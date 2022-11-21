@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Web", "01. Web", "{B0C5186F-6D00-4739-A30F-D7C14E321E91}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Aplicacion", "02. Aplicacion", "{0B4ED0AC-154F-4E6F-AFBE-DEAB6FF981C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03. Dominio", "03. Dominio", "{9AA56BAD-E884-4B77-BA8C-5E481D0E768E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Infraestructura", "04. Infraestructura", "{92C41846-88C4-4057-97AE-8F4B2D13BCA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPSA.Autorizadores.Dominio", "SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj", "{4E952E2E-F720-4907-9A07-E5F1E70E5108}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPSA.Autorizadores.Dominio.Contrato", "SPSA.Autorizadores.Dominio.Contrato\SPSA.Autorizadores.Dominio.Contrato.csproj", "{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPSA.Autorizadores.Infraestructura", "SPSA.Autorizadores.Infraestructura\SPSA.Autorizadores.Infraestructura.csproj", "{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPSA.Autorizadores.Web", "SPSA.Autorizadores.Web\SPSA.Autorizadores.Web.csproj", "{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPSA.Autorizadores.Aplicacion", "SPSA.Autorizadores.Aplicacion\SPSA.Autorizadores.Aplicacion.csproj", "{DE177FE3-7042-48D3-A5A4-B31CB97218E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05. Instalador", "05. Instalador", "{24D60AC3-40D9-4F72-A3F3-212373E8379E}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SPSA.Autorizadores.Web.Instalador", "SPSA.Autorizadores.Web.Instalador\SPSA.Autorizadores.Web.Instalador.vdproj", "{83B3306B-AB13-4ED0-9824-D5ED229DF866}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dlls", "dlls", "{B2FF4D89-704D-4249-988C-7D76A837A20A}"
+	ProjectSection(SolutionItems) = preProject
+		dlls\LibSCA.dll = dlls\LibSCA.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E952E2E-F720-4907-9A07-E5F1E70E5108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E952E2E-F720-4907-9A07-E5F1E70E5108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E952E2E-F720-4907-9A07-E5F1E70E5108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E952E2E-F720-4907-9A07-E5F1E70E5108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE177FE3-7042-48D3-A5A4-B31CB97218E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE177FE3-7042-48D3-A5A4-B31CB97218E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE177FE3-7042-48D3-A5A4-B31CB97218E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE177FE3-7042-48D3-A5A4-B31CB97218E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83B3306B-AB13-4ED0-9824-D5ED229DF866}.Debug|Any CPU.ActiveCfg = Debug
+		{83B3306B-AB13-4ED0-9824-D5ED229DF866}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4E952E2E-F720-4907-9A07-E5F1E70E5108} = {9AA56BAD-E884-4B77-BA8C-5E481D0E768E}
+		{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79} = {9AA56BAD-E884-4B77-BA8C-5E481D0E768E}
+		{CAAE201A-9378-407A-B56C-EBB0CFFB1F86} = {92C41846-88C4-4057-97AE-8F4B2D13BCA9}
+		{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC} = {B0C5186F-6D00-4739-A30F-D7C14E321E91}
+		{DE177FE3-7042-48D3-A5A4-B31CB97218E0} = {0B4ED0AC-154F-4E6F-AFBE-DEAB6FF981C5}
+		{83B3306B-AB13-4ED0-9824-D5ED229DF866} = {24D60AC3-40D9-4F72-A3F3-212373E8379E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9E60688E-11D4-4075-A6A3-96953B3467FE}
+	EndGlobalSection
+EndGlobal
