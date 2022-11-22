@@ -55,5 +55,8 @@
       <Name>SPSA.Autorizadores.Dominio</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="DiagramaClasesDominio.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -47,6 +47,7 @@
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\Empresa.cs" />
     <Compile Include="Entidades\Local.cs" />
+    <Compile Include="Entidades\Persona.cs" />
     <Compile Include="Entidades\SegPermiso.cs" />
     <Compile Include="Entidades\SegSucursalxUsr.cs" />
     <Compile Include="Entidades\SegUsuario.cs" />

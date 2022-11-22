@@ -1,14 +1,8 @@
 ﻿
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
-    public class Autorizador
+    public class Autorizador : Persona
     {
-        public string Codigo { get; private set; }
-        public string Nombres { get; private set; }
-        public string ApellidoPaterno { get; private set; }
-        public string ApellidoMaterno { get; private set; }
-        public string NumeroDocumento { get; private set; }
-        public string Estado { get; private set; }
         public int CodLocal { get; private set; }
         public string UsuarioCreacion { get; private set; }
         public string CodigoAutorizador { get; private set; }

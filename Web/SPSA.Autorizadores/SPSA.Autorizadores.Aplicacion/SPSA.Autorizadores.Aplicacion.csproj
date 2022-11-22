@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="DiagramaClasesAplicacion.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -18,33 +18,33 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands
         public string CodigoAutorizador { get; set; }
         public string NumeroTarjeta { get; set; }
 
+    }
 
-        public class ActualizarEstadoArchivoHandler : IRequestHandler<ActualizarEstadoArchivoCommand, RespuestaComunDTO>
+    public class ActualizarEstadoArchivoHandler : IRequestHandler<ActualizarEstadoArchivoCommand, RespuestaComunDTO>
+    {
+        private readonly IRepositorioAutorizadores _repositorioAutorizadores;
+
+        public ActualizarEstadoArchivoHandler(IRepositorioAutorizadores repositorioAutorizadores)
         {
-            private readonly IRepositorioAutorizadores _repositorioAutorizadores;
+            _repositorioAutorizadores = repositorioAutorizadores;
+        }
 
-            public ActualizarEstadoArchivoHandler(IRepositorioAutorizadores repositorioAutorizadores)
+        public async Task<RespuestaComunDTO> Handle(ActualizarEstadoArchivoCommand request, CancellationToken cancellationToken)
+        {
+            var respuesta = new RespuestaComunDTO();
+            try
             {
-                _repositorioAutorizadores = repositorioAutorizadores;
+                var autorizador = new Autorizador(request.Codigo, request.CodLocal, request.CodigoAutorizador, request.NumeroTarjeta);
+                await _repositorioAutorizadores.ActualizarEstadoArchivo(autorizador);
+                respuesta.Ok = true;
+            }
+            catch (Exception ex)
+            {
+                respuesta.Mensaje = $"Error al actualizar estado archivo {ex.Message}";
+                respuesta.Ok = false;
             }
 
-            public async Task<RespuestaComunDTO> Handle(ActualizarEstadoArchivoCommand request, CancellationToken cancellationToken)
-            {
-                var respuesta = new RespuestaComunDTO();
-                try
-                {
-                    var autorizador = new Autorizador(request.Codigo, request.CodLocal, request.CodigoAutorizador, request.NumeroTarjeta);
-                    await _repositorioAutorizadores.ActualizarEstadoArchivo(autorizador);
-                    respuesta.Ok = true;
-                }
-                catch (Exception ex)
-                {
-                    respuesta.Mensaje = $"Error al actualizar estado archivo {ex.Message}";
-                    respuesta.Ok = false;
-                }
-
-                return respuesta;
-            }
+            return respuesta;
         }
     }
 }

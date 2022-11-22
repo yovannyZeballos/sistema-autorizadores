@@ -2505,6 +2505,7 @@
     <Content Include="Content\scss\utlities\_typography.scss" />
     <Content Include="Content\scss\utlities\_width.scss" />
     <Content Include="Content\scss\_variables.scss" />
+    <Content Include="DiagramaClasesWeb.cd" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
