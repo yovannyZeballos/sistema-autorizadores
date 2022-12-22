@@ -1,9 +1,9 @@
 ﻿var urlColaborador = baseUrl + 'Autorizador/ListarColaborador';
 var urlTodosColaborador = baseUrl + 'Autorizador/ListarTodosColaborador';
 var urlAutorizador = baseUrl + 'Autorizador/ListarAutorizador';
-var urlAsignarAutorizador = baseUrl + 'Autorizador/AsignarAutorizador'; 
-var urlEliminarAutorizador = baseUrl + 'Autorizador/EliminarAutorizador'; 
-var urlActualizarEstadoArchivoAutorizador = baseUrl + 'Autorizador/ActualizarEstadoArchivoAutorizador'; 
+var urlAsignarAutorizador = baseUrl + 'Autorizador/AsignarAutorizador';
+var urlEliminarAutorizador = baseUrl + 'Autorizador/EliminarAutorizador';
+var urlActualizarEstadoArchivoAutorizador = baseUrl + 'Autorizador/ActualizarEstadoArchivoAutorizador';
 
 
 var Autorizador = function () {
@@ -29,11 +29,11 @@ var Autorizador = function () {
                 .then((willDelete) => {
                     if (willDelete) {
                         eliminarAutorizador();
-                    } 
+                    }
                 });
 
 
-            
+
         });
 
         $("#btnBuscarColaborador").on('click', function () {
@@ -56,7 +56,7 @@ var Autorizador = function () {
         $("#chkInactivosAutorizadores,#chkActivosAutorizadores").on("change", function () {
             checkActivoAnuladoAutorizadores();
         })
-       
+
     }
 
     $('#tableColaborador tbody').on('click', 'tr', function () {
@@ -157,112 +157,146 @@ var Autorizador = function () {
     };
 
     var visualizarDataTableAutorizador = function () {
-        dataTableAutorizador = $('#tableAutorizador').DataTable({
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
+
+        $.ajax({
+            url: urlAutorizador,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+
+                var columnas = [];
+
+                response.Columnas.forEach((x) => {
+                    columnas.push({
+                        title: x,
+                        data: x.replace(" ", "").replace(".", ""),
+                        defaultContent: "",
+                    });
+                });
+
+                dataTableAutorizador = $('#tableAutorizador').DataTable({
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    scrollY: '180px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    //"ajax": {
+                    //    "url": urlAutorizador,
+                    //    "type": "POST",
+                    //    "dataSrc": "Autorizadores"
+                    //},
+                    "columns": columnas,
+                    "data": response.Autorizadores,
+                    "bAutoWidth": false,
+                    rowCallback: function (row, data, index) {
+                        if (data.Estado == "ELI") {
+                            $("td", row).addClass("text-danger");
+                        }
+                    },
+                    //"columns": [
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.CodigoAutorizador;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.CodigoAutorizador + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.Codigo;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.Codigo + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.ApellidoPaterno;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.ApellidoPaterno + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.ApellidoMaterno;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.ApellidoMaterno + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.Nombres;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.Nombres + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return 'ACTIVO';
+                    //            else
+                    //                return '<span class="text-danger">INACTIVO</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.NumeroDocumento;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.NumeroDocumento + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.FechaCreacion;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.FechaCreacion + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.UsuarioCreacion;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.UsuarioCreacion + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.NumeroTarjeta;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.NumeroTarjeta + '</span>';
+                    //        }
+                    //    },
+                    //    {
+                    //        "data": function (obj) {
+                    //            if (obj.Estado == 'A')
+                    //                return obj.Impreso;
+                    //            else
+                    //                return '<span class="text-danger">' + obj.Impreso + '</span>';
+                    //        }
+                    //    },
+                    //]
+                });
             },
-            scrollY: '180px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: false,
-            "ajax": {
-                "url": urlAutorizador,
-                "type": "POST",
-                "dataSrc": "Autorizadores"
-            },
-            "bAutoWidth": false,
-            "columns": [
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.CodigoAutorizador;
-                        else
-                            return '<span class="text-danger">' + obj.CodigoAutorizador + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.Codigo;
-                        else
-                            return '<span class="text-danger">' + obj.Codigo + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.ApellidoPaterno;
-                        else
-                            return '<span class="text-danger">' + obj.ApellidoPaterno + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.ApellidoMaterno;
-                        else
-                            return '<span class="text-danger">' + obj.ApellidoMaterno + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.Nombres;
-                        else
-                            return '<span class="text-danger">' + obj.Nombres + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return 'ACTIVO';
-                        else
-                            return '<span class="text-danger">INACTIVO</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.NumeroDocumento;
-                        else
-                            return '<span class="text-danger">' + obj.NumeroDocumento + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.FechaCreacion;
-                        else
-                            return '<span class="text-danger">' + obj.FechaCreacion + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.UsuarioCreacion;
-                        else
-                            return '<span class="text-danger">' + obj.UsuarioCreacion + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.NumeroTarjeta;
-                        else
-                            return '<span class="text-danger">' + obj.NumeroTarjeta + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'A')
-                            return obj.Impreso;
-                        else
-                            return '<span class="text-danger">' + obj.Impreso + '</span>';
-                    }
-                },
-            ]
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
         });
+
+
     };
 
     var visualizarDataTableBusquedaColaborador = function () {
@@ -378,7 +412,7 @@ var Autorizador = function () {
             dataType: "json",
             success: function (response) {
                 dataTableColaborador.ajax.reload();
-                dataTableAutorizador.ajax.reload();
+                cargarAutorizadores();
                 swal({
                     text: response.Mensaje,
                     icon: "success"
@@ -412,7 +446,7 @@ var Autorizador = function () {
             dataType: "json",
             success: function (response) {
                 dataTableColaborador.ajax.reload();
-                dataTableAutorizador.ajax.reload();
+                cargarAutorizadores();
                 swal({
                     text: response.Mensaje,
                     icon: "success"
@@ -441,15 +475,27 @@ var Autorizador = function () {
             return;
         }
 
+
+        let autorizadores = registrosSeleccionados.map(x => {
+            return {
+                Codigo: x.Codigo,
+                CodigoAutorizador: x.Autorizador,
+                UsuarioCreacion: x.UCreación
+            }
+        });
+
+        console.log(autorizadores);
+
+
         btnLoading($("#btnEliminar"), true);
 
         $.ajax({
             url: urlEliminarAutorizador,
             type: "post",
-            data: { autorizadores: registrosSeleccionados },
+            data: { autorizadores: autorizadores },
             dataType: "json",
             success: function (response) {
-                dataTableAutorizador.ajax.reload();
+                cargarAutorizadores();
                 swal({
                     text: response.Mensaje,
                     icon: "success"
@@ -476,10 +522,19 @@ var Autorizador = function () {
 
         btnLoading($("#btnGenerar"), true);
 
+        let autorizadores = registrosSeleccionados.map(x => {
+            return {
+                Codigo: x.Codigo,
+                CodigoAutorizador: x.Autorizador,
+                CodLocal: x.LOCAL,
+                NumeroTarjeta: x.Tarjeta
+            }
+        });
+
         $.ajax({
             url: urlActualizarEstadoArchivoAutorizador,
             type: "post",
-            data: { autorizadores: registrosSeleccionados },
+            data: { autorizadores: autorizadores },
             dataType: "json",
             success: function (response) {
                 swal({
@@ -510,7 +565,7 @@ var Autorizador = function () {
         return true;
     }
 
-    const cargarTodosColaboradores  = function() {
+    const cargarTodosColaboradores = function () {
         $.ajax({
             url: urlTodosColaborador,
             type: "post",
@@ -519,6 +574,25 @@ var Autorizador = function () {
                 dataTableBusquedaColaborador.clear();
                 dataTableBusquedaColaborador.rows.add(response.Colaboradores);
                 dataTableBusquedaColaborador.draw();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    }
+
+    const cargarAutorizadores = function () {
+        $.ajax({
+            url: urlAutorizador,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+                dataTableAutorizador.clear();
+                dataTableAutorizador.rows.add(response.Autorizadores);
+                dataTableAutorizador.draw();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -545,14 +619,14 @@ var Autorizador = function () {
     const checkActivoAnuladoAutorizadores = function () {
 
         if ($("#chkInactivosAutorizadores").prop('checked') && !$("#chkActivosAutorizadores").prop('checked')) {
-            dataTableAutorizador.column(5).search('INACTIVO').draw();
+            dataTableAutorizador.column(8).search('ELI').draw();
         }
         else if ($("#chkActivosAutorizadores").prop('checked') && !$("#chkInactivosAutorizadores").prop('checked')) {
-            var regExSearch = '\\b' + 'ACTIVO' + '\\b';
-            dataTableAutorizador.column(5).search(regExSearch, true, false).draw();
+            var regExSearch = '\\b' + 'ACT' + '\\b';
+            dataTableAutorizador.column(8).search(regExSearch, true, false).draw();
         }
         else {
-            dataTableAutorizador.column(5).search('').draw();
+            dataTableAutorizador.column(8).search('').draw();
         }
     }
 

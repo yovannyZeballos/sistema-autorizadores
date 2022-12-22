@@ -8,6 +8,7 @@ namespace SPSA.Autorizadores.Web.Models.Intercambio
 {
     public class ListarAutorizadorResponse : RespuestaComunDTO
     {
-        public List<AutorizadorDTO> Autorizadores { get; set; }
+        public List<Dictionary<string, object>> Autorizadores { get; set; }
+        public List<string> Columnas { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -108,13 +109,26 @@ namespace SPSA.Autorizadores.Web.Controllers
         }
 
         [HttpPost]
-        public async Task GuardarLocalSession(string codigoLocal)
+        public async Task<JsonResult> GuardarLocalSession(string codigoLocal)
         {
-            var local = await _mediator.Send(new ObtenerLocalQuery { Codigo = codigoLocal });
-            WebSession.Local = codigoLocal;
-            WebSession.TipoSO = local.TipoSO;
-            WebSession.LocalOfiplan = local.CodigoOfiplan;
-            WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
+            var response = new RespuestaComunDTO();
+            try
+            {
+                var local = await _mediator.Send(new ObtenerLocalQuery { Codigo = codigoLocal });
+                WebSession.Local = codigoLocal;
+                WebSession.TipoSO = local.TipoSO;
+                WebSession.LocalOfiplan = local.CodigoOfiplan;
+                WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
+                response.Ok = true;
+            }
+            catch (System.Exception ex)
+            {
+                response.Ok = false;
+                response.Mensaje = ex.Message;
+            }
+
+            return Json(response);
+
         }
 
         [HttpGet]

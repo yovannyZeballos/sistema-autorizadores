@@ -1,20 +1,23 @@
 ﻿using AutoMapper;
+using AutoMapper.Mappers;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 {
 
-    public class ListarAutorizadoresQuery : IRequest<List<AutorizadorDTO>>
+    public class ListarAutorizadoresQuery : IRequest<DataTable>
     {
         public string CodigoLocal { get; set; } = string.Empty;
     }
 
-    public class ListarAutorizadoresHandler : IRequestHandler<ListarAutorizadoresQuery, List<AutorizadorDTO>>
+    public class ListarAutorizadoresHandler : IRequestHandler<ListarAutorizadoresQuery, DataTable>
     {
         private readonly IMapper _mapper;
         private readonly IRepositorioAutorizadores _repositorioAutorizadores;
@@ -25,11 +28,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
             _repositorioAutorizadores = repositorioAutorizadores;
         }
 
-        public async Task<List<AutorizadorDTO>> Handle(ListarAutorizadoresQuery request, CancellationToken cancellationToken)
+        public async Task<DataTable> Handle(ListarAutorizadoresQuery request, CancellationToken cancellationToken)
         {
-            var autorizadores = await _repositorioAutorizadores.ListarAutorizador(request.CodigoLocal);
-            var autorizadoresDto = _mapper.Map<List<AutorizadorDTO>>(autorizadores);
-            return autorizadoresDto;
+            var autorizadoresDataTable = await _repositorioAutorizadores.ListarAutorizador(request.CodigoLocal);
+            return autorizadoresDataTable;
+            //var dynamicTable = autorizadoresDataTable.AsDynamicEnumerable();
+            //return dynamicTable.ToList();
+            //var autorizadoresDto = _mapper.Map<List<AutorizadorDTO>>(autorizadores);
+            //return autorizadoresDto;
         }
     }
 }

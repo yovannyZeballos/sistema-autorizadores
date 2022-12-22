@@ -23,7 +23,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
         {
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUTORIZADOR.SP_REGISTRA_SUP_MANUAL", connection);
+                var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_REGISTRA_SUP_MANUAL", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = _commandTimeout;
 
@@ -56,7 +56,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
         {
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = _commandTimeout
@@ -86,7 +86,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             var colaboradores = new List<Colaborador>();
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_COLA_OFISIS", connection)
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_COLA_OFISIS", connection)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = _commandTimeout
@@ -128,12 +128,12 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         }
 
-        public async Task<List<Autorizador>> ListarAutorizador(string codigoLocal)
+        public async Task<DataTable> ListarAutorizador(string codigoLocal)
         {
             var colaboradores = new List<Autorizador>();
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_COLA_AUTORIZADOS", connection)
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_COLA_AUTORIZADOS", connection)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = _commandTimeout
@@ -144,33 +144,41 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
 
                 var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                var datatable = new DataTable();
+                datatable.Load(dr);
 
-                if (dr != null && dr.HasRows)
-                {
-                    while (await dr.ReadAsync())
-                    {
-                        colaboradores.Add(new Autorizador
-                        (
-                            dr["emp_codigo"].ToString(),
-                            dr["emp_nombre"].ToString(),
-                            dr["emp_apepat"].ToString(),
-                            dr["emp_apemat"].ToString(),
-                            dr["emp_numdoc"].ToString(),
-                            dr["emp_estado"].ToString(),
-                            Convert.ToInt32(dr["loc_numero"]),
-                            dr["EMP_USRCREA"].ToString(),
-                            dr["AUT_CODAUTORIZA"].ToString(),
-                            Convert.ToDateTime(dr["EMP_FECCREA"]).ToString("dd/MM/yyyy"),
-                            dr["tar_numtar"].ToString(),
-                            dr["TAR_ESTIMP"].ToString() == "A" ? "S" : "N"
-                        ));
-                    }
-                }
 
                 connection.Close();
                 connection.Dispose();
 
-                return colaboradores;
+                return datatable;
+
+                //if (dr != null && dr.HasRows)
+                //{
+                //    while (await dr.ReadAsync())
+                //    {
+                //        colaboradores.Add(new Autorizador
+                //        (
+                //            dr["emp_codigo"].ToString(),
+                //            dr["emp_nombre"].ToString(),
+                //            dr["emp_apepat"].ToString(),
+                //            dr["emp_apemat"].ToString(),
+                //            dr["emp_numdoc"].ToString(),
+                //            dr["emp_estado"].ToString(),
+                //            Convert.ToInt32(dr["loc_numero"]),
+                //            dr["EMP_USRCREA"].ToString(),
+                //            dr["AUT_CODAUTORIZA"].ToString(),
+                //            Convert.ToDateTime(dr["EMP_FECCREA"]).ToString("dd/MM/yyyy"),
+                //            dr["tar_numtar"].ToString(),
+                //            dr["TAR_ESTIMP"].ToString() == "A" ? "S" : "N"
+                //        ));
+                //    }
+                //}
+
+                //connection.Close();
+                //connection.Dispose();
+
+                //return colaboradores;
             }
 
         }
@@ -179,7 +187,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
         {
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUTORIZADOR.SP_CAMBIO_GENERACION_ARCHIVO", connection);
+                var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_CAMBIO_GENERACION_ARCHIVO", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = _commandTimeout;
 
@@ -208,7 +216,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
         {
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUTORIZADOR.SP_ELIMINAR_AUTORIZADOR", connection);
+                var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_ELIMINAR_AUTORIZADOR", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = _commandTimeout;
 

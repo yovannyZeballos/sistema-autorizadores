@@ -177,7 +177,6 @@ var Login = function () {
             url: urlLocal + "?ruc=" + ruc,
             type: "get",
             success: function (response) {
-                console.log(response);
 
                 if (response.Ok === true) {
                     cargarLocales(response.Locales);
@@ -265,10 +264,24 @@ var Login = function () {
             type: "post",
             data: { codigoLocal: $("#cboLocal").val() },
             success: function (response) {
-                document.location.href = home;
-                btnLoading($("#btnAutenticarse"), false);
+                if (response.Ok) {
+                    document.location.href = home;
+                    btnLoading($("#btnAutenticarse"), false);
+                }
+                else {
+                    notif({
+                        type: "error",
+                        msg: response.Mensaje,
+                        height: 100,
+                        width: "all",
+                        position: "center"
+                    });
+                    btnLoading($("#btnAutenticarse"), false);
+                }
+               
             },
             error: function (jqXHR, textStatus, errorThrown) {
+
                 notif({
                     type: "error",
                     msg: jqXHR.responseText,

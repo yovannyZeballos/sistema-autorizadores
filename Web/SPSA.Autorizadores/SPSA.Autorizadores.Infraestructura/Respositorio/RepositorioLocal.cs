@@ -103,7 +103,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             var local = new Local();
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                var command = new OracleCommand("EXCT2SP.PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_LOCALES", connection)
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_LOCALES", connection)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = _commandTimeout

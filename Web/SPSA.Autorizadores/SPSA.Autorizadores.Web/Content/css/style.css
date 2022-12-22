@@ -71653,3 +71653,6 @@ a.text-dark:focus {
 
 /*# sourceMappingURL=style.css.map */
 
+table thead tr th {
+    font-size: 11px !important;
+}

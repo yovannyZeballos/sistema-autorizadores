@@ -3,15 +3,18 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
+using SPSA.Autorizadores.Web.Extensiones;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace SPSA.Autorizadores.Web.Controllers
 {
@@ -79,9 +82,22 @@ namespace SPSA.Autorizadores.Web.Controllers
 
             try
             {
-                var autorizadores = await _mediator.Send(new ListarAutorizadoresQuery { CodigoLocal = local });
+                var autorizadoresDatatable = await _mediator.Send(new ListarAutorizadoresQuery { CodigoLocal = local });
+                respuesta.Columnas = new List<string>();
+                foreach (DataColumn colum in autorizadoresDatatable.Columns)
+                {
+                    respuesta.Columnas.Add(colum.ColumnName);
+                }
+
+                var lst = autorizadoresDatatable.AsEnumerable()
+                         .Select(r => r.Table.Columns.Cast<DataColumn>()
+                         .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
+                      ).ToDictionary(z => z.Key.Replace(" ","").Replace(".", ""), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
+                   ).ToList();
+
+
                 respuesta.Ok = true;
-                respuesta.Autorizadores = autorizadores;
+                respuesta.Autorizadores = lst;
             }
             catch (System.Exception ex)
             {
@@ -120,7 +136,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 
                 foreach (var item in respuestaGeneracion.Mensaje.Split('\n'))
                 {
-                    if(item != "null" && item != "")
+                    if (item != "null" && item != "")
                         respuesta.AppendLine(item.Split('|').Count() == 0 ? "" : $"{item.Split('|')[0]}/{item.Split('|')[1]}");
 
                 }
