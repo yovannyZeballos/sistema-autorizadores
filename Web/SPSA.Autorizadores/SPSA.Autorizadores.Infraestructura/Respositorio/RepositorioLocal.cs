@@ -132,5 +132,57 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 return local;
             }
         }
+
+        public async Task<DataTable> ListaLocalesAsignar()
+        {
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            {
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_G4_LISTA_LOCALES", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+                command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                var datatable = new DataTable();
+                datatable.Load(dr);
+
+
+                connection.Close();
+                connection.Dispose();
+
+                return datatable;
+            }
+        }
+
+        public async Task AsignarLocal(string codLocal, string codCadena)
+        {
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            {
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_B_ASIGNAR_LOCAL", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = _commandTimeout;
+
+                await command.Connection.OpenAsync();
+                command.Parameters.Add("vCOD_CADENA", OracleDbType.Varchar2, codCadena, ParameterDirection.Input);
+                command.Parameters.Add("vCOD_LOCAL", OracleDbType.Varchar2, codLocal, ParameterDirection.Input);
+                command.Parameters.Add("nRESP", OracleDbType.Decimal, 1, ParameterDirection.Output);
+                command.Parameters.Add("vMENSAJE", OracleDbType.Varchar2, 250, "", ParameterDirection.Output);
+
+                await command.ExecuteNonQueryAsync();
+
+                var error = Convert.ToDecimal(command.Parameters["nRESP"].Value.ToString());
+                var mensjaeError = command.Parameters["vMENSAJE"].Value.ToString();
+
+                if (error == -1)
+                    throw new Exception(mensjaeError);
+
+                connection.Close();
+                connection.Dispose();
+            }
+        }
     }
 }

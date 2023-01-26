@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\AplicacionDTO.cs" />
+    <Compile Include="DTO\LocalesAsignadosDTO.cs" />
+    <Compile Include="DTO\AutorizadorEliminadoDTO.cs" />
     <Compile Include="DTO\AutorizadorDTO.cs" />
     <Compile Include="DTO\ColaboradorDTO.cs" />
     <Compile Include="DTO\EmpresaDTO.cs" />
@@ -102,9 +104,12 @@
     <Compile Include="Features\Autorizadores\Commands\EliminarAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\CrearAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\GenerarArchivoCommand.cs" />
+    <Compile Include="Features\Autorizadores\Queries\ListarColaboradoresCesadosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarAutorizadoresQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarColaboradoresQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasQuery.cs" />
+    <Compile Include="Features\Locales\Commands\AsignarLocalCommand.cs" />
+    <Compile Include="Features\Locales\Queries\ListarLocalesAsignarQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalQuery.cs" />
     <Compile Include="Features\Seguridad\Commands\LoginCommand.cs" />

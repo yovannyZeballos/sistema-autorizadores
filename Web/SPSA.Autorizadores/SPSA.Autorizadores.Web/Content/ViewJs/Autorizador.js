@@ -484,7 +484,6 @@ var Autorizador = function () {
             }
         });
 
-        console.log(autorizadores);
 
 
         btnLoading($("#btnEliminar"), true);

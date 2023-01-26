@@ -9,9 +9,11 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
     {
         Task<List<Colaborador>> ListarColaboradores(string codigoLocal);
         Task<DataTable> ListarAutorizador(string codigoLocal);
+        Task<DataTable> ListarColaboradoresCesados();
         Task Crear(Autorizador autorizador);
         Task Eliminar(Autorizador autorizador);
         Task ActualizarEstadoArchivo(Autorizador autorizador);
         Task<string> GenerarArchivo(string tipoSO);
+
     }
 }

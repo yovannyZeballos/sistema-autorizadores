@@ -19,6 +19,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
 using static SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands.ActualizarEstadoArchivoCommand;
 using SPSA.Autorizadores.Aplicacion.Mappings;
 using System.Data;
+using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -67,6 +68,9 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<ActualizarEstadoArchivoHandler>().As<IRequestHandler<ActualizarEstadoArchivoCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarAutorizadorHandler>().As<IRequestHandler<EliminarAutorizadorCommand, RespuestaComunDTO>>();
             builder.RegisterType<ObtenerLocalHandler>().As<IRequestHandler<ObtenerLocalQuery, LocalDTO>>();
+            builder.RegisterType<ListarColaboradoresCesadosHandler>().As<IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>>();
+            builder.RegisterType<ListarLocalesAsignarHandler>().As<IRequestHandler<ListarLocalesAsignarQuery, LocalesAsignadosDTO>>();
+            builder.RegisterType<AsignarLocalHandler>().As<IRequestHandler<AsignarLocalCommand, RespuestaComunDTO>>();
 
             builder.Register<ServiceFactory>(ctx =>
             {

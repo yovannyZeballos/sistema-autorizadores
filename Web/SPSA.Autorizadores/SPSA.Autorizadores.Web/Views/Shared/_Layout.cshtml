@@ -197,6 +197,28 @@
                                                                     </li>
                                                                 </ul>
                                                             }
+                                                            else if (item.Id == 8)
+                                                            {
+                                                                <ul class="sub-slide-menu">
+
+                                                                    <li>
+                                                                        <a class="sub-slide-item" href="@Url.Action("Index", "EliminarAutorizador")">
+                                                                            @item.DesPermiso
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            }
+                                                            else if (item.Id == 9)
+                                                            {
+                                                                <ul class="sub-slide-menu">
+
+                                                                    <li>
+                                                                        <a class="sub-slide-item" href="@Url.Action("Index", "AsignarLocal")">
+                                                                            @item.DesPermiso
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            }
                                                         }
 
                                                     </li>
@@ -241,6 +263,25 @@
         </div>
         <!--/sidebar-right-->
 
+        <div style="display:none">
+            <div class="dimmer active" id="loader">
+                <div class="sk-circle">
+                    <div class="sk-circle1 sk-child"></div>
+                    <div class="sk-circle2 sk-child"></div>
+                    <div class="sk-circle3 sk-child"></div>
+                    <div class="sk-circle4 sk-child"></div>
+                    <div class="sk-circle5 sk-child"></div>
+                    <div class="sk-circle6 sk-child"></div>
+                    <div class="sk-circle7 sk-child"></div>
+                    <div class="sk-circle8 sk-child"></div>
+                    <div class="sk-circle9 sk-child"></div>
+                    <div class="sk-circle10 sk-child"></div>
+                    <div class="sk-circle11 sk-child"></div>
+                    <div class="sk-circle12 sk-child"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -250,12 +291,14 @@
         var codigoLocalSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Local';
 
         var dataTableColaborador = null;
+        var dataTableColaboradorCesados = null;
         var dataTableAutorizador = null;
         var dataTableBusquedaColaborador = null;
+        var dataTableLocalesAsignar = null;
 
     </script>
 
-   
+
 
     <!-- Jquery js-->
     <script src="~/Content/plugins/jquery/jquery.min.js"></script>
@@ -297,6 +340,8 @@
 
     <!-- custom js -->
     <script src="~/Content/js/custom.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
     <script src="~/Content/js/utiles.js"></script>
     <script src="~/Content/js/CheckSession.js"></script>
     <script src="~/Content/ViewJs/Home.js"></script>

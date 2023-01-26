@@ -146,13 +146,18 @@
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\AutorizadorController.cs" />
     <Compile Include="Controllers\CambioLocalController.cs" />
+    <Compile Include="Controllers\AsignarLocalController.cs" />
+    <Compile Include="Controllers\EliminarAutorizadorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Extensiones\DataTableExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Intercambio\AsignarLocalRequest.cs" />
     <Compile Include="Models\Intercambio\ListarAutorizadorResponse.cs" />
+    <Compile Include="Models\Intercambio\ListarLocalesAsignarResponse.cs" />
+    <Compile Include="Models\Intercambio\ListarColaboradoresCesadosResponse.cs" />
     <Compile Include="Models\Intercambio\ListarColaboradorResponse.cs" />
     <Compile Include="Models\Intercambio\ListarLocalResponse.cs" />
     <Compile Include="Models\Intercambio\ListarEmpresaResponse.cs" />
@@ -2157,6 +2162,8 @@
     <Content Include="Content\switcher\img\bg-img4.jpg" />
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
+    <Content Include="Content\ViewJs\AsignarLocal.js" />
+    <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
     <Content Include="Content\ViewJs\Home.js" />
@@ -2535,6 +2542,8 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Autorizador\Index.cshtml" />
     <Content Include="Views\CambioLocal\Index.cshtml" />
+    <Content Include="Views\EliminarAutorizador\Index.cshtml" />
+    <Content Include="Views\AsignarLocal\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
