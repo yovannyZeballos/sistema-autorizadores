@@ -25,6 +25,36 @@ var AsignarLocal = function () {
         $('#tableLocalesAsignar tbody').on('click', 'tr', function () {
             $(this).toggleClass('selected');
         });
+
+        $("#cboEmpresa").on("change", function () {
+            const valor = $(this).val();
+            let regExSearch = '\\b' + valor + '\\b';
+
+            if (valor === "0") {
+                dataTableLocalesAsignar.column(1).search('').draw();
+
+            }
+            else if (valor === "4") {
+                regExSearch = "^[4-8]$";
+                dataTableLocalesAsignar.column(1).search(regExSearch, true, false).draw();
+            }
+            else {
+                dataTableLocalesAsignar.column(1).search(regExSearch, true, false).draw();
+            }
+        });
+
+        $("#cboInd").on("change", function () {
+            const valor = $(this).val();
+            let regExSearch = '\\b' + valor + '\\b';
+
+            if (valor === "0") {
+                dataTableLocalesAsignar.column(5).search('').draw();
+
+            }
+            else {
+                dataTableLocalesAsignar.column(5).search(regExSearch, true, false).draw();
+            }
+        });
     }
 
 

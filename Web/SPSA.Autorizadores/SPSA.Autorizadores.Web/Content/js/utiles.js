@@ -21,6 +21,6 @@ const showLoading = function () {
 }
 
 const closeLoading = function () {
-    if (!swal)
+    if (swal)
         swal.close();
 }

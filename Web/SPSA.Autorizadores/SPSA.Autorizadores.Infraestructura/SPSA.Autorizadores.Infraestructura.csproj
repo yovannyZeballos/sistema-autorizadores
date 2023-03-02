@@ -100,10 +100,11 @@
   <ItemGroup>
     <Compile Include="IoC\InfraestructuraModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Respositorio\RepositorioAutorizadores.cs" />
-    <Compile Include="Respositorio\RepositorioEmpresa.cs" />
-    <Compile Include="Respositorio\RepositorioLocal.cs" />
-    <Compile Include="Respositorio\RepositorioSeguridad.cs" />
+    <Compile Include="Repositorio\RepositorioAutorizadores.cs" />
+    <Compile Include="Repositorio\RepositorioEmpresa.cs" />
+    <Compile Include="Repositorio\RepositorioLocal.cs" />
+    <Compile Include="Repositorio\RepositorioPuesto.cs" />
+    <Compile Include="Repositorio\RepositorioSeguridad.cs" />
     <Compile Include="Utiles\CadenasConexion.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -7,5 +7,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
     public interface IRepositorioEmpresa
     {
         Task<List<Empresa>> Listar();
+        Task<List<Empresa>> ListarOfiplan();
     }
 }

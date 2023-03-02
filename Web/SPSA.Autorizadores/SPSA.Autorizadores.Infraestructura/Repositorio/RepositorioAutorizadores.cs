@@ -81,7 +81,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         }
 
-        public async Task<List<Colaborador>> ListarColaboradores(string codigoLocal)
+        public async Task<List<Colaborador>> ListarColaboradores(string codigoLocal, string codigoEmpresa)
         {
             var colaboradores = new List<Colaborador>();
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
@@ -92,7 +92,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                     CommandTimeout = _commandTimeout
                 };
 
-                await command.Connection.OpenAsync();
+                await command.Connection.OpenAsync(); 
+                command.Parameters.Add("vCOD_EMPR", OracleDbType.Varchar2, codigoEmpresa, ParameterDirection.Input);
                 command.Parameters.Add("vCOD_LOCAL", OracleDbType.Varchar2, codigoLocal, ParameterDirection.Input);
                 command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
 
@@ -265,5 +266,30 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
+        public async Task<DataTable> ListarColaboradoresMass(string codEmpresa)
+        {
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            {
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_G6_LISTA_COLAB_MASS_SIN_AUT", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+                command.Parameters.Add("VCOD_EMPRESA", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+                command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                var datatable = new DataTable();
+                datatable.Load(dr);
+
+
+                connection.Close();
+                connection.Dispose();
+
+                return datatable;
+            }
+        }
     }
 }

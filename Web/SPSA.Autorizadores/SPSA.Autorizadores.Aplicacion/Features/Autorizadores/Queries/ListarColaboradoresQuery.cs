@@ -12,6 +12,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
     public class ListarColaboradoresQuery : IRequest<List<ColaboradorDTO>>
     {
         public string CodigoLocal { get; set; } = string.Empty;
+        public string CodigoEmpresa { get; set; } = string.Empty;
     }
 
     public class ListarColaboradoresHandler : IRequestHandler<ListarColaboradoresQuery, List<ColaboradorDTO>>
@@ -27,7 +28,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 
         public async Task<List<ColaboradorDTO>> Handle(ListarColaboradoresQuery request, CancellationToken cancellationToken)
         {
-            var colaboradores = await _repositorioAutorizadores.ListarColaboradores(request.CodigoLocal);
+            var colaboradores = await _repositorioAutorizadores.ListarColaboradores(request.CodigoLocal, request.CodigoEmpresa);
             var colaboradoresDto = _mapper.Map<List<ColaboradorDTO>>(colaboradores);
             return colaboradoresDto;
         }

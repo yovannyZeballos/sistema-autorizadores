@@ -20,6 +20,8 @@ using static SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands.Actua
 using SPSA.Autorizadores.Aplicacion.Mappings;
 using System.Data;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -71,6 +73,10 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<ListarColaboradoresCesadosHandler>().As<IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>>();
             builder.RegisterType<ListarLocalesAsignarHandler>().As<IRequestHandler<ListarLocalesAsignarQuery, LocalesAsignadosDTO>>();
             builder.RegisterType<AsignarLocalHandler>().As<IRequestHandler<AsignarLocalCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ListarPuestosHandler>().As<IRequestHandler<ListarPuestosQuery, PuestoDTO>>();
+            builder.RegisterType<ListarEmpresasOfiplanHandler>().As<IRequestHandler<ListarEmpresasOfiplanQuery, List<EmpresaDTO>>>();
+            builder.RegisterType<ActualizarPuestoHandler>().As<IRequestHandler<ActualizarPuestoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ListarColaboradoresMassHandler>().As<IRequestHandler<ListarColaboradoresMassQuery, DataTable>>();
 
             builder.Register<ServiceFactory>(ctx =>
             {

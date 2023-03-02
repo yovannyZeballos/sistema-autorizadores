@@ -125,6 +125,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                         local.Codigo = dr["cLocal"].ToString();
                         local.Estado = dr["Estado"].ToString();
                         local.CodigoOfiplan = dr["nLocalOfiplan"].ToString();
+                        local.CodigoEmpresa = dr["CodEmpresa"].ToString();
                     }
                 }
                 connection.Close();

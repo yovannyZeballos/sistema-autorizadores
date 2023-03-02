@@ -8,5 +8,6 @@
         public string Estado { get; set; }
         public string CodigoOfiplan { get; set; }
         public string TipoSO { get; set; }
+        public string CodigoEmpresa { get; set; }
     }
 }

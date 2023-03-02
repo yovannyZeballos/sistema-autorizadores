@@ -119,6 +119,7 @@ namespace SPSA.Autorizadores.Web.Controllers
                 WebSession.TipoSO = local.TipoSO;
                 WebSession.LocalOfiplan = local.CodigoOfiplan;
                 WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
+                WebSession.CodigoEmpresa = local.CodigoEmpresa;
                 response.Ok = true;
             }
             catch (System.Exception ex)

@@ -60,5 +60,11 @@ namespace SPSA.Autorizadores.Web.Utiles
             get { return Comun.Lee<List<LocalDTO>>("locales"); }
             set { Comun.Escribe("locales", value); }
         }
+
+        public static string CodigoEmpresa
+        {
+            get { return Comun.Lee<string>("codigoEmpresa"); }
+            set { Comun.Escribe("codigoEmpresa", value); }
+        }
     }
 }

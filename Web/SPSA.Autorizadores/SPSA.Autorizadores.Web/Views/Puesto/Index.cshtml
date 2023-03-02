@@ -1,18 +1,18 @@
 ﻿
 @{
-    ViewBag.Title = "Asignar local";
+    ViewBag.Title = "Puestos";
 }
 
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">Asignación de locales</div>
+        <div class="page-title">Roles por empresa para asignar Autorizadores</div>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
             <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Autorizador")>Inicio</a></li>
             <li class="breadcrumb-item1 active">Autorizador</li>
-            <li class="breadcrumb-item1 active">Asignar local</li>
+            <li class="breadcrumb-item1 active">Roles</li>
         </ol>
     </div>
 </div>
@@ -21,48 +21,33 @@
     <div class="col-xl-12">
         <div class="card overflow-hidden">
             <div class="card-header bg-primary ">
-                <h6 class="card-title text-white">Locales</h6>
+                <h6 class="card-title text-white">Roles</h6>
                 <div class="card-options ">
                     <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-xl-6">
                         <div class="form-group select2-sm">
                             <label class="form-label">Empresa</label>
-                            <select class="form-control select2-show-search custom-select" id="cboEmpresa" value="0">
-                                <option value="0">Todos</option>
-                                <option value="3">COMPAÑIA HARD DISCOUNT S.A.C.</option>
-                                <option value="12">MAKRO SUPERMAYORISTA S.A.</option>
-                                <option value="13">PLAZA VEA ORIENTE S.A.C</option>
-                                <option value="4">COMPAÑIA FOOD RETAIL S.A.C.</option>
+                            <select class="form-control select2-show-search custom-select" id="cboEmpresa">
+                                <option label="Seleccione una empresa"></option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Indicador</label>
-                            <select class="form-control select2-show-search custom-select" id="cboInd" value="0">
-                                <option value="0">Todos</option>
-                                <option value="S">S</option>
-                                <option value="N">N</option>
-                            </select>
+                    <div class="col-xl-12">
+                        <div class="form-group data-table-btn">
+                            <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar roles</button>
                         </div>
+                        <table id="tableRoles" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <div class="form-group data-table-btn">
-                    <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar Local</button>
-
-                </div>
-
-                <table id="tableLocalesAsignar" class="table text-nowrap border-bottom">
-                    <thead>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -82,10 +67,11 @@
     <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
-    <script src="~/Content/ViewJs/AsignarLocal.js"></script>
+    <script src="~/Content/ViewJs/Puesto.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            AsignarLocal.init();
+            Puesto.init();
         });
     </script>
 }
+

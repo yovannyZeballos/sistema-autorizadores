@@ -41,7 +41,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 
             try
             {
-                var colaboradores = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = local });
+                var colaboradores = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = local, CodigoEmpresa = WebSession.CodigoEmpresa });
                 respuesta.Ok = true;
                 respuesta.Colaboradores = colaboradores;
             }
@@ -61,7 +61,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 
             try
             {
-                var colaboradores = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = "0" });
+                var colaboradores = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = "0", CodigoEmpresa = WebSession.CodigoEmpresa });
                 respuesta.Ok = true;
                 respuesta.Colaboradores = colaboradores;
             }

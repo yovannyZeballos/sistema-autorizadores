@@ -7,6 +7,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Oracle.ManagedDataAccess.Client;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
@@ -48,6 +49,41 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 }
                 connection.Close();
                 connection.Dispose();
+                return empresas;
+            }
+        }
+
+        public async Task<List<Empresa>> ListarOfiplan()
+        {
+            var empresas = new List<Empresa>();
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            {
+                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_LISTA_EMPRESAS", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+                command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+
+                if (dr != null && dr.HasRows)
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        empresas.Add(new Empresa
+                        {
+                            Ruc = dr["CODIGO"].ToString(),
+                            Descripcion = dr["NOMBRE"].ToString(),
+                        });
+                    }
+                }
+
+                connection.Close();
+                connection.Dispose();
+
                 return empresas;
             }
         }

@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\AplicacionDTO.cs" />
+    <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\LocalesAsignadosDTO.cs" />
     <Compile Include="DTO\AutorizadorEliminadoDTO.cs" />
     <Compile Include="DTO\AutorizadorDTO.cs" />
@@ -98,20 +99,25 @@
     <Compile Include="DTO\EmpresaDTO.cs" />
     <Compile Include="DTO\LocalDTO.cs" />
     <Compile Include="DTO\PermisoDTO.cs" />
+    <Compile Include="DTO\PuestoDTO.cs" />
     <Compile Include="DTO\RespuestaComunDTO.cs" />
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\EliminarAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\CrearAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\GenerarArchivoCommand.cs" />
+    <Compile Include="Features\Autorizadores\Queries\ListarColaboradoresMassQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarColaboradoresCesadosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarAutorizadoresQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarColaboradoresQuery.cs" />
+    <Compile Include="Features\Empresas\Queries\ListarEmpresasOfiplanQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Locales\Commands\AsignarLocalCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesAsignarQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalQuery.cs" />
+    <Compile Include="Features\Puestos\Commands\ActualizarPuestoCommand.cs" />
+    <Compile Include="Features\Puestos\Queries\ListarPuestosQuery.cs" />
     <Compile Include="Features\Seguridad\Commands\LoginCommand.cs" />
     <Compile Include="Mappings\AplicacionProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
