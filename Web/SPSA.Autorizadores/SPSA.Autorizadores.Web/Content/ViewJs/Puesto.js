@@ -135,9 +135,21 @@ var Puesto = function () {
                             else
                                 return '<input type="checkbox" name="id[]" value="' + data + '">';
                         }
-                    }]
-                });
+                    }],
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel <i class="fa fa-cloud-download"></i>',
+                            titleAttr: 'Descargar Excel',
+                            className: 'btn-sm mb-1 ms-2',
+                            exportOptions: {
+                                modifier: { page: 'all' }
+                            }
+                        },
+                    ]
 
+                });
+                dataTableRoles.buttons().container().prependTo($('#tableRoles_filter'));
                 $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {

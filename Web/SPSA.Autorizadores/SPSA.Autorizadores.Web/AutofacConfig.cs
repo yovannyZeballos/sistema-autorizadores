@@ -63,7 +63,7 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<LoginHandler>().As<IRequestHandler<LoginCommand, UsuarioDTO>>();
             builder.RegisterType<ListarEmpresasHandler>().As<IRequestHandler<ListarEmpresasQuery, List<EmpresaDTO>>>();
             builder.RegisterType<ListarLocalesHandler>().As<IRequestHandler<ListarLocalesQuery, List<LocalDTO>>>();
-            builder.RegisterType<ListarColaboradoresHandler>().As<IRequestHandler<ListarColaboradoresQuery, List<ColaboradorDTO>>>();
+            builder.RegisterType<ListarColaboradoresHandler>().As<IRequestHandler<ListarColaboradoresQuery,DataTable>>();
             builder.RegisterType<CrearAutorizadorHandler>().As<IRequestHandler<CrearAutorizadorCommand, RespuestaComunDTO>>();
             builder.RegisterType<GenerarArchivoHandler>().As<IRequestHandler<GenerarArchivoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ListarAutorizadoresHandler>().As<IRequestHandler<ListarAutorizadoresQuery, DataTable>>();

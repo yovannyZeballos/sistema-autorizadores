@@ -28,7 +28,7 @@
             </div>
             <div class="card-body">
 
-                <div class="form-group data-table-btn">
+                <div class="form-group data-table-btn" id="button-group">
                     <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar Autorizador</button>
                     <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-2">Buscar Empleado</button>
                     <div class="checkbox  ms-2" style="display: inline-block;">
@@ -40,22 +40,15 @@
                         </label>
                     </div>
                 </div>
-                <table id="tableColaborador" class="table text-nowrap border-bottom">
-                    <thead>
-                        <tr>
-                            <th class="border-bottom-0" style="font-size: 11px;">Código</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">A. Paterno</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">A. Materno</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">F. Ingreso</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Estado</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Documento</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Desc. Puesto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div>
+                    <table id="tableColaborador" class="table text-nowrap border-bottom">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
@@ -108,6 +101,7 @@
     </div>
 </div>
 
+
 <!-- MODAL -->
 <div class="modal fade" id="modalBusqueda" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -128,18 +122,7 @@
                 </div>
                 <table id="tableBusquedaColaborador" class="table text-nowrap border-bottom">
                     <thead>
-                        <tr>
-                            <th class="border-bottom-0" style="font-size: 11px;">Código</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">A. Paterno</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">A. Materno</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">F. Ingreso</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Estado</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Documento</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">C. Local</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Desc. Local</th>
-                            <th class="border-bottom-0" style="font-size: 11px;">Desc. Puesto</th>
-                        </tr>
+                      
                     </thead>
                     <tbody>
                     </tbody>
@@ -160,10 +143,13 @@
     <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
     <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
     <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
     <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
     <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
     <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/datatables.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
     <script src="~/Content/ViewJs/Autorizador.js"></script>
     <script type="text/javascript">

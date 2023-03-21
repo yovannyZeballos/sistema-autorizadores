@@ -3,19 +3,20 @@ using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 {
 
-    public class ListarColaboradoresQuery : IRequest<List<ColaboradorDTO>>
+    public class ListarColaboradoresQuery : IRequest<DataTable>
     {
         public string CodigoLocal { get; set; } = string.Empty;
         public string CodigoEmpresa { get; set; } = string.Empty;
     }
 
-    public class ListarColaboradoresHandler : IRequestHandler<ListarColaboradoresQuery, List<ColaboradorDTO>>
+    public class ListarColaboradoresHandler : IRequestHandler<ListarColaboradoresQuery, DataTable>
     {
         private readonly IMapper _mapper;
         private readonly IRepositorioAutorizadores _repositorioAutorizadores;
@@ -26,11 +27,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
             _repositorioAutorizadores = repositorioAutorizadores;
         }
 
-        public async Task<List<ColaboradorDTO>> Handle(ListarColaboradoresQuery request, CancellationToken cancellationToken)
+        public async Task<DataTable> Handle(ListarColaboradoresQuery request, CancellationToken cancellationToken)
         {
-            var colaboradores = await _repositorioAutorizadores.ListarColaboradores(request.CodigoLocal, request.CodigoEmpresa);
-            var colaboradoresDto = _mapper.Map<List<ColaboradorDTO>>(colaboradores);
-            return colaboradoresDto;
+            var colaboradoresDatatable = await _repositorioAutorizadores.ListarColaboradores(request.CodigoLocal, request.CodigoEmpresa);
+            return colaboradoresDatatable;
         }
     }
 }

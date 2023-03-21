@@ -21,13 +21,19 @@ $(function (e) {
 
     //______File-Export Data Table
     var table = $('#file-datatable').DataTable({
-        buttons: ['copy', 'excel', 'pdf', 'colvis'],
+        buttons: ['excel'],
         language: {
             searchPlaceholder: 'Search...',
-            scrollX: "100%",
             sSearch: '',
-        }
+        },
+        scrollY: '180px',
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+        "bAutoWidth": true,
     });
+    console.log(table.buttons());
+
     table.buttons().container()
         .appendTo('#file-datatable_wrapper .col-md-6:eq(0)');
 

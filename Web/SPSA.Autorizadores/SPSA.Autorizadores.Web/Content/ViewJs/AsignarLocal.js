@@ -87,7 +87,20 @@ var AsignarLocal = function () {
                     "columns": columnas,
                     "data": response.Locales,
                     "bAutoWidth": false,
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel <i class="fa fa-cloud-download"></i>',
+                            titleAttr: 'Descargar Excel',
+                            className: 'btn-sm mb-1 ms-2',
+                            exportOptions: {
+                                modifier: { page: 'all' }
+                            }
+                        },
+                    ]
                 });
+
+                dataTableLocalesAsignar.buttons().container().prependTo($('#tableLocalesAsignar_filter'));
 
                 $('input[type="search"]').addClass("form-control-sm");
                 closeLoading();

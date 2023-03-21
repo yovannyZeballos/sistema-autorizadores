@@ -72,87 +72,62 @@ var Autorizador = function () {
     });
 
     var visualizarDataTableColaborador = function () {
-        dataTableColaborador = $('#tableColaborador').DataTable({
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
+
+
+        $.ajax({
+            url: urlColaborador,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+
+                var columnas = [];
+
+                response.Columnas.forEach((x) => {
+                    columnas.push({
+                        title: x,
+                        data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
+                        defaultContent: "",
+                    });
+                });
+
+                dataTableColaborador = $('#tableColaborador').DataTable({
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    scrollY: '180px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    columns: columnas,
+                    data: response.Colaboradores,
+                    bAutoWidth: false,
+                    rowCallback: function (row, data, index) {
+                        if (data.Estado == "ANU") {
+                            $("td", row).addClass("text-danger");
+                        }
+                    },
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel <i class="fa fa-cloud-download"></i>',
+                            titleAttr: 'Descargar Excel',
+                            className: 'btn-sm mb-1 ms-2',
+                            exportOptions: {
+                                modifier: { page: 'all' }
+                            }
+                        },
+                    ],
+                });
+
+                dataTableColaborador.buttons().container().prependTo($('#tableColaborador_filter'));
             },
-            scrollY: '180px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: false,
-            "ajax": {
-                "url": urlColaborador,
-                "type": "POST",
-                "dataSrc": "Colaboradores"
-            },
-            "bAutoWidth": true,
-            "columns": [
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.Codigo;
-                        else
-                            return '<span class="text-danger">' + obj.Codigo + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.ApellidoPaterno;
-                        else
-                            return '<span class="text-danger">' + obj.ApellidoPaterno + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.ApellidoMaterno;
-                        else
-                            return '<span class="text-danger">' + obj.ApellidoMaterno + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.Nombres;
-                        else
-                            return '<span class="text-danger">' + obj.Nombres + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.FechaIngreso;
-                        else
-                            return '<span class="text-danger">' + obj.FechaIngreso + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return 'ACTIVO';
-                        else
-                            return '<span class="text-danger">ANULADO</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.NumeroDocumento;
-                        else
-                            return '<span class="text-danger">' + obj.NumeroDocumento + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.DescPuesto;
-                        else
-                            return '<span class="text-danger">' + obj.DescPuesto + '</span>';
-                    }
-                }
-            ]
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
         });
     };
 
@@ -183,11 +158,6 @@ var Autorizador = function () {
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
-                    //"ajax": {
-                    //    "url": urlAutorizador,
-                    //    "type": "POST",
-                    //    "dataSrc": "Autorizadores"
-                    //},
                     "columns": columnas,
                     "data": response.Autorizadores,
                     "bAutoWidth": false,
@@ -196,97 +166,20 @@ var Autorizador = function () {
                             $("td", row).addClass("text-danger");
                         }
                     },
-                    //"columns": [
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.CodigoAutorizador;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.CodigoAutorizador + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.Codigo;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.Codigo + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.ApellidoPaterno;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.ApellidoPaterno + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.ApellidoMaterno;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.ApellidoMaterno + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.Nombres;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.Nombres + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return 'ACTIVO';
-                    //            else
-                    //                return '<span class="text-danger">INACTIVO</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.NumeroDocumento;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.NumeroDocumento + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.FechaCreacion;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.FechaCreacion + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.UsuarioCreacion;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.UsuarioCreacion + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.NumeroTarjeta;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.NumeroTarjeta + '</span>';
-                    //        }
-                    //    },
-                    //    {
-                    //        "data": function (obj) {
-                    //            if (obj.Estado == 'A')
-                    //                return obj.Impreso;
-                    //            else
-                    //                return '<span class="text-danger">' + obj.Impreso + '</span>';
-                    //        }
-                    //    },
-                    //]
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel <i class="fa fa-cloud-download"></i>',
+                            titleAttr: 'Descargar Excel',
+                            className: 'btn-sm mb-1 ms-2',
+                            exportOptions: {
+                                modifier: { page: 'all' }
+                            }
+                        },
+                    ],
                 });
+
+                dataTableAutorizador.buttons().container().prependTo($('#tableAutorizador_filter'));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -300,99 +193,155 @@ var Autorizador = function () {
     };
 
     var visualizarDataTableBusquedaColaborador = function () {
-        dataTableBusquedaColaborador = $('#tableBusquedaColaborador').DataTable({
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
+
+        $.ajax({
+            url: urlTodosColaborador,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+
+                var columnas = [];
+
+                response.Columnas.forEach((x) => {
+                    columnas.push({
+                        title: x,
+                        data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
+                    });
+                });
+
+                dataTableBusquedaColaborador = $('#tableBusquedaColaborador').DataTable({
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    scrollY: '180px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    columns: columnas,
+                    data: response.Colaboradores,
+                    bAutoWidth: false,
+                    rowCallback: function (row, data, index) {
+                        if (data.Estado == "ANU") {
+                            $("td", row).addClass("text-danger");
+                        }
+                    },
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel <i class="fa fa-cloud-download"></i>',
+                            titleAttr: 'Descargar Excel',
+                            className: 'btn-sm mb-1 ms-2',
+                            exportOptions: {
+                                modifier: { page: 'all' }
+                            }
+                        },
+                    ],
+                });
+
+                dataTableBusquedaColaborador.buttons().container().prependTo($('#tableBusquedaColaborador_filter'));
             },
-            scrollY: '180px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: false,
-            "bAutoWidth": false,
-            "columns": [
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.Codigo;
-                        else
-                            return '<span class="text-danger">' + obj.Codigo + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.ApellidoPaterno;
-                        else
-                            return '<span class="text-danger">' + obj.ApellidoPaterno + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.ApellidoMaterno;
-                        else
-                            return '<span class="text-danger">' + obj.ApellidoMaterno + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.Nombres;
-                        else
-                            return '<span class="text-danger">' + obj.Nombres + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.FechaIngreso;
-                        else
-                            return '<span class="text-danger">' + obj.FechaIngreso + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return 'ACTIVO';
-                        else
-                            return '<span class="text-danger">ANULADO</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.NumeroDocumento;
-                        else
-                            return '<span class="text-danger">' + obj.NumeroDocumento + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.CodigoLocal;
-                        else
-                            return '<span class="text-danger">' + obj.CodigoLocal + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.DescLocal;
-                        else
-                            return '<span class="text-danger">' + obj.DescLocal + '</span>';
-                    }
-                },
-                {
-                    "data": function (obj) {
-                        if (obj.Estado == 'ACT')
-                            return obj.DescPuesto;
-                        else
-                            return '<span class="text-danger">' + obj.DescPuesto + '</span>';
-                    }
-                }
-            ]
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
         });
+
+        //dataTableBusquedaColaborador = $('#tableBusquedaColaborador').DataTable({
+        //    language: {
+        //        searchPlaceholder: 'Buscar...',
+        //        sSearch: '',
+        //    },
+        //    scrollY: '180px',
+        //    scrollX: true,
+        //    scrollCollapse: true,
+        //    paging: false,
+        //    "bAutoWidth": false,
+        //    "columns": [
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.Codigo;
+        //                else
+        //                    return '<span class="text-danger">' + obj.Codigo + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.ApellidoPaterno;
+        //                else
+        //                    return '<span class="text-danger">' + obj.ApellidoPaterno + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.ApellidoMaterno;
+        //                else
+        //                    return '<span class="text-danger">' + obj.ApellidoMaterno + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.Nombres;
+        //                else
+        //                    return '<span class="text-danger">' + obj.Nombres + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.FechaIngreso;
+        //                else
+        //                    return '<span class="text-danger">' + obj.FechaIngreso + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return 'ACTIVO';
+        //                else
+        //                    return '<span class="text-danger">ANULADO</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.NumeroDocumento;
+        //                else
+        //                    return '<span class="text-danger">' + obj.NumeroDocumento + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.CodigoLocal;
+        //                else
+        //                    return '<span class="text-danger">' + obj.CodigoLocal + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.DescLocal;
+        //                else
+        //                    return '<span class="text-danger">' + obj.DescLocal + '</span>';
+        //            }
+        //        },
+        //        {
+        //            "data": function (obj) {
+        //                if (obj.Estado == 'ACT')
+        //                    return obj.DescPuesto;
+        //                else
+        //                    return '<span class="text-danger">' + obj.DescPuesto + '</span>';
+        //            }
+        //        }
+        //    ]
+        //});
     };
 
     const asignarAutorizador = function () {
@@ -405,13 +354,25 @@ var Autorizador = function () {
 
         btnLoading($("#btnAsignar"), true);
 
+        let autorizadores = [];
+
+        registrosSeleccionados.map((item) => {
+            autorizadores.push({
+                Codigo: item.Codigo,
+                Nombres: item.Nombre,
+                ApellidoPaterno: item.APaterno,
+                ApellidoMaterno: item.AMaterno,
+                NumeroDocumento: item.Documento
+            });
+        });
+
         $.ajax({
             url: urlAsignarAutorizador,
             type: "post",
-            data: { autorizadores: registrosSeleccionados },
+            data: { autorizadores: autorizadores },
             dataType: "json",
             success: function (response) {
-                dataTableColaborador.ajax.reload();
+                cargarColaboradores();
                 cargarAutorizadores();
                 swal({
                     text: response.Mensaje,
@@ -439,13 +400,26 @@ var Autorizador = function () {
 
         btnLoading($("#btnAsignarAutorizadorBusqueda"), true);
 
+        let autorizadores = [];
+
+        registrosSeleccionados.map((item) => {
+            autorizadores.push({
+                Codigo: item.Codigo,
+                Nombres: item.Nombre,
+                ApellidoPaterno: item.APaterno,
+                ApellidoMaterno: item.AMaterno,
+                NumeroDocumento: item.Documento
+            });
+        });
+
+
         $.ajax({
             url: urlAsignarAutorizador,
             type: "post",
-            data: { autorizadores: registrosSeleccionados },
+            data: { autorizadores: autorizadores },
             dataType: "json",
             success: function (response) {
-                dataTableColaborador.ajax.reload();
+                cargarColaboradores();
                 cargarAutorizadores();
                 swal({
                     text: response.Mensaje,
@@ -592,6 +566,25 @@ var Autorizador = function () {
                 dataTableAutorizador.clear();
                 dataTableAutorizador.rows.add(response.Autorizadores);
                 dataTableAutorizador.draw();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    }
+
+    const cargarColaboradores = function () {
+        $.ajax({
+            url: urlColaborador,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+                dataTableColaborador.clear();
+                dataTableColaborador.rows.add(response.Colaboradores);
+                dataTableColaborador.draw();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({

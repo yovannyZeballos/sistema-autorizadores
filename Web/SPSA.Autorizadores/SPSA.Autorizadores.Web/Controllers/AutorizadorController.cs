@@ -41,9 +41,28 @@ namespace SPSA.Autorizadores.Web.Controllers
 
             try
             {
-                var colaboradores = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = local, CodigoEmpresa = WebSession.CodigoEmpresa });
+                var colaboradoresDatatable = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = local, CodigoEmpresa = WebSession.CodigoEmpresa });
+                respuesta.Columnas = new List<string>();
+                foreach (DataColumn colum in colaboradoresDatatable.Columns)
+                {
+                    respuesta.Columnas.Add(colum.ColumnName);
+                }
+
+                var lst = colaboradoresDatatable.AsEnumerable()
+                        .Select(r => r.Table.Columns.Cast<DataColumn>()
+                        .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
+                     ).ToDictionary(z => z.Key.Replace(" ", "")
+                                              .Replace(".", "")
+                                              .Replace("á", "a")
+                                              .Replace("é", "e")
+                                              .Replace("í", "i")
+                                              .Replace("ó", "o")
+                                              .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
+                  ).ToList();
+
+
                 respuesta.Ok = true;
-                respuesta.Colaboradores = colaboradores;
+                respuesta.Colaboradores = lst;
             }
             catch (System.Exception ex)
             {
@@ -61,9 +80,28 @@ namespace SPSA.Autorizadores.Web.Controllers
 
             try
             {
-                var colaboradores = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = "0", CodigoEmpresa = WebSession.CodigoEmpresa });
+                var colaboradoresDatatable = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = "0", CodigoEmpresa = WebSession.CodigoEmpresa });
+                respuesta.Columnas = new List<string>();
+                foreach (DataColumn colum in colaboradoresDatatable.Columns)
+                {
+                    respuesta.Columnas.Add(colum.ColumnName);
+                }
+
+                var lst = colaboradoresDatatable.AsEnumerable()
+                          .Select(r => r.Table.Columns.Cast<DataColumn>()
+                          .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
+                       ).ToDictionary(z => z.Key.Replace(" ", "")
+                                                .Replace(".", "")
+                                                .Replace("á","a")
+                                                .Replace("é","e")
+                                                .Replace("í","i")
+                                                .Replace("ó","o")
+                                                .Replace("ú","u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
+                    ).ToList();
+
+
                 respuesta.Ok = true;
-                respuesta.Colaboradores = colaboradores;
+                respuesta.Colaboradores = lst;
             }
             catch (System.Exception ex)
             {

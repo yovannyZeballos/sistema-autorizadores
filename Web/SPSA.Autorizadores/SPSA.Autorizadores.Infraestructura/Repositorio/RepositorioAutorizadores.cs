@@ -81,7 +81,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         }
 
-        public async Task<List<Colaborador>> ListarColaboradores(string codigoLocal, string codigoEmpresa)
+        public async Task<DataTable> ListarColaboradores(string codigoLocal, string codigoEmpresa)
         {
             var colaboradores = new List<Colaborador>();
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
@@ -98,33 +98,15 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
 
                 var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                var datatable = new DataTable();
+                datatable.Load(dr);
 
-                if (dr != null && dr.HasRows)
-                {
-                    while (await dr.ReadAsync())
-                    {
-                        colaboradores.Add(new Colaborador
-                        {
-                            ApellidoMaterno = dr["MATERNO"].ToString(),
-                            ApellidoPaterno = dr["PATERNO"].ToString(),
-                            Codigo = dr["CODIGO"].ToString(),
-                            CodigoLocal = dr["C_LOCAL"].ToString(),
-                            CodigoPuesto = dr["C_PUESTO"].ToString(),
-                            DescLocal = dr["LOCAL"].ToString(),
-                            DescPuesto = dr["PUESTO"].ToString(),
-                            Estado = dr["ESTADO"].ToString(),
-                            Nombres = dr["NOMBRE"].ToString(),
-                            Planilla = dr["PLANILLA"].ToString(),
-                            NumeroDocumento = dr["DOCUMENTO"].ToString(),
-                            FechaIngreso = Convert.ToDateTime(dr["F_INGRESO"]).ToString("dd/MM/yyyy")
-                        });
-                    }
-                }
 
                 connection.Close();
                 connection.Dispose();
 
-                return colaboradores;
+                return datatable;
+
             }
 
         }
