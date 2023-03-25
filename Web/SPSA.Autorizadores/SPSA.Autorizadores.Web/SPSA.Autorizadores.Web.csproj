@@ -152,12 +152,15 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MonitorCierreController.cs" />
     <Compile Include="Controllers\PuestoController.cs" />
     <Compile Include="Extensiones\DataTableExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Intercambio\AsignarLocalRequest.cs" />
+    <Compile Include="Models\Intercambio\ListarMonitorRequest.cs" />
+    <Compile Include="Models\Intercambio\ListarMonitorResponse.cs" />
     <Compile Include="Models\Intercambio\ListarColaboradoresMassResponse.cs" />
     <Compile Include="Models\Intercambio\ListarAutorizadorResponse.cs" />
     <Compile Include="Models\Intercambio\ListarLocalesAsignarResponse.cs" />
@@ -166,6 +169,7 @@
     <Compile Include="Models\Intercambio\ListarLocalResponse.cs" />
     <Compile Include="Models\Intercambio\ListarEmpresaResponse.cs" />
     <Compile Include="Models\Intercambio\ListarPuestosResponse.cs" />
+    <Compile Include="Models\Intercambio\ProcesarRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utiles\Comun.cs" />
     <Compile Include="Utiles\WebSession.cs" />
@@ -2174,6 +2178,7 @@
     <Content Include="Content\ViewJs\CambioLocal.js" />
     <Content Include="Content\ViewJs\Home.js" />
     <Content Include="Content\ViewJs\Login.js" />
+    <Content Include="Content\ViewJs\MonitorCierre.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -2553,6 +2558,7 @@
     <Content Include="Views\AsignarLocal\Index.cshtml" />
     <Content Include="Views\Puesto\Index.cshtml" />
     <Content Include="Views\AutorizadoresMass\Index.cshtml" />
+    <Content Include="Views\MonitorCierre\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -71657,3 +71657,8 @@ table thead tr th {
     font-size: 11px !important;
 }
 
+
+.swal-wide {
+    width: 270px !important;
+    height: 240px !important;
+}

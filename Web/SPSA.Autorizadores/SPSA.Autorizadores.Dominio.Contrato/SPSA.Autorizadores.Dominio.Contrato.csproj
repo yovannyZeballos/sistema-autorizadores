@@ -47,8 +47,10 @@
     <Compile Include="Repositorio\IRepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\IRepositorioEmpresa.cs" />
     <Compile Include="Repositorio\IRepositorioLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\IRepositorioPuesto.cs" />
     <Compile Include="Repositorio\IRepositorioSeguridad.cs" />
+    <Compile Include="Repositorio\IRepositorioSovosLocal.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

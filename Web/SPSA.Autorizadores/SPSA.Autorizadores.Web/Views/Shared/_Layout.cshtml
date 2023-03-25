@@ -20,6 +20,8 @@
 
     <!---Icons css-->
     <link href="~/Content/css/icons.css" rel="stylesheet" />
+
+    @RenderSection("css", false)
 </head>
 <body class="app sidebar-mini ltr color-menu color-header">
 
@@ -240,6 +242,33 @@
                                                                         </a>
                                                                     </li>
                                                                 </ul>
+                                                            }
+                                                        }
+
+                                                    </li>
+                                                }
+                                                @if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 12))
+                                                {
+                                                    <li class="sub-slide">
+                                                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
+                                                           href="javascript:void(0);">
+                                                            <span class="sub-side-menu__label">
+                                                                @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 12).DesPermiso
+                                                            </span><i class="sub-angle fa fa-angle-right"></i>
+                                                        </a>
+                                                        @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
+                                                        {
+                                                            if (item.Id == 13)
+                                                            {
+                                                                <ul class="sub-slide-menu">
+
+                                                                    <li>
+                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "MonitorCierre")">
+                                                                            @item.DesPermiso
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+
                                                             }
                                                         }
 

@@ -103,8 +103,10 @@
     <Compile Include="Repositorio\RepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\RepositorioEmpresa.cs" />
     <Compile Include="Repositorio\RepositorioLocal.cs" />
+    <Compile Include="Repositorio\RepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\RepositorioPuesto.cs" />
     <Compile Include="Repositorio\RepositorioSeguridad.cs" />
+    <Compile Include="Repositorio\RepositorioSovosLocal.cs" />
     <Compile Include="Utiles\CadenasConexion.cs" />
   </ItemGroup>
   <ItemGroup />

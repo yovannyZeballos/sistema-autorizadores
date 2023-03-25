@@ -87,5 +87,38 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 return empresas;
             }
         }
+
+        public async Task<List<Empresa>> ListarMonitor()
+        {
+            var empresas = new List<Empresa>();
+            using (SqlConnection connection = new SqlConnection(CadenaConexionCarteleria))
+            {
+                var command = new SqlCommand("SP_MONI_LST_EMP", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+
+                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+
+                if (dr != null && dr.HasRows)
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        empresas.Add(new Empresa
+                        {
+                            Descripcion = dr["RAZON_SOCIAL"].ToString().Trim(),
+                            Ruc = dr["Ruc"].ToString().Trim(),
+                            Codigo = dr["COD_EMPRESA"].ToString().Trim()
+                        });
+                    }
+                }
+                connection.Close();
+                connection.Dispose();
+                return empresas;
+            }
+        }
     }
 }

@@ -12,11 +12,13 @@ const btnLoading = function (button, state) {
 
 const showLoading = function () {
     swal({
-        title: "Procesando...",
+        text: "Procesando...",
         content: divLoader,
         buttons: false,
         closeOnClickOutside: false,
-        closeOnEsc: false
+        closeOnEsc: false,
+        className: 'swal-wide',
+        width: 200
     });
 }
 

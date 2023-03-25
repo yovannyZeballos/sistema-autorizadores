@@ -22,6 +22,8 @@ using System.Data;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -77,6 +79,10 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<ListarEmpresasOfiplanHandler>().As<IRequestHandler<ListarEmpresasOfiplanQuery, List<EmpresaDTO>>>();
             builder.RegisterType<ActualizarPuestoHandler>().As<IRequestHandler<ActualizarPuestoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ListarColaboradoresMassHandler>().As<IRequestHandler<ListarColaboradoresMassQuery, DataTable>>();
+            builder.RegisterType<ListarLocalMonitorHandler>().As<IRequestHandler<ListarLocalMonitorQuery, DataTable>>();
+            builder.RegisterType<ListarEmpresasMonitorHandler>().As<IRequestHandler<ListarEmpresasMonitorQuery, List<EmpresaDTO>>>();
+            builder.RegisterType<CrearLocalMonitorHandler>().As<IRequestHandler<CrearLocalMonitorCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ProcesarMonitorHandler>().As<IRequestHandler<ProcesarMonitorCommand, RespuestaComunDTO>>();
 
             builder.Register<ServiceFactory>(ctx =>
             {

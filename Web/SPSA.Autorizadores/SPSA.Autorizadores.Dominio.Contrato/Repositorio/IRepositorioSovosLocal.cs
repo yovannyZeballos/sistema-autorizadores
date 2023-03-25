@@ -1,13 +1,14 @@
 ﻿using SPSA.Autorizadores.Dominio.Entidades;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-    public interface IRepositorioEmpresa
+    public interface IRepositorioSovosLocal
     {
-        Task<List<Empresa>> Listar();
-        Task<List<Empresa>> ListarOfiplan();
-        Task<List<Empresa>> ListarMonitor();
+        Task<List<SovosLocal>> Listar(string codEmpresa, DateTime fecha);
     }
 }
