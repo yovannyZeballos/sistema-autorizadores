@@ -108,7 +108,8 @@ var MonitorCierre = function () {
                                 $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, node, config);
                             }
                         },
-                    ]
+                    ],
+                    order: []
                 });
 
                 $("#container-btn-exportar").append(dataTableMonitor.buttons().container());

@@ -31,7 +31,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
         private readonly string _clave;
         private readonly int _maximoTareasEncoladas;
 
-        private const string COMANDO_EXISTE_ARCHIVO = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | cut -d/ -f 6 | cut -d- -f1";
+        private const string COMANDO_EXISTE_ARCHIVO = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | sort | tail -n 1 | cut -d/ -f 6 | cut -d- -f1";
         private const string COMANDO_HORA_INICIO = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | xargs cat | grep BEGIN | awk '{print $2}' | cut -d, -f1";
         private const string COMANDO_HORA_FIN = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | xargs cat | grep END | awk '{print $2}' | cut -d, -f1";
         private const string NOMBRE_ARCHIVO = "WF_EODSteps";
@@ -132,6 +132,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                         procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
                         procesoMonitorDTO.HoraFin = "--:--:--";
                         procesoMonitorDTO.HoraInicio = "--:--:--";
+                        procesoMonitorDTO.Observacion = $"Texto encontrado {nombreArchivo}";
                         return procesoMonitorDTO;
                     }
 
@@ -140,6 +141,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                     var comandoHoraFinResult = client.RunCommand(COMANDO_HORA_FIN);
                     procesoMonitorDTO.HoraFin = comandoHoraFinResult.Result.Replace("\n", "");
                     procesoMonitorDTO.Estado = ((int)EstadoMonitor.CIERRE_REALIZADO).ToString();
+
+                    client.Disconnect();
+                    client.Dispose();
                 }
 
             }

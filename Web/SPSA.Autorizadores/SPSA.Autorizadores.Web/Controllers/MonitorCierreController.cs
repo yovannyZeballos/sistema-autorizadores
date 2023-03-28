@@ -65,7 +65,7 @@ namespace SPSA.Autorizadores.Web.Controllers
                                               .Replace("é", "e")
                                               .Replace("í", "i")
                                               .Replace("ó", "o")
-                                              .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
+                                              .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy HH:mm:ss") : z.Value)
                   ).ToList();
 
                 respuesta.Locales = lst;
