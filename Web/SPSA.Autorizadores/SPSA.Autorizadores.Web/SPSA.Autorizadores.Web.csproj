@@ -199,7 +199,6 @@
     <Content Include="Content\images\brand\logo-super-food.png" />
     <Content Include="Content\images\brand\logo-white.png" />
     <Content Include="Content\images\brand\logo.png" />
-    <Content Include="Content\images\brand\logo_sda.jpg" />
     <Content Include="Content\images\browsers\android-browser.svg" />
     <Content Include="Content\images\browsers\aol-explorer.svg" />
     <Content Include="Content\images\browsers\blackberry.svg" />
@@ -1075,6 +1074,8 @@
     <Content Include="Content\images\flags\za.svg" />
     <Content Include="Content\images\flags\zm.svg" />
     <Content Include="Content\images\flags\zw.svg" />
+    <Content Include="Content\images\fondo_inicio.jpg" />
+    <Content Include="Content\images\logo_login.jpg" />
     <Content Include="Content\images\media\11.jpg" />
     <Content Include="Content\images\media\13.jpg" />
     <Content Include="Content\images\media\4.jpg" />
@@ -2526,6 +2527,7 @@
     <Content Include="Content\scss\utlities\_width.scss" />
     <Content Include="Content\scss\_variables.scss" />
     <Content Include="DiagramaClasesWeb.cd" />
+    <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

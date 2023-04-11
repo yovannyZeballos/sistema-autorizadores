@@ -65,7 +65,7 @@ var MonitorCierre = function () {
                         sSearch: '',
                     },
                     searching: false,
-                    scrollY: '240px',
+                    scrollY: '300px',
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,

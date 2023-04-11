@@ -68,8 +68,9 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 command.Parameters.Add(new SqlParameter
                 {
                     SqlDbType = SqlDbType.DateTime,
+                    IsNullable = true,
                     Direction = ParameterDirection.Input,
-                    Value = localMonitor.FechaCierre,
+                    Value = (object)localMonitor.FechaCierre ?? DBNull.Value,
                     ParameterName = "@FEC_CIERRE"
                 });
 
@@ -77,7 +78,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 {
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input,
-                    Size = 10,
+                    Size = 30,
                     Value = localMonitor.HoraInicio,
                     ParameterName = "@HORA_INICIO"
                 });
@@ -86,7 +87,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 {
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input,
-                    Size = 10,
+                    Size = 30,
                     Value = localMonitor.HoraFin,
                     ParameterName = "@HORA_FIN"
                 });

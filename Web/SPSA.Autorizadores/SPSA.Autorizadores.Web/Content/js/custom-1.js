@@ -1025,7 +1025,6 @@
 		$('body').addClass('icon-text');
 		$('body').addClass('sidenav-toggled');
 		icontext();
-		console.log("ok");
 	}
 	/***************** ICONTEXT MENU HAs Class *********************/
 

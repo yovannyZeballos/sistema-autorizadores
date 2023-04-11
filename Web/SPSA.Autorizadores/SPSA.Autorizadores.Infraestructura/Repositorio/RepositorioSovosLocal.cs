@@ -62,7 +62,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                         {
                             CodLocal = dr["COD_LOCAL"].ToString(),
                             Ip = dr["IP_ADDRES"].ToString(),
-                            CodFormato = dr["COD_FORMATO"].ToString()
+                            CodFormato = dr["COD_FORMATO"].ToString(),
+                            CodEmpresa = dr["COD_EMPRESA"].ToString()
                         });
                     }
                 }

@@ -32,7 +32,6 @@ $(function (e) {
         paging: false,
         "bAutoWidth": true,
     });
-    console.log(table.buttons());
 
     table.buttons().container()
         .appendTo('#file-datatable_wrapper .col-md-6:eq(0)');
@@ -40,7 +39,6 @@ $(function (e) {
     //______Delete Data Table
    
     $('#button').on('click', function () {
-        console.log(table.row('.selected'));
         table.row('.selected').remove().draw(false);
     });
     $('#example3').DataTable({

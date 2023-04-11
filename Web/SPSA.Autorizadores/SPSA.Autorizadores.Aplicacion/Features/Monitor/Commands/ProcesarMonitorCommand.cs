@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 {
     public class ProcesarMonitorCommand : IRequest<RespuestaComunDTO>
     {
-        //public List<ProcesoRequestDTO> ProcesoRequest { get; set; }
         public string CodEmpresa { get; set; }
         public DateTime FechaCierre { get; set; }
     }
@@ -31,10 +31,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
         private readonly string _clave;
         private readonly int _maximoTareasEncoladas;
 
-        private const string COMANDO_EXISTE_ARCHIVO = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | sort | tail -n 1 | cut -d/ -f 6 | cut -d- -f1";
-        private const string COMANDO_HORA_INICIO = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | xargs cat | grep BEGIN | awk '{print $2}' | cut -d, -f1";
-        private const string COMANDO_HORA_FIN = "find /home/NCR/webfront-endofday/safe/ -type f -mtime -1 | xargs cat | grep END | awk '{print $2}' | cut -d, -f1";
-        private const string NOMBRE_ARCHIVO = "WF_EODSteps";
+        private readonly string COMANDO_EXISTE_ARCHIVO;
+        private readonly string COMANDO_HORA_INICIO;
+        private readonly string COMANDO_HORA_FIN;
+        private readonly string NOMBRE_ARCHIVO;
+        //private readonly string COMANDO_FECHA_CIERRE;
 
         public ProcesarMonitorHandler(IRepositorioMonitorReporte repositorioLocalMonitor, IRepositorioSovosLocal repositorioSovosLocal)
         {
@@ -43,11 +44,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
             _maximoTareasEncoladas = Convert.ToInt32(ConfigurationManager.AppSettings["MaximoProcesosBloque"]);
             _repositorioLocalMonitor = repositorioLocalMonitor;
             _repositorioSovosLocal = repositorioSovosLocal;
+            COMANDO_EXISTE_ARCHIVO = ConfigurationManager.AppSettings["ObtenerArchivo"].ToString();
+            COMANDO_HORA_INICIO = ConfigurationManager.AppSettings["HoraInicio"].ToString();
+            COMANDO_HORA_FIN = ConfigurationManager.AppSettings["HoraFin"].ToString();
+            NOMBRE_ARCHIVO = ConfigurationManager.AppSettings["NombreArchivo"].ToString();
+            //COMANDO_FECHA_CIERRE = ConfigurationManager.AppSettings["FechaCierre"].ToString();
         }
 
         public async Task<RespuestaComunDTO> Handle(ProcesarMonitorCommand request, CancellationToken cancellationToken)
         {
             var fechaProceso = DateTime.Now;
+            var fechaCierre = fechaProceso.AddDays(-1);
             var tareasCalculo = new List<Task<ProcesoMonitorDTO>>();
             var resultadosProceso = new List<ProcesoMonitorDTO>();
             var respuesta = new RespuestaComunDTO();
@@ -57,7 +64,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                 var timer = new Stopwatch();
                 timer.Start();
 
-                var localesAProcesar = await _repositorioSovosLocal.Listar(request.CodEmpresa, request.FechaCierre);
+                var localesAProcesar = await _repositorioSovosLocal.Listar(request.CodEmpresa, fechaCierre);
 
                 int cantidadTareas = 0;
                 foreach (var local in localesAProcesar)
@@ -83,8 +90,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                 //Insertar BD
                 foreach (var resultado in resultadosProceso)
                 {
-                    var localMonitor = new MonitorReporte(request.CodEmpresa, resultado.CodLocal, fechaProceso,
-                       request.FechaCierre, resultado.HoraInicio, resultado.HoraFin, resultado.Estado, resultado.Observacion, resultado.CodFormato);
+                    var localMonitor = new MonitorReporte(resultado.CodEmpresa, resultado.CodLocal, fechaProceso,
+                       fechaCierre, resultado.HoraInicio, resultado.HoraFin, resultado.Estado, resultado.Observacion, resultado.CodFormato);
 
                     await _repositorioLocalMonitor.Crear(localMonitor);
                 }
@@ -93,9 +100,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                 TimeSpan timeTaken = timer.Elapsed;
 
                 respuesta.Ok = true;
-                respuesta.Mensaje = $"Proceso exitoso, el proceso se ejecuto en {timeTaken.ToString(@"hh\:mm\:ss")}";
+                respuesta.Mensaje = $"Proceso exitoso, el proceso se ejecuto en {timeTaken:hh\\:mm\\:ss}";
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 respuesta.Ok = false;
                 respuesta.Mensaje = ex.Message;
@@ -110,7 +117,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
             {
                 CodLocal = local.CodLocal,
                 CodFormato = local.CodFormato,
+                CodEmpresa = local.CodEmpresa
             };
+
+            string[] formats = new[] { "yyyy-MM-dd", "yyyy-MM-d", "yyyy-M-dd", "yyyy-M-d" };
 
             try
             {
@@ -127,12 +137,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                     var comandoExisteArchivoResult = client.RunCommand(COMANDO_EXISTE_ARCHIVO);
                     var nombreArchivo = comandoExisteArchivoResult.Result.Replace("\n", "");
 
-                    if(nombreArchivo != NOMBRE_ARCHIVO)
+                    if (nombreArchivo != NOMBRE_ARCHIVO)
                     {
                         procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
                         procesoMonitorDTO.HoraFin = "--:--:--";
                         procesoMonitorDTO.HoraInicio = "--:--:--";
-                        procesoMonitorDTO.Observacion = $"Texto encontrado {nombreArchivo}";
+                        //procesoMonitorDTO.Observacion = $"Texto encontrado {nombreArchivo}";
                         return procesoMonitorDTO;
                     }
 
@@ -140,6 +150,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                     procesoMonitorDTO.HoraInicio = comandoHoraInicioResult.Result.Replace("\n", "");
                     var comandoHoraFinResult = client.RunCommand(COMANDO_HORA_FIN);
                     procesoMonitorDTO.HoraFin = comandoHoraFinResult.Result.Replace("\n", "");
+                    //var comandoHoraFechaCierreResult = client.RunCommand(COMANDO_FECHA_CIERRE);
+                    //var fechaCierre = comandoHoraFechaCierreResult.Result.Replace("\n", ""); ;
+
+                    //if (!string.IsNullOrWhiteSpace(fechaCierre))
+                    //    procesoMonitorDTO.FechaCierre = DateTime.ParseExact(fechaCierre, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+
                     procesoMonitorDTO.Estado = ((int)EstadoMonitor.CIERRE_REALIZADO).ToString();
 
                     client.Disconnect();
