@@ -25692,9 +25692,9 @@ hr.divider:after {
 
 .customlogin-imgcontent {
     position: absolute;
-    top: 15%;
+    /*top: 15%;*/
     padding: 5rem;
-    width: 600px;
+    width: 580px;
 }
 
 .error-bg1 {

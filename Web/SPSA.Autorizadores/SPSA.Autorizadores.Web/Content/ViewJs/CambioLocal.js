@@ -1,4 +1,4 @@
-﻿var urlCambioLocal = baseUrl + 'CambioLocal/Index';
+﻿var urlCambioLocal = baseUrl + 'Seguridad/CambioLocal/Index';
 var urlEmpresas = baseUrl + 'Login/ListarEmpresas';
 var urlLocal = baseUrl + 'Login/ListarLocales';
 var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
@@ -109,12 +109,11 @@ var CambioLocal = function () {
             type: "post",
             data: { codigoLocal: codigo },
             success: function (response) {
-
                 swal({
                     text: "Se cambio el local correctamente, se reinicara el sistema.",
                     icon: "success"
                 }).then(() => {
-                    document.location.href = home;
+                    document.location = home;
                     btnLoading($("#btnGuardar"), false);
                 });
             },
