@@ -1,9 +1,9 @@
-﻿var urlColaborador = baseUrl + 'Autorizador/ListarColaborador';
-var urlTodosColaborador = baseUrl + 'Autorizador/ListarTodosColaborador';
-var urlAutorizador = baseUrl + 'Autorizador/ListarAutorizador';
-var urlAsignarAutorizador = baseUrl + 'Autorizador/AsignarAutorizador';
-var urlEliminarAutorizador = baseUrl + 'Autorizador/EliminarAutorizador';
-var urlActualizarEstadoArchivoAutorizador = baseUrl + 'Autorizador/ActualizarEstadoArchivoAutorizador';
+﻿var urlColaborador = baseUrl + 'Autorizadores/Autorizador/ListarColaborador';
+var urlTodosColaborador = baseUrl + 'Autorizadores/Autorizador/ListarTodosColaborador';
+var urlAutorizador = baseUrl + 'Autorizadores/Autorizador/ListarAutorizador';
+var urlAsignarAutorizador = baseUrl + 'Autorizadores/Autorizador/AsignarAutorizador';
+var urlEliminarAutorizador = baseUrl + 'Autorizadores/Autorizador/EliminarAutorizador';
+var urlActualizarEstadoArchivoAutorizador = baseUrl + 'Autorizadores/Autorizador/ActualizarEstadoArchivoAutorizador';
 
 
 var Autorizador = function () {
