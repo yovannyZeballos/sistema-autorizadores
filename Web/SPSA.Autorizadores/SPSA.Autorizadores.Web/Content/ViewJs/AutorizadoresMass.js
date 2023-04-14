@@ -1,6 +1,6 @@
-﻿var urlColaboradorMass = baseUrl + 'AutorizadoresMass/ListarColaboradores';
-var urlAutorizador = baseUrl + 'Autorizador/ListarAutorizador';
-var urlAsignarAutorizador = baseUrl + 'AutorizadoresMass/AsignarAutorizador';
+﻿var urlColaboradorMass = baseUrl + 'Autorizadores/AutorizadoresMass/ListarColaboradores';
+var urlAutorizador = baseUrl + 'Autorizadores/Autorizador/ListarAutorizador';
+var urlAsignarAutorizador = baseUrl + 'Autorizadores/AutorizadoresMass/AsignarAutorizador';
 
 
 var AutorizadorMass = function () {

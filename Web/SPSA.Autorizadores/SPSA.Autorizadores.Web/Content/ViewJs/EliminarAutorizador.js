@@ -1,5 +1,5 @@
-﻿var urlColaboradorCesados = baseUrl + 'EliminarAutorizador/ListarColaboradoresCesados';
-var urlEliminar = baseUrl + 'EliminarAutorizador/EliminarAutorizador';
+﻿var urlColaboradorCesados = baseUrl + 'Autorizadores/EliminarAutorizador/ListarColaboradoresCesados';
+var urlEliminar = baseUrl + 'Autorizadores/EliminarAutorizador/EliminarAutorizador';
 
 
 var EliminarAutorizador = function () {

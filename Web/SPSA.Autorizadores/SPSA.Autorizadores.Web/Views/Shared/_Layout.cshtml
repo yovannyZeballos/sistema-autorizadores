@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Sistema de autorizadores</title>
+    <title>@ViewBag.Title | Sistema de autorizadores</title>
     <!--Favicon -->
     <link rel="icon" href="~/Content/images/brand/favicon.ico" type="image/x-icon" />
 
@@ -166,7 +166,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "CambioLocal")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Seguridad/CambioLocal">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -193,7 +193,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "Autorizador")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/Administrar">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -204,7 +204,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "EliminarAutorizador")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/EliminarAutorizador">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -215,7 +215,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "AsignarLocal")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/AsignarLocal">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -226,7 +226,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "Puesto")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/Puesto">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -237,7 +237,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "AutorizadoresMass")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/AutorizadoresMass">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -263,7 +263,7 @@
                                                                 <ul class="sub-slide-menu">
 
                                                                     <li>
-                                                                        <a class="sub-slide-item lh-1" href="@Url.Action("Index", "MonitorCierre")">
+                                                                        <a class="sub-slide-item lh-1" href="~/Monitor/CierreEOD">
                                                                             @item.DesPermiso
                                                                         </a>
                                                                     </li>
@@ -337,7 +337,7 @@
 
     <script>
         var baseUrl = "@Url.Content("~")";
-        var home = '@Url.Action("Index", "Home")';
+        var home = '@Url.Action("Index", "Home", new { area = "" })';
         var rucSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Ruc';
         var codigoLocalSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Local';
 

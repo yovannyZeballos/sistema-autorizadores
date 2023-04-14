@@ -1,5 +1,5 @@
-﻿var urlPuestos = baseUrl + 'Puesto/Listar';
-var urlActualizarPuestos = baseUrl + 'Puesto/Actualizar';
+﻿var urlPuestos = baseUrl + 'Autorizadores/Puesto/Listar';
+var urlActualizarPuestos = baseUrl + 'Autorizadores/Puesto/Actualizar';
 var urlEmpresas = baseUrl + 'Empresa/ListarEmpresas';
 
 var Puesto = function () {
@@ -217,7 +217,6 @@ var Puesto = function () {
     const cargarEmpresas = function (empresas) {
        
         empresas.map((empresa) => {
-            console.log({ value: empresa.Ruc, text: empresa.Descripcion });
             $('#cboEmpresa').append($('<option>', { value: empresa.Ruc, text: empresa.Descripcion }));
         });
         $('#cboEmpresa').val($('#cboEmpresa option:last-child').val()).trigger('change');

@@ -1,5 +1,5 @@
-﻿var urlLocalesAsignar = baseUrl + 'AsignarLocal/ListarLocalesAsignar';
-var urlAsignar = baseUrl + 'AsignarLocal/Asignar';
+﻿var urlLocalesAsignar = baseUrl + 'Autorizadores/AsignarLocal/ListarLocalesAsignar';
+var urlAsignar = baseUrl + 'Autorizadores/AsignarLocal/Asignar';
 
 
 var AsignarLocal = function () {
