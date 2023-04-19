@@ -1,0 +1,283 @@
+﻿@model string
+@{
+    ViewBag.Title = "Mantenimiento de locales | Locales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Mantenimiento de locales</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Locales</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden needs-validation" id="formLocal">
+            @Html.Partial("_CardHeader", "Local")
+            <div class="card-body pt-3 pb-0">
+                <div class="row mb-4">
+                    <div class="col-lg-2 col-md-2 col-sm-4">
+                        <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary btn-block">Nuevo</button>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-4">
+                        <button type="button" id="btnGuardarLocal" class="btn btn-sm btn-primary btn-block">Guardar</button>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-4">
+                        <button type="button" id="btnBuscarLocal" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body  pb-0">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresa" required>
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Formato</label>
+                            <select class="form-control select2-show-search custom-select" id="cboFormato" required>
+                                <option label="Seleccione un formato"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-3 pb-0">
+                <div class="card-title text-center"><b>Información de local</b></div>
+                <div class="row">
+                    <div class="col-xl-2">
+                        <div class="form-group">
+                            <label for="txtCodigo" class="form-label">Código</label>
+                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtNombreLocal" class="form-label">Nombre</label>
+                            <input type="text" class="form-control form-control-sm" id="txtNombreLocal" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Estado</label>
+                            <select class="form-control select2-show-search custom-select" id="cboEstado" required>
+                                <option value="A" selected>Activo</option>
+                                <option value="E">Eliminado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-control select2-show-search custom-select" id="cboTipo" required>
+                                <option value="T" selected>Tienda</option>
+                                <option value="A">Almacen</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="form-group">
+                            <label for="txtUsuarioActualiza" class="form-label">Actualiza</label>
+                            <input type="text" class="form-control form-control-sm" id="txtUsuarioActualiza" disabled value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Sist. Op.</label>
+                            <select class="form-control select2-show-search custom-select" id="cboSO" required>
+                                <option label="Seleccionar"></option>
+                                <option value="L">Linux</option>
+                                <option value="W">Windows</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <label for="txtIpServidor" class="form-label">IP Servidor</label>
+                            <input type="text" class="form-control form-control-sm" id="txtIpServidor" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Factura</label>
+                            <select class="form-control select2-show-search custom-select" id="cboFactura" required>
+                                <option value="S" selected>Si</option>
+                                <option value="N">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="form-group">
+                            <label for="txtCodigoSunat" class="form-label">Cod. Sunat</label>
+                            <input type="text" class="form-control form-control-sm" id="txtCodigoSunat" value="0000" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="form-group">
+                            <label for="txtEl" class="form-label">El</label>
+                            <input type="text" class="form-control form-control-sm" id="txtEl" value="@Model" disabled required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Cajas")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-9">
+                        <table id="tableCajas" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-3" id="btn-cajas">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnNuevaCaja" type="button" disabled>Nuevo registro</button>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnActualizarCaja" type="button" disabled>Actualizar registro</button>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnEliminarCaja" type="button" disabled>Eliminar registro</button>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="button" value="Importar de Excel" class="btn btn-primary btn-block btn-sm mb-2" id="btnImportarExcel" />
+                            <input type="file" id="excelCajas" style="display: none;">
+                            @*<button class="btn btn-primary btn-block btn-sm mb-2" id="btnImportarExcel" type="button" disabled>Importar de Excel</button>*@
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnDescargarCajas" type="button" disabled>Descargar maestro</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CAJA-->
+<div class="modal fade" id="modalCaja" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnGuardarCaja" class="btn btn-sm btn-primary">Guardar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOCAL-->
+<div class="modal fade" id="modalLocales" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Seleccione un local</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="txtEmpresaLocal" class="form-label">Empresa</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtEmpresaLocal" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="txtFormatoLocal" class="form-label">Formato</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtFormatoLocal" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <table id="tableLocales" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAceptarLocal" class="btn btn-sm btn-primary">Aceptar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL ERRORES CAJA-->
+<div class="modal fade" id="modalErroresImportacionCaja" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarLocal.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarLocal.init();
+        });
+    </script>
+}

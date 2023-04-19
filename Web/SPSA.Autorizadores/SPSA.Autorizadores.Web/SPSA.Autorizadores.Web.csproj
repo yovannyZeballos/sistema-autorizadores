@@ -144,6 +144,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Autorizadores\AutorizadoresAreaRegistration.cs" />
+    <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
+    <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
     <Compile Include="AutofacConfig.cs" />
@@ -162,6 +164,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Intercambio\AsignarLocalRequest.cs" />
+    <Compile Include="Models\Intercambio\ListarFormatoResponse.cs" />
     <Compile Include="Models\Intercambio\ListarMonitorRequest.cs" />
     <Compile Include="Models\Intercambio\ListarMonitorResponse.cs" />
     <Compile Include="Models\Intercambio\ListarColaboradoresMassResponse.cs" />
@@ -2175,6 +2178,7 @@
     <Content Include="Content\switcher\img\bg-img4.jpg" />
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
+    <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
@@ -2533,6 +2537,9 @@
     <Content Include="Areas\Seguridad\Views\web.config" />
     <Content Include="Areas\Autorizadores\Views\web.config" />
     <Content Include="Areas\Monitor\Views\web.config" />
+    <Content Include="Areas\Locales\Views\web.config" />
+    <Content Include="Areas\Locales\Views\AdministrarLocal\Index.cshtml" />
+    <Content Include="Areas\Locales\Views\AdministrarLocal\_NuevaCaja.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2565,6 +2572,7 @@
     <Content Include="Areas\Autorizadores\Views\AutorizadoresMass\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\CierreEOD\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_CardHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

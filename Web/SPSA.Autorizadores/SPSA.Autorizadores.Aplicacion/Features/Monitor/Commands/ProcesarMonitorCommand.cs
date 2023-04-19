@@ -64,7 +64,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                 var timer = new Stopwatch();
                 timer.Start();
 
-                var localesAProcesar = await _repositorioSovosLocal.Listar(request.CodEmpresa, fechaCierre);
+                var localesAProcesar = await _repositorioSovosLocal.ListarMonitor(request.CodEmpresa, fechaCierre);
 
                 int cantidadTareas = 0;
                 foreach (var local in localesAProcesar)
@@ -87,7 +87,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                     resultadosProceso.AddRange(tareasCalculo.Select(t => t.Result));
                 }
 
-                //Insertar BD
+                //Crear BD
                 foreach (var resultado in resultadosProceso)
                 {
                     var localMonitor = new MonitorReporte(resultado.CodEmpresa, resultado.CodLocal, fechaProceso,

@@ -78,6 +78,12 @@ var Autorizador = function () {
             url: urlColaborador,
             type: "post",
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
 
                 var columnas = [];
@@ -137,6 +143,12 @@ var Autorizador = function () {
             url: urlAutorizador,
             type: "post",
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
 
                 var columnas = [];
@@ -198,6 +210,12 @@ var Autorizador = function () {
             url: urlTodosColaborador,
             type: "post",
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
 
                 var columnas = [];
@@ -371,6 +389,12 @@ var Autorizador = function () {
             type: "post",
             data: { autorizadores: autorizadores },
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 cargarColaboradores();
                 cargarAutorizadores();
@@ -418,6 +442,12 @@ var Autorizador = function () {
             type: "post",
             data: { autorizadores: autorizadores },
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 cargarColaboradores();
                 cargarAutorizadores();
@@ -467,6 +497,12 @@ var Autorizador = function () {
             type: "post",
             data: { autorizadores: autorizadores },
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 cargarAutorizadores();
                 swal({
@@ -509,6 +545,12 @@ var Autorizador = function () {
             type: "post",
             data: { autorizadores: autorizadores },
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 swal({
                     text: response.Mensaje,
@@ -543,6 +585,12 @@ var Autorizador = function () {
             url: urlTodosColaborador,
             type: "post",
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 dataTableBusquedaColaborador.clear();
                 dataTableBusquedaColaborador.rows.add(response.Colaboradores);
@@ -562,6 +610,12 @@ var Autorizador = function () {
             url: urlAutorizador,
             type: "post",
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 dataTableAutorizador.clear();
                 dataTableAutorizador.rows.add(response.Autorizadores);
@@ -581,6 +635,12 @@ var Autorizador = function () {
             url: urlColaborador,
             type: "post",
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
                 dataTableColaborador.clear();
                 dataTableColaborador.rows.add(response.Colaboradores);

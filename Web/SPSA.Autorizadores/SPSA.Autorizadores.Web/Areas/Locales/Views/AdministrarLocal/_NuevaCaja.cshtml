@@ -1,0 +1,27 @@
+﻿
+@model SPSA.Autorizadores.Aplicacion.DTO.SovosCajaDTO
+
+<div class="row needs-validation" id="formCaja">
+    <div class="col-xl-2">
+        <div class="form-group">
+            <label for="txtCodigo" class="form-label">Nro. Caja</label>
+            <input type="text" class="form-control form-control-sm" id="txtNroCaja" value="@Model.NumeroCaja" required>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="form-group">
+            <label for="txtCodigo" class="form-label">IP Caja</label>
+            <input type="text" class="form-control form-control-sm" id="txtIpCaja" value="@Model.Ip" required>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="form-group select2-sm">
+            <label class="form-label">Sist. Op.</label>
+            <select class="form-control select2-show-modal custom-select" id="cboSOCaja"  required>
+                <option label="Seleccionar"></option>
+                <option @(Model.So == "L" ? "selected" : "") value="L">Linux</option>
+                <option @(Model.So == "W" ? "selected" : "")  value="W">Windows</option>
+            </select>
+        </div>
+    </div>
+</div>

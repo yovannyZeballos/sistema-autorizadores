@@ -2,9 +2,41 @@
 {
     public class SovosLocal
     {
-        public string CodLocal { get; set; }
-        public string CodFormato { get; set; }
-        public string Ip { get; set; }
-        public string CodEmpresa { get; set; }
+        public string CodEmpresa { get; private set; }
+        public string CodLocal { get; private set; }
+        public string CodFormato { get; private set; }
+        public string NomLocal { get; private set; }
+        public string Ip { get; private set; }
+        public string IpMascara { get; private set; }
+        public string SO { get; private set; }
+        public decimal? Grupo { get; private set; }
+        public string Estado { get; private set; }
+        public string TipoLocal { get; private set; }
+        public string IndFactura { get; private set; }
+        public string CodigoSunat { get; private set; }
+
+        public SovosLocal(string codEmpresa, string codLocal, string codFormato, string nomLocal, string ip, string ipMascara, string sO, decimal? grupo, string estado, string tipoLocal, string indFactura, string codigoSunat)
+        {
+            CodEmpresa = codEmpresa;
+            CodLocal = codLocal;
+            CodFormato = codFormato;
+            NomLocal = nomLocal;
+            Ip = ip;
+            IpMascara = ipMascara;
+            SO = sO;
+            Grupo = grupo;
+            Estado = estado;
+            TipoLocal = tipoLocal;
+            IndFactura = indFactura;
+            CodigoSunat = codigoSunat;
+        }
+
+        public SovosLocal(string codEmpresa, string codLocal, string codFormato, string ip)
+        {
+            CodEmpresa = codEmpresa;
+            CodLocal = codLocal;
+            CodFormato = codFormato;
+            Ip = ip;
+        }
     }
 }

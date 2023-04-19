@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Repositorio;
+using SPSA.Autorizadores.Infraestructura.Utiles;
 
 namespace SPSA.Autorizadores.Infraestructura.IoC
 {
@@ -15,6 +16,9 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
             builder.RegisterType<RepositorioPuesto>().As<IRepositorioPuesto>().InstancePerRequest();
             builder.RegisterType<RepositorioMonitorReporte>().As<IRepositorioMonitorReporte>().InstancePerRequest();
             builder.RegisterType<RepositorioSovosLocal>().As<IRepositorioSovosLocal>().InstancePerRequest();
+            builder.RegisterType<RepositorioSovosFormato>().As<IRepositorioSovosFormato>().InstancePerRequest();
+            builder.RegisterType<DBHelper>().InstancePerRequest();
+            builder.RegisterType<RepositorioSovosCaja>().As<IRepositorioSovosCaja>().InstancePerRequest();
             base.Load(builder);
         }
     }

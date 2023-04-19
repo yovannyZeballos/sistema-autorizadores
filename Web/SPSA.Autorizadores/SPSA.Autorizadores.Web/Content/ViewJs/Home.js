@@ -25,6 +25,8 @@
         init: function () {
             checkSession(function () {
                 eventos();
+
+
             });
         }
     };
