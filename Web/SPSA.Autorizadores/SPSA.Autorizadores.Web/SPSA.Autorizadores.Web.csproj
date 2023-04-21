@@ -1355,7 +1355,10 @@
     <Content Include="Content\images\users\7.jpg" />
     <Content Include="Content\images\users\8.jpg" />
     <Content Include="Content\images\users\9.jpg" />
+    <Content Include="Content\images\users\log-out.svg" />
+    <Content Include="Content\images\users\login-logout.png" />
     <Content Include="Content\images\users\perfil_hombre.svg" />
+    <Content Include="Content\images\users\user-icon.png" />
     <Content Include="Content\js\accordion.js" />
     <Content Include="Content\js\admin\admin-general.js" />
     <Content Include="Content\js\admin\admin-role.js" />
