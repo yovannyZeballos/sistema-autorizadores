@@ -113,6 +113,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constantes.cs" />
     <Compile Include="DTO\AplicacionDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />

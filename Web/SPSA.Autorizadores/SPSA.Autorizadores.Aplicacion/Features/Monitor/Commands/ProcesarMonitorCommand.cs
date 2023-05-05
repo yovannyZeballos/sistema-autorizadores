@@ -142,19 +142,32 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                         procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
                         procesoMonitorDTO.HoraFin = "--:--:--";
                         procesoMonitorDTO.HoraInicio = "--:--:--";
-                        //procesoMonitorDTO.Observacion = $"Texto encontrado {nombreArchivo}";
+                        procesoMonitorDTO.Observacion = Constantes.MensajeArchivoNoEncontrado;
                         return procesoMonitorDTO;
                     }
 
                     var comandoHoraInicioResult = client.RunCommand(COMANDO_HORA_INICIO);
-                    procesoMonitorDTO.HoraInicio = comandoHoraInicioResult.Result.Replace("\n", "");
-                    var comandoHoraFinResult = client.RunCommand(COMANDO_HORA_FIN);
-                    procesoMonitorDTO.HoraFin = comandoHoraFinResult.Result.Replace("\n", "");
-                    //var comandoHoraFechaCierreResult = client.RunCommand(COMANDO_FECHA_CIERRE);
-                    //var fechaCierre = comandoHoraFechaCierreResult.Result.Replace("\n", ""); ;
+                    procesoMonitorDTO.HoraInicio = comandoHoraInicioResult.Result.Replace("\n", "").Trim();
 
-                    //if (!string.IsNullOrWhiteSpace(fechaCierre))
-                    //    procesoMonitorDTO.FechaCierre = DateTime.ParseExact(fechaCierre, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                    if (string.IsNullOrWhiteSpace(procesoMonitorDTO.HoraInicio))
+                    {
+                        procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
+                        procesoMonitorDTO.HoraFin = "--:--:--";
+                        procesoMonitorDTO.HoraInicio = "--:--:--";
+                        procesoMonitorDTO.Observacion = Constantes.MensajeFechaInicioNoEncontrado;
+                        return procesoMonitorDTO;
+                    }
+
+                    var comandoHoraFinResult = client.RunCommand(COMANDO_HORA_FIN);
+                    procesoMonitorDTO.HoraFin = comandoHoraFinResult.Result.Replace("\n", "").Trim();
+
+                    if (string.IsNullOrWhiteSpace(procesoMonitorDTO.HoraFin))
+                    {
+                        procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
+                        procesoMonitorDTO.HoraFin = "--:--:--";
+                        procesoMonitorDTO.Observacion = Constantes.MensajeFechaFinNoEncontrado;
+                        return procesoMonitorDTO;
+                    }
 
                     procesoMonitorDTO.Estado = ((int)EstadoMonitor.CIERRE_REALIZADO).ToString();
 
