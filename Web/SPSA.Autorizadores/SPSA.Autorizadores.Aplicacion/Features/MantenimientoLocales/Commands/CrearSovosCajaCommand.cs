@@ -18,6 +18,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands
         public decimal NumeroCaja { get; set; }
         public string Ip { get; set; }
         public string So { get; set; }
+        public string Estado { get; set; }
 
     }
 
@@ -36,7 +37,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands
 
             try
             {
-                var caja = new SovosCaja(request.CodEmpresa, request.CodLocal, request.CodFormato, request.NumeroCaja, request.Ip, request.So);
+                var caja = new SovosCaja(request.CodEmpresa, request.CodLocal, request.CodFormato, request.NumeroCaja, request.Ip, request.So, request.Estado);
 
                 await _repositorioSovosCaja.Crear(caja);
                 respuesta.Ok = true;

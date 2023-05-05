@@ -25,7 +25,7 @@ namespace SPSA.Autorizadores.Web.Areas.Locales.Controllers
         // GET: Locales/AdministrarLocal
         public ActionResult Index()
         {
-            object fechaActual = DateTime.Now.ToString("dd/MM/yyy HH:mm:ss", CultureInfo.InvariantCulture);
+            object fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
             return View(fechaActual);
         }
 
@@ -194,6 +194,45 @@ namespace SPSA.Autorizadores.Web.Areas.Locales.Controllers
             {
                 HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
                 respuesta = await _mediator.Send(new ImportarCajasCommand { Archivo = archivo, CodEmpresa = codEmpresa, CodFormato = codFormato, CodLocal = codLocal });
+            }
+
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public JsonResult ObtenerFechaSistema()
+        {
+            var respuesta = new RespuestaComunDTO();
+
+            try
+            {
+                respuesta.Ok = true;
+                respuesta.Mensaje = DateTime.Now.ToString("dd/MM/yyy HH:mm:ss", CultureInfo.InvariantCulture);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Ok = false;
+                respuesta.Mensaje = ex.Message;
+            }
+
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarMaestro(DescargarMaestroCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ImportarInventario()
+        {
+            var respuesta = new RespuestaComunExcelDTO();
+            foreach (var fileKey in Request.Files)
+            {
+                HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
+                respuesta = await _mediator.Send(new ImportarInventarioCajaCommand { Archivo = archivo });
             }
 
             return Json(respuesta);

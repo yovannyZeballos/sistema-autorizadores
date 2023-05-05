@@ -4,6 +4,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
         public string TipoLocal { get; set; }
         public string IndFactura { get; set; }
         public string CodigoSunat { get; set; }
+        public string Usuario { get; set; }
+        public string Fecha { get; set; }
     }
 
     public class CrearSovosLocalHandler : IRequestHandler<CrearSovosLocalCommand, RespuestaComunDTO>
@@ -41,8 +44,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
 
             try
             {
+                var fecha = DateTime.ParseExact(request.Fecha, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
                 var local = new SovosLocal(request.CodEmpresa, request.CodLocal, request.CodFormato, request.NomLocal, request.Ip,
-                    request.IpMascara, request.SO, request.Grupo, request.Estado, request.TipoLocal, request.IndFactura, request.CodigoSunat);
+                    request.IpMascara, request.SO, request.Grupo, request.Estado, request.TipoLocal, request.IndFactura, request.CodigoSunat,
+                    request.Usuario, fecha);
 
                 await _repositorioSovosLocal.Crear(local);
                 respuesta.Ok = true;

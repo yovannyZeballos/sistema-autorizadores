@@ -11,5 +11,6 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public decimal NumeroCaja { get; set; }
         public string Ip { get; set; }
         public string So { get; set; }
+        public string Estado { get; set; }
     }
 }

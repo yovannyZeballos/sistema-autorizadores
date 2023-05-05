@@ -63,7 +63,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
                         {
                             respuesta.Ok = false;
                             respuesta.Errores = errores;
-                            respuesta.Mensaje = "Se encontraron algunos errores en el aarchivo";
+                            respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
                             return respuesta;
                         }
 
@@ -78,12 +78,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
                                 respuesta.Ok = false;
                             }
 
-                            await _repositorioSovosCaja.Crear(new SovosCaja(row["COD_EMPRESA"].ToString(), row["COD_LOCAL"].ToString(), row["COD_FORMATO"].ToString(), Convert.ToDecimal(row["NUM_POS"]), row["IP_ADDRES"].ToString(), row["TIP_OS"].ToString()));
+                            await _repositorioSovosCaja.Crear(new SovosCaja(row["COD_EMPRESA"].ToString(), row["COD_LOCAL"].ToString(), 
+                                row["COD_FORMATO"].ToString(), Convert.ToDecimal(row["NUM_POS"]), row["IP_ADDRES"].ToString(), row["TIP_OS"].ToString(), "A"));
                         }
                     }
 
                     respuesta.Ok = true;
-                    respuesta.Mensaje = "archivo importado correctamente";
+                    respuesta.Mensaje = "Archivo importado correctamente";
                 }
             }
             catch (Exception ex)

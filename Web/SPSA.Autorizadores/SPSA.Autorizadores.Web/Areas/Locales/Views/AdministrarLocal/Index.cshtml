@@ -23,15 +23,18 @@
         <div class="card overflow-hidden needs-validation" id="formLocal">
             @Html.Partial("_CardHeader", "Local")
             <div class="card-body pt-3 pb-0">
-                <div class="row mb-4">
-                    <div class="col-lg-2 col-md-2 col-sm-4">
+                <div class="row mb-4" id="btn-local">
+                    <div class="col-lg-2 col-md-2 col-sm-3">
                         <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary btn-block">Nuevo</button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-4">
+                    <div class="col-lg-2 col-md-2 col-sm-3">
                         <button type="button" id="btnGuardarLocal" class="btn btn-sm btn-primary btn-block">Guardar</button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-4">
+                    <div class="col-lg-2 col-md-2 col-sm-3">
                         <button type="button" id="btnBuscarLocal" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-3 d-flex justify-content-end">
+                        <button type="button" id="btnDescargarMaestro"  class="btn btn-sm btn-primary ">Descargar maestro</button>
                     </div>
                 </div>
             </div>
@@ -160,12 +163,12 @@
                             <button class="btn btn-primary btn-block btn-sm mb-2" id="btnEliminarCaja" type="button" disabled>Eliminar registro</button>
                         </div>
                         <div class="col-md-12">
-                            <input type="button" value="Importar de Excel" class="btn btn-primary btn-block btn-sm mb-2" id="btnImportarExcel" />
+                            <input type="button" value="Importar de Excel" class="btn btn-primary btn-block btn-sm mb-2" id="btnImportarExcel" disabled/>
                             <input type="file" id="excelCajas" style="display: none;">
-                            @*<button class="btn btn-primary btn-block btn-sm mb-2" id="btnImportarExcel" type="button" disabled>Importar de Excel</button>*@
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnDescargarCajas" type="button" disabled>Descargar maestro</button>
+                            <input type="button" value="Inventario de caja" class="btn btn-primary btn-block btn-sm mb-2" id="btnInventarioCaja" disabled />
+                            <input type="file" id="excelInventario" style="display: none;">
                         </div>
                     </div>
                 </div>

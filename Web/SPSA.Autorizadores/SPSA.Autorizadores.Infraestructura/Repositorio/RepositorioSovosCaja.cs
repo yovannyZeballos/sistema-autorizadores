@@ -30,6 +30,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                  _dbHelper.MakeParam("@NUM_POS",sovosCaja.NumeroCaja,SqlDbType.Decimal,ParameterDirection.Input),
                  _dbHelper.MakeParam("@IP_ADDRES",sovosCaja.Ip,SqlDbType.VarChar,ParameterDirection.Input,30),
                  _dbHelper.MakeParam("@TIP_OS",sovosCaja.So,SqlDbType.VarChar,ParameterDirection.Input,1),
+                 _dbHelper.MakeParam("@TIP_ESTADO",sovosCaja.Estado,SqlDbType.Char,ParameterDirection.Input,1),
                  _dbHelper.MakeParam("@ERROR",0,SqlDbType.Int,ParameterDirection.Output),
                  _dbHelper.MakeParam("@MSGERR","",SqlDbType.VarChar,ParameterDirection.Output,250)
             };

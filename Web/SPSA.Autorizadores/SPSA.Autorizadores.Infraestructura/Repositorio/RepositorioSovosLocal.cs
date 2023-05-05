@@ -40,6 +40,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                  _dbHelper.MakeParam("@TIP_LOCAL",sovosLocal.TipoLocal,SqlDbType.Char,ParameterDirection.Input,1),
                  _dbHelper.MakeParam("@IND_FACTURA",sovosLocal.IndFactura,SqlDbType.Char,ParameterDirection.Input,1),
                  _dbHelper.MakeParam("@COD_LOCAL_SUNAT",sovosLocal.CodigoSunat,SqlDbType.VarChar,ParameterDirection.Input,4),
+                 _dbHelper.MakeParam("@USER",sovosLocal.Usuario,SqlDbType.VarChar,ParameterDirection.Input,20),
+                 _dbHelper.MakeParam("@FECHA",sovosLocal.Fecha,SqlDbType.DateTime,ParameterDirection.Input),
                  _dbHelper.MakeParam("@ERROR",0,SqlDbType.Int,ParameterDirection.Output),
                  _dbHelper.MakeParam("@MSGERR","",SqlDbType.VarChar,ParameterDirection.Output,250)
             };
@@ -113,12 +115,30 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 while (await dr.ReadAsync())
                 {
-                    sovosLocal = new SovosLocal(codEmpresa, codLocal, codFormato, dr["NOM_LOCAL"].ToString(), dr["IP_ADDRES"].ToString(), dr["IP_MASCARAS"].ToString(),
-                        dr["TIP_OS"].ToString(), Convert.ToDecimal(dr["GRUPO"]) , dr["TIP_ESTADO"].ToString(), dr["TIP_LOCAL"].ToString(), dr["IND_FACTURA"].ToString(), dr["COD_LOCAL_SUNAT"].ToString());
+                    sovosLocal = new SovosLocal(codEmpresa, codLocal, codFormato, dr["NOM_LOCAL"].ToString(), dr["IP_ADDRES"].ToString(), dr["IP_MASCARAS"] is DBNull ? "" : dr["IP_MASCARAS"].ToString(),
+                        dr["TIP_OS"].ToString(), Convert.ToDecimal(dr["GRUPO"] is DBNull ? 0 : dr["GRUPO"]) , dr["TIP_ESTADO"].ToString(), dr["TIP_LOCAL"].ToString(), dr["IND_FACTURA"].ToString(), 
+                        dr["COD_LOCAL_SUNAT"].ToString(), null, null);
                 }
             }
 
             return sovosLocal;
+        }
+
+        public async Task<DataTable> DescargarMaestro(string codEmpresa, string codFormato)
+        {
+            _dbHelper.CadenaConexion = CadenaConexionCarteleria;
+
+            SqlParameter[] dbParams = new SqlParameter[]
+            {
+                 _dbHelper.MakeParam("@COD_EMPRESA",codEmpresa,SqlDbType.VarChar,ParameterDirection.Input,10),
+                 _dbHelper.MakeParam("@COD_FORMATO",codFormato,SqlDbType.VarChar,ParameterDirection.Input,10)
+            };
+
+            var dr = await _dbHelper.ExecuteReader("SP_LOC_DESCARGA_MAESTRO", dbParams);
+            var dt = new DataTable();
+            dt.Load(dr);
+            dr.Close();
+            return dt;
         }
     }
 }

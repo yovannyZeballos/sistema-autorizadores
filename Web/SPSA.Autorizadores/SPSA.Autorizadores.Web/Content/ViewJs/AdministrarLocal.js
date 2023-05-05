@@ -8,6 +8,9 @@ var urlCrearCaja = baseUrl + 'Locales/AdministrarLocal/CrearCaja';
 var urlObtenerLocal = baseUrl + 'Locales/AdministrarLocal/ObtenerLocal';
 var urlEliminarCaja = baseUrl + 'Locales/AdministrarLocal/EliminarCajas';
 var urlImportarCajas = baseUrl + 'Locales/AdministrarLocal/ImportarCajas';
+var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
+var urlDescargarMaestro = baseUrl + 'Locales/AdministrarLocal/DescargarMaestro';
+var urlImportarInventario = baseUrl + 'Locales/AdministrarLocal/ImportarInventario';
 var dataTableCajas = null;
 var dataTableLocales = null;
 
@@ -36,6 +39,8 @@ var AdministrarLocal = function () {
                         TipoLocal: $("#cboTipo").val(),
                         IndFactura: $("#cboFactura").val(),
                         CodigoSunat: $("#txtCodigoSunat").val(),
+                        Usuario: $("#txtUsuarioActualiza").val(),
+                        Fecha: $("#txtEl").val()
                     };
 
                     if (validarLocal(local))
@@ -47,7 +52,7 @@ var AdministrarLocal = function () {
         });
 
         $("#btnNuevoLocal").on("click", function () {
-            document.location = '/Locales/AdministrarLocal';
+            limpiar();
         });
 
         $("#cboEmpresa").on("change", async function () {
@@ -77,7 +82,8 @@ var AdministrarLocal = function () {
                 CodFormato: $("#cboFormato").val(),
                 NumeroCaja: $("#txtNroCaja").val(),
                 Ip: $("#txtIpCaja").val(),
-                So: $("#cboSOCaja").val()
+                So: $("#cboSOCaja").val(),
+                Estado: $("#cboEstadoCaja").val()
             };
 
             if (validarCaja(caja))
@@ -131,7 +137,7 @@ var AdministrarLocal = function () {
 
             swal({
                 title: "Confirmar!",
-                text: "¿Está seguro eliminar las cajas seleccionadas",
+                text: "¿Está seguro eliminar las cajas seleccionadas?",
                 icon: "warning",
                 buttons: ["No", "Si"],
                 dangerMode: true,
@@ -151,15 +157,48 @@ var AdministrarLocal = function () {
             importarExcelCajas();
         });
 
-        //document.getElementById('get_file').onclick = function () {
-        //    document.getElementById('my_file').click();
-        //};
+
+        $("#btnDescargarMaestro").on("click", function () {
+            if (validarBuscarLocal()) {
+                descargarMaestro();
+            }
+
+        });
+
+        $("#btnInventarioCaja").on("click", function () {
+            $("#excelInventario").trigger("click");
+        });
+
+        $('#excelInventario').change(function (e) {
+            importarExcelInventario();
+        });
+
     };
+
+    const limpiar = function () {
+        $("#cboEmpresa").val('').trigger('change');
+        $("#cboFormato").val('').trigger('change');
+        $("#cboEstado").val('A').trigger('change');
+        $("#cboTipo").val('T').trigger('change');
+        $("#cboSO").val('').trigger('change');
+        $("#cboFactura").val('S').trigger('change');
+        $("#txtCodigo").val('');
+        $("#txtNombreLocal").val('');
+        $("#txtIpServidor").val('');
+        $("#txtCodigoSunat").val('0000');
+        desabilitarBotonosLocal(false);
+        desabilitarBotonosCaja(true);
+        desabilitarControles(false);
+        obtenerFechaSistema();
+        dataTableCajas.clear();
+        dataTableCajas.draw();
+    }
+
 
     const validarSelecion = function (count, unSoloRegistro = false) {
         if (count === 0) {
             swal({
-                text: "Debe seleccionar como minimo un registro",
+                text: "Debe seleccionar como mínimo un registro",
                 icon: "warning",
             });
             return false;
@@ -227,7 +266,7 @@ var AdministrarLocal = function () {
                 response.Empresas.map(empresa => {
                     $('#cboEmpresa').append($('<option>', { value: empresa.Codigo, text: empresa.Descripcion }));
                 });
-                $('#cboEmpresa').val("001");
+                //$('#cboEmpresa').val("001");
             } else {
                 swal({
                     text: response.Mensaje,
@@ -306,17 +345,44 @@ var AdministrarLocal = function () {
         $("#cboEmpresa").prop("disabled", disable);
         $("#txtCodigo").prop("disabled", disable);
         $("#cboFormato").prop("disabled", disable);
-        $("#txtNombreLocal").prop("disabled", disable);
-        $("#txtIpServidor").prop("disabled", disable);
-        $("#cboSO").prop("disabled", disable);
-        $("#cboEstado").prop("disabled", disable);
-        $("#cboTipo").prop("disabled", disable);
-        $("#cboFactura").prop("disabled", disable);
-        $("#txtCodigoSunat").prop("disabled", disable);
+        //$("#txtNombreLocal").prop("disabled", disable);
+        //$("#txtIpServidor").prop("disabled", disable);
+        //$("#cboSO").prop("disabled", disable);
+        //$("#cboEstado").prop("disabled", disable);
+        //$("#cboTipo").prop("disabled", disable);
+        //$("#cboFactura").prop("disabled", disable);
+        //$("#txtCodigoSunat").prop("disabled", disable);
+    }
+
+    const obtenerFechaSistema = function () {
+
+        $.ajax({
+            url: urlFechaSistema,
+            type: "post",
+            dataType: "json",
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                $("#txtEl").val(response.Mensaje);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
     }
 
     const desabilitarBotonosCaja = function (disable) {
         $("#btn-cajas :input").attr("disabled", disable);
+    }
+
+    const desabilitarBotonosLocal = function (disable) {
+        $("#btn-local :input").attr("disabled", disable);
+
     }
 
     const validarLocal = function (local) {
@@ -370,7 +436,7 @@ var AdministrarLocal = function () {
 
             response.Columnas.forEach((x) => {
 
-                if (x === "COD_EMPRESA" || x === "COD_FORMATO" || x === "COD_LOCAL") {
+                if (x === "COD_EMPRESA" || x === "COD_FORMATO" || x === "COD_LOCAL" || x === 'TIP_ESTADO' ) {
                     columnas.push({
                         title: x,
                         data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
@@ -523,7 +589,8 @@ var AdministrarLocal = function () {
         const model = {
             NumeroCaja: registro.NroCaja,
             Ip: registro.IP,
-            So: registro.SO
+            So: registro.SO,
+            Estado: registro.TIP_ESTADO
         };
 
         $.ajax({
@@ -693,10 +760,11 @@ var AdministrarLocal = function () {
                 $("#modalLocales").modal('hide');
 
                 setearLocal(response);
-                desabilitarBotonosCaja(true);
-                desabilitarControles(false)
+                desabilitarBotonosCaja(false);
+                desabilitarControles(true)
                 $("#btnGuardarLocal").prop("disabled", false);
                 await recargarDataTableCajas();
+                obtenerFechaSistema();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -775,7 +843,7 @@ var AdministrarLocal = function () {
                 closeLoading();
                 $("#excelCajas").val(null);
             },
-            success: async function (response) {
+            success: function (response) {
 
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning", }).then(() => {
@@ -795,7 +863,7 @@ var AdministrarLocal = function () {
 
                 swal({ text: response.Mensaje, icon: "success", });
 
-                await recargarDataTableCajas();
+                 recargarDataTableCajas();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -813,13 +881,61 @@ var AdministrarLocal = function () {
         //});
     }
 
+    const importarExcelInventario = function () {
+
+        var formData = new FormData();
+        var uploadFiles = $('#excelInventario').prop('files');
+        formData.append("excelInventario", uploadFiles[0]);
+
+        $.ajax({
+            url: urlImportarInventario,
+            type: "post",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+                $("#excelInventario").val(null);
+            },
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
+
+                        if (response.Errores.length > 0) {
+                            let html = "";
+                            response.Errores.map((error) => {
+                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
+                            });
+                            $('#tbodyErroresCaja').html(html);
+                            $('#modalErroresImportacionCaja').modal("show");
+                        }
+
+                    });
+                    return;
+                }
+
+                swal({ text: response.Mensaje, icon: "success", });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+
+    }
+
     const inputMask = function () {
         $('#txtIpServidor').mask('099.099.099.099');
        
         $('#txtCodigo').mask('ZZZZZZZZZZ', {
             translation: {
                 'Z': {
-                    pattern: /[1-9]/, optional: true
+                    pattern: /[0-9]/, optional: true
                 }
             }
 
@@ -828,6 +944,43 @@ var AdministrarLocal = function () {
 
     }
 
+    const descargarMaestro = function () {
+
+        const request = {
+            CodEmpresa: $("#cboEmpresa").val(),
+            CodFormato: $("#cboFormato").val()
+        };
+
+        $.ajax({
+            url: urlDescargarMaestro,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
     return {
         init: function () {
             checkSession(async function () {

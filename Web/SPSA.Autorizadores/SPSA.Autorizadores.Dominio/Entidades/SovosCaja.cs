@@ -9,8 +9,9 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public decimal NumeroCaja { get; private set; }
         public string Ip { get; private set; }
         public string So { get; private set; }
+        public string Estado { get; private set; }
 
-        public SovosCaja(string codEmpresa, string codLocal, string codFormato, decimal numeroCaja, string ip, string so)
+        public SovosCaja(string codEmpresa, string codLocal, string codFormato, decimal numeroCaja, string ip, string so, string estado)
         {
             CodEmpresa = codEmpresa;
             CodLocal = codLocal;
@@ -18,6 +19,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
             NumeroCaja = numeroCaja;
             Ip = ip;
             So = so;
+            Estado = estado;
         }
     }
 }

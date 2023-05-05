@@ -1,4 +1,6 @@
-﻿namespace SPSA.Autorizadores.Dominio.Entidades
+﻿using System;
+
+namespace SPSA.Autorizadores.Dominio.Entidades
 {
     public class SovosLocal
     {
@@ -14,8 +16,11 @@
         public string TipoLocal { get; private set; }
         public string IndFactura { get; private set; }
         public string CodigoSunat { get; private set; }
+        public string Usuario { get; private set; }
+        public DateTime? Fecha { get; private set; }
 
-        public SovosLocal(string codEmpresa, string codLocal, string codFormato, string nomLocal, string ip, string ipMascara, string sO, decimal? grupo, string estado, string tipoLocal, string indFactura, string codigoSunat)
+        public SovosLocal(string codEmpresa, string codLocal, string codFormato, string nomLocal, string ip, string ipMascara, string sO, decimal? grupo, 
+            string estado, string tipoLocal, string indFactura, string codigoSunat, string usuario, DateTime? fecha)
         {
             CodEmpresa = codEmpresa;
             CodLocal = codLocal;
@@ -29,6 +34,8 @@
             TipoLocal = tipoLocal;
             IndFactura = indFactura;
             CodigoSunat = codigoSunat;
+            Usuario = usuario;
+            Fecha = fecha;
         }
 
         public SovosLocal(string codEmpresa, string codLocal, string codFormato, string ip)

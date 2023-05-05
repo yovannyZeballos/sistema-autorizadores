@@ -52,6 +52,7 @@
     <Compile Include="Repositorio\IRepositorioSeguridad.cs" />
     <Compile Include="Repositorio\IRepositorioSovosCaja.cs" />
     <Compile Include="Repositorio\IRepositorioSovosFormato.cs" />
+    <Compile Include="Repositorio\IRepositorioSovosInventarioCaja.cs" />
     <Compile Include="Repositorio\IRepositorioSovosLocal.cs" />
   </ItemGroup>
   <ItemGroup>
