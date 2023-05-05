@@ -6,6 +6,8 @@ using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using System;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -236,6 +238,35 @@ namespace SPSA.Autorizadores.Web.Areas.Locales.Controllers
             }
 
             return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarPlantillas()
+        {
+            var respuesta = await _mediator.Send(new DescargarPlantillasCommand());
+            return Json(respuesta);
+
+            //var respuesta = new RespuestaComunExcelDTO();
+
+            //var carpeta = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plantillas");
+
+            //using (MemoryStream zipToOpen = new MemoryStream())
+            //{
+            //    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+            //    {
+            //        ZipArchiveEntry readmeEntry;
+            //        DirectoryInfo d = new DirectoryInfo(carpeta);
+            //        FileInfo[] Files = d.GetFiles("*");
+            //        foreach (FileInfo file in Files)
+            //        {
+            //            readmeEntry = archive.CreateEntryFromFile(file.FullName, file.Name);
+            //        }
+            //    }
+
+            //    var zip = Convert.ToBase64String(zipToOpen.ToArray());
+            //}
+
+            //return Json(respuesta);
         }
     }
 }

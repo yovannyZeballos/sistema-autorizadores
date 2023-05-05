@@ -92,6 +92,7 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<ImportarCajasHandler>().As<IRequestHandler<ImportarCajasCommand, RespuestaComunExcelDTO>>();
             builder.RegisterType<DescargarMaestroHandler>().As<IRequestHandler<DescargarMaestroCommand, DescargarMaestroDTO>>();
             builder.RegisterType<ImportarInventarioCajaHandler>().As<IRequestHandler<ImportarInventarioCajaCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarPlantillasHandler>().As<IRequestHandler<DescargarPlantillasCommand, DescargarPlantillasDTO>>();
 
 
             builder.Register<ServiceFactory>(ctx =>

@@ -79,6 +79,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -114,6 +115,7 @@
   <ItemGroup>
     <Compile Include="DTO\AplicacionDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
+    <Compile Include="DTO\DescargarPlantillasDTO.cs" />
     <Compile Include="DTO\DescargarMaestroDTO.cs" />
     <Compile Include="DTO\EnumClass.cs" />
     <Compile Include="DTO\ErroresExcelDTO.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="Features\Locales\Queries\ListarLocalesQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalQuery.cs" />
     <Compile Include="Features\MantenimientoLocales\Commands\DescargarMaestroCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\DescargarPlantillasCommand.cs" />
     <Compile Include="Features\MantenimientoLocales\Commands\EliminarSovosCajasCommand.cs" />
     <Compile Include="Features\MantenimientoLocales\Commands\CrearSovosCajaCommand.cs" />
     <Compile Include="Features\MantenimientoLocales\Commands\CrearSovosLocalCommand.cs" />

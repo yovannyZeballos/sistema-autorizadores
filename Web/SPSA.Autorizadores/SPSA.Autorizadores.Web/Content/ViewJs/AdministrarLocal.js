@@ -11,6 +11,7 @@ var urlImportarCajas = baseUrl + 'Locales/AdministrarLocal/ImportarCajas';
 var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
 var urlDescargarMaestro = baseUrl + 'Locales/AdministrarLocal/DescargarMaestro';
 var urlImportarInventario = baseUrl + 'Locales/AdministrarLocal/ImportarInventario';
+var urlDescargarPlantilla = baseUrl + 'Locales/AdministrarLocal/DescargarPlantillas';
 var dataTableCajas = null;
 var dataTableLocales = null;
 
@@ -105,7 +106,6 @@ var AdministrarLocal = function () {
 
         });
 
-
         $("#btnBuscarLocal").on("click", function () {
             if (validarBuscarLocal()) {
                 $("#txtEmpresaLocal").val($("#cboEmpresa option:selected").text());
@@ -126,7 +126,6 @@ var AdministrarLocal = function () {
             obtenerLocal(registrosSeleccionados[0].CodLocal);
 
         });
-
 
         $("#btnEliminarCaja").on("click", function () {
             const registrosSeleccionados = dataTableCajas.rows('.selected').data().toArray();
@@ -157,7 +156,6 @@ var AdministrarLocal = function () {
             importarExcelCajas();
         });
 
-
         $("#btnDescargarMaestro").on("click", function () {
             if (validarBuscarLocal()) {
                 descargarMaestro();
@@ -171,6 +169,10 @@ var AdministrarLocal = function () {
 
         $('#excelInventario').change(function (e) {
             importarExcelInventario();
+        });
+
+        $("#btnDescargarPlantillas").on("click", function () {
+            descargarPlantillas();
         });
 
     };
@@ -360,7 +362,7 @@ var AdministrarLocal = function () {
             url: urlFechaSistema,
             type: "post",
             dataType: "json",
-            success: async function (response) {
+            success: function (response) {
 
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning", });
@@ -975,6 +977,34 @@ var AdministrarLocal = function () {
                 downloadLink.href = linkSource;
                 downloadLink.download = fileName;
                 downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+
+    const descargarPlantillas = function () {
+
+        $.ajax({
+            url: urlDescargarPlantilla,
+            type: "post",
+            dataType: "json",
+            success:  function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
