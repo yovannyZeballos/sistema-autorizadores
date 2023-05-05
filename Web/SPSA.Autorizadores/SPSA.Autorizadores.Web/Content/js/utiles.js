@@ -11,18 +11,9 @@ const btnLoading = function (button, state) {
 
 
 const showLoading = function () {
-    swal({
-        text: "Procesando...",
-        content: divLoader,
-        buttons: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-        className: 'swal-wide',
-        width: 200
-    });
+    $("#modalLoading").modal('show');
 }
 
 const closeLoading = function () {
-    if (swal)
-        swal.close();
+    $("#modalLoading").modal('hide');
 }

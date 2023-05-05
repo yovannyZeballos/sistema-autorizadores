@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title | Sistema de autorizadores</title>
+    <title>@ViewBag.Title | Sistema de gestión de cajas</title>
     <!--Favicon -->
     <link rel="icon" href="~/Content/images/brand/favicon.ico" type="image/x-icon" />
 
@@ -306,7 +306,7 @@
             <div class="container">
                 <div class="row align-items-center flex-row-reverse">
                     <div class="col-md-12 col-sm-12 mt-3 mt-lg-0 text-center">
-                        Copyright © <span id="anio"></span> <a href="javascript:void(0);">Super Food Holding</a>. All rights reserved.
+                        Copyright © <a href="javascript:void(0);">Super Food Holding</a> <span>2022</span>. Todos los derechos reservados.
                     </div>
                 </div>
             </div>
@@ -316,25 +316,51 @@
         <div class="sidebar sidebar-right sidebar-animate">
         </div>
         <!--/sidebar-right-->
-
-        <div style="display:none">
-            <div class="dimmer active" id="loader">
-                <div class="sk-circle">
-                    <div class="sk-circle1 sk-child"></div>
-                    <div class="sk-circle2 sk-child"></div>
-                    <div class="sk-circle3 sk-child"></div>
-                    <div class="sk-circle4 sk-child"></div>
-                    <div class="sk-circle5 sk-child"></div>
-                    <div class="sk-circle6 sk-child"></div>
-                    <div class="sk-circle7 sk-child"></div>
-                    <div class="sk-circle8 sk-child"></div>
-                    <div class="sk-circle9 sk-child"></div>
-                    <div class="sk-circle10 sk-child"></div>
-                    <div class="sk-circle11 sk-child"></div>
-                    <div class="sk-circle12 sk-child"></div>
+        <!-- Modal Loading-->
+        <div class="modal" id="modalLoading" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4 class="text-center">Procesando...</h4>
+                        <div class="dimmer active" id="loader">
+                            <div class="sk-circle">
+                                <div class="sk-circle1 sk-child"></div>
+                                <div class="sk-circle2 sk-child"></div>
+                                <div class="sk-circle3 sk-child"></div>
+                                <div class="sk-circle4 sk-child"></div>
+                                <div class="sk-circle5 sk-child"></div>
+                                <div class="sk-circle6 sk-child"></div>
+                                <div class="sk-circle7 sk-child"></div>
+                                <div class="sk-circle8 sk-child"></div>
+                                <div class="sk-circle9 sk-child"></div>
+                                <div class="sk-circle10 sk-child"></div>
+                                <div class="sk-circle11 sk-child"></div>
+                                <div class="sk-circle12 sk-child"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        @*<div style="display:none">
+                <div class="dimmer active" id="loader">
+                    <div class="sk-circle">
+                        <div class="sk-circle1 sk-child"></div>
+                        <div class="sk-circle2 sk-child"></div>
+                        <div class="sk-circle3 sk-child"></div>
+                        <div class="sk-circle4 sk-child"></div>
+                        <div class="sk-circle5 sk-child"></div>
+                        <div class="sk-circle6 sk-child"></div>
+                        <div class="sk-circle7 sk-child"></div>
+                        <div class="sk-circle8 sk-child"></div>
+                        <div class="sk-circle9 sk-child"></div>
+                        <div class="sk-circle10 sk-child"></div>
+                        <div class="sk-circle11 sk-child"></div>
+                        <div class="sk-circle12 sk-child"></div>
+                    </div>
+                </div>
+            </div>*@
 
     </div>
 
@@ -343,6 +369,7 @@
         var home = '@Url.Action("Index", "Home", new { area = "" })';
         var rucSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Ruc';
         var codigoLocalSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Local';
+        var codigoEmpresa = '@SPSA.Autorizadores.Web.Utiles.WebSession.CodigoEmpresa';
 
         var dataTableColaborador = null;
         var dataTableColaboradorCesados = null;
@@ -352,7 +379,6 @@
         var dataTableRoles = null;
         var dataTableColaboradorMass = null;
         var dataTableAutorizadorMass = null;
-
 
     </script>
 

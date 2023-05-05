@@ -35,7 +35,9 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
                 .ForMember(dest => dest.Aplicacion, opt => opt.MapFrom(src => src.App))
                 .ForMember(dest => dest.CodEmpleado, opt => opt.MapFrom(src => src.codigoEmpleado));
 
-           
+            CreateMap<SovosFormato, FormatoDTO>().ReverseMap();
+            CreateMap<SovosLocal, SovosLocalDTO>().ReverseMap();
+
 
         }
     }

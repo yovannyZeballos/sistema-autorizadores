@@ -156,9 +156,6 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 var datatable = new DataTable();
                 datatable.Load(dr);
 
-                connection.Close();
-                connection.Dispose();
-
                 return datatable;
             }
         }

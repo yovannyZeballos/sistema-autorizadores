@@ -19,6 +19,9 @@ using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -40,7 +43,7 @@ namespace SPSA.Autorizadores.Web
             builder.Register(context => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<AplicacionProfile>();
-                
+
                 //etc...
             })).AsSelf().SingleInstance();
 
@@ -58,15 +61,15 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterSource(new ContravariantRegistrationSource());
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
             builder.RegisterType<LoginHandler>().As<IRequestHandler<LoginCommand, UsuarioDTO>>();
-            builder.RegisterType<ListarEmpresasHandler>().As<IRequestHandler<ListarEmpresasQuery, List<EmpresaDTO>>>();
+            builder.RegisterType<Aplicacion.Features.Empresas.Queries.ListarEmpresasHandler>().As<IRequestHandler<Aplicacion.Features.Empresas.Queries.ListarEmpresasQuery, List<EmpresaDTO>>>();
             builder.RegisterType<ListarLocalesHandler>().As<IRequestHandler<ListarLocalesQuery, List<LocalDTO>>>();
-            builder.RegisterType<ListarColaboradoresHandler>().As<IRequestHandler<ListarColaboradoresQuery,DataTable>>();
+            builder.RegisterType<ListarColaboradoresHandler>().As<IRequestHandler<ListarColaboradoresQuery, DataTable>>();
             builder.RegisterType<CrearAutorizadorHandler>().As<IRequestHandler<CrearAutorizadorCommand, RespuestaComunDTO>>();
             builder.RegisterType<GenerarArchivoHandler>().As<IRequestHandler<GenerarArchivoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ListarAutorizadoresHandler>().As<IRequestHandler<ListarAutorizadoresQuery, DataTable>>();
             builder.RegisterType<ActualizarEstadoArchivoHandler>().As<IRequestHandler<ActualizarEstadoArchivoCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarAutorizadorHandler>().As<IRequestHandler<EliminarAutorizadorCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ObtenerLocalHandler>().As<IRequestHandler<ObtenerLocalQuery, LocalDTO>>();
+            builder.RegisterType<Aplicacion.Features.Locales.Queries.ObtenerLocalHandler>().As<IRequestHandler<Aplicacion.Features.Locales.Queries.ObtenerLocalQuery, LocalDTO>>();
             builder.RegisterType<ListarColaboradoresCesadosHandler>().As<IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>>();
             builder.RegisterType<ListarLocalesAsignarHandler>().As<IRequestHandler<ListarLocalesAsignarQuery, LocalesAsignadosDTO>>();
             builder.RegisterType<AsignarLocalHandler>().As<IRequestHandler<AsignarLocalCommand, RespuestaComunDTO>>();
@@ -78,6 +81,19 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<ListarEmpresasMonitorHandler>().As<IRequestHandler<ListarEmpresasMonitorQuery, List<EmpresaDTO>>>();
             builder.RegisterType<CrearLocalMonitorHandler>().As<IRequestHandler<CrearLocalMonitorCommand, RespuestaComunDTO>>();
             builder.RegisterType<ProcesarMonitorHandler>().As<IRequestHandler<ProcesarMonitorCommand, RespuestaComunDTO>>();
+            builder.RegisterType<Aplicacion.Features.MantenimientoLocales.Queries.ListarEmpresasHandler>().As<IRequestHandler<Aplicacion.Features.MantenimientoLocales.Queries.ListarEmpresasQuery, List<EmpresaDTO>>>();
+            builder.RegisterType<ListarFormatossHandler>().As<IRequestHandler<ListarFormatosQuery, List<FormatoDTO>>>();
+            builder.RegisterType<CrearSovosLocalHandler>().As<IRequestHandler<CrearSovosLocalCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ListarCajasPorLocalHandler>().As<IRequestHandler<ListarCajasPorLocalQuery, ListarCajasPorLocalDTO>>();
+            builder.RegisterType<CrearSovosCajaHandler>().As<IRequestHandler<CrearSovosCajaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ListarLocalesPorEmpresaHandler>().As<IRequestHandler<ListarLocalesPorEmpresaQuery, ListarLocalesPorEmpresaDTO>>();
+            builder.RegisterType<Aplicacion.Features.MantenimientoLocales.Queries.ObtenerLocalHandler>().As<IRequestHandler<Aplicacion.Features.MantenimientoLocales.Queries.ObtenerLocalQuery, SovosLocalDTO>>();
+            builder.RegisterType<EliminarSovosCajaHandler>().As<IRequestHandler<EliminarSovosCajasCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarCajasHandler>().As<IRequestHandler<ImportarCajasCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarMaestroHandler>().As<IRequestHandler<DescargarMaestroCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<ImportarInventarioCajaHandler>().As<IRequestHandler<ImportarInventarioCajaCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarPlantillasHandler>().As<IRequestHandler<DescargarPlantillasCommand, DescargarPlantillasDTO>>();
+
 
             builder.Register<ServiceFactory>(ctx =>
             {
