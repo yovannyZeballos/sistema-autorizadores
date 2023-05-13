@@ -9,5 +9,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task<List<Empresa>> Listar();
         Task<List<Empresa>> ListarOfiplan();
         Task<List<Empresa>> ListarMonitor();
+        Task<List<Empresa>> LocListarEmpresa();
     }
 }

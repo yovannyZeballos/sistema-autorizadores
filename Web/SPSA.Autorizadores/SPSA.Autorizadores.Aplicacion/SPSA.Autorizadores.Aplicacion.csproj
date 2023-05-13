@@ -35,6 +35,21 @@
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="ClosedXML, Version=0.96.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.96.0\lib\net46\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.16.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.16.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
     <Reference Include="LibSCA">
       <HintPath>..\dlls\LibSCA.dll</HintPath>
     </Reference>
@@ -63,6 +78,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -86,18 +103,26 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constantes.cs" />
     <Compile Include="DTO\AplicacionDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
+    <Compile Include="DTO\DescargarPlantillasDTO.cs" />
+    <Compile Include="DTO\DescargarMaestroDTO.cs" />
     <Compile Include="DTO\EnumClass.cs" />
+    <Compile Include="DTO\ErroresExcelDTO.cs" />
+    <Compile Include="DTO\FormatoDTO.cs" />
+    <Compile Include="DTO\ListarLocalesPorEmpresaDTO.cs" />
+    <Compile Include="DTO\ListarCajasPorLocalDTO.cs" />
     <Compile Include="DTO\LocalesAsignadosDTO.cs" />
     <Compile Include="DTO\AutorizadorEliminadoDTO.cs" />
     <Compile Include="DTO\AutorizadorDTO.cs" />
@@ -109,7 +134,11 @@
     <Compile Include="DTO\ProcesoMonitorDTO.cs" />
     <Compile Include="DTO\PuestoDTO.cs" />
     <Compile Include="DTO\RespuestaComunDTO.cs" />
+    <Compile Include="DTO\RespuestaComunExcelDTO.cs" />
+    <Compile Include="DTO\SovosCajaDTO.cs" />
+    <Compile Include="DTO\SovosLocalDTO.cs" />
     <Compile Include="DTO\UsuarioDTO.cs" />
+    <Compile Include="Extensiones\DataSetExtensions.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\EliminarAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\CrearAutorizadorCommand.cs" />
@@ -124,6 +153,18 @@
     <Compile Include="Features\Locales\Queries\ListarLocalesAsignarQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalQuery.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\DescargarMaestroCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\DescargarPlantillasCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\EliminarSovosCajasCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\CrearSovosCajaCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\CrearSovosLocalCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\ImportarCajasCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Commands\ImportarInventarioCajaCommand.cs" />
+    <Compile Include="Features\MantenimientoLocales\Queries\ObtenerLocalQuery.cs" />
+    <Compile Include="Features\MantenimientoLocales\Queries\ListarLocalesPorEmpresaQuery.cs" />
+    <Compile Include="Features\MantenimientoLocales\Queries\ListarCajasPorLocalQuery.cs" />
+    <Compile Include="Features\MantenimientoLocales\Queries\ListarFormatosQuery.cs" />
+    <Compile Include="Features\MantenimientoLocales\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Monitor\Commands\CrearLocalMonitorCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorCommand.cs" />
     <Compile Include="Features\Monitor\Queries\ListarEmpresasMonitorQuery.cs" />

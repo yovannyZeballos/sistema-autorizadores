@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title | Sistema de autorizadores</title>
+    <title>@ViewBag.Title | Sistema de gestión de cajas</title>
     <!--Favicon -->
     <link rel="icon" href="~/Content/images/brand/favicon.ico" type="image/x-icon" />
 
@@ -79,7 +79,7 @@
                                         <div class="dropdown profile-dropdown">
                                             <a href="javascript:void(0);" class="nav-link pe-1 ps-0 leading-none" data-bs-toggle="dropdown">
                                                 <span>
-                                                    <img src="~/Content/images/users/log-out.svg" alt="img" class="avatar avatar-md bradius">
+                                                    <i class="fa fa-user-circle-o" style="font-size:30px;"></i>
                                                 </span>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow animated">
@@ -137,145 +137,169 @@
 
                                 @if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos != null)
                                 {
-                                    if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 1))
+                                    if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 2))
                                     {
                                         <li class="slide">
                                             <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
-                                                <i class="feather feather-home sidemenu_icon"></i>
+                                                <i class="feather feather-lock sidemenu_icon"></i>
                                                 <span class="side-menu__label">
-                                                    @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 1).DesPermiso
+                                                    @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 2).DesPermiso
                                                 </span><i class="angle fa fa-angle-right"></i>
                                             </a>
                                             <ul class="slide-menu">
                                                 <li class="side-menu-label1">
-                                                    <a href="javascript:void(0);">@SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 1).DesPermiso</a>
+                                                    <a href="javascript:void(0);">@SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 2).DesPermiso</a>
                                                 </li>
-                                                @if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 2))
+                                                @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
                                                 {
-                                                    <li class="sub-slide">
-                                                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
-                                                           href="javascript:void(0);">
-                                                            <i class="feather feather-lock sidemenu_icon"></i>
-                                                            <span class="sub-side-menu__label">
-                                                                @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 2).DesPermiso
-                                                            </span><i class="sub-angle fa fa-angle-right"></i>
-                                                        </a>
-                                                        @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
-                                                        {
-                                                            if (item.Id == 5)
-                                                            {
-                                                                <ul class="sub-slide-menu">
-
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Seguridad/CambioLocal">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-
-                                                            }
-                                                        }
-
-                                                    </li>
+                                                    if (item.Id == 5)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Seguridad/CambioLocal">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
                                                 }
-                                                @if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 3))
+                                            </ul>
+                                        </li>
+                                    }
+
+                                    if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 3))
+                                    {
+                                        <li class="slide">
+                                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                                <i class="feather feather-users sidemenu_icon"></i>
+                                                <span class="side-menu__label">
+                                                    @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 3).DesPermiso
+                                                </span><i class="angle fa fa-angle-right"></i>
+                                            </a>
+                                            <ul class="slide-menu">
+                                                <li class="side-menu-label1">
+                                                    <a href="javascript:void(0);">@SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 3).DesPermiso</a>
+                                                </li>
+                                                @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
                                                 {
-                                                    <li class="sub-slide">
-                                                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
-                                                           href="javascript:void(0);">
-                                                            <i class="feather feather-users sidemenu_icon"></i>
-                                                            <span class="sub-side-menu__label">
-                                                                @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 3).DesPermiso
-                                                            </span><i class="sub-angle fa fa-angle-right"></i>
-                                                        </a>
-                                                        @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
-                                                        {
-                                                            if (item.Id == 6)
-                                                            {
-                                                                <ul class="sub-slide-menu">
-
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/Administrar">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                            else if (item.Id == 8)
-                                                            {
-                                                                <ul class="sub-slide-menu">
-
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/EliminarAutorizador">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                            else if (item.Id == 9)
-                                                            {
-                                                                <ul class="sub-slide-menu">
-
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/AsignarLocal">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                            else if (item.Id == 10)
-                                                            {
-                                                                <ul class="sub-slide-menu">
-
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/Puesto">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                            else if (item.Id == 11)
-                                                            {
-                                                                <ul class="sub-slide-menu">
-
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Autorizadores/AutorizadoresMass">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                        }
-
-                                                    </li>
+                                                    if (item.Id == 6)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Autorizadores/Administrar">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else if (item.Id == 8)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Autorizadores/EliminarAutorizador">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else if (item.Id == 9)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Autorizadores/AsignarLocal">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else if (item.Id == 10)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Autorizadores/Puesto">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else if (item.Id == 11)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Autorizadores/AutorizadoresMass">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
                                                 }
-                                                @if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 12))
+                                            </ul>
+                                        </li>
+                                    }
+
+                                    if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 12))
+                                    {
+                                        <li class="slide">
+                                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                                <i class="feather feather-check-square sidemenu_icon"></i>
+                                                <span class="side-menu__label">
+                                                    @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 12).DesPermiso
+                                                </span><i class="angle fa fa-angle-right"></i>
+                                            </a>
+                                            <ul class="slide-menu">
+                                                <li class="side-menu-label1">
+                                                    <a href="javascript:void(0);">@SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 12).DesPermiso</a>
+                                                </li>
+                                                @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
                                                 {
-                                                    <li class="sub-slide">
-                                                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
-                                                           href="javascript:void(0);">
-                                                            <i class="feather feather-check-square sidemenu_icon"></i>
-                                                            <span class="sub-side-menu__label">
-                                                                @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 12).DesPermiso
-                                                            </span><i class="sub-angle fa fa-angle-right"></i>
-                                                        </a>
-                                                        @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
-                                                        {
-                                                            if (item.Id == 13)
-                                                            {
-                                                                <ul class="sub-slide-menu">
+                                                    if (item.Id == 13)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
+                                                               href="~/Monitor/CierreEOD">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
 
-                                                                    <li>
-                                                                        <a class="sub-slide-item lh-1" href="~/Monitor/CierreEOD">
-                                                                            @item.DesPermiso
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-
-                                                            }
-                                                        }
-
-                                                    </li>
+                                    if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 14))
+                                    {
+                                        <li class="slide">
+                                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                                <i class="fe fe-layers sidemenu_icon"></i>
+                                                <span class="side-menu__label">
+                                                    @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 14).DesPermiso
+                                                </span><i class="angle fa fa-angle-right"></i>
+                                            </a>
+                                            <ul class="slide-menu">
+                                                <li class="side-menu-label1">
+                                                    <a href="javascript:void(0);">@SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 14).DesPermiso</a>
+                                                </li>
+                                                @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
+                                                {
+                                                    if (item.Id == 15)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
+                                                               href="~/Locales/AdministrarLocal">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
                                                 }
                                             </ul>
                                         </li>
@@ -306,7 +330,7 @@
             <div class="container">
                 <div class="row align-items-center flex-row-reverse">
                     <div class="col-md-12 col-sm-12 mt-3 mt-lg-0 text-center">
-                        Copyright © <span id="anio"></span> <a href="javascript:void(0);">Super Food Holding</a>. All rights reserved.
+                        Copyright © <a href="javascript:void(0);">Super Food Holding</a> <span>2022</span>. Todos los derechos reservados.
                     </div>
                 </div>
             </div>
@@ -316,25 +340,51 @@
         <div class="sidebar sidebar-right sidebar-animate">
         </div>
         <!--/sidebar-right-->
-
-        <div style="display:none">
-            <div class="dimmer active" id="loader">
-                <div class="sk-circle">
-                    <div class="sk-circle1 sk-child"></div>
-                    <div class="sk-circle2 sk-child"></div>
-                    <div class="sk-circle3 sk-child"></div>
-                    <div class="sk-circle4 sk-child"></div>
-                    <div class="sk-circle5 sk-child"></div>
-                    <div class="sk-circle6 sk-child"></div>
-                    <div class="sk-circle7 sk-child"></div>
-                    <div class="sk-circle8 sk-child"></div>
-                    <div class="sk-circle9 sk-child"></div>
-                    <div class="sk-circle10 sk-child"></div>
-                    <div class="sk-circle11 sk-child"></div>
-                    <div class="sk-circle12 sk-child"></div>
+        <!-- Modal Loading-->
+        <div class="modal" id="modalLoading" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4 class="text-center">Procesando...</h4>
+                        <div class="dimmer active" id="loader">
+                            <div class="sk-circle">
+                                <div class="sk-circle1 sk-child"></div>
+                                <div class="sk-circle2 sk-child"></div>
+                                <div class="sk-circle3 sk-child"></div>
+                                <div class="sk-circle4 sk-child"></div>
+                                <div class="sk-circle5 sk-child"></div>
+                                <div class="sk-circle6 sk-child"></div>
+                                <div class="sk-circle7 sk-child"></div>
+                                <div class="sk-circle8 sk-child"></div>
+                                <div class="sk-circle9 sk-child"></div>
+                                <div class="sk-circle10 sk-child"></div>
+                                <div class="sk-circle11 sk-child"></div>
+                                <div class="sk-circle12 sk-child"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        @*<div style="display:none">
+                <div class="dimmer active" id="loader">
+                    <div class="sk-circle">
+                        <div class="sk-circle1 sk-child"></div>
+                        <div class="sk-circle2 sk-child"></div>
+                        <div class="sk-circle3 sk-child"></div>
+                        <div class="sk-circle4 sk-child"></div>
+                        <div class="sk-circle5 sk-child"></div>
+                        <div class="sk-circle6 sk-child"></div>
+                        <div class="sk-circle7 sk-child"></div>
+                        <div class="sk-circle8 sk-child"></div>
+                        <div class="sk-circle9 sk-child"></div>
+                        <div class="sk-circle10 sk-child"></div>
+                        <div class="sk-circle11 sk-child"></div>
+                        <div class="sk-circle12 sk-child"></div>
+                    </div>
+                </div>
+            </div>*@
 
     </div>
 
@@ -343,6 +393,7 @@
         var home = '@Url.Action("Index", "Home", new { area = "" })';
         var rucSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Ruc';
         var codigoLocalSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.Local';
+        var codigoEmpresa = '@SPSA.Autorizadores.Web.Utiles.WebSession.CodigoEmpresa';
 
         var dataTableColaborador = null;
         var dataTableColaboradorCesados = null;
@@ -352,7 +403,6 @@
         var dataTableRoles = null;
         var dataTableColaboradorMass = null;
         var dataTableAutorizadorMass = null;
-
 
     </script>
 

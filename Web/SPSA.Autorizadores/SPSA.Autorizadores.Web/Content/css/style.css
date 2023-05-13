@@ -71671,3 +71671,17 @@ table thead tr th {
     left: 0;
     border: 15px solid orange
 }
+
+.was-validated .custom-select:invalid + .select2 .select2-selection {
+    border-color: #dc3545 !important;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    background-image: none !important;
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+    background-image: none !important;
+    border-color: #ced4da;
+}
+

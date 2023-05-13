@@ -120,5 +120,38 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 return empresas;
             }
         }
+
+        public async Task<List<Empresa>> LocListarEmpresa()
+        {
+            var empresas = new List<Empresa>();
+            using (SqlConnection connection = new SqlConnection(CadenaConexionCarteleria))
+            {
+                var command = new SqlCommand("SP_LOC_LIST_EMPRESA", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+
+                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+
+                if (dr != null && dr.HasRows)
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        empresas.Add(new Empresa
+                        {
+                            Descripcion = dr["NOMBRE"].ToString().Trim(),
+                            Ruc = dr["RUC"].ToString().Trim(),
+                            Codigo = dr["COD_EMPRESA"].ToString().Trim()
+                        });
+                    }
+                }
+                connection.Close();
+                connection.Dispose();
+                return empresas;
+            }
+        }
     }
 }

@@ -106,8 +106,12 @@
     <Compile Include="Repositorio\RepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\RepositorioPuesto.cs" />
     <Compile Include="Repositorio\RepositorioSeguridad.cs" />
+    <Compile Include="Repositorio\RepositorioSovosCaja.cs" />
+    <Compile Include="Repositorio\RepositorioSovosFormato.cs" />
+    <Compile Include="Repositorio\RepositorioSovosInventarioCaja.cs" />
     <Compile Include="Repositorio\RepositorioSovosLocal.cs" />
     <Compile Include="Utiles\CadenasConexion.cs" />
+    <Compile Include="Utiles\DBHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

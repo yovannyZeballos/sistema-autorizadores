@@ -34,7 +34,6 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
         {
             var respuesta = new ListarMonitorResponse();
             var local = WebSession.LocalOfiplan;
-
             try
             {
                 var fechaValida = DateTime.TryParseExact(request.Fecha, "dd/MM/yyyy", new CultureInfo("es-PE"), DateTimeStyles.None, out DateTime fecha);

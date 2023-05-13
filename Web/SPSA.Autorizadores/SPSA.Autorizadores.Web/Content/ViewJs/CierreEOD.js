@@ -22,16 +22,19 @@ var CierreEOD = function () {
             Fecha: $("#txtFecha").val(),
             Estado: $("#cboEstado").val()
         }
-        showLoading();
 
         $.ajax({
             url: urlListado,
             type: "post",
             dataType: "json",
             data: { request },
-            success: function (response) {
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
                 closeLoading();
-
+            },
+            success: function (response) {
                 var columnas = [];
                 response.Columnas.forEach((x) => {
                     if (x === "ESTADO") {
@@ -114,9 +117,10 @@ var CierreEOD = function () {
 
                 $("#container-btn-exportar").append(dataTableMonitor.buttons().container());
                 //dataTableMonitor.buttons().container().prependTo($('#tableMonitor_filter'));
+               
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                closeLoading();
+                //closeLoading();
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
@@ -139,8 +143,6 @@ var CierreEOD = function () {
         }
 
 
-        showLoading();
-
         const request = {
             CodEmpresa: codEmpresa,
             Fecha: fecha
@@ -151,6 +153,12 @@ var CierreEOD = function () {
             type: "post",
             data: { request },
             dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
 
                 if (!response.Ok) {
@@ -171,7 +179,6 @@ var CierreEOD = function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                closeLoading();
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
@@ -193,7 +200,6 @@ var CierreEOD = function () {
             return;
         }
 
-        showLoading();
         const request = {
             CodEmpresa: codEmpresa,
             Fecha: fecha,
@@ -205,8 +211,13 @@ var CierreEOD = function () {
             type: "post",
             data: { request },
             dataType: "json",
-            success: function (response) {
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
                 closeLoading();
+            },
+            success: function (response) {
                 if (!response.Ok) {
                     swal({
                         text: response.Mensaje,
@@ -224,7 +235,7 @@ var CierreEOD = function () {
                 dataTableMonitor.draw();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                closeLoading();
+                //closeLoading();
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
@@ -237,6 +248,12 @@ var CierreEOD = function () {
         $.ajax({
             url: urlEmpresas,
             type: "get",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
 
                 if (response.Ok === true) {
