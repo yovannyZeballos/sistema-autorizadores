@@ -66,5 +66,17 @@ namespace SPSA.Autorizadores.Web.Utiles
             get { return Comun.Lee<string>("codigoEmpresa"); }
             set { Comun.Escribe("codigoEmpresa", value); }
         }
+
+        public static string SistemaVersion
+        {
+            get { return Comun.Lee<string>("sistemaVersion"); }
+            set { Comun.Escribe("sistemaVersion", value); }
+        }
+
+        public static string SistemaAmbiente
+        {
+            get { return Comun.Lee<string>("sistemaAmbiente"); }
+            set { Comun.Escribe("sistemaAmbiente", value); }
+        }
     }
 }

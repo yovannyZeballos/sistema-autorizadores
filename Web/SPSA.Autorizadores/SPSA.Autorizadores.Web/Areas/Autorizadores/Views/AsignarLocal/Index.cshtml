@@ -3,7 +3,6 @@
     ViewBag.Title = "Asignar local | Autorizadores";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-}
 
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
@@ -56,6 +55,7 @@
 
                 <div class="form-group data-table-btn">
                     <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar Local</button>
+                    <button id="btnAsociarLocalPMM" class="btn btn-sm btn-primary mb-4  ms-2">Asociar Locales</button>
 
                 </div>
 
@@ -70,7 +70,22 @@
     </div>
 </div>
 
-
+<!-- MODAL LOCAL PMM-->
+<div class="modal fade" id="modalLocalPMM" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Asociar local PMM</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnGuardarLocalPMM" class="btn btn-sm btn-primary">Guardar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
 

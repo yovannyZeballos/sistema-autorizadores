@@ -37,6 +37,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 
             CreateMap<SovosFormato, FormatoDTO>().ReverseMap();
             CreateMap<SovosLocal, SovosLocalDTO>().ReverseMap();
+            CreateMap<LocalOfiplan, LocalOfiplanDTO>().ReverseMap();
 
 
         }

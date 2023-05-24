@@ -157,6 +157,7 @@
     <Compile Include="Areas\Autorizadores\Controllers\AsignarLocalController.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\EliminarAutorizadorController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CierreEODController.cs" />
@@ -2551,6 +2552,7 @@
     <Content Include="Plantillas\Plantilla_Carga_Inventario.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\Autorizadores\Views\AsignarLocal\_AsociarLocalPMM.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2584,6 +2586,7 @@
     <Content Include="Areas\Monitor\Views\CierreEOD\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_CardHeader.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
