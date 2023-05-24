@@ -129,6 +129,7 @@
     <Compile Include="DTO\ColaboradorDTO.cs" />
     <Compile Include="DTO\EmpresaDTO.cs" />
     <Compile Include="DTO\LocalDTO.cs" />
+    <Compile Include="DTO\LocalOfiplanDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
     <Compile Include="DTO\PermisoDTO.cs" />
     <Compile Include="DTO\ProcesoMonitorDTO.cs" />
@@ -150,8 +151,10 @@
     <Compile Include="Features\Empresas\Queries\ListarEmpresasOfiplanQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Locales\Commands\AsignarLocalCommand.cs" />
+    <Compile Include="Features\Locales\Commands\AsociarLocalPMMCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesAsignarQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ObtenerLocalOfiplanQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalQuery.cs" />
     <Compile Include="Features\MantenimientoLocales\Commands\DescargarMaestroCommand.cs" />
     <Compile Include="Features\MantenimientoLocales\Commands\DescargarPlantillasCommand.cs" />

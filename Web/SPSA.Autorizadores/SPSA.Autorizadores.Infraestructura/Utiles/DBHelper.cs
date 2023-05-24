@@ -1,4 +1,5 @@
-﻿using SPSA.Autorizadores.Dominio.Entidades;
+﻿using Oracle.ManagedDataAccess.Client;
+using SPSA.Autorizadores.Dominio.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -41,12 +42,51 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
                     ParameterName = paramName
                 };
         }
+        public OracleParameter MakeParam(string paramName, object value, OracleDbType dbType, ParameterDirection direction, int size = 0)
+        {
+            if (size > 0)
+                return new OracleParameter
+                {
+                    OracleDbType = dbType,
+                    Direction = direction,
+                    Size = size,
+                    Value = value,
+                    ParameterName = paramName
+                };
+            else
+                return new OracleParameter
+                {
+                    OracleDbType = dbType,
+                    Direction = direction,
+                    Value = value,
+                    ParameterName = paramName
+                };
+        }
 
         public async Task ExecuteNonQuery(string query, SqlParameter[] dbParams = null)
         {
             using (var connection = new SqlConnection(CadenaConexion))
             {
                 var command = new SqlCommand(query, connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+
+                if (dbParams != null)
+                    command.Parameters.AddRange(dbParams);
+
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task ExecuteNonQuery(string query, OracleParameter[] dbParams = null)
+        {
+            using (var connection = new OracleConnection(CadenaConexion))
+            {
+                var command = new OracleCommand(query, connection)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = _commandTimeout
@@ -87,6 +127,32 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
             }
         }
 
+        public async Task<Dictionary<string, object>> ExecuteNonQueryWithOutput(string query, OracleParameter[] dbParams)
+        {
+            var outputs = new Dictionary<string, object>();
+            using (var connection = new OracleConnection(CadenaConexion))
+            {
+                var command = new OracleCommand(query, connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                };
+
+                await command.Connection.OpenAsync();
+
+                command.Parameters.AddRange(dbParams);
+
+                await command.ExecuteNonQueryAsync();
+
+                foreach (var param in dbParams.Where(x => x.Direction == ParameterDirection.Output))
+                {
+                    outputs.Add(param.ParameterName, command.Parameters[param.ParameterName].Value);
+                }
+
+                return outputs;
+            }
+        }
+
         public async Task<SqlDataReader> ExecuteReader(string query, SqlParameter[] dbParams = null)
         {
             var connection = new SqlConnection(CadenaConexion);
@@ -104,6 +170,26 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 
                 var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 return dr;
+            }
+        }
+
+        public async Task<OracleDataReader> ExecuteReader(string query, OracleParameter[] dbParams = null)
+        {
+            var connection = new OracleConnection(CadenaConexion);
+
+            using (var command = new OracleCommand(query, connection)
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandTimeout = _commandTimeout
+            })
+            {
+                await command.Connection.OpenAsync();
+
+                if (dbParams != null)
+                    command.Parameters.AddRange(dbParams);
+
+                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                return (OracleDataReader)dr;
             }
         }
 

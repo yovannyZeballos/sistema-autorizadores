@@ -5,7 +5,14 @@
         dataType: "json",
         success: function (response) {
             if (response.Ok == false) {
-                redireccionarLogin();
+
+                swal({
+                    text: response.Mensaje,
+                    icon: "info"
+                }).then(() => {
+                    redireccionarLogin();
+                });
+
             } else {
                 if (callback != null && typeof (callback) == "function")
                     callback();

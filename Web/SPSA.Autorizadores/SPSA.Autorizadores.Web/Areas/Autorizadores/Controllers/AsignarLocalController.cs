@@ -79,5 +79,21 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
             return Json(respuesta);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> FormAsociarLocalPMM(ObtenerLocalOfiplanQuery request)
+        {
+            var localOfiplan = await _mediator.Send(request);
+            if (!localOfiplan.Ok)
+                throw new System.Exception(localOfiplan.Mensaje);
+
+            return PartialView("_AsociarLocalPMM", localOfiplan);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AsociarLocalPMM(AsociarLocalPMMCommand request)
+        {
+            var response = await _mediator.Send(request);
+            return Json(response);
+        }
     }
 }
