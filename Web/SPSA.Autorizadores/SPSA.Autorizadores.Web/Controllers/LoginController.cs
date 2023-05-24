@@ -6,6 +6,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -27,6 +28,8 @@ namespace SPSA.Autorizadores.Web.Controllers
         // GET: Login
         public ActionResult Index()
         {
+            WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
+            WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
             return View();
         }
 
@@ -150,7 +153,7 @@ namespace SPSA.Autorizadores.Web.Controllers
             {
                 if (WebSession.UserName == null || WebSession.Login == null)
                 {
-                    respuesta.Mensaje = "Se termino la sesión";
+                    respuesta.Mensaje = "Su sesión a caducado, se redireccionará al login para que ingrese sus credenciales";
                     respuesta.Ok = false;
                 }
             }

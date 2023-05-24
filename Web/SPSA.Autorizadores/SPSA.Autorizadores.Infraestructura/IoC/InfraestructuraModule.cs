@@ -20,6 +20,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
             builder.RegisterType<DBHelper>().InstancePerRequest();
             builder.RegisterType<RepositorioSovosCaja>().As<IRepositorioSovosCaja>().InstancePerRequest();
             builder.RegisterType<RepositorioSovosInventarioCaja>().As<IRepositorioSovosInventarioCaja>().InstancePerRequest();
+            builder.RegisterType<RepositorioLocalOfiplan>().As<IRepositorioLocalOfiplan>().InstancePerRequest();
             base.Load(builder);
         }
     }
