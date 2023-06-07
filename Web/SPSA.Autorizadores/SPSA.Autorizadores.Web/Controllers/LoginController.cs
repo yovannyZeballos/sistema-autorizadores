@@ -49,6 +49,8 @@ namespace SPSA.Autorizadores.Web.Controllers
                     WebSession.UserName = usuario.NombreUsuario;
                     WebSession.Permisos = usuario.Aplicacion.Permisos;
                     WebSession.Locales = usuario.Locales;
+                    WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
+                    WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
                 }
                 else
                 {

@@ -447,7 +447,8 @@ var AdministrarLocal = function () {
                 } else {
                     columnas.push({
                         title: x,
-                        data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+                        data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
+      
                     });
                 }
             });
@@ -457,13 +458,13 @@ var AdministrarLocal = function () {
                     searchPlaceholder: 'Buscar...',
                     sSearch: '',
                 },
+                autoWidth: false,
                 scrollY: '180px',
                 scrollX: true,
                 scrollCollapse: true,
                 paging: false,
                 columns: columnas,
                 data: response.Cajas,
-                bAutoWidth: false,
                 buttons: [
                     {
                         extend: 'excel',
@@ -475,6 +476,9 @@ var AdministrarLocal = function () {
                         }
                     },
                 ],
+                columnDefs: [
+                    { "width": "60px", "targets": [3,4,5] }
+                ]
             });
 
             dataTableCajas.buttons().container().prependTo($('#tableCajas_filter'));
