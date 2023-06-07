@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Autorizadores\AutorizadoresAreaRegistration.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
+    <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
@@ -2553,6 +2554,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Autorizadores\Views\AsignarLocal\_AsociarLocalPMM.cshtml" />
+    <Content Include="Areas\Locales\Views\InventarioCaja\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
