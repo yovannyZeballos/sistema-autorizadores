@@ -22,6 +22,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -90,13 +92,19 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<Aplicacion.Features.MantenimientoLocales.Queries.ObtenerLocalHandler>().As<IRequestHandler<Aplicacion.Features.MantenimientoLocales.Queries.ObtenerLocalQuery, SovosLocalDTO>>();
             builder.RegisterType<EliminarSovosCajaHandler>().As<IRequestHandler<EliminarSovosCajasCommand, RespuestaComunDTO>>();
             builder.RegisterType<ImportarCajasHandler>().As<IRequestHandler<ImportarCajasCommand, RespuestaComunExcelDTO>>();
-            builder.RegisterType<DescargarMaestroHandler>().As<IRequestHandler<DescargarMaestroCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<Aplicacion.Features.MantenimientoLocales.Commands.DescargarMaestroHandler>().As<IRequestHandler<Aplicacion.Features.MantenimientoLocales.Commands.DescargarMaestroCommand, DescargarMaestroDTO>>();
             builder.RegisterType<ImportarInventarioCajaHandler>().As<IRequestHandler<ImportarInventarioCajaCommand, RespuestaComunExcelDTO>>();
             builder.RegisterType<DescargarPlantillasHandler>().As<IRequestHandler<DescargarPlantillasCommand, DescargarPlantillasDTO>>();
             builder.RegisterType<ObtenerLocalOfiplanHandler>().As<IRequestHandler<ObtenerLocalOfiplanQuery, LocalOfiplanDTO>>();
             builder.RegisterType<AsociarLocalPMMHandler>().As<IRequestHandler<AsociarLocalPMMCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ListarCaracteristicasCajaHandler>().As<IRequestHandler<ListarCaracteristicasCajaQuery, CaracetristicaCajaResponseDTO>>();
+            builder.RegisterType<CrearSovosCajaInventarioHandler>().As<IRequestHandler<CrearSovosCajaInventarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ListarCajaInventarioHandler>().As<IRequestHandler<ListarCajaInventarioQuery, ListarCajaInventarioDTO>>();
+            builder.RegisterType<ObtenerCajaInventarioHandler>().As<IRequestHandler<ObtenerCajaInventarioQuery, SovosCajaInventarioDTO>>();
+			builder.RegisterType<Aplicacion.Features.InventarioCaja.Commands.DescargarMaestroHandler>().As<IRequestHandler<Aplicacion.Features.InventarioCaja.Commands.DescargarMaestroCommand, DescargarMaestroDTO>>();
 
-            builder.Register<ServiceFactory>(ctx =>
+
+			builder.Register<ServiceFactory>(ctx =>
             {
                 var c = ctx.Resolve<IComponentContext>();
                 return t => c.Resolve(t);

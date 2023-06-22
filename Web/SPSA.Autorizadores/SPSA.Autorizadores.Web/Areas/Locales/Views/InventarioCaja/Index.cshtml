@@ -1,4 +1,5 @@
-﻿@{
+﻿@model string
+@{
     ViewBag.Title = "Inventario Cajas | Locales";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -37,9 +38,10 @@
             color: #263871;
             float: none;
         }
+
         .col-form-label {
-            font-weight: bold ;
-            font-size: 0.7rem;
+            font-weight: bold;
+            font-size: 0.75rem;
         }
     </style>
 
@@ -68,13 +70,13 @@
             <div class="card-body pt-3 pb-0">
                 <div class="row mb-4" id="btn-local">
                     <div class="col-lg-2 col-md-2 col-sm-3">
-                        <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary btn-block">Nuevo</button>
+                        <button type="button" id="btnNuevo" class="btn btn-sm btn-primary btn-block">Nuevo</button>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-3">
-                        <button type="button" id="btnGuardarLocal" class="btn btn-sm btn-primary btn-block">Guardar</button>
+                        <button type="button" id="btnGuardar" class="btn btn-sm btn-primary btn-block">Guardar</button>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-3">
-                        <button type="button" id="btnBuscarLocal" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                        <button type="button" id="btnBuscar" class="btn btn-sm btn-primary btn-block">Buscar</button>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-3 d-flex justify-content-end">
                         <button type="button" id="btnDescargarMaestro" class="btn btn-sm btn-primary ">Descargar maestro</button>
@@ -85,44 +87,169 @@
             <div class="card-body  pb-0">
                 <div class="row">
                     <div class="col-xl-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Empresa</label>
-                            <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresa" required>
-                                <option label="Seleccione una empresa"></option>
-                            </select>
+
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-2">Empresa</label>
+                            <div class="col-xl-10">
+                                <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresa" required>
+                                    <option label="Seleccione una empresa"></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Formato</label>
-                            <select class="form-control select2-show-search custom-select" id="cboFormato" required>
-                                <option label="Seleccione un formato"></option>
-                            </select>
+
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-2">Formato</label>
+                            <div class="col-xl-10">
+                                <select class="form-control select2-show-search custom-select" id="cboFormato" required>
+                                    <option label="Seleccione un formato"></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Local</label>
-                            <select class="form-control is-valid select2-show-search custom-select" id="cboLocal" required>
-                                <option label="Seleccione un local"></option>
-                            </select>
+
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-2">Local</label>
+                            <div class="col-xl-10">
+                                <select class="form-control is-valid select2-show-search custom-select" id="cboLocal" required>
+                                    <option label="Seleccione un local"></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xl-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Caja</label>
-                            <select class="form-control select2-show-search custom-select" id="cboCaja" required>
-                                <option label="Seleccione una caja"></option>
-                            </select>
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-2">Num POS</label>
+                            <div class="col-xl-10">
+                                <select class="form-control select2-show-search custom-select" id="cboNumPos" required>
+                                    <option label="Seleccione una caja"></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="card-body pt-3 pb-0">
-                @*<div class="card-title text-center"><b>Información de activo (Caja)</b></div>*@
+                <div class="row">
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">F Lising</label>
+                            <div class="col-xl-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="feather feather-calendar"></span>
+                                        </div>
+                                    </div><input id="txtFechaLising" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-4">Estado</label>
+                            <div class="col-xl-8">
+                                <select class="form-control select2-show-search custom-select" id="cboEstado">
+                                    <option label="Seleccione una opción"></option>
+                                    <option value="A">Activo</option>
+                                    <option value="I">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-4">S.O.</label>
+                            <div class="col-xl-8">
+                                <select class="form-control select2-show-search custom-select" id="cboSo">
+                                    <option label="Seleccione una opción"></option>
+                                    <option value="L">Linux</option>
+                                    <option value="W">Windows</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">Versión</label>
+                            <div class="col-xl-8">
+                                <input type="text" class="form-control form-control-sm" id="txtVersion">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">F Asignac.</label>
+                            <div class="col-xl-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="feather feather-calendar"></span>
+                                        </div>
+                                    </div><input id="txtFechaAsignacion" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">Ranking</label>
+                            <div class="col-xl-8">
+                                <input type="text" class="form-control form-control-sm" id="txtRanking">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-2">Ubicación</label>
+                            <div class="col-xl-10">
+                                <input type="text" class="form-control form-control-sm" id="txtUbicación">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">Sede</label>
+                            <div class="col-xl-8">
+                                <input type="text" class="form-control form-control-sm" id="txtSede">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">Caja</label>
+                            <div class="col-xl-8">
+                                <input type="text" class="form-control form-control-sm" id="txtCaja">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">F Apertura</label>
+                            <div class="col-xl-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="feather feather-calendar"></span>
+                                        </div>
+                                    </div><input id="txtFechaApertura" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="row">
                     <div class="col-xl-7">
                         <fieldset class="default">
@@ -139,16 +266,16 @@
                             <div class="row">
                                 <div class="col-xl-7">
                                     <div class="form-group row mb-2">
-                                        <label class="col-form-label col-xl-3" for="email">CPU</label>
+                                        <label class="col-form-label col-xl-3">CPU</label>
                                         <div class="col-xl-9">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtModeloCpu">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
                                     <div class="form-group row  mb-2">
                                         <div class="col-xl-12">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtSerieCpu">
                                         </div>
                                     </div>
                                 </div>
@@ -158,16 +285,16 @@
                             <div class="row">
                                 <div class="col-xl-7">
                                     <div class="form-group row mb-2">
-                                        <label class="col-form-label col-xl-3" for="email">Impresora</label>
+                                        <label class="col-form-label col-xl-3">Impresora</label>
                                         <div class="col-xl-9">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtModeloImpresora">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
                                     <div class="form-group row mb-2">
                                         <div class="col-xl-12">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtSerieImpresora">
                                         </div>
                                     </div>
                                 </div>
@@ -176,16 +303,16 @@
                             <div class="row">
                                 <div class="col-xl-7">
                                     <div class="form-group row mb-2">
-                                        <label class="col-form-label col-xl-3" for="email">Dynakey</label>
+                                        <label class="col-form-label col-xl-3">Dynakey</label>
                                         <div class="col-xl-9">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtModeloDynakey">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
                                     <div class="form-group row mb-2">
                                         <div class="col-xl-12">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtSerieDynakey">
                                         </div>
                                     </div>
                                 </div>
@@ -194,16 +321,16 @@
                             <div class="row">
                                 <div class="col-xl-7">
                                     <div class="form-group row mb-2">
-                                        <label class="col-form-label col-xl-3" for="email">Scanner</label>
+                                        <label class="col-form-label col-xl-3">Scanner</label>
                                         <div class="col-xl-9">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtModeloScanner">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
                                     <div class="form-group row mb-2">
                                         <div class="col-xl-12">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtSerieScanner">
                                         </div>
                                     </div>
                                 </div>
@@ -212,16 +339,16 @@
                             <div class="row">
                                 <div class="col-xl-7">
                                     <div class="form-group row mb-2">
-                                        <label class="col-form-label col-xl-3" for="email">Gaveta</label>
+                                        <label class="col-form-label col-xl-3">Gaveta</label>
                                         <div class="col-xl-9">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtModeloGaveta">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
                                     <div class="form-group row mb-2">
                                         <div class="col-xl-12">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtSerieGaveta">
                                         </div>
                                     </div>
                                 </div>
@@ -230,16 +357,16 @@
                             <div class="row">
                                 <div class="col-xl-7">
                                     <div class="form-group row mb-2">
-                                        <label class="col-form-label col-xl-3" for="email">Monitor</label>
+                                        <label class="col-form-label col-xl-3">Monitor</label>
                                         <div class="col-xl-9">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtModeloMonitor">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
                                     <div class="form-group row mb-2">
                                         <div class="col-xl-12">
-                                            <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                            <input type="text" class="form-control form-control-sm" id="txtSerieMonitor">
                                         </div>
                                     </div>
                                 </div>
@@ -255,30 +382,30 @@
                                     <div class="row">
                                         <div class="col-xl-12">
                                             <div class="form-group row mb-2 select2-sm">
-                                                <label class="col-form-label col-xl-2">Tipo 1</label>
-                                                <div class="col-xl-10">
-                                                    <select class="form-control select2-show-search custom-select" id="cboCaja" required>
-                                                        <option label="Seleccione una caja"></option>
+                                                <label class="col-form-label col-xl-3">Carac 1</label>
+                                                <div class="col-xl-9">
+                                                    <select class="form-control select2-show-search custom-select" id="cboCaract1">
+                                                        <option label="Seleccione una opcion"></option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-12">
                                             <div class="form-group row mb-2 select2-sm">
-                                                <label class="col-form-label col-xl-2">Tipo 2</label>
-                                                <div class="col-xl-10">
-                                                    <select class="form-control select2-show-search custom-select" id="cboCaja" required>
-                                                        <option label="Seleccione una caja"></option>
+                                                <label class="col-form-label col-xl-3">Carac 2</label>
+                                                <div class="col-xl-9">
+                                                    <select class="form-control select2-show-search custom-select" id="cboCaract2">
+                                                        <option label="Seleccione una opcion"></option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-12">
                                             <div class="form-group row mb-2 select2-sm">
-                                                <label class="col-form-label col-xl-2">Tipo 3</label>
-                                                <div class="col-xl-10">
-                                                    <select class="form-control select2-show-search custom-select" id="cboCaja" required>
-                                                        <option label="Seleccione una caja"></option>
+                                                <label class="col-form-label col-xl-3">Carac 3</label>
+                                                <div class="col-xl-9">
+                                                    <select class="form-control select2-show-search custom-select" id="cboCaract3">
+                                                        <option label="Seleccione una opcion"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -294,32 +421,32 @@
 
                                         <div class="col-xl-7">
                                             <div class="form-group row mb-2">
-                                                <label class="col-form-label col-xl-4" for="email">Creado</label>
+                                                <label class="col-form-label col-xl-4">Creado</label>
                                                 <div class="col-xl-8">
-                                                    <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                                    <input type="text" class="form-control form-control-sm" id="txtUsuarioCreacion" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-5">
                                             <div class="form-group row mb-2">
                                                 <div class="col-xl-12">
-                                                    <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                                    <input type="text" class="form-control form-control-sm" id="txtFechaCreacion" value="@Model" disabled>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-xl-7">
                                             <div class="form-group row mb-2">
-                                                <label class="col-form-label col-xl-4" for="email">Modifi.</label>
+                                                <label class="col-form-label col-xl-4">Modifi.</label>
                                                 <div class="col-xl-8">
-                                                    <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                                    <input type="text" class="form-control form-control-sm" id="txtUsuarioModificacion" disabled>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-5">
                                             <div class="form-group row mb-2">
                                                 <div class="col-xl-12">
-                                                    <input type="text" class="form-control form-control-sm" id="txtCodigo" required>
+                                                    <input type="text" class="form-control form-control-sm" id="txtFechaModificacion" disabled>
                                                 </div>
                                             </div>
                                         </div>
@@ -335,4 +462,57 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL LOCAL-->
+<div class="modal fade" id="modalInventario" data-bs-backdrop="static">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Seleccione un registro</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tableInventario" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAceptar" class="btn btn-sm btn-primary">Aceptar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/InventarioCaja.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            InventarioCaja.init();
+        });
+    </script>
+}
+
 

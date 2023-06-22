@@ -116,11 +116,14 @@
     <Compile Include="Constantes.cs" />
     <Compile Include="DTO\AplicacionDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
+    <Compile Include="DTO\CaracetristicaCajaDTO.cs" />
+    <Compile Include="DTO\CaracetristicaCajaResponseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />
     <Compile Include="DTO\DescargarMaestroDTO.cs" />
     <Compile Include="DTO\EnumClass.cs" />
     <Compile Include="DTO\ErroresExcelDTO.cs" />
     <Compile Include="DTO\FormatoDTO.cs" />
+    <Compile Include="DTO\ListarCajaInventarioDTO.cs" />
     <Compile Include="DTO\ListarLocalesPorEmpresaDTO.cs" />
     <Compile Include="DTO\ListarCajasPorLocalDTO.cs" />
     <Compile Include="DTO\LocalesAsignadosDTO.cs" />
@@ -137,6 +140,7 @@
     <Compile Include="DTO\RespuestaComunDTO.cs" />
     <Compile Include="DTO\RespuestaComunExcelDTO.cs" />
     <Compile Include="DTO\SovosCajaDTO.cs" />
+    <Compile Include="DTO\SovosCajaInventarioDTO.cs" />
     <Compile Include="DTO\SovosLocalDTO.cs" />
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="Extensiones\DataSetExtensions.cs" />
@@ -150,6 +154,11 @@
     <Compile Include="Features\Autorizadores\Queries\ListarColaboradoresQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasOfiplanQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasQuery.cs" />
+    <Compile Include="Features\InventarioCaja\Commands\CrearSovosCajaInventarioCommand.cs" />
+    <Compile Include="Features\InventarioCaja\Commands\DescargarMaestroCommand.cs" />
+    <Compile Include="Features\InventarioCaja\Queries\ListarCajaInventarioQuery.cs" />
+    <Compile Include="Features\InventarioCaja\Queries\ListarCaracteristicasCajaQuery.cs" />
+    <Compile Include="Features\InventarioCaja\Queries\ObtenerCajaInventarioQuery.cs" />
     <Compile Include="Features\Locales\Commands\AsignarLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\AsociarLocalPMMCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesAsignarQuery.cs" />

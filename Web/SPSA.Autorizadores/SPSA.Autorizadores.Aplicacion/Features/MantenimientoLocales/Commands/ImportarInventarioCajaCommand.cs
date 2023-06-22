@@ -52,7 +52,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
                         UseColumnDataType = true
                     }).ToAllStringFields();
 
-                    await _repositorioSovosInventarioCaja.Insertar(ds.Tables[0]);
+                    await _repositorioSovosInventarioCaja.InsertarMasivo(ds.Tables[0]);
 
                     respuesta.Ok = true;
                     respuesta.Mensaje = "Archivo importado correctamente";

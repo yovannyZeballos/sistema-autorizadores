@@ -44,11 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entidades\Autorizador.cs" />
+    <Compile Include="Entidades\CaracteristicaCaja.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\Empresa.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
     <Compile Include="Entidades\SovosCaja.cs" />
+    <Compile Include="Entidades\SovosCajaInventario.cs" />
     <Compile Include="Entidades\SovosFormato.cs" />
     <Compile Include="Entidades\SovosLocal.cs" />
     <Compile Include="Entidades\MonitorReporte.cs" />

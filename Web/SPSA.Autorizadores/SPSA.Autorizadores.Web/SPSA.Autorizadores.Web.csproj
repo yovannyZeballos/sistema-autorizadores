@@ -2192,6 +2192,7 @@
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
     <Content Include="Content\ViewJs\Home.js" />
+    <Content Include="Content\ViewJs\InventarioCaja.js" />
     <Content Include="Content\ViewJs\Login.js" />
     <Content Include="Content\ViewJs\CierreEOD.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
