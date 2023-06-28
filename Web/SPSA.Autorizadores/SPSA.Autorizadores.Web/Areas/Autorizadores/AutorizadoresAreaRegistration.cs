@@ -14,7 +14,13 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            context.MapRoute(
+			context.MapRoute(
+			"AutorizadorMasivo_default",
+			"Autorizadores/AutorizadorMasivoLocal/{action}/{id}",
+			new { controller = "AutorizadorMasivo", action = "Index", id = UrlParameter.Optional }
+		   );
+
+			context.MapRoute(
             "Administrar_default",
             "Autorizadores/Administrar/{action}/{id}",
             new { controller = "Autorizador", action = "Index", id = UrlParameter.Optional }
@@ -44,7 +50,8 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores
              new { controller = "Puesto", action = "Index", id = UrlParameter.Optional }
             );
 
-           
-        }
+			
+
+		}
     }
 }
