@@ -13,9 +13,10 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task Crear(Autorizador autorizador);
         Task Eliminar(Autorizador autorizador);
         Task ActualizarEstadoArchivo(Autorizador autorizador);
-        Task<string> GenerarArchivo(string tipoSO);
-        Task<DataTable> ListarColaboradoresMass(string codEmpresa);
+        Task ActualizarEstadoArchivoPorLocal(string locales);
+		Task<string> GenerarArchivo(string tipoSO);
+		Task<DataTable> ListarColaboradoresMass(string codEmpresa);
+        Task<string> GenerarArchivoLocal(decimal codLocal, string tipoSO);
 
-
-    }
+	}
 }
