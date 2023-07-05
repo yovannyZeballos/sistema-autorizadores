@@ -2,6 +2,7 @@
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
 using SPSA.Autorizadores.Web.Utiles;
 using System;
@@ -63,9 +64,29 @@ namespace SPSA.Autorizadores.Web.Areas.Locales.Controllers
 
 
 		[HttpPost]
-		public async Task<JsonResult> DescargarMaestro(DescargarMaestroCommand request)
+		public async Task<JsonResult> DescargarMaestro(Aplicacion.Features.InventarioCaja.Commands.DescargarMaestroCommand request)
 		{
 			var respuesta = await _mediator.Send(request);
+			return Json(respuesta);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> ImportarInventario()
+		{
+			var respuesta = new RespuestaComunExcelDTO();
+			foreach (var fileKey in Request.Files)
+			{
+				HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
+				respuesta = await _mediator.Send(new ImportarInventarioCajaCommand { Archivo = archivo, Usuario = WebSession.Login });
+			}
+
+			return Json(respuesta);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> DescargarPlantillas()
+		{
+			var respuesta = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventario_Caja"});
 			return Json(respuesta);
 		}
 	}

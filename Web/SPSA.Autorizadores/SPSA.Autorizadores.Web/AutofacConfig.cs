@@ -21,9 +21,10 @@ using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Commands;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -102,6 +103,17 @@ namespace SPSA.Autorizadores.Web
             builder.RegisterType<ListarCajaInventarioHandler>().As<IRequestHandler<ListarCajaInventarioQuery, ListarCajaInventarioDTO>>();
             builder.RegisterType<ObtenerCajaInventarioHandler>().As<IRequestHandler<ObtenerCajaInventarioQuery, SovosCajaInventarioDTO>>();
 			builder.RegisterType<Aplicacion.Features.InventarioCaja.Commands.DescargarMaestroHandler>().As<IRequestHandler<Aplicacion.Features.InventarioCaja.Commands.DescargarMaestroCommand, DescargarMaestroDTO>>();
+			builder.RegisterType<ListarInventarioTipoHandler>().As<IRequestHandler<ListarInventarioTipoQuery, ListarInventarioTipoDTO>>();
+			builder.RegisterType<CrearInventarioServidorHandler>().As<IRequestHandler<CrearInventarioServidorCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ListarInventarioServidorVirtualHandler>().As<IRequestHandler<ListarInventarioServidorVirtualQuery, ListarInventarioServidorVirtualDTO>>();
+			builder.RegisterType<CrearInventarioServidorVirtualHandler>().As<IRequestHandler<CrearInventarioServidorVirtualCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ListarInventarioServidorHandler>().As<IRequestHandler<ListarInventarioServidorQuery, ListarInventarioServidorDTO>>();
+			builder.RegisterType<ObtenerInventarioServidorHandler>().As<IRequestHandler<ObtenerInventarioServidorQuery, InventarioServidorDTO>>();
+			builder.RegisterType<EliminarInventarioServidorVirtualHandler>().As<IRequestHandler<EliminarInventarioServidorVirtualCommand, RespuestaComunDTO>>();
+			builder.RegisterType<Aplicacion.Features.InventarioServidor.Commands.DescargarMaestroHandler>().As<IRequestHandler<Aplicacion.Features.InventarioServidor.Commands.DescargarMaestroCommand, DescargarMaestroDTO>>();
+			builder.RegisterType<ImportarInventarioServidorHandler>().As<IRequestHandler<ImportarInventarioServidorCommand, RespuestaComunExcelDTO>>();
+
+
 
 
 			builder.Register<ServiceFactory>(ctx =>

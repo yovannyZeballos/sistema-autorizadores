@@ -10,6 +10,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
 {
     public class DescargarPlantillasCommand : IRequest<DescargarPlantillasDTO>
     {
+        public string Carpeta { get; set; }
     }
 
     public class DescargarPlantillasHandler : IRequestHandler<DescargarPlantillasCommand, DescargarPlantillasDTO>
@@ -21,7 +22,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
                 var respuesta = new DescargarPlantillasDTO();
                 try
                 {
-                    var carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plantillas");
+                    var carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, request.Carpeta);
 
                     using (MemoryStream zipToOpen = new MemoryStream())
                     {
@@ -38,7 +39,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
 
                         respuesta.Archivo = Convert.ToBase64String(zipToOpen.ToArray());
                         respuesta.Ok = true;
-                        respuesta.NombreArchivo = "Plantillas.zip";
+                        respuesta.NombreArchivo = $"{request.Carpeta}.zip";
                     }
                 }
                 catch (Exception ex)

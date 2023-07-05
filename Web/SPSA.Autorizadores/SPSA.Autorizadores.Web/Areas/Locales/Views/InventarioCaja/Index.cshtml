@@ -69,16 +69,23 @@
 
             <div class="card-body pt-3 pb-0">
                 <div class="row mb-4" id="btn-local">
-                    <div class="col-lg-2 col-md-2 col-sm-3">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
                         <button type="button" id="btnNuevo" class="btn btn-sm btn-primary btn-block">Nuevo</button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-3">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
                         <button type="button" id="btnGuardar" class="btn btn-sm btn-primary btn-block">Guardar</button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-3">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
                         <button type="button" id="btnBuscar" class="btn btn-sm btn-primary btn-block">Buscar</button>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-3 d-flex justify-content-end">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <button type="button" id="btnImportar" class="btn btn-sm btn-primary btn-block">Importar Excel</button>
+                        <input type="file" id="excelInventario" style="display: none;">
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-link btn-sm" id="btnDescargarPlantillas">Descargar plantillas</a>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 d-flex justify-content-end">
                         <button type="button" id="btnDescargarMaestro" class="btn btn-sm btn-primary ">Descargar maestro</button>
                     </div>
                 </div>
@@ -484,6 +491,33 @@
             </div>
             <div class="modal-footer">
                 <button id="btnAceptar" class="btn btn-sm btn-primary">Aceptar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL ERRORES-->
+<div class="modal fade" id="modalErroresImportacionCaja" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
                 <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>

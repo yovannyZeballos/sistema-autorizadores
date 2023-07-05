@@ -46,7 +46,11 @@
     <Compile Include="Entidades\Autorizador.cs" />
     <Compile Include="Entidades\CaracteristicaCaja.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
+    <Compile Include="Entidades\DatosAuditoria.cs" />
     <Compile Include="Entidades\Empresa.cs" />
+    <Compile Include="Entidades\InventarioServidor.cs" />
+    <Compile Include="Entidades\InventarioServidorVirtual.cs" />
+    <Compile Include="Entidades\InventarioTipo.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
     <Compile Include="Entidades\SovosCaja.cs" />

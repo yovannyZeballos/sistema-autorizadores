@@ -87,7 +87,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
                     resultadosProceso.AddRange(tareasCalculo.Select(t => t.Result));
                 }
 
-                //Crear BD
+                //Insertar BD
                 foreach (var resultado in resultadosProceso)
                 {
                     var localMonitor = new MonitorReporte(resultado.CodEmpresa, resultado.CodLocal, fechaProceso,

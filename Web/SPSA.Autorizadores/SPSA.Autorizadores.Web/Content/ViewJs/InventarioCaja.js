@@ -8,6 +8,9 @@ const urlLocales = baseUrl + 'Locales/AdministrarLocal/ListarLocales';
 const urlCajas = baseUrl + 'Locales/AdministrarLocal/ListarCajas';
 var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
 var urlDescargarMaestro = baseUrl + 'Locales/InventarioCaja/DescargarMaestro';
+var urlImportarInventario = baseUrl + 'Locales/InventarioCaja/ImportarInventario';
+var urlDescargarPlantilla = baseUrl + 'Locales/InventarioCaja/DescargarPlantillas';
+
 var dataTableInventario = null;
 
 const InventarioCaja = function () {
@@ -113,6 +116,18 @@ const InventarioCaja = function () {
 
         $("#btnDescargarMaestro").on("click", function () {
             descargarMaestro();
+        });
+
+        $("#btnImportar").on("click", function () {
+            $("#excelInventario").trigger("click");
+        });
+
+        $('#excelInventario').change(function (e) {
+            importarExcelInventario();
+        });
+
+        $("#btnDescargarPlantillas").on("click", function () {
+            descargarPlantillas();
         });
     }
 
@@ -638,6 +653,81 @@ const InventarioCaja = function () {
                 downloadLink.href = linkSource;
                 downloadLink.download = fileName;
                 downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const importarExcelInventario = function () {
+
+        var formData = new FormData();
+        var uploadFiles = $('#excelInventario').prop('files');
+        formData.append("excelInventario", uploadFiles[0]);
+
+        $.ajax({
+            url: urlImportarInventario,
+            type: "post",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+                $("#excelInventario").val(null);
+            },
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
+
+                        if (response.Errores.length > 0) {
+                            let html = "";
+                            response.Errores.map((error) => {
+                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
+                            });
+                            $('#tbodyErroresCaja').html(html);
+                            $('#modalErroresImportacionCaja').modal("show");
+                        }
+
+                    });
+                    return;
+                }
+
+                swal({ text: response.Mensaje, icon: "success", });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+
+    }
+
+    const descargarPlantillas = function () {
+
+        $.ajax({
+            url: urlDescargarPlantilla,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });

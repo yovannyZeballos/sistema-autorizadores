@@ -25,6 +25,12 @@ namespace SPSA.Autorizadores.Web.Areas.Locales
 			   "Locales/{controller}/{action}/{id}",
 				new { controller = "InventarioCaja", action = "Index", id = UrlParameter.Optional }
 		   );
+
+			context.MapRoute(
+			   "InventarioServidor_default",
+			   "Locales/{controller}/{action}/{id}",
+				new { controller = "InventarioServidor", action = "Index", id = UrlParameter.Optional }
+		   );
 		}
 	}
 }

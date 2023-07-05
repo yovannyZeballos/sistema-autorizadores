@@ -261,7 +261,7 @@
                                                     if (item.Id == 13)
                                                     {
                                                         <li class="sub-slide">
-                                                            <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
                                                                href="~/Monitor/CierreEOD">
                                                                 <span class="sub-side-menu__label">
                                                                     @item.DesPermiso
@@ -292,8 +292,32 @@
                                                     if (item.Id == 15)
                                                     {
                                                         <li class="sub-slide">
-                                                            <a class="sub-side-menu__item" data-bs-toggle="sub-slide"
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
                                                                href="~/Locales/AdministrarLocal">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    if (item.Id == 17)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Locales/InventarioCaja">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    if (item.Id == 18)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Locales/InventarioServidor">
                                                                 <span class="sub-side-menu__label">
                                                                     @item.DesPermiso
                                                                 </span>

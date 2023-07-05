@@ -48,7 +48,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
 			{
 				cajas.Ok = false;
 				cajas.Mensaje = ex.Message;
-				throw;
 			}
 
 			return cajas;

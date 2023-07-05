@@ -4835,7 +4835,7 @@ input[type=button].btn-block {
 
 .card-title {
     line-height: 1.2;
-    text-transform: none;
+    text-transform: none !important;
     font-weight: 500;
     letter-spacing: 0.01rem;
     font-size: 0.9rem;
