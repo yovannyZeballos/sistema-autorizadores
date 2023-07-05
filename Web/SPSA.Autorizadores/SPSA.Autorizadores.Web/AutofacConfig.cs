@@ -112,8 +112,7 @@ namespace SPSA.Autorizadores.Web
 			builder.RegisterType<EliminarInventarioServidorVirtualHandler>().As<IRequestHandler<EliminarInventarioServidorVirtualCommand, RespuestaComunDTO>>();
 			builder.RegisterType<Aplicacion.Features.InventarioServidor.Commands.DescargarMaestroHandler>().As<IRequestHandler<Aplicacion.Features.InventarioServidor.Commands.DescargarMaestroCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<ImportarInventarioServidorHandler>().As<IRequestHandler<ImportarInventarioServidorCommand, RespuestaComunExcelDTO>>();
-
-
+            builder.RegisterType<GenerarArchivoPorLocalHandler>().As<IRequestHandler<GenerarArchivoPorLocalCommand, DescargarPlantillasDTO>>();
 
 
 			builder.Register<ServiceFactory>(ctx =>

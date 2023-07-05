@@ -273,5 +273,62 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 return datatable;
             }
         }
-    }
+
+		public async Task ActualizarEstadoArchivoPorLocal(string locales)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_CAMBIO_ESTADO_AUT_LOCAL", connection);
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandTimeout = _commandTimeout;
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("PINNU_LOCALES", OracleDbType.Varchar2, locales, ParameterDirection.Input);
+				command.Parameters.Add("PINNU_ERROR", OracleDbType.Decimal, 1, ParameterDirection.Output);
+				command.Parameters.Add("PINVC_MSGERR", OracleDbType.Varchar2, 250, "", ParameterDirection.Output);
+
+				await command.ExecuteNonQueryAsync();
+
+				var error = Convert.ToDecimal(command.Parameters["PINNU_ERROR"].Value.ToString());
+				var mensjaeError = command.Parameters["PINVC_MSGERR"].Value.ToString();
+
+				if (error == -1)
+					throw new Exception(mensjaeError);
+
+				connection.Close();
+				connection.Dispose();
+			}
+		}
+
+		public async Task<string> GenerarArchivoLocal(decimal codLocal,string tipoSO)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandTimeout = _commandTimeout
+				};
+				
+				await command.Connection.OpenAsync();
+
+				command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+				command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
+				command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+
+				await command.ExecuteNonQueryAsync();
+
+				var resultado = command.Parameters["resultado"].Value.ToString();
+
+				connection.Close();
+				connection.Dispose();
+
+				return resultado;
+
+			}
+
+
+		}
+
+	}
 }

@@ -41,6 +41,12 @@ var Autorizador = function () {
             cargarTodosColaboradores();
         });
 
+
+        $("#bntColaboradoresActivos").on('click', function () {
+            $('#modalColaboradoresActivos').modal('show');
+            cargarColaboradores();
+        });
+
         $("#btnAsignarAutorizadorBusqueda").on('click', function () {
             asignarAutorizadorBusqueda();
         });
@@ -55,6 +61,10 @@ var Autorizador = function () {
 
         $("#chkInactivosAutorizadores,#chkActivosAutorizadores").on("change", function () {
             checkActivoAnuladoAutorizadores();
+        })
+
+        $("#chkTodos").on("change", function () {
+            chechTodos();
         })
 
     }
@@ -78,12 +88,6 @@ var Autorizador = function () {
             url: urlColaborador,
             type: "post",
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
             success: function (response) {
 
                 var columnas = [];
@@ -101,12 +105,12 @@ var Autorizador = function () {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
                     },
-                    scrollY: '180px',
+                    scrollY: '350px',
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
                     columns: columnas,
-                    data: response.Colaboradores,
+                    //data: response.Colaboradores,
                     bAutoWidth: false,
                     rowCallback: function (row, data, index) {
                         if (data.Estado == "ANU") {
@@ -166,7 +170,7 @@ var Autorizador = function () {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
                     },
-                    scrollY: '180px',
+                    scrollY: '400px',
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
@@ -232,7 +236,7 @@ var Autorizador = function () {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
                     },
-                    scrollY: '180px',
+                    scrollY: '300px',
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
@@ -403,6 +407,7 @@ var Autorizador = function () {
                     icon: "success"
                 });
                 btnLoading($("#btnAsignar"), false);
+                $('#modalColaboradoresActivos').modal('hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -595,6 +600,10 @@ var Autorizador = function () {
                 dataTableBusquedaColaborador.clear();
                 dataTableBusquedaColaborador.rows.add(response.Colaboradores);
                 dataTableBusquedaColaborador.draw();
+
+                setTimeout(() => {
+                    dataTableBusquedaColaborador.columns.adjust().draw();
+                }, 500);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -645,6 +654,10 @@ var Autorizador = function () {
                 dataTableColaborador.clear();
                 dataTableColaborador.rows.add(response.Colaboradores);
                 dataTableColaborador.draw();
+
+                setTimeout(() => {
+                    dataTableColaborador.columns.adjust().draw();
+                }, 500);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -680,6 +693,20 @@ var Autorizador = function () {
         else {
             dataTableAutorizador.column(8).search('').draw();
         }
+    }
+    const chechTodos = function () {
+
+        if ($("#chkTodos").prop('checked')) {
+            dataTableAutorizador.rows({ search: 'applied' }).nodes().each(function () {
+                $(this).addClass('selected');
+            });
+        } else {
+            dataTableAutorizador.rows({ search: 'applied' }).nodes().each(function () {
+                $(this).removeClass('selected');
+            });
+        }
+
+       
     }
 
     const checkActivoAnuladoTodos = function () {

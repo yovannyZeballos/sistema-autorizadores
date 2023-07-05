@@ -130,6 +130,7 @@
     <Compile Include="DTO\ListarInventarioServidorDTO.cs" />
     <Compile Include="DTO\ListarInventarioServidorVirtualDTO.cs" />
     <Compile Include="DTO\ListarInventarioTipoDTO.cs" />
+    <Compile Include="DTO\GenerarArchivoPorLocalDTO.cs" />
     <Compile Include="DTO\ListarLocalesPorEmpresaDTO.cs" />
     <Compile Include="DTO\ListarCajasPorLocalDTO.cs" />
     <Compile Include="DTO\LocalesAsignadosDTO.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="DTO\SovosLocalDTO.cs" />
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="Extensiones\DataSetExtensions.cs" />
+    <Compile Include="Features\Autorizadores\Commands\GenerarArchivoPorLocalCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\EliminarAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\CrearAutorizadorCommand.cs" />
