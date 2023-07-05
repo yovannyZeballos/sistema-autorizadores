@@ -196,7 +196,6 @@ var AdministrarLocal = function () {
         dataTableCajas.draw();
     }
 
-
     const validarSelecion = function (count, unSoloRegistro = false) {
         if (count === 0) {
             swal({
@@ -484,7 +483,6 @@ var AdministrarLocal = function () {
             dataTableCajas.buttons().container().prependTo($('#tableCajas_filter'));
 
         } catch (e) {
-            console.error(e);
             swal({ text: e.toString(), icon: "error" });
         }
     }
@@ -509,7 +507,6 @@ var AdministrarLocal = function () {
             dataTableCajas.rows.add(response.Cajas);
             dataTableCajas.draw();
         } catch (e) {
-            console.error(e);
             swal({ text: e.toString(), icon: "error" });
         }
         closeLoading();
@@ -708,7 +705,6 @@ var AdministrarLocal = function () {
                     return;
 
                 }
-
                 dataTableLocales.clear();
                 dataTableLocales.rows.add(response.Locales);
                 dataTableLocales.draw();
@@ -988,7 +984,6 @@ var AdministrarLocal = function () {
         });
     }
 
-
     const descargarPlantillas = function () {
 
         $.ajax({
@@ -1015,6 +1010,7 @@ var AdministrarLocal = function () {
             }
         });
     }
+
     return {
         init: function () {
             checkSession(async function () {

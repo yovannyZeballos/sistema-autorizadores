@@ -148,6 +148,8 @@
     <Compile Include="Areas\Autorizadores\AutorizadoresAreaRegistration.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorMasivoController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
+    <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
+    <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
@@ -2193,6 +2195,8 @@
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
     <Content Include="Content\ViewJs\Home.js" />
+    <Content Include="Content\ViewJs\InventarioCaja.js" />
+    <Content Include="Content\ViewJs\InventarioServidor.js" />
     <Content Include="Content\ViewJs\Login.js" />
     <Content Include="Content\ViewJs\CierreEOD.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
@@ -2548,13 +2552,19 @@
     <Content Include="Areas\Locales\Views\web.config" />
     <Content Include="Areas\Locales\Views\AdministrarLocal\Index.cshtml" />
     <Content Include="Areas\Locales\Views\AdministrarLocal\_NuevaCaja.cshtml" />
-    <Content Include="Plantillas\Plantilla_Carga_Cajas.xlsx">
+    <Content Include="Plantilla_Caja\Plantilla_Carga_Cajas.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Plantillas\Plantilla_Carga_Inventario.xlsx">
+    <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Autorizadores\Views\AsignarLocal\_AsociarLocalPMM.cshtml" />
+    <Content Include="Areas\Locales\Views\InventarioCaja\Index.cshtml" />
+    <Content Include="Areas\Locales\Views\InventarioServidor\Index.cshtml" />
+    <Content Include="Areas\Locales\Views\InventarioServidor\_NuevaVirtual.cshtml" />
+    <Content Include="Plantilla_Inventario_Servidor\Plantilla_Servidor_Inventario.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Autorizadores\Views\AutorizadorMasivo\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

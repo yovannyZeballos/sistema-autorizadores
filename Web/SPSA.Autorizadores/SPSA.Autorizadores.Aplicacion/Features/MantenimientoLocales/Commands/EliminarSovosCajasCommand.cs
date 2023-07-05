@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands
+namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
 {
     public class EliminarSovosCajasCommand : IRequest<RespuestaComunDTO>
     {
