@@ -1452,9 +1452,6 @@
             };
 
         if (timeOpt.days || timeOpt.months) {
-            console.log(
-                'You are using a custom date interval. Use ' +
-                'Clndr.setIntervalStart(startDate) instead.');
             return this;
         }
 
@@ -1500,9 +1497,6 @@
             };
 
         if (!timeOpt.days && !timeOpt.months) {
-            console.log(
-                'You are using a custom date interval. Use ' +
-                'Clndr.setIntervalStart(startDate) instead.');
             return this;
         }
 

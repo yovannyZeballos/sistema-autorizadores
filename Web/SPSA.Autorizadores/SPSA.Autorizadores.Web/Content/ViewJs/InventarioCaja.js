@@ -259,7 +259,6 @@ const InventarioCaja = function () {
             CodFormato: codFormato == null ? $("#cboFormato").val() : codFormato,
             CodLocal: codLocal == null ? $("#cboLocal").val() : codLocal
         };
-        console.log(request);
         $.ajax({
             url: urlCajas,
             type: "post",
@@ -280,7 +279,6 @@ const InventarioCaja = function () {
 
                 if (numPos != null) $('#cboNumPos').val(numPos);
 
-                console.log(numPos);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });

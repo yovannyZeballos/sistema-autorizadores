@@ -138,7 +138,6 @@ $(function(e){
 	$('input[name="daterange"]').daterangepicker({
 		opens: 'left'
 	  }, function(start, end, label) {
-		console.log("A new date selection was made: " + start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
 	});
 
 	$('#daterange-categories').change(function() {

@@ -94,8 +94,6 @@ const AutorizadorMasivo = function () {
                     return;
                 }
 
-                console.log(response);
-
                 const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
                 const downloadLink = document.createElement("a");
                 const fileName = response.NombreArchivo;
