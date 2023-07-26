@@ -38,8 +38,20 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<SovosFormato, FormatoDTO>().ReverseMap();
             CreateMap<SovosLocal, SovosLocalDTO>().ReverseMap();
             CreateMap<LocalOfiplan, LocalOfiplanDTO>().ReverseMap();
+            CreateMap<SovosCajaInventario, SovosCajaInventarioDTO>()
+                .ForMember(dest => dest.FechaApertura , opt => opt.MapFrom(src => src.FechaApertura == null ? "" : src.FechaApertura.Value.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.FechaAsignacion , opt => opt.MapFrom(src => src.FechaAsignacion == null ? "" : src.FechaAsignacion.Value.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.FechaCreacion , opt => opt.MapFrom(src => src.FechaCreacion == null ? "" : src.FechaCreacion.Value.ToString("dd/MM/yyyy HH:mm:ss")))
+                .ForMember(dest => dest.FechaLising , opt => opt.MapFrom(src => src.FechaLising == null ? "" : src.FechaLising.Value.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.FechaModificacion, opt => opt.MapFrom(src => src.FechaModificacion == null ? "" : src.FechaModificacion.Value.ToString("dd/MM/yyyy HH:mm:ss")))
+				.ReverseMap();
 
+			CreateMap<InventarioTipo, InventarioTipoDTO>().ReverseMap();
+			CreateMap<InventarioServidor, InventarioServidorDTO>()
+				.ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom(src => src.FechaCreacion == null ? "" : src.FechaCreacion.Value.ToString("dd/MM/yyyy  HH:mm:ss")))
+				.ForMember(dest => dest.FechaModificacion, opt => opt.MapFrom(src => src.FechaModificacion == null ? "" : src.FechaModificacion.Value.ToString("dd/MM/yyyy  HH:mm:ss")))
+				.ReverseMap();
 
-        }
-    }
+		}
+	}
 }

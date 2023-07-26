@@ -19,39 +19,7 @@
 </div>
 
 <div class="row row-sm">
-    <div class="col-xl-12">
-        <div class="card overflow-hidden">
-            <div class="card-header bg-primary ">
-                <h6 class="card-title text-white">Colaboradores activos</h6>
-                <div class="card-options ">
-                    <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="form-group data-table-btn" id="button-group">
-                    <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar Autorizador</button>
-                    <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-2">Buscar Empleado</button>
-                    <div class="checkbox  ms-2" style="display: inline-block;">
-                        <label class="unselectable  ms-2">
-                            <input id="chkActivos" type="checkbox"> ACTIVOS
-                        </label>
-                        <label class="unselectable ms-2">
-                            <input id="chkAnulados" type="checkbox"> ANULADOS
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <table id="tableColaborador" class="table text-nowrap border-bottom">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
 
-            </div>
-        </div>
-    </div>
 
     <div class="col-xl-12">
         <div class="card overflow-hidden">
@@ -62,40 +30,38 @@
                 </div>
             </div>
             <div class="card-body">
-
-                <div class="form-group data-table-btn">
-                    <button id="btnGenerar" class="btn btn-sm btn-primary mb-4 ms-2">Generar Archivo</button>
-                    <button id="btnEliminar" class="btn btn-sm btn-primary mb-4 ms-2">Eliminar Autorizador</button>
-                    <div class="checkbox  ms-2" style="display: inline-block;">
-                        <label class="unselectable ms-2">
-                            <input id="chkActivosAutorizadores" type="checkbox"> ACTIVOS
-                        </label>
-                        <label class="unselectable ms-2">
-                            <input id="chkInactivosAutorizadores" type="checkbox"> INACTIVOS
-                        </label>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <button id="bntColaboradoresActivos" class="btn btn-sm btn-primary mb-4 ms-1">Colaboradores activos</button>
+                        <button id="btnGenerar" class="btn btn-sm btn-primary mb-4 ms-1">Generar Archivo</button>
+                        <button id="btnEliminar" class="btn btn-sm btn-primary mb-4 ms-1">Eliminar Autorizador</button>
+                        <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-1">Buscar empleado</button>
                     </div>
+                    <div class="col-xl-12">
+                        <div class="form-group data-table-btn">
+                            <div class="checkbox  ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkTodos" type="checkbox"> Seleccionar todos
+                                </label>
+                                <label class="unselectable ms-2">
+                                    <input id="chkActivosAutorizadores" type="checkbox"> Activos
+                                </label>
+                                <label class="unselectable ms-2">
+                                    <input id="chkInactivosAutorizadores" type="checkbox"> Inactivos
+                                </label>
+                            </div>
 
+                        </div>
+                        <table id="tableAutorizador" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table id="tableAutorizador" class="table text-nowrap border-bottom">
-                    <thead>
-                        @* <tr>
-                                <th class="border-bottom-0" style="font-size: 11px;">Autorizador</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Código</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">A. Paterno</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">A. Materno</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Estado</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Documento</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">F. Registro</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">U. Registro</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">BIN Tarjeta</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Tarjeta impresa</th>
 
-                            </tr>*@
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+
             </div>
         </div>
     </div>
@@ -113,16 +79,16 @@
                 <div class="form-group data-table-btn">
                     <div class="checkbox  ms-2" style="display: inline-block;">
                         <label class="unselectable  ms-2">
-                            <input id="chkActivosTodos" type="checkbox"> ACTIVOS
+                            <input id="chkActivosTodos" type="checkbox"> Activos
                         </label>
                         <label class="unselectable ms-2">
-                            <input id="chkAnuladosTodos" type="checkbox"> ANULADOS
+                            <input id="chkAnuladosTodos" type="checkbox"> Anulados
                         </label>
                     </div>
                 </div>
                 <table id="tableBusquedaColaborador" class="table text-nowrap border-bottom">
                     <thead>
-                      
+
                     </thead>
                     <tbody>
                     </tbody>
@@ -131,6 +97,39 @@
             <div class="modal-footer">
                 <button id="btnAsignarAutorizadorBusqueda" class="btn btn-sm btn-primary">Asignar Autorizador</button>
                 <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL COLABORADORES ACTIVOS-->
+<div class="modal fade" id="modalColaboradoresActivos" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Colaboradores activos</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group data-table-btn" id="button-group">
+                    <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar Autorizador</button>
+                    <div class="checkbox  ms-2" style="display: inline-block;">
+                        <label class="unselectable  ms-2">
+                            <input id="chkActivos" type="checkbox"> ACTIVOS
+                        </label>
+                        <label class="unselectable ms-2">
+                            <input id="chkAnulados" type="checkbox"> ANULADOS
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <table id="tableColaborador" class="table text-nowrap border-bottom">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

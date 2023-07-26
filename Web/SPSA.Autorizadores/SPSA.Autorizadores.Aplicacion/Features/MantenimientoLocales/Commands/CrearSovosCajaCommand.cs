@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajaes.Commands
+namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands
 {
     public class CrearSovosCajaCommand : IRequest<RespuestaComunDTO>
     {

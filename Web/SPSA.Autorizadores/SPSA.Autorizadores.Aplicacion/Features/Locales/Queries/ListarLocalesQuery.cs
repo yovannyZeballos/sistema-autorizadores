@@ -32,7 +32,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
         public async Task<List<LocalDTO>> Handle(ListarLocalesQuery request, CancellationToken cancellationToken)
         {
             var locales = await _repositorioLocal.ListarXEmpresa(request.Ruc);
-            locales = locales.Where(x => request.Locales.Select(p => p.Codigo).Contains(x.Codigo)).ToList();
+            locales = locales.Where(x => request.Locales.Select(p => p.Codigo.Trim()).Contains(x.Codigo)).ToList();
             var localessDto = _mapper.Map<List<LocalDTO>>(locales);
             return localessDto;
         }
