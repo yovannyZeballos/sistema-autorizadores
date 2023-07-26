@@ -20,7 +20,6 @@ jQuery(function(e){
 					if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
 						(($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false  // fix for BS 3.3.6
 					}
-					console.log($(this));
 				});
 			});
 			
