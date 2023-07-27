@@ -12,6 +12,7 @@ var urlImportarInventario = baseUrl + 'Locales/InventarioCaja/ImportarInventario
 var urlDescargarPlantilla = baseUrl + 'Locales/InventarioCaja/DescargarPlantillas';
 
 var dataTableInventario = null;
+var dataTableListado = null;
 
 const InventarioCaja = function () {
 
@@ -26,8 +27,16 @@ const InventarioCaja = function () {
 
         });
 
+        $("#cboEmpresaListado").on("change", function () {
+            listarFormatosListado();
+        });
+
         $("#cboFormato").on("change", function (event, codFormato, codLocal) {
             listarLocales(codFormato, codLocal);
+        });
+
+        $("#cboFormatoListado").on("change", function (event, codFormato, codLocal) {
+            listarLocalesListado();
         });
 
         $("#cboLocal").on("change", function (event, codFormato, codLocal, numPos) {
@@ -129,6 +138,40 @@ const InventarioCaja = function () {
         $("#btnDescargarPlantillas").on("click", function () {
             descargarPlantillas();
         });
+
+        $('#tableListado tbody').on('dblclick', 'tr', function () {
+            var data = dataTableListado.row(this).data();
+            obtenerInventario($("#cboEmpresaListado").val(), $("#cboFormatoListado").val(), $("#cboLocalListado").val(), data.NUM_POS);
+            $('#formListadoInventario').hide(100);
+            $('#formInventario').show(100);
+        });
+
+        $("#btnBuscarListado").on("click", function () {
+            recargarDataTableInventarioListado();
+        });
+
+        $('#tableListado tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                dataTableListado.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        $("#btnRegresar").on("click", function () {
+            recargarDataTableInventarioListado();
+            $('#formListadoInventario').show(100);
+            $('#formInventario').hide(100);
+        });
+
+
+        $("#btnNuevoListado").on("click", function () {
+            limpiar();
+            desabilitarControles(false);
+            $('#formListadoInventario').hide(100);
+            $('#formInventario').show(100);
+        });
     }
 
     const validarSelecion = function (count, unSoloRegistro = false) {
@@ -163,6 +206,12 @@ const InventarioCaja = function () {
                     response.Empresas.map(empresa => {
                         $('#cboEmpresa').append($('<option>', { value: empresa.Codigo, text: empresa.Descripcion }));
                     });
+
+                    $('#cboEmpresaListado').empty().append('<option label="Seleccionar"></option>');
+                    response.Empresas.map(empresa => {
+                        $('#cboEmpresaListado').append($('<option>', { value: empresa.Codigo, text: empresa.Descripcion }));
+                    });
+
                 } else {
                     swal({
                         text: response.Mensaje,
@@ -217,6 +266,40 @@ const InventarioCaja = function () {
 
     }
 
+    const listarFormatosListado = function () {
+        const codEmpresa = $("#cboEmpresaListado").val();
+        if (!codEmpresa) return;
+
+        const request = {
+            CodEmpresa: codEmpresa
+        };
+
+        $.ajax({
+            url: urlFormatos,
+            type: "post",
+            data: { request },
+            success: function (response) {
+                if (response === undefined) return;
+                if (response.Ok) {
+                    $('#cboFormatoListado').empty().append('<option label="Seleccionar"></option>');
+                    response.Formatos.map(formato => {
+                        $('#cboFormatoListado').append($('<option>', { value: formato.CodFormato, text: formato.Nombre }));
+                    });
+                } else {
+                    swal({
+                        text: response.Mensaje,
+                        icon: "error"
+                    });
+                    return;
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+
+    }
+
     const listarLocales = function (codFormato = null, codLocal = null) {
 
         const request = {
@@ -245,6 +328,38 @@ const InventarioCaja = function () {
 
                 if (codLocal != null)
                     $('#cboLocal').val(codLocal);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const listarLocalesListado = function () {
+
+        const request = {
+            CodEmpresa: $("#cboEmpresaListado").val(),
+            CodFormato: $("#cboFormatoListado").val()
+        };
+
+        $.ajax({
+            url: urlLocales,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            success: function (response) {
+                if (!response.Ok) {
+                    swal({
+                        text: response.Mensaje,
+                        icon: "warning"
+                    });
+                    return;
+                }
+
+                $('#cboLocalListado').empty().append('<option label="Seleccionar"></option>');
+                response.Locales.map(local => {
+                    $('#cboLocalListado').append($('<option>', { value: local.CodLocal, text: local.CodLocal + ' - ' + local.NombreLocal }));
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -393,8 +508,8 @@ const InventarioCaja = function () {
         $("#cboFormato").val('').trigger('change');
         $("#cboLocal").val('').trigger('change');
         $("#cboNumPos").val('').trigger('change');
-        $("#cboEstado").val('').trigger('change');
-        $("#cboSo").val('').trigger('change');
+        $("#cboEstado").val('A').trigger('change');
+        $("#cboSo").val('L').trigger('change');
         $("#cboCaract1").val('').trigger('change');
         $("#cboCaract2").val('').trigger('change');
         $("#cboCaract3").val('').trigger('change');
@@ -733,13 +848,115 @@ const InventarioCaja = function () {
         });
     }
 
+    const inicializarDataTableInventarioListado = function () {
+
+        $.ajax({
+            url: urlListarInventario,
+            type: "post",
+            data: { request: {} },
+            dataType: "json",
+            success: function (response) {
+
+                var columnas = [];
+
+                response.Columnas.forEach((x) => {
+                    columnas.push({
+                        title: x.replace("_", " "),
+                        data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+                    });
+                });
+
+                dataTableListado = $('#tableListado').DataTable({
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    scrollY: '180px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    columns: columnas,
+                    data: response.Cajas,
+                    bAutoWidth: false,
+                    searching: false
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+
+    }
+
+    const recargarDataTableInventarioListado = function () {
+
+        const request = {
+            CodEmpresa: $("#cboEmpresaListado").val(),
+            CodFormato: $("#cboFormatoListado").val(),
+            CodLocal: $("#cboLocalListado").val()
+
+        };
+
+        if (request.CodEmpresa === "" || request.CodFormato === "" || request.CodLocal === "") {
+            swal({ text: "Debe seleccionar la empresa, formato y local", icon: "warning", });
+            return;
+        }
+
+
+
+        $.ajax({
+            url: urlListarInventario,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+                if (!response.Ok) {
+                    swal({
+                        text: response.Mensaje,
+                        icon: "warning"
+                    });
+
+                    dataTableListado.clear();
+                    dataTableListado.draw();
+                    return;
+
+                }
+                dataTableListado.clear();
+                dataTableListado.rows.add(response.Cajas);
+                dataTableListado.draw();
+                dataTableListado.columns.adjust().draw();
+
+                setTimeout(() => {
+                    dataTableListado.columns.adjust().draw();
+                }, 500);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    }
+
     return {
         init: function () {
             checkSession(async function () {
                 eventos();
+                $('#formInventario').hide();
                 inicializarDatePicker();
                 listarEmpresas();
-                inicializarDataTableInventario();
+                //inicializarDataTableInventario();
+                inicializarDataTableInventarioListado();
             });
         }
     }
