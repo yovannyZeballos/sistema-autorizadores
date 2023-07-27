@@ -75,7 +75,7 @@
                     <div class="col-lg-2 col-md-2 col-sm-12">
                         <button type="button" id="btnGuardar" class="btn btn-sm btn-primary btn-block">Guardar</button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12">
+                    <div class="col-lg-2 col-md-2 col-sm-12" style="display:none;">
                         <button type="button" id="btnBuscar" class="btn btn-sm btn-primary btn-block">Buscar</button>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12">
@@ -85,7 +85,7 @@
                     <div class="col-md-2">
                         <a class="btn btn-link btn-sm" id="btnDescargarPlantillas">Descargar plantillas</a>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 d-flex justify-content-end">
+                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex justify-content-end">
                         <button type="button" id="btnDescargarMaestro" class="btn btn-sm btn-primary ">Descargar maestro</button>
                     </div>
                 </div>
@@ -161,9 +161,8 @@
                         <div class="form-group row mb-2 select2-sm">
                             <label class="col-form-label col-xl-4">Estado</label>
                             <div class="col-xl-8">
-                                <select class="form-control select2-show-search custom-select" id="cboEstado">
-                                    <option label="Seleccione una opción"></option>
-                                    <option value="A">Activo</option>
+                                <select class="form-control select2-show-search custom-select" id="cboEstado" required>
+                                    <option value="A" selected>Activo</option>
                                     <option value="I">Inactivo</option>
                                 </select>
                             </div>
@@ -175,8 +174,7 @@
                             <label class="col-form-label col-xl-4">S.O.</label>
                             <div class="col-xl-8">
                                 <select class="form-control select2-show-search custom-select" id="cboSo">
-                                    <option label="Seleccione una opción"></option>
-                                    <option value="L">Linux</option>
+                                    <option value="L" selected>Linux</option>
                                     <option value="W">Windows</option>
                                 </select>
                             </div>
@@ -205,11 +203,26 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-3">
+                    <div class="col-xl-3" style="display:none;">
                         <div class="form-group row mb-2">
                             <label class="col-form-label col-xl-4">Ranking</label>
                             <div class="col-xl-8">
                                 <input type="text" class="form-control form-control-sm" id="txtRanking">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2">
+                            <label class="col-form-label col-xl-4">F Apertura</label>
+                            <div class="col-xl-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="feather feather-calendar"></span>
+                                        </div>
+                                    </div><input id="txtFechaApertura" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -241,20 +254,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-3">
-                        <div class="form-group row mb-2">
-                            <label class="col-form-label col-xl-4">F Apertura</label>
-                            <div class="col-xl-8">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <span class="feather feather-calendar"></span>
-                                        </div>
-                                    </div><input id="txtFechaApertura" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
                 <div class="row">
@@ -463,9 +463,77 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row mb-4">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <button type="button" id="btnRegresar" class="btn btn-sm btn-primary">Regresar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <div class="card overflow-hidden needs-validation" id="formListadoInventario">
+            @Html.Partial("_CardHeader", "Listado inventario de cajas")
+
+            <div class="card-body pt-3 pb-0">
+                <div class="row mb-4">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <button type="button" id="btnBuscarListado" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <button type="button" id="btnNuevoListado" class="btn btn-sm btn-primary btn-block">Nuevo</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-5">
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-3">Empresa</label>
+                            <div class="col-xl-9">
+                                <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresaListado" required>
+                                    <option label="Seleccione una empresa"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-4">Formato</label>
+                            <div class="col-xl-8">
+                                <select class="form-control select2-show-search custom-select" id="cboFormatoListado" required>
+                                    <option label="Seleccione un formato"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group row mb-2 select2-sm">
+                            <label class="col-form-label col-xl-3">Local</label>
+                            <div class="col-xl-9">
+                                <select class="form-control is-valid select2-show-search custom-select" id="cboLocalListado" required>
+                                    <option label="Seleccione un local"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tableListado" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
