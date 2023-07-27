@@ -96,10 +96,15 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			await _dbHelper.ExecuteNonQuery("SP_LOC_CARGA_INV_POS", dbParams);
 		}
 
-		public async Task<DataTable> Listar()
+		public async Task<DataTable> Listar(string codEmpresa, string codFormato, string codLocal)
 		{
 			_dbHelper.CadenaConexion = CadenaConexionCarteleria;
-			SqlParameter[] dbParams = null;
+			SqlParameter[] dbParams = new SqlParameter[]
+			{
+				_dbHelper.MakeParam("@COD_EMPRESA",codEmpresa ?? "",SqlDbType.VarChar,ParameterDirection.Input,10),
+				_dbHelper.MakeParam("@COD_FORMATO",codFormato ?? "",SqlDbType.VarChar,ParameterDirection.Input,10),
+				_dbHelper.MakeParam("@COD_LOCAL",codLocal ?? "",SqlDbType.VarChar,ParameterDirection.Input,10),
+			};
 			var dr = await _dbHelper.ExecuteReader("SP_LOC_CAJA_INV_LISTAR", dbParams);
 			var dt = new DataTable();
 			dt.Load(dr);

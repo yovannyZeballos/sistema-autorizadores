@@ -13,6 +13,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
 {
 	public class ListarCajaInventarioQuery : IRequest<ListarCajaInventarioDTO>
 	{
+		public string CodEmpresa { get; set; }
+		public string CodFormato { get; set; }
+		public string CodLocal { get; set; }
 	}
 
 	public class ListarCajaInventarioHandler : IRequestHandler<ListarCajaInventarioQuery, ListarCajaInventarioDTO>
@@ -30,7 +33,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
 
 			try
 			{
-				var localesDataTable = await _repositorioSovosInventarioCaja.Listar();
+				var localesDataTable = await _repositorioSovosInventarioCaja.Listar(request.CodEmpresa, request.CodFormato, request.CodLocal);
 
 				cajas.Columnas = new List<string>();
 				foreach (DataColumn colum in localesDataTable.Columns)
