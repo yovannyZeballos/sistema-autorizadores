@@ -339,6 +339,37 @@
                                             </ul>
                                         </li>
                                     }
+
+                                    if (SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Any(x => x.Id == 4))
+                                    {
+                                        <li class="slide">
+                                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                                <i class="feather feather-airplay sidemenu_icon"></i>
+                                                <span class="side-menu__label">
+                                                    @SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 4).DesPermiso
+                                                </span><i class="angle fa fa-angle-right"></i>
+                                            </a>
+                                            <ul class="slide-menu">
+                                                <li class="side-menu-label1">
+                                                    <a href="javascript:void(0);">@SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.FirstOrDefault(x => x.Id == 4).DesPermiso</a>
+                                                </li>
+                                                @foreach (var item in SPSA.Autorizadores.Web.Utiles.WebSession.Permisos.Where(x => x.Nivel == 3).ToList())
+                                                {
+                                                    if (item.Id == 7)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Cajeros/AdministrarCajero">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
                                 }
 
 

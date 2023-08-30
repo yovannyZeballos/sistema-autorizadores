@@ -147,6 +147,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Autorizadores\AutorizadoresAreaRegistration.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorMasivoController.cs" />
+    <Compile Include="Areas\Cajeros\CajerosAreaRegistration.cs" />
+    <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
@@ -2191,6 +2193,7 @@
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
     <Content Include="Content\ViewJs\AutorizadorMasivo.js" />
+    <Content Include="Content\ViewJs\AdministrarCajero.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
@@ -2566,6 +2569,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Autorizadores\Views\AutorizadorMasivo\Index.cshtml" />
+    <Content Include="Areas\Cajeros\Views\web.config" />
+    <Content Include="Areas\Cajeros\Views\AdministrarCajero\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2603,6 +2608,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Cajeros\Data\" />
+    <Folder Include="Areas\Cajeros\Views\Shared\" />
     <Folder Include="Data\" />
     <Folder Include="Views\Empresa\" />
   </ItemGroup>
