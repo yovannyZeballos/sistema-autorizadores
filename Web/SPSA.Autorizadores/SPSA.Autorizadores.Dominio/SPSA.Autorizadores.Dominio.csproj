@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Entidades\ArchivoAutorizador.cs" />
     <Compile Include="Entidades\Autorizador.cs" />
+    <Compile Include="Entidades\Cajero.cs" />
     <Compile Include="Entidades\CaracteristicaCaja.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />

@@ -17,3 +17,7 @@ const showLoading = function () {
 const closeLoading = function () {
     $("#modalLoading").modal('hide');
 }
+
+const quitarTildes = function (texto) {
+    return texto.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+}
