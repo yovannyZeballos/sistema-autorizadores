@@ -24,6 +24,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
             builder.RegisterType<RepositorioInventarioTipo>().As<IRepositorioInventarioTipo>().InstancePerRequest();
             builder.RegisterType<RepositorioInventarioServidor>().As<IRepositorioInventarioServidor>().InstancePerRequest();
             builder.RegisterType<RepositorioInventarioServidorVirtual>().As<IRepositorioInventarioServidorVirtual>().InstancePerRequest();
+            builder.RegisterType<RepositorioCajero>().As<IRepositorioCajero>().InstancePerRequest();
             base.Load(builder);
         }
     }
