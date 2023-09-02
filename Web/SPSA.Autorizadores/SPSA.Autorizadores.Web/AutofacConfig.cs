@@ -121,6 +121,7 @@ namespace SPSA.Autorizadores.Web
 			builder.RegisterType<EliminarCajeroHandler>().As<IRequestHandler<EliminarCajeroCommand, RespuestaComunDTO>>();
 			builder.RegisterType<DescargarExcelCajerosHandler>().As<IRequestHandler<DescargarExcelCajerosCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<GenerarArchivoCajeroHandler>().As<IRequestHandler<GenerarArchivoCajeroCommand, RespuestaComunDTO>>();
+			builder.RegisterType<DescargarExcelRolesHandler>().As<IRequestHandler<DescargarExcelRolesCommand, DescargarMaestroDTO>>();
 
 
 			builder.Register<ServiceFactory>(ctx =>

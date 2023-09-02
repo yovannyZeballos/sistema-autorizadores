@@ -107,7 +107,6 @@ var CierreEOD = function () {
                                     });
                                     return;
                                 }
-
                                 $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, node, config);
                             }
                         },
