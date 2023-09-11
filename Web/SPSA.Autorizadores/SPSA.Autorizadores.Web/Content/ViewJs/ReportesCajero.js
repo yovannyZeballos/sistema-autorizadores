@@ -40,11 +40,6 @@ const ReportesCajero = function () {
             ok = false;
         }
 
-        if (codLocal === null || codLocal === '') {
-            mensajes = mensajes + 'Debe seleccionar el local \n';
-            ok = false;
-        }
-
         if (fechaInicio === '') {
             mensajes = mensajes + 'Debe ingresar la fecha de inicio \n';
             ok = false;

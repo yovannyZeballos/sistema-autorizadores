@@ -12,11 +12,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries
 {
 	public class ReporteDiferenciaCajaQuery : IRequest<ListarComunDTO<Dictionary<string, object>>>
 	{
-        public string CodigoEmpresa { get; set; }
-        public string CodigoLocal { get; set; }
-        public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
-    }
+		public string CodigoEmpresa { get; set; }
+		public string CodigoLocal { get; set; }
+		public DateTime FechaInicio { get; set; }
+		public DateTime FechaFin { get; set; }
+	}
 
 	public class ReporteDiferenciaCajaHandler : IRequestHandler<ReporteDiferenciaCajaQuery, ListarComunDTO<Dictionary<string, object>>>
 	{
@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries
 			{
 				response.Columnas = new List<string>();
 				response.Data = new List<Dictionary<string, object>>();
-				var dt = await _repositorioCajero.ReporteDiferenciaCajas(request.CodigoEmpresa, request.CodigoLocal, request.FechaInicio, request.FechaFin);
+				var dt = await _repositorioCajero.ReporteDiferenciaCajas(request.CodigoEmpresa, string.IsNullOrEmpty(request.CodigoLocal) ? "0" : request.CodigoLocal, request.FechaInicio, request.FechaFin);
 				foreach (DataColumn colum in dt.Columns)
 				{
 					response.Columnas.Add(colum.ColumnName);

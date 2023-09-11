@@ -13,11 +13,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries
 {
 	public class ReporteSobresQuery : IRequest<ListarComunDTO<Dictionary<string, object>>>
 	{
-        public string CodigoEmpresa { get; set; }
-        public string CodigoLocal { get; set; }
-        public string FechaInicio { get; set; }
-        public string FechaFin { get; set; }
-    }
+		public string CodigoEmpresa { get; set; }
+		public string CodigoLocal { get; set; }
+		public string FechaInicio { get; set; }
+		public string FechaFin { get; set; }
+	}
 
 	public class ReporteSobresHandler : IRequestHandler<ReporteSobresQuery, ListarComunDTO<Dictionary<string, object>>>
 	{
@@ -52,7 +52,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries
 
 				response.Columnas = new List<string>();
 				response.Data = new List<Dictionary<string, object>>();
-				var dt = await _repositorioCajero.ReporteSobres(request.CodigoEmpresa, request.CodigoLocal, fechaInicio, fechaFin);
+				var dt = await _repositorioCajero.ReporteSobres(request.CodigoEmpresa, string.IsNullOrEmpty(request.CodigoLocal) ? "0" : request.CodigoLocal, fechaInicio, fechaFin);
 				foreach (DataColumn colum in dt.Columns)
 				{
 					response.Columnas.Add(colum.ColumnName);
