@@ -31,8 +31,11 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 await command.Connection.OpenAsync();
                 command.Parameters.Add("VCO_EMPR", OracleDbType.Varchar2, puesto.CodEmpresa, ParameterDirection.Input);
                 command.Parameters.Add("VCO_PUES_TRAB", OracleDbType.Varchar2, puesto.CodPuesto, ParameterDirection.Input);
-                command.Parameters.Add("VCK_SELEC", OracleDbType.Varchar2, puesto.Select, ParameterDirection.Input);
-                command.Parameters.Add("VRPTA", OracleDbType.Decimal, 1, ParameterDirection.Output);
+                command.Parameters.Add("VCK_SELEC", OracleDbType.Varchar2, puesto.IndAutorizador, ParameterDirection.Input);
+                command.Parameters.Add("v_IND_CAJERO", OracleDbType.Varchar2, puesto.IndCajero, ParameterDirection.Input);
+                command.Parameters.Add("v_IND_AUTO_AUT", OracleDbType.Varchar2, puesto.IndAutoAutorizador, ParameterDirection.Input);
+                command.Parameters.Add("v_IND_CAJE_AUT", OracleDbType.Varchar2, puesto.IndAutoCajero, ParameterDirection.Input);
+				command.Parameters.Add("VRPTA", OracleDbType.Decimal, 1, ParameterDirection.Output);
                 command.Parameters.Add("VMSJ", OracleDbType.Varchar2, 250, "", ParameterDirection.Output);
 
                 await command.ExecuteNonQueryAsync();
