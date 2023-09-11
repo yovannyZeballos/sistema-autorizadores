@@ -15,6 +15,8 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task<DataTable> ListarPorEmpresa(string codEmpresa, string codFormato);
         Task<SovosLocal> ObtenerLocal(string codEmpresa, string codFormato, string codLocal);
         Task<DataTable> DescargarMaestro(string codEmpresa, string codFormato);
+        Task<List<SovosLocal>> ListarPorEmpresa(string codEmpresa);
 
-    }
+
+	}
 }

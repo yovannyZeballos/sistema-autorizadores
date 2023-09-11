@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
@@ -75,6 +78,7 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
@@ -130,12 +134,14 @@
     <Compile Include="DTO\ListarCajaInventarioDTO.cs" />
     <Compile Include="DTO\ListarComunDTO.cs" />
     <Compile Include="DTO\ListarCajerosDTO.cs" />
+    <Compile Include="DTO\ListarEmpresaResponseDTO.cs" />
     <Compile Include="DTO\ListarInventarioServidorDTO.cs" />
     <Compile Include="DTO\ListarInventarioServidorVirtualDTO.cs" />
     <Compile Include="DTO\ListarInventarioTipoDTO.cs" />
     <Compile Include="DTO\GenerarArchivoPorLocalDTO.cs" />
     <Compile Include="DTO\ListarLocalesPorEmpresaDTO.cs" />
     <Compile Include="DTO\ListarCajasPorLocalDTO.cs" />
+    <Compile Include="DTO\ListarLocalXEmpresaResponseDTO.cs" />
     <Compile Include="DTO\LocalesAsignadosDTO.cs" />
     <Compile Include="DTO\AutorizadorEliminadoDTO.cs" />
     <Compile Include="DTO\AutorizadorDTO.cs" />
@@ -169,6 +175,8 @@
     <Compile Include="Features\Cajeros\Commands\GenerarArchivoCajeroCommand.cs" />
     <Compile Include="Features\Cajeros\Queries\ListarColaboradoresQuery.cs" />
     <Compile Include="Features\Cajeros\Queries\ListarCajerosQuery.cs" />
+    <Compile Include="Features\Cajeros\Queries\ReporteDiferenciaCajaQuery.cs" />
+    <Compile Include="Features\Cajeros\Queries\ReporteSobresQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasOfiplanQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\InventarioCaja\Commands\CrearSovosCajaInventarioCommand.cs" />
@@ -188,6 +196,7 @@
     <Compile Include="Features\Locales\Commands\AsignarLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\AsociarLocalPMMCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesAsignarQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ListarLocalesXEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalOfiplanQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerLocalQuery.cs" />
@@ -210,12 +219,12 @@
     <Compile Include="Features\Puestos\Commands\ActualizarPuestoCommand.cs" />
     <Compile Include="Features\Puestos\Queries\ListarPuestosQuery.cs" />
     <Compile Include="Features\Seguridad\Commands\LoginCommand.cs" />
+    <Compile Include="IoC\AplicacionModule.cs" />
     <Compile Include="Mappings\AplicacionProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="DiagramaClasesAplicacion.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
