@@ -63,8 +63,6 @@ namespace SPSA.Autorizadores.Web
 		.As<IMapper>()
 		.InstancePerLifetimeScope();
 
-
-			//
 			builder.RegisterModule(new AplicacionModule());
 
 			builder.Register<ServiceFactory>(ctx =>
