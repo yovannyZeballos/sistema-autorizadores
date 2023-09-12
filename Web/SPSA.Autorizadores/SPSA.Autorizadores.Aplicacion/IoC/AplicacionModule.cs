@@ -90,6 +90,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarLocalesXEmpresaHandler>().As<IRequestHandler<ListarLocalesXEmpresaQuery, ListarLocalXEmpresaResponseDTO>>();
 			builder.RegisterType<ReporteDiferenciaCajaHandler>().As<IRequestHandler<ReporteDiferenciaCajaQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteSobresHandler>().As<IRequestHandler<ReporteSobresQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<DescargarExcelRolesHandler>().As<IRequestHandler<DescargarExcelRolesCommand, DescargarMaestroDTO>>();
 
 			base.Load(builder);
 		}
