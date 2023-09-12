@@ -149,6 +149,7 @@
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorMasivoController.cs" />
     <Compile Include="Areas\Cajeros\CajerosAreaRegistration.cs" />
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
+    <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocalController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CierreEODController.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\PuestoController.cs" />
@@ -2203,6 +2205,7 @@
     <Content Include="Content\ViewJs\Login.js" />
     <Content Include="Content\ViewJs\CierreEOD.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
+    <Content Include="Content\ViewJs\ReportesCajero.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -2548,7 +2551,6 @@
     <Content Include="Content\scss\utlities\_typography.scss" />
     <Content Include="Content\scss\utlities\_width.scss" />
     <Content Include="Content\scss\_variables.scss" />
-    <Content Include="DiagramaClasesWeb.cd" />
     <Content Include="Areas\Seguridad\Views\web.config" />
     <Content Include="Areas\Autorizadores\Views\web.config" />
     <Content Include="Areas\Monitor\Views\web.config" />
@@ -2571,6 +2573,8 @@
     <Content Include="Areas\Autorizadores\Views\AutorizadorMasivo\Index.cshtml" />
     <Content Include="Areas\Cajeros\Views\web.config" />
     <Content Include="Areas\Cajeros\Views\AdministrarCajero\Index.cshtml" />
+    <Content Include="Areas\Cajeros\Views\Reportes\Sobres.cshtml" />
+    <Content Include="Areas\Cajeros\Views\Reportes\DiferenciaCajas.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2608,10 +2612,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Cajeros\Data\" />
     <Folder Include="Areas\Cajeros\Views\Shared\" />
-    <Folder Include="Data\" />
-    <Folder Include="Views\Empresa\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

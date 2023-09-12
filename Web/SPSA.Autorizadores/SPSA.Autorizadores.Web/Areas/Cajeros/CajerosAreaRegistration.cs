@@ -19,6 +19,12 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros
 				"Cajeros/{controller}/{action}/{id}",
                 new { controller = "AdministrarCajero", action = "Index", id = UrlParameter.Optional }
             );
-        }
+
+			context.MapRoute(
+				"Cajeros_Reporte_Sobres",
+				"Cajeros/{controller}/{action}/{id}",
+				new { controller = "Reportes", action = "Sobres", id = UrlParameter.Optional }
+			);
+		}
     }
 }
