@@ -45,5 +45,12 @@ namespace SPSA.Autorizadores.Dominio.Entidades
             CodFormato = codFormato;
             Ip = ip;
         }
-    }
+
+		public SovosLocal(string codEmpresa, string codLocal, string nomLocal)
+		{
+			CodEmpresa = codEmpresa;
+			CodLocal = codLocal;
+			NomLocal = nomLocal;
+		}
+	}
 }

@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Web.Models.Intercambio;
+using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -65,8 +67,15 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
             return Json(new RespuestaComunDTO
             {
                 Ok = true,
-                Mensaje = respuesta.ToString()
+                Mensaje = "Registros guardados exitosamente"
             });
         }
-    }
+
+		[HttpPost]
+		public async Task<JsonResult> DescargarMaestro(DescargarExcelRolesCommand request)
+		{
+			var respuesta = await _mediator.Send(request);
+			return Json(respuesta);
+		}
+	}
 }

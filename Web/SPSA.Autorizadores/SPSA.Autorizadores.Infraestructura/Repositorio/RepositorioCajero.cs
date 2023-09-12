@@ -121,7 +121,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			}
 		}
 
-		public async Task<string> GenerarArchivo(string tipoSO)
+		public async Task<string> GenerarArchivo(string codigoLocal, string tipoSO)
 		{
 			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
 			{
@@ -133,12 +133,13 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 				await command.Connection.OpenAsync();
 
+				command.Parameters.Add("NLOC_NUMERO", OracleDbType.Decimal, codigoLocal, ParameterDirection.Input);
 				command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
 				command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
 
 				await command.ExecuteNonQueryAsync();
 
-				var resultado = command.Parameters["resultado"].Value.ToString().Replace("null","");
+				var resultado = command.Parameters["resultado"].Value.ToString().Replace("null", "");
 
 				connection.Close();
 				connection.Dispose();
@@ -148,6 +149,62 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			}
 
 
+		}
+
+		public async Task<DataTable> ReporteDiferenciaCajas(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_REP_DIF_CAJA", connection)
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandTimeout = _commandTimeout
+				};
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("VCOD_EMPRESA", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("vCOD_LOCAL", OracleDbType.Varchar2, codLocal, ParameterDirection.Input);
+				command.Parameters.Add("VFEC_INI", OracleDbType.Date, fechaInicio, ParameterDirection.Input);
+				command.Parameters.Add("VFEC_FIN", OracleDbType.Date, fechaFin, ParameterDirection.Input);
+				command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				var datatable = new DataTable();
+				datatable.Load(dr);
+
+				connection.Close();
+				connection.Dispose();
+
+				return datatable;
+			}
+		}
+
+		public async Task<DataTable> ReporteSobres(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_REP_SOBRE", connection)
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandTimeout = _commandTimeout
+				};
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("VCOD_EMPRESA", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("vCOD_LOCAL", OracleDbType.Varchar2, codLocal, ParameterDirection.Input);
+				command.Parameters.Add("VFEC_INI", OracleDbType.Date, fechaInicio, ParameterDirection.Input);
+				command.Parameters.Add("VFEC_FIN", OracleDbType.Date, fechaFin, ParameterDirection.Input);
+				command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				var datatable = new DataTable();
+				datatable.Load(dr);
+
+				connection.Close();
+				connection.Dispose();
+
+				return datatable;
+			}
 		}
 	}
 }

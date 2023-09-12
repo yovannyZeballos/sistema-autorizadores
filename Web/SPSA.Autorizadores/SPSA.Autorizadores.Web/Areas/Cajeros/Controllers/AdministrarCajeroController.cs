@@ -50,17 +50,20 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 		public async Task<JsonResult> AsignarCajero(List<CajeroDTO> cajeros)
 		{
 			cajeros.Select(x => { x.Usuario = WebSession.Login; return x; }).ToList();
-			var response = await _mediator.Send(new AsignarCajeroCommand { Cajeros = cajeros });
-			return Json(response);
+			var respuesta = await _mediator.Send(new AsignarCajeroCommand { Cajeros = cajeros });
+			var respuestaArchivo = await _mediator.Send(new GenerarArchivoCajeroCommand { TipoSO = WebSession.TipoSO, CodLocal = WebSession.Local });
+			respuesta.Mensaje += $"\n{respuestaArchivo.Mensaje}";
+			return Json(respuesta);
 
 		}
 
 		[HttpPost]
 		public async Task<JsonResult> EliminarCajero(List<string> nroDocumentos)
 		{
-			var response = await _mediator.Send(new EliminarCajeroCommand { NroDocumentos = nroDocumentos, Usuario = WebSession.Login });
-			return Json(response);
-
+			var respuesta = await _mediator.Send(new EliminarCajeroCommand { NroDocumentos = nroDocumentos, Usuario = WebSession.Login });
+			var respuestaArchivo = await _mediator.Send(new GenerarArchivoCajeroCommand { TipoSO = WebSession.TipoSO, CodLocal = WebSession.Local });
+			respuesta.Mensaje += $"\n{respuestaArchivo.Mensaje}";
+			return Json(respuesta);
 		}
 
 		[HttpPost]
@@ -73,7 +76,7 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 		[HttpPost]
 		public async Task<JsonResult> GenerarArchivo()
 		{
-			var respuesta = await _mediator.Send(new GenerarArchivoCajeroCommand { TipoSO = WebSession.TipoSO });
+			var respuesta = await _mediator.Send(new GenerarArchivoCajeroCommand { TipoSO = WebSession.TipoSO, CodLocal = WebSession.Local });
 			return Json(respuesta);
 		}
 	}

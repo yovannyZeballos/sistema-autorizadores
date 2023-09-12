@@ -1,6 +1,8 @@
 ﻿var urlPuestos = baseUrl + 'Autorizadores/Puesto/Listar';
 var urlActualizarPuestos = baseUrl + 'Autorizadores/Puesto/Actualizar';
 var urlEmpresas = baseUrl + 'Empresa/ListarEmpresas';
+var urlDescargar = baseUrl + 'Autorizadores/Puesto/DescargarMaestro';
+
 
 var Puesto = function () {
 
@@ -12,6 +14,22 @@ var Puesto = function () {
         $("#cboEmpresa").on("change", function () {
             cargarRoles();
         });
+
+        $("#btnDescargarMaestro").on('click', function () {
+            descargarMaestro();
+        });
+
+        $(document).on('change', '[name="id[]"]', function () {
+            var checkbox = $(this);
+
+            if (checkbox.is(':checked')) {
+                checkbox.val('S');
+            } else {
+                checkbox.val('N');
+            }
+        });
+
+
     }
 
     const listarEmpresas = function () {
@@ -118,7 +136,7 @@ var Puesto = function () {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
                     },
-                    scrollY: '300px',
+                    scrollY: '420px',
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
@@ -126,30 +144,17 @@ var Puesto = function () {
                     //"data": response.Puestos,
                     "bAutoWidth": false,
                     'columnDefs': [{
-                        'targets': 3,
+                        'targets': [3, 4, 5, 6],
                         'searchable': false,
                         'orderable': false,
                         'render': function (data, type, full, meta) {
                             if (data === 'S')
-                                return '<input type="checkbox" checked name="id[]" value="' + data + '">';
+                                return '<input type="checkbox" checked class="checkbox" name="id[]" value="' + data + '">';
                             else
-                                return '<input type="checkbox" name="id[]" value="' + data + '">';
+                                return '<input type="checkbox" class="checkbox" name="id[]" value="' + data + '">';
                         }
                     }],
-                    buttons: [
-                        {
-                            extend: 'excel',
-                            text: 'Excel <i class="fa fa-cloud-download"></i>',
-                            titleAttr: 'Descargar Excel',
-                            className: 'btn-sm mb-1 ms-2',
-                            exportOptions: {
-                                modifier: { page: 'all' }
-                            }
-                        },
-                    ]
-
                 });
-                dataTableRoles.buttons().container().prependTo($('#tableRoles_filter'));
                 $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -165,27 +170,58 @@ var Puesto = function () {
 
     const actualizar = function () {
 
-        showLoading();
-
-        const puestos = dataTableRoles.rows().data().toArray();
         let puestosActualizar = [];
-        dataTableRoles.$('input[type="checkbox"]').each(function (index, value) {
-            const puestoActualizar = puestos[index];
+
+        $("#tableRoles tbody tr").each(function (index) {
+
+            let codEmpresa, codPuesto, indAutorizador, indCajero, indAutoCajero, indAutoAutorizador;
+
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        codEmpresa = $(this).text();
+                        break;
+                    case 1:
+                        codPuesto = $(this).text();
+                        break;
+                    case 3:
+                        indAutorizador =$(this).find('input[type=checkbox]').val();
+                        break;
+                    case 4:
+                        indCajero = $(this).find('input[type=checkbox]').val();
+                        break;
+                    case 5:
+                        indAutoAutorizador = $(this).find('input[type=checkbox]').val();
+                        break;
+                    case 6:
+                        indAutoCajero = $(this).find('input[type=checkbox]').val();
+                        break;
+                    default:
+                }
+            });
+
             puestosActualizar.push({
-                CodEmpresa: puestoActualizar.CO_EMPR,
-                CodPuesto: puestoActualizar.Codigo,
-                Select: this.checked ? 'S' : 'N'
+                CodEmpresa: codEmpresa,
+                CodPuesto: codPuesto,
+                IndAutorizador: indAutorizador,
+                IndCajero: indCajero,
+                IndAutoCajero: indAutoCajero,
+                IndAutoAutorizador: indAutoAutorizador
             });
         });
-
 
         $.ajax({
             url: urlActualizarPuestos,
             type: "post",
             dataType: "json",
             data: { puestos: puestosActualizar },
-            success: function (response) {
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
                 closeLoading();
+            },
+            success: function (response) {
 
                 if (!response.Ok) {
                     swal({
@@ -198,7 +234,7 @@ var Puesto = function () {
                 if (response.Mensaje.length > 0) {
                     swal({
                         text: response.Mensaje,
-                        icon: "warning"
+                        icon: "success"
                     });
                     return;
                 }
@@ -215,13 +251,49 @@ var Puesto = function () {
     }
 
     const cargarEmpresas = function (empresas) {
-       
+
         empresas.map((empresa) => {
             $('#cboEmpresa').append($('<option>', { value: empresa.Ruc, text: empresa.Descripcion }));
         });
         $('#cboEmpresa').val($('#cboEmpresa option:last-child').val()).trigger('change');
     }
 
+    const descargarMaestro = function () {
+
+        const data = {
+            CodEmpresa: $('#cboEmpresa').val()
+        };
+
+        $.ajax({
+            url: urlDescargar,
+            type: "post",
+            data: data,
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
 
     return {
         init: function () {
