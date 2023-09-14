@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
-using SPSA.Autorizadores.Dominio.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +14,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands
 	{
 		public List<string> NroDocumentos { get; set; }
 		public string Usuario { get; set; }
+		public string TipoSO { get; set; }
+		public string CodLocal { get; set; }
 	}
 
 	public class EliminarCajeroHandler : IRequestHandler<EliminarCajeroCommand, RespuestaComunDTO>
@@ -45,6 +45,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands
 					mensajes.AppendLine($"Ocurrio un error al eliminar el Cajero {item} | {ex.Message}");
 				}
 			}
+
+			var msgGenrarArchivo = await _repositorioCajero.GenerarArchivo(request.CodLocal, request.TipoSO);
+			mensajes.AppendLine(string.IsNullOrEmpty(msgGenrarArchivo) ? "No se generó ningun archivo" : $"Archivo Generado \n {(msgGenrarArchivo.Split('|').Count() == 0 ? "" : $"{msgGenrarArchivo.Split('|')[0]}/{msgGenrarArchivo.Split('|')[1]}")}");
+
 			respuesta.Mensaje = mensajes.ToString();
 			return respuesta;
 		}

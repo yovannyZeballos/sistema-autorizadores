@@ -15,6 +15,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands
 	public class AsignarCajeroCommand : IRequest<RespuestaComunDTO>
 	{
 		public List<CajeroDTO> Cajeros { get; set; }
+		public string TipoSO { get; set; }
+		public string CodLocal { get; set; }
 	}
 
 	public class AsignarCajeroHandler : IRequestHandler<AsignarCajeroCommand, RespuestaComunDTO>
@@ -46,6 +48,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands
 					respuesta.Ok = false;
 				}
 			}
+
+			var msgGenrarArchivo = await _repositorioCajero.GenerarArchivo(request.CodLocal, request.TipoSO);
+			mensajes.AppendLine(string.IsNullOrEmpty(msgGenrarArchivo) ? "No se generó ningun archivo" : $"Archivo Generado \n {(msgGenrarArchivo.Split('|').Count() == 0 ? "" : $"{msgGenrarArchivo.Split('|')[0]}/{msgGenrarArchivo.Split('|')[1]}")}");
+			
 			respuesta.Mensaje = mensajes.ToString();
 			return respuesta;
 		}

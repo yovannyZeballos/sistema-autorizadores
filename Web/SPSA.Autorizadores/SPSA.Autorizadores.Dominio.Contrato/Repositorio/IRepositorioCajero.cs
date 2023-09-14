@@ -14,6 +14,8 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		Task<string> GenerarArchivo(string codigoLocal, string tipoSO);
 		Task<DataTable> ReporteDiferenciaCajas(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin);
 		Task<DataTable> ReporteSobres(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin);
+		Task ActualizarEstado(string codLocal, string codCajero);
+
 
 	}
 }
