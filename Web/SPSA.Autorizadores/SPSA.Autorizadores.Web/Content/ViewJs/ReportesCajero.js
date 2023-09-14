@@ -29,11 +29,8 @@ const ReportesCajero = function () {
         let mensajes = '';
         let ok = true;
         const codEmpresa = $("#cboEmpresa").val();
-        const codLocal = $("#cboLocal").val();
         const fechaInicio = $("#txtFechaInicio").val();
         const fechaFin = $("#txtFechaFin").val();
-
-        console.log(codEmpresa);
 
         if (codEmpresa === null || codEmpresa === '') {
             mensajes = mensajes + 'Debe seleccionar la empresa \n';
@@ -232,6 +229,7 @@ const ReportesCajero = function () {
                 }
 
                 $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
+                  $('#cboLocal').append($('<option>', { value: '0', text: 'TODOS' }));
                 response.Locales.map(local => {
                     $('#cboLocal').append($('<option>', { value: local.CodLocal, text: local.CodLocal + ' - ' + local.NomLocal }));
                 });

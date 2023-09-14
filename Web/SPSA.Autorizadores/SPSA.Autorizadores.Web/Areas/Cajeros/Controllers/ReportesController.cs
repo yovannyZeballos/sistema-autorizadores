@@ -38,14 +38,18 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 		public async Task<JsonResult> ReporteSobres(ReporteSobresQuery request)
 		{
 			var response = await _mediator.Send(request);
-			return Json(response);
+			var json = Json(response);
+			json.MaxJsonLength = int.MaxValue;
+			return json;
 		}
 
 		[HttpPost]
 		public async Task<JsonResult> ReporteDiferencias(ReporteDiferenciaCajaQuery request)
 		{
 			var response = await _mediator.Send(request);
-			return Json(response);
+			var json = Json(response);
+			json.MaxJsonLength = int.MaxValue;
+			return json;
 		}
 	}
 }
