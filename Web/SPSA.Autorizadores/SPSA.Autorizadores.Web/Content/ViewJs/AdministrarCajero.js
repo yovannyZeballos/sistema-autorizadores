@@ -489,8 +489,21 @@ const AdministrarCajero = function () {
 
     const generarArchivo = function () {
 
+        const registrosSeleccionados = dataTableCajeros.rows('.selected').data().toArray();
+        debugger;
+        if (!validarSelecion(registrosSeleccionados.length)) {
+            return;
+        }
+
+        let cajeros = [];
+
+        registrosSeleccionados.map((item) => {
+            cajeros.push(item.CodCajero);
+        });
+
         $.ajax({
             url: urlGenerarArchivo,
+            data: { cajeros },
             type: "post",
             dataType: "json",
             beforeSend: function () {
