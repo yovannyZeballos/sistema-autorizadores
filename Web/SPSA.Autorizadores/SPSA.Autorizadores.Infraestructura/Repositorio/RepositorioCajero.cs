@@ -206,5 +206,23 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 				return datatable;
 			}
 		}
+
+		public async Task ActualizarEstado(string codLocal, string codCajero)
+		{
+
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_UPD_EST_GENERADO", connection);
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandTimeout = _commandTimeout;
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("V_LOC_NUMERO", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
+				command.Parameters.Add("V_CAJ_CODIGO", OracleDbType.Varchar2, codCajero, ParameterDirection.Input);
+				await command.ExecuteNonQueryAsync();
+				connection.Close();
+				connection.Dispose();
+			}
+		}
 	}
 }
