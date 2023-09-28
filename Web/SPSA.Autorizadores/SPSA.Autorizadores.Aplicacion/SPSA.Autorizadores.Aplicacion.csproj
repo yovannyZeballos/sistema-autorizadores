@@ -123,6 +123,7 @@
     <Compile Include="DTO\CajeroDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaResponseDTO.cs" />
+    <Compile Include="DTO\ListarResponseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />
     <Compile Include="DTO\DescargarMaestroDTO.cs" />
     <Compile Include="DTO\EnumClass.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="DTO\ListarLocalesPorEmpresaDTO.cs" />
     <Compile Include="DTO\ListarCajasPorLocalDTO.cs" />
     <Compile Include="DTO\ListarLocalXEmpresaResponseDTO.cs" />
+    <Compile Include="DTO\ListBoxDTO.cs" />
     <Compile Include="DTO\LocalesAsignadosDTO.cs" />
     <Compile Include="DTO\AutorizadorEliminadoDTO.cs" />
     <Compile Include="DTO\AutorizadorDTO.cs" />
@@ -160,6 +162,8 @@
     <Compile Include="DTO\SovosLocalDTO.cs" />
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="Extensiones\DataSetExtensions.cs" />
+    <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
+    <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
     <Compile Include="Features\Puestos\Commands\DescargarExcelRolesCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\GenerarArchivoPorLocalCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />

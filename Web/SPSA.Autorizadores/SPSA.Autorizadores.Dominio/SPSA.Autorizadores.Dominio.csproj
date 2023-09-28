@@ -53,6 +53,7 @@
     <Compile Include="Entidades\InventarioServidor.cs" />
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
     <Compile Include="Entidades\InventarioTipo.cs" />
+    <Compile Include="Entidades\ListBox.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
     <Compile Include="Entidades\SovosCaja.cs" />

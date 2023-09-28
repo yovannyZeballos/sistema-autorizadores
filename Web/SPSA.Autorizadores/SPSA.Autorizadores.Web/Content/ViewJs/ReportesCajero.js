@@ -20,7 +20,6 @@ const ReportesCajero = function () {
         });
 
         $("#cboEmpresa").on("change", function () {
-            debugger;
             listarLocales();
         });
     }

@@ -83,7 +83,6 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         public async Task<DataTable> ListarColaboradores(string codigoLocal, string codigoEmpresa)
         {
-            var colaboradores = new List<Colaborador>();
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
                 var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_MANT_LISTA_COLA_OFISIS", connection)

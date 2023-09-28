@@ -2,6 +2,7 @@
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
+using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
 using System.Collections.Generic;
@@ -11,67 +12,82 @@ using System.Web.Mvc;
 
 namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
 {
-    public class EliminarAutorizadorController : Controller
-    {
-        private readonly IMediator _mediator;
+	public class EliminarAutorizadorController : Controller
+	{
+		private readonly IMediator _mediator;
 
-        public EliminarAutorizadorController(IMediator mediator)
-        {
-            _mediator = mediator;
+		public EliminarAutorizadorController(IMediator mediator)
+		{
+			_mediator = mediator;
 
-        }
-        // GET: ColaboradoresCesados
-        public ActionResult Index()
-        {
-            return View();
-        }
+		}
+		// GET: ColaboradoresCesados
+		public ActionResult Index()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        public async Task<JsonResult> ListarColaboradoresCesados()
-        {
-            var respuesta = new ListarColaboradoresCesadosResponse();
+		[HttpPost]
+		public async Task<JsonResult> ListarColaboradoresCesados()
+		{
+			var respuesta = new ListarColaboradoresCesadosResponse();
 
-            try
-            {
-                var colaboradoresCesados = await _mediator.Send(new ListarColaboradoresCesadosQuery());
+			try
+			{
+				var colaboradoresCesados = await _mediator.Send(new ListarColaboradoresCesadosQuery());
 
-                respuesta.Ok = true;
-                respuesta.Colaboradores = colaboradoresCesados.Colaboradores;
-                respuesta.Columnas = colaboradoresCesados.Columnas;
-            }
-            catch (System.Exception ex)
-            {
-                respuesta.Ok = false;
-                respuesta.Mensaje = ex.Message;
-            }
+				respuesta.Ok = true;
+				respuesta.Colaboradores = colaboradoresCesados.Colaboradores;
+				respuesta.Columnas = colaboradoresCesados.Columnas;
+			}
+			catch (System.Exception ex)
+			{
+				respuesta.Ok = false;
+				respuesta.Mensaje = ex.Message;
+			}
 
-            return Json(respuesta);
-        }
+			return Json(respuesta);
+		}
 
 
-        [HttpPost]
-        public async Task<JsonResult> EliminarAutorizador(List<EliminarAutorizadorCommand> autorizadores)
-        {
-            var respuesta = new RespuestaComunDTO();
-            respuesta.Ok = true;
+		[HttpPost]
+		public async Task<JsonResult> EliminarAutorizador(List<EliminarAutorizadorCommand> autorizadores)
+		{
+			var respuesta = new RespuestaComunDTO();
+			respuesta.Ok = true;
 
-            var usuario = WebSession.Login;
+			var usuario = WebSession.Login;
 
-            foreach (var autorizador in autorizadores)
-            {
-                autorizador.UsuarioCreacion = usuario;
-                var rpta = await _mediator.Send(autorizador);
+			foreach (var autorizador in autorizadores)
+			{
+				autorizador.UsuarioCreacion = usuario;
+				var rpta = await _mediator.Send(autorizador);
 
-                if (!rpta.Ok)
-                {
-                    respuesta.Ok = false;
-                    respuesta.Mensaje += $" | {rpta.Mensaje}";
-                }
+				if (!rpta.Ok)
+				{
+					respuesta.Ok = false;
+					respuesta.Mensaje += $" | {rpta.Mensaje}";
+				}
 
-            }
+			}
 
-            return Json(respuesta);
-        }
+			return Json(respuesta);
+		}
 
-    }
+		[HttpPost]
+		public async Task<JsonResult> ListarListBox()
+		{
+			var respuesta = await _mediator.Send(new ListarListBoxQuery { Usuario = WebSession.Login });
+			return Json(respuesta);
+		}
+
+
+		[HttpPost]
+		public async Task<JsonResult> ListarGrilla(ListarGrillaQuery request)
+		{
+			var respuesta = await _mediator.Send(request);
+			return Json(respuesta);
+		}
+
+	}
 }
