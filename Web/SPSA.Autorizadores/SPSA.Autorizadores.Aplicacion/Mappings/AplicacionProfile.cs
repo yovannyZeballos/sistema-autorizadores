@@ -52,6 +52,8 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 				.ForMember(dest => dest.FechaModificacion, opt => opt.MapFrom(src => src.FechaModificacion == null ? "" : src.FechaModificacion.Value.ToString("dd/MM/yyyy  HH:mm:ss")))
 				.ReverseMap();
 
+            CreateMap<ListBox, ListBoxDTO>();
+
 		}
 	}
 }
