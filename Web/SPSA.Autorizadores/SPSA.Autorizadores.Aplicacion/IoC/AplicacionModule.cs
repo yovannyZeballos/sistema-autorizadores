@@ -32,7 +32,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterSource(new ContravariantRegistrationSource());
 			builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
 			builder.RegisterType<LoginHandler>().As<IRequestHandler<LoginCommand, UsuarioDTO>>();
-			builder.RegisterType<Features.Empresas.Queries.ListarEmpresasHandler>().As<IRequestHandler<Features.Empresas.Queries.ListarEmpresasQuery,ListarEmpresaResponseDTO>>();
+			builder.RegisterType<Features.Empresas.Queries.ListarEmpresasHandler>().As<IRequestHandler<Features.Empresas.Queries.ListarEmpresasQuery, ListarEmpresaResponseDTO>>();
 			builder.RegisterType<ListarLocalesHandler>().As<IRequestHandler<ListarLocalesQuery, List<LocalDTO>>>();
 			builder.RegisterType<Features.Autorizadores.Queries.ListarColaboradoresHandler>().As<IRequestHandler<Features.Autorizadores.Queries.ListarColaboradoresQuery, DataTable>>();
 			builder.RegisterType<CrearAutorizadorHandler>().As<IRequestHandler<CrearAutorizadorCommand, RespuestaComunDTO>>();
@@ -91,6 +91,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ReporteDiferenciaCajaHandler>().As<IRequestHandler<ReporteDiferenciaCajaQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteSobresHandler>().As<IRequestHandler<ReporteSobresQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<DescargarExcelRolesHandler>().As<IRequestHandler<DescargarExcelRolesCommand, DescargarMaestroDTO>>();
+			builder.RegisterType<ListarGrillaHandler>().As<IRequestHandler<ListarGrillaQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<ListarListBoxHandler>().As<IRequestHandler<ListarListBoxQuery, ListarResponseDTO<List<ListBoxDTO>>>>();
 
 			base.Load(builder);
 		}
