@@ -137,14 +137,8 @@ const ReportesCajeroCierre = function () {
                     columns: columnas,
                     bAutoWidth: false,
                     rowCallback: function (row, data, i) {
-                        console.log(data);
                         var keys = Object.keys(data);
-                        console.log(keys);
-
                         keys.sort().forEach((k, index) => {
-
-                            console.log(data[k]);
-                            console.log(index);
 
                             if (data[k] === "A") {
                                 $(`td:eq(${index+1})`, row).addClass("bg-danger");
