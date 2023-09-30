@@ -33,7 +33,6 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 			return View();
 		}
 
-
 		[HttpPost]
 		public async Task<JsonResult> ReporteSobres(ReporteSobresQuery request)
 		{
@@ -51,5 +50,6 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 			json.MaxJsonLength = int.MaxValue;
 			return json;
 		}
+
 	}
 }

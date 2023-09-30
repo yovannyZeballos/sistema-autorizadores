@@ -77,7 +77,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                         {
                             Ruc = dr["CODIGO"].ToString(),
                             Descripcion = dr["NOMBRE"].ToString(),
-                        });
+                            Sociedad = dr["SOCIEDAD"].ToString()
+						});
                     }
                 }
 

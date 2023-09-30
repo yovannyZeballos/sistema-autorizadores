@@ -20,21 +20,15 @@ namespace SPSA.Autorizadores.Web.Controllers
 		[AllowAnonymous]
 		public async Task<JsonResult> ListarEmpresas()
 		{
-			var respuesta = new ListarEmpresaResponse();
+			var respose = await _mediator.Send(new ListarEmpresasOfiplanQuery());
+			return Json(respose, JsonRequestBehavior.AllowGet);
+		}
 
-			try
-			{
-				var empresas = await _mediator.Send(new ListarEmpresasOfiplanQuery());
-				respuesta.Ok = true;
-				respuesta.Empresas = empresas;
-			}
-			catch (System.Exception ex)
-			{
-				respuesta.Ok = false;
-				respuesta.Mensaje = ex.Message;
-			}
-
-			return Json(respuesta, JsonRequestBehavior.AllowGet);
+		[HttpPost]
+		public async Task<JsonResult> ListarOfiplan()
+		{
+			var respose = await _mediator.Send(new ListarEmpresasOfiplanQuery());
+			return Json(respose);
 		}
 
 		[HttpPost]

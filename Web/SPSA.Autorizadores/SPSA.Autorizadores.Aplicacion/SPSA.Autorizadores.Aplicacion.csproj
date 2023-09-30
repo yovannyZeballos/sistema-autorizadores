@@ -71,6 +71,9 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.25.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.25.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
+    <Reference Include="NReco.PivotData, Version=1.4.2.0, Culture=neutral, PublicKeyToken=9ad162d4af1a824f, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.PivotData.1.4.2\lib\net45\NReco.PivotData.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet, Version=2020.0.2.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2020.0.2\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -164,6 +167,8 @@
     <Compile Include="Extensiones\DataSetExtensions.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ReporteCierreQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ReporteCierrePivotQuery.cs" />
     <Compile Include="Features\Puestos\Commands\DescargarExcelRolesCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\GenerarArchivoPorLocalCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />

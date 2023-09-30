@@ -26,6 +26,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<RepositorioInventarioServidorVirtual>().As<IRepositorioInventarioServidorVirtual>().InstancePerRequest();
 			builder.RegisterType<RepositorioCajero>().As<IRepositorioCajero>().InstancePerRequest();
 			builder.RegisterType<RepositorioProcesos>().As<IRepositorioProcesos>().InstancePerRequest();
+			builder.RegisterType<RepositorioCajaCierre>().As<IRepositorioCajaCierre>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}
