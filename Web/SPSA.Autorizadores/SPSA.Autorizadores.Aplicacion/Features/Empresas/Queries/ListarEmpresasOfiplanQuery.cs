@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
 {
 
-    public class ListarEmpresasOfiplanQuery : IRequest<List<EmpresaDTO>>
+    public class ListarEmpresasOfiplanQuery : IRequest<ListarEmpresaResponseDTO>
     {
     }
 
-    public class ListarEmpresasOfiplanHandler : IRequestHandler<ListarEmpresasOfiplanQuery, List<EmpresaDTO>>
+    public class ListarEmpresasOfiplanHandler : IRequestHandler<ListarEmpresasOfiplanQuery, ListarEmpresaResponseDTO>
     {
         private readonly IMapper _mapper;
         private readonly IRepositorioEmpresa _repositorioEmpresa;
@@ -24,11 +24,22 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
             _repositorioEmpresa = repositorioEmpresa;
         }
 
-        public async Task<List<EmpresaDTO>> Handle(ListarEmpresasOfiplanQuery request, CancellationToken cancellationToken)
+        public async Task<ListarEmpresaResponseDTO> Handle(ListarEmpresasOfiplanQuery request, CancellationToken cancellationToken)
         {
-            var empresas = await _repositorioEmpresa.ListarOfiplan();
-            var empresassDto = _mapper.Map<List<EmpresaDTO>>(empresas);
-            return empresassDto;
+			var response = new ListarEmpresaResponseDTO();
+			try
+			{
+				var empresas = await _repositorioEmpresa.ListarOfiplan();
+				response.Empresas = _mapper.Map<List<EmpresaDTO>>(empresas);
+				response.Ok = true;
+			}
+			catch (System.Exception ex)
+			{
+				response.Ok = false;
+				response.Mensaje = ex.Message;
+			}
+
+			return response;
         }
     }
 }
