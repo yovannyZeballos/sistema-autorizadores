@@ -153,6 +153,7 @@
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
+    <Compile Include="Areas\Locales\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
@@ -2205,6 +2206,7 @@
     <Content Include="Content\ViewJs\Login.js" />
     <Content Include="Content\ViewJs\CierreEOD.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
+    <Content Include="Content\ViewJs\ReportesCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajero.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -2575,6 +2577,7 @@
     <Content Include="Areas\Cajeros\Views\AdministrarCajero\Index.cshtml" />
     <Content Include="Areas\Cajeros\Views\Reportes\Sobres.cshtml" />
     <Content Include="Areas\Cajeros\Views\Reportes\DiferenciaCajas.cshtml" />
+    <Content Include="Areas\Locales\Views\ReporteCierre\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

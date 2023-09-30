@@ -45,7 +45,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarLocalesAsignarHandler>().As<IRequestHandler<ListarLocalesAsignarQuery, LocalesAsignadosDTO>>();
 			builder.RegisterType<AsignarLocalHandler>().As<IRequestHandler<AsignarLocalCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ListarPuestosHandler>().As<IRequestHandler<ListarPuestosQuery, PuestoDTO>>();
-			builder.RegisterType<ListarEmpresasOfiplanHandler>().As<IRequestHandler<ListarEmpresasOfiplanQuery, List<EmpresaDTO>>>();
+			builder.RegisterType<ListarEmpresasOfiplanHandler>().As<IRequestHandler<ListarEmpresasOfiplanQuery, ListarEmpresaResponseDTO>>();
 			builder.RegisterType<ActualizarPuestoHandler>().As<IRequestHandler<ActualizarPuestoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ListarColaboradoresMassHandler>().As<IRequestHandler<ListarColaboradoresMassQuery, DataTable>>();
 			builder.RegisterType<ListarLocalMonitorHandler>().As<IRequestHandler<ListarLocalMonitorQuery, DataTable>>();
@@ -93,6 +93,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<DescargarExcelRolesHandler>().As<IRequestHandler<DescargarExcelRolesCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<ListarGrillaHandler>().As<IRequestHandler<ListarGrillaQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarListBoxHandler>().As<IRequestHandler<ListarListBoxQuery, ListarResponseDTO<List<ListBoxDTO>>>>();
+			builder.RegisterType<ReporteCierrePivotHandler>().As<IRequestHandler<ReporteCierrePivotQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<ReporteCierreHandler>().As<IRequestHandler<ReporteCierreQuery, ListarComunDTO<Dictionary<string, object>>>>();
 
 			base.Load(builder);
 		}
