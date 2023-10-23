@@ -15,7 +15,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		Task<DataTable> ReporteDiferenciaCajas(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin);
 		Task<DataTable> ReporteSobres(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin);
 		Task ActualizarEstado(string codLocal, string codCajero);
-
-
+		Task<DataTable> ReporteDiferenciaCajasExcel(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin);
 	}
 }
