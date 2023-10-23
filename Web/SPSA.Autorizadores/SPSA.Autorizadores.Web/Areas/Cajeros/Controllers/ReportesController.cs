@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using SPSA.Autorizadores.Web.Models.Intercambio;
@@ -44,6 +45,15 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 
 		[HttpPost]
 		public async Task<JsonResult> ReporteDiferencias(ReporteDiferenciaCajaQuery request)
+		{
+			var response = await _mediator.Send(request);
+			var json = Json(response);
+			json.MaxJsonLength = int.MaxValue;
+			return json;
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> ReporteDiferenciasExcel(ReporteDiferenciaCajaExcelCommand request)
 		{
 			var response = await _mediator.Send(request);
 			var json = Json(response);

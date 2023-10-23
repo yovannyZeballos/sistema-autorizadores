@@ -224,5 +224,33 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 				connection.Dispose();
 			}
 		}
+
+		public async Task<DataTable> ReporteDiferenciaCajasExcel(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.sp_rep_dif_acum", connection)
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandTimeout = _commandTimeout
+				};
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("VCOD_EMPRESA", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("vCOD_LOCAL", OracleDbType.Varchar2, codLocal, ParameterDirection.Input);
+				command.Parameters.Add("VFEC_INI", OracleDbType.Date, fechaInicio, ParameterDirection.Input);
+				command.Parameters.Add("VFEC_FIN", OracleDbType.Date, fechaFin, ParameterDirection.Input);
+				command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				var datatable = new DataTable();
+				datatable.Load(dr);
+
+				connection.Close();
+				connection.Dispose();
+
+				return datatable;
+			}
+		}
 	}
 }
