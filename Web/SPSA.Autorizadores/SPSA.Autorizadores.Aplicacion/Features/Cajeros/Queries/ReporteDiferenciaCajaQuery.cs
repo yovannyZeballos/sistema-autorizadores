@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries
 			{
 				response.Columnas = new List<string>();
 				response.Data = new List<Dictionary<string, object>>();
-				var dt = await _repositorioCajero.ReporteDiferenciaCajas(request.CodigoEmpresa, string.IsNullOrEmpty(request.CodigoLocal) ? "0" : request.CodigoLocal, request.FechaInicio, request.FechaFin);
+				var dt = await _repositorioCajero.ReporteDiferenciaCajas(request.CodigoEmpresa, string.IsNullOrEmpty(request.CodigoLocal) ? "00" : request.CodigoLocal, request.FechaInicio, request.FechaFin);
 				foreach (DataColumn colum in dt.Columns)
 				{
 					response.Columnas.Add(colum.ColumnName);

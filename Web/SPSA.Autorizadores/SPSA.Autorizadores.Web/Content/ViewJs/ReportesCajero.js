@@ -2,6 +2,7 @@
 const urlListarLocal = '/Local/Listar';
 const urlReporteSobre = '/Cajeros/Reportes/ReporteSobres';
 const urlReporteDiferencia = '/Cajeros/Reportes/ReporteDiferencias';
+const urlReporteDiferenciaExcel = '/Cajeros/Reportes/ReporteDiferenciasExcel';
 
 var dataTableReporte = null;
 
@@ -21,6 +22,11 @@ const ReportesCajero = function () {
 
         $("#cboEmpresa").on("change", function () {
             listarLocales();
+        });
+
+        $("#btnReporteExcel").on('click', function () {
+            if (!validar()) return;
+            descargarReporteDiferenciaExcel();
         });
     }
 
@@ -271,7 +277,6 @@ const ReportesCajero = function () {
         });
     }
 
-
     const fechaActual = function () {
         let date = new Date()
 
@@ -283,6 +288,45 @@ const ReportesCajero = function () {
         $("#txtFechaFin").val(`${day}/${month}/${year}`);
     }
 
+    const descargarReporteDiferenciaExcel = function () {
+
+        const request = {
+            CodigoEmpresa: $("#cboEmpresa").val(),
+            CodigoLocal: "00",
+            FechaInicio: $("#txtFechaInicio").val(),
+            FechaFin: $("#txtFechaFin").val()
+        };
+
+        $.ajax({
+            url: urlReporteDiferenciaExcel,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
 
     return {
         init: function (tipoReporte) {
