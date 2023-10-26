@@ -96,6 +96,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ReporteCierrePivotHandler>().As<IRequestHandler<ReporteCierrePivotQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteCierreHandler>().As<IRequestHandler<ReporteCierreQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteDiferenciaCajaExcelHandler>().As<IRequestHandler<ReporteDiferenciaCajaExcelCommand, DescargarMaestroDTO>>();
+			builder.RegisterType<ReporteCierreResumenHandler>().As<IRequestHandler<ReporteCierreResumenQuery, ListarComunDTO<Dictionary<string, object>>>>();
 
 			base.Load(builder);
 		}

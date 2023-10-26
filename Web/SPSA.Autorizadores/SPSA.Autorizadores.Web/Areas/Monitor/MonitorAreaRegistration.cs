@@ -19,6 +19,12 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor
                 "Monitor/{controller}/{action}/{id}",
                 new { controller = "CierreEOD", action = "Index", id = UrlParameter.Optional }
             );
-        }
+
+			context.MapRoute(
+			   "ReporteCierre_default",
+			   "Monitor/{controller}/{action}/{id}",
+				new { controller = "ReporteCierre", action = "Index", id = UrlParameter.Optional }
+		   );
+		}
     }
 }

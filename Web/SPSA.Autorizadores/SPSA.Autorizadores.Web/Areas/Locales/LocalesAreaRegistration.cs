@@ -32,11 +32,7 @@ namespace SPSA.Autorizadores.Web.Areas.Locales
 				new { controller = "InventarioServidor", action = "Index", id = UrlParameter.Optional }
 		   );
 
-		context.MapRoute(
-			   "ReporteCierre_default",
-			   "Locales/{controller}/{action}/{id}",
-				new { controller = "ReporteCierre", action = "Index", id = UrlParameter.Optional }
-		   );
+		
 		}
 	}
 }
