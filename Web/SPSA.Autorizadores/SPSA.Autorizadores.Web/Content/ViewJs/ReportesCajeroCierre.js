@@ -1,6 +1,6 @@
 ﻿const urlListarEmpresa = '/Empresa/ListarOfiplan';
-const urlReporteCierre = '/Locales/ReporteCierre/ReporteCierre';
-const urlReporteCierrePivot = '/Locales/ReporteCierre/ReportePivotCierre';
+const urlReporteCierre = '/Monitor/ReporteCierre/ReporteCierre';
+const urlReporteCierrePivot = '/Monitor/ReporteCierre/ReportePivotCierre';
 
 var dataTableReporte = null;
 var listadoReporte = [];
