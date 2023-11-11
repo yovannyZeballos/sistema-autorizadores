@@ -168,6 +168,7 @@
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
     <Compile Include="Features\Cajeros\Commands\ReporteDiferenciaCajaExcelCommand.cs" />
+    <Compile Include="Features\Locales\Queries\ReporteCierreResumenQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierrePivotQuery.cs" />
     <Compile Include="Features\Puestos\Commands\DescargarExcelRolesCommand.cs" />

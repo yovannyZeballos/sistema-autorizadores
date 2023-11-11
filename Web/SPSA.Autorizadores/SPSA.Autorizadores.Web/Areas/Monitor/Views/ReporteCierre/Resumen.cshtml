@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de cierre resumen| Locales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+
+        .table tr.selected {
+            background-color: #128af9 !important;
+            color: white !important;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        #tableReportes_1 thead th {
+            padding: 0px 22px !important;
+        }
+
+        #tableReportes_2 thead th {
+            padding: 0px 22px !important;
+        }
+
+        #tableReportes_3 thead th {
+            padding: 0px 22px !important;
+        }
+
+        .swal-modal .swal-text {
+            text-align: left;
+        }
+    </style>
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Reporte de cierre resumen</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Locales</li>
+            <li class="breadcrumb-item1 active">Reporte de cierre resumen</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Reporte")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="form-group select2-sm ">
+                            <label class="form-label">Año</label>
+                            <select class="form-control select2-show-search custom-select" id="cboAño">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group select2-sm ">
+                            <label class="form-label">Mes</label>
+                            <select class="form-control select2-show-search custom-select" id="cboMes">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <button id="btnConsultar" class="btn btn-sm btn-primary mb-4  ms-2">
+                                <i class="fe fe-search me-1"></i>
+                                Consultar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <table id="tableReportes_1" class="table table-striped table-bordered text-nowrap border-bottom">
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-12">
+                                <table id="tableReportes_2" class="table table-striped table-bordered text-nowrap border-bottom">
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="col-6">
+                        <table id="tableReportes_3" class="table table-striped table-bordered text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/ViewJs/ReportesCajeroCierreResumen.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ReportesCajeroCierreResumen.init();
+        });
+    </script>
+}
+
