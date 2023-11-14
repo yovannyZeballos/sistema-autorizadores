@@ -171,6 +171,10 @@
     <Compile Include="Features\Locales\Queries\ReporteCierreResumenQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierrePivotQuery.cs" />
+    <Compile Include="Features\MantenimientoCajeroVolante\Commands\EliminarCajeroVolanteCommand.cs" />
+    <Compile Include="Features\MantenimientoCajeroVolante\Commands\CrearCajeroVolanteCommand.cs" />
+    <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
+    <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\Puestos\Commands\DescargarExcelRolesCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\GenerarArchivoPorLocalCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />

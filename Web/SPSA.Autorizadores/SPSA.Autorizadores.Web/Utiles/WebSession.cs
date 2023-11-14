@@ -78,5 +78,11 @@ namespace SPSA.Autorizadores.Web.Utiles
             get { return Comun.Lee<string>("sistemaAmbiente"); }
             set { Comun.Escribe("sistemaAmbiente", value); }
         }
-    }
+
+		public static List<LocalDTO> LocalesAsignadosXEmpresa
+		{
+			get { return Comun.Lee<List<LocalDTO>>("locales"); }
+			set { Comun.Escribe("locales", value); }
+		}
+	}
 }

@@ -252,5 +252,125 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 				return datatable;
 			}
 		}
+
+		public async Task<DataTable> ListarCajeroVolanteOfiplan(string codEmpresa, decimal codigoLocal)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_VOLANTE_LISTA_OFIPLAN", connection)
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandTimeout = _commandTimeout
+				};
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("vCOD_EMPR", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("vCOD_LOCAL", OracleDbType.Varchar2, codigoLocal, ParameterDirection.Input);
+				command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				var datatable = new DataTable();
+				datatable.Load(dr);
+
+				connection.Close();
+				connection.Dispose();
+
+				return datatable;
+			}
+		}
+
+		public async Task<DataTable> ListarCajeroVolante(string codEmpresa, string codigoCoordinador)
+		{
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_VOLANTE_LISTA_CORDINADOR", connection)
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandTimeout = _commandTimeout
+				};
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("vCOD_EMPR", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("vCORDINADOR", OracleDbType.Varchar2, codigoCoordinador, ParameterDirection.Input);
+				command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				var datatable = new DataTable();
+				datatable.Load(dr);
+
+				connection.Close();
+				connection.Dispose();
+
+				return datatable;
+			}
+		}
+
+		public async Task CrearCajeroVolante(CajeroVolante cajeroVolante)
+		{
+
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_VOLANTE_CREACION", connection);
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandTimeout = _commandTimeout;
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("v_COD_OFISIS", OracleDbType.Varchar2, cajeroVolante.CodOfisis, ParameterDirection.Input);
+				command.Parameters.Add("v_NUM_DOC", OracleDbType.Varchar2, cajeroVolante.NumDocumento, ParameterDirection.Input);
+				command.Parameters.Add("v_COD_EMPR_ORI", OracleDbType.Varchar2, cajeroVolante.CodEmpresaOrigen, ParameterDirection.Input);
+				command.Parameters.Add("n_COD_SEDE_ORI", OracleDbType.Decimal, cajeroVolante.CodSedeOrigen, ParameterDirection.Input);
+				command.Parameters.Add("v_COD_EMPR", OracleDbType.Varchar2, cajeroVolante.CodEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("n_COD_SEDE", OracleDbType.Decimal, cajeroVolante.CodSede, ParameterDirection.Input);
+				command.Parameters.Add("v_USU_CREACION", OracleDbType.Varchar2, cajeroVolante.Usuario, ParameterDirection.Input);
+				command.Parameters.Add("v_COORDINADOR", OracleDbType.Varchar2, cajeroVolante.Coordinador, ParameterDirection.Input);
+				command.Parameters.Add("v_SQLERRM", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+				command.Parameters.Add("n_SQLCODE", OracleDbType.Decimal, 2, ParameterDirection.Output);
+				command.Parameters.Add("v_ERROR", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+				command.Parameters.Add("n_RETORNO", OracleDbType.Decimal, 2, ParameterDirection.Output);
+				await command.ExecuteNonQueryAsync();
+
+				var sqlErrorMsg = command.Parameters["v_SQLERRM"].Value.ToString();
+				var retorno = Convert.ToDecimal(command.Parameters["n_RETORNO"].Value.ToString());
+				var mensjaeError = command.Parameters["v_ERROR"].Value.ToString();
+
+				if (retorno > 0)
+					throw new Exception($"{mensjaeError} - {sqlErrorMsg}");
+
+				connection.Close();
+				connection.Dispose();
+			}
+		}
+
+		public async Task EliminarCajeroVolante(CajeroVolante cajeroVolante)
+		{
+
+			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+			{
+				var command = new OracleCommand("PKG_SGC_CAJERO.SP_VOLANTE_ELIMINA", connection);
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandTimeout = _commandTimeout;
+
+				await command.Connection.OpenAsync();
+				command.Parameters.Add("v_COD_OFISIS", OracleDbType.Varchar2, cajeroVolante.CodOfisis, ParameterDirection.Input);
+				command.Parameters.Add("v_COD_EMPR", OracleDbType.Varchar2, cajeroVolante.CodEmpresa, ParameterDirection.Input);
+				command.Parameters.Add("n_COD_SEDE", OracleDbType.Decimal, cajeroVolante.CodSede, ParameterDirection.Input);
+				command.Parameters.Add("v_USU_ELIMINA", OracleDbType.Varchar2, cajeroVolante.Usuario, ParameterDirection.Input);
+				command.Parameters.Add("v_SQLERRM", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+				command.Parameters.Add("n_SQLCODE", OracleDbType.Decimal, 2, ParameterDirection.Output);
+				command.Parameters.Add("v_ERROR", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+				command.Parameters.Add("n_RETORNO", OracleDbType.Decimal, 2, ParameterDirection.Output);
+				await command.ExecuteNonQueryAsync();
+
+				var sqlErrorMsg = command.Parameters["v_SQLERRM"].Value.ToString();
+				var retorno = Convert.ToDecimal(command.Parameters["n_RETORNO"].Value.ToString());
+				var mensjaeError = command.Parameters["v_ERROR"].Value.ToString();
+
+				if (retorno > 0)
+					throw new Exception($"{mensjaeError} - {sqlErrorMsg}");
+
+				connection.Close();
+				connection.Dispose();
+			}
+		}
 	}
 }

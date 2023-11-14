@@ -88,6 +88,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 				var login = WebSession.Login;
 				var localesUsuario = WebSession.Locales;
 				var locales = await _mediator.Send(new ListarLocalesQuery { Ruc = ruc, Locales = localesUsuario });
+				WebSession.LocalesAsignadosXEmpresa = locales;
 				respuesta.Ok = true; ;
 				respuesta.Locales = locales;
 			}
