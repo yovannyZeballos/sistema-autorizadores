@@ -149,6 +149,7 @@
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorMasivoController.cs" />
     <Compile Include="Areas\Cajeros\CajerosAreaRegistration.cs" />
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
+    <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
@@ -2197,6 +2198,7 @@
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
     <Content Include="Content\ViewJs\AutorizadorMasivo.js" />
     <Content Include="Content\ViewJs\AdministrarCajero.js" />
+    <Content Include="Content\ViewJs\CajeroVolante.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
@@ -2333,7 +2335,6 @@
     <Content Include="Content\plugins\iconfonts\weathericons\fonts\weathericons-regular-webfont.woff" />
     <Content Include="Content\plugins\iconfonts\weathericons\fonts\weathericons-regular-webfont.woff2" />
     <Content Include="Content\plugins\jquery-steps\build\jquery.steps-1.1.0.zip" />
-    <Content Include="Content\plugins\jquery-steps\build\jQuery.Steps.1.1.0.nupkg" />
     <Content Include="Content\plugins\jquery-steps\nuget\jQuery.Steps.nuspec" />
     <Content Include="Content\plugins\jquery-steps\steps.jquery.json" />
     <Content Include="Content\plugins\jQuerytransfer\icon_font\font\iconfont.eot" />
@@ -2580,6 +2581,9 @@
     <Content Include="Areas\Cajeros\Views\Reportes\DiferenciaCajas.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteCierre\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteCierre\Resumen.cshtml" />
+    <Content Include="Areas\Cajeros\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Cajeros\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Cajeros\Views\CajeroVolante\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2617,7 +2621,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Cajeros\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
