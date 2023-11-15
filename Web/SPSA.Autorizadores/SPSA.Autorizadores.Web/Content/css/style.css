@@ -735,8 +735,8 @@ hr {
 }
 
 body *::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
     transition: 0.3s;
 }
 
@@ -750,8 +750,8 @@ body *::-ms-webkit-scrollbar-track {
 }
 
 body *::-ms-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
     transition: 0.3s;
 }
 

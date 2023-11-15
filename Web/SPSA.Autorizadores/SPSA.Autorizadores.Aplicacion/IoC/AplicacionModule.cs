@@ -13,6 +13,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
@@ -97,6 +99,10 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ReporteCierreHandler>().As<IRequestHandler<ReporteCierreQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteDiferenciaCajaExcelHandler>().As<IRequestHandler<ReporteDiferenciaCajaExcelCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<ReporteCierreResumenHandler>().As<IRequestHandler<ReporteCierreResumenQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<ListarCajeroVolanteHandler>().As<IRequestHandler<ListarCajeroVolanteQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<ListarCajeroVolanteOfiplanHandler>().As<IRequestHandler<ListarCajeroVolanteOfiplanQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<CrearCajeroVolanteHandler>().As<IRequestHandler<CrearCajeroVolanteCommand, RespuestaComunDTO>>();
+			builder.RegisterType<EliminarCajeroVolanteHandler>().As<IRequestHandler<EliminarCajeroVolanteCommand, RespuestaComunDTO>>();
 
 			base.Load(builder);
 		}
