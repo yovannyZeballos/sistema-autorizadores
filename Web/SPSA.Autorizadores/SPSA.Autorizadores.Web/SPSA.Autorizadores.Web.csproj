@@ -154,6 +154,7 @@
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
+    <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
@@ -2199,6 +2200,7 @@
     <Content Include="Content\ViewJs\AutorizadorMasivo.js" />
     <Content Include="Content\ViewJs\AdministrarCajero.js" />
     <Content Include="Content\ViewJs\CajeroVolante.js" />
+    <Content Include="Content\ViewJs\CajaDefectuosa.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
@@ -2584,6 +2586,9 @@
     <Content Include="Areas\Cajeros\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Cajeros\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Cajeros\Views\CajeroVolante\Index.cshtml" />
+    <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Monitor\Views\CajaDefectuosa\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

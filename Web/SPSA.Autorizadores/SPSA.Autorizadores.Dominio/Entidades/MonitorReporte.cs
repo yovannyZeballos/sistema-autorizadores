@@ -13,8 +13,10 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string Estado { get; private set; }
         public string Observacion { get; private set; }
         public string Formato { get; private set; }
+		public int Tipo { get; private set; }
 
-        public MonitorReporte(string codEmpresa, string codLocal, DateTime fechaProceso, DateTime? fechaCierre, string horaInicio, string horaFin, string estado, string observacion, string formato)
+        public MonitorReporte(string codEmpresa, string codLocal, DateTime fechaProceso, DateTime? fechaCierre, string horaInicio, 
+            string horaFin, string estado, string observacion, string formato, int tipo)
         {
             CodEmpresa = codEmpresa;
             CodLocal = codLocal;
@@ -25,6 +27,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
             Estado = estado;
             Observacion = observacion;
             Formato = formato;
+            Tipo = tipo;
         }
     }
 }

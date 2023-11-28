@@ -109,6 +109,7 @@
     <Compile Include="Repositorio\RepositorioInventarioTipo.cs" />
     <Compile Include="Repositorio\RepositorioLocal.cs" />
     <Compile Include="Repositorio\RepositorioLocalOfiplan.cs" />
+    <Compile Include="Repositorio\RepositorioMonitorComando.cs" />
     <Compile Include="Repositorio\RepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\RepositorioProcesos.cs" />
     <Compile Include="Repositorio\RepositorioPuesto.cs" />
