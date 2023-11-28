@@ -110,11 +110,19 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                     ParameterName = "@DES_OBS"
                 });
 
-                await command.ExecuteNonQueryAsync();
+				command.Parameters.Add(new SqlParameter
+				{
+					SqlDbType = SqlDbType.Int,
+					Direction = ParameterDirection.Input,
+					Value = localMonitor.Tipo,
+					ParameterName = "@TIPO"
+				});
+
+				await command.ExecuteNonQueryAsync();
             }
         }
 
-        public async Task<DataTable> ListarMonitorReporte(string codEmpresa, DateTime fecha, string estado)
+        public async Task<DataTable> ListarMonitorReporte(string codEmpresa, DateTime fecha, string estado, int tipo)
         {
             using (var connection = new SqlConnection(CadenaConexionCarteleria))
             {
@@ -152,7 +160,15 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                     ParameterName = "@TIP_ESTADO"
                 });
 
-                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				command.Parameters.Add(new SqlParameter
+				{
+					SqlDbType = SqlDbType.Int,
+					Direction = ParameterDirection.Input,
+					Value = tipo,
+					ParameterName = "@TIPO"
+				});
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 var datatable = new DataTable();
                 datatable.Load(dr);
 

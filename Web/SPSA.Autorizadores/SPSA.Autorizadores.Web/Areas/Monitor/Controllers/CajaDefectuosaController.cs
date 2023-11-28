@@ -14,16 +14,16 @@ using System.Web.Mvc;
 
 namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 {
-	public class CierreEODController : Controller
+	public class CajaDefectuosaController : Controller
 	{
 		private readonly IMediator _mediator;
 
-		public CierreEODController(IMediator mediator)
+		public CajaDefectuosaController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}
 
-		// GET: MonitorCierre
+		// GET: CajaDefectuosa
 		public ActionResult Index()
 		{
 			return View();
@@ -32,38 +32,16 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 		[HttpPost]
 		public async Task<JsonResult> ListarMonitor(ListarLocalMonitorQuery request)
 		{
-			request.Tipo = (int)TipoMonitor.CIERRE_FIN_DIA;
+			request.Tipo = (int)TipoMonitor.CAJA_DEFECTUOSA;
 			var response = await _mediator.Send(request);
 			return Json(response);
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> Procesar(ProcesarMonitorCommand request)
+		public async Task<JsonResult> Procesar(ProcesarCajaDefectuosaCommand request)
 		{
 			var response = await _mediator.Send(request);
 			return Json(response);
-
-		}
-
-		[HttpGet]
-		[AllowAnonymous]
-		public async Task<JsonResult> ListarEmpresas()
-		{
-			var respuesta = new ListarEmpresaResponse();
-
-			try
-			{
-				var empresas = await _mediator.Send(new ListarEmpresasMonitorQuery());
-				respuesta.Ok = true;
-				respuesta.Empresas = empresas;
-			}
-			catch (System.Exception ex)
-			{
-				respuesta.Ok = false;
-				respuesta.Mensaje = ex.Message;
-			}
-
-			return Json(respuesta, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

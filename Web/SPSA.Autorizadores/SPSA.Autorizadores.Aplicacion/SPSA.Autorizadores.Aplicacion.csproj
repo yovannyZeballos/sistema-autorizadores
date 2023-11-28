@@ -175,6 +175,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Commands\CrearCajeroVolanteCommand.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
+    <Compile Include="Features\Monitor\Commands\ProcesarCajaDefectuosaCommand.cs" />
     <Compile Include="Features\Puestos\Commands\DescargarExcelRolesCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\GenerarArchivoPorLocalCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ActualizarEstadoArchivoCommand.cs" />
@@ -228,7 +229,6 @@
     <Compile Include="Features\MantenimientoLocales\Queries\ListarCajasPorLocalQuery.cs" />
     <Compile Include="Features\MantenimientoLocales\Queries\ListarFormatosQuery.cs" />
     <Compile Include="Features\MantenimientoLocales\Queries\ListarEmpresasQuery.cs" />
-    <Compile Include="Features\Monitor\Commands\CrearLocalMonitorCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorCommand.cs" />
     <Compile Include="Features\Monitor\Queries\ListarEmpresasMonitorQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ListarLocalMonitorQuery.cs" />

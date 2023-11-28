@@ -56,7 +56,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 		}
 
-		public async Task<List<SovosLocal>> ListarMonitor(string codEmpresa, DateTime fecha)
+		public async Task<List<SovosLocal>> ListarMonitor(string codEmpresa, DateTime fecha, int tipo)
 		{
 			var locales = new List<SovosLocal>();
 
@@ -66,6 +66,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			{
 				 _dbHelper.MakeParam("@COD_EMPRESA",codEmpresa,SqlDbType.VarChar,ParameterDirection.Input,10),
 				 _dbHelper.MakeParam("@FEC_CIERRE",fecha,SqlDbType.DateTime,ParameterDirection.Input),
+				 _dbHelper.MakeParam("@TIPO",tipo,SqlDbType.Int,ParameterDirection.Input),
 			};
 
 			var dr = await _dbHelper.ExecuteReader("SP_MONI_LISTAR_SOVOS_LOCAL", dbParams);

@@ -50,9 +50,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarEmpresasOfiplanHandler>().As<IRequestHandler<ListarEmpresasOfiplanQuery, ListarEmpresaResponseDTO>>();
 			builder.RegisterType<ActualizarPuestoHandler>().As<IRequestHandler<ActualizarPuestoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ListarColaboradoresMassHandler>().As<IRequestHandler<ListarColaboradoresMassQuery, DataTable>>();
-			builder.RegisterType<ListarLocalMonitorHandler>().As<IRequestHandler<ListarLocalMonitorQuery, DataTable>>();
+			builder.RegisterType<ListarLocalMonitorHandler>().As<IRequestHandler<ListarLocalMonitorQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarEmpresasMonitorHandler>().As<IRequestHandler<ListarEmpresasMonitorQuery, List<EmpresaDTO>>>();
-			builder.RegisterType<CrearLocalMonitorHandler>().As<IRequestHandler<CrearLocalMonitorCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ProcesarMonitorHandler>().As<IRequestHandler<ProcesarMonitorCommand, RespuestaComunDTO>>();
 			builder.RegisterType<Features.MantenimientoLocales.Queries.ListarEmpresasHandler>().As<IRequestHandler<Features.MantenimientoLocales.Queries.ListarEmpresasQuery, List<EmpresaDTO>>>();
 			builder.RegisterType<ListarFormatossHandler>().As<IRequestHandler<ListarFormatosQuery, List<FormatoDTO>>>();
@@ -103,6 +102,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarCajeroVolanteOfiplanHandler>().As<IRequestHandler<ListarCajeroVolanteOfiplanQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<CrearCajeroVolanteHandler>().As<IRequestHandler<CrearCajeroVolanteCommand, RespuestaComunDTO>>();
 			builder.RegisterType<EliminarCajeroVolanteHandler>().As<IRequestHandler<EliminarCajeroVolanteCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ProcesarCajaDefectuosaHandler>().As<IRequestHandler<ProcesarCajaDefectuosaCommand, RespuestaComunDTO>>();
 
 			base.Load(builder);
 		}
