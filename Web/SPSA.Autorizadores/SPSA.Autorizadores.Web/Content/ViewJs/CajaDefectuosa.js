@@ -1,9 +1,9 @@
-﻿var urlListado = baseUrl + 'Monitor/CierreEOD/ListarMonitor';
-var urlProcesar = baseUrl + 'Monitor/CierreEOD/Procesar';
-var urlEmpresas = baseUrl + 'Monitor/CierreEOD/ListarEmpresas';
+﻿var urlListado = baseUrl + 'Monitor/CajaDefectuosa/ListarMonitor';
+var urlProcesar = baseUrl + 'Monitor/CajaDefectuosa/Procesar';
+var urlEmpresas = baseUrl + 'Empresa/Listar';
 var dataTableMonitor = null;
 
-var CierreEOD = function () {
+var CajaDefectuosa = function () {
 
     const eventos = function () {
         $("#btnConsultar").on('click', function () {
@@ -37,11 +37,11 @@ var CierreEOD = function () {
             success: function (response) {
                 var columnas = [];
                 response.Columnas.forEach((x) => {
-                    if (x === "ESTADO") {
+                    if (x === "¿CAJA DEFECTUOSA?") {
                         columnas.push({
                             title: x,
                             data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
-                            className: "estado",
+                            className: "estado text-center",
                             defaultContent: ""
                         });
 
@@ -77,11 +77,11 @@ var CierreEOD = function () {
                     bAutoWidth: false,
                     rowCallback: function (row, data, index) {
                         $("td.estado", row).addClass("text-white");
-                        if (data.TIP_ESTADO == "1") {
+                        if (data.TIP_ESTADO == "5") {
                             $("td.estado", row).addClass("bg-primary");
                         } else if (data.TIP_ESTADO == "2") {
                             $("td.estado", row).addClass("bg-warning");
-                        } else if (data.TIP_ESTADO == "3") {
+                        } else if (data.TIP_ESTADO == "4") {
                             $("td.estado", row).addClass("bg-danger");
                         }
                     },
@@ -96,7 +96,7 @@ var CierreEOD = function () {
                             },
                             filename: function () {
                                 const fecha = $("#txtFecha").val().replace('/','');
-                                return `Cierre_EOD_${fecha}`;
+                                return `MONITOR_CAJAS_DEFECTUOSAS_${fecha}`;
                             },
                             action: function (e, dt, node, config) {
 
@@ -115,7 +115,6 @@ var CierreEOD = function () {
                 });
 
                 $("#container-btn-exportar").append(dataTableMonitor.buttons().container());
-                //dataTableMonitor.buttons().container().prependTo($('#tableMonitor_filter'));
                
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -143,8 +142,7 @@ var CierreEOD = function () {
 
 
         const request = {
-            CodEmpresa: codEmpresa,
-            Fecha: fecha
+            CodEmpresa: codEmpresa
         }
 
         $.ajax({
@@ -246,7 +244,7 @@ var CierreEOD = function () {
     const listarEmpresas = function () {
         $.ajax({
             url: urlEmpresas,
-            type: "get",
+            type: "post",
             beforeSend: function () {
                 showLoading();
             },
@@ -276,6 +274,7 @@ var CierreEOD = function () {
 
     const cargarEmpresas = function (empresas) {
         $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
+        $('#cboEmpresa').append($('<option>', { value: '000', text: 'TODOS' }));
         empresas.map(empresa => {
             $('#cboEmpresa').append($('<option>', { value: empresa.Codigo, text: empresa.Descripcion }));
         });

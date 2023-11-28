@@ -9,18 +9,19 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 {
-	public class ProcesarMonitorCommand : IRequest<RespuestaComunDTO>
+	public class ProcesarCajaDefectuosaCommand : IRequest<RespuestaComunDTO>
 	{
 		public string CodEmpresa { get; set; }
 	}
 
-	public class ProcesarMonitorHandler : IRequestHandler<ProcesarMonitorCommand, RespuestaComunDTO>
+	public class ProcesarCajaDefectuosaHandler : IRequestHandler<ProcesarCajaDefectuosaCommand, RespuestaComunDTO>
 	{
 		private readonly IRepositorioMonitorReporte _repositorioLocalMonitor;
 		private readonly IRepositorioSovosLocal _repositorioSovosLocal;
@@ -29,13 +30,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		private readonly string _usuario;
 		private readonly string _clave;
 		private readonly int _maximoTareasEncoladas;
+		private string COMANDO_CANTIDAD;
+		private string COMANDO_CAJAS;
 
-		private string COMANDO_EXISTE_ARCHIVO;
-		private string COMANDO_HORA_INICIO;
-		private string COMANDO_HORA_FIN;
-		private string NOMBRE_ARCHIVO;
-
-		public ProcesarMonitorHandler(IRepositorioMonitorReporte repositorioLocalMonitor, IRepositorioSovosLocal repositorioSovosLocal,
+		public ProcesarCajaDefectuosaHandler(IRepositorioMonitorReporte repositorioLocalMonitor, IRepositorioSovosLocal repositorioSovosLocal,
 			IRepositorioMonitorComando repositorioMonitorComando)
 		{
 			_usuario = ConfigurationManager.AppSettings["Usuario"];
@@ -43,18 +41,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 			_maximoTareasEncoladas = Convert.ToInt32(ConfigurationManager.AppSettings["MaximoProcesosBloque"]);
 			_repositorioLocalMonitor = repositorioLocalMonitor;
 			_repositorioSovosLocal = repositorioSovosLocal;
-			//COMANDO_EXISTE_ARCHIVO = ConfigurationManager.AppSettings["ObtenerArchivo"].ToString();
-			//COMANDO_HORA_INICIO = ConfigurationManager.AppSettings["HoraInicio"].ToString();
-			//COMANDO_HORA_FIN = ConfigurationManager.AppSettings["HoraFin"].ToString();
-			//NOMBRE_ARCHIVO = ConfigurationManager.AppSettings["NombreArchivo"].ToString();
 			_repositorioMonitorComando = repositorioMonitorComando;
-
 		}
 
-		public async Task<RespuestaComunDTO> Handle(ProcesarMonitorCommand request, CancellationToken cancellationToken)
+		public async Task<RespuestaComunDTO> Handle(ProcesarCajaDefectuosaCommand request, CancellationToken cancellationToken)
 		{
 			var fechaProceso = DateTime.Now;
-			var fechaCierre = fechaProceso.AddDays(-1);
+			var fechaCierre = fechaProceso;
 			var tareasCalculo = new List<Task<ProcesoMonitorDTO>>();
 			var resultadosProceso = new List<ProcesoMonitorDTO>();
 			var respuesta = new RespuestaComunDTO();
@@ -64,13 +57,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				var timer = new Stopwatch();
 				timer.Start();
 
-				var comandos = await _repositorioMonitorComando.ListarPorTipo((int)TipoMonitor.CIERRE_FIN_DIA);
-				COMANDO_EXISTE_ARCHIVO = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoObtenerArchivoCierreEOD).Comando;
-				COMANDO_HORA_INICIO = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoHoraInicioArchivoCierreEOD).Comando;
-				COMANDO_HORA_FIN = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoHoraFinArchivoCierreEOD).Comando;
-				NOMBRE_ARCHIVO = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoNombreArchivoCierreEOD).Comando;
+				var comandos = await _repositorioMonitorComando.ListarPorTipo((int)TipoMonitor.CAJA_DEFECTUOSA);
 
-				var localesAProcesar = await _repositorioSovosLocal.ListarMonitor(request.CodEmpresa, fechaCierre, (int)TipoMonitor.CIERRE_FIN_DIA);
+				COMANDO_CANTIDAD = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoCantidadCajasDefectuosos).Comando;
+				COMANDO_CAJAS = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoCajasDefectuosos).Comando;
+
+				var localesAProcesar = await _repositorioSovosLocal.ListarMonitor(request.CodEmpresa, fechaCierre, (int)TipoMonitor.CAJA_DEFECTUOSA);
 
 				int cantidadTareas = 0;
 				foreach (var local in localesAProcesar)
@@ -97,8 +89,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				foreach (var resultado in resultadosProceso)
 				{
 					var localMonitor = new MonitorReporte(resultado.CodEmpresa, resultado.CodLocal, fechaProceso,
-					   fechaCierre, resultado.HoraInicio, resultado.HoraFin, resultado.Estado, resultado.Observacion,
-					   resultado.CodFormato, (int)TipoMonitor.CIERRE_FIN_DIA);
+					   fechaCierre, resultado.HoraInicio, resultado.HoraFin, resultado.Estado, resultado.Observacion, 
+					   resultado.CodFormato, (int)TipoMonitor.CAJA_DEFECTUOSA);
 
 					await _repositorioLocalMonitor.Crear(localMonitor);
 				}
@@ -124,7 +116,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 			{
 				CodLocal = local.CodLocal,
 				CodFormato = local.CodFormato,
-				CodEmpresa = local.CodEmpresa
+				CodEmpresa = local.CodEmpresa,
+				HoraFin = "",
+				HoraInicio = ""
 			};
 
 			string[] formats = new[] { "yyyy-MM-dd", "yyyy-MM-d", "yyyy-M-dd", "yyyy-M-d" };
@@ -141,43 +135,22 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 					client.ConnectionInfo.Timeout = TimeSpan.FromSeconds(30);
 					client.Connect();
 
-					var comandoExisteArchivoResult = client.RunCommand(COMANDO_EXISTE_ARCHIVO);
-					var nombreArchivo = comandoExisteArchivoResult.Result.Replace("\n", "");
+					var comandocantidad = client.RunCommand(COMANDO_CANTIDAD);
+					var cantidad = comandocantidad.Result.Replace("\n", "");
 
-					if (nombreArchivo != NOMBRE_ARCHIVO)
+
+					if (cantidad == "0")
 					{
-						procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
-						procesoMonitorDTO.HoraFin = "--:--:--";
-						procesoMonitorDTO.HoraInicio = "--:--:--";
-						procesoMonitorDTO.Observacion = Constantes.MensajeArchivoNoEncontrado;
+						procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO).ToString();
+						procesoMonitorDTO.Observacion = "--";
 						return procesoMonitorDTO;
 					}
 
-					var comandoHoraInicioResult = client.RunCommand(COMANDO_HORA_INICIO);
-					procesoMonitorDTO.HoraInicio = comandoHoraInicioResult.Result.Replace("\n", "").Trim();
+					var comandoCajas = client.RunCommand(COMANDO_CAJAS);
+					var cajas = comandoCajas.Result.Replace("\n", "").Trim().Replace(" ", ", ");
 
-					if (string.IsNullOrWhiteSpace(procesoMonitorDTO.HoraInicio))
-					{
-						procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
-						procesoMonitorDTO.HoraFin = "--:--:--";
-						procesoMonitorDTO.HoraInicio = "--:--:--";
-						procesoMonitorDTO.Observacion = Constantes.MensajeFechaInicioNoEncontrado;
-						return procesoMonitorDTO;
-					}
-
-					var comandoHoraFinResult = client.RunCommand(COMANDO_HORA_FIN);
-					procesoMonitorDTO.HoraFin = comandoHoraFinResult.Result.Replace("\n", "").Trim();
-
-					if (string.IsNullOrWhiteSpace(procesoMonitorDTO.HoraFin))
-					{
-						procesoMonitorDTO.Estado = ((int)EstadoMonitor.NO_SE_HA_REALIZADO_CIERRE).ToString();
-						procesoMonitorDTO.HoraFin = "--:--:--";
-						procesoMonitorDTO.Observacion = Constantes.MensajeFechaFinNoEncontrado;
-						return procesoMonitorDTO;
-					}
-
-					procesoMonitorDTO.Estado = ((int)EstadoMonitor.CIERRE_REALIZADO).ToString();
-
+					procesoMonitorDTO.Estado = ((int)EstadoMonitor.SI).ToString();
+					procesoMonitorDTO.Observacion = $"Cantidad: {cantidad}, Cajas: {cajas}";
 					client.Disconnect();
 					client.Dispose();
 				}
@@ -187,8 +160,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 			{
 				procesoMonitorDTO.Estado = ((int)EstadoMonitor.PENDIENTE_VALIDACION_CIERRE).ToString();
 				procesoMonitorDTO.Observacion = "SIN CONEXIÓN AL SERVER | " + ex.Message;
-				procesoMonitorDTO.HoraFin = "--:--:--";
-				procesoMonitorDTO.HoraInicio = "--:--:--";
 			}
 
 			return procesoMonitorDTO;
