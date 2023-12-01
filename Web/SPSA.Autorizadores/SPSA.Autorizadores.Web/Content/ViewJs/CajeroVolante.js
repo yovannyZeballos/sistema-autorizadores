@@ -28,6 +28,9 @@ const CajeroVolante = function () {
             $(this).toggleClass('selected');
         });
 
+        $('#tableLocal tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
 
         $("#chkActivos,#chkInactivos").on("change", function () {
 
@@ -42,6 +45,23 @@ const CajeroVolante = function () {
             }
 
         });
+
+        $("#chkSeleccionar").on("change", function () {
+            chechTodos();
+        })
+    }
+
+    const chechTodos = function () {
+
+        if ($("#chkSeleccionar").prop('checked')) {
+            dataTableLocal.rows({ search: 'applied' }).nodes().each(function () {
+                $(this).addClass('selected');
+            });
+        } else {
+            dataTableLocal.rows({ search: 'applied' }).nodes().each(function () {
+                $(this).removeClass('selected');
+            });
+        }
     }
 
     const visualizarDataTableCajero = function () {
@@ -98,7 +118,13 @@ const CajeroVolante = function () {
                     data: response.Data,
                     columns: columnas,
                     bAutoWidth: false,
+                    language: {
+                        searchPlaceholder: "Buscar Cajero",
+                        sSearch: ''
+                    }
                 });
+
+                $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -130,6 +156,7 @@ const CajeroVolante = function () {
                     columnas.push({
                         title: x.replace("_", " "),
                         data: quitarTildes(x).replace(/ /g, "").replace(".", ""),
+                        className: "pointer"
                     });
                 });
 
@@ -155,7 +182,7 @@ const CajeroVolante = function () {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
                     },
-                    searching: false,
+                    searching: true,
                     scrollY: '320px',
                     scrollX: true,
                     scrollCollapse: true,
@@ -163,7 +190,13 @@ const CajeroVolante = function () {
                     data: response.Data,
                     columns: columnas,
                     bAutoWidth: false,
+                    language: {
+                        searchPlaceholder: "Buscar Local",
+                        sSearch: ''
+                    }
                 });
+
+                $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -234,7 +267,13 @@ const CajeroVolante = function () {
                             $("td", row).addClass("text-danger");
                         }
                     },
+                    language: {
+                        searchPlaceholder: "Buscar Volante",
+                        sSearch: ''
+                    }
                 });
+
+                $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -247,21 +286,35 @@ const CajeroVolante = function () {
     }
 
     const asignar = function () {
-        const registrosSeleccionados = dataTableCajero.rows('.selected').data().toArray();
+        const registrosSeleccionadosCajero = dataTableCajero.rows('.selected').data().toArray();
 
-        if (!validarSelecion(registrosSeleccionados.length)) {
+        if (!validarSelecion(registrosSeleccionadosCajero.length, "Cajeros")) {
+            return;
+        }
+
+        const registrosSeleccionadosLocal = dataTableLocal.rows('.selected').data().toArray();
+
+        if (!validarSelecion(registrosSeleccionadosLocal.length, "Locales")) {
             return;
         }
 
         let cajeros = [];
+        let locales = [];
 
-        registrosSeleccionados.map((item) => {
+        registrosSeleccionadosLocal.map((item) => {
+            locales.push(item.Codigo);
+        });
+
+        registrosSeleccionadosCajero.map((item) => {
             cajeros.push({
                 CodOfisis: item.Codigo,
                 NumDocumento: item.NroDocu,
-                CodSedeOrigen: item.C_LOCAL
+                CodSedeOrigen: item.C_LOCAL,
+                LocalesAsignados: locales
             });
         });
+
+       
 
         $.ajax({
             url: urlCrearCajeroVolante,
@@ -304,7 +357,7 @@ const CajeroVolante = function () {
     const eliminar = function () {
         const registrosSeleccionados = dataTableCajeroVolante.rows('.selected').data().toArray();
 
-        if (!validarSelecion(registrosSeleccionados.length)) {
+        if (!validarSelecion(registrosSeleccionados.length, "Cajero volante")) {
             return;
         }
 
@@ -355,10 +408,10 @@ const CajeroVolante = function () {
     }
 
 
-    const validarSelecion = function (count) {
+    const validarSelecion = function (count, titulo) {
         if (count === 0) {
             swal({
-                text: "Debe seleccionar como minimo un registro",
+                text: titulo + " - debe seleccionar como minimo un registro",
                 icon: "warning",
             });
             return false;
@@ -375,6 +428,7 @@ const CajeroVolante = function () {
                 visualizarDataTableCajero();
                 visualizarDataTableLocal();
                 visualizarDataTableCajeroVolante();
+                $('input[type="search"]').addClass("form-control-sm");
             });
         }
     }
