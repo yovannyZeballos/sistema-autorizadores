@@ -52,7 +52,7 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 			{
 				item.CodEmpresaOrigen = WebSession.CodigoEmpresa;
 				item.CodEmpresa = WebSession.CodigoEmpresa;
-				item.LocalesAsignados = WebSession.LocalesAsignadosXEmpresa.Select(x => x.Codigo).ToList();
+				//item.LocalesAsignados = WebSession.LocalesAsignadosXEmpresa.Select(x => x.Codigo).ToList();
 				item.Coordinador = WebSession.Login;
 				item.Usuario = WebSession.Login;
 				var rpta = await _mediator.Send(item);
