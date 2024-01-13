@@ -31,6 +31,11 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor
 				   "Monitor/{controller}/{action}/{id}",
 					new { controller = "CajaDefectuosa", action = "Index", id = UrlParameter.Optional }
 			   );
+			context.MapRoute(
+				   "BCT_default",
+				   "Monitor/{controller}/{action}/{id}",
+					new { controller = "BCT", action = "Index", id = UrlParameter.Optional }
+			   );
 		}
 	}
 }
