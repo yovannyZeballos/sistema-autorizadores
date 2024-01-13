@@ -11,5 +11,9 @@
         public const string CodigoComandoObtenerArchivoCierreEOD = "002";
         public const string CodigoComandoHoraInicioArchivoCierreEOD = "003";
         public const string CodigoComandoHoraFinArchivoCierreEOD = "004";
+
+        public const decimal CodigoProcesoBct = 29;
+        public const string CodigoParametroToleranciaSegundos = "01";
+        public const string CodigoParametroToleranciaCantidad = "02";
 	}
 }
