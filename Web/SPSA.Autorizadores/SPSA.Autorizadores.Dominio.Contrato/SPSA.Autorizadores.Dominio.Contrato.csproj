@@ -35,6 +35,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,12 +65,17 @@
     <Compile Include="Repositorio\IRepositorioSovosFormato.cs" />
     <Compile Include="Repositorio\IRepositorioSovosInventarioCaja.cs" />
     <Compile Include="Repositorio\IRepositorioSovosLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioTransactionXmlCT2.cs" />
+    <Compile Include="Repositorio\IRepositorioProcesoParametro.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">
       <Project>{4E952E2E-F720-4907-9A07-E5F1E70E5108}</Project>
       <Name>SPSA.Autorizadores.Dominio</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

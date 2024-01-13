@@ -22,6 +22,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
+using SPSA.Autorizadores.Dominio.Entidades;
 using System.Collections.Generic;
 using System.Data;
 
@@ -103,6 +104,9 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<CrearCajeroVolanteHandler>().As<IRequestHandler<CrearCajeroVolanteCommand, RespuestaComunDTO>>();
 			builder.RegisterType<EliminarCajeroVolanteHandler>().As<IRequestHandler<EliminarCajeroVolanteCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ProcesarCajaDefectuosaHandler>().As<IRequestHandler<ProcesarCajaDefectuosaCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ProcesarMonitorBCTHandler>().As<IRequestHandler<ProcesarMonitorBCTCommand, ObtenerComunDTO<(bool, bool)>>>();
+			builder.RegisterType<ObtenerRegistrosMonitorBCTHandler>().As<IRequestHandler<ObtenerRegistrosMonitorBCTQuery, ObtenerComunDTO<(TransactionXmlCT2, List<TransactionXmlCT2>)>>>();
+			builder.RegisterType<ObtenerParametrosHandler>().As<IRequestHandler<ObtenerParametrosQuery, ParametrosMonitorBctDTO>>();
 
 			base.Load(builder);
 		}
