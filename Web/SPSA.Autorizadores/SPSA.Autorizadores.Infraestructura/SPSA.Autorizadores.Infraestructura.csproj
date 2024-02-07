@@ -130,6 +130,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuracion\ProcesoParametroEmpresaTypeConfiguration.cs" />
+    <Compile Include="Configuracion\SegSistemaTypeConfiguration.cs" />
     <Compile Include="Configuracion\ProcesoParametroTypeConfiguration.cs" />
     <Compile Include="Contexto\BCTContexto.cs" />
     <Compile Include="IoC\InfraestructuraModule.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="Repositorio\RepositorioCajaCierre.cs" />
     <Compile Include="Repositorio\RepositorioCajero.cs" />
     <Compile Include="Repositorio\RepositorioEmpresa.cs" />
+    <Compile Include="Repositorio\RepositorioGenerico.cs" />
     <Compile Include="Repositorio\RepositorioInventarioServidor.cs" />
     <Compile Include="Repositorio\RepositorioInventarioServidorVirtual.cs" />
     <Compile Include="Repositorio\RepositorioInventarioTipo.cs" />
@@ -147,6 +150,8 @@
     <Compile Include="Repositorio\RepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\RepositorioProcesos.cs" />
     <Compile Include="Repositorio\RepositorioPuesto.cs" />
+    <Compile Include="Repositorio\RepositorioProcesoParametroEmpresa.cs" />
+    <Compile Include="Repositorio\RepositorioSegSistema.cs" />
     <Compile Include="Repositorio\RepositorioSeguridad.cs" />
     <Compile Include="Repositorio\RepositorioSovosCaja.cs" />
     <Compile Include="Repositorio\RepositorioSovosFormato.cs" />

@@ -27,11 +27,12 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> Listar()
+		public async Task<JsonResult> Listar(ObtenerRegistrosMonitorBCTQuery request)
 		{
-			var response = await _mediator.Send(new ObtenerRegistrosMonitorBCTQuery());
+			var response = await _mediator.Send(request);
 			return Json(response);
 		}
+
 
 		[HttpPost]
 		public async Task<JsonResult> Procesar(ProcesarMonitorBCTCommand request)

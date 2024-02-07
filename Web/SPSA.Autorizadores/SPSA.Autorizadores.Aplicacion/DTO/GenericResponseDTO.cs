@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.DTO
 {
-	public class ListarResponseDTO<T> : RespuestaComunDTO
+	public class GenericResponseDTO<T> : RespuestaComunDTO
 	{
         public T Data { get; set; }
     }

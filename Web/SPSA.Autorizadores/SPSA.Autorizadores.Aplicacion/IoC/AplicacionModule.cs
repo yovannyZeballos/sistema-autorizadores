@@ -22,6 +22,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Dominio.Entidades;
 using System.Collections.Generic;
 using System.Data;
@@ -94,7 +96,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ReporteSobresHandler>().As<IRequestHandler<ReporteSobresQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<DescargarExcelRolesHandler>().As<IRequestHandler<DescargarExcelRolesCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<ListarGrillaHandler>().As<IRequestHandler<ListarGrillaQuery, ListarComunDTO<Dictionary<string, object>>>>();
-			builder.RegisterType<ListarListBoxHandler>().As<IRequestHandler<ListarListBoxQuery, ListarResponseDTO<List<ListBoxDTO>>>>();
+			builder.RegisterType<ListarListBoxHandler>().As<IRequestHandler<ListarListBoxQuery, GenericResponseDTO<List<ListBoxDTO>>>>();
 			builder.RegisterType<ReporteCierrePivotHandler>().As<IRequestHandler<ReporteCierrePivotQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteCierreHandler>().As<IRequestHandler<ReporteCierreQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ReporteDiferenciaCajaExcelHandler>().As<IRequestHandler<ReporteDiferenciaCajaExcelCommand, DescargarMaestroDTO>>();
@@ -104,10 +106,13 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<CrearCajeroVolanteHandler>().As<IRequestHandler<CrearCajeroVolanteCommand, RespuestaComunDTO>>();
 			builder.RegisterType<EliminarCajeroVolanteHandler>().As<IRequestHandler<EliminarCajeroVolanteCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ProcesarCajaDefectuosaHandler>().As<IRequestHandler<ProcesarCajaDefectuosaCommand, RespuestaComunDTO>>();
-			builder.RegisterType<ProcesarMonitorBCTHandler>().As<IRequestHandler<ProcesarMonitorBCTCommand, ObtenerComunDTO<(bool, bool)>>>();
-			builder.RegisterType<ObtenerRegistrosMonitorBCTHandler>().As<IRequestHandler<ObtenerRegistrosMonitorBCTQuery, ObtenerComunDTO<(TransactionXmlCT2, List<TransactionXmlCT2>)>>>();
-			builder.RegisterType<ObtenerParametrosHandler>().As<IRequestHandler<ObtenerParametrosQuery, ParametrosMonitorBctDTO>>();
-
+			builder.RegisterType<ProcesarMonitorBCTHandler>().As<IRequestHandler<ProcesarMonitorBCTCommand, ObtenerComunDTO<(bool, bool, bool, int)>>>();
+			builder.RegisterType<ObtenerRegistrosMonitorBCTHandler>().As<IRequestHandler<ObtenerRegistrosMonitorBCTQuery, ObtenerComunDTO<TransactionXmlCT2>>>();
+			builder.RegisterType<ObtenerParametrosHandler>().As<IRequestHandler<ObtenerParametrosQuery, GenericResponseDTO<List<ParametrosMonitorBctDTO>>>>();
+			builder.RegisterType<ListarSistemasHandler>().As<IRequestHandler<ListarSistemasQuery, GenericResponseDTO<List<ListarSistemaDTO>>>>();
+			builder.RegisterType<CrearSistemaHandler>().As<IRequestHandler<CrearSistemaCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ActualizarSistemaHandler>().As<IRequestHandler<ActualizarSistemaCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ObtenerSistemaHandler>().As<IRequestHandler<ObtenerSistemaQuery, GenericResponseDTO<ObtenerSistemaDTO>>>();
 			base.Load(builder);
 		}
 	}

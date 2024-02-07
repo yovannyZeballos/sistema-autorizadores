@@ -19,6 +19,12 @@ namespace SPSA.Autorizadores.Web.Areas.Seguridad
                 "Seguridad/{controller}/{action}/{id}",
                 new {controller = "CambioLocal", action = "Index", id = UrlParameter.Optional }
             );
-        }
+
+			context.MapRoute(
+			   "Sistema_default",
+			   "Seguridad/{controller}/{action}/{id}",
+				new { controller = "Sistema", action = "Index", id = UrlParameter.Optional }
+		    );
+		}
     }
 }

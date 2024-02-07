@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
+using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
@@ -17,7 +19,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 	public class LoginController : Controller
 	{
 		private readonly IMediator _mediator;
-
+		private readonly ILogger _log = SerilogClass._log;
 		public LoginController(IMediator mediator)
 		{
 			_mediator = mediator;
@@ -45,6 +47,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 
 				if (usuario.Ok)
 				{
+					_log.Information($"Usuario: {command.Usuario}, Inicio de sesion exitoso");
 					WebSession.Login = command.Usuario;
 					WebSession.UserName = usuario.NombreUsuario;
 					WebSession.Permisos = usuario.Aplicacion.Permisos;
@@ -60,6 +63,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 			}
 			catch (System.Exception ex)
 			{
+				_log.Error(ex, ex.Message);
 				respuesta.Ok = false;
 				respuesta.Mensaje = ex.Message;
 			}
@@ -94,6 +98,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 			}
 			catch (System.Exception ex)
 			{
+				_log.Error(ex, ex.Message);
 				respuesta.Ok = false;
 				respuesta.Mensaje = ex.Message;
 			}
@@ -117,6 +122,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 			}
 			catch (System.Exception ex)
 			{
+				_log.Error(ex, ex.Message);
 				response.Ok = false;
 				response.Mensaje = ex.Message;
 			}
@@ -149,6 +155,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 			}
 			catch (System.Exception ex)
 			{
+				_log.Error(ex, ex.Message);
 				respuesta.Mensaje = ex.Message;
 				respuesta.Ok = false;
 			}

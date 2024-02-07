@@ -48,70 +48,185 @@
             <div class="card-body">
 
                 <div class="row">
-                    <div class="form-group data-table-btn">
-                        <button id="btnRefrescar" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-refresh-ccw me-1"></i>Refrescar</button>
+                    <div class="col-md-3">
+                        <div class="card" style="background-color: #f3f3f0;">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-12 text-center">
+                                        <img src="~/Content/images/brand/logo-super-food.png"
+                                             class="header-brand-img desktop-lgo"
+                                             style=" height: 50px;"
+                                             alt="Dayonelogo" />
+                                    </div>
+
+                                    <div class="col-md-12 text-center mt-3">
+                                        <h4>SPSA</h4>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="custom-controls-stacked mt-2" style="margin-left:20px;">
+                                                    <label class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="chkEmpresaSpsa" value="02" checked disabled>
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <h6 class="mt-2" id="lblToleranciaSpsa"></h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-sm rounded-circle" id="btnResultadoCantidadSpsa">&nbsp;</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 text-center">
+                                        <h2 id="lblCantidadSpsa" style=" border-style: double;"></h2>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
+                        <div class="card" style="background-color: #f3f3f0;">
+                            <div class="card-body">
+                                <div class="row">
 
-                        <div class="form-group row mb-2">
-                            <label class="col-form-label col-md-7 text-end">Tolerancia en segundos</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control form-control-sm" id="txtToleranciaSegundos" disabled>
+                                    <div class="col-md-12 text-center">
+                                        <img src="~/Content/images/brand/logo-oechsle.png"
+                                             class="header-brand-img desktop-lgo"
+                                             style=" height: 50px;"
+                                             alt="Dayonelogo" />
+                                    </div>
+
+                                    <div class="col-md-12 text-center mt-3">
+                                        <h4>TPSA</h4>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="custom-controls-stacked mt-2" style="margin-left:20px;">
+                                                    <label class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="chkEmpresaOechsle" value="09" checked disabled>
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <h6 class="mt-2" id="lblToleranciaOechsle"></h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-sm rounded-circle" id="btnResultadoCantidadOechsle">&nbsp;</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 text-center">
+                                        <h2 id="lblCantidadOechsle" style=" border-style: double;"></h2>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group row mb-2">
-                            <label class="col-form-label col-md-7 text-end">Diferencia en segundos</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control form-control-sm" id="txtDiferenciaSegundos" disabled>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-2">
-                            <label class="col-form-label col-md-7 text-end">Resultado</label>
-                            <div class="col-md-5">
-                                <button class="btn btn-sm rounded-circle" id="btnResultadoSegundos">&nbsp;</button>
-                            </div>
-                        </div>
-
-                        <table id="tableListado" class="table table-striped table-bordered text-nowrap border-bottom">
-                            <thead>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
                     </div>
 
-                    <div class="col-md-6">
 
-                        <div class="form-group row mb-2">
-                            <label class="col-form-label col-md-7 text-end">Tolerancia</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control form-control-sm" id="txtTolerancia" disabled>
+                    <div class="col-md-3">
+                        <div class="card" style="background-color: #f3f3f0;">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-12 text-center">
+                                        <img src="~/Content/images/brand/logo-promart.png"
+                                             class="header-brand-img desktop-lgo"
+                                             style=" height: 50px;"
+                                             alt="Dayonelogo" />
+                                    </div>
+
+                                    <div class="col-md-12 text-center mt-3">
+                                        <h4>HPSA - PERÚ</h4>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="custom-controls-stacked mt-2" style="margin-left:20px;">
+                                                    <label class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="chkEmpresaPromart" value="10" checked disabled>
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <h6 class="mt-2" id="lblToleranciaPromart"></h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-sm rounded-circle" id="btnResultadoCantidadPromart">&nbsp;</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 text-center">
+                                        <h2 id="lblCantidadPromart" style=" border-style: double;"></h2>
+                                    </div>
+
+                                </div>
+
+
                             </div>
                         </div>
-
-
-                        <div class="form-group row mb-8">
-                            <label class="col-form-label col-md-7 text-end">Resultado</label>
-                            <div class="col-md-5">
-                                <button class="btn btn-sm rounded-circle" id="btnResultadoCantidad">&nbsp;</button>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control form-control-lg text-center" id="txtFechaRegistro" style="font-weight:bold" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control form-control-lg text-center" id="txtCantidad" style="font-weight:bold" readonly>
-                            </div>
-                        </div>
-
-
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="card" style="background-color: #f3f3f0;">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-12 text-center">
+                                        <img src="~/Content/images/brand/logo-promart.png"
+                                             class="header-brand-img desktop-lgo"
+                                             style=" height: 50px;"
+                                             alt="Dayonelogo" />
+                                    </div>
+
+                                    <div class="col-md-12 text-center mt-3">
+                                        <h4>HPSA - ECUADOR</h4>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="custom-controls-stacked mt-2" style="margin-left:20px;">
+                                                    <label class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="chkEmpresaPromartEcu" value="11" checked disabled>
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <h6 class="mt-2" id="lblToleranciaPromartEcu"></h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-sm rounded-circle" id="btnResultadoCantidadPromartEcu">&nbsp;</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 text-center">
+                                        <h2 id="lblCantidadPromartEcu" style=" border-style: double;"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
