@@ -173,7 +173,27 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
             }
         }
 
-        public async Task<OracleDataReader> ExecuteReader(string query, OracleParameter[] dbParams = null)
+		public async Task<SqlDataReader> ExecuteReaderText(string query, SqlParameter[] dbParams = null)
+		{
+			var connection = new SqlConnection(CadenaConexion);
+
+			using (var command = new SqlCommand(query, connection)
+			{
+				CommandType = CommandType.Text,
+				CommandTimeout = _commandTimeout
+			})
+			{
+				await command.Connection.OpenAsync();
+
+				if (dbParams != null)
+					command.Parameters.AddRange(dbParams);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				return dr;
+			}
+
+		}
+		public async Task<OracleDataReader> ExecuteReader(string query, OracleParameter[] dbParams = null)
         {
             var connection = new OracleConnection(CadenaConexion);
 

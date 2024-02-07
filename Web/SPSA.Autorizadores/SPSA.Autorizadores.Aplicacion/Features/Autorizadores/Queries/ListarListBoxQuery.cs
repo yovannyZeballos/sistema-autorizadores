@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 {
-	public class ListarListBoxQuery : IRequest<ListarResponseDTO<List<ListBoxDTO>>>
+	public class ListarListBoxQuery : IRequest<GenericResponseDTO<List<ListBoxDTO>>>
 	{
         public string Usuario { get; set; }
     }
 
-	public class ListarListBoxHandler : IRequestHandler<ListarListBoxQuery, ListarResponseDTO<List<ListBoxDTO>>>
+	public class ListarListBoxHandler : IRequestHandler<ListarListBoxQuery, GenericResponseDTO<List<ListBoxDTO>>>
 	{
 		private readonly IRepositorioProcesos _repositorioProcesos;
 		private readonly IMapper _mapper;
@@ -24,9 +24,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 			_mapper = mapper;
 		}
 
-		public async Task<ListarResponseDTO<List<ListBoxDTO>>> Handle(ListarListBoxQuery request, CancellationToken cancellationToken)
+		public async Task<GenericResponseDTO<List<ListBoxDTO>>> Handle(ListarListBoxQuery request, CancellationToken cancellationToken)
 		{
-			var response = new ListarResponseDTO<List<ListBoxDTO>>();
+			var response = new GenericResponseDTO<List<ListBoxDTO>>();
 			try
 			{
 				var data = await _repositorioProcesos.ListarListBox(request.Usuario);

@@ -3,128 +3,120 @@ var urlProcesar = baseUrl + 'Monitor/BCT/Procesar';
 var urlParametros = baseUrl + 'Monitor/BCT/Parametros';
 var dataTableListado = null;
 var dataTableCantidad = null;
-var RegistroTotal = {} ;
+var RegistroTotal = {};
 var RegistroPorSegundo = [];
 var Parametros = {};
-var idInterval = 0;
+var idIntervalSpsa = 0;
+var idIntervalPromart = 0;
+var idIntervalPromartEcu = 0;
+var idIntervalOechsle = 0;
+var timeoutInterval = 5000;
+var toleranciaSegundosSpa = 0;
+var fechaAlertaSpsa = "";
+var fechaAlertaPromart = "";
+var fechaAlertaPromartEcu = "";
+var fechaAlertaOechsle = "";
 
 var BCT = function () {
 
     const eventos = function () {
 
-        $("#btnRefrescar").on("click", function () {
-            clearInterval(idInterval);
-            cargarParametros();
-            cargarDatos();
-            idInterval = setInterval(cargarDatos, 5000);
-        });
-    }
-
-    const cargarListadoSegundos = function (listado = []) {
-        if (listado.length > 0) {
-            let fechaInicalStr = listado[0].Fecha;
-            let fechaFinalStr = listado[listado.length - 1].Fecha;
-
-            let fechaInical = new Date(+(fechaInicalStr.replace(/\D/g, '')));
-            let fechaFinal = new Date(+(fechaFinalStr.replace(/\D/g, '')));
-
-            let dif = fechaFinal.getTime() - fechaInical.getTime()
-            let diferenciaSegundos = Math.abs(dif / 1000);
-
-            $("#txtDiferenciaSegundos").val(diferenciaSegundos);
-        }
-
-
-        let columnas = [
-            {
-                title: 'Fecha',
-                data: 'FechaFormato'
-            },
-            {
-                title: 'Registros',
-                data: 'Cantidad'
+        $("#chkEmpresaSpsa").on("change", function () {
+            if (!$("#chkEmpresaSpsa").is(":checked")) {
+                clearInterval(idIntervalSpsa);
+                $("#lblCantidadSpsa").text("");
+                $("#lblToleranciaSpsa").text("");
+                $("#btnResultadoCantidadSpsa").removeClass("btn-success");
+                $("#btnResultadoCantidadSpsa").removeClass("btn-danger");
+                $("#btnResultadoCantidadSpsa").removeClass("btn-warning");
             }
-        ];
+            else {
+                cargarParametros("02");
+                idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
+            }
+        });
 
-        if (dataTableListado != null) {
-            dataTableListado.clear();
-            dataTableListado.destroy();
-            dataTableListado = null;
-        }
+        $("#chkEmpresaOechsle").on("change", function () {
+            if (!$("#chkEmpresaOechsle").is(":checked")) {
+                clearInterval(idIntervalOechsle);
+                $("#lblCantidadOechsle").text("");
+                $("#lblToleranciaOechsle").text("");
+                $("#btnResultadoCantidadOechsle").removeClass("btn-success");
+                $("#btnResultadoCantidadOechsle").removeClass("btn-danger");
+                $("#btnResultadoCantidadOechsle").removeClass("btn-warning");
+            }
+            else {
+                cargarParametros("09");
+                idIntervalOechsle = setInterval(cargarDatos, timeoutInterval, "09");
+            }
+        });
 
-        var tableId = "#tableListado";
-        $(tableId + " tbody").empty();
-        $(tableId + " thead").empty();
+        $("#chkEmpresaPromart").on("change", function () {
+            if (!$("#chkEmpresaPromart").is(":checked")) {
+                clearInterval(idIntervalPromart);
+                $("#lblCantidadPromart").text("");
+                $("#lblToleranciaPromart").text("");
+                $("#btnResultadoCantidadPromart").removeClass("btn-success");
+                $("#btnResultadoCantidadPromart").removeClass("btn-danger");
+                $("#btnResultadoCantidadPromart").removeClass("btn-warning");
+            }
+            else {
+                cargarParametros("10");
+                idIntervalPromart = setInterval(cargarDatos, timeoutInterval, "10");
+            }
+        });
 
-        dataTableListado = $(tableId).DataTable({
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-            },
-            searching: false,
-            scrollY: '480px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: false,
-            columns: columnas,
-            data: listado,
-            bAutoWidth: false
+        $("#chkEmpresaPromartEcu").on("change", function () {
+            if (!$("#chkEmpresaPromartEcu").is(":checked")) {
+                clearInterval(idIntervalPromartEcu);
+                $("#lblCantidadPromartEcu").text("");
+                $("#lblToleranciaPromartEcu").text("");
+                $("#btnResultadoCantidadPromartEcu").removeClass("btn-success");
+                $("#btnResultadoCantidadPromartEcu").removeClass("btn-danger");
+                $("#btnResultadoCantidadPromartEcu").removeClass("btn-warning");
+            }
+            else {
+                cargarParametros("11");
+                idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "11");
+            }
         });
     }
 
-    const cargarListadoCantidad = function (registro = {}) {
+    const cargarListadoCantidad = function (registro = {}, codEmpresa) {
 
-        $("#txtFechaRegistro").val(registro.FechaFormato);
-        $("#txtCantidad").val(registro.Cantidad);
-        //let columnas = [
-        //    {
-        //        title: 'Fecha',
-        //        data: 'FechaFormato'
-        //    },
-        //    {
-        //        title: 'Registros',
-        //        data: 'Cantidad'
-        //    }
-        //];
+        if (registro && registro != null) {
+            switch (codEmpresa) {
+                case "02":
+                    $("#lblCantidadSpsa").text(registro.Cantidad);
+                    break;
+                case "09":
+                    $("#lblCantidadOechsle").text(registro.Cantidad);
+                    break;
+                case "10":
+                    $("#lblCantidadPromart").text(registro.Cantidad);
+                    break;
+                case "11":
+                    $("#lblCantidadPromartEcu").text(registro.Cantidad);
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        //if (dataTableCantidad != null) {
-        //    dataTableCantidad.clear();
-        //    dataTableCantidad.destroy();
-        //    dataTableCantidad = null;
-        //}
-
-        //var tableId = "#tableCantidad";
-        //$(tableId + " tbody").empty();
-        //$(tableId + " thead").empty();
-
-        //dataTableCantidad = $(tableId).DataTable({
-        //    language: {
-        //        searchPlaceholder: 'Buscar...',
-        //        sSearch: '',
-        //    },
-        //    searching: false,
-        //    scrollY: '480px',
-        //    scrollX: true,
-        //    scrollCollapse: true,
-        //    paging: false,
-        //    columns: columnas,
-        //    data: listado,
-        //    bAutoWidth: false
-        //});
     }
 
-    const cargarDatos = function () {
+    const cargarDatos = function (codEmpresa) {
+
+
+        const request = {
+            CodEmpresa: codEmpresa
+        }
 
         $.ajax({
             url: urlListado,
             type: "post",
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            data: { request },
             success: function (response) {
 
                 if (!response.Ok) {
@@ -132,18 +124,10 @@ var BCT = function () {
                     return;
                 }
 
-                RegistroTotal = response.Data.Item1;
-                RegistroPorSegundo = response.Data.Item2.map(item => {
-                    return {
-                        FechaStr: convertirfecha(new Date(+(item.Fecha.replace(/\D/g, '')))),
-                        Cantidad: item.Cantidad
-                    };
-                });
+                let cantidadAnterior = obtenerCantidadAnterior(codEmpresa);
 
-                cargarListadoSegundos(response.Data.Item2);
-                cargarListadoCantidad(response.Data.Item1);
-
-                procesar();
+                cargarListadoCantidad(response.Data, codEmpresa);
+                procesar(codEmpresa, response.Data, cantidadAnterior);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -154,7 +138,30 @@ var BCT = function () {
         });
     };
 
-    const cargarParametros = function () {
+    const obtenerCantidadAnterior = function (codEmpresa) {
+
+        let cantidad = 0;
+        switch (codEmpresa) {
+            case "02":
+                cantidad = $("#lblCantidadSpsa").text();
+                break;
+            case "09":
+                cantidad = $("#lblCantidadOechsle").text();
+                break;
+            case "10":
+                cantidad = $("#lblCantidadPromart").text();
+                break;
+            case "11":
+                cantidad = $("#lblCantidadPromartEcu").text();
+                break;
+            default:
+                break;
+        }
+        return cantidad;
+    }
+
+    const cargarParametros = function (codEmpresa = "") {
+
 
         $.ajax({
             url: urlParametros,
@@ -162,15 +169,39 @@ var BCT = function () {
             dataType: "json",
             success: function (response) {
 
+                console.log(response);
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning" });
                     return;
                 }
 
-                Parametros = response;
+                if (codEmpresa != "")
+                    response.Data = response.Data.filter((item) => item.CodEmpresa == codEmpresa);
 
-                $("#txtToleranciaSegundos").val(response.ToleranciaSegundos);
-                $("#txtTolerancia").val(response.ToleranciaCantidad);
+                response.Data.forEach((item) => {
+                    switch (item.CodEmpresa) {
+                        case "02":
+                            $("#lblToleranciaSpsa").text(item.ToleranciaCantidad);
+                            break;
+                        case "09":
+                            $("#lblToleranciaOechsle").text(item.ToleranciaCantidad);
+                            break;
+                        case "10":
+                            $("#lblToleranciaPromart").text(item.ToleranciaCantidad);
+                            break;
+                        case "11":
+                            $("#lblToleranciaPromartEcu").text(item.ToleranciaCantidad);
+                            break;
+                        default:
+                    }
+                });
+
+                if (codEmpresa != "")
+                    cargarDatos(codEmpresa);
+                else
+                    $("input:checkbox:checked").each(function () {
+                        cargarDatos($(this).val());
+                    });
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -182,24 +213,34 @@ var BCT = function () {
         });
     };
 
-    const procesar = function () {
+    const procesar = function (codEmpresa, registroTotal, cantidadAnterior) {
 
-        const codEmpresa = $("#cboEmpresa").val();
-        const fecha = $("#txtFecha").val();
+        let fechaAlerta = "";
 
-        if (codEmpresa === null || fecha === "") {
-            swal({
-                text: "Seleccione la Empresa e ingrese la fecha.",
-                icon: "warning"
-            });
-            return;
+        switch (codEmpresa) {
+            case "02":
+                fechaAlerta = fechaAlertaSpsa;
+                break;
+            case "09":
+                fechaAlerta = fechaAlertaOechsle;
+                break;
+            case "10":
+                fechaAlerta = fechaAlertaPromart;
+                break;
+            case "11":
+                fechaAlerta = fechaAlertaPromartEcu;
+                break;
+            default:
         }
 
+        let colorSemaforo = obtenerColorSemaforo(codEmpresa);
 
         const request = {
-            RegistroTotal: RegistroTotal,
-            RegistroPorSegundo: RegistroPorSegundo,
-            Parametros: Parametros,
+            RegistroTotal: registroTotal,
+            CodEmpresa: codEmpresa,
+            FechaAlerta: fechaAlerta,
+            CantidadAnterior: cantidadAnterior,
+            Color: colorSemaforo
         }
 
         $.ajax({
@@ -207,12 +248,6 @@ var BCT = function () {
             type: "post",
             data: { request },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
             success: function (response) {
 
                 if (!response.Ok) {
@@ -223,25 +258,98 @@ var BCT = function () {
                     return;
                 }
 
-                if (response.Data.Item1 === true) {
-                    $("#btnResultadoCantidad").addClass("btn-success");
-                    $("#btnResultadoCantidad").removeClass("btn-danger");
-                } else {
-                    $("#btnResultadoCantidad").removeClass("btn-success");
-                    $("#btnResultadoCantidad").addClass("btn-danger");
+
+                let envioNotificacion = response.Data.Item4; // 0:NO, 1:SI
+                let idBoton = "";
+
+                switch (codEmpresa) {
+                    case "02":
+                        idBoton = "#btnResultadoCantidadSpsa";
+                        break;
+                    case "09":
+                        idBoton = "#btnResultadoCantidadOechsle";
+                        break;
+                    case "10":
+                        idBoton = "#btnResultadoCantidadPromart";
+                        break;
+                    case "11":
+                        idBoton = "#btnResultadoCantidadPromartEcu";
+                        break;
+                    default:
                 }
 
+                if (response.Data.Item1 === true) { //Verde
+                    $(idBoton).addClass("btn-success");
+                    $(idBoton).removeClass("btn-danger");
+                    $(idBoton).removeClass("btn-warning");
 
-                if (response.Data.Item2 === true) {
-                    $("#btnResultadoSegundos").addClass("btn-success");
-                    $("#btnResultadoSegundos").removeClass("btn-danger");
-                } else {
-                    $("#btnResultadoSegundos").removeClass("btn-success");
-                    $("#btnResultadoSegundos").addClass("btn-danger");
+                    switch (codEmpresa) {
+                        case "02":
+                            fechaAlertaSpsa = "";
+                            break;
+                        case "09":
+                            fechaAlertaOechsle = "";
+                            break;
+                        case "10":
+                            fechaAlertaPromart = "";
+                            break;
+                        case "10":
+                            fechaAlertaPromartEcu = "";
+                            break;
+                        default:
+                    }
+
+                } else if (response.Data.Item2 === true) { //Naranja
+                    $(idBoton).addClass("btn-warning");
+                    $(idBoton).removeClass("btn-danger");
+                    $(idBoton).removeClass("btn-success");
+
+                    switch (codEmpresa) {
+                        case "02":
+                            if (fechaAlertaSpsa == "" || envioNotificacion == 1)
+                                fechaAlertaSpsa = convertirfecha(new Date());
+                            break;
+                        case "09":
+                            if (fechaAlertaOechsle == "" || envioNotificacion == 1)
+                                fechaAlertaOechsle = convertirfecha(new Date());
+                            break;
+                        case "10":
+                            if (fechaAlertaPromart == "" || envioNotificacion == 1)
+                                fechaAlertaPromart = convertirfecha(new Date());
+                            break;
+                        case "11":
+                            if (fechaAlertaPromartEcu == "" || envioNotificacion == 1)
+                                fechaAlertaPromartEcu = convertirfecha(new Date());
+                            break;
+                        default:
+                    }
+
+
+
+                } else if (response.Data.Item3 === true) {  //Rojo
+                    $(idBoton).addClass("btn-danger");
+                    $(idBoton).removeClass("btn-success");
+                    $(idBoton).removeClass("btn-warning");
+                    switch (codEmpresa) {
+                        case "02":
+                            if (colorSemaforo == 2 || envioNotificacion == 1)
+                                fechaAlertaSpsa = convertirfecha(new Date());
+                            break;
+                        case "09":
+                            if (colorSemaforo == 2 || envioNotificacion == 1)
+                                fechaAlertaOechsle = convertirfecha(new Date());
+                            break;
+                        case "10":
+                            if (colorSemaforo == 2 || envioNotificacion == 1)
+                                fechaAlertaPromart = convertirfecha(new Date());
+                            break;
+                        case "11":
+                            if (colorSemaforo == 2 || envioNotificacion == 1)
+                                fechaAlertaPromartEcu = convertirfecha(new Date());
+                            break;
+                        default:
+                    }
                 }
-                
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -250,6 +358,37 @@ var BCT = function () {
                 });
             }
         });
+    }
+
+    const obtenerColorSemaforo = function (codEmpresa) {
+        let idBoton = "";
+        let colorSemaforo = 0;
+
+        switch (codEmpresa) {
+            case "02":
+                idBoton = "#btnResultadoCantidadSpsa";
+                break;
+            case "09":
+                idBoton = "#btnResultadoCantidadOechsle";
+                break;
+            case "10":
+                idBoton = "#btnResultadoCantidadPromart";
+                break;
+            case "11":
+                idBoton = "#btnResultadoCantidadPromartEcu";
+                break;
+            default:
+        }
+
+        if ($(idBoton).hasClass('btn-success')) {
+            colorSemaforo = 1
+        } else if ($(idBoton).hasClass('btn-warning')) {
+            colorSemaforo = 2
+        } else if ($(idBoton).hasClass('btn-danger')) {
+            colorSemaforo = 3
+        }
+
+        return colorSemaforo;
     }
 
     const convertirfecha = function (fecha) {
@@ -261,7 +400,7 @@ var BCT = function () {
         var second = fecha.getSeconds(); // yields seconds
 
         // After this construct a string with the above results as below
-        return day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second; 
+        return day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
     }
 
     return {
@@ -269,8 +408,10 @@ var BCT = function () {
             checkSession(function () {
                 eventos();
                 cargarParametros();
-                cargarDatos();
-                idInterval = setInterval(cargarDatos, 5000);
+                idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
+                idIntervalOechsle = setInterval(cargarDatos, timeoutInterval, "09");
+                idIntervalPromart = setInterval(cargarDatos, timeoutInterval, "10");
+                idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "11");
             });
         }
     }

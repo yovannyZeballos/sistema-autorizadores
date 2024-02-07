@@ -14,4 +14,11 @@
 		CIERRE_FIN_DIA = 1,
 		CAJA_DEFECTUOSA = 2
 	}
+
+	public enum ColorSemaforo
+	{
+		VERDE = 1,
+		NARANJA = 2,
+		ROJO = 3
+	}
 }

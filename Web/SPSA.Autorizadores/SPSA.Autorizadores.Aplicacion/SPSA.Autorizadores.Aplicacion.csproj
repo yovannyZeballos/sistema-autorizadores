@@ -101,6 +101,12 @@
     <Reference Include="Renci.SshNet, Version=2020.0.2.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2020.0.2\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.3.1.1\lib\net462\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File, Version=5.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.File.5.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -161,8 +167,9 @@
     <Compile Include="DTO\CajeroDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaResponseDTO.cs" />
+    <Compile Include="DTO\ListarSistemaDTO.cs" />
     <Compile Include="DTO\ObtenerComunDTO.cs" />
-    <Compile Include="DTO\ListarResponseDTO.cs" />
+    <Compile Include="DTO\GenericResponseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />
     <Compile Include="DTO\DescargarMaestroDTO.cs" />
     <Compile Include="DTO\EnumClass.cs" />
@@ -190,6 +197,7 @@
     <Compile Include="DTO\EmpresaDTO.cs" />
     <Compile Include="DTO\LocalDTO.cs" />
     <Compile Include="DTO\LocalOfiplanDTO.cs" />
+    <Compile Include="DTO\ObtenerSistemaDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
     <Compile Include="DTO\PermisoDTO.cs" />
@@ -274,8 +282,13 @@
     <Compile Include="Features\Monitor\Queries\ListarLocalMonitorQuery.cs" />
     <Compile Include="Features\Puestos\Commands\ActualizarPuestoCommand.cs" />
     <Compile Include="Features\Puestos\Queries\ListarPuestosQuery.cs" />
-    <Compile Include="Features\Seguridad\Commands\LoginCommand.cs" />
+    <Compile Include="Features\Seguridad\Login\Commands\LoginCommand.cs" />
+    <Compile Include="Features\Seguridad\Sistema\Commands\ActualizarSistemaCommand.cs" />
+    <Compile Include="Features\Seguridad\Sistema\Commands\CrearSistemaCommand.cs" />
+    <Compile Include="Features\Seguridad\Sistema\Queries\ListarSistemasQuery.cs" />
+    <Compile Include="Features\Seguridad\Sistema\Queries\ObtenerSistemaQuery.cs" />
     <Compile Include="IoC\AplicacionModule.cs" />
+    <Compile Include="Logger\SerilogClass.cs" />
     <Compile Include="Mappings\AplicacionProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -291,6 +304,10 @@
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">
       <Project>{4E952E2E-F720-4907-9A07-E5F1E70E5108}</Project>
       <Name>SPSA.Autorizadores.Dominio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPSA.Autorizadores.Infraestructura\SPSA.Autorizadores.Infraestructura.csproj">
+      <Project>{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}</Project>
+      <Name>SPSA.Autorizadores.Infraestructura</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

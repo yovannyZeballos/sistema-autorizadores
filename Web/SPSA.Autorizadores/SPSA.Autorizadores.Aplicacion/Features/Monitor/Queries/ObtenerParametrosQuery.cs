@@ -1,39 +1,39 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 {
-	public class ObtenerParametrosQuery : IRequest<ParametrosMonitorBctDTO>
+	public class ObtenerParametrosQuery : IRequest<GenericResponseDTO<List<ParametrosMonitorBctDTO>>>
 	{
 	}
 
-	public class ObtenerParametrosHandler : IRequestHandler<ObtenerParametrosQuery, ParametrosMonitorBctDTO>
+	public class ObtenerParametrosHandler : IRequestHandler<ObtenerParametrosQuery, GenericResponseDTO<List<ParametrosMonitorBctDTO>>>
 	{
-		private readonly IRepositorioProcesoParametro _repositorioProcesoParametro;
+		private readonly IBCTContexto _contexto;
 
-		public ObtenerParametrosHandler(IRepositorioProcesoParametro repositorioProcesoParametro)
+		public ObtenerParametrosHandler()
 		{
-			_repositorioProcesoParametro = repositorioProcesoParametro;
+			_contexto = new BCTContexto();
 		}
 
-		public async Task<ParametrosMonitorBctDTO> Handle(ObtenerParametrosQuery request, CancellationToken cancellationToken)
+		public async Task<GenericResponseDTO<List<ParametrosMonitorBctDTO>>> Handle(ObtenerParametrosQuery request, CancellationToken cancellationToken)
 		{
-			var parametrosMonitorBctDTO = new ParametrosMonitorBctDTO { Ok = true };
+			var parametrosMonitorBctDTO = new GenericResponseDTO<List<ParametrosMonitorBctDTO>> { Ok = true };
 			try
 			{
-				var parametros = await _repositorioProcesoParametro.ListarPorProceso(Constantes.CodigoProcesoBct);
-				parametrosMonitorBctDTO.ToleranciaSegundos 
-					= Convert.ToInt32(parametros.FirstOrDefault(x => x.CodParametro == Constantes.CodigoParametroToleranciaSegundos)?.ValParametro);
-				parametrosMonitorBctDTO.ToleranciaCantidad
-					= Convert.ToInt32(parametros.FirstOrDefault(x => x.CodParametro == Constantes.CodigoParametroToleranciaCantidad)?.ValParametro);
+				var parametros = await _contexto.RepositorioProcesoParametroEmpresa.Obtener(x => x.CodProceso == Constantes.CodigoProcesoBct).ToListAsync();
 
+				parametrosMonitorBctDTO.Data
+					= parametros.Where(x => x.CodParametro == Constantes.CodigoParametroToleranciaCantidad)
+					.Select(x => new ParametrosMonitorBctDTO { ToleranciaCantidad = Convert.ToInt32(x.ValParametro), CodEmpresa = x.CodEmpresa }).ToList();
 			}
 			catch (Exception ex)
 			{

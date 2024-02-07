@@ -60,6 +60,8 @@
     <Compile Include="Entidades\LocalOfiplan.cs" />
     <Compile Include="Entidades\MonitorComando.cs" />
     <Compile Include="Entidades\ProcesoParametro.cs" />
+    <Compile Include="Entidades\ProcesoParametroEmpresa.cs" />
+    <Compile Include="Entidades\SegSistema.cs" />
     <Compile Include="Entidades\SovosCaja.cs" />
     <Compile Include="Entidades\SovosCajaInventario.cs" />
     <Compile Include="Entidades\SovosFormato.cs" />

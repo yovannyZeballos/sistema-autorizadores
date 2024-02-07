@@ -85,6 +85,12 @@
     <Reference Include="Npgsql, Version=4.1.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.4.1.3\lib\net461\Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.3.1.1\lib\net462\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File, Version=5.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.File.5.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -210,6 +216,7 @@
     <Compile Include="Areas\Monitor\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\SistemaController.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorController.cs" />
@@ -265,6 +272,8 @@
     <Content Include="Content\images\brand\favicon.png" />
     <Content Include="Content\images\brand\favicon1.png" />
     <Content Include="Content\images\brand\logo-marcas.png" />
+    <Content Include="Content\images\brand\logo-oechsle.png" />
+    <Content Include="Content\images\brand\logo-promart.png" />
     <Content Include="Content\images\brand\logo-super-food - copia.png" />
     <Content Include="Content\images\brand\logo-super-food-1.png" />
     <Content Include="Content\images\brand\logo-super-food.png" />
@@ -2266,6 +2275,7 @@
     <Content Include="Content\ViewJs\ReportesCajeroCierreResumen.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajero.js" />
+    <Content Include="Content\ViewJs\Sistema.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -2610,9 +2620,7 @@
     <Content Include="Content\scss\utlities\_typography.scss" />
     <Content Include="Content\scss\utlities\_width.scss" />
     <Content Include="Content\scss\_variables.scss" />
-    <Content Include="Areas\Seguridad\Views\web.config" />
     <Content Include="Areas\Autorizadores\Views\web.config" />
-    <Content Include="Areas\Monitor\Views\web.config" />
     <Content Include="Areas\Locales\Views\web.config" />
     <Content Include="Areas\Locales\Views\AdministrarLocal\Index.cshtml" />
     <Content Include="Areas\Locales\Views\AdministrarLocal\_NuevaCaja.cshtml" />
@@ -2639,10 +2647,11 @@
     <Content Include="Areas\Cajeros\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Cajeros\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Cajeros\Views\CajeroVolante\Index.cshtml" />
-    <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\CajaDefectuosa\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\BCT\Index.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Sistema\Index.cshtml" />
+    <Content Include="Areas\Seguridad\Views\web.config" />
+    <Content Include="Areas\Monitor\Views\web.config" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
