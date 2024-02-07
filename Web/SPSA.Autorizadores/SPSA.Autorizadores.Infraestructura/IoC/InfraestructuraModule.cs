@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Infraestructura.Contexto;
 using SPSA.Autorizadores.Infraestructura.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Utiles;
+using System.Runtime.Remoting.Contexts;
 
 namespace SPSA.Autorizadores.Infraestructura.IoC
 {
@@ -30,6 +32,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<RepositorioMonitorComando>().As<IRepositorioMonitorComando>().InstancePerRequest();
 			builder.RegisterType<RepositorioTransactionXmlCT2>().As<IRepositorioTransactionXmlCT2>().InstancePerRequest();
 			builder.RegisterType<RepositorioProcesoParametro>().As<IRepositorioProcesoParametro>().InstancePerRequest();
+
 			base.Load(builder);
 		}
 	}

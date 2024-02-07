@@ -2,7 +2,8 @@
 {
 	public class ParametrosMonitorBctDTO : RespuestaComunDTO
 	{
-        public int ToleranciaSegundos { get; set; }
-        public int ToleranciaCantidad { get; set; }
-    }
+		public int ToleranciaSegundos { get; set; }
+		public int ToleranciaCantidad { get; set; }
+		public string CodEmpresa { get; set; }
+	}
 }
