@@ -699,8 +699,8 @@ var Transfer = (function ($) {
             + '<div class="transfer-double-content clearfix">'
             + '<div class="transfer-double-content-left">'
             + '<div class="transfer-double-content-tabs">'
-            + '<div class="tab-item-name tab-item-name-' + currentTimeStr + ' tab-active">Groups</div>'
-            + '<div class="tab-item-name tab-item-name-' + currentTimeStr + '">Items</div>'
+            + '<div class="tab-item-name tab-item-name-' + currentTimeStr + '">Groups</div>'
+            + '<div class="tab-item-name tab-item-name-' + currentTimeStr + ' tab-active">Items</div>'
             + '</div>'
 
             + '<div class="transfer-double-list transfer-double-list-' + currentTimeStr + ' tab-content-first-' + currentTimeStr + ' tab-content-active">'

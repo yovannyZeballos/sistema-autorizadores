@@ -1,0 +1,505 @@
+﻿@{
+    ViewBag.Title = "Usuario | Seguridad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        #tableEmpresa thead th, #tableUsuarios thead th, #tableCadena thead th {
+            padding: 0px 22px !important;
+        }
+    </style>
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Usuarios</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Seguridad</li>
+            <li class="breadcrumb-item1 active">Usuario</li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Mantenimiento de usuarios")
+            <div class="card-body">
+                <div class="col-xl-12">
+                    <div class="form-group data-table-btn">
+                        <button id="btnNuevoUsuario" class="btn btn-sm btn-primary mb-4  ms-2">
+                            <i class="fe fe-plus-circle"></i> Nuevo Usuario
+                        </button>
+                        <button id="btnEditarUsuario" class="btn btn-sm btn-primary mb-4  ms-2">
+                            <i class="fe fe-edit-3"></i> Editar Usuario
+                        </button>
+                    </div>
+                    <table id="tableUsuarios" class="table text-nowrap border-bottom">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Código colaborador</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Tipo</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Email</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Estado</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Fec. creación</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Usuario creación</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Fec. modificación</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">Usuario modificación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div>
+                    <button id="btnAsociarEmpresa" class="btn btn-sm btn-primary mb-4  ms-2">
+                        <i class="fe fe-list"></i> Empresas
+                    </button>
+                    <button id="btnAsociarCadena" class="btn btn-sm btn-primary mb-4  ms-2">
+                        <i class="fe fe-list"></i> Cadenas
+                    </button>
+                    <button id="btnAsociarRegion" class="btn btn-sm btn-primary mb-4  ms-2">
+                        <i class="fe fe-list"></i> Regiones
+                    </button>
+                    <button id="btnAsociarZona" class="btn btn-sm btn-primary mb-4  ms-2">
+                        <i class="fe fe-list"></i> Zonas
+                    </button>
+                    <button id="btnAsociarLocal" class="btn btn-sm btn-primary mb-4  ms-2">
+                        <i class="fe fe-list"></i> Locales
+                    </button>
+                    <button id="btnAsociarPerfil" class="btn btn-sm btn-primary mb-4  ms-2">
+                        <i class="fe fe-lock"></i> Perfiles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="crearUsuarioModal" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloUsuarioModalLabel">Crear Usuario</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="crearUsuarioForm">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="codUsuario" class="form-label">Código</label>
+                            <input type="text" class="form-control form-control-sm" id="codUsuario" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="codColaborador" class="form-label">Codigo colaborador</label>
+                            <input type="text" class="form-control form-control-sm" id="codColaborador" required>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label for="dirEmail" class="form-label">Email</label>
+                            <input type="text" class="form-control form-control-sm" id="dirEmail" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Tipo</label>
+                                <select class="form-control select2-show-search custom-select" id="tipUsuario">
+                                    <option value="AD">Administrador</option>
+                                    <option value="SG">Seguridad</option>
+                                    <option value="US">Usuario</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Estado</label>
+                                <select class="form-control select2-show-search custom-select" id="indActivo">
+                                    <option value="A">Activo</option>
+                                    <option value="I">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarUsuario">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asociar Empresa-->
+<div class="modal fade" id="asociarEmpresaModal" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="asociarEmpresaModalLabel">Asociar Empresas</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group data-table-btn">
+                    <div class="checkbox  ms-2" style="display: inline-block;">
+                        <label class="unselectable ms-2">
+                            <input id="chkTodos" type="checkbox"> Seleccionar todos
+                        </label>
+                    </div>
+
+                </div>
+                <table id="tableEmpresa" class="table text-nowrap border-bottom">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0" style="font-size: 11px;"></th>
+                            <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarEmpresa">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asociar Cadena-->
+<div class="modal fade" id="asociarCadenaModal" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="asociarCadenaModalLabel">Asociar Cadenas</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control custom-select" id="cboEmpresaCadena">
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table id="tableCadena" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;"></th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarCadenas">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asociar Region-->
+<div class="modal fade" id="asociarRegionModal" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="asociarRegionModalLabel">Asociar Regiones</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control custom-select" id="cboEmpresaRegion">
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control custom-select" id="cboCadenaRegion">
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table id="tableRegion" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;"></th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarRegiones">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asociar Zonas-->
+<div class="modal fade" id="asociarZonaModal" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="asociarZonaModalLabel">Asociar Zonas</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control custom-select" id="cboEmpresaZona">
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control custom-select" id="cboCadenaZona">
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Region</label>
+                            <select class="form-control custom-select" id="cboRegionZona">
+                                <option label="Seleccione una region"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table id="tableZona" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;"></th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarZonas">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Asociar Zonas-->
+<div class="modal fade" id="asociarLocalModal" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="asociarLocalModalLabel">Asociar Locales</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control custom-select" id="cboEmpresaLocal">
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control custom-select" id="cboCadenaLocal">
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Region</label>
+                            <select class="form-control custom-select" id="cboRegionLocal">
+                                <option label="Seleccione una region"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Zona</label>
+                            <select class="form-control custom-select" id="cboZonaLocal">
+                                <option label="Seleccione una zona"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group data-table-btn">
+                            <div class="checkbox  ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkTodosLocal" type="checkbox"> Seleccionar todos
+                                </label>
+                            </div>
+
+                        </div>
+                        <table id="tableLocal" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;"></th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarLocales">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Asociar Perfil-->
+<div class="modal fade" id="asociarPerfilModal" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="asociarPerfilModalLabel">Asociar Perfiles</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group data-table-btn">
+                    <div class="checkbox  ms-2" style="display: inline-block;">
+                        <label class="unselectable ms-2">
+                            <input id="chkTodosPerfil" type="checkbox"> Seleccionar todos
+                        </label>
+                    </div>
+
+                </div>
+                <table id="tablePerfil" class="table text-nowrap border-bottom">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0" style="font-size: 11px;"></th>
+                            <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardarPerfil">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/Usuario.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Usuario.init();
+        });
+    </script>
+}
+
+

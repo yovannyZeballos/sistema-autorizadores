@@ -64,6 +64,7 @@ namespace SPSA.Autorizadores.Web.Areas.Seguridad.Controllers
 		[HttpPost]
 		public async Task<JsonResult> ActualizarSistema(ActualizarSistemaCommand command)
 		{
+			command.UsuModifica = WebSession.Login;
 			var respuesta = await _mediator.Send(command);
 			return Json(respuesta);
 		}
@@ -80,6 +81,16 @@ namespace SPSA.Autorizadores.Web.Areas.Seguridad.Controllers
 			return Json(response);
 		}
 
+		/// <summary>
+		/// Acción para listar los sistemas de seguridad.
+		/// </summary>
+		/// <returns>JsonResult con la lista de sistemas activos de seguridad.</returns>
+		[HttpPost]
+		public async Task<JsonResult> ListarActivos()
+		{
+			var response = await _mediator.Send(new ListarSistemasActivosQuery());
+			return Json(response);
+		}
 
 	}
 }

@@ -19,11 +19,42 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		{
 			RepositorioSegSistema = new RepositorioSegSistema(this);
 			RepositorioProcesoParametroEmpresa = new RepositorioProcesoParametroEmpresa(this);
+			RepositorioSegUsuario = new RepositorioSegUsuario(this);
+			RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
+			RepositorioSegEmpresa = new RepositorioSegEmpresa(this);
+			RepositorioSegCadena = new RepositorioSegCadena(this);
+			RepositorioMaeCadena = new RepositorioMaeCadena(this);
+			RepositorioMaeRegion = new RepositorioMaeRegion(this);
+			RepositorioMaeZona = new RepositorioMaeZona(this);
+			RepositorioMaeLocal = new RepositorioMaeLocal(this);
+			RepositorioSegRegion = new RepositorioSegRegion(this);
+			RepositorioSegZona = new RepositorioSegZona(this);
+			RepositorioSegLocal = new RepositorioSegLocal(this);
+			RepositorioSegPerfil = new RepositorioSegPerfil(this);
+			RepositorioSegPerfilUsuario = new RepositorioSegPerfilUsuario(this);
+			RepositorioSegMenu = new RepositorioSegMenu(this);
+			RepositorioSegPerfilMenu = new RepositorioSegPerfilMenu(this);
+			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
+		public IRepositorioSegUsuario RepositorioSegUsuario { get; private set; }
+		public IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; private set; }
+		public IRepositorioSegEmpresa RepositorioSegEmpresa { get; private set; }
+		public IRepositorioSegCadena RepositorioSegCadena { get; private set; }
+		public IRepositorioMaeCadena RepositorioMaeCadena { get; private set; }
+		public IRepositorioMaeRegion RepositorioMaeRegion { get; private set; }
+		public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
+		public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
+		public IRepositorioSegRegion RepositorioSegRegion { get; private set; }
+		public IRepositorioSegZona RepositorioSegZona { get; private set; }
+		public IRepositorioSegLocal RepositorioSegLocal { get; private set; }
+		public IRepositorioSegPerfil RepositorioSegPerfil { get; private set; }
+		public IRepositorioSegPerfilUsuario RepositorioSegPerfilUsuario { get; private set; }
+		public IRepositorioSegMenu RepositorioSegMenu { get; private set; }
+		public IRepositorioSegPerfilMenu RepositorioSegPerfilMenu { get; private set; }
 
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -31,6 +62,21 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoParametroEmpresaTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegSistemaTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegUsuarioTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegEmpresaTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegCadenaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegRegionTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegZonaTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegLocalTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegPerfilTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegPerfilUsuarioTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegMenuTypeConfiguration());
+			modelBuilder.Configurations.Add(new SegPerfilMenuTypeConfiguration());
 		}
 
 		public bool GuardarCambios()

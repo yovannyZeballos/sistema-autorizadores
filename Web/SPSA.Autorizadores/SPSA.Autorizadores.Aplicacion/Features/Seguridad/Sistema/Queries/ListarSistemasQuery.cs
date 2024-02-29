@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
@@ -22,6 +24,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries
 	{
 		private readonly IBCTContexto _contexto;
 		private readonly IMapper _mapper;
+		private readonly ILogger _logger = SerilogClass._log;
+
 
 		public ListarSistemasHandler(IMapper mapper)
 		{
@@ -47,7 +51,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries
 			catch (Exception ex)
 			{
 				response.Ok = false;
-				response.Mensaje = ex.Message;
+				response.Mensaje = "Ocurrió un error al listar los sistemas";
+				_logger.Error(ex, response.Mensaje);
 			}
 			return response;
 		}

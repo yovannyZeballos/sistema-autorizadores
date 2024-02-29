@@ -4,7 +4,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioSegSistema : RepositorioGenerico<BCTContexto, SegSistema>, IRepositorioSegSistema
+	public class RepositorioSegSistema : RepositorioGenerico<BCTContexto, Seg_Sistema>, IRepositorioSegSistema
 	{
 		public RepositorioSegSistema(BCTContexto context) : base(context) { }
 
