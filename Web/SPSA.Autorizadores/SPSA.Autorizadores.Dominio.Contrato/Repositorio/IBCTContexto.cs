@@ -7,6 +7,21 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 	{
 		IRepositorioSegSistema RepositorioSegSistema { get; }
 		IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; }
+		IRepositorioSegUsuario RepositorioSegUsuario { get; }
+		IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; }
+		IRepositorioSegEmpresa RepositorioSegEmpresa { get; }
+		IRepositorioSegCadena RepositorioSegCadena { get; }
+		IRepositorioMaeCadena RepositorioMaeCadena { get; }
+		IRepositorioMaeRegion RepositorioMaeRegion { get; }
+		IRepositorioMaeZona RepositorioMaeZona { get; }
+		IRepositorioMaeLocal RepositorioMaeLocal { get; }
+		IRepositorioSegRegion RepositorioSegRegion { get; }
+		IRepositorioSegZona RepositorioSegZona { get; }
+		IRepositorioSegLocal RepositorioSegLocal { get; }
+		IRepositorioSegPerfil RepositorioSegPerfil { get; }
+		IRepositorioSegPerfilUsuario RepositorioSegPerfilUsuario { get; }
+		IRepositorioSegMenu RepositorioSegMenu { get; }
+		IRepositorioSegPerfilMenu RepositorioSegPerfilMenu { get; }
 
 		bool GuardarCambios();
 		Task<bool> GuardarCambiosAsync();

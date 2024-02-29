@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -43,5 +44,12 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		/// <param name="predicado">El predicado para filtrar las entidades. Si es null, se devolverán todas las entidades.</param>
 		/// <returns>Las entidades que cumplen con el predicado especificado.</returns>
 		IQueryable<TEntidad> Obtener(Expression<Func<TEntidad, bool>> predicado = null);
+
+		/// <summary>
+		/// Elimina un rango de entidades del repositorio.
+		/// </summary>
+		/// <param name="entity">Las entidades a eliminar.</param>
+		void EliminarRango(ICollection<TEntidad> entities);
+
 	}
 }

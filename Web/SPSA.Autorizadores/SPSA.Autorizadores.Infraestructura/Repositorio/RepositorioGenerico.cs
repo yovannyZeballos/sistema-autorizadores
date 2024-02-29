@@ -35,6 +35,11 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			_contexto.Set<TEntidad>().Remove(entidad);
 		}
 
+		public void EliminarRango(ICollection<TEntidad> entidades)
+		{
+			_contexto.Set<TEntidad>().RemoveRange(entidades);
+		}
+
 		public async Task<bool> Existe(Expression<Func<TEntidad, bool>> predicado)
 		{
 			IQueryable<TEntidad> query = _contexto.Set<TEntidad>();

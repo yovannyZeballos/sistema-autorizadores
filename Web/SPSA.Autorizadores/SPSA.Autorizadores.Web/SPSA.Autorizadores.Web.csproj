@@ -211,13 +211,20 @@
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\RegionController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\CadenaController.cs" />
+    <Compile Include="Areas\Maestros\MaestrosAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\BCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\SistemaController.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
+    <Compile Include="Areas\Maestros\Controllers\ZonaController.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorController.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadoresMassController.cs" />
@@ -2240,6 +2247,18 @@
     <Content Include="Content\plugins\timeline\js\jquery.js" />
     <Content Include="Content\plugins\timeline\js\jquery.timelify.js" />
     <Content Include="Content\plugins\treeview\treeview.js" />
+    <Content Include="Content\plugins\vakata-jstree\dist\jstree.js" />
+    <Content Include="Content\plugins\vakata-jstree\dist\jstree.min.js" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\32px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\40px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\style.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\style.min.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\throbber.gif" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\32px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\40px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\style.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\style.min.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\throbber.gif" />
     <Content Include="Content\plugins\vertical-scroll\jquery.bootstrap.newsbox.js" />
     <Content Include="Content\plugins\vertical-scroll\vertical-scroll.js" />
     <Content Include="Content\plugins\wowmaster\wow.js" />
@@ -2271,10 +2290,13 @@
     <Content Include="Content\ViewJs\InventarioServidor.js" />
     <Content Include="Content\ViewJs\Login.js" />
     <Content Include="Content\ViewJs\CierreEOD.js" />
+    <Content Include="Content\ViewJs\Menu.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierreResumen.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajero.js" />
+    <Content Include="Content\ViewJs\Perfil.js" />
+    <Content Include="Content\ViewJs\Usuario.js" />
     <Content Include="Content\ViewJs\Sistema.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -2652,6 +2674,10 @@
     <Content Include="Areas\Seguridad\Views\Sistema\Index.cshtml" />
     <Content Include="Areas\Seguridad\Views\web.config" />
     <Content Include="Areas\Monitor\Views\web.config" />
+    <Content Include="Areas\Seguridad\Views\Usuario\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\web.config" />
+    <Content Include="Areas\Seguridad\Views\Perfil\Index.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Menu\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2689,6 +2715,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Maestros\Views\Cadena\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

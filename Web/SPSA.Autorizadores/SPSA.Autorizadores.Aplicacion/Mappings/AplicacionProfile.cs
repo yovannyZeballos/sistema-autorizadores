@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using pe.oechsle.Entity;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Dominio.Entidades;
 
 namespace SPSA.Autorizadores.Aplicacion.Mappings
@@ -54,10 +57,32 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 				.ReverseMap();
 
 			CreateMap<ListBox, ListBoxDTO>();
-			CreateMap<ListarSistemaDTO, SegSistema>().ReverseMap();
-			CreateMap<CrearSistemaCommand, SegSistema>().ReverseMap();
-			CreateMap<ActualizarSistemaCommand, SegSistema>().ReverseMap();
-			CreateMap<SegSistema, ObtenerSistemaDTO>();
+			CreateMap<ListarSistemaDTO, Seg_Sistema>().ReverseMap();
+			CreateMap<CrearSistemaCommand, Seg_Sistema>().ReverseMap();
+			CreateMap<ActualizarSistemaCommand, Seg_Sistema>().ReverseMap();
+			CreateMap<Seg_Sistema, ObtenerSistemaDTO>();
+			CreateMap<ListarUsuarioDTO, Seg_Usuario>().ReverseMap();
+			CreateMap<CrearUsuarioCommand, Seg_Usuario>().ReverseMap();
+			CreateMap<ActualizarUsuarioCommand, Seg_Usuario>().ReverseMap();
+			CreateMap<Mae_Empresa, ListarEmpresaDTO>().ReverseMap();
+			CreateMap<Seg_Empresa, ListarEmpresaDTO>()
+				.ForPath(dest => dest.NomEmpresa, opt => opt.MapFrom(src => src.Mae_Empresa == null ? "" : src.Mae_Empresa.NomEmpresa));
+			CreateMap<Seg_Cadena, ListarCadenaDTO>()
+				.ForPath(dest => dest.NomCadena, opt => opt.MapFrom(src => src.Mae_Cadena == null ? "" : src.Mae_Cadena.NomCadena));
+			CreateMap<Seg_Region, ListarRegionDTO>()
+				.ForPath(dest => dest.NomRegion, opt => opt.MapFrom(src => src.Mae_Region == null ? "" : src.Mae_Region.NomRegion));
+			CreateMap<Mae_Cadena, ListarCadenaDTO>();
+			CreateMap<Mae_Region, ListarRegionDTO>();
+			CreateMap<Mae_Zona, ListarZonaDTO>();
+			CreateMap<Seg_Zona, ListarZonaDTO>()
+				.ForPath(dest => dest.NomZona, opt => opt.MapFrom(src => src.Mae_Zona == null ? "" : src.Mae_Zona.NomZona));
+			CreateMap<Mae_Local, ListarLocalDTO>();
+			CreateMap<ListarPerfilDTO, Seg_Perfil>().ReverseMap();
+			CreateMap<CrearPerfilCommand, Seg_Perfil>().ReverseMap();
+			CreateMap<ActualizarPerfilCommand, Seg_Perfil>().ReverseMap();
+			CreateMap<CrearMenuCommand, Seg_Menu>();
+			CreateMap<Seg_Menu, ListarMenuDTO>();
+			CreateMap<ActualizarMenuCommand, Seg_Menu>();
 
 		}
 	}
