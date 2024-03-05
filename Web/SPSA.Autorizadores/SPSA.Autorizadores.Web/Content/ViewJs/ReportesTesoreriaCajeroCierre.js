@@ -6,8 +6,8 @@ var urlListarLocales = baseUrl + 'Monitor/ReporteTesoreria/ListarLocales';
 
 var urlObtenerEmpresa = baseUrl + 'Maestros/Empresa/ObtenerEmpresa';
 
-const urlReporteCierre = '/Monitor/ReporteCierre/ReporteCierre';
-const urlReporteCierrePivot = '/Monitor/ReporteCierre/ReportePivotCierre';
+const urlReporteCierre = '/Monitor/ReporteTesoreria/ReporteCierre';
+const urlReporteCierrePivot = '/Monitor/ReporteTesoreria/ReportePivotCierre';
 
 var dataTableReporte = null;
 var listadoReporte = [];
@@ -565,12 +565,6 @@ const ReportesTesoreriaCajeroCierre = function () {
         return ok;
     }
 
-
-
-    //////////////
-
-    
-
     const fechaActual = function () {
         let date = new Date()
 
@@ -581,9 +575,12 @@ const ReportesTesoreriaCajeroCierre = function () {
         $("#cboMes").val(month);
     }
 
-    const listarReporte = function () {
+    const listarReporte = async function () {
+
+        const objEmpresa = await obtenerEmpresa($("#cboEmpresa").val());
+
         const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
+            CodEmpresa: objEmpresa.Data.CodSociedad,
             Año: $("#cboAño").val(),
             Mes: $("#cboMes").val()
         };

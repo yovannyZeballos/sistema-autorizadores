@@ -32,6 +32,24 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> ReporteCierre(ReporteCierreQuery request)
+        {
+            var response = await _mediator.Send(request);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ReporteCierreResumen(ReporteCierreResumenQuery request)
+        {
+            var response = await _mediator.Send(request);
+            var json = Json(response);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        [HttpPost]
         public async Task<JsonResult> ListarEmpresas(ListarEmpresasQuery request)
         {
             request.CodUsuario = WebSession.Login;
