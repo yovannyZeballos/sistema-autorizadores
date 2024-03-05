@@ -40,14 +40,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
-		public IRepositorioSegUsuario RepositorioSegUsuario { get; private set; }
-		public IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; private set; }
+		public IRepositorioSegUsuario RepositorioSegUsuario { get; private set; }		
 		public IRepositorioSegEmpresa RepositorioSegEmpresa { get; private set; }
-		public IRepositorioSegCadena RepositorioSegCadena { get; private set; }
-		public IRepositorioMaeCadena RepositorioMaeCadena { get; private set; }
-		public IRepositorioMaeRegion RepositorioMaeRegion { get; private set; }
+		public IRepositorioSegCadena RepositorioSegCadena { get; private set; }	
 		public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
-		public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
 		public IRepositorioSegRegion RepositorioSegRegion { get; private set; }
 		public IRepositorioSegZona RepositorioSegZona { get; private set; }
 		public IRepositorioSegLocal RepositorioSegLocal { get; private set; }
@@ -56,20 +52,20 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioSegMenu RepositorioSegMenu { get; private set; }
 		public IRepositorioSegPerfilMenu RepositorioSegPerfilMenu { get; private set; }
 
+        public IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; private set; }
+        public IRepositorioMaeCadena RepositorioMaeCadena { get; private set; }
+        public IRepositorioMaeRegion RepositorioMaeRegion { get; private set; }
+        public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
+        public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoParametroEmpresaTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegSistemaTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegUsuarioTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegEmpresaTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegCadenaTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegRegionTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegZonaTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegLocalTypeConfiguration());
@@ -77,7 +73,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new SegPerfilUsuarioTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegMenuTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegPerfilMenuTypeConfiguration());
-		}
+
+            modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+        }
 
 		public bool GuardarCambios()
 		{

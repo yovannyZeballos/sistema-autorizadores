@@ -58,6 +58,7 @@
     <Compile Include="Entidades\ListBox.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
+    <Compile Include="Entidades\Mae_Caja.cs" />
     <Compile Include="Entidades\Mae_Cadena.cs" />
     <Compile Include="Entidades\Mae_Empresa.cs" />
     <Compile Include="Entidades\Mae_Local.cs" />
