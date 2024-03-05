@@ -1,0 +1,40 @@
+﻿@model SPSA.Autorizadores.Aplicacion.DTO.MaeZonaDTO
+
+<div class="row needs-validation" id="formZona">
+    <div class="col-xl-12" style="display: none;">
+        <div class="form-group">
+            <label for="txtCodEmpresa" class="form-label">Empresa</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodEmpresa" value="@Model.CodEmpresa" required disabled>
+        </div>
+    </div>
+    <div class="col-xl-12" style="display: none;">
+        <div class="form-group">
+            <label for="txtCodCadena" class="form-label">Cadena</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodCadena" value="@Model.CodCadena" required disabled>
+        </div>
+    </div>
+    <div class="col-xl-12" style="display: none;">
+        <div class="form-group">
+            <label for="txtCodRegion" class="form-label">Region</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodRegion" value="@Model.CodRegion" required disabled>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodZona" class="form-label">Código</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodZona" value="@Model.CodZona" maxlength="3" required>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtNomZona" class="form-label">Nombre</label>
+            <input type="text" class="form-control form-control-sm" id="txtNomZona" value="@Model.NomZona" maxlength="100" required oninput="this.value = this.value.toUpperCase()">
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodCordina" class="form-label">CodCordina</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodCordina" value="@Model.CodCordina" maxlength="10" required>
+        </div>
+    </div>
+</div>

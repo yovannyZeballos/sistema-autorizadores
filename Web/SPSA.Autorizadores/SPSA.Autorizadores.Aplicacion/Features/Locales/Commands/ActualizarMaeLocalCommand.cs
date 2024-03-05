@@ -2,12 +2,9 @@
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.Zonas.Commands;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
-using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
-using SPSA.Autorizadores.Infraestructura.Repositorio;
 using System;
 using System.Data.Entity;
 using System.Threading;

@@ -1,10 +1,5 @@
 ﻿using SPSA.Autorizadores.Dominio.Entidades;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Configuracion
 {
@@ -25,7 +20,9 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.CodZona).HasColumnName("COD_ZONA");
             Property(x => x.CodLocal).HasColumnName("COD_LOCAL");
             Property(x => x.NumCaja).HasColumnName("NUM_CAJA");
-            //Property(x => x.CodCordina).HasColumnName("COD_CORDINA");
+            Property(x => x.IpAddress).HasColumnName("IP_ADDRESS");
+            Property(x => x.TipOs).HasColumnName("TIP_OS");
+            Property(x => x.TipEstado).HasColumnName("TIP_ESTADO");
         }
     }
 }

@@ -245,11 +245,11 @@
     <Compile Include="Features\Cadenas\Queries\ListarCadenasAsociadasQuery.cs" />
     <Compile Include="Features\Cadenas\Queries\ListarMaeCadenaQuery.cs" />
     <Compile Include="Features\Cadenas\Queries\ObtenerMaeCadenaQuery.cs" />
-    <Compile Include="Features\Cajas\Command\ActualizarMaeCajaCommand.cs" />
-    <Compile Include="Features\Cajas\Command\CrearMaeCajaCommand.cs" />
-    <Compile Include="Features\Cajas\Command\DescargarMaeCajaCommand.cs" />
-    <Compile Include="Features\Cajas\Command\EliminarMaeCajasCommand.cs" />
-    <Compile Include="Features\Cajas\Command\ImportarMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\ActualizarMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\CrearMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\DescargarMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\EliminarMaeCajasCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\ImportarMaeCajaCommand.cs" />
     <Compile Include="Features\Cajas\Queries\ListarMaeCajaQuery.cs" />
     <Compile Include="Features\Cajas\Queries\ObtenerMaeCajaQuery.cs" />
     <Compile Include="Features\Cajeros\Commands\ReporteDiferenciaCajaExcelCommand.cs" />
@@ -370,6 +370,7 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarCadenasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
+    <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
     <Compile Include="Features\Zona\Commands\ActualizarMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\CrearMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\ImportarMaeZonaCommand.cs" />
@@ -399,7 +400,9 @@
       <Name>SPSA.Autorizadores.Infraestructura</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Features\TablasMae\Queries\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
