@@ -171,12 +171,24 @@
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
+    <Compile Include="DTO\ListarMaeCadenaDTO.cs" />
+    <Compile Include="DTO\ListarMaeCajaDTO.cs" />
+    <Compile Include="DTO\ListarMaeEmpresaDTO.cs" />
+    <Compile Include="DTO\ListarMaeLocalDTO.cs" />
+    <Compile Include="DTO\ListarMaeRegionDTO.cs" />
+    <Compile Include="DTO\ListarMaeZonaDTO.cs" />
     <Compile Include="DTO\ListarMenuDTO.cs" />
     <Compile Include="DTO\ListarPerfilDTO.cs" />
     <Compile Include="DTO\ListarZonaDTO.cs" />
     <Compile Include="DTO\ListarRegionDTO.cs" />
     <Compile Include="DTO\ListarSistemaDTO.cs" />
     <Compile Include="DTO\ListarUsuarioDTO.cs" />
+    <Compile Include="DTO\MaeCadenaDTO.cs" />
+    <Compile Include="DTO\MaeCajaDTO.cs" />
+    <Compile Include="DTO\MaeEmpresaDTO.cs" />
+    <Compile Include="DTO\MaeLocalDTO.cs" />
+    <Compile Include="DTO\MaeRegionDTO.cs" />
+    <Compile Include="DTO\MaeZonaDTO.cs" />
     <Compile Include="DTO\ObtenerComunDTO.cs" />
     <Compile Include="DTO\GenericResponseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />
@@ -206,6 +218,12 @@
     <Compile Include="DTO\EmpresaDTO.cs" />
     <Compile Include="DTO\LocalDTO.cs" />
     <Compile Include="DTO\LocalOfiplanDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeCadenaDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeCajaDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeEmpresaDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeLocalDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeRegionDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeZonaDTO.cs" />
     <Compile Include="DTO\ObtenerSistemaDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
@@ -221,9 +239,32 @@
     <Compile Include="Extensiones\DataSetExtensions.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
+    <Compile Include="Features\Cadenas\Commands\ActualizarMaeCadenaCommand.cs" />
+    <Compile Include="Features\Cadenas\Commands\CrearMaeCadenaCommand.cs" />
+    <Compile Include="Features\Cadenas\Commands\ImportarMaeCadenaCommand.cs" />
     <Compile Include="Features\Cadenas\Queries\ListarCadenasAsociadasQuery.cs" />
+    <Compile Include="Features\Cadenas\Queries\ListarMaeCadenaQuery.cs" />
+    <Compile Include="Features\Cadenas\Queries\ObtenerMaeCadenaQuery.cs" />
+    <Compile Include="Features\Cajas\Commands\ActualizarMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\CrearMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\DescargarMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\EliminarMaeCajasCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\ImportarMaeCajaCommand.cs" />
+    <Compile Include="Features\Cajas\Queries\ListarMaeCajaQuery.cs" />
+    <Compile Include="Features\Cajas\Queries\ObtenerMaeCajaQuery.cs" />
     <Compile Include="Features\Cajeros\Commands\ReporteDiferenciaCajaExcelCommand.cs" />
+    <Compile Include="Features\Empresas\Commands\ActualizarMaeEmpresaCommand.cs" />
+    <Compile Include="Features\Empresas\Commands\CrearMaeEmpresaCommand.cs" />
+    <Compile Include="Features\Empresas\Commands\ImportarMaeEmpresaCommand.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasAsociadasQuery.cs" />
+    <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
+    <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
+    <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Commands\ImportarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Queries\ListarMaeLocalQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ObtenerMaeLocalQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreResumenQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierrePivotQuery.cs" />
@@ -231,6 +272,11 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Commands\CrearCajeroVolanteCommand.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
+    <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
+    <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />
+    <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />
+    <Compile Include="Features\Regiones\Queries\ListarMaeRegionQuery.cs" />
+    <Compile Include="Features\Regiones\Queries\ObtenerMaeRegionQuery.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\EliminarMenuCommand.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\ActualizarMenuCommand .cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\CrearMenuCommand.cs" />
@@ -324,7 +370,13 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarCadenasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
+    <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
+    <Compile Include="Features\Zona\Commands\ActualizarMaeZonaCommand.cs" />
+    <Compile Include="Features\Zona\Commands\CrearMaeZonaCommand.cs" />
+    <Compile Include="Features\Zona\Commands\ImportarMaeZonaCommand.cs" />
+    <Compile Include="Features\Zona\Queries\ListarMaeZonaQuery.cs" />
     <Compile Include="Features\Zona\Queries\ListarZonasAciadasQuery.cs" />
+    <Compile Include="Features\Zona\Queries\ObtenerMaeZonaQuery.cs" />
     <Compile Include="IoC\AplicacionModule.cs" />
     <Compile Include="Logger\SerilogClass.cs" />
     <Compile Include="Mappings\AplicacionProfile.cs" />
@@ -348,7 +400,9 @@
       <Name>SPSA.Autorizadores.Infraestructura</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Features\TablasMae\Queries\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,7 +1,12 @@
 ﻿using MediatR;
+using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries;
+using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
@@ -31,5 +36,58 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 			var respose = await _mediator.Send(query);
 			return Json(respose);
 		}
-	}
+        [HttpPost]
+        public async Task<JsonResult> ObtenerRegion(ObtenerMaeRegionQuery request)
+        {
+            var respose = await _mediator.Send(request);
+            return Json(respose);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ListarRegion(ListarMaeRegionQuery request)
+        {
+            var respose = await _mediator.Send(request);
+            return Json(respose);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CrearRegion(CrearMaeRegionCommand command)
+        {
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ActualizarRegion(ActualizarMaeRegionCommand command)
+        {
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ImportarExcelRegion(HttpPostedFileBase archivoExcel)
+        {
+            if (archivoExcel is null)
+            {
+                var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
+                response.Ok = false;
+                response.Mensaje = "Se encontraron algunos errores en el archivo";
+                response.Errores.Add(new ErroresExcelDTO
+                {
+                    Fila = 1,
+                    Mensaje = "No se ha seleccionado ningun archivo."
+                });
+
+                return Json(response);
+            }
+            else
+            {
+                var command = new ImportarMaeRegionCommand { ArchivoExcel = archivoExcel.InputStream };
+                var response = await _mediator.Send(command);
+
+                return Json(response);
+            }
+        }
+
+    }
 }

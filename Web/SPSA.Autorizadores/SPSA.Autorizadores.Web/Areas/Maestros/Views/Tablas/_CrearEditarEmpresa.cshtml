@@ -1,0 +1,36 @@
+﻿
+@model SPSA.Autorizadores.Aplicacion.DTO.MaeEmpresaDTO
+
+<div class="row needs-validation" id="formEmpresa">
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodEmpresa" class="form-label">Empresa</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodEmpresa" value="@Model.CodEmpresa" maxlength="2" required>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtNomEmpresa" class="form-label">Nombre</label>
+            <input type="text" class="form-control form-control-sm" id="txtNomEmpresa" value="@Model.NomEmpresa" maxlength="50" required oninput="this.value = this.value.toUpperCase()">
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtRuc" class="form-label">Ruc</label>
+            <input type="text" class="form-control form-control-sm" id="txtRuc" value="@Model.Ruc" maxlength="11" required>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodSociedad" class="form-label">CodSociedad</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodSociedad" value="@Model.CodSociedad" maxlength="4" required>
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodEmpresaOfi" class="form-label">CodEmpresaOfi</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodEmpresaOfi" value="@Model.CodEmpresaOfi" maxlength="2" required>
+        </div>
+    </div>
+</div>

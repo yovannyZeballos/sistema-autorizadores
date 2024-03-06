@@ -130,6 +130,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeZonaTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeRegionTypeConfiguration.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Repositorio\RepositorioInventarioTipo.cs" />
     <Compile Include="Repositorio\RepositorioLocal.cs" />
     <Compile Include="Repositorio\RepositorioLocalOfiplan.cs" />
+    <Compile Include="Repositorio\RepositorioMaeCaja.cs" />
     <Compile Include="Repositorio\RepositorioMaeLocal.cs" />
     <Compile Include="Repositorio\RepositorioMaeZona.cs" />
     <Compile Include="Repositorio\RepositorioMaeRegion.cs" />

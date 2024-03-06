@@ -1,0 +1,34 @@
+﻿@model SPSA.Autorizadores.Aplicacion.DTO.MaeRegionDTO
+
+<div class="row needs-validation" id="formRegion">
+    <div class="col-xl-12" style="display: none;">
+        <div class="form-group">
+            <label for="txtCodEmpresa" class="form-label">Empresa</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodEmpresa" value="@Model.CodEmpresa" required disabled>
+        </div>
+    </div>
+    <div class="col-xl-12" style="display: none;">
+        <div class="form-group">
+            <label for="txtCodCadena" class="form-label">Cadena</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodCadena" value="@Model.CodCadena" required disabled>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodRegion" class="form-label">Codigo</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodRegion" value="@Model.CodRegion" maxlength="2" required>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtNomRegion" class="form-label">Nombre</label>
+            <input type="text" class="form-control form-control-sm" id="txtNomRegion" value="@Model.NomRegion" maxlength="50" required oninput="this.value = this.value.toUpperCase()">
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="form-group">
+            <label for="txtCodRegional" class="form-label">CodRegional</label>
+            <input type="text" class="form-control form-control-sm" id="txtCodRegional" value="@Model.CodRegional" maxlength="10" required>
+        </div>
+    </div>
+</div>
