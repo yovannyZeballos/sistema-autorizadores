@@ -8,6 +8,7 @@ using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -20,13 +21,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
         public List<MaeCajaDTO> Cajas { get; set; }
     }
 
-    public class EliminarMaestroCajasHandler : IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>
+    public class EliminarMaeCajasHandler : IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>
     {
         private readonly IBCTContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public EliminarMaestroCajasHandler(IMapper mapper)
+        public EliminarMaeCajasHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new BCTContexto();
@@ -36,33 +37,33 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
         public async Task<RespuestaComunDTO> Handle(EliminarMaeCajasCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new RespuestaComunDTO { Ok = true };
-            //try
-            //{
+            try
+            {
 
-            //    foreach (var cajaEliminar in request.Cajas)
-            //    {
-            //        var existeCaja = await _repositorioMaestroCaja.Obtener(cajaEliminar.CodEmpresa, cajaEliminar.CodCadena, cajaEliminar.CodRegion, cajaEliminar.CodZona, cajaEliminar.CodLocal, cajaEliminar.NumCaja);
-            //        if (existeCaja == null)
-            //        {
-            //            respuesta.Ok = false;
-            //            respuesta.Mensaje = "La caja no existe";
-            //            return respuesta;
-            //        }
+                foreach (var cajaEliminar in request.Cajas)
+                {
+                    var caja = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == cajaEliminar.CodEmpresa && x.CodCadena == cajaEliminar.CodCadena && x.CodRegion == cajaEliminar.CodRegion && x.CodZona == cajaEliminar.CodZona && x.NumCaja == cajaEliminar.NumCaja).FirstOrDefaultAsync();
+                    if (caja is null)
+                    {
+                        respuesta.Ok = false;
+                        respuesta.Mensaje = "Caja no existe";
+                        return respuesta;
+                    }
 
-            //        var caja = _mapper.Map<MaestroCaja>(cajaEliminar);
-            //        caja.TipEstado = "E";
-            //        await _repositorioMaestroCaja.Actualizar(caja);     
-            //    }
+                    caja.TipEstado = "E";
+                    _contexto.RepositorioMaeCaja.Actualizar(caja);
+                    await _contexto.GuardarCambiosAsync();
+                    respuesta.Mensaje = "Caja actualizado exitosamente.";
+                }
 
-            //    respuesta.Mensaje = "Cajas actualizado exitosamente.";
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    respuesta.Ok = false;
-            //    respuesta.Mensaje = "Ocurrió un error al crear local";
-            //    _logger.Error(ex, "Ocurrió un error al crear local");
-            //}
+                respuesta.Mensaje = "Cajas actualizado exitosamente.";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Ok = false;
+                respuesta.Mensaje = "Ocurrió un error al crear local";
+                _logger.Error(ex, "Ocurrió un error al crear local");
+            }
             return respuesta;
         }
     }

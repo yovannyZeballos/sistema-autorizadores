@@ -729,7 +729,7 @@ var AdministrarMaestroLocal = function () {
                 }
                 $("#modalLocales").modal('hide');
 
-                setearLocal(response.Local);
+                setearLocal(response.Data);
                 desabilitarBotonosCaja(false);
                 desabilitarControles(true)
                 $("#btnGuardarLocal").prop("disabled", false);
@@ -848,7 +848,7 @@ var AdministrarMaestroLocal = function () {
                 url: urlListarCajas,
                 type: "post",
                 dataType: "JSON",
-                dataSrc: "Cajas",
+                dataSrc: "Data",
                 data: { request },
                 beforeSend: function () {
                     showLoading();

@@ -10,6 +10,8 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
+using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 {
@@ -38,28 +40,48 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
         {
             var respuesta = new DescargarMaestroDTO();
 
-            //try
-            //{
-            //    var dt = await _repositorioMaestroLocal.Descargar(request.CodEmpresa, request.CodCadena, request.CodRegion, request.CodZona);
-            //    dt.TableName = "Locales";
-            //    string fileName = $"MaestroLocales_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
-            //    using (XLWorkbook wb = new XLWorkbook())
-            //    {
-            //        wb.Worksheets.Add(dt);
-            //        using (MemoryStream stream = new MemoryStream())
-            //        {
-            //            wb.SaveAs(stream);
-            //            respuesta.Archivo = Convert.ToBase64String(stream.ToArray());
-            //            respuesta.NombreArchivo = fileName;
-            //            respuesta.Ok = true;
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    respuesta.Ok = false;
-            //    respuesta.Mensaje = ex.Message;
-            //}
+            try
+            {
+                var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona).ToListAsync();
+
+                string fileName = $"MaestroLocales_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
+
+                using (var wb = new XLWorkbook())
+                {
+                    var ws = wb.Worksheets.Add("Locales");
+
+                    var headerRow = ws.Row(1);
+                    var properties = listaLocales.First().GetType().GetProperties();
+                    for (int i = 0; i < properties.Length; i++)
+                    {
+                        headerRow.Cell(i + 1).Value = properties[i].Name;
+                    }
+
+                    for (int i = 0; i < listaLocales.Count; i++)
+                    {
+                        var rowData = listaLocales[i];
+                        for (int j = 0; j < properties.Length; j++)
+                        {
+                            var propValue = properties[j].GetValue(rowData);
+                            ws.Cell(i + 2, j + 1).Value = propValue != null ? "'" + propValue.ToString() : "";
+                        }
+                    }
+
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        respuesta.Archivo = Convert.ToBase64String(stream.ToArray());
+                        respuesta.NombreArchivo = fileName;
+                        respuesta.Ok = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Ok = false;
+                respuesta.Mensaje = ex.Message;
+            }
+
             return respuesta;
         }
     }

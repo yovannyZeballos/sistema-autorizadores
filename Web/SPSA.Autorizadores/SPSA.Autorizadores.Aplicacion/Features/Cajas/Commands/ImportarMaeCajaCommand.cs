@@ -95,8 +95,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
                             respuesta.Ok = false;
                             respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
                         }
-
-                        //await _contexto.GuardarCambiosAsync();
                     }
                 }
             }

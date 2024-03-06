@@ -199,7 +199,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearMaeCajaHandler>().As<IRequestHandler<CrearMaeCajaCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeCajaHandler>().As<IRequestHandler<ActualizarMaeCajaCommand, RespuestaComunDTO>>();
             builder.RegisterType<ImportarMaeCajaHandler>().As<IRequestHandler<ImportarMaeCajaCommand, RespuestaComunExcelDTO>>();
-            builder.RegisterType<EliminarMaestroCajasHandler>().As<IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>>();
+            builder.RegisterType<EliminarMaeCajasHandler>().As<IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>>();
             builder.RegisterType<DescargarMaestroCajalHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
 
             #endregion <--TABLA MAESTROS SGP-->

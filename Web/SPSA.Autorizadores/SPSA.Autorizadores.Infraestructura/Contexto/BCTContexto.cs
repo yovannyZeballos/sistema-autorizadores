@@ -20,13 +20,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioSegSistema = new RepositorioSegSistema(this);
 			RepositorioProcesoParametroEmpresa = new RepositorioProcesoParametroEmpresa(this);
 			RepositorioSegUsuario = new RepositorioSegUsuario(this);
-			RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
 			RepositorioSegEmpresa = new RepositorioSegEmpresa(this);
 			RepositorioSegCadena = new RepositorioSegCadena(this);
-			RepositorioMaeCadena = new RepositorioMaeCadena(this);
-			RepositorioMaeRegion = new RepositorioMaeRegion(this);
-			RepositorioMaeZona = new RepositorioMaeZona(this);
-			RepositorioMaeLocal = new RepositorioMaeLocal(this);
 			RepositorioSegRegion = new RepositorioSegRegion(this);
 			RepositorioSegZona = new RepositorioSegZona(this);
 			RepositorioSegLocal = new RepositorioSegLocal(this);
@@ -34,16 +29,21 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioSegPerfilUsuario = new RepositorioSegPerfilUsuario(this);
 			RepositorioSegMenu = new RepositorioSegMenu(this);
 			RepositorioSegPerfilMenu = new RepositorioSegPerfilMenu(this);
-			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
-		}
 
+            RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
+            RepositorioMaeCadena = new RepositorioMaeCadena(this);
+            RepositorioMaeRegion = new RepositorioMaeRegion(this);
+            RepositorioMaeZona = new RepositorioMaeZona(this);
+            RepositorioMaeLocal = new RepositorioMaeLocal(this);
+            RepositorioMaeCaja = new RepositorioMaeCaja(this);
+            //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
+        }
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
 		public IRepositorioSegUsuario RepositorioSegUsuario { get; private set; }		
 		public IRepositorioSegEmpresa RepositorioSegEmpresa { get; private set; }
 		public IRepositorioSegCadena RepositorioSegCadena { get; private set; }	
-		public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
 		public IRepositorioSegRegion RepositorioSegRegion { get; private set; }
 		public IRepositorioSegZona RepositorioSegZona { get; private set; }
 		public IRepositorioSegLocal RepositorioSegLocal { get; private set; }
@@ -55,6 +55,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
         public IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; private set; }
         public IRepositorioMaeCadena RepositorioMaeCadena { get; private set; }
         public IRepositorioMaeRegion RepositorioMaeRegion { get; private set; }
+        public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
         public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
         public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
 
