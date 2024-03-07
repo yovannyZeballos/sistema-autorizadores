@@ -1,71 +1,71 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Zona.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
-    public class CadenaController : Controller
+    public class MaeZonaController : Controller
     {
 		private readonly IMediator _mediator;
 
-		public CadenaController(IMediator mediator)
+		public MaeZonaController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}
 
-		// GET: Maestros/Cadena
+		// GET: Maestros/Zona
 		public ActionResult Index()
         {
             return View();
         }
 
 		/// <summary>
-		/// Este método se utiliza para listar las cadenas asociadas.
+		/// Este método se utiliza para listar las zonas asociadas.
 		/// </summary>
-		/// <param name="query">La consulta para listar las cadenas asociadas.</param>
-		/// <returns>Devuelve un resultado JSON de las cadenas asociadas.</returns>
+		/// <param name="query">La consulta para listar las zonas asociadas.</param>
+		/// <returns>Devuelve un resultado JSON de las zonas asociadas.</returns>
 		[HttpPost]
-		public async Task<JsonResult> ListarCadenasAsociadas(ListarCadenasAsociadasQuery query)
+		public async Task<JsonResult> ListarZonasAsociadas(ListarZonasAsociadasQuery query)
 		{
 			var respose = await _mediator.Send(query);
 			return Json(respose);
 		}
 
         [HttpPost]
-        public async Task<JsonResult> ObtenerCadena(ObtenerMaeCadenaQuery request)
+        public async Task<JsonResult> ObtenerZona(ObtenerMaeZonaQuery request)
         {
-            var response = await _mediator.Send(request);
-            return Json(response);
+            var respose = await _mediator.Send(request);
+            return Json(respose);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarCadena(ListarMaeCadenaQuery request)
+        public async Task<JsonResult> ListarZona(ListarMaeZonaQuery request)
         {
-            var response = await _mediator.Send(request);
-            return Json(response);
+            var respose = await _mediator.Send(request);
+            return Json(respose);
         }
 
         [HttpPost]
-        public async Task<JsonResult> CrearCadena(CrearMaeCadenaCommand command)
-        {
-            var respuesta = await _mediator.Send(command);
-            return Json(respuesta);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> ActualizarCadena(ActualizarMaeCadenaCommand command)
+        public async Task<JsonResult> CrearZona(CrearMaeZonaCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarExcelCadena(HttpPostedFileBase archivoExcel)
+        public async Task<JsonResult> ActualizarZona(ActualizarMaeZonaCommand command)
+        {
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ImportarExcelZona(HttpPostedFileBase archivoExcel)
         {
             if (archivoExcel is null)
             {
@@ -82,7 +82,7 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
             }
             else
             {
-                var command = new ImportarMaeCadenaCommand { ArchivoExcel = archivoExcel.InputStream };
+                var command = new ImportarMaeZonaCommand { ArchivoExcel = archivoExcel.InputStream };
                 var response = await _mediator.Send(command);
 
                 return Json(response);

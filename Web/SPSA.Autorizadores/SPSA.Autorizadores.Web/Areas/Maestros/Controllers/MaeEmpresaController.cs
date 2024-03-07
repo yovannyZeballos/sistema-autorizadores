@@ -11,11 +11,11 @@ using System.Web.Mvc;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
-    public class EmpresaController : Controller
+    public class MaeEmpresaController : Controller
     {
         private readonly IMediator _mediator;
 
-        public EmpresaController(IMediator mediator)
+        public MaeEmpresaController(IMediator mediator)
         {
             _mediator = mediator;
         }

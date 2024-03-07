@@ -1,55 +1,53 @@
 ﻿using MediatR;
-using System.Globalization;
+using SPSA.Autorizadores.Aplicacion.DTO;
+using System.Threading.Tasks;
 using System;
 using System.Web.Mvc;
-using System.Threading.Tasks;
-using SPSA.Autorizadores.Aplicacion.DTO;
 using System.Collections.Generic;
 using System.Web;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Caja.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
+
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
-    public class LocalController : Controller
+    public class MaeCajaController : Controller
     {
         private readonly IMediator _mediator;
 
-        public LocalController(IMediator mediator)
+        public MaeCajaController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         public ActionResult Index()
         {
-            object fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            return View(fechaActual);
-            //return View();
+            return View();
         }
 
         [HttpPost]
-        public async Task<JsonResult> ObtenerLocal(ObtenerMaeLocalQuery request)
+        public async Task<JsonResult> ObtenerCaja(ObtenerMaeCajaQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarLocal(ListarMaeLocalQuery request)
+        public async Task<JsonResult> ListarCaja(ListarMaeCajaQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ActualizarLocal(ActualizarMaeLocalCommand command)
+        public async Task<JsonResult> ActualizarCaja(ActualizarMaeCajaCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarExcelLocal(HttpPostedFileBase archivoExcel)
+        public async Task<JsonResult> ImportarExcelCaja(HttpPostedFileBase archivoExcel)
         {
             if (archivoExcel is null)
             {
@@ -66,7 +64,7 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
             }
             else
             {
-                var command = new ImportarMaeLocalCommand { ArchivoExcel = archivoExcel.InputStream };
+                var command = new ImportarMaeCajaCommand { ArchivoExcel = archivoExcel.InputStream };
                 var response = await _mediator.Send(command);
 
                 return Json(response);
@@ -74,10 +72,10 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> CrearLocal(CrearMaeLocalCommand command)
+        public async Task<JsonResult> CrearCaja(CrearMaeCajaCommand command)
         {
-            command.CodLocalOfiplan = (command.CodLocalOfiplan is null) ? "" : command.CodLocalOfiplan;
-            command.NomLocalOfiplan = (command.NomLocalOfiplan is null) ? "" : command.NomLocalOfiplan;
+            //command.CodLocalOfiplan = (command.CodLocalOfiplan is null) ? "" : command.CodLocalOfiplan;
+            //command.NomLocalOfiplan = (command.NomLocalOfiplan is null) ? "" : command.NomLocalOfiplan;
 
             //command.UsuCreacion = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -85,16 +83,17 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> DescargarLocal(DescargarMaeLocalCommand request)
+        public async Task<JsonResult> EliminarCajas(EliminarMaeCajasCommand command)
         {
-            var respuesta = await _mediator.Send(request);
+            var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public ActionResult CrearEditarCaja(MaeCajaDTO model)
+        public async Task<JsonResult> DescargarCaja(DescargarMaeCajaCommand request)
         {
-            return PartialView("_CrearEditarCaja", model);
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
         }
 
     }

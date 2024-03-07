@@ -10,11 +10,11 @@ using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
-    public class RegionController : Controller
+    public class MaeRegionController : Controller
     {
 		private readonly IMediator _mediator;
 
-		public RegionController(IMediator mediator)
+		public MaeRegionController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}

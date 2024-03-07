@@ -4,7 +4,7 @@ var urlListarRegiones = baseUrl + 'Monitor/ReporteTesoreria/ListarRegiones';
 var urlListarZonas = baseUrl + 'Monitor/ReporteTesoreria/ListarZonas';
 var urlListarLocales = baseUrl + 'Monitor/ReporteTesoreria/ListarLocales';
 
-var urlObtenerEmpresa = baseUrl + 'Maestros/Empresa/ObtenerEmpresa';
+var urlObtenerEmpresa = baseUrl + 'Maestros/MaeEmpresa/ObtenerEmpresa';
 
 const urlReporteCierre = '/Monitor/ReporteTesoreria/ReporteCierre';
 const urlReporteCierrePivot = '/Monitor/ReporteTesoreria/ReportePivotCierre';
