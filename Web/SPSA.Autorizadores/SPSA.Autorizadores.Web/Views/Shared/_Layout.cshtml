@@ -342,7 +342,6 @@
                                                         </li>
                                                     }
 
-
                                                     if (item.Id == 24)
                                                     {
                                                         <li class="sub-slide">
@@ -372,6 +371,18 @@
                                                         <li class="sub-slide">
                                                             <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
                                                                href="~/Monitor/BCT">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    if (item.Id == 33)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Monitor/ReporteTesoreria">
                                                                 <span class="sub-side-menu__label">
                                                                     @item.DesPermiso
                                                                 </span>
@@ -434,7 +445,31 @@
                                                         </li>
                                                     }
 
-                                                   
+                                                    if (item.Id == 34)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Maestros/MaeTablas">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    if (item.Id == 32)
+                                                    {
+                                                        <li class="sub-slide">
+                                                            <a class="sub-side-menu__item  lh-1" data-bs-toggle="sub-slide"
+                                                               href="~/Maestros/MaeLocal">
+                                                                <span class="sub-side-menu__label">
+                                                                    @item.DesPermiso
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+
                                                 }
                                             </ul>
                                         </li>
@@ -507,9 +542,6 @@
                                         </li>
                                     }
                                 }
-
-
-
 
                             </ul>
                             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z" /></svg></div>
