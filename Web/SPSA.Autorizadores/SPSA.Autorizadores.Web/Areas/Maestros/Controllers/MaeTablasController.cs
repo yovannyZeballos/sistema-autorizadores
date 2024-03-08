@@ -6,11 +6,11 @@ using System.Web.Mvc;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
-    public class TablasController : Controller
+    public class MaeTablasController : Controller
     {
         private readonly IMediator _mediator;
 
-        public TablasController(IMediator mediator)
+        public MaeTablasController(IMediator mediator)
         {
             _mediator = mediator;
         }

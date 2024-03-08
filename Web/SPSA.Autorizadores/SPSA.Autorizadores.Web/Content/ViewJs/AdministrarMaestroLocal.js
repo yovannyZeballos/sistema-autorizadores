@@ -1,36 +1,30 @@
-﻿var urlListarEmpresas = baseUrl + 'Maestros/Empresa/ListarEmpresa';
-var urlListarCadenas = baseUrl + 'Maestros/Cadena/ListarCadena';
-var urlListarRegiones = baseUrl + 'Maestros/Region/ListarRegion';
-var urlListarZonas = baseUrl + 'Maestros/Zona/ListarZona';
-var urlListarLocales = baseUrl + 'Maestros/Local/ListarLocal';
-var urlListarCajas = baseUrl + 'Maestros/Caja/ListarCaja';
+﻿var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresa';
+var urlListarCadenas = baseUrl + 'Maestros/MaeCadena/ListarCadena';
+var urlListarRegiones = baseUrl + 'Maestros/MaeRegion/ListarRegion';
+var urlListarZonas = baseUrl + 'Maestros/MaeZona/ListarZona';
+var urlListarLocales = baseUrl + 'Maestros/MaeLocal/ListarLocal';
+var urlListarCajas = baseUrl + 'Maestros/MaeCaja/ListarCaja';
 
-var urlCrearLocal = baseUrl + 'Maestros/Local/CrearLocal';
-var urlCrearCaja = baseUrl + 'Maestros/Caja/CrearCaja';
-var urlActualizarCaja = baseUrl + 'Maestros/Caja/ActualizarCaja';
-var urlEliminarCajas = baseUrl + 'Maestros/Caja/EliminarCajas';
-var urlObtenerLocal = baseUrl + 'Maestros/Local/ObtenerLocal';
+var urlCrearLocal = baseUrl + 'Maestros/MaeLocal/CrearLocal';
+var urlCrearCaja = baseUrl + 'Maestros/MaeCaja/CrearCaja';
+var urlActualizarCaja = baseUrl + 'Maestros/MaeCaja/ActualizarCaja';
+var urlEliminarCajas = baseUrl + 'Maestros/MaeCaja/EliminarCajas';
+var urlObtenerLocal = baseUrl + 'Maestros/MaeLocal/ObtenerLocal';
 
-var urlModalCrearEditarCaja = baseUrl + 'Maestros/Local/CrearEditarCaja';
+var urlModalCrearEditarCaja = baseUrl + 'Maestros/MaeLocal/CrearEditarCaja';
 
-var urlImportarLocales = baseUrl + 'Maestros/Local/ImportarExcelLocal';
-var urlImportarCajas = baseUrl + 'Maestros/Caja/ImportarExcelCaja';
+var urlImportarLocales = baseUrl + 'Maestros/MaeLocal/ImportarExcelLocal';
+var urlImportarCajas = baseUrl + 'Maestros/MaeCaja/ImportarExcelCaja';
 
-var urlDescargarLocales = baseUrl + 'Maestros/Local/DescargarLocal';
-var urlDescargarCajas = baseUrl + 'Maestros/Caja/DescargarCaja';
+var urlDescargarLocales = baseUrl + 'Maestros/MaeLocal/DescargarLocal';
+var urlDescargarCajas = baseUrl + 'Maestros/MaeCaja/DescargarCaja';
 
-var urlDescargarPlantilla = baseUrl + 'Maestros/Tablas/DescargarPlantillas';
+var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
 var dataTableLocales = null;
 var codLocalCaja = null;
 
-
-//var urlEliminarCaja = baseUrl + 'Locales/AdministrarLocal/EliminarCajas';
-//var urlImportarCajas = baseUrl + 'Locales/AdministrarLocal/ImportarCajas';
 var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
-
-
-//var dataTableCajas = null;
 
 
 var AdministrarMaestroLocal = function () {

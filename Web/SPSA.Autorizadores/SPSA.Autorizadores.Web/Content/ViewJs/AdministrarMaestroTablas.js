@@ -1,38 +1,38 @@
-﻿var urlListarEmpresas = baseUrl + 'Maestros/Empresa/ListarEmpresa';
-var urlListarCadenas = baseUrl + 'Maestros/Cadena/ListarCadena';
-var urlListarRegiones = baseUrl + 'Maestros/Region/ListarRegion';
-var urlListarZonas = baseUrl + 'Maestros/Zona/ListarZona';
-var urlListarLocales = baseUrl + 'Maestros/Local/ListarLocal';
+﻿var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresa';
+var urlListarCadenas = baseUrl + 'Maestros/MaeCadena/ListarCadena';
+var urlListarRegiones = baseUrl + 'Maestros/MaeRegion/ListarRegion';
+var urlListarZonas = baseUrl + 'Maestros/MaeZona/ListarZona';
+var urlListarLocales = baseUrl + 'Maestros/MaeLocal/ListarLocal';
 
-var urlObtenerEmpresa = baseUrl + 'Maestros/Empresa/ObtenerEmpresa';
-var urlObtenerCadena = baseUrl + 'Maestros/Cadena/ObtenerCadena';
-var urlObtenerRegion = baseUrl + 'Maestros/Region/ObtenerRegion';
-var urlObtenerZona = baseUrl + 'Maestros/Zona/ObtenerZona';
-var urlObtenerLocal = baseUrl + 'Maestros/Local/ObtenerLocal';
+var urlObtenerEmpresa = baseUrl + 'Maestros/MaeEmpresa/ObtenerEmpresa';
+var urlObtenerCadena = baseUrl + 'Maestros/MaeCadena/ObtenerCadena';
+var urlObtenerRegion = baseUrl + 'Maestros/MaeRegion/ObtenerRegion';
+var urlObtenerZona = baseUrl + 'Maestros/MaeZona/ObtenerZona';
+var urlObtenerLocal = baseUrl + 'Maestros/MaeLocal/ObtenerLocal';
 
-var urlCrearEmpresa = baseUrl + 'Maestros/Empresa/CrearEmpresa';
-var urlCrearCadena = baseUrl + 'Maestros/Cadena/CrearCadena';
-var urlCrearRegion = baseUrl + 'Maestros/Region/CrearRegion';
-var urlCrearZona = baseUrl + 'Maestros/Zona/CrearZona';
-var urlCrearLocal = baseUrl + 'Maestros/Local/CrearLocal';
+var urlCrearEmpresa = baseUrl + 'Maestros/MaeEmpresa/CrearEmpresa';
+var urlCrearCadena = baseUrl + 'Maestros/MaeCadena/CrearCadena';
+var urlCrearRegion = baseUrl + 'Maestros/MaeRegion/CrearRegion';
+var urlCrearZona = baseUrl + 'Maestros/MaeZona/CrearZona';
+var urlCrearLocal = baseUrl + 'Maestros/MaeLocal/CrearLocal';
 
-var urlActualizarEmpresa = baseUrl + 'Maestros/Empresa/ActualizarEmpresa';
-var urlActualizarCadena = baseUrl + 'Maestros/Cadena/ActualizarCadena';
-var urlActualizarRegion = baseUrl + 'Maestros/Region/ActualizarRegion';
-var urlActualizarZona = baseUrl + 'Maestros/Zona/ActualizarZona';
-var urlActualizarLocal = baseUrl + 'Maestros/Local/ActualizarLocal';
+var urlActualizarEmpresa = baseUrl + 'Maestros/MaeEmpresa/ActualizarEmpresa';
+var urlActualizarCadena = baseUrl + 'Maestros/MaeCadena/ActualizarCadena';
+var urlActualizarRegion = baseUrl + 'Maestros/MaeRegion/ActualizarRegion';
+var urlActualizarZona = baseUrl + 'Maestros/MaeZona/ActualizarZona';
+var urlActualizarLocal = baseUrl + 'Maestros/MaeLocal/ActualizarLocal';
 
-var urlImportarEmpresa = baseUrl + 'Maestros/Empresa/ImportarExcelEpresa';
-var urlImportarCadena = baseUrl + 'Maestros/Cadena/ImportarExcelCadena';
-var urlImportarRegion = baseUrl + 'Maestros/Region/ImportarExcelRegion';
-var urlImportarZona = baseUrl + 'Maestros/Zona/ImportarExcelZona';
-var urlImportarLocal = baseUrl + 'Maestros/Local/ImportarExcelLocal';
+var urlImportarEmpresa = baseUrl + 'Maestros/MaeMaeEmpresa/ImportarExcelEpresa';
+var urlImportarCadena = baseUrl + 'Maestros/MaeCadena/ImportarExcelCadena';
+var urlImportarRegion = baseUrl + 'Maestros/MaeRegion/ImportarExcelRegion';
+var urlImportarZona = baseUrl + 'Maestros/MaeZona/ImportarExcelZona';
+var urlImportarLocal = baseUrl + 'Maestros/MaeLocal/ImportarExcelLocal';
 
-var urlModalCrearEditarEmpresa = baseUrl + 'Maestros/Tablas/CrearEditarEmpresa';
-var urlModalCrearEditarCadena = baseUrl + 'Maestros/Tablas/CrearEditarCadena';
-var urlModalCrearEditarRegion = baseUrl + 'Maestros/Tablas/CrearEditarRegion';
-var urlModalCrearEditarZona = baseUrl + 'Maestros/Tablas/CrearEditarZona';
-var urlModalCrearEditarLocal = baseUrl + 'Maestros/Tablas/CrearEditarLocal';
+var urlModalCrearEditarEmpresa = baseUrl + 'Maestros/MaeTablas/CrearEditarEmpresa';
+var urlModalCrearEditarCadena = baseUrl + 'Maestros/MaeTablas/CrearEditarCadena';
+var urlModalCrearEditarRegion = baseUrl + 'Maestros/MaeTablas/CrearEditarRegion';
+var urlModalCrearEditarZona = baseUrl + 'Maestros/MaeTablas/CrearEditarZona';
+var urlModalCrearEditarLocal = baseUrl + 'Maestros/MaeTablas/CrearEditarLocal';
 
 var AdministrarMaestroTablas = function () {
 
