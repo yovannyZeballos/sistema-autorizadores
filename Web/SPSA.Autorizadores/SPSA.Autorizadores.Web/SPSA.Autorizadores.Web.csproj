@@ -211,20 +211,25 @@
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
-    <Compile Include="Areas\Maestros\Controllers\RegionController.cs" />
-    <Compile Include="Areas\Maestros\Controllers\CadenaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeCajaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeRegionController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeTablasController.cs" />
     <Compile Include="Areas\Maestros\MaestrosAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\BCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
+    <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\PerfilController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\SistemaController.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
-    <Compile Include="Areas\Maestros\Controllers\ZonaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeZonaController.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorController.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadoresMassController.cs" />
@@ -2275,6 +2280,8 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
+    <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
+    <Content Include="Content\ViewJs\AdministrarMaestroTablas.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
     <Content Include="Content\ViewJs\AutorizadorMasivo.js" />
@@ -2292,6 +2299,7 @@
     <Content Include="Content\ViewJs\CierreEOD.js" />
     <Content Include="Content\ViewJs\Menu.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
+    <Content Include="Content\ViewJs\ReportesTesoreriaCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierreResumen.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajero.js" />
@@ -2678,6 +2686,20 @@
     <Content Include="Areas\Maestros\Views\web.config" />
     <Content Include="Areas\Seguridad\Views\Perfil\Index.cshtml" />
     <Content Include="Areas\Seguridad\Views\Menu\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeLocal\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeLocal\_CrearEditarCaja.cshtml" />
+    <Content Include="Areas\Maestros\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarCadena.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarEmpresa.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarRegion.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarZona.cshtml" />
+    <Content Include="Areas\Maestros\Views\_ViewStart.cshtml" />
+    <Content Include="Plantillas_Tablas\Plantilla_Cadena\TablaCadena.xlsx" />
+    <Content Include="Plantillas_Tablas\Plantilla_Caja\TablaCaja.xlsx" />
+    <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2716,6 +2738,14 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
+    <Folder Include="Areas\Maestros\Views\MaeCaja\" />
+    <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
+    <Folder Include="Areas\Maestros\Views\MaeRegion\" />
+    <Folder Include="Areas\Maestros\Views\MaeZona\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Empresa\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Local\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Region\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Zona\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -2728,7 +2758,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Aplicacion\SPSA.Autorizadores.Aplicacion.csproj">
-      <Project>{DE177FE3-7042-48D3-A5A4-B31CB97218E0}</Project>
+      <Project>{de177fe3-7042-48d3-a5a4-b31cb97218e0}</Project>
       <Name>SPSA.Autorizadores.Aplicacion</Name>
     </ProjectReference>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

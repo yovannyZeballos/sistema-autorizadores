@@ -1,8 +1,8 @@
 ﻿const urlLogin = baseUrl + 'Login/Index';
 const urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';
-const urlListarCadenasAsociadas = baseUrl + 'Maestros/Cadena/ListarCadenasAsociadas';
-const urlListarRegionesAsociadas = baseUrl + 'Maestros/Region/ListarRegionesAsociadas';
-const urlListarZonasAsociadas = baseUrl + 'Maestros/Zona/ListarZonasAsociadas';
+const urlListarCadenasAsociadas = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
+const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesAsociadas';
+const urlListarZonasAsociadas = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
 const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
 const urlLocal = baseUrl + 'Login/ListarLocales';
 const urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';

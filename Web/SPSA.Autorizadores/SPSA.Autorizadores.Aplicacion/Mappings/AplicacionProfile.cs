@@ -1,10 +1,16 @@
 ﻿using AutoMapper;
 using pe.oechsle.Entity;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
+using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 using SPSA.Autorizadores.Dominio.Entidades;
 
 namespace SPSA.Autorizadores.Aplicacion.Mappings
@@ -87,6 +93,47 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 			CreateMap<ActualizarMenuCommand, Seg_Menu>();
 			CreateMap<Seg_Usuario, ObtenerUsuarioDTO>();
 
-		}
-	}
+            #region <--TABLA MAESTROS SGP-->
+
+            CreateMap<MaeEmpresaDTO, Mae_Empresa>().ReverseMap();
+            CreateMap<MaeCadenaDTO, Mae_Cadena>().ReverseMap();
+            CreateMap<MaeRegionDTO, Mae_Region>().ReverseMap();
+            CreateMap<MaeZonaDTO, Mae_Zona>().ReverseMap();
+            CreateMap<MaeLocalDTO, Mae_Local>().ReverseMap();
+            CreateMap<MaeCajaDTO, Mae_Caja>().ReverseMap();
+
+            CreateMap<ListarMaeEmpresaDTO, Mae_Empresa>().ReverseMap();
+            CreateMap<ObtenerMaeEmpresaDTO, Mae_Empresa>().ReverseMap();
+            CreateMap<CrearMaeEmpresaCommand, Mae_Empresa>().ReverseMap();
+            CreateMap<ActualizarMaeEmpresaCommand, Mae_Empresa>().ReverseMap();
+
+            CreateMap<ListarMaeCadenaDTO, Mae_Cadena>().ReverseMap();
+            CreateMap<ObtenerMaeCadenaDTO, Mae_Cadena>().ReverseMap();
+            CreateMap<CrearMaeCadenaCommand, Mae_Cadena>().ReverseMap();
+            CreateMap<ActualizarMaeCadenaCommand, Mae_Cadena>().ReverseMap();
+
+            CreateMap<ListarMaeRegionDTO, Mae_Region>().ReverseMap();
+            CreateMap<ObtenerMaeRegionDTO, Mae_Region>().ReverseMap();
+            CreateMap<CrearMaeRegionCommand, Mae_Region>().ReverseMap();
+            CreateMap<ActualizarMaeRegionCommand, Mae_Region>().ReverseMap();
+
+            CreateMap<ListarMaeZonaDTO, Mae_Zona>().ReverseMap();
+            CreateMap<ObtenerMaeZonaDTO, Mae_Zona>().ReverseMap();
+            CreateMap<CrearMaeZonaCommand, Mae_Zona>().ReverseMap();
+            CreateMap<ActualizarMaeZonaCommand, Mae_Zona>().ReverseMap();
+
+            CreateMap<ListarMaeLocalDTO, Mae_Local>().ReverseMap();
+            CreateMap<ObtenerMaeLocalDTO, Mae_Local>().ReverseMap();
+            CreateMap<CrearMaeLocalCommand, Mae_Local>().ReverseMap();
+            CreateMap<ActualizarMaeLocalCommand, Mae_Local>().ReverseMap();
+
+            CreateMap<ListarMaeCajaDTO, Mae_Caja>().ReverseMap();
+            CreateMap<ObtenerMaeCajaDTO, Mae_Caja>().ReverseMap();
+            CreateMap<CrearMaeCajaCommand, Mae_Caja>().ReverseMap();
+            CreateMap<ActualizarMaeCajaCommand, Mae_Caja>().ReverseMap();
+
+            #endregion <--TABLA MAESTROS SGP-->
+
+        }
+    }
 }

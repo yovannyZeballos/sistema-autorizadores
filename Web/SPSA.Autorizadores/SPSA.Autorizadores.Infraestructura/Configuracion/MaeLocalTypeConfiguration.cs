@@ -27,6 +27,10 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(x => x.CodLocal).HasColumnName("COD_LOCAL");
 			Property(x => x.NomLocal).HasColumnName("NOM_LOCAL");
 			Property(x => x.TipEstado).HasColumnName("TIP_ESTADO");
+			Property(x => x.CodLocalPMM).HasColumnName("COD_LOCAL_PMM");
+			Property(x => x.CodLocalOfiplan).HasColumnName("COD_LOCAL_OFIPLAN");
+			Property(x => x.NomLocalOfiplan).HasColumnName("NOM_LOCAL_OFIPLAN");
+			Property(x => x.CodLocalSunat).HasColumnName("COD_LOCAL_SUNAT");
 		}
 	}
 }

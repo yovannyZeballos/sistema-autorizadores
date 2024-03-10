@@ -4,9 +4,13 @@ using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
+using SPSA.Autorizadores.Aplicacion.Features.Caja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
@@ -22,6 +26,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries;
@@ -33,6 +38,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.TablasMae.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Queries;
 using SPSA.Autorizadores.Dominio.Entidades;
 using System.Collections.Generic;
@@ -158,7 +165,52 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ObtenerMenuHandler>().As<IRequestHandler<ObtenerMenuQuery, GenericResponseDTO<ListarMenuDTO>>>();
 			builder.RegisterType<ObtenerMenusUsuarioHandler>().As<IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
 
-			base.Load(builder);
+            #region <--TABLA MAESTROS SGP-->
+            builder.RegisterType<DescargarTablaPlantillasHandler>().As<IRequestHandler<DescargarTablaPlantillasCommand, DescargarPlantillasDTO>>();
+
+            builder.RegisterType<ListarMaeEmpresaHandler>().As<IRequestHandler<ListarMaeEmpresaQuery, GenericResponseDTO<List<ListarMaeEmpresaDTO>>>>();
+            builder.RegisterType<ObtenerMaeEmpresaHandler>().As<IRequestHandler<ObtenerMaeEmpresaQuery, GenericResponseDTO<ObtenerMaeEmpresaDTO>>>();
+            builder.RegisterType<CrearMaestroEmpresaHandler>().As<IRequestHandler<CrearMaeEmpresaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaestroEmpresaHandler>().As<IRequestHandler<ActualizarMaeEmpresaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaestroEmpresaHandler>().As<IRequestHandler<ImportarMaeEmpresaCommand, RespuestaComunExcelDTO>>();
+
+            builder.RegisterType<ListarMaeCadenaHandler>().As<IRequestHandler<ListarMaeCadenaQuery, GenericResponseDTO<List<ListarMaeCadenaDTO>> >>();
+            builder.RegisterType<ObtenerMaeCadenaHandler>().As<IRequestHandler<ObtenerMaeCadenaQuery, GenericResponseDTO<ObtenerMaeCadenaDTO>>>();
+            builder.RegisterType<CrearMaeCadenaHandler>().As<IRequestHandler<CrearMaeCadenaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeCadenaHandler>().As<IRequestHandler<ActualizarMaeCadenaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeCadenaHandler>().As<IRequestHandler<ImportarMaeCadenaCommand, RespuestaComunExcelDTO>>();
+
+            builder.RegisterType<ListarMaeRegionHandler>().As<IRequestHandler<ListarMaeRegionQuery, GenericResponseDTO<List<ListarMaeRegionDTO>>>>();
+            builder.RegisterType<ObtenerMaeRegionHandler>().As<IRequestHandler<ObtenerMaeRegionQuery, GenericResponseDTO<ObtenerMaeRegionDTO>>>();
+            builder.RegisterType<CrearMaeRegionHandler>().As<IRequestHandler<CrearMaeRegionCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeRegionHandler>().As<IRequestHandler<ActualizarMaeRegionCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeRegionHandler>().As<IRequestHandler<ImportarMaeRegionCommand, RespuestaComunExcelDTO>>();
+
+            builder.RegisterType<ListarMaeZonaHandler>().As<IRequestHandler<ListarMaeZonaQuery, GenericResponseDTO<List<ListarMaeZonaDTO>>>>();
+            builder.RegisterType<ObtenerMaeZonaHandler>().As<IRequestHandler<ObtenerMaeZonaQuery, GenericResponseDTO<ObtenerMaeZonaDTO>>>();
+            builder.RegisterType<CrearMaeZonaHandler>().As<IRequestHandler<CrearMaeZonaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeZonaHandler>().As<IRequestHandler<ActualizarMaeZonaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeZonaHandler>().As<IRequestHandler<ImportarMaeZonaCommand, RespuestaComunExcelDTO>>();
+
+            builder.RegisterType<ListarMaeLocalHandler>().As<IRequestHandler<ListarMaeLocalQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>>();
+            builder.RegisterType<ObtenerMaeLocalHandler>().As<IRequestHandler<ObtenerMaeLocalQuery, GenericResponseDTO<ObtenerMaeLocalDTO>>>();
+            builder.RegisterType<CrearMaeLocalHandler>().As<IRequestHandler<CrearMaeLocalCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeLocalHandler>().As<IRequestHandler<ActualizarMaeLocalCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeLocalHandler>().As<IRequestHandler<ImportarMaeLocalCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarMaestroLocalHandler>().As<IRequestHandler<DescargarMaeLocalCommand, DescargarMaestroDTO>>();
+
+            builder.RegisterType<ListarMaeCajaHandler>().As<IRequestHandler<ListarMaeCajaQuery, GenericResponseDTO<List<ListarMaeCajaDTO>>>>();
+            builder.RegisterType<ObtenerMaeCajaHandler>().As<IRequestHandler<ObtenerMaeCajaQuery, GenericResponseDTO<ObtenerMaeCajaDTO>>>();
+            builder.RegisterType<CrearMaeCajaHandler>().As<IRequestHandler<CrearMaeCajaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeCajaHandler>().As<IRequestHandler<ActualizarMaeCajaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeCajaHandler>().As<IRequestHandler<ImportarMaeCajaCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<EliminarMaeCajasHandler>().As<IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>>();
+            builder.RegisterType<DescargarMaestroCajalHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
+
+            #endregion <--TABLA MAESTROS SGP-->
+
+
+            base.Load(builder);
 		}
 	}
 }
