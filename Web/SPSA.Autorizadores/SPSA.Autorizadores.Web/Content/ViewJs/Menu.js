@@ -3,6 +3,7 @@ const urlListarMenus = '/Seguridad/Menu/ListarMenus';
 const urlCrearMenu = '/Seguridad/Menu/CrearMenu';
 const urlEditarMenu = '/Seguridad/Menu/ActualizarMenu';
 const urlEliminarMenu = '/Seguridad/Menu/EliminarMenu';
+const urlObtenerMenu = '/Seguridad/Menu/ObtenerMenu';
 
 var $treeview = $("#jstree");
 var menus = [{ "id": "0", "parent": "#", "text": "" }];
@@ -22,6 +23,8 @@ const Menu = function () {
 
             let menu = {
                 NomMenu: $('#nomMenu').val(),
+                UrlMenu: $('#urlMenu').val(),
+                IconoMenu: $('#iconoMenu').val(),
                 CodMenuPadre: codMenuPadre,
                 CodSistema: $("#cboSistema").val(),
                 CodMenu: accion === "EDITAR" ? registros[0].id : ""
@@ -40,8 +43,7 @@ const Menu = function () {
             $('#crearMenuModalLabel').text('Editar menu');
             $('#crearMenulModal').modal('show');
 
-            $('#nomMenu').val(registros[0].text);
-            accion = "EDITAR";
+            obtenerMenu(registros[0].id);
 
         });
 
@@ -78,7 +80,6 @@ const Menu = function () {
     }
 
     const validarEliminacion = function (menu) {
-        console.log(menu)
         if (menu.children.length > 0) {
             mensajeAdvertencia('No se puede eliminar un menu que tiene submenus');
             return false;
@@ -139,7 +140,46 @@ const Menu = function () {
                 $("#cboSistema").trigger('change');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                mensajeError('Error al listar los sistemas: ' + jqXHR);
+                mensajeError('Error al listar los sistemas: ' + jqXHR.responseText);
+            }
+        });
+    }
+
+    const obtenerMenu = function (codMenu) {
+
+        const data = {
+            CodMenu: codMenu
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: urlObtenerMenu,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    mensajeError('Error al obtener el menu: ' + data.Mensaje);
+                    return;
+                }
+
+                const menu = data.Data;
+                $('#nomMenu').val(menu.NomMenu);
+                $('#urlMenu').val(menu.UrlMenu);
+                $('#iconoMenu').val(menu.IconoMenu);
+
+                accion = "EDITAR";
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                mensajeError('Error al listar los sistemas: ' + jqXHR.responseText);
             }
         });
     }
@@ -178,7 +218,7 @@ const Menu = function () {
                 $treeview.jstree(true).refresh();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                mensajeError('Error al listar los sistemas: ' + jqXHR);
+                mensajeError('Error al listar los sistemas: ' + jqXHR.responseText);
             }
         });
     }
@@ -221,13 +261,15 @@ const Menu = function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                mensajeError('Error al guardar el menu: ' + jqXHR);
+                mensajeError('Error al guardar el menu: ' + jqXHR.responseText);
             }
         });
     }
 
     const limpiarFormulario = function () {
         $('#nomMenu').val('');
+        $('#urlMenu').val('');
+        $('#iconoMenu').val('');
     }
 
     const cerrarModal = function () {
@@ -259,7 +301,7 @@ const Menu = function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                mensajeError('Error al editar el menu: ' + jqXHR);
+                mensajeError('Error al editar el menu: ' + jqXHR.responseText);
             }
         });
     }
@@ -287,7 +329,7 @@ const Menu = function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                mensajeError('Error al eliminar el menu: ' + jqXHR);
+                mensajeError('Error al eliminar el menu: ' + jqXHR.responseText);
             }
         });
     }

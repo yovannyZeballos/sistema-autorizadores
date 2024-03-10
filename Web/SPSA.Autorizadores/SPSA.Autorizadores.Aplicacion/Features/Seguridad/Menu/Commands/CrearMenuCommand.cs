@@ -16,6 +16,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands
 	public class CrearMenuCommand : IRequest<RespuestaComunDTO>
 	{
 		public string NomMenu { get; set; }
+		public string UrlMenu { get; set; }
+		public string IconoMenu { get; set; }
 		public string CodSistema { get; set; }
 		public string CodMenuPadre { get; set; }
 		public string UsuCreacion { get; set; }

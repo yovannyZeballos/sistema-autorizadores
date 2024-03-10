@@ -16,7 +16,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 		public string UsuCreacion { get; set; }
 		public DateTime? FecModifica { get; set; }
 		public string UsuModifica { get; set; }
-	}
+    }
 
 
 

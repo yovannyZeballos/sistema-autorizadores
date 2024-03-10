@@ -227,8 +227,6 @@ const Usuario = function () {
         });
 
         $("#cboRegionLocal").on("change", function () {
-            
-
             listarZonasAsociadas('#cboZonaLocal', '#asociarLocalModal', '#cboEmpresaLocal', '#cboCadenaLocal', '#cboRegionLocal');
         });
 

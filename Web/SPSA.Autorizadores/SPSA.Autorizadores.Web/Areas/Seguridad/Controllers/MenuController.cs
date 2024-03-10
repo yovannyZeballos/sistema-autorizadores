@@ -59,5 +59,13 @@ namespace SPSA.Autorizadores.Web.Areas.Seguridad.Controllers
 			var response = await _mediator.Send(command);
 			return Json(response);
 		}
+
+
+		[HttpPost]
+		public async Task<JsonResult> ObtenerMenu(ObtenerMenuQuery query)
+		{
+			var response = await _mediator.Send(query);
+			return Json(response);
+		}
 	}
 }

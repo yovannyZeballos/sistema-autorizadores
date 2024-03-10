@@ -34,7 +34,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioSegPerfilUsuario = new RepositorioSegPerfilUsuario(this);
 			RepositorioSegMenu = new RepositorioSegMenu(this);
 			RepositorioSegPerfilMenu = new RepositorioSegPerfilMenu(this);
-			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
+			this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
 

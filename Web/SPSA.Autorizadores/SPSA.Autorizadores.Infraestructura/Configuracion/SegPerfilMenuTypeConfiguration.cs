@@ -7,7 +7,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 	{
 		public SegPerfilMenuTypeConfiguration()
 		{
-			ToTable("SEG_PERFIL_MENU", "SEGURIDAD"); 
+			ToTable("SEG_PERFIL_MENU", "SEGURIDAD");
 			HasKey(s => new { s.CodPerfil, s.CodSistema, s.CodMenu });
 			Property(s => s.CodPerfil).HasColumnName("COD_PERFIL");
 			Property(s => s.CodSistema).HasColumnName("COD_SISTEMA");
@@ -16,6 +16,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(s => s.UsuCreacion).HasColumnName("USU_CREACION");
 			Property(s => s.FecModifica).HasColumnName("FEC_MODIFICA");
 			Property(s => s.UsuModifica).HasColumnName("USU_MODIFICA");
+			HasRequired(s => s.Menu).WithMany().HasForeignKey(s => new { s.CodSistema, s.CodMenu });
+
 		}
 	}
 }

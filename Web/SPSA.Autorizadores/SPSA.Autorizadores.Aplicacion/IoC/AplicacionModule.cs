@@ -24,6 +24,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
@@ -151,7 +152,11 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<EliminarMenuHandler>().As<IRequestHandler<EliminarMenuCommand, RespuestaComunDTO>>();
 			builder.RegisterType<AsociarMenusHandler>().As<IRequestHandler<AsociarMenusCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ListarMenusHandler>().As<IRequestHandler<ListarMenusQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
-
+			builder.RegisterType<ObtenerUsuarioHandler>().As<IRequestHandler<ObtenerUsuarioQuery, GenericResponseDTO<ObtenerUsuarioDTO>>>();
+			builder.RegisterType<ListarLocalesAsociadasHandler>().As<IRequestHandler<ListarLocalesAsociadasQuery, GenericResponseDTO<List<ListarLocalDTO>>>>();
+			builder.RegisterType<ObtenerJerarquiaOrganizacionalHandler>().As<IRequestHandler<ObtenerJerarquiaOrganizacionalQuery, JerarquiaOrganizacionalDTO>>();
+			builder.RegisterType<ObtenerMenuHandler>().As<IRequestHandler<ObtenerMenuQuery, GenericResponseDTO<ListarMenuDTO>>>();
+			builder.RegisterType<ObtenerMenusUsuarioHandler>().As<IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
 
 			base.Load(builder);
 		}

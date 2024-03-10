@@ -13,6 +13,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(s => s.CodMenu).HasColumnName("COD_MENU");
 			Property(s => s.NomMenu).HasColumnName("NOM_MENU");
 			Property(s => s.CodMenuPadre).HasColumnName("COD_MENU_PADRE");
+			Property(s => s.UrlMenu).HasColumnName("URL_MENU");
+			Property(s => s.IconoMenu).HasColumnName("ICONO_MENU");
 			Property(s => s.IndActivo).HasColumnName("IND_ACTIVO");
 			Property(s => s.FecCreacion).HasColumnName("FEC_CREACION");
 			Property(s => s.UsuCreacion).HasColumnName("USU_CREACION");

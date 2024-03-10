@@ -84,5 +84,17 @@ namespace SPSA.Autorizadores.Web.Utiles
 			get { return Comun.Lee<List<LocalDTO>>("locales"); }
 			set { Comun.Escribe("locales", value); }
 		}
+
+		public static JerarquiaOrganizacionalDTO JerarquiaOrganizacional
+		{
+			get { return Comun.Lee<JerarquiaOrganizacionalDTO>("jerarquiaOrganizacional"); }
+			set { Comun.Escribe("jerarquiaOrganizacional", value); }
+		}
+
+		public static List<ListarMenuDTO> MenusAsociados
+		{
+			get { return Comun.Lee<List<ListarMenuDTO>>("menusAsociados"); }
+			set { Comun.Escribe("menusAsociados", value); }
+		}
 	}
 }
