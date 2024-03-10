@@ -77,6 +77,8 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 				.ForPath(dest => dest.NomCadena, opt => opt.MapFrom(src => src.Mae_Cadena == null ? "" : src.Mae_Cadena.NomCadena));
 			CreateMap<Seg_Region, ListarRegionDTO>()
 				.ForPath(dest => dest.NomRegion, opt => opt.MapFrom(src => src.Mae_Region == null ? "" : src.Mae_Region.NomRegion));
+			CreateMap<Seg_Local, ListarLocalDTO>()
+				.ForPath(dest => dest.NomLocal, opt => opt.MapFrom(src => src.Mae_Local == null ? "" : src.Mae_Local.NomLocal));
 			CreateMap<Mae_Cadena, ListarCadenaDTO>();
 			CreateMap<Mae_Region, ListarRegionDTO>();
 			CreateMap<Mae_Zona, ListarZonaDTO>();
@@ -89,6 +91,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 			CreateMap<CrearMenuCommand, Seg_Menu>();
 			CreateMap<Seg_Menu, ListarMenuDTO>();
 			CreateMap<ActualizarMenuCommand, Seg_Menu>();
+			CreateMap<Seg_Usuario, ObtenerUsuarioDTO>();
 
             #region <--TABLA MAESTROS SGP-->
 

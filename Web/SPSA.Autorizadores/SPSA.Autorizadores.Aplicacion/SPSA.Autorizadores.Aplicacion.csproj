@@ -168,6 +168,7 @@
     <Compile Include="DTO\CajeroDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaResponseDTO.cs" />
+    <Compile Include="DTO\JerarquiaOrganizacionalDTO.cs" />
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="DTO\ObtenerMaeRegionDTO.cs" />
     <Compile Include="DTO\ObtenerMaeZonaDTO.cs" />
     <Compile Include="DTO\ObtenerSistemaDTO.cs" />
+    <Compile Include="DTO\ObtenerUsuarioDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
     <Compile Include="DTO\PermisoDTO.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="Features\Locales\Commands\ImportarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerMaeLocalQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ListarLocalesAsociadosQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreResumenQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierrePivotQuery.cs" />
@@ -277,6 +280,7 @@
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Queries\ListarMaeRegionQuery.cs" />
     <Compile Include="Features\Regiones\Queries\ObtenerMaeRegionQuery.cs" />
+    <Compile Include="Features\Seguridad\Login\Queries\ObtenerJerarquiaOrganizacionalQuery.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\EliminarMenuCommand.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\ActualizarMenuCommand .cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\CrearMenuCommand.cs" />
@@ -344,7 +348,9 @@
     <Compile Include="Features\Puestos\Queries\ListarPuestosQuery.cs" />
     <Compile Include="Features\Regiones\Queries\ListarRegionesAsociadasQuery.cs" />
     <Compile Include="Features\Seguridad\Login\Commands\LoginCommand.cs" />
+    <Compile Include="Features\Seguridad\Menu\Queries\ObtenerMenuQuery.cs" />
     <Compile Include="Features\Seguridad\Menu\Queries\ListarMenuQuery.cs" />
+    <Compile Include="Features\Seguridad\Menu\Queries\ObtenerMenusUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Perfil\Commands\AsociarMenusCommand.cs" />
     <Compile Include="Features\Seguridad\Perfil\Commands\ActualizarPerfilCommand.cs" />
     <Compile Include="Features\Seguridad\Perfil\Commands\CrearPerfilCommand.cs" />
@@ -370,6 +376,7 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarCadenasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
+    <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
     <Compile Include="Features\Zona\Commands\ActualizarMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\CrearMaeZonaCommand.cs" />

@@ -4,6 +4,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
@@ -54,6 +55,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 					WebSession.Locales = usuario.Locales;
 					WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
 					WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
+					WebSession.MenusAsociados = usuario.MenusAsociados;
 				}
 				else
 				{
@@ -107,13 +109,24 @@ namespace SPSA.Autorizadores.Web.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> GuardarLocalSession(string codigoLocal)
+		public async Task<JsonResult> GuardarLocalSession(ObtenerJerarquiaOrganizacionalQuery query)
 		{
 			var response = new RespuestaComunDTO();
 			try
 			{
-				var local = await _mediator.Send(new ObtenerLocalQuery { Codigo = codigoLocal });
-				WebSession.Local = codigoLocal;
+				var jerarquia = await _mediator.Send(query);
+
+				if (!jerarquia.Ok)
+				{
+					response.Ok = false;
+					response.Mensaje = jerarquia.Mensaje;
+					return Json(response);
+				}
+
+				WebSession.JerarquiaOrganizacional = jerarquia;
+
+				var local = await _mediator.Send(new ObtenerLocalQuery { Codigo = query.CodLocal });
+				WebSession.Local = query.CodLocal;
 				WebSession.TipoSO = local.TipoSO;
 				WebSession.LocalOfiplan = local.CodigoOfiplan;
 				WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";

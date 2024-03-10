@@ -208,5 +208,12 @@ namespace SPSA.Autorizadores.Web.Areas.Seguridad.Controllers
 			return Json(respuesta);
 		}
 
+		[HttpPost]
+		public async Task<JsonResult> ObtenerUsuario(ObtenerUsuarioQuery query)
+		{
+			var response = await _mediator.Send(query);
+			return Json(response);
+		}
+
 	}
 }

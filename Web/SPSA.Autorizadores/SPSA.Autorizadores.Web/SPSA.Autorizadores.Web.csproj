@@ -2758,7 +2758,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Aplicacion\SPSA.Autorizadores.Aplicacion.csproj">
-      <Project>{DE177FE3-7042-48D3-A5A4-B31CB97218E0}</Project>
+      <Project>{de177fe3-7042-48d3-a5a4-b31cb97218e0}</Project>
       <Name>SPSA.Autorizadores.Aplicacion</Name>
     </ProjectReference>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

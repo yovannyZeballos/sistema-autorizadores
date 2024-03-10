@@ -17,6 +17,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands
 	public class ActualizarMenuCommand : IRequest<RespuestaComunDTO>
 	{
 		public string CodMenu { get; set; }
+		public string UrlMenu { get; set; }
+		public string IconoMenu { get; set; }
 		public string NomMenu { get; set; }
 		public string UsuModificacion { get; set; }
 	}
