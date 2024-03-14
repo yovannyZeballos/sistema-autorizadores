@@ -6,6 +6,7 @@ using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,33 +65,68 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 		public async Task<RespuestaComunDTO> Handle(AsociarUsuarioRegionCommand request, CancellationToken cancellationToken)
 		{
 			var response = new RespuestaComunDTO { Ok = true };
-			try
+            var regionesAgregar = new List<Seg_Region>();
+            var regionesEliminar = new List<Seg_Region>();
+            try
 			{
 				var regionesAsocidas = await _contexto.RepositorioSegRegion
 					.Obtener(x => x.CodUsuario == request.CodUsuario && x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena)
 					.ToListAsync();
 
-				if (regionesAsocidas.Count > 0)
-				{
-					_contexto.RepositorioSegRegion.EliminarRango(regionesAsocidas);
-				}
+                HashSet<string> codigosHashSet = new HashSet<string>();
+                foreach (var region in regionesAsocidas)
+                {
+                    codigosHashSet.Add(region.CodRegion);
+                }
 
-				if (request.RegionesAsociadas != null)
-				{
-					foreach (var region in request.RegionesAsociadas)
-					{
-						_contexto.RepositorioSegRegion.Agregar(new Seg_Region
-						{
-							CodUsuario = request.CodUsuario,
-							CodEmpresa = request.CodEmpresa,
-							CodCadena = request.CodCadena,
-							CodRegion = region
-						});
-					}
-				}
+                // Identificar los códigos para agregar
+                foreach (var codigo in request.RegionesAsociadas)
+                {
+                    if (!codigosHashSet.Contains(codigo))
+                    {
+                        regionesAgregar.Add(new Seg_Region
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = request.CodCadena,
+                            CodRegion = codigo
+                        });
+                    }
+                }
 
+                // Identificar los códigos para eliminaren cascada
+                foreach (var codigo in codigosHashSet)
+                {
+                    if (!Array.Exists(request.RegionesAsociadas, c => c == codigo))
+                    {
+                        regionesEliminar.Add(new Seg_Region
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = request.CodCadena,
+                            CodRegion = codigo
+                        });
+                    }
+                }
 
-				await _contexto.GuardarCambiosAsync();
+                if (regionesEliminar.Count > 0)
+                {
+                    foreach (var cadena in regionesEliminar)
+                    {
+                        var regionDesasociada = await _contexto.RepositorioSegRegion.Obtener(e => e.CodUsuario == cadena.CodUsuario && e.CodEmpresa == cadena.CodEmpresa 
+																							&& e.CodCadena == cadena.CodCadena && e.CodRegion == cadena.CodRegion).FirstOrDefaultAsync();
+                        _contexto.RepositorioSegRegion.Eliminar(regionDesasociada);
+                    }
+                }
+
+                if (regionesAgregar.Count > 0)
+                {
+                    foreach (var cadena in regionesAgregar)
+                    {
+                        _contexto.RepositorioSegRegion.Agregar(cadena);
+                    }
+                }
+                await _contexto.GuardarCambiosAsync();
 			}
 			catch (Exception ex)
 			{

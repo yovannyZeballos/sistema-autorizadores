@@ -6,7 +6,9 @@ using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,7 +76,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 		public async Task<RespuestaComunDTO> Handle(AsociarUsuarioLocalCommand request, CancellationToken cancellationToken)
 		{
 			var response = new RespuestaComunDTO { Ok = true };
-			try
+            var localesAgregar = new List<Seg_Local>();
+            var localesEliminar = new List<Seg_Local>();
+            try
 			{
 				var localesAsocidas = await _contexto.RepositorioSegLocal
 					.Obtener(x => x.CodUsuario == request.CodUsuario 
@@ -84,27 +88,64 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 					&& x.CodZona == request.CodZona)
 					.ToListAsync();
 
-				if (localesAsocidas.Count > 0)
-				{
-					_contexto.RepositorioSegLocal.EliminarRango(localesAsocidas);
-				}
+                HashSet<string> codigosHashSet = new HashSet<string>();
+                foreach (var local in localesAsocidas)
+                {
+                    codigosHashSet.Add(local.CodLocal);
+                }
 
-				if (request.LocalesAsociados != null)
-				{
-					foreach (var local in request.LocalesAsociados)
-					{
-						_contexto.RepositorioSegLocal.Agregar(new Seg_Local
-						{
-							CodUsuario = request.CodUsuario,
-							CodEmpresa = request.CodEmpresa,
-							CodCadena = request.CodCadena,
-							CodRegion = request.CodRegion,
-							CodZona = request.CodZona,
-							CodLocal = local
-						});
-					}
-				}
+                // Identificar los códigos para agregar
+                foreach (var codigo in request.LocalesAsociados)
+                {
+                    if (!codigosHashSet.Contains(codigo))
+                    {
+                        localesAgregar.Add(new Seg_Local
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = request.CodCadena,
+                            CodRegion = request.CodRegion,
+                            CodZona = request.CodZona,
+                            CodLocal = codigo
+                        });
+                    }
+                }
 
+                // Identificar los códigos para eliminaren cascada
+                foreach (var codigo in codigosHashSet)
+                {
+                    if (!Array.Exists(request.LocalesAsociados, c => c == codigo))
+                    {
+                        localesEliminar.Add(new Seg_Local
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = request.CodCadena,
+                            CodRegion = request.CodRegion,
+                            CodZona = request.CodZona,
+                            CodLocal = codigo
+                        });
+                    }
+                }
+
+                if (localesEliminar.Count > 0)
+                {
+                    foreach (var local in localesEliminar)
+                    {
+                        var localDesasociada = await _contexto.RepositorioSegLocal.Obtener(e => e.CodUsuario == local.CodUsuario && e.CodEmpresa == local.CodEmpresa
+                                                                                            && e.CodCadena == local.CodCadena && e.CodRegion == local.CodRegion
+                                                                                            && e.CodZona == local.CodZona && e.CodLocal == local.CodLocal).FirstOrDefaultAsync();
+                        _contexto.RepositorioSegLocal.Eliminar(localDesasociada);
+                    }
+                }
+
+                if (localesAgregar.Count > 0)
+                {
+                    foreach (var local in localesAgregar)
+                    {
+                        _contexto.RepositorioSegLocal.Agregar(local);
+                    }
+                }
 
 				await _contexto.GuardarCambiosAsync();
 			}
