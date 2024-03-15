@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +33,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 		public void Eliminar(TEntidad entidad)
 		{
-			_contexto.Set<TEntidad>().Remove(entidad);
+            _contexto.Set<TEntidad>().Remove(entidad);
 		}
 
 		public void EliminarRango(ICollection<TEntidad> entidades)

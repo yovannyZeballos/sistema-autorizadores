@@ -6,6 +6,7 @@ using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
@@ -69,37 +70,75 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 		public async Task<RespuestaComunDTO> Handle(AsociarUsuarioZonaCommand request, CancellationToken cancellationToken)
 		{
 			var response = new RespuestaComunDTO { Ok = true };
-			try
+            var zonasAgregar = new List<Seg_Zona>();
+            var zonasEliminar = new List<Seg_Zona>();
+            try
 			{
-				var zonaesAsocidas = await _contexto.RepositorioSegZona
+				var zonasAsocidas = await _contexto.RepositorioSegZona
 					.Obtener(x => x.CodUsuario == request.CodUsuario 
 					&& x.CodEmpresa == request.CodEmpresa 
 					&& x.CodCadena == request.CodCadena
 					&& x.CodRegion == request.CodRegion)
 					.ToListAsync();
 
-				if (zonaesAsocidas.Count > 0)
-				{
-					_contexto.RepositorioSegZona.EliminarRango(zonaesAsocidas);
-				}
+                HashSet<string> codigosHashSet = new HashSet<string>();
+                foreach (var zona in zonasAsocidas)
+                {
+                    codigosHashSet.Add(zona.CodZona);
+                }
 
-				if (request.ZonasAsociadas != null)
-				{
-					foreach (var zona in request.ZonasAsociadas)
-					{
-						_contexto.RepositorioSegZona.Agregar(new Seg_Zona
-						{
-							CodUsuario = request.CodUsuario,
-							CodEmpresa = request.CodEmpresa,
-							CodCadena = request.CodCadena,
-							CodRegion = request.CodRegion,
-							CodZona = zona
-						});
-					}
-				}
+                // Identificar los códigos para agregar
+                foreach (var codigo in request.ZonasAsociadas)
+                {
+                    if (!codigosHashSet.Contains(codigo))
+                    {
+                        zonasAgregar.Add(new Seg_Zona
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = request.CodCadena,
+                            CodRegion = request.CodRegion,
+                            CodZona = codigo
+                        });
+                    }
+                }
 
+                // Identificar los códigos para eliminaren cascada
+                foreach (var codigo in codigosHashSet)
+                {
+                    if (!Array.Exists(request.ZonasAsociadas, c => c == codigo))
+                    {
+                        zonasEliminar.Add(new Seg_Zona
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = request.CodCadena,
+                            CodRegion = request.CodRegion,
+                            CodZona = codigo
+                        });
+                    }
+                }
 
-				await _contexto.GuardarCambiosAsync();
+                if (zonasEliminar.Count > 0)
+                {
+                    foreach (var zona in zonasEliminar)
+                    {
+                        var zonaDesasociada = await _contexto.RepositorioSegZona.Obtener(e => e.CodUsuario == zona.CodUsuario && e.CodEmpresa == zona.CodEmpresa
+                                                                                            && e.CodCadena == zona.CodCadena && e.CodRegion == zona.CodRegion
+                                                                                            && e.CodZona == zona.CodZona).FirstOrDefaultAsync();
+                        _contexto.RepositorioSegZona.Eliminar(zonaDesasociada);
+                    }
+                }
+
+                if (zonasAgregar.Count > 0)
+                {
+                    foreach (var zona in zonasAgregar)
+                    {
+                        _contexto.RepositorioSegZona.Agregar(zona);
+                    }
+                }
+
+                await _contexto.GuardarCambiosAsync();
 			}
 			catch (Exception ex)
 			{

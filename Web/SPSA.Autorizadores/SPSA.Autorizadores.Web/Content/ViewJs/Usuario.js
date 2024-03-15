@@ -89,16 +89,28 @@ const Usuario = function () {
 
         $('#btnGuardarEmpresa').on("click", function () {
 
-            var usuario = obtenerFilaSeleccionada();
-            if (usuario) {
-                let codUsuario = usuario.CodUsuario;
-                dataTableEmpresa.search('').draw();
-                let empresasSeleccionadas = $("#tableEmpresa input:checkbox:checked").map(function () {
-                    return $(this).attr("value");
-                }).get();
+            swal({
+                title: "¿Está seguro de aplicar los cambios?",
+                text: "En caso deshabilite una empresa, se deshabilitarán todos las cadenas, regiones, zonas y locales asociados a este.",
+                icon: "warning",
+                buttons: ["No", "Si"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
 
-                asociarEmpresas(codUsuario, empresasSeleccionadas || []);
-            }
+                    var usuario = obtenerFilaSeleccionada();
+                    if (usuario) {
+                        let codUsuario = usuario.CodUsuario;
+                        dataTableEmpresa.search('').draw();
+                        let empresasSeleccionadas = $("#tableEmpresa input:checkbox:checked").map(function () {
+                            return $(this).attr("value");
+                        }).get();
+
+                        asociarEmpresas(codUsuario, empresasSeleccionadas || []);
+                    }
+
+                }
+            });
         });
 
         $("#chkTodos").on("change", function () {
@@ -121,16 +133,28 @@ const Usuario = function () {
         });
 
         $('#btnGuardarCadenas').on("click", function () {
-            var usuario = obtenerFilaSeleccionada();
-            if (usuario) {
-                let codUsuario = usuario.CodUsuario;
-                dataTableCadena.search('').draw();
-                let cadenasSeleccionadas = $("#tableCadena input:checkbox:checked").map(function () {
-                    return $(this).attr("value");
-                }).get();
+            swal({
+                title: "¿Está seguro de aplicar los cambios?",
+                text: "En caso deshabilite una cadena, se deshabilitarán todos las regiones, zonas y locales asociados a este.",
+                icon: "warning",
+                buttons: ["No", "Si"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
 
-                asociarCadenas(codUsuario, cadenasSeleccionadas);
-            }
+                    var usuario = obtenerFilaSeleccionada();
+                    if (usuario) {
+                        let codUsuario = usuario.CodUsuario;
+                        dataTableCadena.search('').draw();
+                        let cadenasSeleccionadas = $("#tableCadena input:checkbox:checked").map(function () {
+                            return $(this).attr("value");
+                        }).get();
+
+                        asociarCadenas(codUsuario, cadenasSeleccionadas);
+                    }
+
+                }
+            });
         });
 
         $('#btnAsociarRegion').on("click", function () {
@@ -157,16 +181,28 @@ const Usuario = function () {
         });
 
         $('#btnGuardarRegiones').on("click", function () {
-            var usuario = obtenerFilaSeleccionada();
-            if (usuario) {
-                let codUsuario = usuario.CodUsuario;
-                dataTableRegion.search('').draw();
-                let regionesSeleccionadas = $("#tableRegion input:checkbox:checked").map(function () {
-                    return $(this).attr("value");
-                }).get();
+            swal({
+                title: "¿Está seguro de aplicar los cambios?",
+                text: "En caso deshabilite una region, se deshabilitarán todos las zonas y locales asociados a este.",
+                icon: "warning",
+                buttons: ["No", "Si"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
 
-                asociarRegiones(codUsuario, regionesSeleccionadas);
-            }
+                    var usuario = obtenerFilaSeleccionada();
+                    if (usuario) {
+                        let codUsuario = usuario.CodUsuario;
+                        dataTableRegion.search('').draw();
+                        let regionesSeleccionadas = $("#tableRegion input:checkbox:checked").map(function () {
+                            return $(this).attr("value");
+                        }).get();
+
+                        asociarRegiones(codUsuario, regionesSeleccionadas);
+                    }
+
+                }
+            });
         });
 
         $('#btnAsociarZona').on("click", function () {
@@ -197,16 +233,28 @@ const Usuario = function () {
         });
 
         $('#btnGuardarZonas').on("click", function () {
-            var usuario = obtenerFilaSeleccionada();
-            if (usuario) {
-                let codUsuario = usuario.CodUsuario;
-                dataTableZona.search('').draw();
-                let zonasSeleccionadas = $("#tableZona input:checkbox:checked").map(function () {
-                    return $(this).attr("value");
-                }).get();
+            swal({
+                title: "¿Está seguro de aplicar los cambios?",
+                text: "En caso deshabilite una zona, se deshabilitarán todos los locales asociados a este.",
+                icon: "warning",
+                buttons: ["No", "Si"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
 
-                asociarZonas(codUsuario, zonasSeleccionadas);
-            }
+                    var usuario = obtenerFilaSeleccionada();
+                    if (usuario) {
+                        let codUsuario = usuario.CodUsuario;
+                        dataTableZona.search('').draw();
+                        let zonasSeleccionadas = $("#tableZona input:checkbox:checked").map(function () {
+                            return $(this).attr("value");
+                        }).get();
+
+                        asociarZonas(codUsuario, zonasSeleccionadas);
+                    }
+
+                }
+            });
         });
 
         $('#btnAsociarLocal').on("click", function () {

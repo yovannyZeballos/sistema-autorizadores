@@ -6,6 +6,7 @@ using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,32 +60,67 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 		public async Task<RespuestaComunDTO> Handle(AsociarUsuarioCadenaCommand request, CancellationToken cancellationToken)
 		{
 			var response = new RespuestaComunDTO { Ok = true };
-			try
+            var cadenasAgregar = new List<Seg_Cadena>();
+            var cadenasEliminar = new List<Seg_Cadena>();
+            try
 			{
 				var cadenasAsocidas = await _contexto.RepositorioSegCadena
 					.Obtener(x => x.CodUsuario == request.CodUsuario && x.CodEmpresa == request.CodEmpresa)
 					.ToListAsync();
 
-				if (cadenasAsocidas.Count > 0)
-				{
-					_contexto.RepositorioSegCadena.EliminarRango(cadenasAsocidas);
-				}
+                HashSet<string> codigosHashSet = new HashSet<string>();
+                foreach (var cadena in cadenasAsocidas)
+                {
+                    codigosHashSet.Add(cadena.CodCadena);
+                }
 
-				if (request.CadenasAsociadas != null)
-				{
-					foreach (var cadena in request.CadenasAsociadas)
-					{
-						_contexto.RepositorioSegCadena.Agregar(new Seg_Cadena
-						{
-							CodUsuario = request.CodUsuario,
-							CodEmpresa = request.CodEmpresa,
-							CodCadena = cadena
+                // Identificar los códigos para agregar
+                foreach (var codigo in request.CadenasAsociadas)
+                {
+                    if (!codigosHashSet.Contains(codigo))
+                    {
+                        cadenasAgregar.Add(new Seg_Cadena
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = codigo
 						});
-					}
+                    }
+                }
+
+                // Identificar los códigos para eliminaren cascada
+                foreach (var codigo in codigosHashSet)
+                {
+                    if (!Array.Exists(request.CadenasAsociadas, c => c == codigo))
+                    {
+                        cadenasEliminar.Add(new Seg_Cadena
+                        {
+                            CodUsuario = request.CodUsuario,
+                            CodEmpresa = request.CodEmpresa,
+                            CodCadena = codigo
+						});
+                    }
+                }
+
+                if (cadenasEliminar.Count > 0)
+				{
+                    foreach (var cadena in cadenasEliminar)
+                    {
+                        var cadenaDesasociada = await _contexto.RepositorioSegCadena.Obtener(e => e.CodUsuario == cadena.CodUsuario && e.CodEmpresa == cadena.CodEmpresa && e.CodCadena == cadena.CodCadena).FirstOrDefaultAsync();
+                        _contexto.RepositorioSegCadena.Eliminar(cadenaDesasociada);
+                    }
 				}
 
+				if (cadenasAgregar.Count > 0)
+				{
+					foreach (var cadena in cadenasAgregar)
+					{
+						_contexto.RepositorioSegCadena.Agregar(cadena);
+					}
 
-				await _contexto.GuardarCambiosAsync();
+
+					await _contexto.GuardarCambiosAsync();
+				}
 			}
 			catch (Exception ex)
 			{
