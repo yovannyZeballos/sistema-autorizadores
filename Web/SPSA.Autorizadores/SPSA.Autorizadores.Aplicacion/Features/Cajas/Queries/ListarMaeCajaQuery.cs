@@ -11,6 +11,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Queries
 {
@@ -40,7 +41,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Queries
             var response = new GenericResponseDTO<List<ListarMaeCajaDTO>> { Ok = true, Data = new List<ListarMaeCajaDTO>() };
             try
             {
-                var cajas = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona && x.CodLocal == request.CodLocal).ToListAsync();
+                var cajas = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona && x.CodLocal == request.CodLocal)
+                    .OrderBy(x => x.NumCaja)
+                    .ToListAsync();
                 response.Data = _mapper.Map<List<ListarMaeCajaDTO>>(cajas);
                 response.Ok = true;
                 response.Mensaje = "Se ha generado la lista correctamente";

@@ -10,6 +10,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using Serilog;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries
 {
@@ -36,7 +37,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries
 
             try
             {
-                var empresas = await _contexto.RepositorioMaeCadena.Obtener(x=> x.CodEmpresa == request.CodEmpresa).ToListAsync();
+                var empresas = await _contexto.RepositorioMaeCadena.Obtener(x=> x.CodEmpresa == request.CodEmpresa)
+                    .OrderBy(x=> x.CodCadena)
+                    .ToListAsync();
                 response.Data = _mapper.Map<List<ListarMaeCadenaDTO>>(empresas);
                 response.Ok = true;
                 response.Mensaje = "Se ha generado la lista correctamente";

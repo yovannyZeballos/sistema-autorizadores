@@ -45,7 +45,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries
 							&& x.CodEmpresa == request.CodEmpresa
 							&& x.CodCadena == request.CodCadena)
 					.Include(x => x.Mae_Region)
-					.ToListAsync();
+                    .OrderBy(x => x.CodRegion)
+                    .ToListAsync();
 
 				response.Data = _mapper.Map<List<ListarRegionDTO>>(Regiones);
 			}

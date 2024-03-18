@@ -10,6 +10,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
 {
@@ -38,7 +39,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
             var response = new GenericResponseDTO<List<ListarMaeLocalDTO>> { Ok = true, Data = new List<ListarMaeLocalDTO>() };
             try
             {
-                var locales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona).ToListAsync();
+                var locales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona)
+                    .OrderBy(x => x.CodLocal)
+                    .ToListAsync();
                 response.Data = _mapper.Map<List<ListarMaeLocalDTO>>(locales);
                 response.Ok = true;
                 response.Mensaje = "Se ha generado la lista correctamente";

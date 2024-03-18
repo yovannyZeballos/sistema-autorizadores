@@ -10,6 +10,7 @@ using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
 {
@@ -35,7 +36,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
 
             try
             {
-                var empresas = await _contexto.RepositorioMaeEmpresa.Obtener().ToListAsync();
+                var empresas = await _contexto.RepositorioMaeEmpresa.Obtener().OrderBy(x=> x.CodEmpresa).ToListAsync();
                 response.Data = _mapper.Map<List<ListarMaeEmpresaDTO>>(empresas);
                 response.Ok = true;
                 response.Mensaje = "Se ha generado la lista correctamente";
