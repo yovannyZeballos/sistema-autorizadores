@@ -208,6 +208,8 @@
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\AdministrarInventarioController.cs" />
+    <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
@@ -2281,6 +2283,7 @@
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
+    <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroTablas.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
@@ -2700,6 +2703,10 @@
     <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\web.config" />
+    <Content Include="Areas\Inventario\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Inventario\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Inventario\Views\AdministrarInventario\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2737,6 +2744,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
     <Folder Include="Areas\Maestros\Views\MaeCaja\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />

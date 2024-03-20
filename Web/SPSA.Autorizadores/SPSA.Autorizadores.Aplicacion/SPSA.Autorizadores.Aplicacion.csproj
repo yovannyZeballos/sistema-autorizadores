@@ -261,11 +261,14 @@
     <Compile Include="Features\Empresas\Queries\ListarEmpresasAsociadasQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
+    <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Commands\DescargarMaeLocalXEmpresaCommand.cs" />
     <Compile Include="Features\Locales\Commands\ImportarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ListarMaeLocalXEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerMaeLocalQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesAsociadosQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreResumenQuery.cs" />

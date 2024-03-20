@@ -1,50 +1,49 @@
-﻿using ClosedXML.Excel;
+﻿using AutoMapper;
+using ClosedXML.Excel;
 using MediatR;
+using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using System.IO;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
-using Serilog;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 {
-    public class DescargarMaeLocalCommand : IRequest<DescargarMaestroDTO>
+    public class DescargarMaeLocalXEmpresaCommand : IRequest<DescargarMaestroDTO>
     {
         public string CodEmpresa { get; set; }
-        public string CodCadena { get; set; }
-        public string CodRegion { get; set; }
-        public string CodZona { get; set; }
     }
 
-    public class DescargarMaeLocalHandler : IRequestHandler<DescargarMaeLocalCommand, DescargarMaestroDTO>
+    public class DescargarMaeLocalXEmpresaHandler : IRequestHandler<DescargarMaeLocalXEmpresaCommand, DescargarMaestroDTO>
     {
         private readonly IBCTContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public DescargarMaeLocalHandler(IMapper mapper)
+        public DescargarMaeLocalXEmpresaHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new BCTContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<DescargarMaestroDTO> Handle(DescargarMaeLocalCommand request, CancellationToken cancellationToken)
+        public async Task<DescargarMaestroDTO> Handle(DescargarMaeLocalXEmpresaCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new DescargarMaestroDTO();
 
             try
             {
-                var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona).ToListAsync();
+                var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa).ToListAsync();
 
-                string fileName = $"MaestroLocales_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
+                string fileName = $"LocalesPorEmpresa_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
 
                 using (var wb = new XLWorkbook())
                 {

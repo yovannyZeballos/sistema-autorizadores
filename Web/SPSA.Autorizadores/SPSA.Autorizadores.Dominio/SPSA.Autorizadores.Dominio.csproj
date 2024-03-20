@@ -52,6 +52,7 @@
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
     <Compile Include="Entidades\Empresa.cs" />
+    <Compile Include="Entidades\Inv_Activo.cs" />
     <Compile Include="Entidades\InventarioServidor.cs" />
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
     <Compile Include="Entidades\InventarioTipo.cs" />

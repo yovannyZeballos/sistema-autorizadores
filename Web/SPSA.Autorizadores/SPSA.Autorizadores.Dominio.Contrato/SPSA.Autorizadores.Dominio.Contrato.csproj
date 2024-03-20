@@ -53,6 +53,7 @@
     <Compile Include="Repositorio\IRepositorioCajero.cs" />
     <Compile Include="Repositorio\IRepositorioEmpresa.cs" />
     <Compile Include="Repositorio\IRepositorioGenerico.cs" />
+    <Compile Include="Repositorio\IRepositorioInventarioActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioServidor.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioServidorVirtual.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioTipo.cs" />
