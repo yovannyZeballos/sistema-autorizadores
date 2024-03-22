@@ -571,7 +571,7 @@ var AdministrarMaestroLocal = function () {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     swal({
-                        text: 'Error al listar los regiones: ' + jqXHR,
+                        text: 'Error al listar los locales: ' + jqXHR,
                         icon: "error"
                     });
                 }

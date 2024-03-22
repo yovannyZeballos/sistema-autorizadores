@@ -202,6 +202,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Aperturas\AperturasAreaRegistration.cs" />
+    <Compile Include="Areas\Aperturas\Controllers\AdministrarAperturaController.cs" />
     <Compile Include="Areas\Autorizadores\AutorizadoresAreaRegistration.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorMasivoController.cs" />
     <Compile Include="Areas\Cajeros\CajerosAreaRegistration.cs" />
@@ -2281,6 +2283,7 @@
     <Content Include="Content\switcher\img\bg-img4.jpg" />
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
+    <Content Include="Content\ViewJs\AdministrarApertura.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
@@ -2707,6 +2710,11 @@
     <Content Include="Areas\Inventario\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Inventario\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Inventario\Views\AdministrarInventario\Index.cshtml" />
+    <Content Include="Areas\Aperturas\Views\web.config" />
+    <Content Include="Areas\Aperturas\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Aperturas\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Aperturas\Views\AdministrarApertura\Index.cshtml" />
+    <Content Include="Areas\Aperturas\Views\AdministrarApertura\_CrearEditarApertura.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2744,6 +2752,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Aperturas\Data\" />
     <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
     <Folder Include="Areas\Maestros\Views\MaeCaja\" />

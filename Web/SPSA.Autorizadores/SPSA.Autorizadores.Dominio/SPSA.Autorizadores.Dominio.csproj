@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entidades\Apertura.cs" />
     <Compile Include="Entidades\ArchivoAutorizador.cs" />
     <Compile Include="Entidades\Autorizador.cs" />
     <Compile Include="Entidades\Cajero.cs" />

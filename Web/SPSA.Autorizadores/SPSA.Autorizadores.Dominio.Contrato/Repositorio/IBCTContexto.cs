@@ -26,6 +26,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMaeCaja RepositorioMaeCaja { get; }
 
         IRepositorioInventarioActivo RepositorioInventarioActivo { get; }
+        IRepositorioApertura RepositorioApertura { get; }
 
         bool GuardarCambios();
 		Task<bool> GuardarCambiosAsync();

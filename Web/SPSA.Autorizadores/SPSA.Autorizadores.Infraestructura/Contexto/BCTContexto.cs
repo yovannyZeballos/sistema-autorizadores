@@ -38,6 +38,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMaeCaja = new RepositorioMaeCaja(this);
 
             RepositorioInventarioActivo = new RepositorioInventarioActivo(this);
+            RepositorioApertura = new RepositorioApertura(this);
 
 
             //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
@@ -64,6 +65,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
         public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
 
         public IRepositorioInventarioActivo RepositorioInventarioActivo { get; private set; }
+        public IRepositorioApertura RepositorioApertura { get; private set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -89,6 +91,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
 
             modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
+            modelBuilder.Configurations.Add(new AperturaTypeConfiguration());
         }
 
 		public bool GuardarCambios()

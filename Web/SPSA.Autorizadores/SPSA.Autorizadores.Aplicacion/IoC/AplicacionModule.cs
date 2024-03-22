@@ -2,6 +2,8 @@
 using Autofac.Features.Variance;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
@@ -210,13 +212,14 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<EliminarMaeCajasHandler>().As<IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>>();
             builder.RegisterType<DescargarMaestroCajalHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
 
-            //builder.RegisterType<ListarMaeCajaHandler>().As<IRequestHandler<ListarMaeCajaQuery, GenericResponseDTO<List<ListarMaeCajaDTO>>>>();
-            //builder.RegisterType<ObtenerMaeCajaHandler>().As<IRequestHandler<ObtenerMaeCajaQuery, GenericResponseDTO<ObtenerMaeCajaDTO>>>();
-            //builder.RegisterType<CrearMaeCajaHandler>().As<IRequestHandler<CrearMaeCajaCommand, RespuestaComunDTO>>();
-            //builder.RegisterType<ActualizarMaeCajaHandler>().As<IRequestHandler<ActualizarMaeCajaCommand, RespuestaComunDTO>>();
             builder.RegisterType<ImportarInventarioActivoHandler>().As<IRequestHandler<ImportarInventarioActivoCommand, RespuestaComunExcelDTO>>();
-            //builder.RegisterType<EliminarMaeCajasHandler>().As<IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>>();
-            //builder.RegisterType<DescargarMaestroCajalHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
+
+            builder.RegisterType<ListarAperturaHandler>().As<IRequestHandler<ListarAperturaQuery, GenericResponseDTO<List<ListarAperturaDTO>>>>();
+            builder.RegisterType<ObtenerAperturaHandler>().As<IRequestHandler<ObtenerAperturaQuery, GenericResponseDTO<ObtenerAperturaDTO>>>();
+            builder.RegisterType<CrearAperturaHandler>().As<IRequestHandler<CrearAperturaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarAperturaHandler>().As<IRequestHandler<ActualizarAperturaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarAperturaHandler>().As<IRequestHandler<ImportarAperturaCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarAperturaHandler>().As<IRequestHandler<DescargarAperturaCommand, DescargarMaestroDTO>>();
 
             #endregion <--TABLA MAESTROS SGP-->
 

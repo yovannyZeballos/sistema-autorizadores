@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constantes.cs" />
+    <Compile Include="DTO\AperturaDTO.cs" />
     <Compile Include="DTO\AplicacionDTO.cs" />
     <Compile Include="DTO\AsociarMenuDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="DTO\CaracetristicaCajaDTO.cs" />
     <Compile Include="DTO\CaracetristicaCajaResponseDTO.cs" />
     <Compile Include="DTO\JerarquiaOrganizacionalDTO.cs" />
+    <Compile Include="DTO\ListarAperturaDTO.cs" />
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="DTO\MaeLocalDTO.cs" />
     <Compile Include="DTO\MaeRegionDTO.cs" />
     <Compile Include="DTO\MaeZonaDTO.cs" />
+    <Compile Include="DTO\ObtenerAperturaDTO.cs" />
     <Compile Include="DTO\ObtenerComunDTO.cs" />
     <Compile Include="DTO\GenericResponseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />
@@ -239,6 +242,12 @@
     <Compile Include="DTO\SovosLocalDTO.cs" />
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="Extensiones\DataSetExtensions.cs" />
+    <Compile Include="Features\Aperturas\Commands\ActualizarAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Commands\CrearAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Commands\DescargarAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Commands\ImportarAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Queries\ListarAperturaQuery.cs" />
+    <Compile Include="Features\Aperturas\Queries\ObtenerAperturaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
     <Compile Include="Features\Cadenas\Commands\ActualizarMaeCadenaCommand.cs" />
