@@ -603,7 +603,6 @@ const AdministrarLocalAperturas = function () {
                 //{ data: "NomLocalSAP" },
                 //{ data: "CodLocalOfiplan" },
                 //{ data: "NomLocalOfiplan" },
-
                 { data: "Administrador" },
                 { data: "NumTelefono" },
                 { data: "CodCentroCosto" },
