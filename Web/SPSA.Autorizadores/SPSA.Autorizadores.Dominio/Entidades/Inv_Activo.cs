@@ -17,11 +17,11 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string NomArea { get; set; }
         public string NumOc { get; set; }
         public string NumGuia { get; set; }
-        public DateTime FecSalida{ get; set; }
+        public DateTime? FecSalida{ get; set; }
         public int Antiguedad { get; set; }
         public string IndOperativo { get; set; }
         public string Observacion { get; set; }
         public string Garantia { get; set; }
-        public DateTime FecActualiza { get; set; }
+        public DateTime? FecActualiza { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public string CodComercio { get; set; }
         public string CodCentroCosto { get; set; }
         public DateTime FecApertura { get; set; }
-        public string TipEstado { get; set; }
+        public string TipEstado { get; set; } = "A";
         public string UsuCreacion { get; set; }
         public DateTime FecCreacion { get; set; }
         public string UsuModifica { get; set; }

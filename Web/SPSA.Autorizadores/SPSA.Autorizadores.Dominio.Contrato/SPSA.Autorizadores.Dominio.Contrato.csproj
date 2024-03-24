@@ -89,6 +89,9 @@
     <Compile Include="Repositorio\IRepositorioSovosLocal.cs" />
     <Compile Include="Repositorio\IRepositorioTransactionXmlCT2.cs" />
     <Compile Include="Repositorio\IRepositorioProcesoParametro.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiDepartamento.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiDistrito.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiProvincia.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

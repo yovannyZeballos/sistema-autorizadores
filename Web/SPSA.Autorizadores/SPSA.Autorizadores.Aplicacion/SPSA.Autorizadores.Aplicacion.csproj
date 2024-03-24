@@ -182,6 +182,9 @@
     <Compile Include="DTO\ListarMaeZonaDTO.cs" />
     <Compile Include="DTO\ListarMenuDTO.cs" />
     <Compile Include="DTO\ListarPerfilDTO.cs" />
+    <Compile Include="DTO\ListarUbiDepartamentoDTO.cs" />
+    <Compile Include="DTO\ListarUbiDistritoDTO.cs" />
+    <Compile Include="DTO\ListarUbiProvinciaDTO.cs" />
     <Compile Include="DTO\ListarZonaDTO.cs" />
     <Compile Include="DTO\ListarRegionDTO.cs" />
     <Compile Include="DTO\ListarSistemaDTO.cs" />
@@ -229,6 +232,7 @@
     <Compile Include="DTO\ObtenerMaeRegionDTO.cs" />
     <Compile Include="DTO\ObtenerMaeZonaDTO.cs" />
     <Compile Include="DTO\ObtenerSistemaDTO.cs" />
+    <Compile Include="DTO\ObtenerUbiDistritoDTO.cs" />
     <Compile Include="DTO\ObtenerUsuarioDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
@@ -390,6 +394,10 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ListarUbiDepartamentoQuery.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ListarUbiDistritoQuery.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ListarUbiProvinciaQuery.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ObtenerUbigeoQuery.cs" />
     <Compile Include="Features\Zona\Commands\ActualizarMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\CrearMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\ImportarMaeZonaCommand.cs" />

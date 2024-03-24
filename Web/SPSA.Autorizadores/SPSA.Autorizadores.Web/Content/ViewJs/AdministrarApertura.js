@@ -1,4 +1,9 @@
-﻿var urlListarApertura = baseUrl + 'Aperturas/AdministrarApertura/ListarApertura';
+﻿var urlListarDepartamentos = baseUrl + 'Ubigeos/Ubigeo/ListarDepartamentos';
+var urlListarProvincias = baseUrl + 'Ubigeos/Ubigeo/ListarProvincias';
+var urlListarDistritos = baseUrl + 'Ubigeos/Ubigeo/ListarDistritos';
+var urlObtenerUbigeo = baseUrl + 'Ubigeos/Ubigeo/ObtenerUbigeo';
+
+var urlListarApertura = baseUrl + 'Aperturas/AdministrarApertura/ListarApertura';
 var urlModalCrearEditarApertura = baseUrl + 'Aperturas/AdministrarApertura/CrearEditarApertura';
 var urlCrearApertura = baseUrl + 'Aperturas/AdministrarApertura/CrearApertura';
 var urlActualizarApertura = baseUrl + 'Aperturas/AdministrarApertura/ActualizarApertura';
@@ -7,7 +12,6 @@ var urlDescargarAperturas = baseUrl + 'Aperturas/AdministrarApertura/DescargarEx
 var urlObtenerApertura = baseUrl + 'Aperturas/AdministrarApertura/ObtenerApertura';
 
 var dataTableAperturas = null;
-
 const AdministrarLocalAperturas = function () {
 
     var inicalizarTablaAperturas = true;
@@ -47,15 +51,43 @@ const AdministrarLocalAperturas = function () {
                 NumTelefono: $("#txtNumTelefono").val(),
                 Email: $("#txtEmail").val(),
                 Direccion: $("#txtDireccion").val(),
-                Ubigeo: $("#txtUbigeo").val(),
+                /* Ubigeo: $("#txtUbigeo").val(),*/
                 CodComercio: $("#txtCodComercio").val(),
                 CodCentroCosto: $("#txtCodCentroCosto").val(),
                 FecApertura: $("#txtFecApertura").val(),
-                TipEstado: $("#txtTipEstado").val()
+                TipEstado: $("#cboTipEstado").val()
             };
+
+            apertura.Ubigeo = $("#cboDepartamento").val() + $("#cboProvincia").val() + $("#cboDistrito").val();
 
             if (validarApertura(apertura))
                 await guardarApertura(apertura, urlCrearApertura);
+        });
+
+        $("#btnActualizarApertura").on("click", async function () {
+            var apertura = {
+                CodLocalPMM: $("#txtCodLocalPMM").val(),
+                NomLocalPMM: $("#txtNomLocalPMM").val(),
+                CodLocalSAP: $("#txtCodLocalSAP").val(),
+                NomLocalSAP: $("#txtNomLocalSAP").val(),
+                CodLocalSAPNew: $("#txtCodLocalSAPNew").val(),
+                CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
+                NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
+                Administrador: $("#txtAdministrador").val(),
+                NumTelefono: $("#txtNumTelefono").val(),
+                Email: $("#txtEmail").val(),
+                Direccion: $("#txtDireccion").val(),
+                /* Ubigeo: $("#txtUbigeo").val(),*/
+                CodComercio: $("#txtCodComercio").val(),
+                CodCentroCosto: $("#txtCodCentroCosto").val(),
+                FecApertura: $("#txtFecApertura").val(),
+                TipEstado: $("#cboTipEstado").val()
+            };
+
+            apertura.Ubigeo = $("#cboDepartamento").val() + $("#cboProvincia").val() + $("#cboDistrito").val();
+
+            if (validarApertura(apertura))
+                await guardarApertura(apertura, urlActualizarApertura);
         });
 
         $("#btnDescargarArchivo").on('click', function () {
@@ -80,7 +112,6 @@ const AdministrarLocalAperturas = function () {
 
         });
 
-
         $("#tableAperturas tbody").on('click', 'tr', function () {
             $('#tableAperturas tbody tr').removeClass('selected');
             $(this).toggleClass('selected');
@@ -89,16 +120,223 @@ const AdministrarLocalAperturas = function () {
         $("#tableAperturas tbody").on('click', 'tr', function () {
             $(this).addClass('selected');
         });
-      
+
+        $("#cboDepartamento").on("change", async function () {
+            await cargarComboProvincias();
+        });
+
+        $("#cboProvincia").on("change", async function () {
+            await cargarComboDistritos();
+        });
+
+        $("#cboDistrito").on("change", async function () {
+        });
+
+
+
+        $("#btnCargarArchivo").click(function () {
+            $("#modalImportarApertura").modal('show');
+        });
+
+        $("#btnCargarExcelApertura").on("click", function () {
+            var inputFile = document.getElementById('archivoExcelApertura');
+            var archivoSeleccionado = inputFile.files.length > 0;
+
+            if (archivoSeleccionado) {
+                swal({
+                    title: "¿Está seguro importar el archivo?",
+                    text: " Sí el código de local existe, este no será actualizado con los nuevos datos recibidos.",
+                    icon: "warning",
+                    buttons: ["No", "Si"],
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        importarExcelAperturas();
+                    }
+                });
+            } else {
+                alert('Por favor, seleccione un archivo antes de continuar.');
+            }
+        });
+
+    }
+
+    const cargarComboDepartamentos = async function () {
+
+        try {
+            const response = await listarDepartamentos();
+
+            if (response.Ok) {
+                $('#cboDepartamento').empty().append('<option label="Seleccionar"></option>');
+                $('#cboProvincia').empty().append('<option label="Seleccionar"></option>');
+                $('#cboDistrito').empty().append('<option label="Seleccionar"></option>');
+                response.Data.map(departamento => {
+                    $('#cboDepartamento').append($('<option>', { value: departamento.CodDepartamento, text: departamento.NomDepartamento }));
+                });
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "error"
+                });
+                return;
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
+        }
+    }
+
+    const cargarComboProvincias = async function () {
+
+        try {
+            const response = await listarProvincias();
+
+            if (response === undefined) return;
+
+            if (response.Ok) {
+                $('#cboProvincia').empty().append('<option label="Seleccionar"></option>');
+                $('#cboDistrito').empty().append('<option label="Seleccionar"></option>');
+                response.Data.map(provincia => {
+                    $('#cboProvincia').append($('<option>', { value: provincia.CodProvincia, text: provincia.NomProvincia }));
+                });
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "error"
+                });
+                return;
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
+        }
+    }
+
+    const cargarComboDistritos = async function () {
+
+        try {
+            const response = await listarDistritos();
+            if (response === undefined) return;
+            if (response.Ok) {
+                $('#cboDistrito').empty().append('<option label="Seleccionar"></option>');
+                response.Data.map(distrito => {
+                    $('#cboDistrito').append($('<option>', { value: distrito.CodDistrito, text: distrito.NomDistrito }));
+                });
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "error"
+                });
+                return;
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
+        }
+    }
+
+    const listarDepartamentos = function () {
+        return new Promise((resolve, reject) => {
+
+            const request = {
+            };
+
+            $.ajax({
+                url: urlListarDepartamentos,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+
+    }
+
+    const listarProvincias = function () {
+        return new Promise((resolve, reject) => {
+            const codDepartamento = $("#cboDepartamento").val();
+            if (!codDepartamento) return resolve();
+
+            const request = {
+                CodDepartamento: codDepartamento
+            };
+
+            $.ajax({
+                url: urlListarProvincias,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+    }
+
+    const listarDistritos = function () {
+        return new Promise((resolve, reject) => {
+            const codDepartamento = $("#cboDepartamento").val();
+            const codProvincia = $("#cboProvincia").val();
+            if (!codDepartamento) return resolve();
+
+            const request = {
+                CodDepartamento: codDepartamento,
+                CodProvincia: codProvincia,
+            };
+
+            $.ajax({
+                url: urlListarDistritos,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
     }
 
     const abrirModalNuevaApertura = async function () {
         $("#tituloModalApertura").html("Nuevo Local Apertura");
         $("#btnActualizarApertura").hide();
         $("#btnGuardarApertura").show();
-        const model = {};
+        $("#modalAperturas").modal('show');
+        $("#txtCodLocalPMM").prop("disabled", false);
 
-        await cargarFormApertura(model, false);
+        $("#txtCodLocalPMM").val('');
+        $("#txtNomLocalPMM").val('');
+        $("#txtCodLocalSAP").val('');
+        $("#txtNomLocalSAP").val('');
+        $("#txtCodLocalSAPNew").val('');
+        $("#txtCodLocalOfiplan").val('');
+        $("#txtNomLocalOfiplan").val('');
+        $("#txtAdministrador").val('');
+        $("#txtNumTelefono").val('');
+        $("#txtEmail").val('');
+        $("#txtDireccion").val('');
+        $("#txtUbigeo").val('');
+        $("#txtCodComercio").val('');
+        $("#txtCodCentroCosto").val('');
+        $("#txtFecApertura").val('');
+        $("#cboTipEstado").val('');
+
+        await cargarComboDepartamentos();
+
+        //await cargarFormAperturaNuevo(model, false);
     }
 
     const abrirModalEditarCadena = async function (codLocalPMM) {
@@ -106,10 +344,46 @@ const AdministrarLocalAperturas = function () {
         $("#btnActualizarCadena").show();
         $("#btnGuardarCadena").hide();
 
+        $('#cboDepartamento').empty().append('<option label="Seleccionar"></option>');
+        $('#cboProvincia').empty().append('<option label="Seleccionar"></option>');
+        $('#cboDistrito').empty().append('<option label="Seleccionar"></option>');
+
+        $("#modalAperturas").modal('show');
+        $("#txtCodLocalPMM").prop("disabled", true);
+
         const response = await obtenerApertura(codLocalPMM);
         const model = response.Data;
 
-        await cargarFormApertura(model, true);
+        $("#txtCodLocalPMM").val(model.CodLocalPMM);
+        $("#txtNomLocalPMM").val(model.NomLocalPMM);
+        $("#txtCodLocalSAP").val(model.CodLocalSAP);
+        $("#txtNomLocalSAP").val(model.NomLocalSAP);
+        $("#txtCodLocalSAPNew").val(model.CodLocalSAPNew);
+        $("#txtCodLocalOfiplan").val(model.CodLocalOfiplan);
+        $("#txtNomLocalOfiplan").val(model.NomLocalOfiplan);
+        $("#txtAdministrador").val(model.Administrador);
+        $("#txtNumTelefono").val(model.NumTelefono);
+        $("#txtEmail").val(model.Email);
+        $("#txtDireccion").val(model.Direccion);
+        $("#txtUbigeo").val(model.Ubigeo);
+        $("#txtCodComercio").val(model.CodComercio);
+        $("#txtCodCentroCosto").val(model.CodCentroCosto);
+        var fechaCorrecta = convertirFecha(model.FecApertura).toISOString().substring(0, 10);
+        $("#txtFecApertura").val(fechaCorrecta);
+        $("#cboTipEstado").val(model.TipEstado);
+
+        var objUbigeo = await obtenerUbigeo(model.Ubigeo);
+        await cargarComboDepartamentos();
+        $("#cboDepartamento").val(objUbigeo.Data.CodDepartamento);
+        /*$('#cboDepartamento').trigger('change');*/
+        await cargarComboProvincias();
+        $("#cboProvincia").val(objUbigeo.Data.CodProvincia);
+        /*$('#cboProvincia').trigger('change');*/
+        await cargarComboDistritos();
+        $("#cboDistrito").val(objUbigeo.Data.CodDistrito);
+        /*$('#cboDistrito').trigger('change');*/
+
+        //await cargarFormAperturaEditar(model, true);
     }
 
     const obtenerApertura = function (codLocalPMM) {
@@ -134,8 +408,17 @@ const AdministrarLocalAperturas = function () {
         });
     }
 
+    function convertirFecha(fechaEnFormatoJSON) {
+        // Extraemos el número de milisegundos de la cadena de fecha
+        var milisegundos = parseInt(fechaEnFormatoJSON.replace("/Date(", "").replace(")/", ""));
 
-    const cargarFormApertura = async function (model, deshabilitar) {
+        // Creamos un objeto de fecha con los milisegundos
+        var fecha = new Date(milisegundos);
+
+        return fecha;
+    }
+
+    const cargarFormAperturaNuevo = async function (model, deshabilitar) {
         $.ajax({
             url: urlModalCrearEditarApertura,
             type: "post",
@@ -150,12 +433,64 @@ const AdministrarLocalAperturas = function () {
             success: async function (response) {
                 $("#modalAperturas").find(".modal-body").html(response);
                 $("#modalAperturas").modal('show');
-
                 $("#txtCodLocalPMM").prop("disabled", deshabilitar);
+                await cargarComboDepartamentos();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
+        });
+    }
+
+    const cargarFormAperturaEditar = async function (model, deshabilitar) {
+
+        var fechaJSON = model.FecApertura;
+        var fecha = convertirFecha(fechaJSON);
+
+        model.FecApertura = fecha.toISOString().substring(0, 10);
+
+        $.ajax({
+            url: urlModalCrearEditarApertura,
+            type: "post",
+            data: { model },
+            dataType: "html",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+                $("#modalAperturas").find(".modal-body").html(response);
+                $("#modalAperturas").modal('show');
+                $("#txtCodLocalPMM").prop("disabled", deshabilitar);
+                await cargarComboDepartamentos();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const obtenerUbigeo = function (codUbigeo) {
+        return new Promise((resolve, reject) => {
+            if (!codUbigeo) return resolve();
+
+            const request = {
+                CodUbigeo: codUbigeo
+            };
+
+            $.ajax({
+                url: urlObtenerUbigeo,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
         });
     }
 
@@ -193,7 +528,7 @@ const AdministrarLocalAperturas = function () {
                 }
 
                 swal({ text: response.Mensaje, icon: "success", });
-                /*await cargarArbolEmpresas();*/
+                recargarDataTableAperturas();
                 $("#modalAperturas").modal('hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -265,31 +600,23 @@ const AdministrarLocalAperturas = function () {
                 { data: "NomLocalPMM" },
                 { data: "CodLocalSAP" },
                 { data: "CodLocalSAPNew" },
-                { data: "NomLocalSAP" },
-                { data: "CodLocalOfiplan" },
-                { data: "NomLocalOfiplan" },
+                //{ data: "NomLocalSAP" },
+                //{ data: "CodLocalOfiplan" },
+                //{ data: "NomLocalOfiplan" },
                 { data: "Administrador" },
+                { data: "NumTelefono" },
                 { data: "CodCentroCosto" },
-                { data: "CodComercio" },
-                { data: "FecApertura" }
+                { data: "CodComercio" }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',
                 sSearch: '',
             },
-            scrollY: '400px',
+            scrollY: '600px',
             scrollX: true,
             scrollCollapse: true,
             paging: true,
             rowCallback: function (row, data, index) {
-                //$(row).on('click', function () {
-                //    if ($(this).hasClass('selected')) {
-                //        $(this).removeClass('selected');
-                //    } else {
-                //        dtListaAperturas.$('tr.selected').removeClass('selected');
-                //        $(this).addClass('selected');
-                //    }
-                //});
             },
             bAutoWidth: false
         });
@@ -387,13 +714,61 @@ const AdministrarLocalAperturas = function () {
         });
     }
 
+    const importarExcelAperturas = function () {
+        var archivo = document.getElementById('archivoExcelApertura').files[0];
+        var formData = new FormData();
+        formData.append('archivoExcel', archivo);
+
+        $.ajax({
+            url: urlImportarApertura,
+            type: "post",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+                $("#archivoExcelApertura").val(null);
+                $("#modalImportarApertura").modal('hide');
+            },
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
+
+                        if (response.Errores.length > 0) {
+                            let html = "";
+                            response.Errores.map((error) => {
+                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
+                            });
+                            $('#tbodyErroresCaja').html(html);
+                            $('#modalErroresImportacionExcel').modal("show");
+                        }
+                    });
+                    return;
+                }
+                swal({ text: response.Mensaje, icon: "success", });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
 
     return {
         init: function () {
             checkSession(async function () {
+                //inicalizarFormulario();
                 eventos();
-                /*visualizarDataTableAperturas();*/
+                showLoading();
                 recargarDataTableAperturas();
+                /*await cargarComboDepartamentos();*/
+                //await visualizarDataTableCajas();
+                closeLoading();
             });
         }
     }

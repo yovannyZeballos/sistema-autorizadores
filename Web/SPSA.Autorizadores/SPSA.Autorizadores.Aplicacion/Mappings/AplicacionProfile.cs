@@ -139,6 +139,12 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearAperturaCommand, Apertura>().ReverseMap();
             CreateMap<ActualizarAperturaCommand, Apertura>().ReverseMap();
 
+            CreateMap<ListarUbiDepartamentoDTO, UbiDepartamento>().ReverseMap();
+            CreateMap<ListarUbiProvinciaDTO, UbiProvincia>().ReverseMap();
+            CreateMap<ListarUbiDistritoDTO, UbiDistrito>().ReverseMap();
+            CreateMap<ObtenerUbiDistritoDTO, UbiDistrito>().ReverseMap();
+
+
             #endregion <--TABLA MAESTROS SGP-->
 
         }

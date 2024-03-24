@@ -18,11 +18,11 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string Ubigeo { get; set; }
         public string CodComercio { get; set; }
         public string CodCentroCosto { get; set; }
-        public DateTime FecApertura { get; set; }
+        public DateTime? FecApertura { get; set; }
         public string TipEstado { get; set; }
         public string UsuCreacion { get; set; }
-        public DateTime FecCreacion { get; set; }
+        public DateTime? FecCreacion { get; set; }
         public string UsuModifica { get; set; }
-        public DateTime FecModifica { get; set; }
+        public DateTime? FecModifica { get; set; }
     }
 }

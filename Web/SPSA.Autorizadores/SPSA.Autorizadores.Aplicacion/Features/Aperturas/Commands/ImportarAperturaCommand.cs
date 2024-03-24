@@ -52,21 +52,34 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
                             {
                                 var nuevoApertura = new Dominio.Entidades.Apertura
                                 {
-                                    //CodEmpresa = worksheet.Cell(row, 1).Value.ToString(),
-                                    //CodCadena = worksheet.Cell(row, 2).Value.ToString(),
-                                    //CodRegion = worksheet.Cell(row, 3).Value.ToString(),
-                                    //CodZona = worksheet.Cell(row, 4).Value.ToString(),
-                                    //NomZona = worksheet.Cell(row, 5).Value.ToString(),
-                                    //CodCordina = worksheet.Cell(row, 6).Value.ToString()
+                                    NomLocalPMM = worksheet.Cell(row, 2).Value.ToString().ToUpper(),
+                                    Administrador = worksheet.Cell(row, 3).Value.ToString(),
+                                    NumTelefono = worksheet.Cell(row, 4).Value.ToString(),
+                                    Email = worksheet.Cell(row, 5).Value.ToString(),
+                                    Direccion = worksheet.Cell(row, 6).Value.ToString(),
+                                    CodLocalPMM = worksheet.Cell(row, 10).Value.ToString().Trim(),
+                                    CodLocalSAP = worksheet.Cell(row, 11).Value.ToString().Trim(),
+                                    CodLocalSAPNew = worksheet.Cell(row, 12).Value.ToString().Trim(),
+                                    CodComercio = worksheet.Cell(row, 13).Value.ToString().Trim(),
+                                    CodCentroCosto = worksheet.Cell(row, 14).Value.ToString().Trim(),
+                                    //FecApertura = worksheet.Cell(row, 15).Value,
+                                    TipEstado = worksheet.Cell(row, 16).Value.ToString()
                                 };
+
+                                object cellValueFecApertura = worksheet.Cell(row, 15).Value;
+                                bool isEmptyOrNullFecApertura = cellValueFecApertura == null || string.IsNullOrWhiteSpace(cellValueFecApertura.ToString());
+                                nuevoApertura.FecApertura = isEmptyOrNullFecApertura ? null : DateTime.TryParse(cellValueFecApertura.ToString(), out DateTime fecha1) ? fecha1 : (DateTime?)null;
+
 
                                 bool existe = await _contexto.RepositorioApertura.Existe(x => x.CodLocalPMM == nuevoApertura.CodLocalPMM);
                                 if (existe)
                                 {
-                                    _contexto.RepositorioApertura.Actualizar(nuevoApertura);
+                                    //_contexto.RepositorioApertura.Actualizar(nuevoApertura);
                                 }
                                 else
                                 {
+                                    nuevoApertura.UsuCreacion = "EXCEL_IMPORT";
+                                    nuevoApertura.FecCreacion = DateTime.Now;
                                     _contexto.RepositorioApertura.Agregar(nuevoApertura);
                                 }
                                 await _contexto.GuardarCambiosAsync();

@@ -3,6 +3,8 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Web.Utiles;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
@@ -22,7 +24,8 @@ namespace SPSA.Autorizadores.Web.Areas.Aperturas.Controllers
         // GET: Aperturas/Apertura
         public ActionResult Index()
         {
-            return View();
+            AperturaDTO apertura = new AperturaDTO();
+            return View(apertura);
         }
 
         [HttpPost]
@@ -48,6 +51,8 @@ namespace SPSA.Autorizadores.Web.Areas.Aperturas.Controllers
         [HttpPost]
         public async Task<JsonResult> CrearApertura(CrearAperturaCommand command)
         {
+            command.UsuCreacion = WebSession.Login;
+            command.FecCreacion = DateTime.Now;
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
@@ -55,6 +60,8 @@ namespace SPSA.Autorizadores.Web.Areas.Aperturas.Controllers
         [HttpPost]
         public async Task<JsonResult> ActualizarApertura(ActualizarAperturaCommand command)
         {
+            command.UsuModifica = WebSession.Login;
+            command.FecModifica = DateTime.Now;
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }

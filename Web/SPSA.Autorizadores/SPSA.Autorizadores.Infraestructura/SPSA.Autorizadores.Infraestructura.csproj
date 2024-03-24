@@ -151,6 +151,9 @@
     <Compile Include="Configuracion\ProcesoParametroTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeEmpresaTypeConfiguration.cs" />
     <Compile Include="Configuracion\SegUsuarioTypeConfiguration.cs" />
+    <Compile Include="Configuracion\UbiDepartamentoTypeConfiguration.cs" />
+    <Compile Include="Configuracion\UbiDistritoTypeConfiguration.cs" />
+    <Compile Include="Configuracion\UbiProvinciaTypeConfiguration.cs" />
     <Compile Include="Contexto\BCTContexto.cs" />
     <Compile Include="IoC\InfraestructuraModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -195,6 +198,9 @@
     <Compile Include="Repositorio\RepositorioSovosLocal.cs" />
     <Compile Include="Repositorio\RepositorioTransactionXmlCT2.cs" />
     <Compile Include="Repositorio\RepositorioProcesoParametro.cs" />
+    <Compile Include="Repositorio\RepositorioUbiDepartamento.cs" />
+    <Compile Include="Repositorio\RepositorioUbiDistrito.cs" />
+    <Compile Include="Repositorio\RepositorioUbiProvincia.cs" />
     <Compile Include="Utiles\CadenasConexion.cs" />
     <Compile Include="Utiles\DBHelper.cs" />
   </ItemGroup>

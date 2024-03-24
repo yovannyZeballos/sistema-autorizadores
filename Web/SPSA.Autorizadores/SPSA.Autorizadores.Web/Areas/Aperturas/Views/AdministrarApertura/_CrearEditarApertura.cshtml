@@ -4,110 +4,132 @@
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtCodLocalPMM" class="form-label">Codigo PMM</label>
-            <input type="number" class="form-control form-control-sm" id="txtCodLocalPMM" value="@Model.CodLocalPMM" required>
+            <input type="number" class="form-control" id="txtCodLocalPMM" value="@Model.CodLocalPMM" required>
         </div>
     </div>
     <div class="col-xl-8">
         <div class="form-group">
             <label for="txtNomLocalPMM" class="form-label">Nombre</label>
-            <input type="text" class="form-control form-control-sm" id="txtNomLocalPMM" value="@Model.NomLocalPMM" required oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" id="txtNomLocalPMM" value="@Model.NomLocalPMM" required oninput="this.value = this.value.toUpperCase()">
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtCodLocalSAP" class="form-label">Codigo SAP</label>
-            <input type="text" class="form-control form-control-sm" id="txtCodLocalSAP" value="@Model.CodLocalSAP" required>
+            <input type="text" class="form-control" id="txtCodLocalSAP" value="@Model.CodLocalSAP" required>
         </div>
     </div>
     <div class="col-xl-8">
         <div class="form-group">
             <label for="txtNomLocalSAP" class="form-label">Nombre</label>
-            <input type="text" class="form-control form-control-sm" id="txtNomLocalSAP" value="@Model.NomLocalSAP" required oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" id="txtNomLocalSAP" value="@Model.NomLocalSAP" required oninput="this.value = this.value.toUpperCase()">
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtCodLocalOfiplan" class="form-label">Codigo GDH</label>
-            <input type="text" class="form-control form-control-sm" id="txtCodLocalOfiplan" value="@Model.CodLocalOfiplan" required>
+            <input type="text" class="form-control" id="txtCodLocalOfiplan" value="@Model.CodLocalOfiplan" required>
         </div>
     </div>
     <div class="col-xl-8">
         <div class="form-group">
             <label for="txtNomLocalOfiplan" class="form-label">Nombre</label>
-            <input type="text" class="form-control form-control-sm" id="txtNomLocalOfiplan" value="@Model.NomLocalOfiplan" required oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" id="txtNomLocalOfiplan" value="@Model.NomLocalOfiplan" required oninput="this.value = this.value.toUpperCase()">
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtCodLocalSAPNew" class="form-label">Nuevo Codigo SAP </label>
-            <input type="text" class="form-control form-control-sm" id="txtCodLocalSAPNew" value="@Model.CodLocalSAPNew" required>
+            <input type="text" class="form-control" id="txtCodLocalSAPNew" value="@Model.CodLocalSAPNew" required>
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtCodComercio" class="form-label">Codigo Comercio</label>
-            <input type="text" class="form-control form-control-sm" id="txtCodComercio" value="@Model.CodComercio" required>
+            <input type="text" class="form-control" id="txtCodComercio" value="@Model.CodComercio" required>
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtCodCentroCosto" class="form-label">Codigo Centro Costo</label>
-            <input type="text" class="form-control form-control-sm" id="txtCodCentroCosto" value="@Model.CodCentroCosto" required>
+            <input type="text" class="form-control" id="txtCodCentroCosto" value="@Model.CodCentroCosto" required>
         </div>
     </div>
-
     <div class="col-xl-12">
         <div class="form-group">
             <label for="txtAdministrador" class="form-label">Administrador</label>
-            <input type="text" class="form-control form-control-sm" id="txtAdministrador" value="@Model.Administrador" required oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" id="txtAdministrador" value="@Model.Administrador" required oninput="this.value = this.value.toUpperCase()">
         </div>
     </div>
-
     <div class="col-xl-12">
         <div class="form-group">
             <label for="txtEmail" class="form-label">Email</label>
-            <input type="text" class="form-control form-control-sm" id="txtEmail" value="@Model.Email" required>
+            <input type="text" class="form-control" id="txtEmail" value="@Model.Email" required>
         </div>
     </div>
     <div class="col-xl-12">
         <div class="form-group">
             <label for="txtDireccion" class="form-label">Direccion</label>
-            <input type="text" class="form-control form-control-sm" id="txtDireccion" value="@Model.Direccion" required>
+            <input type="text" class="form-control" id="txtDireccion" value="@Model.Direccion" required>
         </div>
     </div>
-    <div class="col-xl-12">
+    <div class="col-xl-4">
+        <div class="form-group">
+            <label class="form-label">Departamento</label>
+            <select class="form-control select2-show-search custom-select" id="cboDepartamento" required>
+                <option label="Seleccione un departamento"></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="form-group">
+            <label class="form-label">Provincia</label>
+            <select class="form-control select2-show-search custom-select" id="cboProvincia" required>
+                <option label="Seleccione una provincia"></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="form-group">
+            <label class="form-label">Distrito</label>
+            <select class="form-control select2-show-search custom-select" id="cboDistrito" required>
+                <option label="Seleccione un distrito"></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-4">
         <div class="form-group">
             <label for="txtUbigeo" class="form-label">Ubigeo</label>
-            <input type="text" class="form-control form-control-sm" id="txtUbigeo" value="@Model.Ubigeo" required>
+            <input type="text" class="form-control" id="txtUbigeo" value="@Model.Ubigeo" required>
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtNumTelefono" class="form-label">Rpc</label>
-            <input type="text" class="form-control form-control-sm" id="txtNumTelefono" value="@Model.NumTelefono" required>
+            <input type="text" class="form-control" id="txtNumTelefono" value="@Model.NumTelefono" required>
         </div>
     </div>
     <div class="col-xl-4">
         <div class="form-group">
             <label for="txtFecApertura" class="form-label">Fecha Apertura</label>
-            <input type="text" class="form-control form-control-sm" id="txtFecApertura" value="@Model.FecApertura" required>
+            <input type="date" class="form-control" id="txtFecApertura" value="@Model.FecApertura.ToString("yyyy-MM-dd")" required>
         </div>
     </div>
     <div class="col-xl-4">
-        <div class="form-group">
+        <div class="form-group select2-sm">
             <label for="txtTipEstado" class="form-label">Tipo Estado</label>
-            <input type="text" class="form-control form-control-sm" id="txtTipEstado" value="@Model.TipEstado" required>
+            <select class="form-control select2-show-search custom-select" id="cboTipEstado" required>
+                <option value="A" @(Model.TipEstado == "A" ? "selected" : "")>Activo</option>
+                <option value="E" @(Model.TipEstado == "E" ? "selected" : "")>Eliminado</option>
+            </select>
         </div>
     </div>
 
-    @*<div class="col-xl-2 col-md-4">
-        <div class="form-group select2-sm">
-            <label class="form-label">Estado</label>
-            <select class="form-control select2-show-search custom-select" id="cboTipEstado" required>
-                <option value="A" selected>ACTIVO</option>
-                <option value="E">ELIMINADO</option>
-            </select>
-        </div>
-    </div>*@
-
 </div>
+
+@*<script src="~/Content/ViewJs/AdministrarAperturaPV.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarLocalAperturasPV.init();
+        });
+    </script>*@

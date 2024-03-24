@@ -61,6 +61,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
                 }
 
                 Apertura apertura = _mapper.Map<Apertura>(request);
+
                 _contexto.RepositorioApertura.Agregar(apertura);
                 await _contexto.GuardarCambiosAsync();
                 respuesta.Mensaje = "Local apertura creado exitosamente.";

@@ -43,16 +43,16 @@
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0" style="font-size: 11px;">PMM</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOM PMM</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL PMM</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">SAP</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">SAP NEW</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOM SAP</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">OFIPLAN</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOM OFIPLAN</th>
+                                    @*<th class="border-bottom-0" style="font-size: 11px;">NOM SAP</th>*@
+                                    @*<th class="border-bottom-0" style="font-size: 11px;">OFIPLAN</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NOM OFIPLAN</th>*@
                                     <th class="border-bottom-0" style="font-size: 11px;">ADMINISTRADOR</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">RPC</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">CECO</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">COD COMERCIO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">FECHA</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,6 +73,135 @@
                 <h6 class="modal-title" id="tituloModalApertura"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
+                <div class="row needs-validation" id="formApertura">
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtCodLocalPMM" class="form-label">Codigo PMM</label>
+                            <input type="number" class="form-control" id="txtCodLocalPMM" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="form-group">
+                            <label for="txtNomLocalPMM" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="txtNomLocalPMM" required oninput="this.value = this.value.toUpperCase()">
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <label for="txtCodLocalSAP" class="form-label">Codigo SAP</label>
+                            <input type="text" class="form-control" id="txtCodLocalSAP" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <label for="txtCodLocalSAPNew" class="form-label">Nuevo Codigo SAP </label>
+                            <input type="text" class="form-control" id="txtCodLocalSAPNew" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="form-group">
+                            <label for="txtNomLocalSAP" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="txtNomLocalSAP" required oninput="this.value = this.value.toUpperCase()">
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtCodLocalOfiplan" class="form-label">Codigo GDH</label>
+                            <input type="text" class="form-control" id="txtCodLocalOfiplan" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="form-group">
+                            <label for="txtNomLocalOfiplan" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="txtNomLocalOfiplan" required oninput="this.value = this.value.toUpperCase()">
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtCodComercio" class="form-label">Codigo Comercio</label>
+                            <input type="text" class="form-control" id="txtCodComercio" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtCodCentroCosto" class="form-label">Codigo Centro Costo</label>
+                            <input type="text" class="form-control" id="txtCodCentroCosto" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-9">
+                        <div class="form-group">
+                            <label for="txtAdministrador" class="form-label">Administrador</label>
+                            <input type="text" class="form-control" id="txtAdministrador" required oninput="this.value = this.value.toUpperCase()">
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <label for="txtNumTelefono" class="form-label">Rpc</label>
+                            <input type="text" class="form-control" id="txtNumTelefono" required>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-5">
+                        <div class="form-group">
+                            <label for="txtEmail" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="txtEmail" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-7">
+                        <div class="form-group">
+                            <label for="txtDireccion" class="form-label">Direccion</label>
+                            <input type="text" class="form-control" id="txtDireccion">
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label class="form-label">Departamento</label>
+                            <select class="form-control select2-show-search custom-select" id="cboDepartamento">
+                                <option label="Seleccione un departamento"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label class="form-label">Provincia</label>
+                            <select class="form-control select2-show-search custom-select" id="cboProvincia">
+                                <option label="Seleccione una provincia"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label class="form-label">Distrito</label>
+                            <select class="form-control select2-show-search custom-select" id="cboDistrito" required>
+                                <option label="Seleccione un distrito"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-4" style="display:none">
+                        <div class="form-group">
+                            <label for="txtUbigeo" class="form-label">Ubigeo</label>
+                            <input type="text" class="form-control" id="txtUbigeo" required>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtFecApertura" class="form-label">Fecha Apertura</label>
+                            <input type="date" class="form-control" id="txtFecApertura" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="txtTipEstado" class="form-label">Tipo Estado</label>
+                            <select class="form-control select2-show-search custom-select" id="cboTipEstado" required>
+                                <option value="A">ACTIVO</option>
+                                <option value="E">ELIMINADO</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div class="modal-footer">
                 <button id="btnActualizarApertura" class="btn btn-sm btn-primary">Actualizar</button>
@@ -83,7 +212,52 @@
     </div>
 </div>
 
+<!-- MODAL IMPORTAR LOCAL -->
+<div class="modal fade" id="modalImportarApertura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Importar Aperturas desde Excel </h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <input class="form-control" type="file" id="archivoExcelApertura" />
+                    <br />
+                    <div class="text-center">
+                        <button class="btn btn-success" type="button" id="btnCargarExcelApertura">Cargar Excel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- MODAL ERRORES CAJA-->
+<div class="modal fade" id="modalErroresImportacion" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
@@ -101,6 +275,7 @@
     @*<script src="~/Content/js/datatables.js"></script>*@
     @*<script src="~/Content/js/sweet-alert.js"></script>*@
     <script src="~/Content/ViewJs/AdministrarApertura.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             AdministrarLocalAperturas.init();
