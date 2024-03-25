@@ -18,6 +18,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries
         public string CodCadena { get; set; }
         public string CodRegion { get; set; }
     }
+
     public class ObtenerMaeRegionHandler : IRequestHandler<ObtenerMaeRegionQuery, GenericResponseDTO<ObtenerMaeRegionDTO>>
     {
         private readonly IBCTContexto _contexto;

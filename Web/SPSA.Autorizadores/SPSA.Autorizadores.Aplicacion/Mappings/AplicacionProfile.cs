@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using pe.oechsle.Entity;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
@@ -101,6 +102,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<MaeZonaDTO, Mae_Zona>().ReverseMap();
             CreateMap<MaeLocalDTO, Mae_Local>().ReverseMap();
             CreateMap<MaeCajaDTO, Mae_Caja>().ReverseMap();
+            CreateMap<AperturaDTO, Apertura>().ReverseMap();
 
             CreateMap<ListarMaeEmpresaDTO, Mae_Empresa>().ReverseMap();
             CreateMap<ObtenerMaeEmpresaDTO, Mae_Empresa>().ReverseMap();
@@ -131,6 +133,17 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ObtenerMaeCajaDTO, Mae_Caja>().ReverseMap();
             CreateMap<CrearMaeCajaCommand, Mae_Caja>().ReverseMap();
             CreateMap<ActualizarMaeCajaCommand, Mae_Caja>().ReverseMap();
+
+            CreateMap<ListarAperturaDTO, Apertura>().ReverseMap();
+            CreateMap<ObtenerAperturaDTO, Apertura>().ReverseMap();
+            CreateMap<CrearAperturaCommand, Apertura>().ReverseMap();
+            CreateMap<ActualizarAperturaCommand, Apertura>().ReverseMap();
+
+            CreateMap<ListarUbiDepartamentoDTO, UbiDepartamento>().ReverseMap();
+            CreateMap<ListarUbiProvinciaDTO, UbiProvincia>().ReverseMap();
+            CreateMap<ListarUbiDistritoDTO, UbiDistrito>().ReverseMap();
+            CreateMap<ObtenerUbiDistritoDTO, UbiDistrito>().ReverseMap();
+
 
             #endregion <--TABLA MAESTROS SGP-->
 

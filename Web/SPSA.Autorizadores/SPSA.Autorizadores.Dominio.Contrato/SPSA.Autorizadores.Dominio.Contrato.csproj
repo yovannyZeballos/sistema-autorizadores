@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\IBCTContexto.cs" />
+    <Compile Include="Repositorio\IRepositorioApertura.cs" />
     <Compile Include="Repositorio\IRepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\IRepositorioCajaCierre.cs" />
     <Compile Include="Repositorio\IRepositorioCajero.cs" />
@@ -89,6 +90,9 @@
     <Compile Include="Repositorio\IRepositorioSovosLocal.cs" />
     <Compile Include="Repositorio\IRepositorioTransactionXmlCT2.cs" />
     <Compile Include="Repositorio\IRepositorioProcesoParametro.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiDepartamento.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiDistrito.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiProvincia.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

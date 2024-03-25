@@ -10,6 +10,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Data.Entity;
+using System.Linq;
 namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Queries
 {
     public class ListarMaeZonaQuery : IRequest<GenericResponseDTO<List<ListarMaeZonaDTO>>>
@@ -36,7 +37,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Queries
             var response = new GenericResponseDTO<List<ListarMaeZonaDTO>> { Ok = true, Data = new List<ListarMaeZonaDTO>() };
             try
             {
-                var regiones = await _contexto.RepositorioMaeZona.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion).ToListAsync();
+                var regiones = await _contexto.RepositorioMaeZona.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion)
+                    .OrderBy(x => x.CodZona)
+                    .ToListAsync();
                 response.Data = _mapper.Map<List<ListarMaeZonaDTO>>(regiones);
                 response.Ok = true;
                 response.Mensaje = "Se ha generado la lista correctamente";

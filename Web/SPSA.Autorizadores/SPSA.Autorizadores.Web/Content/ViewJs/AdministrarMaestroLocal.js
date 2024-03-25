@@ -98,14 +98,11 @@ var AdministrarMaestroLocal = function () {
 
         $('#tableLocales tbody').on('click', 'tr', function () {
             $('#tableLocales tbody tr').removeClass('selected');
-            //$(this).addClass('selected');
             $(this).toggleClass('selected');
 
         });
 
         $('#tableCajas tbody').on('click', 'tr', function () {
-            //$('#tableCajas tbody tr').removeClass('selected');
-            //$(this).addClass('selected');
             $(this).toggleClass('selected');
 
         });
@@ -571,7 +568,7 @@ var AdministrarMaestroLocal = function () {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     swal({
-                        text: 'Error al listar los regiones: ' + jqXHR,
+                        text: 'Error al listar los locales: ' + jqXHR,
                         icon: "error"
                     });
                 }
@@ -749,8 +746,7 @@ var AdministrarMaestroLocal = function () {
         $("#txtNomLocalOfiplan").val(local.NomLocalOfiplan);
         $("#txtCodLocalSunat").val(local.CodLocalSunat);
     }
-
-    const importarExcelLocales = function () {
+ const importarExcelLocales = function () {
         var archivo = document.getElementById('archivoExcelLocal').files[0];
         var formData = new FormData();
         formData.append('archivoExcel', archivo);
@@ -794,6 +790,7 @@ var AdministrarMaestroLocal = function () {
         });
     }
 
+   
     const visualizarDataTableCajas = async function () {
         $.ajax({
             url: urlListarCajas,

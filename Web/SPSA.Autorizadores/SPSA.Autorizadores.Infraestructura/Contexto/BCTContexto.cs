@@ -38,8 +38,22 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMaeCaja = new RepositorioMaeCaja(this);
 			RepositorioInvCajas = new RepositorioInvCajas(this);
 			RepositorioInvTipoActivo = new RepositorioInvTipoActivo(this);
-			this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
-		}
+            RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
+            RepositorioMaeCadena = new RepositorioMaeCadena(this);
+            RepositorioMaeRegion = new RepositorioMaeRegion(this);
+            RepositorioMaeZona = new RepositorioMaeZona(this);
+            RepositorioMaeLocal = new RepositorioMaeLocal(this);
+            RepositorioMaeCaja = new RepositorioMaeCaja(this);
+
+            RepositorioInventarioActivo = new RepositorioInventarioActivo(this);
+            RepositorioApertura = new RepositorioApertura(this);
+
+            RepositorioUbiDepartamento = new RepositorioUbiDepartamento(this);
+            RepositorioUbiProvincia = new RepositorioUbiProvincia(this);
+            RepositorioUbiDistrito = new RepositorioUbiDistrito(this);
+
+            //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
+        }
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
@@ -63,7 +77,15 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioInvCajas RepositorioInvCajas { get; private set; }
 		public IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; private set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        public IRepositorioInventarioActivo RepositorioInventarioActivo { get; private set; }
+        public IRepositorioApertura RepositorioApertura { get; private set; }
+
+        public IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; private set; }
+        public IRepositorioUbiProvincia RepositorioUbiProvincia { get; private set; }
+        public IRepositorioUbiDistrito RepositorioUbiDistrito { get; private set; }
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoParametroEmpresaTypeConfiguration());
@@ -79,12 +101,19 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new SegMenuTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegPerfilMenuTypeConfiguration());
 
-			modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
+            modelBuilder.Configurations.Add(new AperturaTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new UbiDepartamentoTypeConfiguration());
+            modelBuilder.Configurations.Add(new UbiProvinciaTypeConfiguration());
+            modelBuilder.Configurations.Add(new UbiDistritoTypeConfiguration());
 			modelBuilder.Configurations.Add(new InvCajasTypeConfiguration());
 			modelBuilder.Configurations.Add(new InvTipoActivoTypeConfiguration());
 		}

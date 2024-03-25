@@ -23,13 +23,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
         public string CodZona { get; set; }
     }
 
-    public class DescargarMaestroLocalHandler : IRequestHandler<DescargarMaeLocalCommand, DescargarMaestroDTO>
+    public class DescargarMaeLocalHandler : IRequestHandler<DescargarMaeLocalCommand, DescargarMaestroDTO>
     {
         private readonly IBCTContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public DescargarMaestroLocalHandler(IMapper mapper)
+        public DescargarMaeLocalHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new BCTContexto();

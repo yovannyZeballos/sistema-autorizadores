@@ -25,6 +25,6 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario
 			   "Inventario/{controller}/{action}/{id}",
 				new { controller = "InventarioCaja", action = "Index", id = UrlParameter.Optional }
 		   );
-		}
+        }
     }
 }

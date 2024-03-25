@@ -10,6 +10,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries
 {
@@ -38,7 +39,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries
 
             try
             {
-                var regiones = await _contexto.RepositorioMaeRegion.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena).ToListAsync();
+                var regiones = await _contexto.RepositorioMaeRegion.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena)
+                    .OrderBy(x => x.CodRegion)
+                    .ToListAsync();
                 response.Data = _mapper.Map<List<ListarMaeRegionDTO>>(regiones);
                 response.Ok = true;
                 response.Mensaje = "Se ha generado la lista correctamente";

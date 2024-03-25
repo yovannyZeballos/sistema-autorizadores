@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constantes.cs" />
+    <Compile Include="DTO\AperturaDTO.cs" />
     <Compile Include="DTO\AplicacionDTO.cs" />
     <Compile Include="DTO\AsociarMenuDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="DTO\CaracetristicaCajaResponseDTO.cs" />
     <Compile Include="DTO\EmpresaAsociadaDTO.cs" />
     <Compile Include="DTO\JerarquiaOrganizacionalDTO.cs" />
+    <Compile Include="DTO\ListarAperturaDTO.cs" />
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
@@ -182,6 +184,9 @@
     <Compile Include="DTO\ListarMaeZonaDTO.cs" />
     <Compile Include="DTO\ListarMenuDTO.cs" />
     <Compile Include="DTO\ListarPerfilDTO.cs" />
+    <Compile Include="DTO\ListarUbiDepartamentoDTO.cs" />
+    <Compile Include="DTO\ListarUbiDistritoDTO.cs" />
+    <Compile Include="DTO\ListarUbiProvinciaDTO.cs" />
     <Compile Include="DTO\ListarZonaDTO.cs" />
     <Compile Include="DTO\ListarRegionDTO.cs" />
     <Compile Include="DTO\ListarSistemaDTO.cs" />
@@ -193,6 +198,7 @@
     <Compile Include="DTO\MaeLocalDTO.cs" />
     <Compile Include="DTO\MaeRegionDTO.cs" />
     <Compile Include="DTO\MaeZonaDTO.cs" />
+    <Compile Include="DTO\ObtenerAperturaDTO.cs" />
     <Compile Include="DTO\ObtenerComunDTO.cs" />
     <Compile Include="DTO\GenericResponseDTO.cs" />
     <Compile Include="DTO\DescargarPlantillasDTO.cs" />
@@ -229,6 +235,7 @@
     <Compile Include="DTO\ObtenerMaeRegionDTO.cs" />
     <Compile Include="DTO\ObtenerMaeZonaDTO.cs" />
     <Compile Include="DTO\ObtenerSistemaDTO.cs" />
+    <Compile Include="DTO\ObtenerUbiDistritoDTO.cs" />
     <Compile Include="DTO\ObtenerUsuarioDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
@@ -244,6 +251,12 @@
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="DTO\ZonaAsociadaDTO.cs" />
     <Compile Include="Extensiones\DataSetExtensions.cs" />
+    <Compile Include="Features\Aperturas\Commands\ActualizarAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Commands\CrearAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Commands\DescargarAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Commands\ImportarAperturaCommand.cs" />
+    <Compile Include="Features\Aperturas\Queries\ListarAperturaQuery.cs" />
+    <Compile Include="Features\Aperturas\Queries\ObtenerAperturaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
     <Compile Include="Features\Cadenas\Commands\ActualizarMaeCadenaCommand.cs" />
@@ -267,11 +280,14 @@
     <Compile Include="Features\Empresas\Queries\ListarEmpresasAsociadasQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
+    <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Commands\DescargarMaeLocalXEmpresaCommand.cs" />
     <Compile Include="Features\Locales\Commands\ImportarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalQuery.cs" />
+    <Compile Include="Features\Locales\Queries\ListarMaeLocalXEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerMaeLocalQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarLocalesAsociadosQuery.cs" />
     <Compile Include="Features\Locales\Queries\ReporteCierreResumenQuery.cs" />
@@ -384,6 +400,10 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ListarUbiDepartamentoQuery.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ListarUbiDistritoQuery.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ListarUbiProvinciaQuery.cs" />
+    <Compile Include="Features\Ubigeos\Queries\ObtenerUbigeoQuery.cs" />
     <Compile Include="Features\Zona\Commands\ActualizarMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\CrearMaeZonaCommand.cs" />
     <Compile Include="Features\Zona\Commands\ImportarMaeZonaCommand.cs" />
