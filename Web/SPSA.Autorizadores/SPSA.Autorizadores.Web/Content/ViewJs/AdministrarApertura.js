@@ -11,6 +11,8 @@ var urlImportarApertura = baseUrl + 'Aperturas/AdministrarApertura/ImportarExcel
 var urlDescargarAperturas = baseUrl + 'Aperturas/AdministrarApertura/DescargarExcelApertura';
 var urlObtenerApertura = baseUrl + 'Aperturas/AdministrarApertura/ObtenerApertura';
 
+var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
+
 var dataTableAperturas = null;
 const AdministrarLocalAperturas = function () {
 
@@ -129,11 +131,6 @@ const AdministrarLocalAperturas = function () {
             await cargarComboDistritos();
         });
 
-        $("#cboDistrito").on("change", async function () {
-        });
-
-
-
         $("#btnCargarArchivo").click(function () {
             $("#modalImportarApertura").modal('show');
         });
@@ -157,6 +154,10 @@ const AdministrarLocalAperturas = function () {
             } else {
                 alert('Por favor, seleccione un archivo antes de continuar.');
             }
+        });
+
+        $("#btnPlantillaArchivo").on("click", function () {
+            descargarPlantillas("Plantilla_Aperturas");
         });
 
     }
@@ -382,8 +383,6 @@ const AdministrarLocalAperturas = function () {
         await cargarComboDistritos();
         $("#cboDistrito").val(objUbigeo.Data.CodDistrito);
         /*$('#cboDistrito').trigger('change');*/
-
-        //await cargarFormAperturaEditar(model, true);
     }
 
     const obtenerApertura = function (codLocalPMM) {
@@ -758,16 +757,40 @@ const AdministrarLocalAperturas = function () {
         });
     }
 
+    const descargarPlantillas = function (nombreCarpeta) {
+        $.ajax({
+            url: urlDescargarPlantilla,
+            type: "post",
+            data: { nombreCarpeta: nombreCarpeta },
+            dataType: "json",
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
 
     return {
         init: function () {
             checkSession(async function () {
-                //inicalizarFormulario();
                 eventos();
                 showLoading();
                 recargarDataTableAperturas();
-                /*await cargarComboDepartamentos();*/
-                //await visualizarDataTableCajas();
                 closeLoading();
             });
         }

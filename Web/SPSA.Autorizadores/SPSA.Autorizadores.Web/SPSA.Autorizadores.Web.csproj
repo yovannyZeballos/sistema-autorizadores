@@ -2285,7 +2285,6 @@
     <Content Include="Content\switcher\img\bg-img4.jpg" />
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
-    <Content Include="Content\ViewJs\AdministrarAperturaPV.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
@@ -2719,6 +2718,8 @@
     <Content Include="Areas\Aperturas\Views\AdministrarApertura\Index.cshtml" />
     <Content Include="Areas\Aperturas\Views\AdministrarApertura\_CrearEditarApertura.cshtml" />
     <Content Include="Areas\Ubigeos\Views\web.config" />
+    <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
+    <Content Include="Plantillas_Tablas\Plantilla_InvActivo\Plantilla_InventarioActivo.xlsx" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

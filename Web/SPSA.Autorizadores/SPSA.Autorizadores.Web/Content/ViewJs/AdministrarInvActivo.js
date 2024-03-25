@@ -1,12 +1,16 @@
 ﻿var urlImportarInvActivo = baseUrl + 'Inventario/AdministrarInventario/ImportarExcelInventario';
 
-
+var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
 var AdministrarInvActivo = function () {
 
     const eventos = function () {
-        $("#btnAbrirModalInvActivo").click(function () {
+        $("#btnCargarArchivo").click(function () {
             $("#modalImportarInvActivo").modal('show');
+        });
+
+        $("#btnPlantillaArchivo").click(function () {
+            descargarPlantillas("Plantilla_InvActivo");
         });
 
         $("#btnCargarExcelInvActivo").on("click", function () {
@@ -75,15 +79,40 @@ var AdministrarInvActivo = function () {
         });
     }
 
+    const descargarPlantillas = function (nombreCarpeta) {
+        $.ajax({
+            url: urlDescargarPlantilla,
+            type: "post",
+            data: { nombreCarpeta: nombreCarpeta },
+            dataType: "json",
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
 
 
     return {
         init: function () {
             checkSession(function () {
                 eventos();
-                showLoading();
-                //await cargarArbolEmpresas();
-                closeLoading();
+                //showLoading();
+                //closeLoading();
             });
         }
     }

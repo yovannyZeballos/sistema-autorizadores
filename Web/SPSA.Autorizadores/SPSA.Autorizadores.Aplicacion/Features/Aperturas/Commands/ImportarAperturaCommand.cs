@@ -75,6 +75,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
                                 if (existe)
                                 {
                                     //_contexto.RepositorioApertura.Actualizar(nuevoApertura);
+                                    //respuesta.Errores.Add(new ErroresExcelDTO
+                                    //{
+                                    //    Fila = row,
+                                    //    Mensaje = $"Local apertura {nuevoApertura.CodLocalPMM} ya existe!"
+                                    //});
                                 }
                                 else
                                 {
