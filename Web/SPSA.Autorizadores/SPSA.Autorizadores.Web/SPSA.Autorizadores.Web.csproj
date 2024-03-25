@@ -208,6 +208,8 @@
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
+    <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
@@ -2293,6 +2295,7 @@
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
     <Content Include="Content\ViewJs\Home.js" />
+    <Content Include="Content\ViewJs\InventarioCaja2.js" />
     <Content Include="Content\ViewJs\InventarioCaja.js" />
     <Content Include="Content\ViewJs\InventarioServidor.js" />
     <Content Include="Content\ViewJs\Login.js" />
@@ -2657,9 +2660,6 @@
     <Content Include="Plantilla_Caja\Plantilla_Carga_Cajas.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Areas\Autorizadores\Views\AsignarLocal\_AsociarLocalPMM.cshtml" />
     <Content Include="Areas\Locales\Views\InventarioCaja\Index.cshtml" />
     <Content Include="Areas\Locales\Views\InventarioServidor\Index.cshtml" />
@@ -2700,6 +2700,14 @@
     <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\web.config" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\Index.cshtml" />
+    <Content Include="Plantilla_Inventarios\Plantilla_Carga_Inventario_Caja.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

@@ -2,7 +2,6 @@
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
@@ -24,14 +23,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
 
 	public class LoginHandler : IRequestHandler<LoginCommand, UsuarioDTO>
 	{
-		private readonly IRepositorioSeguridad _repositorioSeguridad;
 		private readonly IBCTContexto _bCTContexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger;
 
-		public LoginHandler(IRepositorioSeguridad repositorioSeguridad, IMapper mapper)
+		public LoginHandler(IMapper mapper)
 		{
-			_repositorioSeguridad = repositorioSeguridad;
 			_mapper = mapper;
 			_bCTContexto = new BCTContexto();
 			_logger = SerilogClass._log;
@@ -94,14 +91,21 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
 			var response = new List<ListarMenuDTO>();
 			try
 			{
-				var sistema = await _bCTContexto.RepositorioSegSistema.Obtener(x => x.Sigla == siglaSistema).FirstOrDefaultAsync();
-				var perfiles = await _bCTContexto.RepositorioSegPerfilUsuario.Obtener(x => x.CodUsuario == codUsuario).Select(x => x.CodPerfil).ToListAsync();
-				var menus = await _bCTContexto.RepositorioSegPerfilMenu.Obtener(x => x.CodSistema == sistema.CodSistema &&
-											perfiles.Contains(x.CodPerfil))
+				var sistema = await _bCTContexto.RepositorioSegSistema
+					.Obtener(x => x.Sigla == siglaSistema)
+					.AsNoTracking()
+					.FirstOrDefaultAsync();
+
+				var perfiles = await _bCTContexto.RepositorioSegPerfilUsuario
+					.Obtener(x => x.CodUsuario == codUsuario)
+					.AsNoTracking()
+					.Select(x => x.CodPerfil).ToListAsync();
+
+				var menus = await _bCTContexto.RepositorioSegPerfilMenu
+					.Obtener(x => x.CodSistema == sistema.CodSistema && perfiles.Contains(x.CodPerfil))
+					.AsNoTracking()
 					.Include(x => x.Menu)
 					.Select(x => x.Menu).Distinct().ToListAsync();
-
-				//var menus = await _bCTContexto.RepositorioSegMenu.Obtener(x => x.CodSistema == sistema.CodSistema && menusPerfiles.Contains(x.CodMenu)).ToListAsync();
 
 				response = _mapper.Map<List<ListarMenuDTO>>(menus);
 

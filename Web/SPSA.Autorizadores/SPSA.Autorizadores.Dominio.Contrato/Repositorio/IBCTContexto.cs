@@ -24,8 +24,10 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMaeZona RepositorioMaeZona { get; }
         IRepositorioMaeLocal RepositorioMaeLocal { get; }
         IRepositorioMaeCaja RepositorioMaeCaja { get; }
+        IRepositorioInvCajas RepositorioInvCajas { get; }
+        IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; }
 
-        bool GuardarCambios();
+		bool GuardarCambios();
 		Task<bool> GuardarCambiosAsync();
 		void Reestablecer();
 	}

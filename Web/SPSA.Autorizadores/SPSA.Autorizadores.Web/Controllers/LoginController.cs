@@ -114,6 +114,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 			var response = new RespuestaComunDTO();
 			try
 			{
+				query.Usuario = WebSession.Login;
 				var jerarquia = await _mediator.Send(query);
 
 				if (!jerarquia.Ok)

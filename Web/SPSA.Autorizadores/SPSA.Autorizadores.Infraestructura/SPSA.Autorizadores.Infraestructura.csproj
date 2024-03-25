@@ -130,6 +130,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuracion\InvCajasTypeConfiguration.cs" />
+    <Compile Include="Configuracion\InvTipoActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeZonaTypeConfiguration.cs" />
@@ -157,9 +159,11 @@
     <Compile Include="Repositorio\RepositorioCajero.cs" />
     <Compile Include="Repositorio\RepositorioEmpresa.cs" />
     <Compile Include="Repositorio\RepositorioGenerico.cs" />
+    <Compile Include="Repositorio\RepositorioInvCajas.cs" />
     <Compile Include="Repositorio\RepositorioInventarioServidor.cs" />
     <Compile Include="Repositorio\RepositorioInventarioServidorVirtual.cs" />
     <Compile Include="Repositorio\RepositorioInventarioTipo.cs" />
+    <Compile Include="Repositorio\RepositorioInvTipoActivo.cs" />
     <Compile Include="Repositorio\RepositorioLocal.cs" />
     <Compile Include="Repositorio\RepositorioLocalOfiplan.cs" />
     <Compile Include="Repositorio\RepositorioMaeCaja.cs" />

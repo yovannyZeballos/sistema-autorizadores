@@ -53,9 +53,11 @@
     <Compile Include="Repositorio\IRepositorioCajero.cs" />
     <Compile Include="Repositorio\IRepositorioEmpresa.cs" />
     <Compile Include="Repositorio\IRepositorioGenerico.cs" />
+    <Compile Include="Repositorio\IRepositorioInvCajas.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioServidor.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioServidorVirtual.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioTipo.cs" />
+    <Compile Include="Repositorio\IRepositorioInvTipoActivo.cs" />
     <Compile Include="Repositorio\IRepositorioLocal.cs" />
     <Compile Include="Repositorio\IRepositorioLocalOfiplan.cs" />
     <Compile Include="Repositorio\IRepositorioMaeLocal.cs" />
