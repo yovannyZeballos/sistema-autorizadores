@@ -2707,6 +2707,22 @@
     <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
+    <Content Include="Areas\Aperturas\Views\AdministrarApertura\Index.cshtml" />
+    <Content Include="Areas\Aperturas\Views\AdministrarApertura\_CrearEditarApertura.cshtml" />
+    <Content Include="Areas\Aperturas\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Aperturas\Views\web.config" />
+    <Content Include="Areas\Aperturas\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Inventario\Views\AdministrarInventario\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Inventario\Views\web.config" />
+    <Content Include="Areas\Inventario\Views\_ViewStart.cshtml" />
+    <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plantilla_Inventarios\Plantilla_Carga_Inventario_Caja.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

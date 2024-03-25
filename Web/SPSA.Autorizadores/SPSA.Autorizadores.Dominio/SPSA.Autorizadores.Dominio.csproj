@@ -58,6 +58,7 @@
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
     <Compile Include="Entidades\InventarioTipo.cs" />
     <Compile Include="Entidades\InvTipoActivo.cs" />
+    <Compile Include="Entidades\Inv_Activo.cs" />
     <Compile Include="Entidades\ListBox.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
