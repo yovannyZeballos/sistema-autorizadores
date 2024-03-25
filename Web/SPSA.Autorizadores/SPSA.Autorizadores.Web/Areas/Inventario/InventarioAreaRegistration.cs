@@ -19,6 +19,12 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario
                 "Inventario/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }
             );
+
+			context.MapRoute(
+			   "InventarioCaja",
+			   "Inventario/{controller}/{action}/{id}",
+				new { controller = "InventarioCaja", action = "Index", id = UrlParameter.Optional }
+		   );
         }
     }
 }

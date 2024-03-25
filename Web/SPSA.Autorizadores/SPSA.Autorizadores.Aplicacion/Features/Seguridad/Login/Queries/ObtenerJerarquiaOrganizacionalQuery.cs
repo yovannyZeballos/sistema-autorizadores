@@ -5,10 +5,8 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries
 		public string CodRegion { get; set; }
 		public string CodZona { get; set; }
 		public string CodLocal { get; set; }
+		public string Usuario { get; set; }
 	}
 
 	public class ObtenerJerarquiaOrganizacionalHandler : IRequestHandler<ObtenerJerarquiaOrganizacionalQuery, JerarquiaOrganizacionalDTO>
@@ -36,40 +35,105 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries
 
 		public async Task<JerarquiaOrganizacionalDTO> Handle(ObtenerJerarquiaOrganizacionalQuery request, CancellationToken cancellationToken)
 		{
-			var response = new JerarquiaOrganizacionalDTO { Ok = true };
+			var response = new JerarquiaOrganizacionalDTO() ;
 
 			try
 			{
-				var local = await _bCTContexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa &&
-																				x.CodCadena == request.CodCadena &&
-																				x.CodRegion == request.CodRegion &&
-																				x.CodZona == request.CodZona &&
-																				x.CodLocal == request.CodLocal).FirstOrDefaultAsync();
+				response = await _bCTContexto.RepositorioMaeLocal
+					.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena
+								&& x.CodRegion == request.CodRegion && x.CodZona == request.CodZona
+								&& x.CodLocal == request.CodLocal)
+					.Join(_bCTContexto.RepositorioMaeZona.Obtener(),
+						local => new { local.CodEmpresa, local.CodCadena, local.CodRegion, local.CodZona }, // clave de unión en Local
+						zona => new { zona.CodEmpresa, zona.CodCadena, zona.CodRegion, zona.CodZona }, // clave de unión en Zona
+						(local, zona) => new { Local = local, Zona = zona }) // resultado
+					.Join(_bCTContexto.RepositorioMaeRegion.Obtener(),
+						zona => new { zona.Zona.CodEmpresa, zona.Zona.CodCadena, zona.Zona.CodRegion }, // clave de unión en Zona
+						region => new { region.CodEmpresa, region.CodCadena, region.CodRegion }, // clave de unión en Region
+						(zona, region) => new { zona.Local, zona.Zona, Region = region }) // resultado
+					.Join(_bCTContexto.RepositorioMaeCadena.Obtener(),
+						region => new { region.Region.CodEmpresa, region.Region.CodCadena }, // clave de unión en Region
+						cadena => new { cadena.CodEmpresa, cadena.CodCadena }, // clave de unión en Cadena
+						(region, cadena) => new { region.Local, region.Zona, region.Region, Cadena = cadena }) // resultado
+					.Join(_bCTContexto.RepositorioMaeEmpresa.Obtener(),
+						cadena => cadena.Cadena.CodEmpresa, // clave de unión en Cadena
+						empresa => empresa.CodEmpresa, // clave de unión en Empresa
+						(cadena, empresa) => new { cadena.Local, cadena.Zona, cadena.Region, cadena.Cadena, Empresa = empresa }) // resultado
+					.Select(x => new JerarquiaOrganizacionalDTO
+					{
+						CodEmpresa = x.Empresa.CodEmpresa,
+						NomEmpresa = x.Empresa.NomEmpresa,
+						CodCadena = x.Cadena.CodCadena,
+						NomCadena = x.Cadena.NomCadena,
+						CodRegion = x.Region.CodRegion,
+						NomRegion = x.Region.NomRegion,
+						CodZona = x.Zona.CodZona,
+						NomZona = x.Zona.NomZona,
+						CodLocal = x.Local.CodLocal,
+						NomLocal = x.Local.NomLocal,
+						Ok = true
+					})
+					.FirstOrDefaultAsync();
 
-				var zona = await _bCTContexto.RepositorioMaeZona.Obtener(x => x.CodEmpresa == request.CodEmpresa &&
-																			  x.CodCadena == request.CodCadena &&
-																			  x.CodRegion == request.CodRegion &&
-																			  x.CodZona == request.CodZona).FirstOrDefaultAsync();
+				response.EmpresasAsociadas = await _bCTContexto.RepositorioSegEmpresa
+					.Obtener(x => x.CodUsuario == request.Usuario)
+					.Include(x => x.Mae_Empresa)
+					.Select(x => new EmpresaAsociadaDTO
+					{
+						CodEmpresa = x.CodEmpresa,
+						NomEmpresa = x.Mae_Empresa.NomEmpresa
+					})
+					.ToListAsync();
 
-				var region = await _bCTContexto.RepositorioMaeRegion.Obtener(x => x.CodEmpresa == request.CodEmpresa &&
-																				  x.CodCadena == request.CodCadena &&
-																				  x.CodRegion == request.CodRegion).FirstOrDefaultAsync();
+				response.CadenasAsociadas = await _bCTContexto.RepositorioSegCadena
+					.Obtener(x => x.CodUsuario == request.Usuario)
+					.Include(x => x.Mae_Cadena)
+					.Select(x => new CadenaAsociadaDTO
+					{
+						CodEmpresa = x.CodEmpresa,
+						CodCadena = x.CodCadena,
+						NomCadena = x.Mae_Cadena.NomCadena
+					})
+					.ToListAsync();
 
-				var cadena = await _bCTContexto.RepositorioMaeCadena.Obtener(x => x.CodEmpresa == request.CodEmpresa &&
-																				  x.CodCadena == request.CodCadena).FirstOrDefaultAsync();
+				response.RegionesAsociadas = await _bCTContexto.RepositorioSegRegion
+					.Obtener(x => x.CodUsuario == request.Usuario)
+					.Include(x => x.Mae_Region)
+					.Select(x => new RegionAsociadaDTO
+					{
+						CodEmpresa = x.CodEmpresa,
+						CodCadena = x.CodCadena,
+						CodRegion = x.CodRegion,
+						NomRegion = x.Mae_Region.NomRegion
+					})
+					.ToListAsync();
 
-				var empresa = await _bCTContexto.RepositorioMaeEmpresa.Obtener(x => x.CodEmpresa == request.CodEmpresa).FirstOrDefaultAsync();
+				response.ZonasAsociadas = await _bCTContexto.RepositorioSegZona
+					.Obtener(x => x.CodUsuario == request.Usuario)
+					.Include(x => x.Mae_Zona)
+					.Select(x => new ZonaAsociadaDTO
+					{
+						CodEmpresa = x.CodEmpresa,
+						CodCadena = x.CodCadena,
+						CodRegion = x.CodRegion,
+						CodZona = x.CodZona,
+						NomZona = x.Mae_Zona.NomZona
+					})
+					.ToListAsync();
 
-				response.CodEmpresa = empresa.CodEmpresa;
-				response.NomEmpresa = empresa.NomEmpresa;
-				response.CodCadena = cadena.CodCadena;
-				response.NomCadena = cadena.NomCadena;
-				response.CodRegion = region.CodRegion;
-				response.NomRegion = region.NomRegion;
-				response.CodZona = zona.CodZona;
-				response.NomZona = zona.NomZona;
-				response.CodLocal = local.CodLocal;
-				response.NomLocal = local.NomLocal;
+				response.LocalesAsociados = await _bCTContexto.RepositorioSegLocal
+					.Obtener(x => x.CodUsuario == request.Usuario)
+					.Include(x => x.Mae_Local)
+					.Select(x => new LocalAsociadoDTO
+					{
+						CodEmpresa = x.CodEmpresa,
+						CodCadena = x.CodCadena,
+						CodRegion = x.CodRegion,
+						CodZona = x.CodZona,
+						CodLocal = x.CodLocal,
+						NomLocal = x.Mae_Local.NomLocal
+					})
+					.ToListAsync();
 			}
 			catch (Exception ex)
 			{

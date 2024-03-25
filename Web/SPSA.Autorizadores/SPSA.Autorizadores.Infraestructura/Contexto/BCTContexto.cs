@@ -30,6 +30,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioSegMenu = new RepositorioSegMenu(this);
 			RepositorioSegPerfilMenu = new RepositorioSegPerfilMenu(this);
 
+			RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
+			RepositorioMaeCadena = new RepositorioMaeCadena(this);
+			RepositorioMaeRegion = new RepositorioMaeRegion(this);
+			RepositorioMaeZona = new RepositorioMaeZona(this);
+			RepositorioMaeLocal = new RepositorioMaeLocal(this);
+			RepositorioMaeCaja = new RepositorioMaeCaja(this);
+			RepositorioInvCajas = new RepositorioInvCajas(this);
+			RepositorioInvTipoActivo = new RepositorioInvTipoActivo(this);
             RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
             RepositorioMaeCadena = new RepositorioMaeCadena(this);
             RepositorioMaeRegion = new RepositorioMaeRegion(this);
@@ -49,9 +57,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
-		public IRepositorioSegUsuario RepositorioSegUsuario { get; private set; }		
+		public IRepositorioSegUsuario RepositorioSegUsuario { get; private set; }
 		public IRepositorioSegEmpresa RepositorioSegEmpresa { get; private set; }
-		public IRepositorioSegCadena RepositorioSegCadena { get; private set; }	
+		public IRepositorioSegCadena RepositorioSegCadena { get; private set; }
 		public IRepositorioSegRegion RepositorioSegRegion { get; private set; }
 		public IRepositorioSegZona RepositorioSegZona { get; private set; }
 		public IRepositorioSegLocal RepositorioSegLocal { get; private set; }
@@ -60,12 +68,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioSegMenu RepositorioSegMenu { get; private set; }
 		public IRepositorioSegPerfilMenu RepositorioSegPerfilMenu { get; private set; }
 
-        public IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; private set; }
-        public IRepositorioMaeCadena RepositorioMaeCadena { get; private set; }
-        public IRepositorioMaeRegion RepositorioMaeRegion { get; private set; }
-        public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
-        public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
-        public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
+		public IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; private set; }
+		public IRepositorioMaeCadena RepositorioMaeCadena { get; private set; }
+		public IRepositorioMaeRegion RepositorioMaeRegion { get; private set; }
+		public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
+		public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
+		public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
+		public IRepositorioInvCajas RepositorioInvCajas { get; private set; }
+		public IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; private set; }
 
         public IRepositorioInventarioActivo RepositorioInventarioActivo { get; private set; }
         public IRepositorioApertura RepositorioApertura { get; private set; }
@@ -104,7 +114,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             modelBuilder.Configurations.Add(new UbiDepartamentoTypeConfiguration());
             modelBuilder.Configurations.Add(new UbiProvinciaTypeConfiguration());
             modelBuilder.Configurations.Add(new UbiDistritoTypeConfiguration());
-        }
+			modelBuilder.Configurations.Add(new InvCajasTypeConfiguration());
+			modelBuilder.Configurations.Add(new InvTipoActivoTypeConfiguration());
+		}
 
 		public bool GuardarCambios()
 		{

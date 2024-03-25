@@ -24,6 +24,8 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMaeZona RepositorioMaeZona { get; }
         IRepositorioMaeLocal RepositorioMaeLocal { get; }
         IRepositorioMaeCaja RepositorioMaeCaja { get; }
+        IRepositorioInvCajas RepositorioInvCajas { get; }
+        IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; }
 
         IRepositorioInventarioActivo RepositorioInventarioActivo { get; }
         IRepositorioApertura RepositorioApertura { get; }
