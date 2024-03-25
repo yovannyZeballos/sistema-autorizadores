@@ -8,6 +8,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,7 +47,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Queries
 							&& x.CodCadena == request.CodCadena
 							&& x.CodRegion == request.CodRegion)
 					.Include(x => x.Mae_Zona)
-					.ToListAsync();
+                    .OrderBy(x => x.CodZona)
+                    .ToListAsync();
 
 				response.Data = _mapper.Map<List<ListarZonaDTO>>(Zonas);
 			}

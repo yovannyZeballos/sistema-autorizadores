@@ -47,6 +47,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries
 							&& x.CodEmpresa == request.CodEmpresa
 							&& (busqueda == "" || x.Mae_Cadena.NomCadena.ToUpper().Contains(busqueda)))
 					.Include(x => x.Mae_Cadena)
+					.OrderBy(x => x.CodCadena)
 					.ToListAsync();
 
 				response.Data = _mapper.Map<List<ListarCadenaDTO>>(cadenas);

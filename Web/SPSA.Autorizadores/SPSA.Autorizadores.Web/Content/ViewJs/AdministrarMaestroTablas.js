@@ -34,6 +34,8 @@ var urlModalCrearEditarRegion = baseUrl + 'Maestros/MaeTablas/CrearEditarRegion'
 var urlModalCrearEditarZona = baseUrl + 'Maestros/MaeTablas/CrearEditarZona';
 var urlModalCrearEditarLocal = baseUrl + 'Maestros/MaeTablas/CrearEditarLocal';
 
+var urlDescargarLocalPorEmpresa = baseUrl + 'Maestros/MaeLocal/DescargarLocalPorEmpresa';
+
 var AdministrarMaestroTablas = function () {
 
     const eventos = function () {
@@ -151,6 +153,24 @@ var AdministrarMaestroTablas = function () {
             var codZona = $(this).parent('.zona').data('zona');
 
             abrirModalEditarZona(codEmpresa, codCadena, codRegion, codZona);
+        });
+
+
+        $('.tree').on('click', '.exportar-locales-btn', function (event) {
+            event.stopPropagation();
+            var codEmpresa = $(this).parent('.empresa').data('empresa');
+
+            swal({
+                title: "¿Está seguro exportar el archivo?",
+                text: "Puede demorar unos minutos la exportación de locales por empresa...",
+                icon: "warning",
+                buttons: ["No", "Si"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    descargarLocalesPorEmpresa(codEmpresa);
+                }
+            });
         });
 
 
@@ -300,7 +320,7 @@ var AdministrarMaestroTablas = function () {
                 CodRegional: $("#txtCodRegional").val()
             };
 
-            console.log(region);
+            //console.log(region);
 
             if (validarRegion(region))
                 await guardarRegion(region, urlCrearRegion);
@@ -350,6 +370,47 @@ var AdministrarMaestroTablas = function () {
         });
 
     };
+
+
+    const descargarLocalesPorEmpresa = function (codEmpresa) {
+
+        const request = {
+            CodEmpresa: codEmpresa,
+        };
+
+        $.ajax({
+            url: urlDescargarLocalPorEmpresa,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+
+
 
     const listarEmpresas = function () {
         return new Promise((resolve, reject) => {
@@ -721,7 +782,7 @@ var AdministrarMaestroTablas = function () {
                 var treeRoot = $('#tree-root');
                 treeRoot.empty();
                 response.Data.forEach(function (empresa) {
-                    var empresaNode = $('<ul><li class="empresa" data-empresa="' + empresa.CodEmpresa + '"><b>' + empresa.CodEmpresa + ' | ' + empresa.Ruc + ' | ' + empresa.NomEmpresa + '</b> | ' + empresa.CodSociedad + ' | ' + empresa.CodEmpresaOfi + '<span class="editar-empresa-btn">Editar</span><span class="crear-cadena-btn">(+)Cadena</span></li></ul>');
+                    var empresaNode = $('<ul><li class="empresa" data-empresa="' + empresa.CodEmpresa + '"><b>' + empresa.CodEmpresa + ' | ' + empresa.Ruc + ' | ' + empresa.NomEmpresa + '</b> | ' + empresa.CodSociedad + ' | ' + empresa.CodEmpresaOfi + '<span class="editar-empresa-btn">Editar</span><span class="crear-cadena-btn">(+)Cadena</span><span class="exportar-locales-btn">(+)Exportar Locales</span></li></ul>');
                     empresaNode.data('codigo', empresa.CodEmpresa);
                     treeRoot.append(empresaNode);
                 });

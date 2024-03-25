@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entidades\Apertura.cs" />
     <Compile Include="Entidades\ArchivoAutorizador.cs" />
     <Compile Include="Entidades\Autorizador.cs" />
     <Compile Include="Entidades\Cajero.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
     <Compile Include="Entidades\Empresa.cs" />
+    <Compile Include="Entidades\Inv_Activo.cs" />
     <Compile Include="Entidades\InventarioServidor.cs" />
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
     <Compile Include="Entidades\InventarioTipo.cs" />
@@ -89,6 +91,9 @@
     <Compile Include="Entidades\SegSucursalxUsr.cs" />
     <Compile Include="Entidades\SegUsuario.cs" />
     <Compile Include="Entidades\TransactionXmlCT2.cs" />
+    <Compile Include="Entidades\UbiDepartamento.cs" />
+    <Compile Include="Entidades\UbiDistrito.cs" />
+    <Compile Include="Entidades\UbiProvincia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -42,6 +42,13 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> ListarLocalPorEmpresa(ListarMaeLocalXEmpresaQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
         public async Task<JsonResult> ActualizarLocal(ActualizarMaeLocalCommand command)
         {
             var respuesta = await _mediator.Send(command);
@@ -86,6 +93,13 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 
         [HttpPost]
         public async Task<JsonResult> DescargarLocal(DescargarMaeLocalCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarLocalPorEmpresa(DescargarMaeLocalXEmpresaCommand request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);

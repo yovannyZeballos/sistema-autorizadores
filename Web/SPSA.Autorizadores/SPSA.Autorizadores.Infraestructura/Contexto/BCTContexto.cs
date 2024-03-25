@@ -36,6 +36,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMaeZona = new RepositorioMaeZona(this);
             RepositorioMaeLocal = new RepositorioMaeLocal(this);
             RepositorioMaeCaja = new RepositorioMaeCaja(this);
+
+            RepositorioInventarioActivo = new RepositorioInventarioActivo(this);
+            RepositorioApertura = new RepositorioApertura(this);
+
+            RepositorioUbiDepartamento = new RepositorioUbiDepartamento(this);
+            RepositorioUbiProvincia = new RepositorioUbiProvincia(this);
+            RepositorioUbiDistrito = new RepositorioUbiDistrito(this);
+
             //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
         }
 
@@ -59,6 +67,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
         public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
         public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
 
+        public IRepositorioInventarioActivo RepositorioInventarioActivo { get; private set; }
+        public IRepositorioApertura RepositorioApertura { get; private set; }
+
+        public IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; private set; }
+        public IRepositorioUbiProvincia RepositorioUbiProvincia { get; private set; }
+        public IRepositorioUbiDistrito RepositorioUbiDistrito { get; private set; }
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
@@ -81,6 +97,13 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
             modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
             modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
+            modelBuilder.Configurations.Add(new AperturaTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new UbiDepartamentoTypeConfiguration());
+            modelBuilder.Configurations.Add(new UbiProvinciaTypeConfiguration());
+            modelBuilder.Configurations.Add(new UbiDistritoTypeConfiguration());
         }
 
 		public bool GuardarCambios()
