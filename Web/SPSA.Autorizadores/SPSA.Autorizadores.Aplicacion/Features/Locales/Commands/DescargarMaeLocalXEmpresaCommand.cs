@@ -41,7 +41,32 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 
             try
             {
-                var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa).ToListAsync();
+                //var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa).ToListAsync();
+
+                var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa)
+                                                                .Join(_contexto.RepositorioMaeEmpresa.Obtener(x => x.CodEmpresa == request.CodEmpresa),
+                                                                      local => local.CodEmpresa,
+                                                                      empresa => empresa.CodEmpresa,
+                                                                      (local, empresa) => new { Local = local, NomEmpresa = empresa.NomEmpresa })
+                                                                .Join(_contexto.RepositorioMaeCadena.Obtener(x => x.CodEmpresa == request.CodEmpresa),
+                                                                      localEmpresa => localEmpresa.Local.CodCadena,
+                                                                      cadena => cadena.CodCadena,
+                                                                      (localEmpresa, cadena) => new {
+                                                                          localEmpresa.Local.CodEmpresa,
+                                                                          NomEmpresa = localEmpresa.NomEmpresa,
+                                                                          localEmpresa.Local.CodCadena,
+                                                                          NomCadena = cadena.NomCadena,
+                                                                          localEmpresa.Local.CodRegion,
+                                                                          localEmpresa.Local.CodZona,
+                                                                          localEmpresa.Local.CodLocal,
+                                                                          localEmpresa.Local.NomLocal,
+                                                                          localEmpresa.Local.TipEstado,
+                                                                          localEmpresa.Local.CodLocalPMM,
+                                                                          localEmpresa.Local.CodLocalOfiplan,
+                                                                          localEmpresa.Local.NomLocalOfiplan,
+                                                                          localEmpresa.Local.CodLocalSunat
+                                                                      })
+                                                                .ToListAsync();
 
                 string fileName = $"LocalesPorEmpresa_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
 

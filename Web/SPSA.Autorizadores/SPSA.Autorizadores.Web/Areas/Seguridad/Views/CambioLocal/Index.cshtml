@@ -40,14 +40,49 @@
                             <input type="text" class="form-control form-control-sm" id="txtNombre" value="@SPSA.Autorizadores.Web.Utiles.WebSession.UserName" disabled>
                         </div>
                     </div>
-                    <div class="col-xl-12">
+                    @*<div class="col-xl-12">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Empresa</label>
+                                <select class="form-control select2-show-search custom-select" id="cboEmpresa">
+                                    <option label="Seleccione una empresa"></option>
+                                </select>
+                            </div>
+                        </div>*@
+
+                    <div class="col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label">Empresa</label>
-                            <select class="form-control select2-show-search custom-select" id="cboEmpresa">
+                            <select class="form-control custom-select" id="cboEmpresa">
                                 <option label="Seleccione una empresa"></option>
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control custom-select" id="cboCadena">
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Región</label>
+                            <select class="form-control custom-select" id="cboRegion">
+                                <option label="Seleccione una región"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Zona</label>
+                            <select class="form-control custom-select" id="cboZona">
+                                <option label="Seleccione una región"></option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
