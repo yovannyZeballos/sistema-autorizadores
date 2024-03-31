@@ -97,34 +97,5 @@ namespace SPSA.Autorizadores.Web.Utiles
 			set { Comun.Escribe("menusAsociados", value); }
 		}
 
-        public static string CodEmpresa
-        {
-            get { return Comun.Lee<string>("codEmpresaAsoc"); }
-            set { Comun.Escribe("codEmpresaAsoc", value); }
-        }
-
-        public static string CodCadena
-        {
-            get { return Comun.Lee<string>("codCadenaAsoc"); }
-            set { Comun.Escribe("codCadenaAsoc", value); }
-        }
-
-        public static string CodRegion
-        {
-            get { return Comun.Lee<string>("codRegionAsoc"); }
-            set { Comun.Escribe("codRegionAsoc", value); }
-        }
-
-        public static string CodZona
-        {
-            get { return Comun.Lee<string>("codZonaAsoc"); }
-            set { Comun.Escribe("codZonaAsoc", value); }
-        }
-
-        public static string CodLocal
-        {
-            get { return Comun.Lee<string>("codLocalAsoc"); }
-            set { Comun.Escribe("codLocalAsoc", value); }
-        }
     }
 }

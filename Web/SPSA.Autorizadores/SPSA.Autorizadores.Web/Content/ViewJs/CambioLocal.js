@@ -88,7 +88,6 @@ var CambioLocal = function () {
     const listarEmpresasAsociadas = function (idControl) {
 
         let data = { CodUsuario: $('#txtUsuario').val(), Busqueda: '' };
-
         $.ajax({
             url: urlListarEmpresasAsociadas,
             type: 'POST',
@@ -135,6 +134,8 @@ var CambioLocal = function () {
                         }
                     }
                 });
+
+                $(idControl).val(codEmpresaSession);
 
                 $(idControl).trigger('change');
             },
@@ -198,6 +199,8 @@ var CambioLocal = function () {
                         }
                     }
                 });
+
+                $(idCombo).val(codCadenaSession);
 
                 $(idCombo).trigger('change');
 
@@ -267,6 +270,8 @@ var CambioLocal = function () {
                     }
                 });
 
+                $(idCombo).val(codRegionSession);
+
                 $(idCombo).trigger('change');
 
             },
@@ -335,6 +340,8 @@ var CambioLocal = function () {
                         }
                     }
                 });
+
+                $(idCombo).val(codZonaSession);
 
                 $(idCombo).trigger('change');
 
@@ -499,13 +506,14 @@ var CambioLocal = function () {
 
     const seleccionarLocal = function () {
         var i = 0;
-        dataTableLocal.rows().data().toArray().map(row => {
-            if (row.CodLocal === codigoLocalSession) {
-                dataTableLocal.row(i).nodes().to$().toggleClass('selected');
+        dataTableLocal.rows().every(function () {
+            var rowData = this.data();
+            if (rowData.CodLocal === codLocalSession) {
+                $(this.node()).toggleClass('selected');
             }
             i++;
         });
-    }
+    };
 
     return {
         init: function () {
@@ -521,17 +529,6 @@ var CambioLocal = function () {
                 $('#cboCadena').select2();
                 $('#cboRegion').select2();
                 $('#cboZona').select2();
-
-                //$('#cboEmpresa').val(codEmpresaSession);
-                //$('#cboCadena').val(codCadenaSession);
-                //$('#cboRegion').val(codRegionSession);
-                //$('#cboZona').val(codZonaSession);
-
-                //console.log(codEmpresaSession);
-                //console.log(codCadenaSession);
-                //console.log(codRegionSession);
-                //console.log(codZonaSession);
-                //console.log(codLocalSession);
             });
         }
     }

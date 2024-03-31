@@ -9,6 +9,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
+using System;
 using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Helpers;
@@ -133,14 +134,6 @@ namespace SPSA.Autorizadores.Web.Controllers
 				WebSession.LocalOfiplan = local.CodigoOfiplan;
 				WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
 				WebSession.CodigoEmpresa = local.CodigoEmpresa;
-
-                WebSession.CodEmpresa = query.CodEmpresa;
-                WebSession.CodCadena = query.CodCadena;
-                WebSession.CodRegion = query.CodRegion;
-                WebSession.CodZona = query.CodZona;
-                WebSession.CodLocal = query.CodLocal;
-
-
 
                 response.Ok = true;
 			}
