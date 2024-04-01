@@ -96,5 +96,6 @@ namespace SPSA.Autorizadores.Web.Utiles
 			get { return Comun.Lee<List<ListarMenuDTO>>("menusAsociados"); }
 			set { Comun.Escribe("menusAsociados", value); }
 		}
-	}
+
+    }
 }

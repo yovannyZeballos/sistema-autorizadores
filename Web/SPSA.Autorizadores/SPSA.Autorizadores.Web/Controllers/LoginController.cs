@@ -9,6 +9,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
+using System;
 using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Helpers;
@@ -92,9 +93,10 @@ namespace SPSA.Autorizadores.Web.Controllers
 			{
 				WebSession.Ruc = ruc;
 				var login = WebSession.Login;
-				var localesUsuario = WebSession.Locales;
-				var locales = await _mediator.Send(new ListarLocalesQuery { Ruc = ruc, Locales = localesUsuario });
-				WebSession.LocalesAsignadosXEmpresa = locales;
+				//var localesUsuario = WebSession.Locales;
+				//var locales = await _mediator.Send(new ListarLocalesQuery { Ruc = ruc, Locales = localesUsuario });
+				var locales = await _mediator.Send(new ListarLocalesQuery { Ruc = ruc, Locales = WebSession.Locales });
+				//WebSession.LocalesAsignadosXEmpresa = locales;
 				respuesta.Ok = true; ;
 				respuesta.Locales = locales;
 			}
@@ -132,7 +134,8 @@ namespace SPSA.Autorizadores.Web.Controllers
 				WebSession.LocalOfiplan = local.CodigoOfiplan;
 				WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
 				WebSession.CodigoEmpresa = local.CodigoEmpresa;
-				response.Ok = true;
+
+                response.Ok = true;
 			}
 			catch (System.Exception ex)
 			{

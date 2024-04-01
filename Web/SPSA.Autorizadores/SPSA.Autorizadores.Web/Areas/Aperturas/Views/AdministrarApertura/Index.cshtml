@@ -28,13 +28,12 @@
 <div class="row row-sm">
     <div class="col-xl-12">
         <div class="card overflow-hidden">
-            @Html.Partial("_CardHeader", "Cajeros")
+            @Html.Partial("_CardHeader", "Aperturas")
             <div class="card-body">
                 <div class="row">
                     <div class="col-xl-12">
                         <button id="btnNuevaApertura" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nueva Apertura</button>
                         <button id="btnEditarApertura" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Editar Apertura</button>
-                        @*<button id="btnEliminarApertura" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-x-circle me-1"></i>Eliminar Apertura</button>*@
                         <button id="btnDescargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Excel</button>
                         <button id="btnCargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Cargar Excel</button>
                         <button id="btnPlantillaArchivo" class="btn btn-sm btn-warning mb-4 ms-1"><i class="fe fe-download me-1"></i>Plantilla Excel</button>
@@ -47,9 +46,6 @@
                                     <th class="border-bottom-0" style="font-size: 11px;">LOCAL PMM</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">SAP</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">SAP NEW</th>
-                                    @*<th class="border-bottom-0" style="font-size: 11px;">NOM SAP</th>*@
-                                    @*<th class="border-bottom-0" style="font-size: 11px;">OFIPLAN</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOM OFIPLAN</th>*@
                                     <th class="border-bottom-0" style="font-size: 11px;">ADMINISTRADOR</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">RPC</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">CECO</th>
@@ -158,7 +154,7 @@
                     <div class="col-xl-4">
                         <div class="form-group">
                             <label class="form-label">Departamento</label>
-                            <select class="form-control select2-show-search custom-select" id="cboDepartamento">
+                            <select class="form-control custom-select" id="cboDepartamento">
                                 <option label="Seleccione un departamento"></option>
                             </select>
                         </div>
@@ -166,7 +162,7 @@
                     <div class="col-xl-4">
                         <div class="form-group">
                             <label class="form-label">Provincia</label>
-                            <select class="form-control select2-show-search custom-select" id="cboProvincia">
+                            <select class="form-control custom-select" id="cboProvincia">
                                 <option label="Seleccione una provincia"></option>
                             </select>
                         </div>
@@ -174,7 +170,7 @@
                     <div class="col-xl-4">
                         <div class="form-group">
                             <label class="form-label">Distrito</label>
-                            <select class="form-control select2-show-search custom-select" id="cboDistrito" required>
+                            <select class="form-control custom-select" id="cboDistrito" required>
                                 <option label="Seleccione un distrito"></option>
                             </select>
                         </div>
@@ -195,8 +191,9 @@
                     <div class="col-xl-4">
                         <div class="form-group">
                             <label for="txtTipEstado" class="form-label">Tipo Estado</label>
-                            <select class="form-control select2-show-search custom-select" id="cboTipEstado" required>
-                                <option value="A">ACTIVO</option>
+                            <select class="form-control custom-select" id="cboTipEstado" required>
+                                <option value="A">APERTURADO</option>
+                                <option value="P">POR APERTURAR</option>
                                 <option value="E">ELIMINADO</option>
                             </select>
                         </div>
