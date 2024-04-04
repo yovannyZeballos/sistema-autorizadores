@@ -2723,6 +2723,8 @@
     <Content Include="Plantilla_Inventarios\Plantilla_Carga_Inventario_Caja.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Plantillas_Tablas\Plantilla_InvActivo\Plantilla_InventarioActivo.xlsx" />
+    <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
