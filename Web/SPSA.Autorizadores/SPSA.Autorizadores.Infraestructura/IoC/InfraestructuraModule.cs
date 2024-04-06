@@ -33,6 +33,8 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<RepositorioTransactionXmlCT2>().As<IRepositorioTransactionXmlCT2>().InstancePerRequest();
 			builder.RegisterType<RepositorioProcesoParametro>().As<IRepositorioProcesoParametro>().InstancePerRequest();
 
+			builder.RegisterType<RepositorioDataTable>().As<IRepositorioDataTable>().InstancePerRequest();
+
 			base.Load(builder);
 		}
 	}

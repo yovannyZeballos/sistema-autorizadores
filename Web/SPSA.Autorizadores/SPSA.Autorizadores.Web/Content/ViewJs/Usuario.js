@@ -1,4 +1,5 @@
 ﻿const urlListar = '/Seguridad/Usuario/Listar';
+const urlListarUsuarios = '/DataTables/Listas/ListarUsuario';
 const urlListarEmpresas = '/Seguridad/Usuario/ListarEmpresas';
 const urlGuardar = '/Seguridad/Usuario/CrearUsuario';
 const urlActualizar = '/Seguridad/Usuario/ActualizarUsuario';
@@ -57,7 +58,6 @@ const Usuario = function () {
         $('#btnGuardarUsuario').on("click", function () {
             if (!validarValoresDeControles()) return;
             var usuario = obtenerValoresDeControles();
-            console.log();
             if ($('#codUsuario').prop('disabled'))
                 actualizarUsuario(usuario);
             else
@@ -86,6 +86,15 @@ const Usuario = function () {
                 $(this).addClass('selected');
             }
         });
+
+        //$('#tableAutorizador tbody').on('click', 'tr', function () {
+        //    if ($(this).hasClass('selected')) {
+        //        $(this).removeClass('selected');
+        //    } else {
+        //        dataTableListado.$('tr.selected').removeClass('selected');
+        //        $(this).addClass('selected');
+        //    }
+        //});
 
         $('#btnGuardarEmpresa').on("click", function () {
 
@@ -158,7 +167,6 @@ const Usuario = function () {
         });
 
         $('#btnAsociarRegion').on("click", function () {
-            console.log('asociar regiones')
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
             $('#asociarRegionModalLabel').text('Asociar regiones para el usuario: ' + fila.CodUsuario);
@@ -336,6 +344,73 @@ const Usuario = function () {
             }
         });
     }
+
+    var visualizarDataTableUsuarios = function () {
+
+        $.ajax({
+            url: urlListarUsuarios,
+            type: "post",
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+
+                var columnas = [];
+
+                response.Columnas.forEach((x) => {
+                    columnas.push({
+                        title: x,
+                        data: x.replace(" ", "").replace(".", ""),
+                        defaultContent: "",
+                    });
+                });
+
+                dataTableAutorizador = $('#tableAutorizador').DataTable({
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    scrollY: '400px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    "columns": columnas,
+                    "data": response.Usuarios,
+                    "bAutoWidth": false,
+                    rowCallback: function (row, data, index) {
+                        //if (data.Estado == "ELI") {
+                        //    $("td", row).addClass("text-danger");
+                        //}
+                    },
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel <i class="fa fa-cloud-download"></i>',
+                            titleAttr: 'Descargar Excel',
+                            className: 'btn-sm mb-1 ms-2',
+                            exportOptions: {
+                                modifier: { page: 'all' }
+                            }
+                        },
+                    ],
+                });
+
+                //dataTableAutorizador.buttons().container().prependTo($('#tableAutorizador_filter'));
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+
+
+    };
 
 
     const inicializarDataTableUsuario = function () {
@@ -1304,6 +1379,7 @@ const Usuario = function () {
         init: function () {
             checkSession(function () {
                 eventos();
+                /*visualizarDataTableUsuarios();*/
                 inicializarDataTableUsuario();
                 inicializarSelect2();
                 $('#cboEmpresaRegion').select2();

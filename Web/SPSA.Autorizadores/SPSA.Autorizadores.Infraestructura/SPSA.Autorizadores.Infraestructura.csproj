@@ -163,6 +163,7 @@
     <Compile Include="Repositorio\RepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\RepositorioCajaCierre.cs" />
     <Compile Include="Repositorio\RepositorioCajero.cs" />
+    <Compile Include="Repositorio\RepositorioDataTable.cs" />
     <Compile Include="Repositorio\RepositorioEmpresa.cs" />
     <Compile Include="Repositorio\RepositorioGenerico.cs" />
     <Compile Include="Repositorio\RepositorioInvCajas.cs" />

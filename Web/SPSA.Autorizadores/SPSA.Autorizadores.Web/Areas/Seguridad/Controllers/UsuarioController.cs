@@ -43,12 +43,12 @@ namespace SPSA.Autorizadores.Web.Areas.Seguridad.Controllers
 			return Json(response);
 		}
 
-		/// <summary>
-		/// Acción para crear un nuevo usuario.
-		/// </summary>
-		/// <param name="command">El comando para crear un nuevo usuario.</param>
-		/// <returns>Una respuesta JSON con el resultado de la creación del usuario.</returns>
-		[HttpPost]
+        /// <summary>
+        /// Acción para crear un nuevo usuario.
+        /// </summary>
+        /// <param name="command">El comando para crear un nuevo usuario.</param>
+        /// <returns>Una respuesta JSON con el resultado de la creación del usuario.</returns>
+        [HttpPost]
 		public async Task<JsonResult> CrearUsuario(CrearUsuarioCommand command)
 		{
 			command.UsuCreacion = WebSession.Login;

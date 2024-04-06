@@ -47,7 +47,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 			var response = new GenericResponseDTO<List<ListarUsuarioDTO>> { Ok = true };
 			try
 			{
-				var usuarios = await _contexto.RepositorioSegUsuario.Obtener().ToListAsync();
+                //var usuariosds = await _contexto.RepositorioSegUsuario.PruebasProcedure();
+                var usuarios = await _contexto.RepositorioSegUsuario.Obtener().ToListAsync();
 				response.Data = _mapper.Map<List<ListarUsuarioDTO>>(usuarios);
 			}
 			catch (Exception ex)

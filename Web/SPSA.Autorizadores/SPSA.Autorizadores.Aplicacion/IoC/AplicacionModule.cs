@@ -13,6 +13,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Caja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
@@ -171,8 +172,10 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ObtenerMenusUsuarioHandler>().As<IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
 			builder.RegisterType<ImportarExcelInventarioCajaHandler>().As<IRequestHandler<ImportarExcelInventarioCajaCommand, RespuestaComunExcelDTO>>();
 
-			#region <--TABLA MAESTROS SGP-->
-			builder.RegisterType<DescargarTablaPlantillasHandler>().As<IRequestHandler<DescargarTablaPlantillasCommand, DescargarPlantillasDTO>>();
+            builder.RegisterType<DtUsuariosHandler>().As<IRequestHandler<DtUsuariosQuery, DataTable>>();
+
+            #region <--TABLA MAESTROS SGP-->
+            builder.RegisterType<DescargarTablaPlantillasHandler>().As<IRequestHandler<DescargarTablaPlantillasCommand, DescargarPlantillasDTO>>();
 
 			builder.RegisterType<ListarMaeEmpresaHandler>().As<IRequestHandler<ListarMaeEmpresaQuery, GenericResponseDTO<List<ListarMaeEmpresaDTO>>>>();
 			builder.RegisterType<ObtenerMaeEmpresaHandler>().As<IRequestHandler<ObtenerMaeEmpresaQuery, GenericResponseDTO<ObtenerMaeEmpresaDTO>>>();
