@@ -27,6 +27,8 @@ var dataTableZona = null;
 var dataTableLocal = null;
 var dataTablePerfil = null;
 
+var dataTableAutorizador = null;
+
 var dataTableEmpresasInicializada = false;
 var dataTableCadenasInicializada = false;
 var dataTableRegionesInicializada = false;
@@ -58,6 +60,7 @@ const Usuario = function () {
         $('#btnGuardarUsuario').on("click", function () {
             if (!validarValoresDeControles()) return;
             var usuario = obtenerValoresDeControles();
+            
             if ($('#codUsuario').prop('disabled'))
                 actualizarUsuario(usuario);
             else
@@ -69,7 +72,7 @@ const Usuario = function () {
         $('#btnAsociarEmpresa').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
-            $('#asociarEmpresaModalLabel').text('Asociar empresas para el usuario: ' + fila.CodUsuario);
+            $('#asociarEmpresaModalLabel').text('Asociar empresas para el usuario: ' + fila.out_codigo);
             $('#asociarEmpresaModal').modal('show');
 
             if (!dataTableEmpresasInicializada)
@@ -87,14 +90,14 @@ const Usuario = function () {
             }
         });
 
-        //$('#tableAutorizador tbody').on('click', 'tr', function () {
-        //    if ($(this).hasClass('selected')) {
-        //        $(this).removeClass('selected');
-        //    } else {
-        //        dataTableListado.$('tr.selected').removeClass('selected');
-        //        $(this).addClass('selected');
-        //    }
-        //});
+        $('#tableAutorizador tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                dataTableAutorizador.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
 
         $('#btnGuardarEmpresa').on("click", function () {
 
@@ -109,7 +112,7 @@ const Usuario = function () {
 
                     var usuario = obtenerFilaSeleccionada();
                     if (usuario) {
-                        let codUsuario = usuario.CodUsuario;
+                        let codUsuario = usuario.out_codigo;
                         dataTableEmpresa.search('').draw();
                         let empresasSeleccionadas = $("#tableEmpresa input:checkbox:checked").map(function () {
                             return $(this).attr("value");
@@ -141,7 +144,7 @@ const Usuario = function () {
         $('#btnAsociarCadena').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
-            $('#asociarCadenaModalLabel').text('Asociar cadenas para el usuario: ' + fila.CodUsuario);
+            $('#asociarCadenaModalLabel').text('Asociar cadenas para el usuario: ' + fila.out_codigo);
             $('#asociarCadenaModal').modal('show');
             $('#cboEmpresaCadena').val('').trigger('change');
         });
@@ -165,7 +168,7 @@ const Usuario = function () {
 
                     var usuario = obtenerFilaSeleccionada();
                     if (usuario) {
-                        let codUsuario = usuario.CodUsuario;
+                        let codUsuario = usuario.out_codigo;
                         dataTableCadena.search('').draw();
                         let cadenasSeleccionadas = $("#tableCadena input:checkbox:checked").map(function () {
                             return $(this).attr("value");
@@ -181,7 +184,7 @@ const Usuario = function () {
         $('#btnAsociarRegion').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
-            $('#asociarRegionModalLabel').text('Asociar regiones para el usuario: ' + fila.CodUsuario);
+            $('#asociarRegionModalLabel').text('Asociar regiones para el usuario: ' + fila.out_codigo);
             $('#asociarRegionModal').modal('show');
             //$('#cboCadenaRegion').empty().trigger('change');
             listarEmpresasAsociadas('#cboEmpresaRegion', '#asociarRegionModal');
@@ -212,7 +215,7 @@ const Usuario = function () {
 
                     var usuario = obtenerFilaSeleccionada();
                     if (usuario) {
-                        let codUsuario = usuario.CodUsuario;
+                        let codUsuario = usuario.out_codigo;
                         dataTableRegion.search('').draw();
                         let regionesSeleccionadas = $("#tableRegion input:checkbox:checked").map(function () {
                             return $(this).attr("value");
@@ -228,7 +231,7 @@ const Usuario = function () {
         $('#btnAsociarZona').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
-            $('#asociarZonaModalLabel').text('Asociar zonas para el usuario: ' + fila.CodUsuario);
+            $('#asociarZonaModalLabel').text('Asociar zonas para el usuario: ' + fila.out_codigo);
             $('#asociarZonaModal').modal('show');
             //$('#cboRegionZona').empty().trigger('change');
             listarEmpresasAsociadas('#cboEmpresaZona', '#asociarZonaModal');
@@ -264,7 +267,7 @@ const Usuario = function () {
 
                     var usuario = obtenerFilaSeleccionada();
                     if (usuario) {
-                        let codUsuario = usuario.CodUsuario;
+                        let codUsuario = usuario.out_codigo;
                         dataTableZona.search('').draw();
                         let zonasSeleccionadas = $("#tableZona input:checkbox:checked").map(function () {
                             return $(this).attr("value");
@@ -280,7 +283,7 @@ const Usuario = function () {
         $('#btnAsociarLocal').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
-            $('#asociarLocalModalLabel').text('Asociar locales para el usuario: ' + fila.CodUsuario);
+            $('#asociarLocalModalLabel').text('Asociar locales para el usuario: ' + fila.out_codigo);
             $('#asociarLocalModal').modal('show');
             //$('#cboRegionZona').empty().trigger('change');
             listarEmpresasAsociadas('#cboEmpresaLocal', '#asociarLocalModal');
@@ -312,7 +315,7 @@ const Usuario = function () {
         $('#btnGuardarLocales').on("click", function () {
             var usuario = obtenerFilaSeleccionada();
             if (usuario) {
-                let codUsuario = usuario.CodUsuario;
+                let codUsuario = usuario.out_codigo;
                 dataTableLocal.search('').draw();
                 let localesSeleccionados = $("#tableLocal input:checkbox:checked").map(function () {
                     return $(this).attr("value");
@@ -329,7 +332,7 @@ const Usuario = function () {
         $('#btnAsociarPerfil').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
-            $('#asociarPerfilModalLabel').text('Asociar perfiles para el usuario: ' + fila.CodUsuario);
+            $('#asociarPerfilModalLabel').text('Asociar perfiles para el usuario: ' + fila.out_codigo);
             $('#asociarPerfilModal').modal('show');
 
             if (!dataTablePerfilesInicializada)
@@ -346,7 +349,7 @@ const Usuario = function () {
 
             var usuario = obtenerFilaSeleccionada();
             if (usuario) {
-                let codUsuario = usuario.CodUsuario;
+                let codUsuario = usuario.out_codigo;
                 dataTablePerfil.search('').draw();
                 let perfilesSeleccionadas = $("#tablePerfil input:checkbox:checked").map(function () {
                     return $(this).attr("value");
@@ -375,13 +378,13 @@ const Usuario = function () {
 
                 response.Columnas.forEach((x) => {
                     columnas.push({
-                        title: x,
+                        title: x.substring(4),
                         data: x.replace(" ", "").replace(".", ""),
                         defaultContent: "",
                     });
                 });
 
-                dataTableAutorizador = $('#tableAutorizador').DataTable({
+                dataTableListado = $('#tableUsuarios').DataTable({
                     language: {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
@@ -551,11 +554,33 @@ const Usuario = function () {
     const setearValoresDeControles = function () {
         var fila = obtenerFilaSeleccionada();
         if (fila) {
-            $('#codUsuario').val(fila.CodUsuario);
-            $('#codColaborador').val(fila.CodColaborador);
-            $('#tipUsuario').val(fila.TipUsuario).trigger('change');
-            $('#dirEmail').val(fila.DirEmail);
-            $('#indActivo').val(fila.IndActivo).trigger('change');
+            $('#codUsuario').val(fila.out_codigo);
+            $('#codColaborador').val(fila.out_colaborador);
+            //$('#tipUsuario').val(fila.TipUsuario).trigger('change');
+            $('#dirEmail').val(fila.out_email);
+
+            switch (fila.out_tipo) {
+                case "Administrador":
+                    $('#tipUsuario').val('AD').trigger('change');
+                    break;
+                case "Seguridad":
+                    $('#tipUsuario').val('SG').trigger('change');
+                    break;
+                case "Usuario":
+                    $('#tipUsuario').val('US').trigger('change');
+                    break;
+            }
+
+            switch (fila.out_estado) {
+                case "Activo":
+                    $('#indActivo').val('A').trigger('change');
+                    break;
+                case "Inactivo":
+                    $('#indActivo').val('I').trigger('change');
+                    break;
+            }
+
+            //$('#indActivo').val(fila.IndActivo).trigger('change');
         }
     }
 
@@ -624,7 +649,8 @@ const Usuario = function () {
                 type: "post",
                 data: function (d) {
                     let usuario = obtenerFilaSeleccionada();
-                    d.CodUsuario = usuario.CodUsuario;
+                    //d.CodUsuario = usuario.CodUsuario;
+                    d.CodUsuario = usuario.out_codigo;
                 },
                 dataType: "JSON",
                 dataSrc: "Data",
@@ -670,7 +696,7 @@ const Usuario = function () {
 
     const asociarEmpresas = function (codUsuario, empresasAsociadas) {
 
-        console.log(empresasAsociadas);
+        //console.log(empresasAsociadas);
         $.ajax({
             url: urlAsociarEmpresa,
             type: 'POST',
@@ -700,7 +726,9 @@ const Usuario = function () {
     const listarEmpresasAsociadas = function (idControl, idModalContent) {
 
         let usuario = obtenerFilaSeleccionada();
-        let data = { CodUsuario: usuario.CodUsuario, Busqueda: '' };
+        
+        //let data = { CodUsuario: usuario.CodUsuario, Busqueda: '' };
+        let data = { CodUsuario: usuario.out_codigo, Busqueda: '' };
 
         $.ajax({
             url: urlListarEmpresasAsociadas,
@@ -725,7 +753,7 @@ const Usuario = function () {
                         text: item.NomEmpresa
                     }
                 });
-                console.log(results);
+                //console.log(results);
 
                 $(idControl).empty();
 
@@ -756,7 +784,8 @@ const Usuario = function () {
     const listarCadenasAsociadas = function (idCombo, idModalContent, idComboEmpresa) {
 
         let usuario = obtenerFilaSeleccionada();
-        let data = { CodUsuario: usuario.CodUsuario, CodEmpresa: $(idComboEmpresa).val(), Busqueda: '' };
+        //let data = { CodUsuario: usuario.CodUsuario, CodEmpresa: $(idComboEmpresa).val(), Busqueda: '' };
+        let data = { CodUsuario: usuario.out_codigo, CodEmpresa: $(idComboEmpresa).val(), Busqueda: '' };
 
         $.ajax({
             url: urlListarCadenasAsociadas,
@@ -813,7 +842,8 @@ const Usuario = function () {
 
         let usuario = obtenerFilaSeleccionada();
         let data = {
-            CodUsuario: usuario.CodUsuario,
+            //CodUsuario: usuario.CodUsuario,
+            CodUsuario: usuario.out_codigo,
             CodEmpresa: $(idComboEmpresa).val(),
             CodCadena: $(idComboCadena).val()
         };
@@ -877,7 +907,7 @@ const Usuario = function () {
                 type: "post",
                 data: function (param) {
                     let usuario = obtenerFilaSeleccionada();
-                    return { CodUsuario: usuario.CodUsuario, Busqueda: param.term };
+                    return { CodUsuario: usuario.out_codigo, Busqueda: param.term };
                 },
                 processResults: function (data) {
                     let results = data.Data.map(item => {
@@ -914,7 +944,7 @@ const Usuario = function () {
                 type: "post",
                 data: function (d) {
                     let usuario = obtenerFilaSeleccionada();
-                    d.CodUsuario = usuario.CodUsuario;
+                    d.CodUsuario = usuario.out_codigo;
                     d.CodEmpresa = $('#cboEmpresaCadena').val();
                 },
                 dataType: "JSON",
@@ -996,7 +1026,7 @@ const Usuario = function () {
                 type: "post",
                 data: function (d) {
                     let usuario = obtenerFilaSeleccionada();
-                    d.CodUsuario = usuario.CodUsuario;
+                    d.CodUsuario = usuario.out_codigo;
                     d.CodEmpresa = $('#cboEmpresaRegion').val();
                     d.CodCadena = $('#cboCadenaRegion').val();
                 },
@@ -1080,7 +1110,7 @@ const Usuario = function () {
                 type: "post",
                 data: function (d) {
                     let usuario = obtenerFilaSeleccionada();
-                    d.CodUsuario = usuario.CodUsuario;
+                    d.CodUsuario = usuario.out_codigo;
                     d.CodEmpresa = $('#cboEmpresaZona').val();
                     d.CodCadena = $('#cboCadenaZona').val();
                     d.CodRegion = $('#cboRegionZona').val();
@@ -1162,7 +1192,7 @@ const Usuario = function () {
 
         let usuario = obtenerFilaSeleccionada();
         let data = {
-            CodUsuario: usuario.CodUsuario,
+            CodUsuario: usuario.out_codigo,
             CodEmpresa: $(idComboEmpresa).val(),
             CodCadena: $(idComboCadena).val(),
             CodRegion: $(idComboRegion).val()
@@ -1227,7 +1257,7 @@ const Usuario = function () {
                 type: "post",
                 data: function (d) {
                     let usuario = obtenerFilaSeleccionada();
-                    d.CodUsuario = usuario.CodUsuario;
+                    d.CodUsuario = usuario.out_codigo;
                     d.CodEmpresa = $('#cboEmpresaLocal').val();
                     d.CodCadena = $('#cboCadenaLocal').val();
                     d.CodRegion = $('#cboRegionLocal').val();
@@ -1315,7 +1345,7 @@ const Usuario = function () {
                 type: "post",
                 data: function (d) {
                     let usuario = obtenerFilaSeleccionada();
-                    d.CodUsuario = usuario.CodUsuario;
+                    d.CodUsuario = usuario.out_codigo;
                 },
                 dataType: "JSON",
                 dataSrc: "Data",
@@ -1391,8 +1421,8 @@ const Usuario = function () {
         init: function () {
             checkSession(function () {
                 eventos();
-                /*visualizarDataTableUsuarios();*/
-                inicializarDataTableUsuario();
+                visualizarDataTableUsuarios();
+                //inicializarDataTableUsuario();
                 inicializarSelect2();
                 $('#cboEmpresaRegion').select2();
                 $('#cboCadenaRegion').select2();
