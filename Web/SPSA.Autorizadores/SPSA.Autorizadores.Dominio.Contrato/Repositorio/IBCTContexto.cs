@@ -37,5 +37,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         bool GuardarCambios();
 		Task<bool> GuardarCambiosAsync();
 		void Reestablecer();
+		void Rollback();
 	}
 }

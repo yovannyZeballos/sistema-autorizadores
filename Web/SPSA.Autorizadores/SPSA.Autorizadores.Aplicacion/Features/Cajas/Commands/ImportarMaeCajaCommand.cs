@@ -77,6 +77,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
                             }
                             catch (Exception ex)
                             {
+                                _contexto.Rollback();
+
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = row,
