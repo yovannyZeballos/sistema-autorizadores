@@ -35,6 +35,18 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.FecCreacion).HasColumnName("FEC_CREACION");
             Property(x => x.UsuModifica).HasColumnName("USU_MODIFICA");
             Property(x => x.FecModifica).HasColumnName("FEC_MODIFICA");
+
+            Property(x => x.CodEAM).HasColumnName("COD_EAM");
+            Property(x => x.CodSUNAT).HasColumnName("COD_SUNAT");
+            Property(x => x.NumGuias).HasColumnName("NUM_GUIAS");
+            Property(x => x.CentroDistribu).HasColumnName("CENTRO_DISTRIBU");
+            Property(x => x.TdaEspejo).HasColumnName("TDA_ESPEJO");
+            Property(x => x.Mt2Sala).HasColumnName("MT2_SALA");
+            Property(x => x.Spaceman).HasColumnName("SPACEMAN");
+            Property(x => x.ZonaPricing).HasColumnName("ZONA_PRICING");
+            Property(x => x.Geolocalizacion).HasColumnName("GEOLOCALIZACION");
+            Property(x => x.FecCierre).HasColumnName("FEC_CIERRE");
+
         }
     }
 }

@@ -2711,7 +2711,6 @@
     <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
     <Content Include="Areas\Aperturas\Views\AdministrarApertura\Index.cshtml" />
-    <Content Include="Areas\Aperturas\Views\AdministrarApertura\_CrearEditarApertura.cshtml" />
     <Content Include="Areas\Aperturas\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Aperturas\Views\web.config" />
     <Content Include="Areas\Aperturas\Views\_ViewStart.cshtml" />
