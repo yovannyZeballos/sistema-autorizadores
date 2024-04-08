@@ -126,6 +126,18 @@ const Usuario = function () {
             $('#tableEmpresa input[type="checkbox"]').prop('checked', $("#chkTodos").prop('checked'));
         })
 
+        $("#chkTodosCadena").on("change", function () {
+            $('#tableCadena input[type="checkbox"]').prop('checked', $("#chkTodosCadena").prop('checked'));
+        })
+
+        $("#chkTodosRegion").on("change", function () {
+            $('#tableRegion input[type="checkbox"]').prop('checked', $("#chkTodosRegion").prop('checked'));
+        })
+
+        $("#chkTodosZona").on("change", function () {
+            $('#tableZona input[type="checkbox"]').prop('checked', $("#chkTodosZona").prop('checked'));
+        })
+
         $('#btnAsociarCadena').on("click", function () {
             if (!validarSeleccion()) return;
             var fila = obtenerFilaSeleccionada();
