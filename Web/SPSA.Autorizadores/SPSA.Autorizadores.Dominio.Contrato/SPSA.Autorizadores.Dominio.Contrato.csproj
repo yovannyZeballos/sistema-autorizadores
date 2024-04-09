@@ -52,6 +52,7 @@
     <Compile Include="Repositorio\IRepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\IRepositorioCajaCierre.cs" />
     <Compile Include="Repositorio\IRepositorioCajero.cs" />
+    <Compile Include="Repositorio\IRepositorioDataTable.cs" />
     <Compile Include="Repositorio\IRepositorioEmpresa.cs" />
     <Compile Include="Repositorio\IRepositorioGenerico.cs" />
     <Compile Include="Repositorio\IRepositorioInvCajas.cs" />

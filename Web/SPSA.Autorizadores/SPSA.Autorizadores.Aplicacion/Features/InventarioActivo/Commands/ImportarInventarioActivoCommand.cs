@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClosedXML.Excel;
 using MediatR;
+using Npgsql;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 {
@@ -51,7 +53,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                         {
                             try
                             {
-                                var nuevoActivo = new Inv_Activo
+                                var rowActivo = new Inv_Activo
                                 {
                                     CodEmpresa = worksheet.Cell(row, 4).Value.ToString(),
                                     CodCadena = worksheet.Cell(row, 5).Value.ToString(),
@@ -76,26 +78,28 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
                                 object cellValueFecSalida = worksheet.Cell(row, 20).Value;
                                 bool isEmptyOrNullFecSalida = cellValueFecSalida == null || string.IsNullOrWhiteSpace(cellValueFecSalida.ToString());
-                                nuevoActivo.FecSalida = isEmptyOrNullFecSalida ? null : DateTime.TryParse(cellValueFecSalida.ToString(), out DateTime fecha1) ? fecha1 : (DateTime?)null;
+                                rowActivo.FecSalida = isEmptyOrNullFecSalida ? null : DateTime.TryParse(cellValueFecSalida.ToString(), out DateTime fecha1) ? fecha1 : (DateTime?)null;
 
                                 object cellValueFecActualiza = worksheet.Cell(row, 26).Value;
                                 bool isEmptyOrNullFecActualiza = cellValueFecActualiza == null || string.IsNullOrWhiteSpace(cellValueFecActualiza.ToString());
-                                nuevoActivo.FecActualiza = isEmptyOrNullFecActualiza ? null : DateTime.TryParse(cellValueFecActualiza.ToString(), out DateTime fecha2) ? fecha2 : (DateTime?)null;
+                                rowActivo.FecActualiza = isEmptyOrNullFecActualiza ? null : DateTime.TryParse(cellValueFecActualiza.ToString(), out DateTime fecha2) ? fecha2 : (DateTime?)null;
 
 
-                                bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == nuevoActivo.CodEmpresa && x.CodCadena == nuevoActivo.CodCadena && x.CodRegion == nuevoActivo.CodRegion && x.CodZona == nuevoActivo.CodZona && x.CodLocal == nuevoActivo.CodLocal && x.CodActivo == nuevoActivo.CodActivo);
+                                bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == rowActivo.CodEmpresa && x.CodCadena == rowActivo.CodCadena && x.CodRegion == rowActivo.CodRegion && x.CodZona == rowActivo.CodZona && x.CodLocal == rowActivo.CodLocal && x.CodActivo == rowActivo.CodActivo);
                                 if (existe)
                                 {
-                                    //_contexto.RepositorioMaeLocal.Actualizar(nuevoLocal);
+                                    _contexto.RepositorioInventarioActivo.Actualizar(rowActivo);
                                 }
                                 else
                                 {
-                                    _contexto.RepositorioInventarioActivo.Agregar(nuevoActivo);
+                                    _contexto.RepositorioInventarioActivo.Agregar(rowActivo);
                                 }
                                 await _contexto.GuardarCambiosAsync();
                             }
                             catch (Exception ex)
                             {
+                                _contexto.Rollback();
+
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = row,

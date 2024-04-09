@@ -39,23 +39,37 @@
                             <i class="fe fe-edit-3"></i> Editar Usuario
                         </button>
                     </div>
+                    @*<table id="tableUsuarios" class="table text-nowrap border-bottom">
+            <thead>
+                <tr>
+                    <th class="border-bottom-0" style="font-size: 11px;">Código</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Código colaborador</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Tipo</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Email</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Estado</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Fec. creación</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Usuario creación</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Fec. modificación</th>
+                    <th class="border-bottom-0" style="font-size: 11px;">Usuario modificación</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>*@
+
                     <table id="tableUsuarios" class="table text-nowrap border-bottom">
                         <thead>
-                            <tr>
-                                <th class="border-bottom-0" style="font-size: 11px;">Código</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Código colaborador</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Tipo</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Email</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Estado</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Fec. creación</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Usuario creación</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Fec. modificación</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">Usuario modificación</th>
-                            </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
+
+                    @*<table id="tableAutorizador" class="table text-nowrap border-bottom">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>*@
                 </div>
             </div>
             <div class="card-footer">
@@ -162,7 +176,6 @@
                             <input id="chkTodos" type="checkbox"> Seleccionar todos
                         </label>
                     </div>
-
                 </div>
                 <table id="tableEmpresa" class="table text-nowrap border-bottom">
                     <thead>
@@ -209,6 +222,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group data-table-btn">
+                            <div class="checkbox  ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkTodosCadena" type="checkbox"> Seleccionar todos
+                                </label>
+                            </div>
+                        </div>
                         <table id="tableCadena" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>
@@ -264,6 +284,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group data-table-btn">
+                            <div class="checkbox  ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkTodosRegion" type="checkbox"> Seleccionar todos
+                                </label>
+                            </div>
+                        </div>
                         <table id="tableRegion" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>
@@ -327,6 +354,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group data-table-btn">
+                            <div class="checkbox ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkTodosZona" type="checkbox"> Seleccionar todos
+                                </label>
+                            </div>
+                        </div>
                         <table id="tableZona" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>

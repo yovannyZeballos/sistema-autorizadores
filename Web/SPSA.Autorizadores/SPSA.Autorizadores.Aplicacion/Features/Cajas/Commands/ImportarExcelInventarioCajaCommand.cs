@@ -184,8 +184,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 							}
 							catch (Exception ex)
 							{
+                                _contexto.Rollback();
 
-								respuesta.Errores.Add(new ErroresExcelDTO
+                                respuesta.Errores.Add(new ErroresExcelDTO
 								{
 									Fila = fila,
 									Mensaje = ex.Message

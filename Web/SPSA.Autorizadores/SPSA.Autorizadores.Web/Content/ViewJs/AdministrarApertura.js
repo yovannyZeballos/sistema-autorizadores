@@ -57,7 +57,18 @@ const AdministrarLocalAperturas = function () {
                 CodComercio: $("#txtCodComercio").val(),
                 CodCentroCosto: $("#txtCodCentroCosto").val(),
                 FecApertura: $("#txtFecApertura").val(),
-                TipEstado: $("#cboTipEstado").val()
+                FecCierre: $("#txtFecCierre").val(),
+                TipEstado: $("#cboTipEstado").val(),
+                /* Nuevo Campos */
+                CodEAN: $("#txtCodEAN").val(),
+                CodSUNAT: $("#txtCodSUNAT").val(),
+                NumGuias: $("#txtNumGuias").val(),
+                CentroDistribu: $("#txtCentroDistribu").val(),
+                TdaEspejo: $("#txtTdaEspejo").val(),
+                Mt2Sala: $("#txtMt2Sala").val(),
+                Spaceman: $("#txtSpaceman").val(),
+                ZonaPrincing: $("#txtZonaPrincing").val(),
+                Geolocalizacion: $("#txtGeolocalizacion").val()
             };
 
             apertura.Ubigeo = $("#cboDepartamento").val() + $("#cboProvincia").val() + $("#cboDistrito").val();
@@ -83,7 +94,19 @@ const AdministrarLocalAperturas = function () {
                 CodComercio: $("#txtCodComercio").val(),
                 CodCentroCosto: $("#txtCodCentroCosto").val(),
                 FecApertura: $("#txtFecApertura").val(),
-                TipEstado: $("#cboTipEstado").val()
+                FecCierre: $("#txtFecCierre").val(),
+                TipEstado: $("#cboTipEstado").val(),
+                /* Nuevo Campos */
+                CodEAN: $("#txtCodEAN").val(),
+                CodSUNAT: $("#txtCodSUNAT").val(),
+                NumGuias: $("#txtNumGuias").val(),
+                CentroDistribu: $("#txtCentroDistribu").val(),
+                TdaEspejo: $("#txtTdaEspejo").val(),
+                Mt2Sala: $("#txtMt2Sala").val(),
+                Spaceman: $("#txtSpaceman").val(),
+                ZonaPrincing: $("#txtZonaPrincing").val(),
+                Geolocalizacion: $("#txtGeolocalizacion").val()
+
             };
 
             apertura.Ubigeo = $("#cboDepartamento").val() + $("#cboProvincia").val() + $("#cboDistrito").val();
@@ -335,6 +358,17 @@ const AdministrarLocalAperturas = function () {
         $("#txtFecApertura").val('');
         $("#cboTipEstado").val('');
 
+        $("#txtFecCierre").val('');
+        $("#txtCodEAN").val('');
+        $("#txtCodSUNAT").val('');
+        $("#txtNumGuias").val('');
+        $("#txtCentroDistribu").val('');
+        $("#txtTdaEspejo").val('');
+        $("#txtMt2Sala").val('');
+        $("#txtSpaceman").val('');
+        $("#txtZonaPrincing").val('');
+        $("#txtGeolocalizacion").val('');
+
         await cargarComboDepartamentos();
 
         //await cargarFormAperturaNuevo(model, false);
@@ -369,20 +403,50 @@ const AdministrarLocalAperturas = function () {
         $("#txtUbigeo").val(model.Ubigeo);
         $("#txtCodComercio").val(model.CodComercio);
         $("#txtCodCentroCosto").val(model.CodCentroCosto);
-        var fechaCorrecta = convertirFecha(model.FecApertura).toISOString().substring(0, 10);
-        $("#txtFecApertura").val(fechaCorrecta);
+
+        if (model.FecApertura == null) {
+            $("#txtFecApertura").val(model.FecApertura);
+        }
+        else {
+            var fechaAperturaCorrecta = convertirFecha(model.FecApertura).toISOString().substring(0, 10);
+            $("#txtFecApertura").val(fechaAperturaCorrecta);
+        }
+
         $("#cboTipEstado").val(model.TipEstado);
 
-        var objUbigeo = await obtenerUbigeo(model.Ubigeo);
-        await cargarComboDepartamentos();
-        $("#cboDepartamento").val(objUbigeo.Data.CodDepartamento);
-        /*$('#cboDepartamento').trigger('change');*/
-        await cargarComboProvincias();
-        $("#cboProvincia").val(objUbigeo.Data.CodProvincia);
-        /*$('#cboProvincia').trigger('change');*/
-        await cargarComboDistritos();
-        $("#cboDistrito").val(objUbigeo.Data.CodDistrito);
-        /*$('#cboDistrito').trigger('change');*/
+        if (model.FecCierre == null) {
+            $("#txtFecCierre").val(model.FecCierre);
+        }
+        else {
+            var fechaCierreCorrecta = convertirFecha(model.FecCierre).toISOString().substring(0, 10);
+            $("#txtFecCierre").val(fechaCierreCorrecta);
+
+        }
+
+        $("#txtCodEAN").val(model.CodEAN);
+        $("#txtCodSUNAT").val(model.CodSUNAT);
+        $("#txtNumGuias").val(model.NumGuias);
+        $("#txtCentroDistribu").val(model.CentroDistribu);
+        $("#txtTdaEspejo").val(model.TdaEspejo);
+        $("#txtMt2Sala").val(model.Mt2Sala);
+        $("#txtSpaceman").val(model.Spaceman);
+        $("#txtZonaPrincing").val(model.ZonaPrincing);
+        $("#txtGeolocalizacion").val(model.Geolocalizacion);
+
+        if (model.Ubigeo == null) {
+            await cargarComboDepartamentos();
+        }
+        else {
+            var objUbigeo = await obtenerUbigeo(model.Ubigeo);
+            await cargarComboDepartamentos();
+            $("#cboDepartamento").val(objUbigeo.Data.CodDepartamento);
+            await cargarComboProvincias();
+            $("#cboProvincia").val(objUbigeo.Data.CodProvincia);
+            await cargarComboDistritos();
+            $("#cboDistrito").val(objUbigeo.Data.CodDistrito);
+        }
+
+        
     }
 
     const obtenerApertura = function (codLocalPMM) {
@@ -411,64 +475,10 @@ const AdministrarLocalAperturas = function () {
         // Extraemos el número de milisegundos de la cadena de fecha
         var milisegundos = parseInt(fechaEnFormatoJSON.replace("/Date(", "").replace(")/", ""));
 
-        // Creamos un objeto de fecha con los milisegundos
+        // CrEANos un objeto de fecha con los milisegundos
         var fecha = new Date(milisegundos);
 
         return fecha;
-    }
-
-    const cargarFormAperturaNuevo = async function (model, deshabilitar) {
-        $.ajax({
-            url: urlModalCrearEditarApertura,
-            type: "post",
-            data: { model },
-            dataType: "html",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: async function (response) {
-                $("#modalAperturas").find(".modal-body").html(response);
-                $("#modalAperturas").modal('show');
-                $("#txtCodLocalPMM").prop("disabled", deshabilitar);
-                await cargarComboDepartamentos();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
-    }
-
-    const cargarFormAperturaEditar = async function (model, deshabilitar) {
-
-        var fechaJSON = model.FecApertura;
-        var fecha = convertirFecha(fechaJSON);
-
-        model.FecApertura = fecha.toISOString().substring(0, 10);
-
-        $.ajax({
-            url: urlModalCrearEditarApertura,
-            type: "post",
-            data: { model },
-            dataType: "html",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: async function (response) {
-                $("#modalAperturas").find(".modal-body").html(response);
-                $("#modalAperturas").modal('show');
-                $("#txtCodLocalPMM").prop("disabled", deshabilitar);
-                await cargarComboDepartamentos();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
     }
 
     const obtenerUbigeo = function (codUbigeo) {

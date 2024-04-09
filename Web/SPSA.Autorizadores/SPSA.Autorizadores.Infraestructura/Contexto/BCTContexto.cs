@@ -137,8 +137,16 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			.ForEach(x => x.Reload());
 		}
 
-		#region IDisposable Support
-		public new void Dispose()
+        public void Rollback()
+        {
+			ChangeTracker
+				.Entries()
+				.ToList()
+				.ForEach(entry => entry.State = EntityState.Detached);
+        }
+
+        #region IDisposable Support
+        public new void Dispose()
 		{
 			GC.SuppressFinalize(this);
 		}

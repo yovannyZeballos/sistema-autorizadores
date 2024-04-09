@@ -210,6 +210,8 @@
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
+    <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\AdministrarInventarioController.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="Models\Intercambio\ListarLocalResponse.cs" />
     <Compile Include="Models\Intercambio\ListarEmpresaResponse.cs" />
     <Compile Include="Models\Intercambio\ListarPuestosResponse.cs" />
+    <Compile Include="Models\Intercambio\ListarUsuarioResponse.cs" />
     <Compile Include="Models\Intercambio\ProcesarRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utiles\Comun.cs" />
@@ -2708,7 +2711,6 @@
     <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
     <Content Include="Areas\Aperturas\Views\AdministrarApertura\Index.cshtml" />
-    <Content Include="Areas\Aperturas\Views\AdministrarApertura\_CrearEditarApertura.cshtml" />
     <Content Include="Areas\Aperturas\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Aperturas\Views\web.config" />
     <Content Include="Areas\Aperturas\Views\_ViewStart.cshtml" />
@@ -2725,6 +2727,7 @@
     </Content>
     <Content Include="Plantillas_Tablas\Plantilla_InvActivo\Plantilla_InventarioActivo.xlsx" />
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
+    <Content Include="Areas\DataTables\Views\web.config" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2763,6 +2766,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Aperturas\Data\" />
+    <Folder Include="Areas\DataTables\Data\" />
+    <Folder Include="Areas\DataTables\Views\Shared\" />
     <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
     <Folder Include="Areas\Maestros\Views\MaeCaja\" />

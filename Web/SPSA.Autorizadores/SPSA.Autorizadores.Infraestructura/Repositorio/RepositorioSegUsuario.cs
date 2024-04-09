@@ -4,13 +4,13 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioSegUsuario : RepositorioGenerico<BCTContexto, Seg_Usuario>, IRepositorioSegUsuario
-	{
-		public RepositorioSegUsuario(BCTContexto context) : base(context) { }
+    public class RepositorioSegUsuario : RepositorioGenerico<BCTContexto, Seg_Usuario>, IRepositorioSegUsuario
+    {
+        public RepositorioSegUsuario(BCTContexto context) : base(context) { }
 
-		public BCTContexto AppDBMyBDContext
-		{
-			get { return _contexto; }
-		}
-	}
+        public BCTContexto AppDBMyBDContext
+        {
+            get { return _contexto; }
+        }
+    }
 }

@@ -257,6 +257,7 @@
     <Compile Include="Features\Aperturas\Commands\ImportarAperturaCommand.cs" />
     <Compile Include="Features\Aperturas\Queries\ListarAperturaQuery.cs" />
     <Compile Include="Features\Aperturas\Queries\ObtenerAperturaQuery.cs" />
+    <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
     <Compile Include="Features\Cadenas\Commands\ActualizarMaeCadenaCommand.cs" />
