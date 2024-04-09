@@ -60,7 +60,7 @@ const AdministrarLocalAperturas = function () {
                 FecCierre: $("#txtFecCierre").val(),
                 TipEstado: $("#cboTipEstado").val(),
                 /* Nuevo Campos */
-                CodEAM: $("#txtCodEAM").val(),
+                CodEAN: $("#txtCodEAN").val(),
                 CodSUNAT: $("#txtCodSUNAT").val(),
                 NumGuias: $("#txtNumGuias").val(),
                 CentroDistribu: $("#txtCentroDistribu").val(),
@@ -97,7 +97,7 @@ const AdministrarLocalAperturas = function () {
                 FecCierre: $("#txtFecCierre").val(),
                 TipEstado: $("#cboTipEstado").val(),
                 /* Nuevo Campos */
-                CodEAM: $("#txtCodEAM").val(),
+                CodEAN: $("#txtCodEAN").val(),
                 CodSUNAT: $("#txtCodSUNAT").val(),
                 NumGuias: $("#txtNumGuias").val(),
                 CentroDistribu: $("#txtCentroDistribu").val(),
@@ -359,7 +359,7 @@ const AdministrarLocalAperturas = function () {
         $("#cboTipEstado").val('');
 
         $("#txtFecCierre").val('');
-        $("#txtCodEAM").val('');
+        $("#txtCodEAN").val('');
         $("#txtCodSUNAT").val('');
         $("#txtNumGuias").val('');
         $("#txtCentroDistribu").val('');
@@ -403,13 +403,27 @@ const AdministrarLocalAperturas = function () {
         $("#txtUbigeo").val(model.Ubigeo);
         $("#txtCodComercio").val(model.CodComercio);
         $("#txtCodCentroCosto").val(model.CodCentroCosto);
-        var fechaAperturaCorrecta = convertirFecha(model.FecApertura).toISOString().substring(0, 10);
-        $("#txtFecApertura").val(fechaAperturaCorrecta);
+
+        if (model.FecApertura == null) {
+            $("#txtFecApertura").val(model.FecApertura);
+        }
+        else {
+            var fechaAperturaCorrecta = convertirFecha(model.FecApertura).toISOString().substring(0, 10);
+            $("#txtFecApertura").val(fechaAperturaCorrecta);
+        }
+
         $("#cboTipEstado").val(model.TipEstado);
 
-        var fechaCierreCorrecta = convertirFecha(model.FecCierre).toISOString().substring(0, 10);
-        $("#txtFecCierre").val(fechaCierreCorrecta);
-        $("#txtCodEAM").val(model.CodEAM);
+        if (model.FecCierre == null) {
+            $("#txtFecCierre").val(model.FecCierre);
+        }
+        else {
+            var fechaCierreCorrecta = convertirFecha(model.FecCierre).toISOString().substring(0, 10);
+            $("#txtFecCierre").val(fechaCierreCorrecta);
+
+        }
+
+        $("#txtCodEAN").val(model.CodEAN);
         $("#txtCodSUNAT").val(model.CodSUNAT);
         $("#txtNumGuias").val(model.NumGuias);
         $("#txtCentroDistribu").val(model.CentroDistribu);
@@ -419,13 +433,20 @@ const AdministrarLocalAperturas = function () {
         $("#txtZonaPrincing").val(model.ZonaPrincing);
         $("#txtGeolocalizacion").val(model.Geolocalizacion);
 
-        var objUbigeo = await obtenerUbigeo(model.Ubigeo);
-        await cargarComboDepartamentos();
-        $("#cboDepartamento").val(objUbigeo.Data.CodDepartamento);
-        await cargarComboProvincias();
-        $("#cboProvincia").val(objUbigeo.Data.CodProvincia);
-        await cargarComboDistritos();
-        $("#cboDistrito").val(objUbigeo.Data.CodDistrito);
+        if (model.Ubigeo == null) {
+            await cargarComboDepartamentos();
+        }
+        else {
+            var objUbigeo = await obtenerUbigeo(model.Ubigeo);
+            await cargarComboDepartamentos();
+            $("#cboDepartamento").val(objUbigeo.Data.CodDepartamento);
+            await cargarComboProvincias();
+            $("#cboProvincia").val(objUbigeo.Data.CodProvincia);
+            await cargarComboDistritos();
+            $("#cboDistrito").val(objUbigeo.Data.CodDistrito);
+        }
+
+        
     }
 
     const obtenerApertura = function (codLocalPMM) {
@@ -454,7 +475,7 @@ const AdministrarLocalAperturas = function () {
         // Extraemos el número de milisegundos de la cadena de fecha
         var milisegundos = parseInt(fechaEnFormatoJSON.replace("/Date(", "").replace(")/", ""));
 
-        // Creamos un objeto de fecha con los milisegundos
+        // CrEANos un objeto de fecha con los milisegundos
         var fecha = new Date(milisegundos);
 
         return fecha;

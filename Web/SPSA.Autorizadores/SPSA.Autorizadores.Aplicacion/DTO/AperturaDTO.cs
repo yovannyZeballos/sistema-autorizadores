@@ -25,7 +25,7 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public string UsuModifica { get; set; }
         public DateTime FecModifica { get; set; }
 
-        public string CodEAM { get; set; }
+        public string CodEAN { get; set; }
         public string CodSUNAT { get; set; }
         public string NumGuias { get; set; }
         public string CentroDistribu { get; set; }

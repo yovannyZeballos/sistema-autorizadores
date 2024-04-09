@@ -36,7 +36,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.UsuModifica).HasColumnName("USU_MODIFICA");
             Property(x => x.FecModifica).HasColumnName("FEC_MODIFICA");
 
-            Property(x => x.CodEAM).HasColumnName("COD_EAM");
+            Property(x => x.CodEAN).HasColumnName("COD_EAN");
             Property(x => x.CodSUNAT).HasColumnName("COD_SUNAT");
             Property(x => x.NumGuias).HasColumnName("NUM_GUIAS");
             Property(x => x.CentroDistribu).HasColumnName("CENTRO_DISTRIBU");

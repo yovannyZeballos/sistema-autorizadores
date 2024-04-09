@@ -20,7 +20,7 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public string CodCentroCosto { get; set; }
         public DateTime FecApertura { get; set; }
         public string TipEstado { get; set; }
-        public string CodEAM { get; set; }
+        public string CodEAN { get; set; }
         public string CodSUNAT { get; set; }
         public string NumGuias { get; set; }
         public string CentroDistribu { get; set; }

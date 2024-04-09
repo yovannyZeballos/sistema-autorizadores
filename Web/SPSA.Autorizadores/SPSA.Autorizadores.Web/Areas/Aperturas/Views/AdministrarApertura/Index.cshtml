@@ -69,112 +69,271 @@
             <div class="modal-header">
                 <h6 class="modal-title" id="tituloModalApertura"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="font-size:12px">
                 <div class="row needs-validation" id="formApertura">
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCodLocalPMM" class="form-label">Código PMM</label>
-                            <input type="number" class="form-control" id="txtCodLocalPMM" required>
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodLocalPMM" class="col-xl-4 col-form-label form-label">Código PMM</label>
+                                <div class="col-xl-8">
+                                    <input type="number" class="form-control" id="txtCodLocalPMM" required>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-8">
-                        <div class="form-group">
-                            <label for="txtNomLocalPMM" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="txtNomLocalPMM" required oninput="this.value = this.value.toUpperCase()">
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="form-group">
-                            <label for="txtCodLocalSAP" class="form-label">Código SAP</label>
-                            <input type="text" class="form-control" id="txtCodLocalSAP" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="form-group">
-                            <label for="txtCodLocalSAPNew" class="form-label">Nuevo Código SAP </label>
-                            <input type="text" class="form-control" id="txtCodLocalSAPNew" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="form-group">
-                            <label for="txtNomLocalSAP" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="txtNomLocalSAP" required oninput="this.value = this.value.toUpperCase()">
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCodLocalOfiplan" class="form-label">Código GDH</label>
-                            <input type="text" class="form-control" id="txtCodLocalOfiplan" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-8">
-                        <div class="form-group">
-                            <label for="txtNomLocalOfiplan" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="txtNomLocalOfiplan" required oninput="this.value = this.value.toUpperCase()">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtNomLocalPMM" class="col-xl-4 col-form-label form-label">Nombre</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtNomLocalPMM" required oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCodComercio" class="form-label">Código Comercio</label>
-                            <input type="text" class="form-control" id="txtCodComercio" required>
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodLocalSAP" class="col-xl-4 col-form-label form-label">Código SAP</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCodLocalSAP" required>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCodCentroCosto" class="form-label">Código Centro Costo</label>
-                            <input type="text" class="form-control" id="txtCodCentroCosto" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-9">
-                        <div class="form-group">
-                            <label for="txtAdministrador" class="form-label">Administrador</label>
-                            <input type="text" class="form-control" id="txtAdministrador" required oninput="this.value = this.value.toUpperCase()">
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <div class="form-group">
-                            <label for="txtNumTelefono" class="form-label">Rpc</label>
-                            <input type="text" class="form-control" id="txtNumTelefono" required>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtNomLocalSAP" class="col-xl-4 col-form-label form-label">Nombre</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtNomLocalSAP" required oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-xl-5">
-                        <div class="form-group">
-                            <label for="txtEmail" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="txtEmail" required>
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodLocalOfiplan" class="col-xl-4 col-form-label form-label">Código GDH</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCodLocalOfiplan" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtNomLocalOfiplan" class="col-xl-4 col-form-label form-label">Nombre</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtNomLocalOfiplan" required oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-7">
-                        <div class="form-group">
-                            <label for="txtDireccion" class="form-label">Direccion</label>
-                            <input type="text" class="form-control" id="txtDireccion">
+
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtFecApertura" class="col-xl-4 col-form-label form-label">F. Apertura</label>
+                                <div class="col-xl-8">
+                                    <input type="date" class="form-control" id="txtFecApertura" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtFecCierre" class="col-xl-4 col-form-label form-label">F. Cierre</label>
+                                <div class="col-xl-8">
+                                    <input type="date" class="form-control" id="txtFecCierre" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="cboTipEstado" class="col-xl-4 col-form-label form-label">Estado</label>
+                                <div class="col-xl-8">
+                                    <select class="form-control custom-select" id="cboTipEstado" required>
+                                        <option label="Seleccionar"></option>
+                                        <option value="A">APERTURADO</option>
+                                        <option value="P">POR APERTURAR</option>
+                                        <option value="E">ELIMINADO</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label class="form-label">Departamento</label>
-                            <select class="form-control custom-select" id="cboDepartamento">
-                                <option label="Seleccione un departamento"></option>
-                            </select>
+
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodComercio" class="col-xl-4 col-form-label form-label">C. Comercio</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCodComercio" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodCentroCosto" class="col-xl-4 col-form-label form-label">C. Costo</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCodCentroCosto" required>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodEAN" class="col-xl-4 col-form-label form-label">C. EAN</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCodEAN" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label class="form-label">Provincia</label>
-                            <select class="form-control custom-select" id="cboProvincia">
-                                <option label="Seleccione una provincia"></option>
-                            </select>
+
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCodSUNAT" class="col-xl-4 col-form-label form-label">C. Sunat</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCodSUNAT" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtNumGuias" class="col-xl-4 col-form-label form-label">Nro Guia</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtNumGuias" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtCentroDistribu" class="col-xl-4 col-form-label form-label">C. Distrib.</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtCentroDistribu" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label class="form-label">Distrito</label>
-                            <select class="form-control custom-select" id="cboDistrito" required>
-                                <option label="Seleccione un distrito"></option>
-                            </select>
+
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtZonaPrincing" class="col-xl-4 col-form-label form-label">Zona Princing</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtZonaPrincing" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtSpaceman" class="col-xl-4 col-form-label form-label">Modelo</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtSpaceman" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtTdaEspejo" class="col-xl-4 col-form-label form-label">Tda. Espejo</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtTdaEspejo" required>
+                                </div>
+                            </div>
+                           
                         </div>
                     </div>
+
+                    <div class="row mb-3">
+                        <div class="col-xl-12">
+                            <div class="row">
+                                <label for="txtDireccion" class="col-xl-2 col-form-label form-label">Direccion</label>
+                                <div class="col-xl-10">
+                                    <input type="text" class="form-control" id="txtDireccion" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="cboDepartamento" class="col-xl-4 col-form-label form-label">Departamento</label>
+                                <div class="col-xl-8">
+                                    <select class="form-control custom-select" id="cboDepartamento">
+                                        <option label="Seleccione un departamento"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="cboProvincia" class="col-xl-4 col-form-label form-label">Provincia</label>
+                                <div class="col-xl-8">
+                                    <select class="form-control custom-select" id="cboProvincia">
+                                        <option label="Seleccione una provincia"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="cboDistrito" class="col-xl-4 col-form-label form-label">Distrito</label>
+                                <div class="col-xl-8">
+                                    <select class="form-control custom-select" id="cboDistrito" required>
+                                        <option label="Seleccione un distrito"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtAdministrador" class="col-xl-4 col-form-label form-label">Administrador</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtAdministrador" required oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtNumTelefono" class="col-xl-4 col-form-label form-label">Rpc</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtNumTelefono" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtEmail" class="col-xl-4 col-form-label form-label">Email</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtMt2Sala" class="col-xl-4 col-form-label form-label">Mts2 Sala</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtMt2Sala" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <label for="txtGeolocalizacion" class="col-xl-4 col-form-label form-label">Geolocalizacion</label>
+                                <div class="col-xl-8">
+                                    <input type="text" class="form-control" id="txtGeolocalizacion" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-xl-4" style="display:none">
                         <div class="form-group">
                             <label for="txtUbigeo" class="form-label">Ubigeo</label>
@@ -182,88 +341,16 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtFecApertura" class="form-label">Fecha Apertura</label>
-                            <input type="date" class="form-control" id="txtFecApertura" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtFecCierre" class="form-label">Fecha Cierre</label>
-                            <input type="date" class="form-control" id="txtFecCierre" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtTipEstado" class="form-label">Tipo Estado</label>
-                            <select class="form-control custom-select" id="cboTipEstado" required>
-                                <option value="A">APERTURADO</option>
-                                <option value="P">POR APERTURAR</option>
-                                <option value="E">ELIMINADO</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCodEAM" class="form-label">Código EAM</label>
-                            <input type="text" class="form-control" id="txtCodEAM" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCodSUNAT" class="form-label">Código SUNAT</label>
-                            <input type="text" class="form-control" id="txtCodSUNAT" required oninput="this.value = this.value.toUpperCase()">
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtNumGuias" class="form-label">Número Guias</label>
-                            <input type="text" class="form-control" id="txtNumGuias" required>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtCentroDistribu" class="form-label">Centro Distribucion</label>
-                            <input type="text" class="form-control" id="txtCentroDistribu" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtTdaEspejo" class="form-label">Tienda Espejo</label>
-                            <input type="text" class="form-control" id="txtTdaEspejo" required oninput="this.value = this.value.toUpperCase()">
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtMt2Sala" class="form-label">Mt2 Sala</label>
-                            <input type="text" class="form-control" id="txtMt2Sala" required>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtSpaceman" class="form-label">Spaceman</label>
-                            <input type="text" class="form-control" id="txtSpaceman" required>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtZonaPrincing" class="form-label">Zona Princing</label>
-                            <input type="text" class="form-control" id="txtZonaPrincing" required oninput="this.value = this.value.toUpperCase()">
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="txtGeolocalizacion" class="form-label">Geolocalizacion</label>
-                            <input type="text" class="form-control" id="txtGeolocalizacion" required>
-                        </div>
-                    </div>
-
                 </div>
+
+                @*<div class="col-xl-3">
+                        <div class="form-group">
+                            <label for="txtCodLocalSAPNew" class="form-label">Nuevo Código SAP </label>
+                            <input type="text" class="form-control" id="txtCodLocalSAPNew" required>
+                        </div>
+                    </div>*@
             </div>
+
             <div class="modal-footer">
                 <button id="btnActualizarApertura" class="btn btn-sm btn-primary">Guardar</button>
                 <button id="btnGuardarApertura" class="btn btn-sm btn-primary">Guardar</button>

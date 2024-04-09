@@ -33,6 +33,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
         public string TipEstado { get; set; }
         public string UsuModifica { get; set; }
         public DateTime FecModifica { get; set; }
+        public string CodEAN { get; set; }
+        public string CodSUNAT { get; set; }
+        public string NumGuias { get; set; }
+        public string CentroDistribu { get; set; }
+        public string TdaEspejo { get; set; }
+        public string Mt2Sala { get; set; }
+        public string Spaceman { get; set; }
+        public string ZonaPricing { get; set; }
+        public string Geolocalizacion { get; set; }
+        public DateTime FecCierre { get; set; }
     }
 
     public class ActualizarAperturaHandler : IRequestHandler<ActualizarAperturaCommand, RespuestaComunDTO>

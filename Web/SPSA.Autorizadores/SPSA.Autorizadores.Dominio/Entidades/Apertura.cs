@@ -27,7 +27,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 
         //Nuevos campos
 
-        public string CodEAM { get; set; }
+        public string CodEAN { get; set; }
         public string CodSUNAT { get; set; }
         public string NumGuias { get; set; }
         public string CentroDistribu { get; set; }
