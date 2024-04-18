@@ -63,12 +63,26 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
                                     CodComercio = worksheet.Cell(row, 13).Value.ToString().Trim(),
                                     CodCentroCosto = worksheet.Cell(row, 14).Value.ToString().Trim(),
                                     //FecApertura = worksheet.Cell(row, 15).Value,
-                                    TipEstado = worksheet.Cell(row, 16).Value.ToString()
+                                    TipEstado = worksheet.Cell(row, 16).Value.ToString(),
+                                    CodEAN = worksheet.Cell(row, 18).Value.ToString(),
+                                    CodSUNAT = worksheet.Cell(row, 19).Value.ToString(),
+                                    NumGuias = worksheet.Cell(row, 20).Value.ToString(),
+                                    CentroDistribu = worksheet.Cell(row, 21).Value.ToString(),
+                                    TdaEspejo = worksheet.Cell(row, 22).Value.ToString(),
+                                    Mt2Sala = worksheet.Cell(row, 23).Value.ToString(),
+                                    Spaceman = worksheet.Cell(row, 24).Value.ToString(),
+                                    ZonaPricing = worksheet.Cell(row, 25).Value.ToString(),
+                                    Geolocalizacion = worksheet.Cell(row, 26).Value.ToString(),
+                                    //FecCierre = worksheet.Cell(row, 27).Value,
                                 };
 
                                 object cellValueFecApertura = worksheet.Cell(row, 15).Value;
                                 bool isEmptyOrNullFecApertura = cellValueFecApertura == null || string.IsNullOrWhiteSpace(cellValueFecApertura.ToString());
                                 nuevoApertura.FecApertura = isEmptyOrNullFecApertura ? null : DateTime.TryParse(cellValueFecApertura.ToString(), out DateTime fecha1) ? fecha1 : (DateTime?)null;
+
+                                object cellValueFecCierre = worksheet.Cell(row, 27).Value;
+                                bool isEmptyOrNullFecCierre = cellValueFecCierre == null || string.IsNullOrWhiteSpace(cellValueFecCierre.ToString());
+                                nuevoApertura.FecApertura = isEmptyOrNullFecCierre ? null : DateTime.TryParse(isEmptyOrNullFecCierre.ToString(), out DateTime fecha2) ? fecha2 : (DateTime?)null;
 
 
                                 bool existe = await _contexto.RepositorioApertura.Existe(x => x.CodLocalPMM == nuevoApertura.CodLocalPMM);
@@ -111,8 +125,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
                             respuesta.Ok = false;
                             respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
                         }
-
-                        //await _contexto.GuardarCambiosAsync();
                     }
                 }
             }
