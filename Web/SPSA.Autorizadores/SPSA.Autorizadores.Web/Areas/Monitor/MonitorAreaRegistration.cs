@@ -42,6 +42,12 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor
                    "Monitor/{controller}/{action}/{id}",
                     new { controller = "ReporteTesoreria", action = "Index", id = UrlParameter.Optional }
                );
-        }
+
+			context.MapRoute(
+				   "ControlBCT_default",
+				   "Monitor/{controller}/{action}/{id}",
+					new { controller = "ControlBCT", action = "Index", id = UrlParameter.Optional }
+			   );
+		}
     }
 }

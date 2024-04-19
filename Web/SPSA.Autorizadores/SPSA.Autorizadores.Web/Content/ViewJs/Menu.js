@@ -151,7 +151,6 @@ const Menu = function () {
             CodMenu: codMenu
         };
 
-        console.log(data);
 
         $.ajax({
             url: urlObtenerMenu,
