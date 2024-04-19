@@ -31,7 +31,9 @@ var ControlBCT = function () {
                 url: urlProcesar,
                 type: "post",
                 dataType: "json",
-                data: { request: { Fecha: $("#txtFecha").val() } },
+                "data": function (d) {
+                    d.Fecha = $('#txtFecha').val();
+                },
                 dataSrc: function (response) {
                     if (!response.Ok) {
                         swal({
@@ -39,10 +41,8 @@ var ControlBCT = function () {
                             icon: "error"
                         });
                     }
-                    // You can also modify `json.data` if required
                     return response.Data;
                 },
-                //dataSrc: "Data",
                 beforeSend: function () {
                     showLoading();
                 },
