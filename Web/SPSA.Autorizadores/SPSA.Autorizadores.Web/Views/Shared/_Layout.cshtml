@@ -74,7 +74,7 @@
                                             <i class="feather feather-search search-icon header-icon"></i>
                                         </a>
                                         <div class="mt-3 mx-3 text-white">
-                                            @Html.Raw($"<h6><b style=\"font-size: 12px;\">{SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.ToString()} - Local: {SPSA.Autorizadores.Web.Utiles.WebSession.NombreLocal} </b> </h6>")
+                                            @Html.Raw($"<h6><b style=\"font-size: 12px;\">{(SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional == null ? "" : SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.ToString())} - Local: {SPSA.Autorizadores.Web.Utiles.WebSession.NombreLocal} </b> </h6>")
                                         </div>
                                         <div class="dropdown profile-dropdown">
                                             <a href="javascript:void(0);" class="nav-link pe-1 ps-0 leading-none" data-bs-toggle="dropdown">

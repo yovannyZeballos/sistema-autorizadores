@@ -32,8 +32,8 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<RepositorioMonitorComando>().As<IRepositorioMonitorComando>().InstancePerRequest();
 			builder.RegisterType<RepositorioTransactionXmlCT2>().As<IRepositorioTransactionXmlCT2>().InstancePerRequest();
 			builder.RegisterType<RepositorioProcesoParametro>().As<IRepositorioProcesoParametro>().InstancePerRequest();
-
 			builder.RegisterType<RepositorioDataTable>().As<IRepositorioDataTable>().InstancePerRequest();
+			builder.RegisterType<RepositorioMonitorControlBCT>().As<IRepositorioMonitorControlBCT>().InstancePerRequest();
 
 			base.Load(builder);
 		}

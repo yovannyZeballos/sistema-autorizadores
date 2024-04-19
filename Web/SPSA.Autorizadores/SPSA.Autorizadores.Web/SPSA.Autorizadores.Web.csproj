@@ -227,6 +227,7 @@
     <Compile Include="Areas\Maestros\MaestrosAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\BCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
+    <Compile Include="Areas\Monitor\Controllers\ControlBCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
@@ -2301,6 +2302,7 @@
     <Content Include="Content\ViewJs\BCT.js" />
     <Content Include="Content\ViewJs\CajeroVolante.js" />
     <Content Include="Content\ViewJs\CajaDefectuosa.js" />
+    <Content Include="Content\ViewJs\ControlBCT.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
@@ -2728,6 +2730,7 @@
     <Content Include="Plantillas_Tablas\Plantilla_InvActivo\Plantilla_InventarioActivo.xlsx" />
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <Content Include="Areas\DataTables\Views\web.config" />
+    <Content Include="Areas\Monitor\Views\ControlBCT\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

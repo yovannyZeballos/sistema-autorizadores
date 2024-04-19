@@ -198,6 +198,7 @@
     <Compile Include="DTO\MaeLocalDTO.cs" />
     <Compile Include="DTO\MaeRegionDTO.cs" />
     <Compile Include="DTO\MaeZonaDTO.cs" />
+    <Compile Include="DTO\MonitorControlBCTDTO.cs" />
     <Compile Include="DTO\ObtenerAperturaDTO.cs" />
     <Compile Include="DTO\ObtenerComunDTO.cs" />
     <Compile Include="DTO\GenericResponseDTO.cs" />
@@ -298,6 +299,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Commands\CrearCajeroVolanteCommand.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
+    <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />

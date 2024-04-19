@@ -69,6 +69,7 @@
     <Compile Include="Entidades\Mae_Region.cs" />
     <Compile Include="Entidades\Mae_Zona.cs" />
     <Compile Include="Entidades\MonitorComando.cs" />
+    <Compile Include="Entidades\MonitorControlBCT.cs" />
     <Compile Include="Entidades\ProcesoParametro.cs" />
     <Compile Include="Entidades\ProcesoParametroEmpresa.cs" />
     <Compile Include="Entidades\Seg_Menu.cs" />

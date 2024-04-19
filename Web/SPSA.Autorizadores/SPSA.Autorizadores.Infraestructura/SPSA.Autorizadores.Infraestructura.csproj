@@ -179,6 +179,7 @@
     <Compile Include="Repositorio\RepositorioMaeZona.cs" />
     <Compile Include="Repositorio\RepositorioMaeRegion.cs" />
     <Compile Include="Repositorio\RepositorioMonitorComando.cs" />
+    <Compile Include="Repositorio\RepositorioMonitorControlBCT.cs" />
     <Compile Include="Repositorio\RepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\RepositorioProcesos.cs" />
     <Compile Include="Repositorio\RepositorioPuesto.cs" />
