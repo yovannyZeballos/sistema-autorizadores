@@ -98,8 +98,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             }
                             catch (Exception ex)
                             {
-                                var dsd = ex.HResult;
-
                                 if (ex.HResult == -2146233079) 
                                 {
                                     respuesta.Errores.Add(new ErroresExcelDTO
