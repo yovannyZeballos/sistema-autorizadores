@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Bibliography;
 using ExcelDataReader;
 using MediatR;
 using Serilog;
@@ -48,14 +49,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 				{
 					var ds = reader.AsDataSet(new ExcelDataSetConfiguration()
 					{
-						FilterSheet = (tableReader, sheetIndex) =>
-						{
-							var name = tableReader.Name.ToLower();
-							if (name.Contains("plantilla"))
-								return true;
-							else
-								return false;
-						},
+						FilterSheet = (tableReader, sheetIndex) => tableReader.Name.ToLower().Contains("plantilla"),
 						ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
 						{
 							UseHeaderRow = true,
@@ -69,19 +63,28 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 						IFormatProvider formatProvider = CultureInfo.InvariantCulture;
 						var formatStrings = new string[] { "dd/MM/yyyy HH:mm:ss", "d/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss", "d-MM-yyyy HH:mm:ss", "dd/MM/yyyy H:mm:ss", "d/MM/yyyy H:mm:ss", "dd-MM-yyyy H:mm:ss", "d-MM-yyyy H:mm:ss" };
 
-						var fila = 1;
-						foreach (DataRow row in ds.Tables[0].Rows)
+
+						var codActivos = await _contexto.RepositorioInvTipoActivo.Obtener()
+							.AsNoTracking()
+							.Select(x => x.CodActivo)
+							.ToListAsync();
+
+						var invCajasList = new List<InvCajas>();
+
+
+						for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
 						{
 							try
 							{
+								DataRow row = ds.Tables[0].Rows[i];
+
 								if (!int.TryParse(row[5].ToString(), out int numCaja))
 								{
 									respuesta.Errores.Add(new ErroresExcelDTO
 									{
-										Fila = fila,
+										Fila = i + 2,
 										Mensaje = $"Número de caja incorrecto: {row[5]}"
 									});
-									fila++;
 									continue;
 								}
 
@@ -97,10 +100,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 								{
 									respuesta.Errores.Add(new ErroresExcelDTO
 									{
-										Fila = fila,
+										Fila = i + 2,
 										Mensaje = $"Fecha Garantía incorrecto: {fechaGarantiaString}"
 									});
-									fila++;
 									continue;
 								}
 
@@ -108,10 +110,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 								{
 									respuesta.Errores.Add(new ErroresExcelDTO
 									{
-										Fila = fila,
+										Fila = i + 2,
 										Mensaje = $"Fecha inicio Lising incorrecto: {fechaInicioLisingString}"
 									});
-									fila++;
 									continue;
 								}
 
@@ -119,10 +120,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 								{
 									respuesta.Errores.Add(new ErroresExcelDTO
 									{
-										Fila = fila,
+										Fila = i + 2,
 										Mensaje = $"Fecha fin Lising incorrecto: {fechaFinLisingString}"
 									});
-									fila++;
 									continue;
 								}
 
@@ -154,32 +154,24 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 									FechaFinLising = fechaFinLising == DateTime.MinValue ? null : (DateTime?)fechaFinLising,
 								};
 
-								if (!ValidarJerarquiaOrganizacional(request.JerarquiaOrganizacional, invCajas, respuesta.Errores, fila))
-								{
-									fila++;
+								if (!ValidarTamañoCampos(invCajas, respuesta.Errores, i + 2))
 									continue;
-								}
 
-								if (!await ExisteTipoActivo(invCajas.CodActivo))
+
+								if (!ValidarJerarquiaOrganizacional(request.JerarquiaOrganizacional, invCajas, respuesta.Errores, i + 2))
+									continue;
+
+								if (!codActivos.Contains(invCajas.CodActivo))
 								{
 									respuesta.Errores.Add(new ErroresExcelDTO
 									{
-										Fila = fila,
+										Fila = i + 2,
 										Mensaje = $"El código de activo ingresado no existe: {invCajas.CodActivo}"
 									});
-									fila++;
 									continue;
 								}
 
-								if (await ExisteInvCajas(invCajas))
-								{
-									await ActualizarInvCaja(invCajas);
-								}
-								else
-								{
-									AgregarInvCaja(invCajas);
-								}
-
+								invCajasList.Add(invCajas);
 
 							}
 							catch (Exception ex)
@@ -188,26 +180,47 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 
                                 respuesta.Errores.Add(new ErroresExcelDTO
 								{
-									Fila = fila,
+									Fila = i + 2,
 									Mensaje = ex.Message
 								});
 							}
-							fila++;
 						}
+
+						var batchSize = 100;
+						var invCajasExistentes = new List<InvCajas>();
+
+						for (int i = 0; i < invCajasList.Count; i += batchSize)
+						{
+							var batch = invCajasList.Skip(i).Take(batchSize).ToList();
+							var codigosUnicos = batch.Select(y => $"{y.CodEmpresa}{y.CodCadena}{y.CodRegion}{y.CodZona}{y.CodLocal}{y.NumCaja}{y.CodActivo}").ToList();
+
+							var batchResult = await _contexto.RepositorioInvCajas.Obtener(x => codigosUnicos.Any(y => y == x.CodEmpresa + x.CodCadena + x.CodRegion + x.CodZona + x.CodLocal + x.NumCaja + x.CodActivo)).ToListAsync();
+
+							invCajasExistentes.AddRange(batchResult);
+						}
+
+						foreach (var invCajas in invCajasList)
+						{
+							var invCajaExistente = invCajasExistentes.FirstOrDefault(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena
+							&& x.CodRegion == invCajas.CodRegion && x.CodZona == invCajas.CodZona && x.CodLocal == invCajas.CodLocal
+							&& x.NumCaja == invCajas.NumCaja && x.CodActivo == invCajas.CodActivo);
+
+							if (invCajaExistente != null)
+							{
+								ActualizarInvCaja(invCajas, invCajaExistente);
+							}
+							else
+							{
+								AgregarInvCaja(invCajas);
+							}
+						}
+
 					}
 
-					if (respuesta.Errores.Count == 0)
-					{
-						respuesta.Ok = true;
-						respuesta.Mensaje = "Archivo importado correctamente";
-					}
-					else
-					{
-						respuesta.Ok = false;
-						respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
-					}
+					respuesta.Ok = respuesta.Errores.Count == 0;
+					respuesta.Mensaje = respuesta.Ok ? "Archivo importado correctamente." : "archivo importado con algunos errores.";
 
-
+					await _contexto.GuardarCambiosAsync();
 
 				}
 			}
@@ -218,7 +231,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 				_logger.Error(ex, respuesta.Mensaje);
 			}
 
-			await _contexto.GuardarCambiosAsync();
 
 			return respuesta;
 		}
@@ -238,72 +250,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 				exito = false;
 			}
 
-
-			if (!jerarquiaOrganizacional.CadenasAsociadas.Any(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena))
-			{
-				errores.Add(new ErroresExcelDTO
-				{
-					Fila = fila,
-					Mensaje = $"Cadena {invCajas.CodCadena} no asociada al usuario"
-				});
-				exito = false;
-			}
-
-
-			if (!jerarquiaOrganizacional.RegionesAsociadas.Any(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena && x.CodRegion == invCajas.CodRegion))
-			{
-				errores.Add(new ErroresExcelDTO
-				{
-					Fila = fila,
-					Mensaje = $"Región {invCajas.CodRegion} no asociada al usuario"
-				});
-				exito = false;
-			}
-
-
-			if (!jerarquiaOrganizacional.ZonasAsociadas.Any(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena && x.CodRegion == invCajas.CodRegion && x.CodZona == invCajas.CodZona))
-			{
-				errores.Add(new ErroresExcelDTO
-				{
-					Fila = fila,
-					Mensaje = $"Zona {invCajas.CodZona} no asociada al usuario"
-				});
-				exito = false;
-			}
-
-
-			if (!jerarquiaOrganizacional.LocalesAsociados.Any(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena && x.CodRegion == invCajas.CodRegion && x.CodZona == invCajas.CodZona && x.CodLocal == invCajas.CodLocal))
-			{
-				errores.Add(new ErroresExcelDTO
-				{
-					Fila = fila,
-					Mensaje = $"Local {invCajas.CodLocal} no asociado al usuario"
-				});
-				exito = false;
-			}
-
 			return exito;
 		}
 
-		private async Task<bool> ExisteTipoActivo(string codActivo)
+		private void ActualizarInvCaja(InvCajas invCajas, InvCajas invCajaBD)
 		{
-			return await _contexto.RepositorioInvTipoActivo.Existe(x => x.CodActivo == codActivo);
-		}
-
-		private async Task<bool> ExisteInvCajas(InvCajas invCajas)
-		{
-			return await _contexto.RepositorioInvCajas.Existe(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena
-			&& x.CodRegion == invCajas.CodRegion && x.CodZona == invCajas.CodZona && x.CodLocal == invCajas.CodLocal
-			&& x.NumCaja == invCajas.NumCaja && x.CodActivo == invCajas.CodActivo);
-		}
-
-
-		private async Task ActualizarInvCaja(InvCajas invCajas)
-		{
-			var invCajaBD = await _contexto.RepositorioInvCajas.Obtener(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena
-			&& x.CodRegion == invCajas.CodRegion && x.CodZona == invCajas.CodZona && x.CodLocal == invCajas.CodLocal
-			&& x.NumCaja == invCajas.NumCaja && x.CodActivo == invCajas.CodActivo).FirstOrDefaultAsync();
-
 			invCajaBD.CapDisco = invCajas.CapDisco;
 			invCajaBD.CodModelo = invCajas.CodModelo;
 			invCajaBD.CodSerie = invCajas.CodSerie;
@@ -325,6 +276,193 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 		private void AgregarInvCaja(InvCajas invCajas)
 		{
 			_contexto.RepositorioInvCajas.Agregar(invCajas);
+		}
+
+		private bool ValidarTamañoCampos(InvCajas invCajas, List<ErroresExcelDTO> errores, int fila)
+		{
+			var exito = true;
+
+			if (invCajas.CodEmpresa.Length > 2)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = $"El codigo de enpresa no debe tener más de 2 digitos"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CodCadena.Length > 2)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = $"El codigo de cadena no debe tener más de 2 digitos"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CodRegion.Length > 2)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = $"El codigo de región no debe tener más de 2 digitos"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CodZona.Length > 3)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = $"El codigo de zona no debe tener más de 3 digitos"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CodLocal.Length > 4)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = $"El codigo de local no debe tener más de 4 digitos"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CodModelo.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El modelo no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CodSerie.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "La serie no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.NumAdenda.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "La adenda no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.TipEstado.Length > 1)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El estado no debe tener más de 1 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.TipProcesador.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El procesador no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.Memoria.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "La memoria no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.DesSo.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El sistema operativo no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.VerSo.Length > 20)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "La versión del sistema operativo no debe tener más de 20 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.CapDisco.Length > 20)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "La capacidad del disco no debe tener más de 20 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.TipDisco.Length > 20)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El tipo de disco no debe tener más de 20 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.DesPuertoBalanza.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El puerto de la balanza no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.TipoCaja.Length > 100)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El tipo de caja no debe tener más de 100 caracteres"
+				});
+				exito = false;
+			}
+
+			if (invCajas.Hostname.Length > 50)
+			{
+				errores.Add(new ErroresExcelDTO
+				{
+					Fila = fila,
+					Mensaje = "El hostname no debe tener más de 50 caracteres"
+				});
+				exito = false;
+			}
+
+			return exito;
 		}
 
 	}

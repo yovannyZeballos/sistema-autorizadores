@@ -43,7 +43,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 		public async Task<bool> Existe(Expression<Func<TEntidad, bool>> predicado)
 		{
-			IQueryable<TEntidad> query = _contexto.Set<TEntidad>();
+			IQueryable<TEntidad> query = _contexto.Set<TEntidad>().AsNoTracking();
 			return await query.AnyAsync(predicado);
 		}
 
