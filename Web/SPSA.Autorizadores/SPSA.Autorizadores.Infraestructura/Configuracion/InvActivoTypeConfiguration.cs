@@ -11,7 +11,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             ToTable("INV_ACTIVO", "SGP");
 
             // Configura la clave primaria de la entidad Mae_Local.
-            HasKey(x => new { x.CodEmpresa, x.CodCadena, x.CodRegion, x.CodZona, x.CodLocal , x.CodActivo});
+            HasKey(x => new { x.CodEmpresa, x.CodCadena, x.CodRegion, x.CodZona, x.CodLocal , x.CodActivo, x.CodModelo, x.NomMarca, x.CodSerie});
 
             // Configura las propiedades de la entidad Mae_Local.
             Property(x => x.CodEmpresa).HasColumnName("COD_EMPRESA");

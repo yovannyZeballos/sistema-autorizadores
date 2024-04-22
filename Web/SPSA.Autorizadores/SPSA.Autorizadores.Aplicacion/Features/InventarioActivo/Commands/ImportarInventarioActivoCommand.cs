@@ -85,7 +85,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                                 rowActivo.FecActualiza = isEmptyOrNullFecActualiza ? null : DateTime.TryParse(cellValueFecActualiza.ToString(), out DateTime fecha2) ? fecha2 : (DateTime?)null;
 
 
-                                bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == rowActivo.CodEmpresa && x.CodCadena == rowActivo.CodCadena && x.CodRegion == rowActivo.CodRegion && x.CodZona == rowActivo.CodZona && x.CodLocal == rowActivo.CodLocal && x.CodActivo == rowActivo.CodActivo);
+                                bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == rowActivo.CodEmpresa && x.CodCadena == rowActivo.CodCadena && x.CodRegion == rowActivo.CodRegion && x.CodZona == rowActivo.CodZona && x.CodLocal == rowActivo.CodLocal && x.CodActivo == rowActivo.CodActivo && x.CodModelo == rowActivo.CodModelo && x.NomMarca == rowActivo.NomMarca && x.CodSerie == rowActivo.CodSerie);
                                 if (existe)
                                 {
                                     _contexto.RepositorioInventarioActivo.Actualizar(rowActivo);
@@ -98,13 +98,24 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             }
                             catch (Exception ex)
                             {
-                                _contexto.Rollback();
+                                var dsd = ex.HResult;
 
-                                respuesta.Errores.Add(new ErroresExcelDTO
+                                if (ex.HResult == -2146233079) 
                                 {
-                                    Fila = row,
-                                    Mensaje = ex.Message
-                                });
+                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    {
+                                        Fila = row,
+                                        Mensaje = "Ya existe un activo con estas caracteristicas."
+                                    });
+                                }
+                                else
+                                {
+                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    {
+                                        Fila = row,
+                                        Mensaje = ex.Message
+                                    });
+                                }
                             }
                         }
 
