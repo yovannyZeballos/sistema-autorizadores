@@ -512,7 +512,8 @@ const Usuario = function () {
             success: function (data) {
                 if (data.Ok) {
                     mensajeExito('Usuario creado con éxito');
-                    dataTableListado.ajax.reload();
+                    dataTableListado.clear().destroy();
+                    visualizarDataTableUsuarios();
                     limpiarControles();
                 } else {
                     mensajeError('Error al crear el usuario: ' + data.Mensaje);
@@ -539,7 +540,9 @@ const Usuario = function () {
             success: function (data) {
                 if (data.Ok) {
                     mensajeExito('Usuario actualizado con éxito');
-                    dataTableListado.ajax.reload();
+                    //dataTableListado.ajax.reload();
+                    dataTableListado.clear().destroy();
+                    visualizarDataTableUsuarios();
                     limpiarControles();
                 } else {
                     mensajeError('Error al actualizar el usuario: ' + data.Mensaje);
