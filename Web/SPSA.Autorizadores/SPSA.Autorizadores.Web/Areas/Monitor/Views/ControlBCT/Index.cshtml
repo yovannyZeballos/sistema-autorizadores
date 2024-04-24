@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "Control BCT | Monitor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+
+        div.dt-buttons {
+            display: block !important;
+            width: 100% !important;
+        }
+
+
+        #tableMonitor thead th {
+            padding: 0px 22px !important;
+        }
+
+        table.dataTable tbody td {
+            padding: 0px !important;
+        }
+
+        .bg-warning {
+            background-color: #fff3cd !important;
+            color: #263871;
+        }
+    </style>
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Control BCT</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Monitoreo</li>
+            <li class="breadcrumb-item1 active">Control BCT</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Control BCT")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">Fecha</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <span class="feather feather-calendar"></span>
+                                            </div>
+                                        </div><input id="txtFecha" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="btn btn-primary btn-sm" id="btnConsultar" type="button"><i class="fe fe-search me-1"></i> Consultar</button>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="unselectable mt-4">
+                                    <input id="chkAutomatico" type="checkbox"> Actualización Automática
+                                </label>
+                            </div>
+
+                            <div class="col-md-4 mt-5">
+                                <p class="text-end "><span class="text-danger"><b>ROJO</b></span> = Alerta, <span class="text-success"><b>VERDE</b></span> = Dentro del límite permitido</p> 
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="tableMonitor" class="table table-bordered text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Sucursal</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Fecha</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Horario</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Tiempo Límite</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Ultima trnsferencia</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">Diferencia minutos</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/ControlBCT.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ControlBCT.init();
+        });
+    </script>
+}
+

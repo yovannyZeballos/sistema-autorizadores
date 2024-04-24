@@ -48,21 +48,43 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\IBCTContexto.cs" />
+    <Compile Include="Repositorio\IRepositorioApertura.cs" />
     <Compile Include="Repositorio\IRepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\IRepositorioCajaCierre.cs" />
     <Compile Include="Repositorio\IRepositorioCajero.cs" />
+    <Compile Include="Repositorio\IRepositorioDataTable.cs" />
     <Compile Include="Repositorio\IRepositorioEmpresa.cs" />
     <Compile Include="Repositorio\IRepositorioGenerico.cs" />
+    <Compile Include="Repositorio\IRepositorioInvCajas.cs" />
+    <Compile Include="Repositorio\IRepositorioInventarioActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioServidor.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioServidorVirtual.cs" />
     <Compile Include="Repositorio\IRepositorioInventarioTipo.cs" />
+    <Compile Include="Repositorio\IRepositorioInvTipoActivo.cs" />
     <Compile Include="Repositorio\IRepositorioLocal.cs" />
     <Compile Include="Repositorio\IRepositorioLocalOfiplan.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeCaja.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeZona.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeRegion.cs" />
     <Compile Include="Repositorio\IRepositorioMonitorComando.cs" />
+    <Compile Include="Repositorio\IRepositorioMonitorControlBCT.cs" />
     <Compile Include="Repositorio\IRepositorioMonitorReporte.cs" />
     <Compile Include="Repositorio\IRepositorioProcesos.cs" />
     <Compile Include="Repositorio\IRepositorioPuesto.cs" />
     <Compile Include="Repositorio\IRepositorioProcesoParametroEmpresa.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeEmpresa.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeCadena.cs" />
+    <Compile Include="Repositorio\IRepositorioSegPerfilMenu.cs" />
+    <Compile Include="Repositorio\IRepositorioSegPerfilUsuario.cs" />
+    <Compile Include="Repositorio\IRepositorioSegPerfil.cs" />
+    <Compile Include="Repositorio\IRepositorioSegLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioSegMenu.cs" />
+    <Compile Include="Repositorio\IRepositorioSegZona.cs" />
+    <Compile Include="Repositorio\IRepositorioSegRegion.cs" />
+    <Compile Include="Repositorio\IRepositorioSegEmpresa.cs" />
+    <Compile Include="Repositorio\IRepositorioSegCadena.cs" />
+    <Compile Include="Repositorio\IRepositorioSegUsuario.cs" />
     <Compile Include="Repositorio\IRepositorioSegSistema.cs" />
     <Compile Include="Repositorio\IRepositorioSeguridad.cs" />
     <Compile Include="Repositorio\IRepositorioSovosCaja.cs" />
@@ -71,6 +93,9 @@
     <Compile Include="Repositorio\IRepositorioSovosLocal.cs" />
     <Compile Include="Repositorio\IRepositorioTransactionXmlCT2.cs" />
     <Compile Include="Repositorio\IRepositorioProcesoParametro.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiDepartamento.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiDistrito.cs" />
+    <Compile Include="Repositorio\IRepositorioUbiProvincia.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

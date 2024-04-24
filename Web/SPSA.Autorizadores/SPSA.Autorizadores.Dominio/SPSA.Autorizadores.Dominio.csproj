@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entidades\Apertura.cs" />
     <Compile Include="Entidades\ArchivoAutorizador.cs" />
     <Compile Include="Entidades\Autorizador.cs" />
     <Compile Include="Entidades\Cajero.cs" />
@@ -52,16 +53,36 @@
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
     <Compile Include="Entidades\Empresa.cs" />
+    <Compile Include="Entidades\InvCajas.cs" />
     <Compile Include="Entidades\InventarioServidor.cs" />
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
     <Compile Include="Entidades\InventarioTipo.cs" />
+    <Compile Include="Entidades\InvTipoActivo.cs" />
+    <Compile Include="Entidades\Inv_Activo.cs" />
     <Compile Include="Entidades\ListBox.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
+    <Compile Include="Entidades\Mae_Caja.cs" />
+    <Compile Include="Entidades\Mae_Cadena.cs" />
+    <Compile Include="Entidades\Mae_Empresa.cs" />
+    <Compile Include="Entidades\Mae_Local.cs" />
+    <Compile Include="Entidades\Mae_Region.cs" />
+    <Compile Include="Entidades\Mae_Zona.cs" />
     <Compile Include="Entidades\MonitorComando.cs" />
+    <Compile Include="Entidades\MonitorControlBCT.cs" />
     <Compile Include="Entidades\ProcesoParametro.cs" />
     <Compile Include="Entidades\ProcesoParametroEmpresa.cs" />
-    <Compile Include="Entidades\SegSistema.cs" />
+    <Compile Include="Entidades\Seg_Menu.cs" />
+    <Compile Include="Entidades\Seg_Perfil.cs" />
+    <Compile Include="Entidades\Seg_Local.cs" />
+    <Compile Include="Entidades\Seg_PerfilMenu.cs" />
+    <Compile Include="Entidades\Seg_PerfilUsuario.cs" />
+    <Compile Include="Entidades\Seg_Zona.cs" />
+    <Compile Include="Entidades\Seg_Region.cs" />
+    <Compile Include="Entidades\Seg_Cadena.cs" />
+    <Compile Include="Entidades\Seg_Empresa.cs" />
+    <Compile Include="Entidades\Seg_Sistema.cs" />
+    <Compile Include="Entidades\Seg_Usuario.cs" />
     <Compile Include="Entidades\SovosCaja.cs" />
     <Compile Include="Entidades\SovosCajaInventario.cs" />
     <Compile Include="Entidades\SovosFormato.cs" />
@@ -73,6 +94,9 @@
     <Compile Include="Entidades\SegSucursalxUsr.cs" />
     <Compile Include="Entidades\SegUsuario.cs" />
     <Compile Include="Entidades\TransactionXmlCT2.cs" />
+    <Compile Include="Entidades\UbiDepartamento.cs" />
+    <Compile Include="Entidades\UbiDistrito.cs" />
+    <Compile Include="Entidades\UbiProvincia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-	public interface IRepositorioSegSistema : IRepositorioGenerico<SegSistema>
+	public interface IRepositorioSegSistema : IRepositorioGenerico<Seg_Sistema>
 	{
 	}
 }

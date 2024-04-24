@@ -3,7 +3,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace SPSA.Autorizadores.Infraestructura.Configuracion
 {
-	public class SegSistemaTypeConfiguration : EntityTypeConfiguration<SegSistema>
+	public class SegSistemaTypeConfiguration : EntityTypeConfiguration<Seg_Sistema>
 	{
         public SegSistemaTypeConfiguration()
         {

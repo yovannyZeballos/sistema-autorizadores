@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Zona.Queries;
 using SPSA.Autorizadores.Web.Utiles;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,18 @@ namespace SPSA.Autorizadores.Web.Controllers
 				});
 			}
 			return Json(response);
+		}
+
+		/// <summary>
+		/// Este método se utiliza para listar los locales asociadas.
+		/// </summary>
+		/// <param name="query">La consulta para listar los locales asociadas.</param>
+		/// <returns>Devuelve un resultado JSON de los locales asociadas.</returns>
+		[HttpPost]
+		public async Task<JsonResult> ListarLocalesAsociadas(ListarLocalesAsociadasQuery query)
+		{
+			var respose = await _mediator.Send(query);
+			return Json(respose);
 		}
 	}
 }

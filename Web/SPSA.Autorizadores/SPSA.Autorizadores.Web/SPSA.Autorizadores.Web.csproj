@@ -202,22 +202,44 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Aperturas\AperturasAreaRegistration.cs" />
+    <Compile Include="Areas\Aperturas\Controllers\AdministrarAperturaController.cs" />
     <Compile Include="Areas\Autorizadores\AutorizadoresAreaRegistration.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorMasivoController.cs" />
     <Compile Include="Areas\Cajeros\CajerosAreaRegistration.cs" />
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
+    <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
+    <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
+    <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
+    <Compile Include="Areas\Inventario\Controllers\AdministrarInventarioController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeCajaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeRegionController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeTablasController.cs" />
+    <Compile Include="Areas\Maestros\MaestrosAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\BCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
+    <Compile Include="Areas\Monitor\Controllers\ControlBCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteCierreController.cs" />
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
+    <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\SistemaController.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeZonaController.cs" />
+    <Compile Include="Areas\Ubigeos\Controllers\UbigeoController.cs" />
+    <Compile Include="Areas\Ubigeos\UbigeosAreaRegistration.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadorController.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\AutorizadoresMassController.cs" />
@@ -247,6 +269,7 @@
     <Compile Include="Models\Intercambio\ListarLocalResponse.cs" />
     <Compile Include="Models\Intercambio\ListarEmpresaResponse.cs" />
     <Compile Include="Models\Intercambio\ListarPuestosResponse.cs" />
+    <Compile Include="Models\Intercambio\ListarUsuarioResponse.cs" />
     <Compile Include="Models\Intercambio\ProcesarRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utiles\Comun.cs" />
@@ -2240,6 +2263,18 @@
     <Content Include="Content\plugins\timeline\js\jquery.js" />
     <Content Include="Content\plugins\timeline\js\jquery.timelify.js" />
     <Content Include="Content\plugins\treeview\treeview.js" />
+    <Content Include="Content\plugins\vakata-jstree\dist\jstree.js" />
+    <Content Include="Content\plugins\vakata-jstree\dist\jstree.min.js" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\32px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\40px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\style.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\style.min.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default-dark\throbber.gif" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\32px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\40px.png" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\style.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\style.min.css" />
+    <Content Include="Content\plugins\vakata-jstree\dist\themes\default\throbber.gif" />
     <Content Include="Content\plugins\vertical-scroll\jquery.bootstrap.newsbox.js" />
     <Content Include="Content\plugins\vertical-scroll\vertical-scroll.js" />
     <Content Include="Content\plugins\wowmaster\wow.js" />
@@ -2255,7 +2290,11 @@
     <Content Include="Content\switcher\img\bg-img4.jpg" />
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
+    <Content Include="Content\ViewJs\AdministrarApertura.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
+    <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
+    <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
+    <Content Include="Content\ViewJs\AdministrarMaestroTablas.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
     <Content Include="Content\ViewJs\AutorizadorMasivo.js" />
@@ -2263,18 +2302,24 @@
     <Content Include="Content\ViewJs\BCT.js" />
     <Content Include="Content\ViewJs\CajeroVolante.js" />
     <Content Include="Content\ViewJs\CajaDefectuosa.js" />
+    <Content Include="Content\ViewJs\ControlBCT.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
     <Content Include="Content\ViewJs\Home.js" />
+    <Content Include="Content\ViewJs\InventarioCaja2.js" />
     <Content Include="Content\ViewJs\InventarioCaja.js" />
     <Content Include="Content\ViewJs\InventarioServidor.js" />
     <Content Include="Content\ViewJs\Login.js" />
     <Content Include="Content\ViewJs\CierreEOD.js" />
+    <Content Include="Content\ViewJs\Menu.js" />
     <Content Include="Content\ViewJs\Puesto.js" />
+    <Content Include="Content\ViewJs\ReportesTesoreriaCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierreResumen.js" />
     <Content Include="Content\ViewJs\ReportesCajeroCierre.js" />
     <Content Include="Content\ViewJs\ReportesCajero.js" />
+    <Content Include="Content\ViewJs\Perfil.js" />
+    <Content Include="Content\ViewJs\Usuario.js" />
     <Content Include="Content\ViewJs\Sistema.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -2627,9 +2672,6 @@
     <Content Include="Plantilla_Caja\Plantilla_Carga_Cajas.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Areas\Autorizadores\Views\AsignarLocal\_AsociarLocalPMM.cshtml" />
     <Content Include="Areas\Locales\Views\InventarioCaja\Index.cshtml" />
     <Content Include="Areas\Locales\Views\InventarioServidor\Index.cshtml" />
@@ -2652,6 +2694,43 @@
     <Content Include="Areas\Seguridad\Views\Sistema\Index.cshtml" />
     <Content Include="Areas\Seguridad\Views\web.config" />
     <Content Include="Areas\Monitor\Views\web.config" />
+    <Content Include="Areas\Seguridad\Views\Usuario\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\web.config" />
+    <Content Include="Areas\Seguridad\Views\Perfil\Index.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Menu\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeLocal\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeLocal\_CrearEditarCaja.cshtml" />
+    <Content Include="Areas\Maestros\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarCadena.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarEmpresa.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarRegion.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarZona.cshtml" />
+    <Content Include="Areas\Maestros\Views\_ViewStart.cshtml" />
+    <Content Include="Plantillas_Tablas\Plantilla_Cadena\TablaCadena.xlsx" />
+    <Content Include="Plantillas_Tablas\Plantilla_Caja\TablaCaja.xlsx" />
+    <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
+    <Content Include="Areas\Aperturas\Views\AdministrarApertura\Index.cshtml" />
+    <Content Include="Areas\Aperturas\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Aperturas\Views\web.config" />
+    <Content Include="Areas\Aperturas\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Inventario\Views\AdministrarInventario\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Inventario\Views\web.config" />
+    <Content Include="Areas\Inventario\Views\_ViewStart.cshtml" />
+    <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plantilla_Inventarios\Plantilla_Carga_Inventario_Caja.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Plantillas_Tablas\Plantilla_InvActivo\Plantilla_InventarioActivo.xlsx" />
+    <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
+    <Content Include="Areas\DataTables\Views\web.config" />
+    <Content Include="Areas\Monitor\Views\ControlBCT\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2689,6 +2768,22 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Aperturas\Data\" />
+    <Folder Include="Areas\DataTables\Data\" />
+    <Folder Include="Areas\DataTables\Views\Shared\" />
+    <Folder Include="Areas\Inventario\Data\" />
+    <Folder Include="Areas\Maestros\Views\Cadena\" />
+    <Folder Include="Areas\Maestros\Views\MaeCaja\" />
+    <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
+    <Folder Include="Areas\Maestros\Views\MaeRegion\" />
+    <Folder Include="Areas\Maestros\Views\MaeZona\" />
+    <Folder Include="Areas\Ubigeos\Data\" />
+    <Folder Include="Areas\Ubigeos\Views\Shared\" />
+    <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Empresa\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Local\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Region\" />
+    <Folder Include="Plantillas_Tablas\Plantilla_Zona\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -2701,7 +2796,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPSA.Autorizadores.Aplicacion\SPSA.Autorizadores.Aplicacion.csproj">
-      <Project>{DE177FE3-7042-48D3-A5A4-B31CB97218E0}</Project>
+      <Project>{de177fe3-7042-48d3-a5a4-b31cb97218e0}</Project>
       <Name>SPSA.Autorizadores.Aplicacion</Name>
     </ProjectReference>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">

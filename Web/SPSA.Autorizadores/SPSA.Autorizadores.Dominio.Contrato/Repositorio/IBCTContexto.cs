@@ -7,9 +7,36 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 	{
 		IRepositorioSegSistema RepositorioSegSistema { get; }
 		IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; }
+		IRepositorioSegUsuario RepositorioSegUsuario { get; }		
+		IRepositorioSegEmpresa RepositorioSegEmpresa { get; }
+		IRepositorioSegCadena RepositorioSegCadena { get; }
+		IRepositorioSegRegion RepositorioSegRegion { get; }
+		IRepositorioSegZona RepositorioSegZona { get; }
+		IRepositorioSegLocal RepositorioSegLocal { get; }
+		IRepositorioSegPerfil RepositorioSegPerfil { get; }
+		IRepositorioSegPerfilUsuario RepositorioSegPerfilUsuario { get; }
+		IRepositorioSegMenu RepositorioSegMenu { get; }
+		IRepositorioSegPerfilMenu RepositorioSegPerfilMenu { get; }
 
-		bool GuardarCambios();
+        IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; }
+        IRepositorioMaeCadena RepositorioMaeCadena { get; }
+        IRepositorioMaeRegion RepositorioMaeRegion { get; }
+        IRepositorioMaeZona RepositorioMaeZona { get; }
+        IRepositorioMaeLocal RepositorioMaeLocal { get; }
+        IRepositorioMaeCaja RepositorioMaeCaja { get; }
+        IRepositorioInvCajas RepositorioInvCajas { get; }
+        IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; }
+
+        IRepositorioInventarioActivo RepositorioInventarioActivo { get; }
+        IRepositorioApertura RepositorioApertura { get; }
+
+        IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; }
+        IRepositorioUbiProvincia RepositorioUbiProvincia { get; }
+        IRepositorioUbiDistrito RepositorioUbiDistrito { get; }
+
+        bool GuardarCambios();
 		Task<bool> GuardarCambiosAsync();
 		void Reestablecer();
+		void Rollback();
 	}
 }

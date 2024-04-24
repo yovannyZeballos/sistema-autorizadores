@@ -81,7 +81,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands
 					return respuesta;
 				}
 
-				var sistema = _mapper.Map<SegSistema>(request);
+				var sistema = _mapper.Map<Seg_Sistema>(request);
 				sistema.FecCreacion = DateTime.Now;
 				_contexto.RepositorioSegSistema.Agregar(sistema);
 				await _contexto.GuardarCambiosAsync();

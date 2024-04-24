@@ -35,5 +35,13 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 				return ConfigurationManager.ConnectionStrings["BCT"].ConnectionString;
 			}
 		}
+
+		public string CadenaConexionCT2
+		{
+			get
+			{
+				return ConfigurationManager.ConnectionStrings["CT2"].ConnectionString;
+			}
+		}
 	}
 }
