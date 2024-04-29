@@ -57,6 +57,10 @@ namespace SPSA.Autorizadores.Web.Controllers
 					WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
 					WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
 					WebSession.MenusAsociados = usuario.MenusAsociados;
+
+
+
+
 				}
 				else
 				{
