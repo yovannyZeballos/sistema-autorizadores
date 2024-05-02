@@ -51,5 +51,15 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
 		/// Usuario que eliminó el registro.
 		/// </summary>
 		public string UsuElimina { get; set; }
-	}
+
+        /// <summary>
+        /// Fecha ingreso del usuario.
+        /// </summary>
+        public DateTime? FecIngreso { get; set; }
+
+        /// <summary>
+        /// Hora ingreso del usuario.
+        /// </summary>
+        public TimeSpan? HoraIngreso { get; set; }
+    }
 }
