@@ -5,7 +5,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.ServicioWindows
+namespace SPSA.Autorizadores.ServicioWindowsStatusSGP
 {
 	internal static class Program
 	{
@@ -17,7 +17,7 @@ namespace SPSA.Autorizadores.ServicioWindows
 			ServiceBase[] ServicesToRun;
 			ServicesToRun = new ServiceBase[]
 			{
-				new ServicioMonitorBCT()
+				new ServicioStatusSGP()
 			};
 			ServiceBase.Run(ServicesToRun);
 		}

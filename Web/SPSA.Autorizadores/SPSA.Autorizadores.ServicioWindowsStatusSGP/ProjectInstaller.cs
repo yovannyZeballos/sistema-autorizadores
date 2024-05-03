@@ -6,7 +6,7 @@ using System.Configuration.Install;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.ServicioWindows
+namespace SPSA.Autorizadores.ServicioWindowsStatusSGP
 {
 	[RunInstaller(true)]
 	public partial class ProjectInstaller : System.Configuration.Install.Installer

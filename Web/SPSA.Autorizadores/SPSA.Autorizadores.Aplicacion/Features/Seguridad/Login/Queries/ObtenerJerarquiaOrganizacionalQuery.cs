@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries
 
 		public async Task<JerarquiaOrganizacionalDTO> Handle(ObtenerJerarquiaOrganizacionalQuery request, CancellationToken cancellationToken)
 		{
-			var response = new JerarquiaOrganizacionalDTO() ;
+			var response = new JerarquiaOrganizacionalDTO();
 
 			try
 			{
@@ -74,6 +74,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries
 						Ok = true
 					})
 					.FirstOrDefaultAsync();
+
+				if (response == null)
+				{
+					var mensaje = $"No se encontró la jerarquía organizacional asociada al local {request.CodLocal}";
+					_logger.Error(mensaje);
+					return new JerarquiaOrganizacionalDTO
+					{
+						Ok = false,
+						Mensaje = mensaje
+					};
+				}
 
 				response.EmpresasAsociadas = await _bCTContexto.RepositorioSegEmpresa
 					.Obtener(x => x.CodUsuario == request.Usuario)

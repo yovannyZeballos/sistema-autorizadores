@@ -65,11 +65,17 @@
     <Compile Include="Repositorio\IRepositorioLocalOfiplan.cs" />
     <Compile Include="Repositorio\IRepositorioMaeLocal.cs" />
     <Compile Include="Repositorio\IRepositorioMaeCaja.cs" />
+    <Compile Include="Repositorio\IRepositorioTmpMonCierreLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMonCierreLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeLocalAlterno.cs" />
     <Compile Include="Repositorio\IRepositorioMaeZona.cs" />
     <Compile Include="Repositorio\IRepositorioMaeRegion.cs" />
     <Compile Include="Repositorio\IRepositorioMonitorComando.cs" />
     <Compile Include="Repositorio\IRepositorioMonitorControlBCT.cs" />
+    <Compile Include="Repositorio\IRepositorioMonitorProcesoCierre.cs" />
     <Compile Include="Repositorio\IRepositorioMonitorReporte.cs" />
+    <Compile Include="Repositorio\IRepositorioProcesoEmpresa.cs" />
+    <Compile Include="Repositorio\IRepositorioProceso.cs" />
     <Compile Include="Repositorio\IRepositorioProcesos.cs" />
     <Compile Include="Repositorio\IRepositorioPuesto.cs" />
     <Compile Include="Repositorio\IRepositorioProcesoParametroEmpresa.cs" />
