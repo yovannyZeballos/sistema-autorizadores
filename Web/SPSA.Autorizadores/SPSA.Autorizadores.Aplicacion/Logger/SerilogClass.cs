@@ -11,7 +11,7 @@ namespace SPSA.Autorizadores.Aplicacion.Logger
 		{
 			var logPath = ConfigurationManager.AppSettings["RutaLog"];
 			_log = new LoggerConfiguration()
-				.WriteTo.File(logPath, rollingInterval: RollingInterval.Day)
+				.WriteTo.File(logPath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 20)
 				.CreateLogger();
 		}
 	}

@@ -33,8 +33,14 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; }
         IRepositorioUbiProvincia RepositorioUbiProvincia { get; }
         IRepositorioUbiDistrito RepositorioUbiDistrito { get; }
+        IRepositorioProceso RepositorioProceso { get; }
+        IRepositorioProcesoEmpresa RepositorioProcesoEmpresa { get; }
+		IRepositorioMaeLocalAlterno RepositorioMaeLocalAlterno { get; }
+		IRepositorioMonCierreLocal RepositorioMonCierreLocal { get; }
+		IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; }
 
-        bool GuardarCambios();
+
+		bool GuardarCambios();
 		Task<bool> GuardarCambiosAsync();
 		void Reestablecer();
 		void Rollback();

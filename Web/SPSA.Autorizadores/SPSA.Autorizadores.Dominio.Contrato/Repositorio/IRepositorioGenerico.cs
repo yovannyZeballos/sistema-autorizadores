@@ -20,6 +20,12 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		void Agregar(TEntidad entity);
 
 		/// <summary>
+		/// Agrega una entidad al repositorio.
+		/// </summary>
+		/// <param name="entity">La entidad a agregar.</param>
+		void AgregarRango(List<TEntidad> entity);
+
+		/// <summary>
 		/// Actualiza una entidad en el repositorio.
 		/// </summary>
 		/// <param name="entity">La entidad a actualizar.</param>
@@ -51,5 +57,10 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		/// <param name="entity">Las entidades a eliminar.</param>
 		void EliminarRango(ICollection<TEntidad> entities);
 
+		/// <summary>
+		/// Agrega una entidad al repositorio.
+		/// </summary>
+		/// <param name="entity">La entidad a agregar.</param>
+		void AgregarActualizar(TEntidad entity);
 	}
 }

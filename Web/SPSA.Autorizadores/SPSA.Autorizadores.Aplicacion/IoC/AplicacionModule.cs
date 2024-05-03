@@ -232,6 +232,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			#endregion <--TABLA MAESTROS SGP-->
 
 			builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+			builder.RegisterType<ProcesarActualizacionEstadoCierreHandler>().As<IRequestHandler<ProcesarActualizacionEstadoCierreCommand, RespuestaComunDTO>>();
 
 
 			base.Load(builder);

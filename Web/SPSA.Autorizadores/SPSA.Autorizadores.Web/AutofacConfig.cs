@@ -1,33 +1,15 @@
 ﻿using Autofac;
-using Autofac.Features.Variance;
 using Autofac.Integration.Mvc;
 using MediatR;
-using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
 using SPSA.Autorizadores.Infraestructura.IoC;
 using AutoMapper;
-using System.Collections.Generic;
 using System.Web.Mvc;
-using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
 using SPSA.Autorizadores.Aplicacion.Mappings;
-using System.Data;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.IoC;
+using Quartz.Impl;
+using Quartz;
+using SPSA.Autorizadores.Aplicacion.Jobs;
+using SPSA.Autorizadores.Aplicacion.Schedulers;
 
 namespace SPSA.Autorizadores.Web
 {
@@ -74,10 +56,21 @@ namespace SPSA.Autorizadores.Web
 			// Register our Data dependencies
 			builder.RegisterModule(new InfraestructuraModule());
 
+			// Schedule
+			builder.Register(x => new StdSchedulerFactory().GetScheduler().Result).As<IScheduler>();
+			builder.RegisterType<JobActualizacionEstadoCierre>();
+			// Schedule jobs
+			//builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(x => typeof(IJob).IsAssignableFrom(x));
+
+
 			var container = builder.Build();
 
 			// Set MVC DI resolver to use our Autofac container
 			DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+
+			//Schedules
+			SchedulerActualizacionEstadoCierre.Start(container);
 		}
 	}
 }
