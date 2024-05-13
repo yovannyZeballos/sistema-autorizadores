@@ -3,6 +3,7 @@ var urlListarCadenas = baseUrl + 'Maestros/MaeCadena/ListarCadena';
 var urlListarRegiones = baseUrl + 'Maestros/MaeRegion/ListarRegion';
 var urlListarZonas = baseUrl + 'Maestros/MaeZona/ListarZona';
 var urlListarLocales = baseUrl + 'Maestros/MaeLocal/ListarLocal';
+var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
 var urlListarCajas = baseUrl + 'Maestros/MaeCaja/ListarCaja';
 
 var urlCrearLocal = baseUrl + 'Maestros/MaeLocal/CrearLocal';
@@ -125,6 +126,21 @@ var AdministrarMaestroLocal = function () {
                 codRegionAnterior = $("#cboRegion option:selected").val();
                 codZonaAnterior = $("#cboZona option:selected").val();
 
+            }
+        });
+
+        $("#btnBuscarLocalPorEmpresa").on("click", function () {
+            if (validarBuscarLocalPorEmpresa()) {
+                $("#txtEmpresaLocal").val($("#cboEmpresa option:selected").text());
+                $("#txtCadenaLocal").val("TODOS");
+                $("#txtRegionLocal").val("TODOS");
+                $("#txtZonaLocal").val("TODOS");
+                $("#cboCadena").val('');
+                $("#cboRegion").val('');
+                $("#cboZona").val('');
+
+                $("#modalLocales").modal('show');
+                recargarDataTableLocalesPorEmpresa();
             }
         });
 
@@ -638,6 +654,60 @@ var AdministrarMaestroLocal = function () {
         });
     }
 
+    const recargarDataTableLocalesPorEmpresa = function () {
+        const request = {
+            CodEmpresa: $("#cboEmpresa").val(),
+            //CodCadena: $("#cboCadena").val(),
+            //CodRegion: $("#cboRegion").val(),
+            //CodZona: $("#cboZona").val()
+        };
+
+        if ($.fn.DataTable.isDataTable('#tableLocales')) {
+            $('#tableLocales').DataTable().destroy();
+        }
+        dtListaLocales = $('#tableLocales').DataTable({
+            ajax: {
+                url: urlListarLocalesPorEmpresa,
+                type: "post",
+                dataType: "JSON",
+                dataSrc: "Data",
+                data: { request },
+                beforeSend: function () {
+                    showLoading();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal({
+                        text: 'Error al listar los locales: ' + jqXHR,
+                        icon: "error"
+                    });
+                }
+            },
+            columns: [
+                { data: "CodLocal" },
+                { data: "NomLocal" },
+                { data: "CodLocalPMM" },
+                { data: "NomLocalOfiplan" },
+                { data: "CodLocalSunat" },
+            ],
+            language: {
+                searchPlaceholder: 'Buscar...',
+                sSearch: '',
+            },
+            scrollY: '400px',
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            rowCallback: function (row, data, index) {
+
+            },
+            bAutoWidth: false
+        });
+    }
+
+
     const limpiar = function () {
         $("#cboEmpresa").val('').trigger('change');
         $("#cboCadena").val('').trigger('change');
@@ -752,6 +822,18 @@ var AdministrarMaestroLocal = function () {
         return validate;
     }
 
+    const validarBuscarLocalPorEmpresa = function () {
+        let validate = true;
+
+        if ($("#cboEmpresa").val() === '') {
+            validate = false;
+            swal({ text: 'Debe seleccionar la empresa.', icon: "warning", });
+        }
+
+        return validate;
+    }
+
+
     const validarSelecion = function (count, unSoloRegistro = false) {
         if (count === 0) {
             swal({
@@ -770,6 +852,10 @@ var AdministrarMaestroLocal = function () {
         }
 
         return true;
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     const obtenerLocal = function (codLocal) {
@@ -799,7 +885,22 @@ var AdministrarMaestroLocal = function () {
                     swal({ text: response.Mensaje, icon: "warning", });
                     return;
                 }
+
                 $("#modalLocales").modal('hide');
+
+                showLoading();
+
+                if ($("#txtCadenaLocal").val() == "TODOS") {
+                    await sleep(1000);
+                    $("#cboCadena").val(response.Data.CodCadena).trigger('change');
+                    await sleep(1000);
+                    $("#cboRegion").val(response.Data.CodRegion).trigger('change');
+                    await sleep(1000);
+                    $("#cboZona").val(response.Data.CodZona).trigger('change');
+
+                    codRegionAnterior = response.Data.CodRegion;
+                    codZonaAnterior = response.Data.CodZona;
+                }
 
                 setearLocal(response.Data);
                 desabilitarBotonosCaja(false);
@@ -807,6 +908,7 @@ var AdministrarMaestroLocal = function () {
                 $("#btnGuardarLocal").prop("disabled", true);
                 $("#btnActualizarLocal").prop("disabled", false);
                 $("#btnHabilitarlCambioRegionZona").prop("disabled", false);
+
                 await recargarDataTableCajas();
                 /*obtenerFechaSistema();*/
             },
@@ -817,10 +919,6 @@ var AdministrarMaestroLocal = function () {
     }
 
     const setearLocal = function (local) {
-        //$("#cboEmpresa").val('').trigger('change');
-        //$("#cboCadena").val('').trigger('change');
-        //$("#cboRegion").val('').trigger('change');
-        //$("#cboZona").val('').trigger('change');
         $("#cboTipEstado").val(local.TipEstado).trigger('change');
         $("#txtCodLocal").val(local.CodLocal);
         $("#txtNomLocal").val(local.NomLocal);
@@ -1144,14 +1242,14 @@ var AdministrarMaestroLocal = function () {
             },
             success: async function (response) {
 
-                    if (!response.Ok) {
-                        swal({ text: response.Mensaje, icon: "warning", });
-                        return;
-                    }
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
 
-                    swal({ text: response.Mensaje, icon: "success", });
-                    await recargarDataTableCajas();
-                    $("#modalCaja").modal('hide');
+                swal({ text: response.Mensaje, icon: "success", });
+                await recargarDataTableCajas();
+                $("#modalCaja").modal('hide');
 
 
                 if (!response.Ok) {
@@ -1320,8 +1418,8 @@ var AdministrarMaestroLocal = function () {
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
-    } 
-   
+    }
+
     return {
         init: function () {
             checkSession(async function () {

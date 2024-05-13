@@ -62,5 +62,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		/// </summary>
 		/// <param name="entity">La entidad a agregar.</param>
 		void AgregarActualizar(TEntidad entity);
-	}
+
+        Task<int> ExecuteSqlCommandAsync(string sql, params object[] parameters);
+    }
 }
