@@ -201,6 +201,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ImportarMaeZonaHandler>().As<IRequestHandler<ImportarMaeZonaCommand, RespuestaComunExcelDTO>>();
 
 			builder.RegisterType<ListarMaeLocalHandler>().As<IRequestHandler<ListarMaeLocalQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>>();
+			builder.RegisterType<ListarMaeLocalXEmpresaHandler>().As<IRequestHandler<ListarMaeLocalXEmpresaQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>>();
 			builder.RegisterType<ObtenerMaeLocalHandler>().As<IRequestHandler<ObtenerMaeLocalQuery, GenericResponseDTO<ObtenerMaeLocalDTO>>>();
 			builder.RegisterType<CrearMaeLocalHandler>().As<IRequestHandler<CrearMaeLocalCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarMaeLocalHandler>().As<IRequestHandler<ActualizarMaeLocalCommand, RespuestaComunDTO>>();

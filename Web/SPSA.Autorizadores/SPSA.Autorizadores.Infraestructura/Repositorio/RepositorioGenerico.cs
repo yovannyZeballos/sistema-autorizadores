@@ -65,8 +65,13 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			_contexto.Set<TEntidad>().AddRange(entity);
 		}
 
-		#region IDisposable Support
-		private bool disposedValue; // To detect redundant calls
+        public async Task<int> ExecuteSqlCommandAsync(string sql, params object[] parameters)
+        {
+            return await _contexto.Database.ExecuteSqlCommandAsync(sql, parameters);
+        }
+
+        #region IDisposable Support
+        private bool disposedValue; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
 		{

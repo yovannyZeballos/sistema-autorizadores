@@ -5,9 +5,11 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Queries;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,7 +42,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
             var response = new GenericResponseDTO<ObtenerMaeLocalDTO> { Ok = true };
             try
             {
-                var local = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodEmpresa == request.CodEmpresa && s.CodCadena == request.CodCadena && s.CodRegion == request.CodRegion && s.CodZona == request.CodZona && s.CodLocal == request.CodLocal).FirstOrDefaultAsync();
+                Mae_Local local = new Mae_Local();
+                if (request.CodCadena == null)
+                {
+                    local = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodEmpresa == request.CodEmpresa && s.CodLocal == request.CodLocal).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    local = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodEmpresa == request.CodEmpresa && s.CodCadena == request.CodCadena && s.CodRegion == request.CodRegion && s.CodZona == request.CodZona && s.CodLocal == request.CodLocal).FirstOrDefaultAsync();
+                }
+
                 if (local is null)
                 {
                     response.Ok = false;
