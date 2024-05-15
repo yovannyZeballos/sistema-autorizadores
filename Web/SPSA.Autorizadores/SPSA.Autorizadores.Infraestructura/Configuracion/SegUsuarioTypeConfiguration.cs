@@ -18,6 +18,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(u => u.UsuCreacion).HasColumnName("USU_CREACION");
 			Property(u => u.FecElimina).HasColumnName("FEC_ELIMINA");
 			Property(u => u.UsuElimina).HasColumnName("USU_ELIMINA");
+			Property(u => u.FecIngreso).HasColumnName("FEC_INGRESO");
+			Property(u => u.HoraIngreso).HasColumnName("HORA_INGRESO");
 		}
 	}
 }

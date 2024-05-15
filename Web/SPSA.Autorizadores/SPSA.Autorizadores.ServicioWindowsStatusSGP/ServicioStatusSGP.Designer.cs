@@ -1,6 +1,6 @@
-﻿namespace SPSA.Autorizadores.ServicioWindows
+﻿namespace SPSA.Autorizadores.ServicioWindowsStatusSGP
 {
-	partial class ServicioMonitorBCT
+	partial class ServicioStatusSGP
 	{
 		/// <summary> 
 		/// Variable del diseñador necesaria.
@@ -28,18 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.eventLogMonitorBCT = new System.Diagnostics.EventLog();
-			((System.ComponentModel.ISupportInitialize)(this.eventLogMonitorBCT)).BeginInit();
-			// 
-			// ServicioMonitorBCT
-			// 
-			this.ServiceName = "ServicioMonitorBCT";
-			((System.ComponentModel.ISupportInitialize)(this.eventLogMonitorBCT)).EndInit();
-
+			components = new System.ComponentModel.Container();
+			this.ServiceName = "ServicioStatusSGP";
 		}
 
 		#endregion
-
-		private System.Diagnostics.EventLog eventLogMonitorBCT;
 	}
 }

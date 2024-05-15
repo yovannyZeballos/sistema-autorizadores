@@ -6,6 +6,7 @@ using SPSA.Autorizadores.Infraestructura.Repositorio;
 using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Contexto
@@ -51,9 +52,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioUbiDepartamento = new RepositorioUbiDepartamento(this);
             RepositorioUbiProvincia = new RepositorioUbiProvincia(this);
             RepositorioUbiDistrito = new RepositorioUbiDistrito(this);
+			RepositorioProceso = new RepositorioProceso(this);
+			RepositorioProcesoEmpresa = new RepositorioProcesoEmpresa(this);
+			RepositorioMaeLocalAlterno = new RepositorioMaeLocalAlterno(this);
+			RepositorioMonCierreLocal = new	RepositorioMonCierreLocal(this);
+			RepositorioTmpMonCierreLocal = new RepositorioTmpMonCierreLocal(this);
 
-            //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
-        }
+			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
+		}
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
@@ -83,6 +89,11 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
         public IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; private set; }
         public IRepositorioUbiProvincia RepositorioUbiProvincia { get; private set; }
         public IRepositorioUbiDistrito RepositorioUbiDistrito { get; private set; }
+        public IRepositorioProceso RepositorioProceso { get; private set; }
+        public IRepositorioProcesoEmpresa RepositorioProcesoEmpresa { get; private set; }
+        public IRepositorioMaeLocalAlterno RepositorioMaeLocalAlterno { get; private set; }
+        public IRepositorioMonCierreLocal RepositorioMonCierreLocal { get; private set; }
+        public IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; private set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -116,6 +127,11 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             modelBuilder.Configurations.Add(new UbiDistritoTypeConfiguration());
 			modelBuilder.Configurations.Add(new InvCajasTypeConfiguration());
 			modelBuilder.Configurations.Add(new InvTipoActivoTypeConfiguration());
+			modelBuilder.Configurations.Add(new ProcesoTypeConfiguration());
+			modelBuilder.Configurations.Add(new ProcesoEmpresaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeLocalAlternoTypeConfiguration());
+			modelBuilder.Configurations.Add(new MonCierreLocalTypeConfiguration());
+			modelBuilder.Configurations.Add(new TmpMonCierreLocalTypeConfiguration());
 		}
 
 		public bool GuardarCambios()

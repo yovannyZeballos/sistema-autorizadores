@@ -1,4 +1,4 @@
-﻿namespace SPSA.Autorizadores.ServicioWindows
+﻿namespace SPSA.Autorizadores.ServicioWindowsStatusSGP
 {
 	partial class ProjectInstaller
 	{
@@ -39,9 +39,10 @@
 			// 
 			// serviceInstaller1
 			// 
-			this.serviceInstaller1.Description = "Permita alertar cuando identifique que no están pasando las transacciones de la BCT al CT2";
-			this.serviceInstaller1.DisplayName = "Servicio de monitoreo Extractor BCT vs CT2";
-			this.serviceInstaller1.ServiceName = "ServicioMonitorBCT";
+			this.serviceInstaller1.Description = "Permitre monitoriar el estado de sistema web sGP";
+			this.serviceInstaller1.DisplayName = "Servicio de monitoreo status SGP";
+			this.serviceInstaller1.ServiceName = "ServicioStatusSGP";
+			this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
 			// 
 			// ProjectInstaller
 			// 

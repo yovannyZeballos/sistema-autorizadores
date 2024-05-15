@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Remoting.Contexts;
@@ -53,8 +54,24 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			if (predicado != null) query = query.Where(predicado);
 			return query;
 		}
-		#region IDisposable Support
-		private bool disposedValue; // To detect redundant calls
+
+		public void AgregarActualizar(TEntidad entity)
+		{
+			_contexto.Set<TEntidad>().AddOrUpdate(entity);
+		}
+
+		public void AgregarRango(List<TEntidad> entity)
+		{
+			_contexto.Set<TEntidad>().AddRange(entity);
+		}
+
+        public async Task<int> ExecuteSqlCommandAsync(string sql, params object[] parameters)
+        {
+            return await _contexto.Database.ExecuteSqlCommandAsync(sql, parameters);
+        }
+
+        #region IDisposable Support
+        private bool disposedValue; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
 		{
@@ -82,6 +99,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+
+		
 
 
 		#endregion

@@ -53,6 +53,7 @@
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
     <Compile Include="Entidades\Empresa.cs" />
+    <Compile Include="Entidades\EstadoCierre.cs" />
     <Compile Include="Entidades\InvCajas.cs" />
     <Compile Include="Entidades\InventarioServidor.cs" />
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
@@ -62,14 +63,19 @@
     <Compile Include="Entidades\ListBox.cs" />
     <Compile Include="Entidades\Local.cs" />
     <Compile Include="Entidades\LocalOfiplan.cs" />
+    <Compile Include="Entidades\MaeLocalAlterno.cs" />
     <Compile Include="Entidades\Mae_Caja.cs" />
     <Compile Include="Entidades\Mae_Cadena.cs" />
     <Compile Include="Entidades\Mae_Empresa.cs" />
     <Compile Include="Entidades\Mae_Local.cs" />
     <Compile Include="Entidades\Mae_Region.cs" />
     <Compile Include="Entidades\Mae_Zona.cs" />
+    <Compile Include="Entidades\TmpMonCierreLocal.cs" />
+    <Compile Include="Entidades\MonCierreLocal.cs" />
     <Compile Include="Entidades\MonitorComando.cs" />
     <Compile Include="Entidades\MonitorControlBCT.cs" />
+    <Compile Include="Entidades\Proceso.cs" />
+    <Compile Include="Entidades\ProcesoEmpresa.cs" />
     <Compile Include="Entidades\ProcesoParametro.cs" />
     <Compile Include="Entidades\ProcesoParametroEmpresa.cs" />
     <Compile Include="Entidades\Seg_Menu.cs" />
