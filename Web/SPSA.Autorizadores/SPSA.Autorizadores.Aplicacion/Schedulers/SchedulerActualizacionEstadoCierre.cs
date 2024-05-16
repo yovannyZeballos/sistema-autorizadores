@@ -6,6 +6,7 @@ using SPSA.Autorizadores.Aplicacion.Jobs;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,13 @@ namespace SPSA.Autorizadores.Aplicacion.Schedulers
 
 			try
 			{
+				bool.TryParse(ConfigurationManager.AppSettings["EjecutarJobActualizacionEstadoCierre"], out bool ejecutarJobActualizacionEstadoCierre);
+
+				if (!ejecutarJobActualizacionEstadoCierre)
+				{
+					logger.Information($"El Job de Actualizacion de Estado de Cierre no esta habilitado -> EjecutarJobActualizacionEstadoCierre = {ejecutarJobActualizacionEstadoCierre}");
+					return;
+				}
 
 				IBCTContexto contexto = new BCTContexto();
 				var proceso = contexto.RepositorioProceso.Obtener(x => x.CodProceso == Constantes.CodigoProcesoActualizacionEstadoCierre).FirstOrDefault();
