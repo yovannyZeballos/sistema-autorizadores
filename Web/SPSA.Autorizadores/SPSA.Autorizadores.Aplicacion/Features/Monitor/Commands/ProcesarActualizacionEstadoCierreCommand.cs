@@ -75,7 +75,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 								return null;
 							}
 
-							
 
 							return new TmpMonCierreLocal
 							{
