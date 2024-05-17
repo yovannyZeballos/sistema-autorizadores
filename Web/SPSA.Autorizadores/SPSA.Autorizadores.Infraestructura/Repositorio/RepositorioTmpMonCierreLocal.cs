@@ -29,7 +29,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			{
 				foreach (var entity in entities)
 				{
-					writer.WriteLine($"{entity.CodLocalAlterno},{entity.FechaContable?.ToString("yyyy-MM-dd")},{entity.FechaCierre?.ToString("yyyy-MM-dd")},{entity.TipEstado},{entity.FechaCarga},{entity.HoraCarga}");
+					writer.WriteLine($"{entity.CodLocalAlterno},{entity.FechaContable?.ToString("yyyy-MM-dd")},{entity.FechaCierre?.ToString("yyyy-MM-dd")},{entity.TipEstado},{entity.FechaCarga:yyyy-MM-dd},{entity.HoraCarga}");
 				}
 
 			}
