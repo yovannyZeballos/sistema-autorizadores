@@ -305,6 +305,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />
