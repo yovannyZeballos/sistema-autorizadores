@@ -34,6 +34,7 @@ var BCT = function () {
             else {
                 cargarParametros("02");
                 idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
+
             }
         });
 
@@ -129,6 +130,8 @@ var BCT = function () {
 
                 cargarListadoCantidad(response.Data, codEmpresa);
                 procesar(codEmpresa, response.Data, cantidadAnterior);
+                /////
+                cargarParametrosFechaNegocio(codEmpresa)
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -161,6 +164,7 @@ var BCT = function () {
                     switch (item.CodEmpresa) {
                         case "02":
                             $("#lblFechaNegocioSpsa").text(item.FechaNegocio);
+                            $("#lblHoraNegocioSpsa").text(item.HoraNegocio);
 
                             ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioSpsa");
                             ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionSpsa");
@@ -168,6 +172,7 @@ var BCT = function () {
                             break;
                         case "09":
                             $("#lblFechaNegocioOechsle").text(item.FechaNegocio);
+                            $("#lblHoraNegocioOechsle").text(item.HoraNegocio);
 
                             ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioOechsle");
                             ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionOechsle");
@@ -175,6 +180,7 @@ var BCT = function () {
                             break;
                         case "10":
                             $("#lblFechaNegocioPromart").text(item.FechaNegocio);
+                            $("#lblHoraNegocioPromart").text(item.HoraNegocio);
 
                             ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromart");
                             ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromart");
@@ -182,6 +188,7 @@ var BCT = function () {
                             break;
                         case "11":
                             $("#lblFechaNegocioPromartEcu").text(item.FechaNegocio);
+                            $("#lblHoraNegocioPromartEcu").text(item.HoraNegocio);
 
                             ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromartEcu");
                             ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromartEcu");
@@ -209,7 +216,6 @@ var BCT = function () {
     };
 
     function ColorEtadoFechaNegocio(fechaInput, idBoton) {
-
         const fechaAhora = new Date();
         const fechaHoy = new Date(fechaAhora.getTime() - (fechaAhora.getTimezoneOffset() * 60000) - (5 * 3600 * 1000));
 
@@ -513,7 +519,7 @@ var BCT = function () {
             checkSession(function () {
                 eventos();
                 cargarParametros();
-                cargarParametrosFechaNegocio();
+                //cargarParametrosFechaNegocio();
                 idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
                 idIntervalOechsle = setInterval(cargarDatos, timeoutInterval, "09");
                 idIntervalPromart = setInterval(cargarDatos, timeoutInterval, "10");

@@ -37,7 +37,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
                     .Select(g => new ParametrosMonitorBctDTO
                     {
                         CodEmpresa = g.Key,
-                        FechaNegocio = g.FirstOrDefault(x => x.CodParametro == Constantes.CodigoParametroFechaNegocioAlerta)?.ValParametro,
+                        FechaNegocio = Convert.ToDateTime(g.FirstOrDefault(x => x.CodParametro == Constantes.CodigoParametroFechaNegocioAlerta)?.ValParametro).ToString("yyyy-MM-dd"),
+                        HoraNegocio = Convert.ToDateTime(g.FirstOrDefault(x => x.CodParametro == Constantes.CodigoParametroFechaNegocioAlerta)?.ValParametro).ToString("HH:mm:ss"),
                         EstadoConexion = g.FirstOrDefault(x => x.CodParametro == Constantes.CodigoParametroConexionAlerta)?.ValParametro
                     })
                     .ToList();
