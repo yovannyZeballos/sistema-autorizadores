@@ -1,0 +1,197 @@
+﻿@{
+    ViewBag.Title = "Mantenimiento | Inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Inventario Activos</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Inventario</li>
+            <li class="breadcrumb-item1 active">Activos</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden needs-validation" id="formInventario">
+            @Html.Partial("_CardHeader", "Administracion e inventario de cajas")
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card overflow-hidden needs-validation" id="formInventario">
+            @Html.Partial("_CardHeader", "Listado inventario de cajas")
+
+            <div class="card-body pt-3 pb-0">
+                <div class="row mb-4" id="btn-local">
+                    @*<div class="col-lg-2 col-md-2 col-sm-3">
+                    <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary btn-block">Nuevo</button>
+                </div>*@
+                    @*<div class="col-lg-2 col-md-2 col-sm-3">
+                    <button type="button" id="btnGuardarLocal" class="btn btn-sm btn-primary btn-block">Guardar</button>
+                </div>*@
+                    <div class="col-lg-2 col-md-2 col-sm-3">
+                        <button type="button" id="btnBuscarInvPorLocal" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                    </div>
+                    @*<div class="col-lg-6 col-md-6 col-sm-3 d-flex justify-content-end">
+                    <button type="button" id="btnDescargarMaestro" class="btn btn-sm btn-primary ">Descargar maestro</button>
+                </div>*@
+                </div>
+            </div>
+
+            <div class="card-body pt-2 pb-0">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresa" required>
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control select2-show-search custom-select" id="cboCadena" required>
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Region</label>
+                            <select class="form-control select2-show-search custom-select" id="cboRegion" required>
+                                <option label="Seleccione una region"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Zona</label>
+                            <select class="form-control select2-show-search custom-select" id="cboZona" required>
+                                <option label="Seleccione una zona"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local</label>
+                            <select class="form-control select2-show-search custom-select" id="cboLocal" required>
+                                <option label="Seleccione un local"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnBuscarInvPorLocalp" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tableListado" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div>
+    @*<button type="button" id="btnAbrirModalInvActivo" class="btn btn-outline-success btn-sm">Importar Inventario</button>*@
+    <button id="btnCargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Cargar Excel</button>
+    <button id="btnPlantillaArchivo" class="btn btn-sm btn-warning mb-4 ms-1"><i class="fe fe-download me-1"></i>Plantilla Excel</button>
+    @*<button type="button" id="btnAbrirModalCadena" class="btn btn-outline-success btn-sm">Importar Cadenas</button>
+        <button type="button" id="btnAbrirModalRegion" class="btn btn-outline-success btn-sm">Importar Regiones</button>
+        <button type="button" id="btnAbrirModalZona" class="btn btn-outline-success btn-sm">Importar Zonas</button>*@
+</div>
+
+
+<!-- MODAL IMPORTAR INV ACTIVO-->
+<div class="modal fade" id="modalImportarInvActivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalImportarInvActivo">Importar Inventario desde Excel </h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <input class="form-control" type="file" id="archivoExcelInvActivo" />
+                    <br />
+                    <div class="text-center">
+                        <button class="btn btn-success" type="button" id="btnCargarExcelInvActivo">Cargar Excel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ERRORES IMPORTAR EXCEL-->
+<div class="modal fade" id="modalErroresImportacionExcel" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalImportarEmpresa">Errores encontrados</h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/AdministrarInvActivo.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarInvActivo.init();
+        });
+    </script>
+}
