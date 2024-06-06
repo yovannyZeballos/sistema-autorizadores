@@ -218,7 +218,7 @@
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
-    <Compile Include="Areas\Inventario\Controllers\AdministrarInventarioController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\InventarioActivoController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
@@ -2721,7 +2721,7 @@
     <Content Include="Areas\Aperturas\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Aperturas\Views\web.config" />
     <Content Include="Areas\Aperturas\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Inventario\Views\AdministrarInventario\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioCaja\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Inventario\Views\web.config" />

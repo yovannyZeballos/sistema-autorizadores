@@ -179,6 +179,7 @@
     <Compile Include="DTO\ListarAperturaDTO.cs" />
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
+    <Compile Include="DTO\ListarInvActivoDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
     <Compile Include="DTO\ListarMaeCadenaDTO.cs" />
     <Compile Include="DTO\ListarMaeCajaDTO.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="DTO\EmpresaDTO.cs" />
     <Compile Include="DTO\LocalDTO.cs" />
     <Compile Include="DTO\LocalOfiplanDTO.cs" />
+    <Compile Include="DTO\ObtenerInvActivoDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCadenaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCajaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeEmpresaDTO.cs" />
@@ -287,6 +289,8 @@
     <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
     <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
+    <Compile Include="Features\InventarioActivo\Queries\ListarInvActivoQuery.cs" />
+    <Compile Include="Features\InventarioActivo\Queries\ObtenerInvActivoQuery.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
@@ -305,6 +309,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />

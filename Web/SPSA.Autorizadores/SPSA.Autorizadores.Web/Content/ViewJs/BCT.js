@@ -1,6 +1,7 @@
 ﻿var urlListado = baseUrl + 'Monitor/BCT/Listar';
 var urlProcesar = baseUrl + 'Monitor/BCT/Procesar';
 var urlParametros = baseUrl + 'Monitor/BCT/Parametros';
+var urlParametrosFechaNegocio = baseUrl + 'Monitor/BCT/ParametrosFechaNegocio';
 var dataTableListado = null;
 var dataTableCantidad = null;
 var RegistroTotal = {};
@@ -33,6 +34,7 @@ var BCT = function () {
             else {
                 cargarParametros("02");
                 idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
+
             }
         });
 
@@ -128,6 +130,8 @@ var BCT = function () {
 
                 cargarListadoCantidad(response.Data, codEmpresa);
                 procesar(codEmpresa, response.Data, cantidadAnterior);
+                /////
+                cargarParametrosFechaNegocio(codEmpresa)
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -137,6 +141,113 @@ var BCT = function () {
             }
         });
     };
+
+    const cargarParametrosFechaNegocio = function (codEmpresa = "") {
+        $.ajax({
+            url: urlParametrosFechaNegocio,
+            type: "post",
+            dataType: "json",
+            success: function (response) {
+
+                console.log(response);
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning" });
+                    return;
+                }
+
+                if (codEmpresa != "")
+                    response.Data = response.Data.filter((item) => item.CodEmpresa == codEmpresa);
+
+
+
+                response.Data.forEach((item) => {
+                    switch (item.CodEmpresa) {
+                        case "02":
+                            $("#lblFechaNegocioSpsa").text(item.FechaNegocio);
+                            $("#lblHoraNegocioSpsa").text(item.HoraNegocio);
+
+                            ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioSpsa");
+                            ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionSpsa");
+                            
+                            break;
+                        case "09":
+                            $("#lblFechaNegocioOechsle").text(item.FechaNegocio);
+                            $("#lblHoraNegocioOechsle").text(item.HoraNegocio);
+
+                            ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioOechsle");
+                            ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionOechsle");
+
+                            break;
+                        case "10":
+                            $("#lblFechaNegocioPromart").text(item.FechaNegocio);
+                            $("#lblHoraNegocioPromart").text(item.HoraNegocio);
+
+                            ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromart");
+                            ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromart");
+
+                            break;
+                        case "11":
+                            $("#lblFechaNegocioPromartEcu").text(item.FechaNegocio);
+                            $("#lblHoraNegocioPromartEcu").text(item.HoraNegocio);
+
+                            ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromartEcu");
+                            ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromartEcu");
+
+                            break;
+                        default:
+                    }
+                });
+
+                //if (codEmpresa != "")
+                //    cargarDatos(codEmpresa);
+                //else
+                //    $("input:checkbox:checked").each(function () {
+                //        cargarDatos($(this).val());
+                //    });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    };
+
+    function ColorEtadoFechaNegocio(fechaInput, idBoton) {
+        const fechaAhora = new Date();
+        const fechaHoy = new Date(fechaAhora.getTime() - (fechaAhora.getTimezoneOffset() * 60000) - (5 * 3600 * 1000));
+
+        if (!fechaInput) {
+            $(idBoton).addClass("fa-exclamation-circle text-danger");
+            $(idBoton).removeClass("fa-check-circle text-success");
+        } else {
+            var fechaNegocio = new Date(fechaInput + 'T00:00:00-05:00');
+            var formatFechanegocio = fechaNegocio.toISOString().slice(0, 10);
+            var formatFechaHoy = fechaHoy.toISOString().slice(0, 10);
+
+            if (formatFechanegocio === formatFechaHoy) {
+                $(idBoton).addClass("fa-check-circle text-success");
+                $(idBoton).removeClass("fa-exclamation-circle text-danger");
+            }
+            else {
+                $(idBoton).addClass("fa-exclamation-circle text-danger");
+                $(idBoton).removeClass("fa-check-circle text-success");
+            }
+        }
+    }
+
+    function ColorEtadoConexion(conexionInput, idBoton) {
+        if (conexionInput === "SI") {
+            $(idBoton).addClass("fa-check-circle text-success");
+            $(idBoton).removeClass("fa-exclamation-circle text-danger");
+        }
+        else {
+            $(idBoton).addClass("fa-exclamation-circle text-danger");
+            $(idBoton).removeClass("fa-check-circle text-success");
+        }
+    }
 
     const obtenerCantidadAnterior = function (codEmpresa) {
 
@@ -408,6 +519,7 @@ var BCT = function () {
             checkSession(function () {
                 eventos();
                 cargarParametros();
+                //cargarParametrosFechaNegocio();
                 idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
                 idIntervalOechsle = setInterval(cargarDatos, timeoutInterval, "09");
                 idIntervalPromart = setInterval(cargarDatos, timeoutInterval, "10");

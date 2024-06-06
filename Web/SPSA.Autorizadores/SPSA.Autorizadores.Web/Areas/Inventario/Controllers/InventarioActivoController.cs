@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,11 +9,11 @@ using System.Web.Mvc;
 
 namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 {
-    public class AdministrarInventarioController : Controller
+    public class InventarioActivoController : Controller
     {
         private readonly IMediator _mediator;
 
-        public AdministrarInventarioController(IMediator mediator)
+        public InventarioActivoController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -21,6 +21,20 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ObtenerInvActivo(ObtenerInvActivoQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ListarActivos(ListarInvActivoQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
         }
 
         [HttpPost]

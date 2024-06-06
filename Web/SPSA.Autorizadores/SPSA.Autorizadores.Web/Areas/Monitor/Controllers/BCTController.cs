@@ -48,5 +48,12 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 			var response = await _mediator.Send(new ObtenerParametrosQuery());
 			return Json(response);
 		}
-	}
+
+        [HttpPost]
+        public async Task<JsonResult> ParametrosFechaNegocio()
+        {
+            var response = await _mediator.Send(new ObtenerFechaNegocioQuery());
+            return Json(response);
+        }
+    }
 }

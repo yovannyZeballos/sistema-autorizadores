@@ -132,6 +132,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ProcesarMonitorBCTHandler>().As<IRequestHandler<ProcesarMonitorBCTCommand, ObtenerComunDTO<(bool, bool, bool, int)>>>();
 			builder.RegisterType<ObtenerRegistrosMonitorBCTHandler>().As<IRequestHandler<ObtenerRegistrosMonitorBCTQuery, ObtenerComunDTO<TransactionXmlCT2>>>();
 			builder.RegisterType<ObtenerParametrosHandler>().As<IRequestHandler<ObtenerParametrosQuery, GenericResponseDTO<List<ParametrosMonitorBctDTO>>>>();
+			builder.RegisterType<ObtenerFechaNegocioHandler>().As<IRequestHandler<ObtenerFechaNegocioQuery, GenericResponseDTO<List<ParametrosMonitorBctDTO>>>>();
 			builder.RegisterType<ListarSistemasHandler>().As<IRequestHandler<ListarSistemasQuery, GenericResponseDTO<List<ListarSistemaDTO>>>>();
 			builder.RegisterType<CrearSistemaHandler>().As<IRequestHandler<CrearSistemaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarSistemaHandler>().As<IRequestHandler<ActualizarSistemaCommand, RespuestaComunDTO>>();
