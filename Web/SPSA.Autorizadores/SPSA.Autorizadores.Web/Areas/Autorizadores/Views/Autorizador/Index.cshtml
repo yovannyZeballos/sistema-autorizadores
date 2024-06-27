@@ -32,10 +32,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-xl-12">
-                        <button id="bntColaboradoresActivos" class="btn btn-sm btn-primary mb-4 ms-1">Colaboradores activos</button>
-                        <button id="btnGenerar" class="btn btn-sm btn-primary mb-4 ms-1">Generar Archivo</button>
-                        <button id="btnEliminar" class="btn btn-sm btn-primary mb-4 ms-1">Eliminar Autorizador</button>
-                        <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-1">Buscar empleado</button>
+                        <button id="bntColaboradoresActivos" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-user"></span> Colaboradores activos</button>
+                        <button id="btnGenerar" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-file"></span> Generar Archivo</button>
+                        <button id="btnEliminar" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-remove"></span> Eliminar Autorizador</button>
+                        <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-search"></span> Buscar empleado</button>
+                        <button id="btnImprimir" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-print"></span> Imprimir</button>
+                        <button id="btnAbrirModalReimprimir" class="btn btn-sm btn-primary mb-4 ms-1" data-bs-toggle="modal" data-bs-target="#modalMotivo"><span class="fa fa-print"></span> Reimprimir</button>
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group data-table-btn">
@@ -130,6 +132,31 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalMotivo" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMotivoLabel">Ingresar Motivo de la Reimpresión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario dentro del modal -->
+                <form>
+                    <div class="mb-3">
+                        <label for="txtMotivo" class="form-label">Motivo</label>
+                        <input type="text" class="form-control" id="txtMotivo" placeholder="Escribe tu motivo aquí">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id="btnReimprimir" class="btn btn-primary">Reimprimir</button>
             </div>
         </div>
     </div>

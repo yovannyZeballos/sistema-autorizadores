@@ -235,6 +235,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
 			builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 			builder.RegisterType<ProcesarActualizacionEstadoCierreHandler>().As<IRequestHandler<ProcesarActualizacionEstadoCierreCommand, RespuestaComunDTO>>();
+			builder.RegisterType<ImprimirBarrasAutorizadorHandler>().As<IRequestHandler<ImprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
+			builder.RegisterType<ReimprimirBarrasAutorizadorHandler>().As<IRequestHandler<ReimprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
 
 
 			base.Load(builder);

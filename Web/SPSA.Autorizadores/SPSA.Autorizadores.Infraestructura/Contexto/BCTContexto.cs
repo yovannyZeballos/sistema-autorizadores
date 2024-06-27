@@ -57,6 +57,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMaeLocalAlterno = new RepositorioMaeLocalAlterno(this);
 			RepositorioMonCierreLocal = new	RepositorioMonCierreLocal(this);
 			RepositorioTmpMonCierreLocal = new RepositorioTmpMonCierreLocal(this);
+			RepositorioAutImpresion = new RepositorioAutImpresion(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -94,9 +95,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
         public IRepositorioMaeLocalAlterno RepositorioMaeLocalAlterno { get; private set; }
         public IRepositorioMonCierreLocal RepositorioMonCierreLocal { get; private set; }
         public IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; private set; }
+        public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
 
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoParametroEmpresaTypeConfiguration());
@@ -132,6 +134,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MaeLocalAlternoTypeConfiguration());
 			modelBuilder.Configurations.Add(new MonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new TmpMonCierreLocalTypeConfiguration());
+			modelBuilder.Configurations.Add(new AutImpresionTypeConfiguracion());
 		}
 
 		public bool GuardarCambios()

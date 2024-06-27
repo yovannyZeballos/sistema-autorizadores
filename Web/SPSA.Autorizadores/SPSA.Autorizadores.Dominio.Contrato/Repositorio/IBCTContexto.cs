@@ -38,6 +38,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		IRepositorioMaeLocalAlterno RepositorioMaeLocalAlterno { get; }
 		IRepositorioMonCierreLocal RepositorioMonCierreLocal { get; }
 		IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; }
+		IRepositorioAutImpresion RepositorioAutImpresion { get; }
 
 
 		bool GuardarCambios();
