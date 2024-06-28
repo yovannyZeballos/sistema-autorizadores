@@ -363,6 +363,10 @@
     <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ListarInvActivoQuery.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ObtenerInvActivoQuery.cs" />
+    <Compile Include="Features\InventarioCaja\Commands\ActualizarInvCajaCommand.cs" />
+    <Compile Include="Features\InventarioCaja\Commands\CrearInvCajaCommand.cs" />
+    <Compile Include="Features\InventarioCaja\Queries\ListarInvCajaQuery.cs" />
+    <Compile Include="Features\InventarioCaja\Queries\ObtenerInvCajaQuery.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
