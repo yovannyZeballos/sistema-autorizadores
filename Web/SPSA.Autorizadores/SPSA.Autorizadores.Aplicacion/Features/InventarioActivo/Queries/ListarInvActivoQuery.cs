@@ -23,12 +23,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries
         public string CodLocal { get; set; }
     }
 
-    public class ListarInvActivoaHandler : IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>
+    public class ListarInvActivoHandler : IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>
     {
         private readonly IMapper _mapper;
         private readonly IBCTContexto _contexto;
         private readonly ILogger _logger;
-        public ListarInvActivoaHandler(IMapper mapper)
+        public ListarInvActivoHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new BCTContexto();
@@ -49,8 +49,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries
                                                                         .OrderBy(x => x.CodActivo)
                                                                         .ToListAsync();
                 response.Data = _mapper.Map<List<ListarInvActivoDTO>>(activos);
-                response.Ok = true;
-                response.Mensaje = "Se ha generado la lista correctamente";
+                //response.Ok = true;
+                //response.Mensaje = "Se ha generado la lista correctamente";
             }
             catch (Exception ex)
             {

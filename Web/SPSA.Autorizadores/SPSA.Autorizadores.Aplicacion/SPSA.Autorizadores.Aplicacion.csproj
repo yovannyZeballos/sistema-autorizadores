@@ -238,11 +238,15 @@
     <Compile Include="DTO\EmpresaAsociadaDTO.cs" />
     <Compile Include="DTO\ImprimirAutorizadorDTO.cs" />
     <Compile Include="DTO\ImprimirAutorizadorResponseDTO.cs" />
+    <Compile Include="DTO\InvActivoDTO.cs" />
+    <Compile Include="DTO\InvCajaDTO.cs" />
+    <Compile Include="DTO\InvTipoActivoDTO.cs" />
     <Compile Include="DTO\JerarquiaOrganizacionalDTO.cs" />
     <Compile Include="DTO\ListarAperturaDTO.cs" />
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
     <Compile Include="DTO\ListarInvActivoDTO.cs" />
+    <Compile Include="DTO\ListarInvCajaDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
     <Compile Include="DTO\ListarMaeCadenaDTO.cs" />
     <Compile Include="DTO\ListarMaeCajaDTO.cs" />
@@ -298,6 +302,7 @@
     <Compile Include="DTO\LocalDTO.cs" />
     <Compile Include="DTO\LocalOfiplanDTO.cs" />
     <Compile Include="DTO\ObtenerInvActivoDTO.cs" />
+    <Compile Include="DTO\ObtenerInvCajaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCadenaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCajaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeEmpresaDTO.cs" />
@@ -353,6 +358,8 @@
     <Compile Include="Features\Empresas\Queries\ListarEmpresasAsociadasQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
+    <Compile Include="Features\InventarioActivo\Commands\ActualizarInvActivoCommand.cs" />
+    <Compile Include="Features\InventarioActivo\Commands\CrearInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ListarInvActivoQuery.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ObtenerInvActivoQuery.cs" />
@@ -478,6 +485,7 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
+    <Compile Include="Features\TiposActivo\Queries\ListarInvTipoActivoQuery.cs" />
     <Compile Include="Features\Ubigeos\Queries\ListarUbiDepartamentoQuery.cs" />
     <Compile Include="Features\Ubigeos\Queries\ListarUbiDistritoQuery.cs" />
     <Compile Include="Features\Ubigeos\Queries\ListarUbiProvinciaQuery.cs" />
@@ -519,6 +527,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\TablasMae\Queries\" />
+    <Folder Include="Features\TiposActivo\Commands\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Localization\ar.xml" />
@@ -561,18 +570,6 @@
     <Content Include="Localization\zh-CHS.xml" />
     <Content Include="Localization\zh-CHT.xml" />
     <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
