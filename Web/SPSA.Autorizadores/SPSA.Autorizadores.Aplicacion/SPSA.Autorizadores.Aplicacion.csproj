@@ -510,6 +510,7 @@
     <Compile Include="ReportUtils\ReportePDFServicio.cs" />
     <Compile Include="Schedulers\SchedulerActualizacionEstadoCierre.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="ViewModel\InvCajaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

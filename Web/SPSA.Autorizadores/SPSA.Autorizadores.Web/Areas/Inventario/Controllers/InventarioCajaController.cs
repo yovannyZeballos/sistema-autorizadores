@@ -5,11 +5,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
+using SPSA.Autorizadores.Aplicacion.ViewModel;
 using SPSA.Autorizadores.Web.Utiles;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -37,24 +34,21 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return PartialView("_EditarInvCaja", model);
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> CrearFormInvCaja(InvCajaDTO model)
-        //{
-        //    ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
-        //    var tiposActivo = await _mediator.Send(modelTiposActivo);
+        [HttpPost]
+        public async Task<ActionResult> CrearFormInvCaja(InvCajaDTO model)
+        {
+            ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
+            var tiposActivo = await _mediator.Send(modelTiposActivo);
 
-        //    //var invCaja = ObtenerInvCajaPorId(id);
-        //    //var activos = ObtenerListaDeActivos();
-
-        //    var viewModel = new InvCajaViewModel
-        //    {
-        //        InvCaja = model,
-        //        TiposActivo = tiposActivo.Data
-        //    };
+            var viewModel = new InvCajaViewModel
+            {
+                InvCaja = model,
+                TiposActivo = tiposActivo.Data
+            };
 
 
-        //    return PartialView("_CrearInvCaja", viewModel);
-        //}
+            return PartialView("_CrearInvCaja", viewModel);
+        }
 
         [HttpPost]
         public async Task<JsonResult> ObtenerInvCaja(ObtenerInvCajaQuery request)
