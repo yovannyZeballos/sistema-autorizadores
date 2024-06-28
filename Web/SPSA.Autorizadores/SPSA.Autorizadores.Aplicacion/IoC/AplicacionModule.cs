@@ -17,6 +17,7 @@ using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Commands;
@@ -44,6 +45,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.TablasMae.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Ubigeos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Queries;
@@ -219,13 +221,26 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<EliminarMaeCajasHandler>().As<IRequestHandler<EliminarMaeCajasCommand, RespuestaComunDTO>>();
 			builder.RegisterType<DescargarMaestroCajalHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
 
-			builder.RegisterType<ImportarInventarioActivoHandler>().As<IRequestHandler<ImportarInventarioActivoCommand, RespuestaComunExcelDTO>>();
-			builder.RegisterType<ListarAperturaHandler>().As<IRequestHandler<ListarAperturaQuery, GenericResponseDTO<List<ListarAperturaDTO>>>>();
+            builder.RegisterType<ListarInvTipoActivoHandler>().As<IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>>();
+
+            builder.RegisterType<ListarInvActivoHandler>().As<IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>>();
+            builder.RegisterType<ObtenerInvActivoHandler>().As<IRequestHandler<ObtenerInvActivoQuery, GenericResponseDTO<ObtenerInvActivoDTO>>>();
+            builder.RegisterType<CrearInvActivoHandler>().As<IRequestHandler<CrearInvActivoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarInvActivoHandler>().As<IRequestHandler<ActualizarInvActivoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarInventarioActivoHandler>().As<IRequestHandler<ImportarInventarioActivoCommand, RespuestaComunExcelDTO>>();
+
+            //builder.RegisterType<ListarInvCajaHandler>().As<IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>>();
+            //builder.RegisterType<ObtenerInvCajaHandler>().As<IRequestHandler<ObtenerInvCajaQuery, GenericResponseDTO<ObtenerInvCajaDTO>>>();
+            //builder.RegisterType<CrearInvCajaHandler>().As<IRequestHandler<CrearInvCajaCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<ActualizarInvCajaHandler>().As<IRequestHandler<ActualizarInvCajaCommand, RespuestaComunDTO>>();
+
+            builder.RegisterType<ListarAperturaHandler>().As<IRequestHandler<ListarAperturaQuery, GenericResponseDTO<List<ListarAperturaDTO>>>>();
 			builder.RegisterType<ObtenerAperturaHandler>().As<IRequestHandler<ObtenerAperturaQuery, GenericResponseDTO<ObtenerAperturaDTO>>>();
 			builder.RegisterType<CrearAperturaHandler>().As<IRequestHandler<CrearAperturaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarAperturaHandler>().As<IRequestHandler<ActualizarAperturaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImportarAperturaHandler>().As<IRequestHandler<ImportarAperturaCommand, RespuestaComunExcelDTO>>();
 			builder.RegisterType<DescargarAperturaHandler>().As<IRequestHandler<DescargarAperturaCommand, DescargarMaestroDTO>>();
+			
 			builder.RegisterType<ListarUbiDepartamentoHandler>().As<IRequestHandler<ListarUbiDepartamentoQuery, GenericResponseDTO<List<ListarUbiDepartamentoDTO>>>>();
 			builder.RegisterType<ListarUbiProvinciaHandler>().As<IRequestHandler<ListarUbiProvinciaQuery, GenericResponseDTO<List<ListarUbiProvinciaDTO>>>>();
 			builder.RegisterType<ListarUbiDistritoHandler>().As<IRequestHandler<ListarUbiDistritoQuery, GenericResponseDTO<List<ListarUbiDistritoDTO>>>>();

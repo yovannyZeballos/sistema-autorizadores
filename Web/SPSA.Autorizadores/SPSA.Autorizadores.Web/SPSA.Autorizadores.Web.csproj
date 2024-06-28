@@ -2296,6 +2296,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarInvCaja.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />

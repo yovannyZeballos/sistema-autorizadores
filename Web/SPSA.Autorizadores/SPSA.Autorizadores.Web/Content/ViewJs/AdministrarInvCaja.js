@@ -4,19 +4,23 @@ var urlListarRegiones = baseUrl + 'Maestros/MaeRegion/ListarRegion';
 var urlListarZonas = baseUrl + 'Maestros/MaeZona/ListarZona';
 var urlListarLocales = baseUrl + 'Maestros/MaeLocal/ListarLocal';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
-var urlListarActivos = baseUrl + 'Inventario/InventarioActivo/ListarActivos';
+var urlListarCajas = baseUrl + 'Maestros/MaeCaja/ListarCaja';
+var urlListarInvCajas = baseUrl + 'Inventario/InventarioCaja/ListarCajas';
 
-var urlObtenerInvActivo = baseUrl + 'Inventario/InventarioActivo/ObtenerInvActivo';
-var urlCrearInvActivo = baseUrl + 'Inventario/InventarioActivo/CrearInvActivo';
-var urlActualizarInvActivo = baseUrl + 'Inventario/InventarioActivo/ActualizarInvActivo';
-var urlImportarInvActivo = baseUrl + 'Inventario/InventarioActivo/ImportarExcelInventario';
+var urlObtenerInvCaja = baseUrl + 'Inventario/InventarioCaja/ObtenerInvCaja';
+var urlCrearInvCaja = baseUrl + 'Inventario/InventarioCaja/CrearInvCaja';
+var urlActualizarInvCaja = baseUrl + 'Inventario/InventarioCaja/ActualizarInvCaja';
+var urlCrearFormInvCaja = baseUrl + 'Inventario/InventarioCaja/CrearFormInvCaja';
+var urlEditarFormInvCaja = baseUrl + 'Inventario/InventarioCaja/EditarFormInvCaja';
 
-var urlModalCrearEditarInvActivo = baseUrl + 'Inventario/InventarioActivo/CrearEditarInvActivo';
-var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
+var urlImportarInventario = baseUrl + 'Inventario/InventarioCaja/Importar';
+var urlDescargarPlantilla = baseUrl + 'Inventario/InventarioCaja/DescargarPlantillas';
 
-var dtListaActivos = null;
+var dtListaNumCajas = null;
+var dtListaCajas = null;
 var dtListaLocales = null;
-var AdministrarInvActivo = function () {
+
+var AdministrarInvCajas = function () {
 
     const eventos = function () {
 
@@ -36,114 +40,130 @@ var AdministrarInvActivo = function () {
             await cargarComboLocales();
         });
 
-        $("#btnBuscarInvActivoPorLocal").on("click", function () {
-            if (validarBuscarInvActivo()) {
-                const request = {
-                    CodEmpresa: $("#cboEmpresa").val(),
-                    CodCadena: $("#cboCadena").val(),
-                    CodRegion: $("#cboRegion").val(),
-                    CodZona: $("#cboZona").val(),
-                    CodLocal: $("#cboLocal").val(),
-                };
-
-                recargarDataTableActivos(request);
-            }
+        $("#cboLocal").on("change", function () {
+            const request = {
+                CodEmpresa: $("#cboEmpresa").val(),
+                CodCadena: $("#cboCadena").val(),
+                CodRegion: $("#cboRegion").val(),
+                CodZona: $("#cboZona").val(),
+                CodLocal: $("#cboLocal").val()
+            };
+            recargarDataTableNumCajas(request);
         });
 
         $("#btnBuscarLocalPorEmpresa").on("click", function () {
-            if (validarBuscarInvActivoPorEmpresa()) {
+            if (validarBuscarInvCajaPorEmpresa()) {
                 $("#modalLocales").modal('show');
                 recargarDataTableLocalesPorEmpresa();
             }
         });
 
-        $("#btnNuevoInvActivo").click(function () {
+        $("#btnNuevoInvCaja").click(function () {
             const codEmpresa = $("#cboEmpresa").val();
             const codCadena = $("#cboCadena").val();
             const codRegion = $("#cboRegion").val();
             const codZona = $("#cboZona").val();
             const codLocal = $("#cboLocal").val();
 
-            abrirModalNuevoInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal);
-        });
-
-        $("#btnEditarInvActivo").click(function () {
-            const codEmpresa = $("#cboEmpresa").val();
-            const codCadena = $("#cboCadena").val();
-            const codRegion = $("#cboRegion").val();
-            const codZona = $("#cboZona").val();
-            const codLocal = $("#cboLocal").val();
-
-            var filasSeleccionada = document.querySelectorAll("#tableActivos tbody tr.selected");
+            var filasSeleccionada = document.querySelectorAll("#tableNumCajas tbody tr.selected");
             if (!validarSelecion(filasSeleccionada.length)) {
                 return;
             }
 
-            const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
-            const COD_MODELO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
-            const NOM_MARCA = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
-            const COD_SERIE = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
+            const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
 
-            abrirModalEditarInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, COD_ACTIVO, COD_MODELO, NOM_MARCA, COD_SERIE);
+            console.log(NUM_CAJA);
 
-            $("#txtCodActivo").prop("disabled", true);
-            $("#txtCodModelo").prop("disabled", true);
-            $("#txtNomMarca").prop("disabled", true);
-            $("#txtCodSerie").prop("disabled", true);
+            abrirModalNuevoInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA);
         });
 
-        $("#btnGuardarInvActivo").on("click", async function () {
-            var inv_activo = {
+        $("#btnEditarInvCaja").click(function () {
+            const codEmpresa = $("#cboEmpresa").val();
+            const codCadena = $("#cboCadena").val();
+            const codRegion = $("#cboRegion").val();
+            const codZona = $("#cboZona").val();
+            const codLocal = $("#cboLocal").val();
+
+            var filasSeleccionada = document.querySelectorAll("#tableCajas tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+
+            const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+            const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
+
+            abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
+        });
+
+        $("#btnResumenPorNumCaja").click(function () {
+            var filasSeleccionada = document.querySelectorAll("#tableNumCajas tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+
+            const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+
+            const request = {
                 CodEmpresa: $("#cboEmpresa").val(),
                 CodCadena: $("#cboCadena").val(),
                 CodRegion: $("#cboRegion").val(),
                 CodZona: $("#cboZona").val(),
                 CodLocal: $("#cboLocal").val(),
-                CodActivo: $("#txtCodActivo").val(),
-                CodModelo: $("#txtCodModelo").val(),
-                CodSerie: $("#txtCodSerie").val(),
-                NomMarca: $("#txtNomMarca").val(),
-                Ip: $("#txtIp").val(),
-                NomArea: $("#txtNomArea").val(),
-                NumOc: $("#txtNumOc").val(),
-                NumGuia: $("#txtNumGuia").val(),
-                FecSalida: $("#txtFecSalida").val(),
-                Antiguedad: $("#txtAntiguedad").val(),
-                IndOperativo: $("#cboIndOperativo").val(),
-                Observacion: $("#txtObservacion").val(),
-                Garantia: $("#txtGarantia").val(),
-                FecActualiza: $("#txtFecActualiza").val()
+                NumCaja: NUM_CAJA
             };
-
-            if (validarFormInvActivo(inv_activo))
-                await guardarInvActivo(inv_activo, urlCrearInvActivo);
+            abrirModalDatosNumCaja(request);
         });
 
-        $("#btnActualizarInvActivo").on("click", async function () {
-            var inv_activo = {
+        $("#btnGuardarInvCaja").on("click", async function () {
+            var inv_caja = {
                 CodEmpresa: $("#cboEmpresa").val(),
                 CodCadena: $("#cboCadena").val(),
                 CodRegion: $("#cboRegion").val(),
                 CodZona: $("#cboZona").val(),
                 CodLocal: $("#cboLocal").val(),
+                NumCaja: $("#txtNumCaja").val(),
+                CodActivo: $("#cboCodActivo").val(),
+                CodModelo: $("#txtCodModelo").val(),
+                CodSerie: $("#txtCodSerie").val(),
+                NumAdenda: $("#txtNumAdenda").val(),
+                TipProcesador: $("#txtTipProcesador").val(),
+                Memoria: $("#txtMemoria").val(),
+                DesSo: $("#txtDesSo").val(),
+                VerSo: $("#txtVerSo").val(),
+                CapDisco: $("#txtCapDisco").val(),
+                DesPuertoBalanza: $("#txtDesPuertoBalanza").val(),
+                TipEstado: $("#cboTipEstado").val(),
+                FecGarantia: $("#txtFecGarantia").val()
+            };
+
+            if (validarFormInvCaja(inv_caja))
+                await guardarInvCaja(inv_caja, urlCrearInvCaja);
+        });
+
+        $("#btnActualizarInvCaja").on("click", async function () {
+            var inv_caja = {
+                CodEmpresa: $("#cboEmpresa").val(),
+                CodCadena: $("#cboCadena").val(),
+                CodRegion: $("#cboRegion").val(),
+                CodZona: $("#cboZona").val(),
+                CodLocal: $("#cboLocal").val(),
+                NumCaja: $("#txtNumCaja").val(),
                 CodActivo: $("#txtCodActivo").val(),
                 CodModelo: $("#txtCodModelo").val(),
                 CodSerie: $("#txtCodSerie").val(),
-                NomMarca: $("#txtNomMarca").val(),
-                Ip: $("#txtIp").val(),
-                NomArea: $("#txtNomArea").val(),
-                NumOc: $("#txtNumOc").val(),
-                NumGuia: $("#txtNumGuia").val(),
-                FecSalida: $("#txtFecSalida").val(),
-                Antiguedad: $("#txtAntiguedad").val(),
-                IndOperativo: $("#cboIndOperativo").val(),
-                Observacion: $("#txtObservacion").val(),
-                Garantia: $("#txtGarantia").val(),
-                FecActualiza: $("#txtFecActualiza").val()
+                NumAdenda: $("#txtNumAdenda").val(),
+                TipProcesador: $("#txtTipProcesador").val(),
+                Memoria: $("#txtMemoria").val(),
+                DesSo: $("#txtDesSo").val(),
+                VerSo: $("#txtVerSo").val(),
+                CapDisco: $("#txtCapDisco").val(),
+                DesPuertoBalanza: $("#txtDesPuertoBalanza").val(),
+                TipEstado: $("#cboTipEstado").val(),
+                FecGarantia: $("#txtFecGarantia").val()
             };
 
-            if (validarFormInvActivo(inv_activo))
-                await guardarInvActivo(inv_activo, urlActualizarInvActivo);
+            if (validarFormInvCaja(inv_caja))
+                await guardarInvCaja(inv_caja, urlActualizarInvCaja);
         });
 
         $("#btnObtenerInvPorLocal").on("click", async function () {
@@ -171,27 +191,48 @@ var AdministrarInvActivo = function () {
             $("#cboCadena").val(COD_CADENA).trigger('change');
             await sleep(500);
             $("#cboRegion").val(COD_REGION).trigger('change');
-            await sleep(500);
+            await sleep(1200);
             $("#cboZona").val(COD_ZONA).trigger('change');
-            await sleep(500);
+            await sleep(1500);
             $("#cboLocal").val(COD_LOCAL).trigger('change');
 
-            recargarDataTableActivos(request);
-            closeLoading();
+            recargarDataTableNumCajas(request);
+
             $("#modalLocales").modal('hide');
+            closeLoading();
         });
 
-        $('#tableActivos tbody').on('click', 'tr', function () {
+        $('#tableNumCajas tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                numeroCaja = 0;
+            } else {
+                dtListaNumCajas.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                var filasSeleccionada = $(this);
+                const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+                const request = {
+                    CodEmpresa: $("#cboEmpresa").val(),
+                    CodCadena: $("#cboCadena").val(),
+                    CodRegion: $("#cboRegion").val(),
+                    CodZona: $("#cboZona").val(),
+                    CodLocal: $("#cboLocal").val(),
+                    NumCaja: NUM_CAJA
+                };
+                recargarDataTableCajas(request);
+            }
+        });
+
+        $('#tableCajas tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
             } else {
-                dtListaActivos.$('tr.selected').removeClass('selected');
+                dtListaCajas.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             }
         });
 
-        $('#tableActivos tbody').on('dblclick', 'tr', function () {
-
+        $('#tableCajas tbody').on('dblclick', 'tr', function () {
             const codEmpresa = $("#cboEmpresa").val();
             const codCadena = $("#cboCadena").val();
             const codRegion = $("#cboRegion").val();
@@ -200,17 +241,10 @@ var AdministrarInvActivo = function () {
 
             var filasSeleccionada = $(this);
 
-            const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
-            const COD_MODELO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
-            const NOM_MARCA = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
-            const COD_SERIE = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
+            const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+            const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
 
-            abrirModalEditarInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, COD_ACTIVO, COD_MODELO, NOM_MARCA, COD_SERIE);
-
-            $("#txtCodActivo").prop("disabled", true);
-            $("#txtCodModelo").prop("disabled", true);
-            $("#txtNomMarca").prop("disabled", true);
-            $("#txtCodSerie").prop("disabled", true);
+            abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
         });
 
         $('#tableLocales tbody').on('click', 'tr', function () {
@@ -240,49 +274,31 @@ var AdministrarInvActivo = function () {
                 CodLocal: COD_LOCAL,
             };
 
-            console.log('Doble clic en la fila:', request);
-
             await sleep(500);
             $("#cboCadena").val(COD_CADENA).trigger('change');
             await sleep(500);
             $("#cboRegion").val(COD_REGION).trigger('change');
-            await sleep(500);
+            await sleep(1200);
             $("#cboZona").val(COD_ZONA).trigger('change');
-            await sleep(500);
+            await sleep(1500);
             $("#cboLocal").val(COD_LOCAL).trigger('change');
 
-            recargarDataTableActivos(request);
+            //recargarDataTableCajas(request);
+            recargarDataTableNumCajas(request);
             closeLoading();
             $("#modalLocales").modal('hide');
         });
 
-        $("#btnCargarArchivo").click(function () {
-            $("#modalImportarInvActivo").modal('show');
+        $("#btnImportar").on("click", function () {
+            $("#excelInventario").trigger("click");
         });
 
-        $("#btnPlantillaArchivo").click(function () {
-            descargarPlantillas("Plantilla_InvActivo");
+        $('#excelInventario').change(function (e) {
+            importarExcelInventario();
         });
 
-        $("#btnCargarExcelInvActivo").on("click", function () {
-            var inputFile = document.getElementById('archivoExcelInvActivo');
-            var archivoSeleccionado = inputFile.files.length > 0;
-
-            if (archivoSeleccionado) {
-                swal({
-                    title: "¿Está seguro importar el archivo?",
-                    text: " Sí el código de activo existe, este sera actualizado con los nuevos datos recibidos.",
-                    icon: "warning",
-                    buttons: ["No", "Si"],
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        importarExcelInvActivo();
-                    }
-                });
-            } else {
-                alert('Por favor, seleccione un archivo antes de continuar.');
-            }
+        $("#btnDescargarPlantillas").on("click", function () {
+            descargarPlantillas();
         });
     }
 
@@ -304,7 +320,6 @@ var AdministrarInvActivo = function () {
                 }
             });
         });
-
     }
 
     const listarCadenas = function () {
@@ -417,9 +432,64 @@ var AdministrarInvActivo = function () {
                 }
             });
         });
+
     }
 
-    const obtenerInvActivo = function (codEmpresa, codCadena, codRegion, codZona, codLocal, codActivo, codModelo, nomMarca, codSerie) {
+    const listarCajas = function () {
+        return new Promise((resolve, reject) => {
+            const codEmpresa = $("#cboEmpresa").val();
+            const codCadena = $("#cboCadena").val();
+            const codRegion = $("#cboRegion").val();
+            const codZona = $("#cboZona").val();
+            const codLocal = $("#cboLocal").val();
+            const numCaja = $("#cboCaja").val();
+
+            if (!codEmpresa) return resolve();
+            if (!codCadena) return resolve();
+            if (!codRegion) return resolve();
+            if (!codZona) return resolve();
+            if (!codLocal) return resolve();
+
+            const request = {
+                CodEmpresa: codEmpresa,
+                CodCadena: codCadena,
+                CodRegion: codRegion,
+                CodZona: codZona,
+                CodLocal: codLocal
+            };
+
+            $.ajax({
+                url: urlListarCajas,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+
+    }
+
+    const listarActivosPorCaja = function (request) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: urlListarInvCajas,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+    }
+
+    const obtenerInvCaja = function (codEmpresa, codCadena, codRegion, codZona, codLocal, numCaja, codActivo) {
         return new Promise((resolve, reject) => {
             if (!codEmpresa) return resolve();
             if (!codCadena) return resolve();
@@ -434,14 +504,12 @@ var AdministrarInvActivo = function () {
                 CodRegion: codRegion,
                 CodZona: codZona,
                 CodLocal: codLocal,
-                CodActivo: codActivo,
-                CodModelo: codModelo,
-                NomMarca: nomMarca,
-                CodSerie: codSerie
+                NumCaja: numCaja,
+                CodActivo: codActivo
             };
 
             $.ajax({
-                url: urlObtenerInvActivo,
+                url: urlObtenerInvCaja,
                 type: "post",
                 data: { request },
                 success: function (response) {
@@ -551,8 +619,8 @@ var AdministrarInvActivo = function () {
             if (response.Ok) {
                 $('#cboZona').empty().append('<option label="Seleccionar"></option>');
                 $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
-                response.Data.map(region => {
-                    $('#cboZona').append($('<option>', { value: region.CodZona, text: region.NomZona }));
+                response.Data.map(zona => {
+                    $('#cboZona').append($('<option>', { value: zona.CodZona, text: zona.NomZona }));
                 });
             } else {
                 swal({
@@ -578,8 +646,8 @@ var AdministrarInvActivo = function () {
 
             if (response.Ok) {
                 $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
-                response.Data.map(region => {
-                    $('#cboLocal').append($('<option>', { value: region.CodLocal, text: region.NomLocal }));
+                response.Data.map(local => {
+                    $('#cboLocal').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
                 });
             } else {
                 swal({
@@ -608,20 +676,20 @@ var AdministrarInvActivo = function () {
         return true;
     }
 
-    const validarFormInvActivo = function (invactivo) {
+    const validarFormInvCaja = function (invcaja) {
         let validate = true;
 
-        if (invactivo.CodEmpresa === '' || invactivo.CodCadena === '' || invactivo.CodRegion === '' || invactivo.CodZona === '' || invactivo.CodLocal === ''
-            || invactivo.CodActivo === '' || invactivo.CodModelo === '' || invactivo.NomMarca === '' || invactivo.CodSerie === '') {
+        if (invcaja.CodEmpresa === '' || invcaja.CodCadena === '' || invcaja.CodRegion === '' || invcaja.CodZona === '' || invcaja.CodLocal === ''
+            || invcaja.CodActivo === '' || invcaja.NumCaja === '') {
             validate = false;
-            $("#formInvActivo").addClass("was-validated");
+            $("#formInvCaja").addClass("was-validated");
             swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning", });
         }
 
         return validate;
     }
 
-    const validarBuscarInvActivo = function () {
+    const validarBuscarInvCaja = function () {
         let validate = true;
 
         if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '') {
@@ -632,7 +700,7 @@ var AdministrarInvActivo = function () {
         return validate;
     }
 
-    const validarBuscarInvActivoPorEmpresa = function () {
+    const validarBuscarInvCajaPorEmpresa = function () {
         let validate = true;
 
         if ($("#cboEmpresa").val() === '') {
@@ -643,11 +711,11 @@ var AdministrarInvActivo = function () {
         return validate;
     }
 
-    const guardarInvActivo = function (invActivo, url) {
+    const guardarInvCaja = function (invCaja, url) {
         $.ajax({
             url: url,
             type: "post",
-            data: { command: invActivo },
+            data: { command: invCaja },
             dataType: "json",
             beforeSend: function () {
                 showLoading();
@@ -669,9 +737,10 @@ var AdministrarInvActivo = function () {
                     CodRegion: $("#cboRegion").val(),
                     CodZona: $("#cboZona").val(),
                     CodLocal: $("#cboLocal").val(),
+                    NumCaja: invCaja.NumCaja,
                 };
-                recargarDataTableActivos(request);
-                $("#modalInvActivo").modal('hide');
+                recargarDataTableCajas(request);
+                $("#modalInvCaja").modal('hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -679,21 +748,21 @@ var AdministrarInvActivo = function () {
         });
     }
 
-    const abrirModalEditarInvActivo = async function (codEmpresa, codCadena, codRegion, codZona, codLocal, codActivo, codModelo, nomMarca, codSerie) {
-        $("#tituloModalInvActivo").html("Editar Activo");
-        $("#btnActualizarInvActivo").show();
-        $("#btnGuardarInvActivo").hide();
+    const abrirModalEditarInvCaja = async function (codEmpresa, codCadena, codRegion, codZona, codLocal, numCaja, codActivo) {
+        $("#tituloModalInvCaja").html("Editar Inventario");
+        $("#btnActualizarInvCaja").show();
+        $("#btnGuardarInvCaja").hide();
 
-        const response = await obtenerInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, codActivo, codModelo, nomMarca, codSerie);
+        const response = await obtenerInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, numCaja, codActivo);
         const model = response.Data;
 
-        await cargarFormInvActivo(model, true);
+        await cargarFormInvCaja(model, true);
     }
 
-    const abrirModalNuevoInvActivo = async function (codEmpresa, codCadena, codRegion, codZona, codLocal) {
-        $("#tituloModalInvActivo").html("Nuevo Activo");
-        $("#btnActualizarInvActivo").hide();
-        $("#btnGuardarInvActivo").show();
+    const abrirModalNuevoInvCaja = async function (codEmpresa, codCadena, codRegion, codZona, codLocal, numCaja) {
+        $("#tituloModalInvCaja").html("Nuevo Inventario");
+        $("#btnActualizarInvCaja").hide();
+        $("#btnGuardarInvCaja").show();
 
         const model = {};
         model.CodEmpresa = codEmpresa;
@@ -701,13 +770,57 @@ var AdministrarInvActivo = function () {
         model.CodRegion = codRegion;
         model.CodZona = codZona;
         model.CodLocal = codLocal;
+        model.NumCaja = numCaja;
+        model.TipEstado = "A";
 
-        await cargarFormInvActivo(model, false);
+        await cargarFormCrearInvCaja(model);
     }
 
-    const cargarFormInvActivo = async function (model, deshabilitar) {
+    const abrirModalDatosNumCaja = async function (model) {
+        var dataActivos = await listarActivosPorCaja(model);
+
+        const codActivo01 = dataActivos.Data.find(item => item.CodActivo === "01");
+        if (codActivo01) {
+            $('#txtModeloCpu').val(codActivo01.CodModelo || '');
+            $('#txtSerieCpu').val(codActivo01.CodSerie || '');
+        }
+
+        const codActivo02 = dataActivos.Data.find(item => item.CodActivo === "02");
+        if (codActivo02) {
+            $('#txtModeloImpresora').val(codActivo02.CodModelo || '');
+            $('#txtSerieImpresora').val(codActivo02.CodSerie || '');
+        }
+
+        const codActivo03 = dataActivos.Data.find(item => item.CodActivo === "03");
+        if (codActivo03) {
+            $('#txtModeloDynakey').val(codActivo03.CodModelo || '');
+            $('#txtSerieDynakey').val(codActivo03.CodSerie || '');
+        }
+
+        const codActivo04 = dataActivos.Data.find(item => item.CodActivo === "04");
+        if (codActivo04) {
+            $('#txtModeloScanner').val(codActivo04.CodModelo || '');
+            $('#txtSerieScanner').val(codActivo04.CodSerie || '');
+        }
+
+        const codActivo05 = dataActivos.Data.find(item => item.CodActivo === "05");
+        if (codActivo05) {
+            $('#txtModeloGaveta').val(codActivo05.CodModelo || '');
+            $('#txtSerieGaveta').val(codActivo05.CodSerie || '');
+        }
+
+        const codActivo06 = dataActivos.Data.find(item => item.CodActivo === "06");
+        if (codActivo06) {
+            $('#txtModeloMonitor').val(codActivo06.CodModelo || '');
+            $('#txtSerieMonitor').val(codActivo06.CodSerie || '');
+        }
+
+        $("#modalDatosNumCaja").modal('show');
+    }
+
+    const cargarFormInvCaja = async function (model, deshabilitar) {
         $.ajax({
-            url: urlModalCrearEditarInvActivo,
+            url: urlEditarFormInvCaja,
             type: "post",
             data: { model },
             dataType: "html",
@@ -718,12 +831,11 @@ var AdministrarInvActivo = function () {
                 closeLoading();
             },
             success: async function (response) {
-                $("#modalInvActivo").find(".modal-body").html(response);
-                $("#modalInvActivo").modal('show');
+                $("#modalInvCaja").find(".modal-body").html(response);
+                $("#modalInvCaja").modal('show');
+                $("#txtNumCaja").prop("disabled", deshabilitar);
                 $("#txtCodActivo").prop("disabled", deshabilitar);
-                $("#txtCodModelo").prop("disabled", deshabilitar);
-                $("#txtNomMarca").prop("disabled", deshabilitar);
-                $("#txtCodSerie").prop("disabled", deshabilitar);
+                $("#txtNomActivo").prop("disabled", deshabilitar);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -731,14 +843,44 @@ var AdministrarInvActivo = function () {
         });
     }
 
-    const recargarDataTableActivos = function (request) {
+    const cargarFormCrearInvCaja = async function (model) {
+        $.ajax({
+            url: urlCrearFormInvCaja,
+            type: "post",
+            data: { model },
+            dataType: "html",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+                $("#modalInvCaja").find(".modal-body").html(response);
+                $("#modalInvCaja").modal('show');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
 
-        if ($.fn.DataTable.isDataTable('#tableActivos')) {
-            $('#tableActivos').DataTable().destroy();
+
+    const recargarDataTableNumCajas = function (request) {
+        //const request = {
+        //    CodEmpresa: $("#cboEmpresa").val(),
+        //    CodCadena: $("#cboCadena").val(),
+        //    CodRegion: $("#cboRegion").val(),
+        //    CodZona: $("#cboZona").val(),
+        //    CodLocal: $("#cboLocal").val()
+        //};
+
+        if ($.fn.DataTable.isDataTable('#tableNumCajas')) {
+            $('#tableNumCajas').DataTable().destroy();
         }
-        dtListaActivos = $('#tableActivos').DataTable({
+        dtListaNumCajas = $('#tableNumCajas').DataTable({
             ajax: {
-                url: urlListarActivos,
+                url: urlListarCajas,
                 type: "post",
                 dataType: "JSON",
                 dataSrc: "Data",
@@ -751,23 +893,71 @@ var AdministrarInvActivo = function () {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     swal({
-                        text: 'Error al listar activos: ' + jqXHR,
+                        text: 'Error al listar num cajas: ' + jqXHR,
                         icon: "error"
                     });
                 }
             },
             columns: [
+                { data: "NumCaja" },
+                { data: "IpAddress" },
+                { data: "TipOs" },
+                //{ data: "TipEstado" },
+            ],
+            language: {
+                searchPlaceholder: 'Buscar...',
+                sSearch: '',
+            },
+            scrollY: '400px',
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            rowCallback: function (row, data, index) {
+
+            },
+            bAutoWidth: false
+        });
+    }
+
+    const recargarDataTableCajas = function (request) {
+        if ($.fn.DataTable.isDataTable('#tableCajas')) {
+            $('#tableCajas').DataTable().destroy();
+        }
+        dtListaCajas = $('#tableCajas').DataTable({
+            ajax: {
+                url: urlListarInvCajas,
+                type: "post",
+                dataType: "JSON",
+                dataSrc: "Data",
+                data: { request },
+                beforeSend: function () {
+                    showLoading();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal({
+                        text: 'Error al listar cajas: ' + jqXHR,
+                        icon: "error"
+                    });
+                }
+            },
+            columns: [
+                { data: "NumCaja" },
                 { data: "CodActivo" },
+                { data: "InvTipoActivo.NomActivo" },
                 { data: "CodModelo" },
-                { data: "NomMarca" },
                 { data: "CodSerie" },
-                { data: "Ip" },
-                { data: "NomArea" },
-                { data: "NumOc" },
-                { data: "NumGuia" },
-                { data: "Antiguedad" },
-                { data: "Observacion" },
-                { data: "Garantia" },
+                { data: "NumAdenda" },
+                { data: "TipEstado" },
+                { data: "TipProcesador" },
+                { data: "Memoria" },
+                { data: "DesSo" },
+                { data: "VerSo" },
+                { data: "CapDisco" },
+                { data: "DesPuertoBalanza" },
+                { data: "FecGarantia" }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',
@@ -841,13 +1031,14 @@ var AdministrarInvActivo = function () {
         });
     }
 
-    const importarExcelInvActivo = function () {
-        var archivo = document.getElementById('archivoExcelInvActivo').files[0];
+    const importarExcelInventario = function () {
+
         var formData = new FormData();
-        formData.append('archivoExcel', archivo);
+        var uploadFiles = $('#excelInventario').prop('files');
+        formData.append("excelInventario", uploadFiles[0]);
 
         $.ajax({
-            url: urlImportarInvActivo,
+            url: urlImportarInventario,
             type: "post",
             data: formData,
             dataType: "json",
@@ -858,8 +1049,7 @@ var AdministrarInvActivo = function () {
             },
             complete: function () {
                 closeLoading();
-                $("#archivoExcelInvActivo").val(null);
-                $("#modalImportarInvActivo").modal('hide');
+                $("#excelInventario").val(null);
             },
             success: function (response) {
 
@@ -872,24 +1062,28 @@ var AdministrarInvActivo = function () {
                                 html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
                             });
                             $('#tbodyErroresCaja').html(html);
-                            $('#modalErroresImportacionExcel').modal("show");
+                            $('#modalErroresImportacionCaja').modal("show");
                         }
+
                     });
                     return;
                 }
+
                 swal({ text: response.Mensaje, icon: "success", });
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
+
     }
 
-    const descargarPlantillas = function (nombreCarpeta) {
+    const descargarPlantillas = function () {
+
         $.ajax({
             url: urlDescargarPlantilla,
             type: "post",
-            data: { nombreCarpeta: nombreCarpeta },
             dataType: "json",
             success: function (response) {
 
