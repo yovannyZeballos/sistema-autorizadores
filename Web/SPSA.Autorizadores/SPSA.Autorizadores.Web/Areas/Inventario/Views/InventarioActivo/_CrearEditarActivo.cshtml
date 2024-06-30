@@ -1,0 +1,123 @@
+﻿
+@model SPSA.Autorizadores.Aplicacion.DTO.InvActivoDTO
+
+<div class="row needs-validation" id="formInvActivo">
+    @*<div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodEmpresa" class="form-label">Empresa</label>
+            <input type="text" class="form-control" id="txtCodEmpresa" value="@Model.CodEmpresa" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodCadena" class="form-label">Cadena</label>
+            <input type="text" class="form-control" id="txtCodCadena" value="@Model.CodCadena" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodRegion" class="form-label">Region</label>
+            <input type="text" class="form-control" id="txtCodRegion" value="@Model.CodRegion" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodZona" class="form-label">Zona</label>
+            <input type="text" class="form-control" id="txtCodZona" value="@Model.CodZona" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodLocal" class="form-label">Local</label>
+            <input type="text" class="form-control" id="txtCodLocal" value="@Model.CodLocal" required>
+        </div>
+    </div>*@
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodActivo" class="form-label">Cod Activo</label>
+            <input type="number" class="form-control" id="txtCodActivo" value="@Model.CodActivo" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodModelo" class="form-label">Cod Modelo</label>
+            <input type="text" class="form-control" id="txtCodModelo" value="@Model.CodModelo" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtNomMarca" class="form-label">Marca</label>
+            <input type="text" class="form-control" id="txtNomMarca" value="@Model.NomMarca" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtCodSerie" class="form-label">Serie</label>
+            <input type="text" class="form-control" id="txtCodSerie" value="@Model.CodSerie" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtIp" class="form-label">IP</label>
+            <input type="text" class="form-control" id="txtIp" value="@Model.Ip">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtNomArea" class="form-label">Area</label>
+            <input type="text" class="form-control" id="txtNomArea" value="@Model.NomArea">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtNumOc" class="form-label">Num Doc</label>
+            <input type="text" class="form-control" id="txtNumOc" value="@Model.NumOc">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtNumGuia" class="form-label">Num Guia</label>
+            <input type="text" class="form-control" id="txtNumGuia" value="@Model.NumGuia">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtAntiguedad" class="form-label">Antiguedad</label>
+            <input type="text" class="form-control" id="txtAntiguedad" value="@Model.Antiguedad">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtObservacion" class="form-label">Observacion</label>
+            <input type="text" class="form-control" id="txtObservacion" value="@Model.Observacion">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtGarantia" class="form-label">Garantia</label>
+            <input type="text" class="form-control" id="txtGarantia" value="@Model.Garantia">
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="cboIndOperativo" class="form-label">Estado</label>
+            <select class="form-control custom-select" id="cboIndOperativo" required>
+                @*<option value="">Seleccionar</option>*@
+                <option value="A" @(Model.IndOperativo == "A" ? "selected" : "")>ACTIVO</option>
+                <option value="P" @(Model.IndOperativo == "I" ? "selected" : "")>INACTIVO</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtFecSalida" class="form-label">Fec Salida</label>
+            <input type="date" class="form-control" id="txtFecSalida" value="@Model.FecSalida" required>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="form-group">
+            <label for="txtFecActualiza" class="form-label">Fec Actualiza</label>
+            <input type="date" class="form-control" id="txtFecActualiza" value="@Model.FecActualiza" required>
+        </div>
+    </div>
+</div>

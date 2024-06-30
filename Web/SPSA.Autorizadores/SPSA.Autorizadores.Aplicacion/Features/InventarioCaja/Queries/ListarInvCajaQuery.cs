@@ -1,54 +1,59 @@
 ﻿using AutoMapper;
 using MediatR;
+using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using Serilog;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries
+namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
 {
-    public class ListarInvActivoQuery : IRequest<GenericResponseDTO<List<ListarInvActivoDTO>>>
+    public class ListarInvCajaQuery : IRequest<GenericResponseDTO<List<ListarInvCajaDTO>>>
     {
         public string CodEmpresa { get; set; }
         public string CodCadena { get; set; }
         public string CodRegion { get; set; }
         public string CodZona { get; set; }
         public string CodLocal { get; set; }
+        public decimal NumCaja { get; set; }
+        public string CodActivo { get; set; }
     }
 
-    public class ListarInvActivoHandler : IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>
+    public class ListarInvCajaHandler : IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>
     {
         private readonly IMapper _mapper;
         private readonly IBCTContexto _contexto;
         private readonly ILogger _logger;
-        public ListarInvActivoHandler(IMapper mapper)
+        public ListarInvCajaHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new BCTContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<List<ListarInvActivoDTO>>> Handle(ListarInvActivoQuery request, CancellationToken cancellationToken)
+        public async Task<GenericResponseDTO<List<ListarInvCajaDTO>>> Handle(ListarInvCajaQuery request, CancellationToken cancellationToken)
         {
-            var response = new GenericResponseDTO<List<ListarInvActivoDTO>> { Ok = true, Data = new List<ListarInvActivoDTO>() };
+            var response = new GenericResponseDTO<List<ListarInvCajaDTO>> { Ok = true, Data = new List<ListarInvCajaDTO>() };
 
             try
             {
-                var activos = await _contexto.RepositorioInventarioActivo.Obtener(x => x.CodEmpresa == request.CodEmpresa 
-                                                                                    && x.CodCadena == request.CodCadena 
-                                                                                    && x.CodRegion == request.CodRegion 
+                var cajas = await _contexto.RepositorioInvCajas.Obtener(x => x.CodEmpresa == request.CodEmpresa
+                                                                                    && x.CodCadena == request.CodCadena
+                                                                                    && x.CodRegion == request.CodRegion
                                                                                     && x.CodZona == request.CodZona
-                                                                                    && x.CodLocal == request.CodLocal)
+                                                                                    && x.CodLocal == request.CodLocal
+                                                                                    && x.NumCaja == request.NumCaja)
                                                                         .OrderBy(x => x.CodActivo)
                                                                         .ToListAsync();
-                response.Data = _mapper.Map<List<ListarInvActivoDTO>>(activos);
+                response.Data = _mapper.Map<List<ListarInvCajaDTO>>(cajas);
                 //response.Ok = true;
                 //response.Mensaje = "Se ha generado la lista correctamente";
             }

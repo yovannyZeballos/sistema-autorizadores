@@ -24,6 +24,12 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
+        public ActionResult CrearEditarInvActivo(InvActivoDTO model)
+        {
+            return PartialView("_CrearEditarActivo", model);
+        }
+
+        [HttpPost]
         public async Task<JsonResult> ObtenerInvActivo(ObtenerInvActivoQuery request)
         {
             var respuesta = await _mediator.Send(request);
@@ -34,6 +40,20 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         public async Task<JsonResult> ListarActivos(ListarInvActivoQuery request)
         {
             var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CrearInvActivo(CrearInvActivoCommand command)
+        {
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ActualizarInvActivo(ActualizarInvActivoCommand command)
+        {
+            var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 

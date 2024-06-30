@@ -2296,6 +2296,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarInvCaja.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
@@ -2736,6 +2737,9 @@
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <Content Include="Areas\DataTables\Views\web.config" />
     <Content Include="Areas\Monitor\Views\ControlBCT\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearEditarActivo.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\_CrearInvCaja.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\_EditarInvCaja.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
