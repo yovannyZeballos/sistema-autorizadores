@@ -12,6 +12,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<RepositorioAutorizadores>().As<IRepositorioAutorizadores>().InstancePerRequest();
+			builder.RegisterType<RepositorioReportes>().As<IRepositorioReportes>().InstancePerRequest();
 			builder.RegisterType<RepositorioEmpresa>().As<IRepositorioEmpresa>().InstancePerRequest();
 			builder.RegisterType<RepositorioLocal>().As<IRepositorioLocal>().InstancePerRequest();
 			builder.RegisterType<RepositorioSeguridad>().As<IRepositorioSeguridad>().InstancePerRequest();
