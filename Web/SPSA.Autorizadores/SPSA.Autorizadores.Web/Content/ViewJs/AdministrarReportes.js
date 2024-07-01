@@ -1,4 +1,7 @@
-﻿var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
+﻿var urlCambioLocal = baseUrl + 'Seguridad/CambioLocal/Index';
+var urlEmpresas = baseUrl + 'Login/ListarEmpresas';
+var urlLocal = baseUrl + 'Login/ListarLocales';
+var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
 
 const urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';
 const urlListarCadenasAsociadas = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
@@ -8,7 +11,7 @@ const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
 
 var dataTableLocal = null;
 
-var CambioLocal = function () {
+var AdministrarReportes = function () {
 
     var eventos = function () {
 
@@ -40,7 +43,6 @@ var CambioLocal = function () {
         $("#cboZona").on("change", function () {
             listarLocalesAsociados('#cboLocal', '#cboEmpresa', '#cboCadena', '#cboRegion', '#cboZona');
         });
-
 
 
         $('#tableLocales tbody').on('click', 'tr', function () {
@@ -357,8 +359,33 @@ var CambioLocal = function () {
                     return;
                 }
 
-                cargarLocales(data.Data);
-                seleccionarLocal();
+                let results = data.Data.map(item => {
+                    return {
+                        id: item.CodLocal,
+                        text: item.NomLocal
+                    }
+                });
+
+                $(idCombo).empty();
+
+                $(idCombo).select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+                $(idCombo).val(codLocalSession);
+
+                $(idCombo).trigger('change');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -371,6 +398,7 @@ var CambioLocal = function () {
             }
         });
     }
+
 
     const cargarEmpresas = function (empresas) {
         $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
@@ -463,20 +491,59 @@ var CambioLocal = function () {
         });
     };
 
+    const inicializarDatePicker = function () {
+        $('.fc-datepicker').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            closeText: 'Cerrar',
+            prevText: '<Ant',
+            nextText: 'Sig>',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            changeMonth: true,
+            changeYear: true
+        });
+    }
+
+    const fechaActual = function () {
+        let date = new Date()
+
+        let day = `${(date.getDate())}`.padStart(2, '0');
+        let month = `${(date.getMonth() + 1)}`.padStart(2, '0');
+        let year = date.getFullYear();
+
+        $("#txtFechaInicio").val(`${day}/${month}/${year}`);
+        $("#txtFechaFin").val(`${day}/${month}/${year}`);
+    }
+
     return {
         init: function () {
             checkSession(function () {
                 eventos();
-                /*listarEmpresas();*/
+                $('input[type="search"]').addClass("form-control-sm");
+                inicializarDatePicker();
+                fechaActual();
+
                 listarEmpresasAsociadas('#cboEmpresa');
                 
                 visualizarDataTableLocales();
-                $('input[type="search"]').addClass("form-control-sm");
+               
 
                 $('#cboEmpresa').select2();
                 $('#cboCadena').select2();
                 $('#cboRegion').select2();
                 $('#cboZona').select2();
+                $('#cboLocal').select2();
             });
         }
     }
