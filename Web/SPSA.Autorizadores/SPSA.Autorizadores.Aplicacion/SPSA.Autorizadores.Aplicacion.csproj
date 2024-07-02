@@ -391,6 +391,8 @@
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Queries\ListarMaeRegionQuery.cs" />
     <Compile Include="Features\Regiones\Queries\ObtenerMaeRegionQuery.cs" />
+    <Compile Include="Features\Reportes\Queries\ListarLocalesCambioPrecioQuery.cs" />
+    <Compile Include="Features\Reportes\Queries\ListarLocalesNotaCreditoQuery.cs" />
     <Compile Include="Features\Seguridad\Login\Queries\ObtenerJerarquiaOrganizacionalQuery.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\EliminarMenuCommand.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\ActualizarMenuCommand .cs" />
@@ -531,6 +533,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Features\Reportes\Commands\" />
     <Folder Include="Features\TablasMae\Queries\" />
     <Folder Include="Features\TiposActivo\Commands\" />
   </ItemGroup>

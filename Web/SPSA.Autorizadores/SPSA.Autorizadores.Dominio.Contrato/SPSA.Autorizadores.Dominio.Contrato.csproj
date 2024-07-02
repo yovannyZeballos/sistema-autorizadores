@@ -66,6 +66,7 @@
     <Compile Include="Repositorio\IRepositorioLocalOfiplan.cs" />
     <Compile Include="Repositorio\IRepositorioMaeLocal.cs" />
     <Compile Include="Repositorio\IRepositorioMaeCaja.cs" />
+    <Compile Include="Repositorio\IRepositorioReportes.cs" />
     <Compile Include="Repositorio\IRepositorioTmpMonCierreLocal.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreLocal.cs" />
     <Compile Include="Repositorio\IRepositorioMaeLocalAlterno.cs" />

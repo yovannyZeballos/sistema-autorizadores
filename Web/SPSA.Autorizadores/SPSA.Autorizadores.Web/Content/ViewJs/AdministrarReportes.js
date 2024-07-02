@@ -1,4 +1,7 @@
-﻿var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
+﻿var urlCambioLocal = baseUrl + 'Seguridad/CambioLocal/Index';
+var urlEmpresas = baseUrl + 'Login/ListarEmpresas';
+var urlLocal = baseUrl + 'Login/ListarLocales';
+var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
 
 const urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';
 const urlListarCadenasAsociadas = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
@@ -6,23 +9,60 @@ const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesA
 const urlListarZonasAsociadas = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
 const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
 
-var dataTableLocal = null;
+var urlListarLocalesCambioPrecio = baseUrl + 'Reportes/AdministrarReportes/ListarLocalesCambioPrecio';
+var urlListarLocalesNotaCredito = baseUrl + 'Reportes/AdministrarReportes/ListarLocalesNotaCredito';
 
-var CambioLocal = function () {
+var dataTableRegistros = null;
+
+var AdministrarReportes = function () {
 
     var eventos = function () {
 
-        $("#btnGuardar").on("click", function () {
+        $("#btnConsultar").on('click', function () {
+            var selectedReport = $('#cboTipoReporte').val();
 
-            const registrosSeleccionados = dataTableLocal.rows('.selected').data().toArray();
-
-            if (!validarSelecion(registrosSeleccionados.length)) {
-                return;
+            switch (selectedReport) {
+                case '01':
+                    visualizarDataTable(urlListarLocalesCambioPrecio);
+                    break;
+                case '02':
+                    visualizarDataTable(urlListarLocalesNotaCredito);
+                    break;
+                default:
+                    alert('Por favor, seleccione un tipo de reporte válido.');
             }
 
-            btnLoading($("#btnGuardar"), true);
-            guardarLocalSession(registrosSeleccionados[0].CodLocal);
+            //visualizarDataTable();
+        });
 
+        $('#btnExportar').click(function () {
+            // Convertir la tabla HTML a una cadena CSV
+            var csv = [];
+            var rows = document.querySelectorAll("#tableReportes tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++) {
+                    row.push(cols[j].innerText);
+                }
+
+                csv.push(row.join("|"));
+            }
+
+            // Crear un Blob a partir de la cadena CSV
+            var csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+
+            // Crear un enlace de descarga para el archivo CSV
+            var downloadLink = document.createElement("a");
+            downloadLink.download = "Reporte.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+
+            // Agregar el enlace al documento y hacer clic en él
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
         });
 
         $("#cboEmpresa").on("change", function () {
@@ -41,13 +81,11 @@ var CambioLocal = function () {
             listarLocalesAsociados('#cboLocal', '#cboEmpresa', '#cboCadena', '#cboRegion', '#cboZona');
         });
 
-
-
-        $('#tableLocales tbody').on('click', 'tr', function () {
+        $('#tableReportes tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
             } else {
-                dataTableLocal.$('tr.selected').removeClass('selected');
+                dataTableRegistros.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             }
         });
@@ -357,8 +395,33 @@ var CambioLocal = function () {
                     return;
                 }
 
-                cargarLocales(data.Data);
-                seleccionarLocal();
+                let results = data.Data.map(item => {
+                    return {
+                        id: item.CodLocal,
+                        text: item.NomLocal
+                    }
+                });
+
+                $(idCombo).empty();
+
+                $(idCombo).select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+                $(idCombo).val(codLocalSession);
+
+                $(idCombo).trigger('change');
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -372,47 +435,64 @@ var CambioLocal = function () {
         });
     }
 
-    const cargarEmpresas = function (empresas) {
-        $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
-        empresas.map(empresa => {
-            $('#cboEmpresa').append($('<option>', { value: empresa.Ruc, text: empresa.Descripcion }));
-        });
-        $('#cboEmpresa').val(rucSession);
+    var visualizarDataTable = function (dtUrl) {
 
-
-    }
-
-    const cargarLocales = function (locales) {
-        dataTableLocal.clear();
-        dataTableLocal.rows.add(locales);
-        dataTableLocal.draw();
-
-    }
-
-    const guardarLocalSession = function (codigo) {
-
-        let datos = {
-            /*CodUsuario: $('#txtUsuario').val(),*/
-            CodEmpresa: $('#cboEmpresa').val(),
-            CodCadena: $('#cboCadena').val(),
-            CodRegion: $('#cboRegion').val(),
-            CodZona: $('#cboZona').val(),
-            CodLocal: codigo
+        const request = {
+            CodLocal: $("#cboLocal").val(),
+            FechaInicio: $("#txtFechaInicio").val(),
+            FechaFin: $("#txtFechaFin").val(),
         };
 
-
         $.ajax({
-            url: urlGuardarLocalSession,
+            url: dtUrl,
             type: "post",
-            data: { query: datos },
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
             success: function (response) {
-                swal({
-                    text: "Se cambio el local correctamente, se reinicara el sistema.",
-                    icon: "success"
-                }).then(() => {
-                    document.location = home;
-                    btnLoading($("#btnGuardar"), false);
+                var columnas = [];
+
+                response.Columnas.forEach((x) => {
+                    columnas.push({
+                        title: x,
+                        data: x.replace(" ", "").replace(".", ""),
+                        defaultContent: "",
+                    });
                 });
+
+                if (dataTableRegistros != null) {
+                    dataTableRegistros.clear();
+                    dataTableRegistros.destroy();
+                    dataTableRegistros = null;
+                }
+
+                var dataTableRegistrosId = "#tableReportes";
+                $(dataTableRegistrosId + " tbody").empty();
+                $(dataTableRegistrosId + " thead").empty();
+
+                if (columnas.length == 0) return;
+
+                dataTableRegistros = $(dataTableRegistrosId).DataTable({
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    scrollY: '400px',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    "columns": columnas,
+                    "data": response.Data,
+                    "bAutoWidth": false
+                });
+
+                //dataTableRegistros.buttons().container().prependTo($('#tableColaboradorCesado_filter'));
+                $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -421,24 +501,10 @@ var CambioLocal = function () {
                 });
             }
         });
-    }
 
-    var visualizarDataTableLocales = function () {
-        dataTableLocal = $('#tableLocales').DataTable({
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-            },
-            scrollY: '180px',
-            scrollCollapse: true,
-            paging: false,
-            "bAutoWidth": false,
-            "columns": [
-                { "data": "CodLocal" },
-                { "data": "NomLocal" }
-            ]
-        });
+
     };
+
 
     const validarSelecion = function (count) {
         if (count === 0) {
@@ -452,31 +518,55 @@ var CambioLocal = function () {
         return true;
     }
 
-    const seleccionarLocal = function () {
-        var i = 0;
-        dataTableLocal.rows().every(function () {
-            var rowData = this.data();
-            if (rowData.CodLocal === codLocalSession) {
-                $(this.node()).toggleClass('selected');
-            }
-            i++;
+    const inicializarDatePicker = function () {
+        $('.fc-datepicker').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            closeText: 'Cerrar',
+            prevText: '<Ant',
+            nextText: 'Sig>',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            changeMonth: true,
+            changeYear: true
         });
-    };
+    }
+
+    const fechaActual = function () {
+        let date = new Date()
+
+        let day = `${(date.getDate())}`.padStart(2, '0');
+        let month = `${(date.getMonth() + 1)}`.padStart(2, '0');
+        let year = date.getFullYear();
+
+        $("#txtFechaInicio").val(`${day}/${month}/${year}`);
+        $("#txtFechaFin").val(`${day}/${month}/${year}`);
+    }
 
     return {
         init: function () {
             checkSession(function () {
                 eventos();
-                /*listarEmpresas();*/
-                listarEmpresasAsociadas('#cboEmpresa');
-                
-                visualizarDataTableLocales();
                 $('input[type="search"]').addClass("form-control-sm");
-
+                inicializarDatePicker();
+                fechaActual();
+                listarEmpresasAsociadas('#cboEmpresa');
                 $('#cboEmpresa').select2();
                 $('#cboCadena').select2();
                 $('#cboRegion').select2();
                 $('#cboZona').select2();
+                $('#cboLocal').select2();
+                $('#cboTipoReporte').select2();
             });
         }
     }

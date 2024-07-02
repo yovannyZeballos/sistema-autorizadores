@@ -183,6 +183,7 @@
     <Compile Include="Repositorio\RepositorioLocalOfiplan.cs" />
     <Compile Include="Repositorio\RepositorioMaeCaja.cs" />
     <Compile Include="Repositorio\RepositorioMaeLocal.cs" />
+    <Compile Include="Repositorio\RepositorioReportes.cs" />
     <Compile Include="Repositorio\RepositorioTmpMonCierreLocal.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreLocal.cs" />
     <Compile Include="Repositorio\RepositorioMaeLocalAlterno.cs" />
