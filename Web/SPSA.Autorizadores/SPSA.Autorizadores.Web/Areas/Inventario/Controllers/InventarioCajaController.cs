@@ -79,6 +79,20 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> EliminarInvCaja(EliminarInvCajaCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> EliminarInvCajaPorLocal(EliminarInvCajaPorLocalCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
 		public async Task<JsonResult> Importar()
 		{
 			var respuesta = new RespuestaComunExcelDTO();

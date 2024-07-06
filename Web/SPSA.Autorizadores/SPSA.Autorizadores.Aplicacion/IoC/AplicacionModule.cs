@@ -233,6 +233,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ObtenerInvCajaHandler>().As<IRequestHandler<ObtenerInvCajaQuery, GenericResponseDTO<ObtenerInvCajaDTO>>>();
             builder.RegisterType<CrearInvCajaHandler>().As<IRequestHandler<CrearInvCajaCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarInvCajaHandler>().As<IRequestHandler<ActualizarInvCajaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<EliminarInvCajaHandler>().As<IRequestHandler<EliminarInvCajaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<EliminarInvCajaPorLocalHandler>().As<IRequestHandler<EliminarInvCajaPorLocalCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<ListarAperturaHandler>().As<IRequestHandler<ListarAperturaQuery, GenericResponseDTO<List<ListarAperturaDTO>>>>();
             builder.RegisterType<ObtenerAperturaHandler>().As<IRequestHandler<ObtenerAperturaQuery, GenericResponseDTO<ObtenerAperturaDTO>>>();
