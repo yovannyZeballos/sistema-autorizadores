@@ -1116,10 +1116,7 @@ var AdministrarInvCajas = function () {
 
     const recargarDataTableLocalesPorEmpresa = function () {
         const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            //CodCadena: $("#cboCadena").val(),
-            //CodRegion: $("#cboRegion").val(),
-            //CodZona: $("#cboZona").val()
+            CodEmpresa: $("#cboEmpresa").val()
         };
 
         if ($.fn.DataTable.isDataTable('#tableLocales')) {
@@ -1154,7 +1151,7 @@ var AdministrarInvCajas = function () {
                 { data: "CodEmpresa" },
                 { data: "CodCadena" },
                 { data: "CodRegion" },
-                { data: "CodZona" },
+                { data: "CodZona" }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',

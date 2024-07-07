@@ -39,7 +39,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
 
                 foreach (var cajaEliminar in request.Cajas)
                 {
-                    var caja = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == cajaEliminar.CodEmpresa && x.CodCadena == cajaEliminar.CodCadena && x.CodRegion == cajaEliminar.CodRegion && x.CodZona == cajaEliminar.CodZona && x.NumCaja == cajaEliminar.NumCaja).FirstOrDefaultAsync();
+                    var caja = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == cajaEliminar.CodEmpresa && x.CodCadena == cajaEliminar.CodCadena && x.CodRegion == cajaEliminar.CodRegion 
+                                                                    && x.CodZona == cajaEliminar.CodZona && x.CodLocal == cajaEliminar.CodLocal && x.NumCaja == cajaEliminar.NumCaja).FirstOrDefaultAsync();
                     if (caja is null)
                     {
                         respuesta.Ok = false;
