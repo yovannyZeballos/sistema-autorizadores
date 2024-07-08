@@ -30,6 +30,7 @@ var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
 
 var codRegionAnterior = "";
 var codZonaAnterior = "";
+var permitirCambioZonaRegion = false;
 
 
 var AdministrarMaestroLocal = function () {
@@ -47,112 +48,154 @@ var AdministrarMaestroLocal = function () {
             await cargarComboZonas();
         });
 
+        $("#cboZona").on("change", async function () {
+            if (!permitirCambioZonaRegion) {
+                await cargarComboLocales();
+            }
+        });
+
+        $("#cboLocal").on("change", function () {
+
+            if (validarLocalChange()) {
+                showLoading();
+                const request = {
+                    CodEmpresa: $("#cboEmpresa").val(),
+                    CodCadena: $("#cboCadena").val(),
+                    CodRegion: $("#cboRegion").val(),
+                    CodZona: $("#cboZona").val(),
+                    CodLocal: $("#cboLocal").val()
+                };
+
+                codRegionAnterior = request.CodRegion;
+                codZonaAnterior = request.CodZona;
+
+                obtenerLocal(request);
+
+                closeLoading();
+            }
+        });
+
         $("#btnNuevoLocal").on("click", function () {
             limpiar();
         });
 
         $("#btnGuardarLocal").on("click", function () {
-            swal({
-                title: "Confirmar!",
-                text: "¿Está seguro guardar la información ingresada?",
-                icon: "warning",
-                buttons: ["No", "Si"],
-                dangerMode: true,
-            }).then(async (willDelete) => {
-                if (willDelete) {
-                    var local = {
-                        CodEmpresa: $("#cboEmpresa").val(),
-                        CodCadena: $("#cboCadena").val(),
-                        CodRegion: $("#cboRegion").val(),
-                        CodZona: $("#cboZona").val(),
-                        CodLocal: $("#txtCodLocal").val(),
-                        NomLocal: $("#txtNomLocal").val(),
-                        TipEstado: $("#cboTipEstado").val(),
-                        CodLocalPMM: $("#txtCodLocalPMM").val(),
-                        CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
-                        NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
-                        CodLocalSunat: $("#txtCodLocalSunat").val()
-                    };
-                    if (validarLocal(local))
-                        await guardarLocal(local);
-                }
-            });
+
+            if (validarGuardarLocal()) {
+                swal({
+                    title: "Confirmar!",
+                    text: "¿Está seguro guardar la información ingresada?",
+                    icon: "warning",
+                    buttons: ["No", "Si"],
+                    dangerMode: true,
+                }).then(async (willDelete) => {
+                    if (willDelete) {
+                        var local = {
+                            CodEmpresa: $("#cboEmpresa").val(),
+                            CodCadena: $("#cboCadena").val(),
+                            CodRegion: $("#cboRegion").val(),
+                            CodZona: $("#cboZona").val(),
+                            CodLocal: $("#txtCodLocal").val(),
+                            NomLocal: $("#txtNomLocal").val(),
+                            TipEstado: $("#cboTipEstado").val(),
+                            CodLocalPMM: $("#txtCodLocalPMM").val(),
+                            CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
+                            NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
+                            CodLocalSunat: $("#txtCodLocalSunat").val()
+                        };
+                        if (validarLocal(local))
+                            await guardarLocal(local);
+                    }
+                });
+            }
         });
 
-        $("#btnActualizarLocal").on("click", function () {
-            swal({
-                title: "Confirmar!",
-                text: "¿Está seguro guardar la información modificada?",
-                icon: "warning",
-                buttons: ["No", "Si"],
-                dangerMode: true,
-            }).then(async (willDelete) => {
-                if (willDelete) {
-                    var local = {
-                        CodEmpresa: $("#cboEmpresa").val(),
-                        CodCadena: $("#cboCadena").val(),
-                        CodRegion: $("#cboRegion").val(),
-                        CodZona: $("#cboZona").val(),
-                        CodLocal: $("#txtCodLocal").val(),
-                        NomLocal: $("#txtNomLocal").val(),
-                        TipEstado: $("#cboTipEstado").val(),
-                        CodLocalPMM: $("#txtCodLocalPMM").val(),
-                        CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
-                        NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
-                        CodLocalSunat: $("#txtCodLocalSunat").val(),
-                        CodRegionAnterior: codRegionAnterior,
-                        CodZonaAnterior: codZonaAnterior,
-                    };
-                    if (validarLocal(local))
-                        await actualizarLocal(local);
-                }
-            });
+        $("#btnGuardarCambiosLocal").on("click", function () {
+            if (validarGuardarLocal()) {
+                swal({
+                    title: "Confirmar!",
+                    text: "¿Está seguro guardar la información modificada?",
+                    icon: "warning",
+                    buttons: ["No", "Si"],
+                    dangerMode: true,
+                }).then(async (willDelete) => {
+                    if (willDelete) {
+                        permitirCambioZonaRegion = false;
+                        var local = {
+                            CodEmpresa: $("#cboEmpresa").val(),
+                            CodCadena: $("#cboCadena").val(),
+                            CodRegion: $("#cboRegion").val(),
+                            CodZona: $("#cboZona").val(),
+                            CodLocal: $("#txtCodLocal").val(),
+                            NomLocal: $("#txtNomLocal").val(),
+                            TipEstado: $("#cboTipEstado").val(),
+                            CodLocalPMM: $("#txtCodLocalPMM").val(),
+                            CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
+                            NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
+                            CodLocalSunat: $("#txtCodLocalSunat").val(),
+                            CodRegionAnterior: codRegionAnterior,
+                            CodZonaAnterior: codZonaAnterior,
+                        };
+                        if (validarLocal(local)) {
+                            await actualizarLocal(local);
+                        }    
+                    }
+                });
+            }
         });
 
         $("#btnHabilitarlCambioRegionZona").on("click", function () {
             $("#cboRegion").prop("disabled", false);
             $("#cboZona").prop("disabled", false);
-        });
-
-        $("#btnBuscarLocal").on("click", function () {
-            if (validarBuscarLocal()) {
-                $("#txtEmpresaLocal").val($("#cboEmpresa option:selected").text());
-                $("#txtCadenaLocal").val($("#cboCadena option:selected").text());
-                $("#txtRegionLocal").val($("#cboRegion option:selected").text());
-                $("#txtZonaLocal").val($("#cboZona option:selected").text());
-                $("#modalLocales").modal('show');
-                recargarDataTableLocales();
-
-                codRegionAnterior = $("#cboRegion option:selected").val();
-                codZonaAnterior = $("#cboZona option:selected").val();
-
-            }
+            $("#btnGuardarCambiosLocal").prop("disabled", false);
+            permitirCambioZonaRegion = true;
         });
 
         $("#btnBuscarLocalPorEmpresa").on("click", function () {
             if (validarBuscarLocalPorEmpresa()) {
-                $("#txtEmpresaLocal").val($("#cboEmpresa option:selected").text());
-                $("#txtCadenaLocal").val("TODOS");
-                $("#txtRegionLocal").val("TODOS");
-                $("#txtZonaLocal").val("TODOS");
-                $("#cboCadena").val('');
-                $("#cboRegion").val('');
-                $("#cboZona").val('');
+                permitirCambioZonaRegion = false;
 
                 $("#modalLocales").modal('show');
                 recargarDataTableLocalesPorEmpresa();
             }
         });
 
-        $("#btnAceptarLocal").on("click", function () {
+        $("#btnObtenerLocal").on("click", async function () {
             var filasSeleccionada = document.querySelectorAll("#tableLocales tbody tr.selected");
             if (!validarSelecion(filasSeleccionada.length)) {
                 return;
             }
 
-            var codLocal = filasSeleccionada[0].querySelector('td:first-child').textContent;
-            codLocalCaja = codLocal;
-            obtenerLocal(codLocal);
+            showLoading();
+            const COD_EMPRESA = filasSeleccionada[0].querySelector('td:nth-child(6)').textContent;
+            const COD_CADENA = filasSeleccionada[0].querySelector('td:nth-child(7)').textContent;
+            const COD_REGION = filasSeleccionada[0].querySelector('td:nth-child(8)').textContent;
+            const COD_ZONA = filasSeleccionada[0].querySelector('td:nth-child(9)').textContent;
+            const COD_LOCAL = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+
+            const request = {
+                CodEmpresa: COD_EMPRESA,
+                CodCadena: COD_CADENA,
+                CodRegion: COD_REGION,
+                CodZona: COD_ZONA,
+                CodLocal: COD_LOCAL,
+            };
+
+            codRegionAnterior = request.CodRegion;
+            codZonaAnterior = request.CodZona;
+
+            await sleep(1000);
+            $("#cboCadena").val(COD_CADENA).trigger('change');
+            await sleep(1000);
+            $("#cboRegion").val(COD_REGION).trigger('change');
+            await sleep(1200);
+            $("#cboZona").val(COD_ZONA).trigger('change');
+            await sleep(1500);
+            $("#cboLocal").val(COD_LOCAL).trigger('change');
+
+            obtenerLocal(request);
+
+            closeLoading();
         });
 
         $('#tableLocales tbody').on('click', 'tr', function () {
@@ -245,14 +288,16 @@ var AdministrarMaestroLocal = function () {
                     CodCadena: $("#cboCadena").val(),
                     CodRegion: $("#cboRegion").val(),
                     CodZona: $("#cboZona").val(),
-                    CodLocal: codLocalCaja,
+                    CodLocal: $("#cboLocal").val(),
                     NumCaja: filas.querySelector('td:first-child').textContent,
                     ipAddress: filas.querySelector('td:nth-child(2)').textContent,
                     tipOs: filas.querySelector('td:nth-child(3)').textContent,
-                    tipEstado: filas.querySelector('td:nth-child(4)').textContent
+                    //tipEstado: filas.querySelector('td:nth-child(4)').textContent
+                    tipEstado: 'E'
                 };
                 cajasParaEliminar.push(caja);
             });
+
             swal({
                 title: "Confirmar!",
                 text: "¿Está seguro eliminar las cajas seleccionadas?",
@@ -442,6 +487,40 @@ var AdministrarMaestroLocal = function () {
 
     }
 
+    const listarLocales = function () {
+        return new Promise((resolve, reject) => {
+            const codEmpresa = $("#cboEmpresa").val();
+            const codCadena = $("#cboCadena").val();
+            const codRegion = $("#cboRegion").val();
+            const codZona = $("#cboZona").val();
+
+            if (!codEmpresa) return resolve();
+            if (!codCadena) return resolve();
+            if (!codRegion) return resolve();
+            if (!codZona) return resolve();
+
+            const request = {
+                CodEmpresa: codEmpresa,
+                CodCadena: codCadena,
+                CodRegion: codRegion,
+                CodZona: codZona
+            };
+
+            $.ajax({
+                url: urlListarLocales,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+
+    }
+
     const listarCajas = async function () {
 
         const request = {
@@ -469,6 +548,10 @@ var AdministrarMaestroLocal = function () {
 
             if (response.Ok) {
                 $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
+                $('#cboCadena').empty().append('<option label="Seleccionar"></option>');
+                $('#cboRegion').empty().append('<option label="Seleccionar"></option>');
+                $('#cboZona').empty().append('<option label="Seleccionar"></option>');
+                $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(empresa => {
                     $('#cboEmpresa').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
                 });
@@ -499,6 +582,7 @@ var AdministrarMaestroLocal = function () {
                 $('#cboCadena').empty().append('<option label="Seleccionar"></option>');
                 $('#cboRegion').empty().append('<option label="Seleccionar"></option>');
                 $('#cboZona').empty().append('<option label="Seleccionar"></option>');
+                $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(cadena => {
                     $('#cboCadena').append($('<option>', { value: cadena.CodCadena, text: cadena.NomCadena }));
                 });
@@ -525,6 +609,7 @@ var AdministrarMaestroLocal = function () {
             if (response.Ok) {
                 $('#cboRegion').empty().append('<option label="Seleccionar"></option>');
                 $('#cboZona').empty().append('<option label="Seleccionar"></option>');
+                //$('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(region => {
                     $('#cboRegion').append($('<option>', { value: region.CodRegion, text: region.NomRegion }));
                 });
@@ -552,8 +637,36 @@ var AdministrarMaestroLocal = function () {
 
             if (response.Ok) {
                 $('#cboZona').empty().append('<option label="Seleccionar"></option>');
+                //$('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(region => {
                     $('#cboZona').append($('<option>', { value: region.CodZona, text: region.NomZona }));
+                });
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "error"
+                });
+                return;
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
+        }
+    }
+
+    const cargarComboLocales = async function () {
+
+        try {
+            const response = await listarLocales();
+
+            if (response === undefined) return;
+
+            if (response.Ok) {
+                $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
+                response.Data.map(local => {
+                    $('#cboLocal').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
                 });
             } else {
                 swal({
@@ -638,6 +751,10 @@ var AdministrarMaestroLocal = function () {
                 { data: "CodLocalPMM" },
                 { data: "NomLocalOfiplan" },
                 { data: "CodLocalSunat" },
+                { data: "CodEmpresa" },
+                { data: "CodCadena" },
+                { data: "CodRegion" },
+                { data: "CodZona" }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',
@@ -656,10 +773,7 @@ var AdministrarMaestroLocal = function () {
 
     const recargarDataTableLocalesPorEmpresa = function () {
         const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            //CodCadena: $("#cboCadena").val(),
-            //CodRegion: $("#cboRegion").val(),
-            //CodZona: $("#cboZona").val()
+            CodEmpresa: $("#cboEmpresa").val()
         };
 
         if ($.fn.DataTable.isDataTable('#tableLocales')) {
@@ -691,6 +805,10 @@ var AdministrarMaestroLocal = function () {
                 { data: "CodLocalPMM" },
                 { data: "NomLocalOfiplan" },
                 { data: "CodLocalSunat" },
+                { data: "CodEmpresa" },
+                { data: "CodCadena" },
+                { data: "CodRegion" },
+                { data: "CodZona" },
             ],
             language: {
                 searchPlaceholder: 'Buscar...',
@@ -709,10 +827,12 @@ var AdministrarMaestroLocal = function () {
 
 
     const limpiar = function () {
+        permitirCambioZonaRegion = false;
         $("#cboEmpresa").val('').trigger('change');
         $("#cboCadena").val('').trigger('change');
         $("#cboRegion").val('').trigger('change');
         $("#cboZona").val('').trigger('change');
+        $("#cboLocal").val('').trigger('change');
         $("#cboTipEstado").val('A').trigger('change');
         $("#txtCodLocal").val('');
         $("#txtNomLocal").val('');
@@ -725,7 +845,7 @@ var AdministrarMaestroLocal = function () {
         desabilitarBotonosCaja(true);
         desabilitarControles(false);
         obtenerFechaSistema();
-        $("#btnActualizarLocal").prop("disabled", true);
+        $("#btnGuardarCambiosLocal").prop("disabled", true);
         $("#btnHabilitarlCambioRegionZona").prop("disabled", true);
         //dataTableCajas.clear();
         //dataTableCajas.draw();
@@ -801,8 +921,8 @@ var AdministrarMaestroLocal = function () {
                 $("#btnGuardarLocal").prop("disabled", true);
                 $("#cboRegion").prop("disabled", true);
                 $("#cboZona").prop("disabled", true);
-                $("#btnActualizarLocal").prop("disabled", true);
-                $("#btnHabilitarlCambioRegionZona").prop("disabled", true);
+                $("#btnGuardarCambiosLocal").prop("disabled", true);
+                //$("#btnHabilitarlCambioRegionZona").prop("disabled", true);
                 await recargarDataTableCajas();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -816,7 +936,29 @@ var AdministrarMaestroLocal = function () {
 
         if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '') {
             validate = false;
-            swal({ text: 'Debe seleccionar la empresa, cadena, region y zona.', icon: "warning", });
+            swal({ text: 'Debe seleccionar la empresa, cadena, region y zona', icon: "warning", });
+        }
+
+        return validate;
+    }
+
+    const validarGuardarLocal = function () {
+        let validate = true;
+
+        if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '' || $("#txtCodLocal").val() === '') {
+            validate = false;
+            swal({ text: 'Debe seleccionar la empresa, cadena, region, zona y local', icon: "warning", });
+        }
+
+        return validate;
+    }
+
+    const validarLocalChange = function () {
+        let validate = true;
+
+        if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '' || $("#cboLocal").val() === '') {
+            validate = false;
+            //swal({ text: 'Debe seleccionar la empresa, cadena, region, zona y local', icon: "warning", });
         }
 
         return validate;
@@ -858,15 +1000,7 @@ var AdministrarMaestroLocal = function () {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    const obtenerLocal = function (codLocal) {
-
-        const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            CodCadena: $("#cboCadena").val(),
-            CodRegion: $("#cboRegion").val(),
-            CodZona: $("#cboZona").val(),
-            Codlocal: codLocal
-        };
+    const obtenerLocal = function (request) {
 
         $.ajax({
             url: urlObtenerLocal,
@@ -880,7 +1014,6 @@ var AdministrarMaestroLocal = function () {
                 closeLoading();
             },
             success: async function (response) {
-                //console.log(response)
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning", });
                     return;
@@ -888,25 +1021,11 @@ var AdministrarMaestroLocal = function () {
 
                 $("#modalLocales").modal('hide');
 
-                showLoading();
-
-                if ($("#txtCadenaLocal").val() == "TODOS") {
-                    await sleep(1000);
-                    $("#cboCadena").val(response.Data.CodCadena).trigger('change');
-                    await sleep(1000);
-                    $("#cboRegion").val(response.Data.CodRegion).trigger('change');
-                    await sleep(1000);
-                    $("#cboZona").val(response.Data.CodZona).trigger('change');
-
-                    codRegionAnterior = response.Data.CodRegion;
-                    codZonaAnterior = response.Data.CodZona;
-                }
-
                 setearLocal(response.Data);
                 desabilitarBotonosCaja(false);
                 desabilitarControles(true)
                 $("#btnGuardarLocal").prop("disabled", true);
-                $("#btnActualizarLocal").prop("disabled", false);
+                $("#btnGuardarCambiosLocal").prop("disabled", false);
                 $("#btnHabilitarlCambioRegionZona").prop("disabled", false);
 
                 await recargarDataTableCajas();
@@ -1009,7 +1128,7 @@ var AdministrarMaestroLocal = function () {
             CodCadena: $("#cboCadena").val(),
             CodRegion: $("#cboRegion").val(),
             CodZona: $("#cboZona").val(),
-            CodLocal: codLocalCaja
+            CodLocal: $("#cboLocal").val()
         };
 
         if ($.fn.DataTable.isDataTable('#tableCajas')) {
@@ -1070,6 +1189,7 @@ var AdministrarMaestroLocal = function () {
         $("#cboCadena").prop("disabled", disable);
         $("#cboRegion").prop("disabled", disable);
         $("#cboZona").prop("disabled", disable);
+        $("#cboLocal").prop("disabled", disable);
         $("#txtCodLocal").prop("disabled", disable);
     }
 

@@ -149,6 +149,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ObtenerInvCajaDTO, InvCajas>().ReverseMap();
             CreateMap<CrearInvCajaCommand, InvCajas>().ReverseMap();
             CreateMap<ActualizarInvCajaCommand, InvCajas>().ReverseMap();
+            CreateMap<EliminarInvCajaCommand, InvCajas>().ReverseMap();
 
             CreateMap<ListarAperturaDTO, Apertura>().ReverseMap();
             CreateMap<ObtenerAperturaDTO, Apertura>().ReverseMap();

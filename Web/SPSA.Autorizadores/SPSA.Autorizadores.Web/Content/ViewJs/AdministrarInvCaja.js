@@ -12,6 +12,8 @@ var urlCrearInvCaja = baseUrl + 'Inventario/InventarioCaja/CrearInvCaja';
 var urlActualizarInvCaja = baseUrl + 'Inventario/InventarioCaja/ActualizarInvCaja';
 var urlCrearFormInvCaja = baseUrl + 'Inventario/InventarioCaja/CrearFormInvCaja';
 var urlEditarFormInvCaja = baseUrl + 'Inventario/InventarioCaja/EditarFormInvCaja';
+var urlEliminarInvCaja = baseUrl + 'Inventario/InventarioCaja/EliminarInvCaja';
+var urlEliminarInvCajaPorLocal = baseUrl + 'Inventario/InventarioCaja/EliminarInvCajaPorLocal';
 
 var urlImportarInventario = baseUrl + 'Inventario/InventarioCaja/Importar';
 var urlDescargarPlantilla = baseUrl + 'Inventario/InventarioCaja/DescargarPlantillas';
@@ -58,6 +60,45 @@ var AdministrarInvCajas = function () {
             }
         });
 
+        $("#btnEliminarPorLocal").on("click", function () {
+            if (validarBuscarInvCaja()) {
+                const request = {
+                    CodEmpresa: $("#cboEmpresa").val(),
+                    CodCadena: $("#cboCadena").val(),
+                    CodRegion: $("#cboRegion").val(),
+                    CodZona: $("#cboZona").val(),
+                    CodLocal: $("#cboLocal").val()
+                };
+
+                swal({
+                    title: "¿Estás seguro?",
+                    text: "No podrás revertir esto",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Sí, eliminarlo",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    }
+                }).then(async (isConfirm) => {
+                    if (isConfirm) {
+                        await eliminarInvCajaPorLocal(request);
+                        swal("Eliminado!", "Los registros han sido eliminados.", "success");
+                    }
+                });
+            }
+        });
+
         $("#btnNuevoInvCaja").click(function () {
             const codEmpresa = $("#cboEmpresa").val();
             const codCadena = $("#cboCadena").val();
@@ -93,6 +134,53 @@ var AdministrarInvCajas = function () {
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
 
             abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
+        });
+
+        $("#btnEliminarInvCaja").click(async function () {
+            var filasSeleccionada = document.querySelectorAll("#tableCajas tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+
+            const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+            const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
+
+            const request = {
+                CodEmpresa: $("#cboEmpresa").val(),
+                CodCadena: $("#cboCadena").val(),
+                CodRegion: $("#cboRegion").val(),
+                CodZona: $("#cboZona").val(),
+                CodLocal: $("#cboLocal").val(),
+                NumCaja: NUM_CAJA,
+                codActivo: COD_ACTIVO
+            };
+
+            swal({
+                title: "¿Estás seguro?",
+                text: "No podrás revertir esto",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Sí, eliminarlo",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                }
+            }).then(async (isConfirm) => {
+                if (isConfirm) {
+                    await eliminarInvCaja(request);
+                    swal("Eliminado!", "El registro ha sido eliminado.", "success");
+                }
+            });
         });
 
         $("#btnResumenPorNumCaja").click(function () {
@@ -196,6 +284,11 @@ var AdministrarInvCajas = function () {
             await sleep(1500);
             $("#cboLocal").val(COD_LOCAL).trigger('change');
 
+            if ($.fn.DataTable.isDataTable('#tableCajas')) {
+                $('#tableCajas').DataTable().clear().draw();
+                $('#tableCajas').DataTable().destroy();
+            }
+
             recargarDataTableNumCajas(request);
 
             $("#modalLocales").modal('hide');
@@ -283,7 +376,11 @@ var AdministrarInvCajas = function () {
             await sleep(1500);
             $("#cboLocal").val(COD_LOCAL).trigger('change');
 
-            //recargarDataTableCajas(request);
+            if ($.fn.DataTable.isDataTable('#tableCajas')) {
+                $('#tableCajas').DataTable().clear().draw();
+                $('#tableCajas').DataTable().destroy();
+            }
+
             recargarDataTableNumCajas(request);
             closeLoading();
             $("#modalLocales").modal('hide');
@@ -692,9 +789,9 @@ var AdministrarInvCajas = function () {
     const validarBuscarInvCaja = function () {
         let validate = true;
 
-        if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '') {
+        if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '' || $("#cboLocal").val() === '') {
             validate = false;
-            swal({ text: 'Debe seleccionar la empresa, cadena, region y zona.', icon: "warning", });
+            swal({ text: 'Debe seleccionar la empresa, cadena, region, zona y local', icon: "warning", });
         }
 
         return validate;
@@ -865,16 +962,59 @@ var AdministrarInvCajas = function () {
         });
     }
 
+    const eliminarInvCaja = async function (request) {
+        $.ajax({
+            url: urlEliminarInvCaja,
+            type: "post",
+            data: { request },
+            dataType: "html",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+                //$("#modalInvCaja").find(".modal-body").html(response);
+                //$("#modalInvCaja").modal('show');
+                console.log(response);
+                recargarDataTableCajas(request);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const eliminarInvCajaPorLocal = async function (request) {
+        $.ajax({
+            url: urlEliminarInvCajaPorLocal,
+            type: "post",
+            data: { request },
+            dataType: "html",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+                console.log(response);
+
+                if ($.fn.DataTable.isDataTable('#tableCajas')) {
+                    $('#tableCajas').DataTable().clear().draw();
+                    $('#tableCajas').DataTable().destroy();
+                }
+
+                recargarDataTableNumCajas(request);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
 
     const recargarDataTableNumCajas = function (request) {
-        //const request = {
-        //    CodEmpresa: $("#cboEmpresa").val(),
-        //    CodCadena: $("#cboCadena").val(),
-        //    CodRegion: $("#cboRegion").val(),
-        //    CodZona: $("#cboZona").val(),
-        //    CodLocal: $("#cboLocal").val()
-        //};
-
         if ($.fn.DataTable.isDataTable('#tableNumCajas')) {
             $('#tableNumCajas').DataTable().destroy();
         }
@@ -976,10 +1116,7 @@ var AdministrarInvCajas = function () {
 
     const recargarDataTableLocalesPorEmpresa = function () {
         const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            //CodCadena: $("#cboCadena").val(),
-            //CodRegion: $("#cboRegion").val(),
-            //CodZona: $("#cboZona").val()
+            CodEmpresa: $("#cboEmpresa").val()
         };
 
         if ($.fn.DataTable.isDataTable('#tableLocales')) {
@@ -1014,7 +1151,7 @@ var AdministrarInvCajas = function () {
                 { data: "CodEmpresa" },
                 { data: "CodCadena" },
                 { data: "CodRegion" },
-                { data: "CodZona" },
+                { data: "CodZona" }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',
