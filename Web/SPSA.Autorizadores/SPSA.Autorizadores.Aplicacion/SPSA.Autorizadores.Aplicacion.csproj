@@ -334,6 +334,7 @@
     <Compile Include="Features\Aperturas\Queries\ObtenerAperturaQuery.cs" />
     <Compile Include="Features\Autorizadores\Commands\ImprimirBarrasAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ReimprimirBarrasAutorizadorCommand.cs" />
+    <Compile Include="Features\Cajas\Commands\ImportarExcelInvCajaCommand.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />

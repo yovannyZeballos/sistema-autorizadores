@@ -99,15 +99,21 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 			foreach (var fileKey in Request.Files)
 			{
 				HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
-				respuesta = await _mediator.Send(new ImportarExcelInventarioCajaCommand 
-				{ 
-					Archivo = archivo, 
-					Usuario = WebSession.Login,
-					JerarquiaOrganizacional = WebSession.JerarquiaOrganizacional
-				});
-			}
+                respuesta = await _mediator.Send(new ImportarExcelInvCajaCommand
+                {
+                    Archivo = archivo,
+                    Usuario = WebSession.Login,
+                    JerarquiaOrganizacional = WebSession.JerarquiaOrganizacional
+                });
+                //respuesta = await _mediator.Send(new ImportarExcelInventarioCajaCommand 
+                //{ 
+                //	Archivo = archivo, 
+                //	Usuario = WebSession.Login,
+                //	JerarquiaOrganizacional = WebSession.JerarquiaOrganizacional
+                //});
+            }
 
-			return Json(respuesta);
+            return Json(respuesta);
 		}
 
 		[HttpPost]

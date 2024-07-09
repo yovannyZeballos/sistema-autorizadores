@@ -80,7 +80,7 @@
             <select class="form-control custom-select" id="cboTipEstado" required>
                 <option value="">Seleccionar</option>
                 <option value="A" @(Model.InvCaja.TipEstado == "A" ? "selected" : "")>ACTIVO</option>
-                <option value="I" @(Model.InvCaja.TipEstado == "I" ? "selected" : "")>INACTIVO</option>
+                <option value="V" @(Model.InvCaja.TipEstado == "V" ? "selected" : "")>VENCIDO</option>
             </select>
         </div>
     </div>
