@@ -1,5 +1,4 @@
 ﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Bibliography;
 using ExcelDataReader;
 using MediatR;
 using Serilog;
@@ -534,7 +533,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                     respuesta.Errores.Add(new ErroresExcelDTO
                                     {
                                         Fila = 0,
-                                        //Mensaje = $"Local {invCajas.CodActivo} - NumCaja {invCajas.NumCaja} - CodAcivo {invCajas.CodActivo}: {errorMessage}"
                                         Mensaje = $"{errorMessage}"
                                     });
                                     continue;
@@ -555,7 +553,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                 respuesta.Mensaje = ex.Message;
                 _logger.Error(ex, respuesta.Mensaje);
             }
-
 
             return respuesta;
         }
