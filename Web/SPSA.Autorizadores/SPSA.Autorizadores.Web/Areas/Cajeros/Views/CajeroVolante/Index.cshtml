@@ -76,16 +76,17 @@
                             <hr>
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-xl-12">
+                                    @*<div class="col-xl-12">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1" class="form-label">Usuario</label>
                                             <input type="text" class="form-control form-control-sm" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
                                         </div>
-                                    </div>
+                                    </div>*@
+                                    <input type="hidden" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login">
                                     <div class="col-md-6">
                                         <div class="form-group select2-sm">
-                                            <label class="form-label">Empresa</label>
-                                            <select class="form-control custom-select" id="cboEmpresa">
+                                            @*<label class="form-label">Empresa</label>*@
+                                            <select class="form-control custom-select" id="cboEmpresa" disabled>
                                                 <option label="Seleccione una empresa"></option>
                                             </select>
                                         </div>
@@ -93,8 +94,8 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group select2-sm">
-                                            <label class="form-label">Cadena</label>
-                                            <select class="form-control custom-select" id="cboCadena">
+                                            @*<label class="form-label">Cadena</label>*@
+                                            <select class="form-control custom-select" id="cboCadena" disabled>
                                                 <option label="Seleccione una cadena"></option>
                                             </select>
                                         </div>
@@ -121,12 +122,6 @@
                                         <input id="chkSeleccionar" type="checkbox"> Seleccionar todos
                                     </label>
                                 </div>
-                                @*<table id="tableLocal" class="table table-striped table-bordered text-nowrap border-bottom">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>*@
                                 <table id="tableLocal" class="table table-striped table-bordered text-nowrap border-bottom">
                                     <thead>
                                         <tr>
