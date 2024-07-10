@@ -25,7 +25,7 @@ jobs:
       uses: Nuget/setup-nuget@v1.0.5
 
     - name: Restore nuget packages
-      run: nuget restore SPSA.Autorizadores.sln
+      run: nuget restore Web/SPSA.Autorizadores/SPSA.Autorizadores.sln
 
     - name: Build
       run: msbuild SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
