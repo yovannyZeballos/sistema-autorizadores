@@ -73,7 +73,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands
 						Cargo = x.Cargo,
 						Empresa = request.NomEmpresa,
 						Local = request.NomLocal,
-						CodigoBarras = ReportePDFServicio.GenerarCodigoDeBarras($"{x.CodLocal.PadLeft(4, '0')}{x.CodAutorizador}")
+						CodigoBarras = ReportePDFServicio.GenerarCodigoDeBarras($"{x.CodAutorizador.PadLeft(12, '0')}")
 					}).ToList();
 
 				if (!respuesta.Ok)
