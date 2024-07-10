@@ -28,4 +28,4 @@ jobs:
       run: nuget restore Web/SPSA.Autorizadores/SPSA.Autorizadores.sln
 
     - name: Build
-      run: msbuild SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
+      run: msbuild Web/SPSA.Autorizadores/SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
