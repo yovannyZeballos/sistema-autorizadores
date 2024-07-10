@@ -1,4 +1,4 @@
-# Sistema de administración de autorizadores
+# Sistema de Gestions POS y BakOffice
 
 Aplicación web desarrollada en ASP.NET que administra la creación de autorizadores para las cajas.
 
