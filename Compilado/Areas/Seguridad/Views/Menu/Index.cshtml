@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Menu | Seguridad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <link href="~/Content/plugins/vakata-jstree/dist/themes/default/style.min.css" rel="stylesheet" id="style" />
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Menus</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Seguridad</li>
+            <li class="breadcrumb-item1 active">Menu</li>
+        </ol>
+    </div>
+</div>
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Listado de Menus")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Sistema</label>
+                            <select class="form-control custom-select" id="cboSistema">
+                                <option label="Seleccione un sistema"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="jstree">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="btn btn-sm btn-primary btn-block" id="btnCrear">
+                                    <i class="fe fe-file-plus"></i> Crear menu
+                                </button>
+                            </div>
+                            <hr />
+                            <div class="col-md-12">
+                                <button class="btn btn-sm btn-primary btn-block" id="btnEditar">
+                                    <i class="fe fe-edit"></i> Editar menu
+                                </button>
+                            </div>
+
+                            <hr />
+                            <div class="col-md-12">
+                                <button class="btn btn-sm btn-danger btn-block" id="btnEliminar">
+                                    <i class="fe fe-delete"></i> Eliminar menu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Menu-->
+<div class="modal fade" id="crearMenulModal" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="crearMenuModalLabel">Crear Menu</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="nomMenu" class="form-label">Nombre</label>
+                        <input type="text" class="form-control form-control-sm" id="nomMenu" autofocus required>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="urlMenu" class="form-label">Url</label>
+                        <input type="text" class="form-control form-control-sm" id="urlMenu">
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="iconoMenu" class="form-label">Icono</label>
+                        <input type="text" class="form-control form-control-sm" id="iconoMenu">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGuardar">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="~/Content/plugins/vakata-jstree/dist/jstree.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/Menu.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            (function ($, undefined) {
+                "use strict";
+                $.jstree.plugins.noclose = function () {
+                    this.close_node = $.noop;
+                };
+            })(jQuery);
+
+            Menu.init();
+        });
+    </script>
+}

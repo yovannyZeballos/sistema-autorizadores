@@ -1,0 +1,454 @@
+﻿@{
+    ViewBag.Title = "Mantenimiento | Inventario Cajas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<style>
+
+    th, td {
+        white-space: normal; /* Permitir múltiples líneas */
+        word-wrap: break-word; /* Romper palabras largas si es necesario */
+    }
+</style>*@
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Inventario Cajas</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Inventario</li>
+            <li class="breadcrumb-item1 active">Cajas</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden needs-validation" id="formInventario">
+            @Html.Partial("_CardHeader", "Listado de cajas")
+
+            <div class="card-body pt-2 pb-0">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresa" required>
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control select2-show-search custom-select" id="cboCadena" required>
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Region</label>
+                            <select class="form-control select2-show-search custom-select" id="cboRegion" required>
+                                <option label="Seleccione una region"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Zona</label>
+                            <select class="form-control select2-show-search custom-select" id="cboZona" required>
+                                <option label="Seleccione una zona"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local</label>
+                            <select class="form-control select2-show-search custom-select" id="cboLocal" required>
+                                <option label="Seleccione un local"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary btn-block"><i class="fa fa-search"></i> Buscar x Empresa</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnEliminarPorLocal" class="btn btn-sm btn-outline-danger btn-block"><i class="fa fa-trash"></i> Eliminar Bloque</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-xl-4">
+                        <div class="row">
+                            @*<div class="col-xl-4 col-md-6">
+                                    <div class="form-group select2-sm">
+                                        <label class="form-label"></label>
+                                        <button type="button" id="btnEliminarCaja" class="btn btn-sm btn-primary btn-block"><i class="fa fa-remove"></i> Eliminar</button>
+                                    </div>
+                                </div>*@
+                            <div class="col-xl-4 col-md-6">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnResumenPorNumCaja" class="btn btn-sm btn-primary btn-block"><i class="fa fa-eye"></i> Ver Resumen</button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tableNumCajas" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr class="table-info">
+                                    <th class="border-bottom-0" style="font-size: 15px;">NUM_CAJA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">IP_ADDRESS</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">TIPO_OS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <div class="row">
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnNuevoInvCaja" class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Nuevo</button>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnEditarInvCaja" class="btn btn-sm btn-primary btn-block"><i class="fa fa-pencil"></i> Editar</button>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnEliminarInvCaja" class="btn btn-sm btn-outline-danger btn-block"><i class="fa fa-remove"></i> Eliminar</button>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnImportar" class="btn btn-sm btn-outline-success btn-block"><i class="fa fa-upload"></i> Cargar Excel</button>
+                                    <input type="file" id="excelInventario" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-outline-secondary btn-block"><i class="fa fa-download"></i> Plantilla Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="tableCajas" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr class="table-info">
+                                    <th class="border-bottom-0" style="font-size: 15px;">NUM_CAJA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">COD_ACTIVO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">NOM_ACTIVO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">ADENDA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">TIP_ESTADO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">TIP_PROCESADOR</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">MEMORIA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">DES_SO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">VER_SO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">CAP_DISCO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">PUERTO_BALANZA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">FEC_GARANTIA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOCAL-->
+<div class="modal fade" id="modalLocales" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Seleccione un local</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tableLocales" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">PMM</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">OFIPLAN</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">CODIGO SUNAT</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_EMPRESA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_CADENA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_REGION</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_ZONA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnObtenerInvPorLocal" class="btn btn-sm btn-primary">Aceptar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DATOS POR NUM CAJA-->
+<div class="modal fade" id="modalDatosNumCaja" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Datos de Activos (Caja)</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        @*<fieldset class="default">
+                            <legend class="default">Datos del activo (Caja)</legend>*@
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class=" card-title text-center"><b>Modelo:</b></div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class=" card-title text-center"><b>Serie:</b></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="form-group row mb-2">
+                                    <label class="col-form-label col-xl-3">CPU</label>
+                                    <div class="col-xl-9">
+                                        <input type="text" class="form-control form-control-sm" id="txtModeloCpu">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="form-group row  mb-2">
+                                    <div class="col-xl-12">
+                                        <input type="text" class="form-control form-control-sm" id="txtSerieCpu">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="form-group row mb-2">
+                                    <label class="col-form-label col-xl-3">Impresora</label>
+                                    <div class="col-xl-9">
+                                        <input type="text" class="form-control form-control-sm" id="txtModeloImpresora">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="form-group row mb-2">
+                                    <div class="col-xl-12">
+                                        <input type="text" class="form-control form-control-sm" id="txtSerieImpresora">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="form-group row mb-2">
+                                    <label class="col-form-label col-xl-3">Dynakey</label>
+                                    <div class="col-xl-9">
+                                        <input type="text" class="form-control form-control-sm" id="txtModeloDynakey">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="form-group row mb-2">
+                                    <div class="col-xl-12">
+                                        <input type="text" class="form-control form-control-sm" id="txtSerieDynakey">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="form-group row mb-2">
+                                    <label class="col-form-label col-xl-3">Scanner</label>
+                                    <div class="col-xl-9">
+                                        <input type="text" class="form-control form-control-sm" id="txtModeloScanner">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="form-group row mb-2">
+                                    <div class="col-xl-12">
+                                        <input type="text" class="form-control form-control-sm" id="txtSerieScanner">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="form-group row mb-2">
+                                    <label class="col-form-label col-xl-3">Gaveta</label>
+                                    <div class="col-xl-9">
+                                        <input type="text" class="form-control form-control-sm" id="txtModeloGaveta">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="form-group row mb-2">
+                                    <div class="col-xl-12">
+                                        <input type="text" class="form-control form-control-sm" id="txtSerieGaveta">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="form-group row mb-2">
+                                    <label class="col-form-label col-xl-3">Monitor</label>
+                                    <div class="col-xl-9">
+                                        <input type="text" class="form-control form-control-sm" id="txtModeloMonitor">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="form-group row mb-2">
+                                    <div class="col-xl-12">
+                                        <input type="text" class="form-control form-control-sm" id="txtSerieMonitor">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*</fieldset>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<button id="btnDatosInvPorNumCaja" class="btn btn-sm btn-primary">Aceptar</button>*@
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL CREAR INV CAJA -->
+<div class="modal fade" id="modalInvCaja" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalInvCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnActualizarInvCaja" class="btn btn-primary">Guardar</button>
+                <button id="btnGuardarInvCaja" class="btn btn-primary">Guardar</button>
+                <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL IMPORTAR INV CAJA-->
+<div class="modal fade" id="modalImportarInvActivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalImportarInvActivo">Importar Inventario desde Excel </h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <input class="form-control" type="file" id="archivoExcelInvActivo" />
+                    <br />
+                    <div class="text-center">
+                        <button class="btn btn-success" type="button" id="btnCargarExcelInvActivo">Cargar Excel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ERRORES-->
+<div class="modal fade" id="modalErroresImportacionCaja" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/AdministrarInvCaja.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarInvCajas.init();
+        });
+    </script>
+}

@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Asignar local | Autorizadores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Asignación de locales</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Autorizador</li>
+            <li class="breadcrumb-item1 active">Asignar local</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            <div class="card-header bg-primary ">
+                <h6 class="card-title text-white">Locales</h6>
+                <div class="card-options ">
+                    <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control select2-show-search custom-select" id="cboEmpresa" value="0">
+                                <option value="0">Todos</option>
+                                <option value="3">COMPAÑIA HARD DISCOUNT S.A.C.</option>
+                                <option value="12">MAKRO SUPERMAYORISTA S.A.</option>
+                                <option value="13">PLAZA VEA ORIENTE S.A.C</option>
+                                <option value="4">COMPAÑIA FOOD RETAIL S.A.C.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Indicador</label>
+                            <select class="form-control select2-show-search custom-select" id="cboInd" value="0">
+                                <option value="0">Todos</option>
+                                <option value="S">S</option>
+                                <option value="N">N</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group data-table-btn">
+                    <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2">Asignar Local</button>
+                    <button id="btnAsociarLocalPMM" class="btn btn-sm btn-primary mb-4  ms-2">Asociar Locales</button>
+
+                </div>
+
+                <table id="tableLocalesAsignar" class="table text-nowrap border-bottom">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOCAL PMM-->
+<div class="modal fade" id="modalLocalPMM" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Asociar local PMM</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnGuardarLocalPMM" class="btn btn-sm btn-primary">Guardar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/ViewJs/AsignarLocal.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AsignarLocal.init();
+        });
+    </script>
+}

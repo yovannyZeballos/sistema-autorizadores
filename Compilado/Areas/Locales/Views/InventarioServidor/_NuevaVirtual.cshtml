@@ -1,0 +1,56 @@
+﻿@model SPSA.Autorizadores.Aplicacion.DTO.InventarioServidorVirtualDTO
+
+<div class="row needs-validation" id="formVirtual">
+
+    <div class="col-xl-6">
+        <div class="form-group row mb-2 select2-sm">
+            <label class="col-form-label col-xl-2">Tipo</label>
+            <div class="col-xl-10">
+                <select class="form-control select2-show-modal custom-select" id="cboTipoVirtual" required>
+                    <option label="Seleccione una opción"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="form-group row mb-2 select2-sm">
+            <label class="col-form-label col-xl-2">SO</label>
+            <div class="col-xl-10">
+                <select class="form-control select2-show-modal custom-select" id="cboSoVirtual" required>
+                    <option label="Seleccione una opción"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="form-group row mb-2">
+            <label class="col-form-label col-xl-3">RAM</label>
+            <div class="col-xl-9">
+                <input type="number" class="form-control form-control-sm" id="txtRamVirtual" value="@Model.Ram" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="form-group row mb-2">
+            <label class="col-form-label col-xl-3">CPU</label>
+            <div class="col-xl-9">
+                <input type="number" class="form-control form-control-sm" id="txtCpuVirtual"  value="@Model.Cpu" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="form-group row mb-2">
+            <label class="col-form-label col-xl-3">HDD</label>
+            <div class="col-xl-9">
+                <input type="number" class="form-control form-control-sm" id="txtHddVirtual"  value="@Model.Hdd" required>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="txtId" value="@Model.Id">
+
+</div>

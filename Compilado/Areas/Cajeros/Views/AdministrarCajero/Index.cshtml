@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "Administrar | Cajeros";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Mantenimiento de cajeros</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Cajeros</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Cajeros")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <button id="btnNuevoCajero" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Cajero</button>
+                        <button id="btnEliminarCajero" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-x-circle me-1"></i>Emininar Cajero</button>
+                        <button id="btnGenerarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-settings me-1"></i>Generar archivo</button>
+                        <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>
+                        <button id="btnDescargarMaestro" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar maestro</button>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="form-group data-table-btn">
+                            <div class="checkbox  ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkTodos" type="checkbox"> Seleccionar todos
+                                </label>
+                                <label class="unselectable ms-2">
+                                    <input id="chkActivosCajeros" type="checkbox"> Activos
+                                </label>
+                                <label class="unselectable ms-2">
+                                    <input id="chkInactivosCajeros" type="checkbox"> Inactivos
+                                </label>
+                            </div>
+
+                        </div>
+                        <table id="tableCajeros" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL COLABORADORES-->
+<div class="modal fade" id="modalColaboradores" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Colaboradores activos</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group data-table-btn" id="button-group">
+                    <button id="btnAsignar" class="btn btn-sm btn-primary mb-4  ms-2"><i class="fe fe-user-plus me-1"></i>Asignar Cajero</button>
+                    <div class="checkbox  ms-2" style="display: inline-block;">
+                        <label class="unselectable  ms-2">
+                            <input id="chkActivosColaborador" type="checkbox"> ACTIVOS
+                        </label>
+                        <label class="unselectable ms-2">
+                            <input id="chkAnuladosColaborador" type="checkbox"> ANULADOS
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <table id="tableColaboradores" class="table text-nowrap border-bottom">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/datatables.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/ViewJs/AdministrarCajero.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarCajero.init();
+        });
+    </script>
+}

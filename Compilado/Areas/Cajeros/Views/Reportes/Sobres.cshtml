@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de sobres | Cajeros";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Reporte de sobres</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Cajeros</li>
+            <li class="breadcrumb-item1 active">Reporte de sobres</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Reporte")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control select2-show-search custom-select" id="cboEmpresa" value="0">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local</label>
+                            <select class="form-control select2-show-search custom-select" id="cboLocal" value="0">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">F. Inicio</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="feather feather-calendar"></span>
+                                    </div>
+                                </div><input id="txtFechaInicio" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">F. Fin</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="feather feather-calendar"></span>
+                                    </div>
+                                </div><input id="txtFechaFin" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group data-table-btn">
+                    <button id="btnReporteSobres" class="btn btn-sm btn-primary mb-4  ms-2">Consultar</button>
+
+                </div>
+
+                <table id="tableReportes" class="table text-nowrap border-bottom">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/ReportesCajero.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ReportesCajero.init(1);
+        });
+    </script>
+}
