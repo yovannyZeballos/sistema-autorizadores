@@ -1,4 +1,4 @@
-# Sistema de Gestions POS y BakOffice
+# Sistema de Gestión POS y BackOffice
 
 Aplicación web desarrollada en ASP.NET que administra la creación de autorizadores para las cajas.
 
