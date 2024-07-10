@@ -43,7 +43,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
             var respuesta = new RespuestaComunDTO { Ok = true };
             try
             {
-                var caja = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona && x.NumCaja == request.NumCaja).FirstOrDefaultAsync();
+                var caja = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion 
+                                                                        && x.CodZona == request.CodZona && x.CodLocal == request.CodLocal && x.NumCaja == request.NumCaja).FirstOrDefaultAsync();
                 if (caja is null)
                 {
                     respuesta.Ok = false;

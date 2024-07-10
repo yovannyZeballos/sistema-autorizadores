@@ -20,29 +20,7 @@
 <div class="row row-sm">
     <div class="col-xl-12">
         <div class="card overflow-hidden needs-validation" id="formInventario">
-            @Html.Partial("_CardHeader", "Administracion e inventario de cajas")
-        </div>
-    </div>
-    <div class="col-xl-12">
-        <div class="card overflow-hidden needs-validation" id="formInventario">
-            @Html.Partial("_CardHeader", "Listado inventario de cajas")
-
-            <div class="card-body pt-3 pb-0">
-                <div class="row mb-4" id="btn-local">
-                    @*<div class="col-lg-2 col-md-2 col-sm-3">
-                    <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary btn-block">Nuevo</button>
-                </div>*@
-                    @*<div class="col-lg-2 col-md-2 col-sm-3">
-                    <button type="button" id="btnGuardarLocal" class="btn btn-sm btn-primary btn-block">Guardar</button>
-                </div>*@
-                    <div class="col-lg-2 col-md-2 col-sm-3">
-                        <button type="button" id="btnBuscarInvPorLocal" class="btn btn-sm btn-primary btn-block">Buscar</button>
-                    </div>
-                    @*<div class="col-lg-6 col-md-6 col-sm-3 d-flex justify-content-end">
-                    <button type="button" id="btnDescargarMaestro" class="btn btn-sm btn-primary ">Descargar maestro</button>
-                </div>*@
-                </div>
-            </div>
+            @Html.Partial("_CardHeader", "Listado de activos")
 
             <div class="card-body pt-2 pb-0">
                 <div class="row">
@@ -86,21 +64,53 @@
                             </select>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-xl-2 col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label"></label>
-                            <button type="button" id="btnBuscarInvPorLocalp" class="btn btn-sm btn-primary btn-block">Buscar</button>
+                            <button type="button" id="btnBuscarInvActivoPorLocal" class="btn btn-sm btn-primary btn-block"><i class="fa fa-search"></i> Buscar</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary btn-block"><i class="fa fa-search"></i> Buscar x Empresa</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-primary btn-block"><i class="fa fa-pencil"></i> Editar</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Nuevo</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <table id="tableListado" class="table text-nowrap border-bottom">
+                        <table id="tableActivos" class="table text-nowrap border-bottom">
                             <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 15px;">COD_ACTIVO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">COD_MODELO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">NOM_MARCA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">COD_SERIE</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">IP</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">NOM_AREA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">NUM_OC</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">NUM_GUIA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">ANTIGUEDAD</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">OBSERVACION</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">GARANTIA</th>
+                                </tr>
                             </thead>
                             <tbody>
                             </tbody>
@@ -115,14 +125,65 @@
 </div>
 
 <div>
-    @*<button type="button" id="btnAbrirModalInvActivo" class="btn btn-outline-success btn-sm">Importar Inventario</button>*@
     <button id="btnCargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Cargar Excel</button>
     <button id="btnPlantillaArchivo" class="btn btn-sm btn-warning mb-4 ms-1"><i class="fe fe-download me-1"></i>Plantilla Excel</button>
-    @*<button type="button" id="btnAbrirModalCadena" class="btn btn-outline-success btn-sm">Importar Cadenas</button>
-        <button type="button" id="btnAbrirModalRegion" class="btn btn-outline-success btn-sm">Importar Regiones</button>
-        <button type="button" id="btnAbrirModalZona" class="btn btn-outline-success btn-sm">Importar Zonas</button>*@
 </div>
 
+<!-- MODAL LOCAL-->
+<div class="modal fade" id="modalLocales" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Seleccione un local</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tableLocales" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">PMM</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">OFIPLAN</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">CODIGO SUNAT</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_EMPRESA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_CADENA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_REGION</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_ZONA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnObtenerInvPorLocal" class="btn btn-sm btn-primary">Aceptar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CREAR EMPRESA -->
+<div class="modal fade" id="modalInvActivo" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalInvActivo"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnActualizarInvActivo" class="btn btn-primary">Guardar</button>
+                <button id="btnGuardarInvActivo" class="btn btn-primary">Guardar</button>
+                <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- MODAL IMPORTAR INV ACTIVO-->
 <div class="modal fade" id="modalImportarInvActivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -236,6 +236,8 @@
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
+    <Compile Include="Areas\Reportes\Controllers\AdministrarReportesController.cs" />
+    <Compile Include="Areas\Reportes\ReportesAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\PerfilController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\UsuarioController.cs" />
@@ -2296,6 +2298,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarInvCaja.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
@@ -2307,6 +2310,7 @@
     <Content Include="Content\ViewJs\BCT.js" />
     <Content Include="Content\ViewJs\CajeroVolante.js" />
     <Content Include="Content\ViewJs\CajaDefectuosa.js" />
+    <Content Include="Content\ViewJs\AdministrarReportes.js" />
     <Content Include="Content\ViewJs\ControlBCT.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
@@ -2736,7 +2740,17 @@
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <Content Include="Areas\DataTables\Views\web.config" />
     <Content Include="Areas\Monitor\Views\ControlBCT\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearEditarActivo.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\_CrearInvCaja.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioCaja\_EditarInvCaja.cshtml" />
+    <Content Include="Areas\Reportes\Views\web.config" />
+    <Content Include="Areas\Reportes\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Reportes\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Reportes\Views\AdministrarReportes\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
+    <Content Include="Reportes\rptBarraAutorizador.rdl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2782,6 +2796,7 @@
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
+    <Folder Include="Areas\Reportes\Data\" />
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />
@@ -2789,6 +2804,7 @@
     <Folder Include="Plantillas_Tablas\Plantilla_Local\" />
     <Folder Include="Plantillas_Tablas\Plantilla_Region\" />
     <Folder Include="Plantillas_Tablas\Plantilla_Zona\" />
+    <Folder Include="Views\Reportes\" />
     <Folder Include="Views\Status\" />
   </ItemGroup>
   <ItemGroup>

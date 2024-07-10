@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
@@ -27,5 +28,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 		public string Hostname { get; set; }
 		public DateTime? FechaInicioLising { get; set; }
 		public DateTime? FechaFinLising { get; set; }
-	}
+
+        [ForeignKey("CodActivo")]
+        public virtual InvTipoActivo InvTipoActivo { get; set; }
+    }
 }

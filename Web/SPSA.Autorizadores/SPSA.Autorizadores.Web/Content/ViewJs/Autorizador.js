@@ -4,6 +4,8 @@ var urlAutorizador = baseUrl + 'Autorizadores/Autorizador/ListarAutorizador';
 var urlAsignarAutorizador = baseUrl + 'Autorizadores/Autorizador/AsignarAutorizador';
 var urlEliminarAutorizador = baseUrl + 'Autorizadores/Autorizador/EliminarAutorizador';
 var urlActualizarEstadoArchivoAutorizador = baseUrl + 'Autorizadores/Autorizador/ActualizarEstadoArchivoAutorizador';
+var urlImprimir = baseUrl + 'Autorizadores/Autorizador/Imprimir';
+var urlReimprimir = baseUrl + 'Autorizadores/Autorizador/Reimprimir';
 
 
 var Autorizador = function () {
@@ -66,6 +68,14 @@ var Autorizador = function () {
         $("#chkTodos").on("change", function () {
             chechTodos();
         })
+
+        $("#btnImprimir").on('click', function () {
+            imprimir();
+        });
+
+        $("#btnReimprimir").on('click', function () {
+            reimprimir();
+        });
 
     }
 
@@ -155,13 +165,23 @@ var Autorizador = function () {
             },
             success: function (response) {
 
+                console.log(response);
+
                 var columnas = [];
 
                 response.Columnas.forEach((x) => {
+
+                    let visible = true;
+
+                    if (x === "Autorizador") {
+                        visible = false;
+                    }
+
                     columnas.push({
                         title: x,
                         data: x.replace(" ", "").replace(".", ""),
                         defaultContent: "",
+                        visible: visible
                     });
                 });
 
@@ -706,7 +726,7 @@ var Autorizador = function () {
             });
         }
 
-       
+
     }
 
     const checkActivoAnuladoTodos = function () {
@@ -720,6 +740,168 @@ var Autorizador = function () {
         else {
             dataTableBusquedaColaborador.column(5).search('').draw();
         }
+    }
+
+    const imprimir = function () {
+        const registrosSeleccionados = dataTableAutorizador.rows('.selected').data().toArray();
+
+        if (!validarSelecion(registrosSeleccionados.length)) {
+            return;
+        }
+
+        let autorizadores = registrosSeleccionados.map(x => {
+            return {
+                CodColaborador: x.Codigo,
+                CodAutorizador: x.Autorizador,
+                CodLocal: x.LOCAL,
+                NomAutorizador: x.Nombre,
+                Cargo: x.Puesto
+            }
+        });
+
+        $.ajax({
+            url: urlImprimir,
+            type: "post",
+            data: { command: { Autorizadores: autorizadores } },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+
+                let icon = "success";
+
+                if (!response.Ok) {
+                    icon = "warning";
+                }
+
+                mandarImpresora(response.Contenido);
+
+                swal({ text: response.Mensaje, icon: icon });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    }
+
+    const reimprimir = function () {
+
+        let motivo = $("#txtMotivo").val();
+
+        if (motivo === "") {
+            swal({
+                text: "Debe ingresar el motivo",
+                icon: "warning",
+            });
+            return;
+        }
+
+        const registrosSeleccionados = dataTableAutorizador.rows('.selected').data().toArray();
+
+        if (!validarSelecion(registrosSeleccionados.length)) {
+            return;
+        }
+
+        let autorizadores = registrosSeleccionados.map(x => {
+            return {
+                CodColaborador: x.Codigo,
+                CodAutorizador: x.Autorizador,
+                CodLocal: x.LOCAL,
+                NomAutorizador: x.Nombre,
+                Cargo: x.Puesto
+            }
+        });
+
+        $.ajax({
+            url: urlReimprimir,
+            type: "post",
+            data: { command: { Autorizadores: autorizadores, Motivo: motivo } },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+
+                $('#modalMotivo').modal('hide');
+
+                let icon = "success";
+
+                if (!response.Ok) {
+                    icon = "warning";
+                }
+
+                mandarImpresora(response.Contenido);
+
+                swal({ text: response.Mensaje, icon: icon });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    }
+
+    // Función para convertir Base64 a Blob
+    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+    };
+
+    const mandarImpresora = function (contenido) {
+        let iframe = document.createElement('iframe');
+        iframe.id = 'iframePDF';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        // Convertir la cadena Base64 a Blob y crear una URL para el Blob
+        let blob = b64toBlob(contenido, 'application/pdf');
+        let blobUrl = URL.createObjectURL(blob);
+
+        // Cargar el PDF en el iframe y mandar a imprimir
+        //let iframe = document.getElementById('iframePDF') || document.createElement('iframe');
+        iframe.style.display = 'none';
+
+        if (!iframe.id) {
+            iframe.id = 'iframePDF';
+            document.body.appendChild(iframe);
+        }
+
+        iframe.src = blobUrl;
+
+        iframe.onload = function () {
+            setTimeout(function () { // Dar tiempo para que el PDF se cargue completamente
+                iframe.contentWindow.print();
+            }, 500);
+        };
     }
 
     return {

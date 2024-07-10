@@ -1,7 +1,4 @@
-﻿var urlCambioLocal = baseUrl + 'Seguridad/CambioLocal/Index';
-var urlEmpresas = baseUrl + 'Login/ListarEmpresas';
-var urlLocal = baseUrl + 'Login/ListarLocales';
-var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
+﻿var urlGuardarLocalSession = baseUrl + 'Login/GuardarLocalSession';
 
 const urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';
 const urlListarCadenasAsociadas = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
@@ -55,35 +52,6 @@ var CambioLocal = function () {
             }
         });
     };
-
-    const listarEmpresas = function () {
-        $.ajax({
-            url: urlEmpresas,
-            type: "get",
-            success: function (response) {
-
-                if (response.Ok === true) {
-                    cargarEmpresas(response.Empresas);
-                    listarLocales(rucSession);
-                } else {
-                    notif({
-                        type: "error",
-                        msg: response.Mensaje,
-                        height: 100,
-                        position: "right"
-                    });
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                notif({
-                    type: "error",
-                    msg: jqXHR.responseText,
-                    height: 100,
-                    position: "right"
-                });
-            }
-        });
-    }
 
     const listarEmpresasAsociadas = function (idControl) {
 
@@ -392,26 +360,6 @@ var CambioLocal = function () {
                 cargarLocales(data.Data);
                 seleccionarLocal();
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                notif({
-                    type: "error",
-                    msg: jqXHR.responseText,
-                    height: 100,
-                    position: "right"
-                });
-            }
-        });
-    }
-
-
-    const listarLocales = function (ruc) {
-        $.ajax({
-            url: urlLocal + "?ruc=" + ruc,
-            type: "get",
-            success: function (response) {
-                cargarLocales(response.Locales)
-                seleccionarLocal();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 notif({

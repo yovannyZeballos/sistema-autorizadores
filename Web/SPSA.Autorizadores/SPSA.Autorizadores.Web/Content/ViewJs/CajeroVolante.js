@@ -1,4 +1,10 @@
-﻿const urlListarLocales = '/Local/ListarLocalesAsignados';
+﻿const urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';
+const urlListarCadenasAsociadas = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
+const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesAsociadas';
+const urlListarZonasAsociadas = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
+const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
+
+const urlListarLocales = '/Local/ListarLocalesAsignados';
 const urlListarCajeros = '/CajeroVolante/ListarCajerosVolanteOfiplan';
 const urlListarCajerosAsginados = '/CajeroVolante/ListarCajerosVolante'; 
 const urlCrearCajeroVolante = '/CajeroVolante/CrearCajerosVolante';
@@ -11,6 +17,22 @@ var dataTableLocal = null;
 const CajeroVolante = function () {
 
     var eventos = function () {
+
+        $("#cboEmpresa").on("change", function () {
+            listarCadenasAsociadas('#cboCadena', '#cboEmpresa');
+        });
+
+        $("#cboCadena").on("change", function () {
+            listarRegionesAsociadas('#cboRegion', '#cboEmpresa', '#cboCadena');
+        });
+
+        $("#cboRegion").on("change", function () {
+            listarZonasAsociadas('#cboZona', '#cboEmpresa', '#cboCadena', '#cboRegion');
+        });
+
+        $("#cboZona").on("change", function () {
+            listarLocalesAsociados('#cboLocal', '#cboEmpresa', '#cboCadena', '#cboRegion', '#cboZona');
+        });
 
         $("#btnAsignar").on('click', function () {
             asignar();
@@ -49,6 +71,325 @@ const CajeroVolante = function () {
         $("#chkSeleccionar").on("change", function () {
             chechTodos();
         })
+    }
+
+    const listarEmpresasAsociadas = function (idControl) {
+
+        let data = { CodUsuario: $('#txtUsuario').val(), Busqueda: '' };
+        $.ajax({
+            url: urlListarEmpresasAsociadas,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    notif({
+                        type: "error",
+                        msg: data.Mensaje,
+                        height: 100,
+                        position: "right"
+                    });
+
+                    return;
+                }
+
+                let results = data.Data.map(item => {
+                    return {
+                        id: item.CodEmpresa,
+                        text: item.NomEmpresa
+                    }
+                });
+
+                $(idControl).empty();
+
+                $(idControl).select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+                $(idControl).val(codEmpresaSession);
+
+                $(idControl).trigger('change');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                notif({
+                    type: "error",
+                    msg: jqXHR.responseText,
+                    height: 100,
+                    position: "right"
+                });
+            }
+        });
+    }
+
+    const listarCadenasAsociadas = function (idCombo, idComboEmpresa) {
+
+        let data = { CodUsuario: $('#txtUsuario').val(), CodEmpresa: $(idComboEmpresa).val(), Busqueda: '' };
+
+        $.ajax({
+            url: urlListarCadenasAsociadas,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    notif({
+                        type: "error",
+                        msg: data.Mensaje,
+                        height: 100,
+                        position: "right"
+                    });
+                    return;
+                }
+
+                let results = data.Data.map(item => {
+                    return {
+                        id: item.CodCadena,
+                        text: item.NomCadena
+                    }
+                });
+
+                $(idCombo).empty();
+
+                $(idCombo).select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+                $(idCombo).val(codCadenaSession);
+
+                $(idCombo).trigger('change');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                notif({
+                    type: "error",
+                    msg: jqXHR.responseText,
+                    height: 100,
+                    position: "right"
+                });
+            }
+        });
+    }
+
+    const listarRegionesAsociadas = function (idCombo, idComboEmpresa, idComboCadena) {
+
+        let data = {
+            CodUsuario: $('#txtUsuario').val(),
+            CodEmpresa: $(idComboEmpresa).val(),
+            CodCadena: $(idComboCadena).val()
+        };
+
+        $.ajax({
+            url: urlListarRegionesAsociadas,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    notif({
+                        type: "error",
+                        msg: data.Mensaje,
+                        height: 100,
+                        position: "right"
+                    });
+                    return;
+                }
+
+                let results = data.Data.map(item => {
+                    return {
+                        id: item.CodRegion,
+                        text: item.NomRegion
+                    }
+                });
+
+                $(idCombo).empty();
+
+                $(idCombo).select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+                $(idCombo).val(codRegionSession);
+
+                $(idCombo).trigger('change');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                notif({
+                    type: "error",
+                    msg: jqXHR.responseText,
+                    height: 100,
+                    position: "right"
+                });
+            }
+        });
+    }
+
+    const listarZonasAsociadas = function (idCombo, idComboEmpresa, idComboCadena, idComboRegion) {
+
+        let data = {
+            CodUsuario: $('#txtUsuario').val(),
+            CodEmpresa: $(idComboEmpresa).val(),
+            CodCadena: $(idComboCadena).val(),
+            CodRegion: $(idComboRegion).val()
+        };
+
+        $.ajax({
+            url: urlListarZonasAsociadas,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    notif({
+                        type: "error",
+                        msg: data.Mensaje,
+                        height: 100,
+                        position: "right"
+                    });
+                    return;
+                }
+
+                let results = data.Data.map(item => {
+                    return {
+                        id: item.CodZona,
+                        text: item.NomZona
+                    }
+                });
+
+                $(idCombo).empty();
+
+                $(idCombo).select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+                $(idCombo).val(codZonaSession);
+
+                $(idCombo).trigger('change');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                notif({
+                    type: "error",
+                    msg: jqXHR.responseText,
+                    height: 100,
+                    position: "right"
+                });
+            }
+        });
+    }
+
+    const listarLocalesAsociados = function (idCombo, idComboEmpresa, idComboCadena, idComboRegion, idComboZona) {
+
+        let data = {
+            CodUsuario: $('#txtUsuario').val(),
+            CodEmpresa: $(idComboEmpresa).val(),
+            CodCadena: $(idComboCadena).val(),
+            CodRegion: $(idComboRegion).val(),
+            CodZona: $(idComboZona).val()
+        };
+
+        $.ajax({
+            url: urlListarLocalesAsociados,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    notif({
+                        type: "error",
+                        msg: data.Mensaje,
+                        height: 100,
+                        position: "right"
+                    });
+                    return;
+                }
+
+                cargarLocales(data.Data);
+                //seleccionarLocal();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                notif({
+                    type: "error",
+                    msg: jqXHR.responseText,
+                    height: 100,
+                    position: "right"
+                });
+            }
+        });
     }
 
     const chechTodos = function () {
@@ -285,6 +626,30 @@ const CajeroVolante = function () {
 
     }
 
+    var visualizarDataTableLocales = function () {
+        dataTableLocal = $('#tableLocal').DataTable({
+            language: {
+                searchPlaceholder: 'Buscar...',
+                sSearch: '',
+            },
+            scrollY: '180px',
+            scrollCollapse: true,
+            paging: false,
+            "bAutoWidth": false,
+            "columns": [
+                { "data": "CodLocal" },
+                { "data": "NomLocal" }
+            ]
+        });
+    };
+
+    const cargarLocales = function (locales) {
+        dataTableLocal.clear();
+        dataTableLocal.rows.add(locales);
+        dataTableLocal.draw();
+
+    }
+
     const asignar = function () {
         const registrosSeleccionadosCajero = dataTableCajero.rows('.selected').data().toArray();
 
@@ -407,7 +772,6 @@ const CajeroVolante = function () {
 
     }
 
-
     const validarSelecion = function (count, titulo) {
         if (count === 0) {
             swal({
@@ -425,10 +789,21 @@ const CajeroVolante = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
+
+                listarEmpresasAsociadas('#cboEmpresa');
+
                 visualizarDataTableCajero();
-                visualizarDataTableLocal();
+                //visualizarDataTableLocal();
+                visualizarDataTableLocales();
                 visualizarDataTableCajeroVolante();
                 $('input[type="search"]').addClass("form-control-sm");
+
+
+                $('#cboEmpresa').select2();
+                $('#cboCadena').select2();
+                $('#cboRegion').select2();
+                $('#cboZona').select2();
+
             });
         }
     }
