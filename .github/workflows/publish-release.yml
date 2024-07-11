@@ -1,0 +1,58 @@
+name: Generar Release
+
+on:
+  push:
+    branches: [main, develop]
+
+jobs:
+  build:
+  
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code.
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.PAT_GITHUB_ACTION }}
+          
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Setup Nuget
+      uses: Nuget/setup-nuget@v1.0.5
+
+    - name: Restore nuget packages
+      run: nuget restore Web/SPSA.Autorizadores/SPSA.Autorizadores.sln
+
+    - name: Build
+      run: msbuild Web/SPSA.Autorizadores/SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
+
+    - name: Zip Compilado Directory 
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: 'release.zip'
+        path: ./Compilado
+
+    - name: Delete Directory Compilado
+      run: rm ./Compilado -r -force
+    
+    - name: Commit and Push Changes
+      id: commit
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "[skip ci] Generacion de caperta compilado"
+        push_options: --force
+        commit_user_name: Yovanny Zeballos [GitHub Action]
+        commit_user_email: zeballos.yovanny@gmail.com
+        commit_author: Yovanny Zeballos
+        
+    
