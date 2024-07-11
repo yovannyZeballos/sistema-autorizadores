@@ -677,7 +677,6 @@ const CajeroVolante = function () {
         let locales = [];
 
         registrosSeleccionadosLocal.map((item) => {
-            console.log(item);
             locales.push(item.CodLocal);
         });
 
