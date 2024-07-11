@@ -2747,6 +2747,7 @@
     <Content Include="Areas\Reportes\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Reportes\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Reportes\Views\AdministrarReportes\Index.cshtml" />
+    <Content Include="Plantilla_Inventarios_v2\Plantilla_Carga_Inventario_Caja_v2.xlsx" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
