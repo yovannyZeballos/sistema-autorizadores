@@ -57,6 +57,11 @@ jobs:
         cat commitmessage.txt >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
+    - name: Get color
+      env:
+        SELECTED_COLOR: ${{ steps.commit_message_step.outputs.commit_message }}
+      run: echo "The selected color is $SELECTED_COLOR"
+      
     # Quick and dirty step to get rid of the temporary file holding the commit message
     - run: rm commitmessage.txt -r -fo
 
@@ -65,7 +70,7 @@ jobs:
       id: commit
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: ${{ steps.commit_message_step.outputs.commit_message }}
+        commit_message: ${{ steps.commit_message_step.outputs.commit_message }} demo
         push_options: --force
         commit_user_name: Yovanny Zeballos [GitHub Action]
         commit_user_email: zeballos.yovanny@gmail.com
