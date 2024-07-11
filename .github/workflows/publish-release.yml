@@ -1,4 +1,4 @@
-name: Generar Publicado
+name: Generar Release
 
 on:
   push:
@@ -41,11 +41,30 @@ jobs:
         type: 'zip'
         filename: 'release.zip'
         path: ./Compilado
-        
+
+    # Building a multiline commit message
+    # Adjust to your liking
+    - run: echo "Generacion de caperta compilado" >> commitmessage.txt
+    - run: echo "" >> commitmessage.txt
+    - run: echo "" >> commitmessage.txt
+    - run: echo "skip-checks:true" >> commitmessage.txt
+
+    # Create a multiline string to be used by the git-auto-commit Action
+    - name: Set commit message
+      id: commit_message_step
+      run: |
+        echo 'commit_message<<EOF' >> $GITHUB_OUTPUT
+        cat commitmessage.txt >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+
+    # Quick and dirty step to get rid of the temporary file holding the commit message
+    - run: rm -rf commitmessage.txt
+
+    
     - name: Commit and Push Changes
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: Generacion de caperta compilado
+        commit_message: ${{ steps.commit_message_step.outputs.commit_message }}
         push_options: --force
         commit_user_name: Yovanny Zeballos [GitHub Action]
         commit_user_email: zeballos.yovanny@gmail.com
