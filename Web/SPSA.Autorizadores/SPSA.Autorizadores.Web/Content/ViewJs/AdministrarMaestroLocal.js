@@ -219,7 +219,7 @@ var AdministrarMaestroLocal = function () {
                 return;
             }
 
-            var codLocal = codLocalCaja;
+            var codLocal = $("#txtCodLocal").val();
             var numCaja = filasSeleccionada[0].querySelector('td:first-child').textContent;
             var ipAddress = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
             var tipOs = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
@@ -1469,7 +1469,7 @@ var AdministrarMaestroLocal = function () {
             CodCadena: $("#cboCadena").val(),
             CodRegion: $("#cboRegion").val(),
             CodZona: $("#cboZona").val(),
-            CodLocal: codLocalCaja
+            CodLocal: $("#cboLocal").val(),
         };
 
         $.ajax({
