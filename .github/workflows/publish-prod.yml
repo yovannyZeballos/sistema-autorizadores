@@ -36,11 +36,11 @@ jobs:
       run: msbuild Web/SPSA.Autorizadores/SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
 
     - name: Zip Compilado Directory 
-      uses: somaz94/compress-decompress@v1
+      uses: thedoctor0/zip-release@0.7.5
       with:
-        command: compress
-        source: ./Compilado
-        format: zip
+        type: 'zip'
+        filename: 'release.zip'
+        path: ./Compilado
         
     - name: Commit and Push Changes
       uses: stefanzweifel/git-auto-commit-action@v5
