@@ -627,6 +627,16 @@ const CajeroVolante = function () {
     }
 
     var visualizarDataTableLocales = function () {
+
+        if (dataTableLocal != null) {
+            dataTableLocal.clear();
+            dataTableLocal.destroy();
+            dataTableLocal = null;
+        }
+
+        //var tableId = "#tableLocal";
+        //$(tableId + " tbody").empty();
+
         dataTableLocal = $('#tableLocal').DataTable({
             language: {
                 searchPlaceholder: 'Buscar...',
@@ -667,7 +677,8 @@ const CajeroVolante = function () {
         let locales = [];
 
         registrosSeleccionadosLocal.map((item) => {
-            locales.push(item.Codigo);
+            console.log(item);
+            locales.push(item.CodLocal);
         });
 
         registrosSeleccionadosCajero.map((item) => {
@@ -695,7 +706,9 @@ const CajeroVolante = function () {
             success: function (response) {
 
                 visualizarDataTableCajero();
-                visualizarDataTableLocal();
+                //visualizarDataTableLocal();
+                visualizarDataTableLocales();
+                listarLocalesAsociados('#cboLocal', '#cboEmpresa', '#cboCadena', '#cboRegion', '#cboZona');
                 visualizarDataTableCajeroVolante();
 
 
@@ -749,7 +762,9 @@ const CajeroVolante = function () {
             success: function (response) {
 
                 visualizarDataTableCajero();
-                visualizarDataTableLocal();
+                //visualizarDataTableLocal();
+                visualizarDataTableLocales();
+                listarLocalesAsociados('#cboLocal', '#cboEmpresa', '#cboCadena', '#cboRegion', '#cboZona');
                 visualizarDataTableCajeroVolante();
 
                 if (!response.Ok) {
