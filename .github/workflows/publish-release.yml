@@ -58,7 +58,7 @@ jobs:
         echo 'EOF' >> $GITHUB_OUTPUT
 
     # Quick and dirty step to get rid of the temporary file holding the commit message
-    - run: rm -rf commitmessage.txt
+    - run: rm commitmessage.txt -r -fo
 
     
     - name: Commit and Push Changes
