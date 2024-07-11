@@ -5,11 +5,12 @@ on:
     branches: [main, develop]
 
 jobs:
-  setup:
+  build:
   
     runs-on: windows-latest
 
-
+    permissions:
+      contents: write
 
     steps:
     - name: Checkout code.
@@ -28,30 +29,26 @@ jobs:
     - name: Setup Nuget
       uses: Nuget/setup-nuget@v1.0.5
 
-   
+    - name: Restore nuget packages
+      run: nuget restore Web/SPSA.Autorizadores/SPSA.Autorizadores.sln
+
+    - name: Build
+      run: msbuild Web/SPSA.Autorizadores/SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
+
+    - name: Zip Compilado Directory 
+      uses: somaz94/compress-decompress@v1
+      with:
+        command: compress
+        source: ./Compilado
+        format: zip
+        
+    - name: Commit and Push Changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Generacion de caperta compilado
+        push_options: --force
+        commit_user_name: Yovanny Zeballos [GitHub Action]
+        commit_user_email: zeballos.yovanny@gmail.com
+        commit_author: Yovanny Zeballos
+        
     
-
-  build:
-    needs: setup
-    runs-on: windows-latest
-    steps:
-      - name: Restore nuget packages
-        run: nuget restore Web/SPSA.Autorizadores/SPSA.Autorizadores.sln
-
-      - name: Build
-        run: msbuild Web/SPSA.Autorizadores/SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
-
-  push:
-    needs: build
-    runs-on: windows-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Generacion de caperta compilado
-          push_options: --force
-          commit_user_name: Yovanny Zeballos [GitHub Action]
-          commit_user_email: zeballos.yovanny@gmail.com
-          commit_author: Yovanny Zeballos
