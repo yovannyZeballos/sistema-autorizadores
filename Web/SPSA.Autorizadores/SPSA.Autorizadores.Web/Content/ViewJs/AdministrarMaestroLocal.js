@@ -219,7 +219,7 @@ var AdministrarMaestroLocal = function () {
                 return;
             }
 
-            var codLocal = $("#txtCodLocal").val();
+            var codLocal = codLocalCaja;
             var numCaja = filasSeleccionada[0].querySelector('td:first-child').textContent;
             var ipAddress = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
             var tipOs = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
