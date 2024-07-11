@@ -61,16 +61,13 @@ jobs:
       env:
         SELECTED_COLOR: ${{ steps.commit_message_step.outputs.commit_message }}
       run: echo "The selected color is $SELECTED_COLOR"
-      
-    # Quick and dirty step to get rid of the temporary file holding the commit message
-    - run: rm commitmessage.txt -r -fo
 
     
     - name: Commit and Push Changes
       id: commit
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: ${{ steps.commit_message_step.outputs.commit_message }} demo
+        commit_message: "[skip ci] Generacion de caperta compilado"
         push_options: --force
         commit_user_name: Yovanny Zeballos [GitHub Action]
         commit_user_email: zeballos.yovanny@gmail.com
