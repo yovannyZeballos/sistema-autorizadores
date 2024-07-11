@@ -432,7 +432,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                     CodZona = row[3].ToString(),
                                     CodLocal = row[4].ToString(),
                                     NumCaja = numCaja,
-                                    CodActivo = "06",
+                                    CodActivo = "15",
                                     CodModelo = row[40].ToString(),
                                     CodSerie = row[41].ToString(),
                                     NumAdenda = "",

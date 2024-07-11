@@ -906,10 +906,10 @@ var AdministrarInvCajas = function () {
             $('#txtSerieGaveta').val(codActivo05.CodSerie || '');
         }
 
-        const codActivo06 = dataActivos.Data.find(item => item.CodActivo === "06");
-        if (codActivo06) {
-            $('#txtModeloMonitor').val(codActivo06.CodModelo || '');
-            $('#txtSerieMonitor').val(codActivo06.CodSerie || '');
+        const codActivo15 = dataActivos.Data.find(item => item.CodActivo === "15");
+        if (codActivo15) {
+            $('#txtModeloMonitor').val(codActivo15.CodModelo || '');
+            $('#txtSerieMonitor').val(codActivo15.CodSerie || '');
         }
 
         $("#modalDatosNumCaja").modal('show');
