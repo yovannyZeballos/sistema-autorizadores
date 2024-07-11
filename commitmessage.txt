@@ -1,4 +1,0 @@
-Generacion de caperta compilado
-
-
-skip-checks:true
