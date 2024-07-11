@@ -424,51 +424,55 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 invCajasList.Add(invGaveta);
 
                                 //ADD PANTALLA
-                                var invPantalla = new InvCajas
+
+                                if (row[40].ToString() != string.Empty && row[41].ToString() != string.Empty)
                                 {
-                                    CodEmpresa = row[0].ToString(),
-                                    CodCadena = row[1].ToString(),
-                                    CodRegion = row[2].ToString(),
-                                    CodZona = row[3].ToString(),
-                                    CodLocal = row[4].ToString(),
-                                    NumCaja = numCaja,
-                                    CodActivo = "06",
-                                    CodModelo = row[40].ToString(),
-                                    CodSerie = row[41].ToString(),
-                                    NumAdenda = "",
-                                    FecGarantia = fecGarantiaPantalla == DateTime.MinValue ? null : (DateTime?)fecGarantiaPantalla,
-                                    TipEstado = row[39].ToString(),
-                                    TipProcesador = row[9].ToString(),
-                                    Memoria = row[10].ToString(),
-                                    DesSo = row[11].ToString(),
-                                    VerSo = row[12].ToString(),
-                                    CapDisco = row[13].ToString(),
-                                    TipDisco = row[14].ToString(),
-                                    DesPuertoBalanza = row[15].ToString(),
-                                    TipoCaja = "",
-                                    Hostname = row[7].ToString(),
-                                    FechaInicioLising = fechaInicioLising == DateTime.MinValue ? null : (DateTime?)fechaInicioLising,
-                                    FechaFinLising = fechaFinLising == DateTime.MinValue ? null : (DateTime?)fechaFinLising,
-                                };
-
-                                if (!ValidarTamañoCampos(invPantalla, respuesta.Errores, i + 2))
-                                    continue;
-
-
-                                if (!ValidarJerarquiaOrganizacional(request.JerarquiaOrganizacional, invPantalla, respuesta.Errores, i + 2))
-                                    continue;
-
-                                if (!codActivos.Contains(invPantalla.CodActivo))
-                                {
-                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    var invPantalla = new InvCajas
                                     {
-                                        Fila = i + 2,
-                                        Mensaje = $"El código de activo ingresado no existe: {invPantalla.CodActivo}"
-                                    });
-                                    continue;
-                                }
+                                        CodEmpresa = row[0].ToString(),
+                                        CodCadena = row[1].ToString(),
+                                        CodRegion = row[2].ToString(),
+                                        CodZona = row[3].ToString(),
+                                        CodLocal = row[4].ToString(),
+                                        NumCaja = numCaja,
+                                        CodActivo = "15",
+                                        CodModelo = row[40].ToString(),
+                                        CodSerie = row[41].ToString(),
+                                        NumAdenda = "",
+                                        FecGarantia = fecGarantiaPantalla == DateTime.MinValue ? null : (DateTime?)fecGarantiaPantalla,
+                                        TipEstado = row[39].ToString(),
+                                        TipProcesador = row[9].ToString(),
+                                        Memoria = row[10].ToString(),
+                                        DesSo = row[11].ToString(),
+                                        VerSo = row[12].ToString(),
+                                        CapDisco = row[13].ToString(),
+                                        TipDisco = row[14].ToString(),
+                                        DesPuertoBalanza = row[15].ToString(),
+                                        TipoCaja = "",
+                                        Hostname = row[7].ToString(),
+                                        FechaInicioLising = fechaInicioLising == DateTime.MinValue ? null : (DateTime?)fechaInicioLising,
+                                        FechaFinLising = fechaFinLising == DateTime.MinValue ? null : (DateTime?)fechaFinLising,
+                                    };
 
-                                invCajasList.Add(invPantalla);
+                                    if (!ValidarTamañoCampos(invPantalla, respuesta.Errores, i + 2))
+                                        continue;
+
+
+                                    if (!ValidarJerarquiaOrganizacional(request.JerarquiaOrganizacional, invPantalla, respuesta.Errores, i + 2))
+                                        continue;
+
+                                    if (!codActivos.Contains(invPantalla.CodActivo))
+                                    {
+                                        respuesta.Errores.Add(new ErroresExcelDTO
+                                        {
+                                            Fila = i + 2,
+                                            Mensaje = $"El código de activo ingresado no existe: {invPantalla.CodActivo}"
+                                        });
+                                        continue;
+                                    }
+
+                                    invCajasList.Add(invPantalla);
+                                }
                             }
                             catch (Exception ex)
                             {

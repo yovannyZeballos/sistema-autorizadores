@@ -1469,7 +1469,7 @@ var AdministrarMaestroLocal = function () {
             CodCadena: $("#cboCadena").val(),
             CodRegion: $("#cboRegion").val(),
             CodZona: $("#cboZona").val(),
-            CodLocal: codLocalCaja
+            CodLocal: $("#cboLocal").val(),
         };
 
         $.ajax({

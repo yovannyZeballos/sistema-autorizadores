@@ -119,7 +119,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 		[HttpPost]
 		public async Task<JsonResult> DescargarPlantillas()
 		{
-			var respuesta = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventarios" });
+			var respuesta = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventarios_v2" });
 			return Json(respuesta);
 		}
 	}
