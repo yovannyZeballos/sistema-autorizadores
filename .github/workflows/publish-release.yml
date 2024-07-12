@@ -46,9 +46,10 @@ jobs:
       run: rm ./Compilado -r -force
 
     - name: Upload file to Google Drive
-      uses: Fork-on-the-Table-Collective/upload-to-download-from-gdrive@master
+      uses: yovannyZeballos/upload-to-download-from-gdrive@master
       with:
         credentials: ${{ secrets.GSA_CREDENTIALS }}
         actionType: upload
         localPath: ./release.zip
         googleFolderId: 1fNjxXpjvjsE8Dlvr7QAtB2td9moYERZA
+        emptyUploadFolder: true
