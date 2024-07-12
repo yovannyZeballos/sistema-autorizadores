@@ -46,7 +46,7 @@ jobs:
       run: rm ./Compilado -r -force
 
     - name: Upload file to Google Drive
-      uses: upload-to-drive@master
+      uses: Fork-on-the-Table-Collective/upload-to-download-from-gdrive@master
       with:
         credentials: ${{ secrets.GSA_CREDENTIALS }}
         actionType: upload
