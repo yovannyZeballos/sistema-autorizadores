@@ -44,15 +44,11 @@ jobs:
 
     - name: Delete Directory Compilado
       run: rm ./Compilado -r -force
-    
-    - name: Commit and Push Changes
-      id: commit
-      uses: stefanzweifel/git-auto-commit-action@v5
+
+    - name: Upload file to Google Drive
+      uses: yovannyZeballos/upload-to-drive@master
       with:
-        commit_message: "[skip ci] Generacion de caperta compilado"
-        push_options: --force
-        commit_user_name: Yovanny Zeballos [GitHub Action]
-        commit_user_email: zeballos.yovanny@gmail.com
-        commit_author: Yovanny Zeballos
-        
-    
+        credentials: ${{ secrets.GSA_CREDENTIALS }}
+        actionType: upload
+        localPath: ./release.zip
+        googleFolderId: 1fNjxXpjvjsE8Dlvr7QAtB2td9moYERZA
