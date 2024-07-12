@@ -46,7 +46,7 @@ jobs:
       run: rm ./Compilado -r -force
 
     - name: Upload file to Google Drive
-      uses: yovannyZeballos/upload-to-drive@master
+      uses: upload-to-drive@master
       with:
         credentials: ${{ secrets.GSA_CREDENTIALS }}
         actionType: upload
