@@ -164,18 +164,15 @@ var Autorizador = function () {
                 closeLoading();
             },
             success: function (response) {
-
-                console.log(response);
-
                 var columnas = [];
 
                 response.Columnas.forEach((x) => {
 
                     let visible = true;
 
-                    if (x === "Autorizador") {
+                    /*if (x === "Autorizador") {
                         visible = false;
-                    }
+                    }*/
 
                     columnas.push({
                         title: x,
