@@ -247,11 +247,11 @@
                               <Source>Database</Source>
                               <Value>=Fields!CodigoBarras.Value</Value>
                               <MIMEType>image/png</MIMEType>
-                              <Sizing>FitProportional</Sizing>
-                              <Top>3.15807cm</Top>
-                              <Left>2.1644cm</Left>
-                              <Height>1.18684cm</Height>
-                              <Width>3.58974cm</Width>
+                              <Sizing>Fit</Sizing>
+                              <Top>2.95275cm</Top>
+                              <Left>1.90246cm</Left>
+                              <Height>1.47593cm</Height>
+                              <Width>4.10568cm</Width>
                               <ZIndex>4</ZIndex>
                               <Style>
                                 <Border>
@@ -558,6 +558,16 @@
       </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
+  <EmbeddedImages>
+    <EmbeddedImage Name="Screenshot_3">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAn0AAAB0CAYAAADw44QsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAyYSURBVHhe7daxz65jusZhMQ2mQYNIJqjQSBQSKjREIzp/hU4nGkHBaBCJiIpKNBIdCkQjOp2/gko0z94r57Pf3LKveznXzuzGd/ySs3mu+/0ymZWZHDcdkiRJ+tsHfZIkSVcg6JMkSboCQZ8kSdIVCPokSZKuQNAnSZJ0BYI+SZKkKxD0SZIkXYG26Lvpppsue+yxx86vfb/99tuf/sa33357Xo7jzTff/NOt2fPPP3/++jj++OOP8c1f7Zdffjn/wnG89NJLl+/PPPPM+TX94x//uNy++OKL8+txfPDBB5fv//rXv86vN9Y///nPy99o9+OPP56/Po5XX311fHO9vfjii+evj+PXX3/90+277747L8fxxhtvXL4/8sgj59d07733Xm4ffvjh+bXvnXfeufy+3bPPPnv+Ot18883ju+vt559/Pn99HC+//PLl+5NPPnl+Tbfddtvl9tlnn51fj+Pjjz++fL/rrrvOrzfWnXfeefkb7b7//vvz18fx+uuvj2+utxdeeOH89XH8/vvvf7p99dVX5+U4/v3vf1++P/jgg+fX9MADD1xu77777vm17/3337/8vt1TTz11/jrdeuut47vr7aeffjp/fRyvvPLK5fvjjz9+fk133HHH5fbJJ5+cX4/j008/vXy//fbbz6831j333HP5G+2+/vrr89fH8fbbb49vrrfnnnvu/HVab19++eX59Tjee++9y/f777///Joeeuihy+3af4Yb7aOPPrr8vt0TTzxx/jpd++98ene9/fDDD+evj+O11167fH/00UfPr+k/+e9y7b+r/0vr3979u7R7+umnz1+nW2655XL7/PPPz6//+X+Xa/8budGu9+9y9913X27tvvnmm/PXx/HWW29d
+vj/88MPn13Tfffddbtf+P+lGa//30u7/89/l2v4q6PvvQV+CvtygL0Ef9N1o0PfXrX8b+hL09YO+Gxj0Qd//fIe+BH25QV+Cvv896EvQB33XDfrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+C
+vn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+C
+vn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+C
+vn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0Jegrwz65qCvH/Ql6Jvf7gZ9ab1BX4K+ftCXoK8M+uagrx/0Jeib3+4GfWm9QV+Cvn7Ql6CvDPrmoK8f9CXom9/uBn1pvUFfgr5+0JeuDPokSZL09wn6JEmSrkDQJ0mSdAWCPkmSpCsQ9EmSJF2BoE+SJOkKBH2SJElXIOiTJEn623cc/wUfgGlz0CZttQAAAABJRU5ErkJggg==</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>124abf35-1abc-4a29-90c1-f5d8c7b14bbf</rd:ReportID>
 </Report>
