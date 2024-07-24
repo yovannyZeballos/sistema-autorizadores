@@ -91,9 +91,9 @@ var AdministrarInvActivo = function () {
             }
 
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
-            const COD_MODELO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
-            const NOM_MARCA = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
-            const COD_SERIE = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
+            const COD_MODELO = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
+            const NOM_MARCA = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
+            const COD_SERIE = filasSeleccionada[0].querySelector('td:nth-child(5)').textContent;
 
             abrirModalEditarInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, COD_ACTIVO, COD_MODELO, NOM_MARCA, COD_SERIE);
         });
@@ -132,7 +132,7 @@ var AdministrarInvActivo = function () {
                 CodRegion: $("#cboRegion").val(),
                 CodZona: $("#cboZona").val(),
                 CodLocal: $("#cboLocal").val(),
-                CodActivo: $("#txtCodActivo").val(),
+                CodActivo: $("#cboCodActivo").val(),
                 CodModelo: $("#txtCodModelo").val(),
                 CodSerie: $("#txtCodSerie").val(),
                 NomMarca: $("#txtNomMarca").val(),
@@ -207,8 +207,8 @@ var AdministrarInvActivo = function () {
             var filasSeleccionada = $(this);
 
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
-            const COD_MODELO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
-            const NOM_MARCA = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
+            const COD_MODELO = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
+            const NOM_MARCA = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
             const COD_SERIE = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
 
             abrirModalEditarInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, COD_ACTIVO, COD_MODELO, NOM_MARCA, COD_SERIE);
@@ -721,32 +721,21 @@ var AdministrarInvActivo = function () {
         const response = await obtenerInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, codActivo, codModelo, nomMarca, codSerie);
         const model = response.Data;
 
-        //if (model.FecActualiza != "") {
-        //    let dateString = model.FecActualiza;
-        //    // Extraer el timestamp del string
-        //    let timestamp = parseInt(dateString.match(/\d+/)[0], 10);
+        if (model.FecActualiza != "" && model.FecActualiza != null) {
+            let timestamp = parseInt(model.FecActualiza.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            model.FecActualiza = formattedDate;
+        }
 
-        //    // Crear un objeto Date usando el timestamp
-        //    let date = new Date(timestamp);
-
-        //    // Formatear la fecha a dd/mm/yyyy
-        //    let day = String(date.getDate()).padStart(2, '0');
-        //    let month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan desde 0
-        //    let year = date.getFullYear();
-
-        //    let formattedDate = `${day}/${month}/${year}`;
-
-
-        //    console.log(formattedDate); // Para verificar la salida en la consola
-
-        //    model.FecActualiza = formattedDate;
-        //}
-
-
-
+        if (model.FecSalida != "" && model.FecSalida != null) {
+            let timestamp = parseInt(model.FecSalida.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            model.FecSalida = formattedDate;
+        }
 
         await cargarFormEditarInvActivo(model);
-        //await cargarFormInvActivo(model, true);
     }
 
     const abrirModalNuevoInvActivo = async function (codEmpresa, codCadena, codRegion, codZona, codLocal) {
@@ -762,33 +751,6 @@ var AdministrarInvActivo = function () {
         model.CodLocal = codLocal;
 
         await cargarFormCrearInvActivo(model);
-        //await cargarFormInvActivo(model, false);
-    }
-
-    const cargarFormInvActivo = async function (model, deshabilitar) {
-        $.ajax({
-            url: urlModalCrearEditarInvActivo,
-            type: "post",
-            data: { model },
-            dataType: "html",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: async function (response) {
-                $("#modalInvActivo").find(".modal-body").html(response);
-                $("#modalInvActivo").modal('show');
-                $("#txtCodActivo").prop("disabled", deshabilitar);
-                $("#txtCodModelo").prop("disabled", deshabilitar);
-                $("#txtNomMarca").prop("disabled", deshabilitar);
-                $("#txtCodSerie").prop("disabled", deshabilitar);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
     }
 
     const cargarFormCrearInvActivo = async function (model) {
@@ -862,6 +824,7 @@ var AdministrarInvActivo = function () {
             },
             columns: [
                 { data: "CodActivo" },
+                { data: "NomActivo" },
                 { data: "CodModelo" },
                 { data: "NomMarca" },
                 { data: "CodSerie" },
@@ -890,10 +853,7 @@ var AdministrarInvActivo = function () {
 
     const recargarDataTableLocalesPorEmpresa = function () {
         const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            //CodCadena: $("#cboCadena").val(),
-            //CodRegion: $("#cboRegion").val(),
-            //CodZona: $("#cboZona").val()
+            CodEmpresa: $("#cboEmpresa").val()
         };
 
         if ($.fn.DataTable.isDataTable('#tableLocales')) {
@@ -946,9 +906,7 @@ var AdministrarInvActivo = function () {
     }
 
     const importarExcelInvActivo = function () {
-        //var archivo = document.getElementById('archivoExcelInvActivo').files[0];
         var formData = new FormData();
-        //formData.append('archivoExcel', archivo);
         var uploadFiles = $('#excelInventario').prop('files');
         formData.append("excelInventario", uploadFiles[0]);
 
@@ -964,8 +922,6 @@ var AdministrarInvActivo = function () {
             },
             complete: function () {
                 closeLoading();
-                //$("#archivoExcelInvActivo").val(null);
-                //$("#modalImportarInvActivo").modal('hide');
                 $("#excelInventario").val(null);
             },
             success: function (response) {

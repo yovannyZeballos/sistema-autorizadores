@@ -235,7 +235,7 @@ var AdministrarInvCajas = function () {
                 CodZona: $("#cboZona").val(),
                 CodLocal: $("#cboLocal").val(),
                 NumCaja: $("#txtNumCaja").val(),
-                CodActivo: $("#txtCodActivo").val(),
+                CodActivo: $("#cboCodActivo").val(),
                 CodModelo: $("#txtCodModelo").val(),
                 CodSerie: $("#txtCodSerie").val(),
                 NumAdenda: $("#txtNumAdenda").val(),
@@ -855,7 +855,14 @@ var AdministrarInvCajas = function () {
         const response = await obtenerInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, numCaja, codActivo);
         const model = response.Data;
 
-        await cargarFormInvCaja(model, true);
+        if (model.FecGarantia != "" && model.FecGarantia != null) {
+            let timestamp = parseInt(model.FecGarantia.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            model.FecGarantia = formattedDate;
+        }
+
+        await cargarFormInvCaja(model);
     }
 
     const abrirModalNuevoInvCaja = async function (codEmpresa, codCadena, codRegion, codZona, codLocal, numCaja) {
@@ -917,7 +924,7 @@ var AdministrarInvCajas = function () {
         $("#modalDatosNumCaja").modal('show');
     }
 
-    const cargarFormInvCaja = async function (model, deshabilitar) {
+    const cargarFormInvCaja = async function (model) {
         $.ajax({
             url: urlEditarFormInvCaja,
             type: "post",
@@ -932,9 +939,6 @@ var AdministrarInvCajas = function () {
             success: async function (response) {
                 $("#modalInvCaja").find(".modal-body").html(response);
                 $("#modalInvCaja").modal('show');
-                $("#txtNumCaja").prop("disabled", deshabilitar);
-                $("#txtCodActivo").prop("disabled", deshabilitar);
-                $("#txtNomActivo").prop("disabled", deshabilitar);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -1088,7 +1092,7 @@ var AdministrarInvCajas = function () {
             columns: [
                 { data: "NumCaja" },
                 { data: "CodActivo" },
-                { data: "InvTipoActivo.NomActivo" },
+                { data: "NomActivo" },
                 { data: "CodModelo" },
                 { data: "CodSerie" },
                 { data: "NumAdenda" },
