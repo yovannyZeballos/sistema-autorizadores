@@ -47,7 +47,7 @@ namespace SPSA.Autorizadores.Aplicacion.ReportUtils
 
 		public static string GenerarCodigoDeBarras(string datos)
 		{
-			BarcodeDraw barcode = BarcodeDrawFactory.CodeEan13WithChecksum;
+			BarcodeDraw barcode = BarcodeDrawFactory.Code39WithoutChecksum;
 			var imagenCodigoBarras = barcode.Draw(datos, 30);
 
 			using (var ms = new MemoryStream())
