@@ -59,8 +59,6 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
                 TiposActivo = tiposActivo.Data
             };
 
-            viewModel.InvActivo.CodActivo = model.CodActivo.PadLeft(2, '0');
-
             return PartialView("_EditarInvActivo", viewModel);
         }
 

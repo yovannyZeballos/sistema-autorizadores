@@ -30,5 +30,13 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public DateTime? FechaFinLising { get; set; }
 
         public InvTipoActivo InvTipoActivo { get; set; }
+
+        public string NomActivo
+        {
+            get
+            {
+                return InvTipoActivo?.NomActivo;
+            }
+        }
     }
 }
