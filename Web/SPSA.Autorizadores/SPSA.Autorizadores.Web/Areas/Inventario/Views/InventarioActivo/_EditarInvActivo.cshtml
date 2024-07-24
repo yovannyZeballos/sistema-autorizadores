@@ -5,7 +5,7 @@
     <div class="col-xl-3">
         <div class="form-group">
             <label for="cboCodActivo" class="form-label">Activo</label>
-            <select class="form-control custom-select" id="cboCodActivo" required>
+            <select class="form-control custom-select" id="cboCodActivo" required disabled>
                 <option value="">Seleccionar</option>
                 @foreach (var activo in Model.TiposActivo)
                 {
@@ -17,19 +17,19 @@
     <div class="col-xl-3">
         <div class="form-group">
             <label for="txtCodModelo" class="form-label">Modelo</label>
-            <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvActivo.CodModelo" required>
+            <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvActivo.CodModelo" required disabled>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
             <label for="txtNomMarca" class="form-label">Marca</label>
-            <input type="text" class="form-control" id="txtNomMarca" value="@Model.InvActivo.NomMarca" required>
+            <input type="text" class="form-control" id="txtNomMarca" value="@Model.InvActivo.NomMarca" required disabled>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
             <label for="txtCodSerie" class="form-label">Serie</label>
-            <input type="text" class="form-control" id="txtCodSerie" value="@Model.InvActivo.CodSerie" required>
+            <input type="text" class="form-control" id="txtCodSerie" value="@Model.InvActivo.CodSerie" required disabled>
         </div>
     </div>
     <div class="col-xl-3">

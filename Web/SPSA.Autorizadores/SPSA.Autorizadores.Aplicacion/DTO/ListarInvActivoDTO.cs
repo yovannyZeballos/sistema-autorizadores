@@ -26,5 +26,13 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public DateTime? FecActualiza { get; set; }
 
         public InvTipoActivo InvTipoActivo { get; set; }
+
+        public string NomActivo
+        {
+            get
+            {
+                return InvTipoActivo?.NomActivo;
+            }
+        }
     }
 }

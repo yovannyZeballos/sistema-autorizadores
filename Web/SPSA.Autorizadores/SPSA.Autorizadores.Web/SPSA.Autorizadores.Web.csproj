@@ -2741,7 +2741,6 @@
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <Content Include="Areas\DataTables\Views\web.config" />
     <Content Include="Areas\Monitor\Views\ControlBCT\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearEditarActivo.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioCaja\_CrearInvCaja.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioCaja\_EditarInvCaja.cshtml" />
     <Content Include="Areas\Reportes\Views\web.config" />
