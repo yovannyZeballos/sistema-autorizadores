@@ -25,7 +25,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 	/// </summary>
 	public class ListarEmpresasHandler : IRequestHandler<ListarEmpresasQuery, GenericResponseDTO<List<ListarEmpresaDTO>>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 		/// </summary>
 		public ListarEmpresasHandler(IMapper mapper)
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_mapper = mapper;
 		}
 

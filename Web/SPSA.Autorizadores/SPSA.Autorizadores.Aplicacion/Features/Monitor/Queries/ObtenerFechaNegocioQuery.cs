@@ -17,11 +17,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 
     public class ObtenerFechaNegocioHandler : IRequestHandler<ObtenerFechaNegocioQuery, GenericResponseDTO<List<ParametrosMonitorBctDTO>>>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
 
         public ObtenerFechaNegocioHandler()
         {
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
         }
 
         public async Task<GenericResponseDTO<List<ParametrosMonitorBctDTO>>> Handle(ObtenerFechaNegocioQuery request, CancellationToken cancellationToken)

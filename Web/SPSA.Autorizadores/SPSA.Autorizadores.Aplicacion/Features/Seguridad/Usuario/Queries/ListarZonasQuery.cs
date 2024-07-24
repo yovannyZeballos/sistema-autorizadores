@@ -45,7 +45,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 	/// </summary>
 	public class ListarZonasHandler : IRequestHandler<ListarZonasQuery, GenericResponseDTO<List<ListarZonaDTO>>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger;
 
@@ -54,7 +54,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 		/// </summary>
 		public ListarZonasHandler(IMapper mapper)
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_mapper = mapper;
 			_logger = SerilogClass._log;
 		}

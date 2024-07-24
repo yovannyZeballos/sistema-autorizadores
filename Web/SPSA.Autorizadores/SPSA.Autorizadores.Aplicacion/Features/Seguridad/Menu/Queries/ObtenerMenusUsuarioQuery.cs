@@ -23,13 +23,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries
 
 	public class ObtenerMenusUsuarioHandler : IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>
 	{
-		private readonly IBCTContexto _bCTContexto;
+		private readonly ISGPContexto _bCTContexto;
 		private readonly ILogger _logger;
 		private readonly IMapper _mapper;
 
 		public ObtenerMenusUsuarioHandler(IMapper mapper)
 		{
-			_bCTContexto = new BCTContexto();
+			_bCTContexto = new SGPContexto();
 			_logger = SerilogClass._log;
 			_mapper = mapper;
 

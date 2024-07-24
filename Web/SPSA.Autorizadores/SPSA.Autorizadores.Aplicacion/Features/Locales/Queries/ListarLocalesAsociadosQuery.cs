@@ -25,13 +25,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
 	public class ListarLocalesAsociadasHandler : IRequestHandler<ListarLocalesAsociadasQuery, GenericResponseDTO<List<ListarLocalDTO>>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly ILogger _logger;
 
 		public ListarLocalesAsociadasHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

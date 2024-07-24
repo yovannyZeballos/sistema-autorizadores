@@ -23,7 +23,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 	/// </summary>
 	public class ListarUsuarioHandler : IRequestHandler<ListarUsuarioQuery, GenericResponseDTO<List<ListarUsuarioDTO>>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 		public ListarUsuarioHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		/// <summary>

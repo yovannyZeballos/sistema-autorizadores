@@ -21,12 +21,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands
 
 	public class EliminarMenuHandler : IRequestHandler<EliminarMenuCommand, RespuestaComunDTO>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly ILogger _logger = SerilogClass._log;
 
 		public EliminarMenuHandler()
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 		public async Task<RespuestaComunDTO> Handle(EliminarMenuCommand request, CancellationToken cancellationToken)
 		{

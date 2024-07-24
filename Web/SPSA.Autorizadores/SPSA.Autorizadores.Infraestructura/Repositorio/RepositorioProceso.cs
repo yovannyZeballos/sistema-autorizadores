@@ -4,11 +4,11 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioProceso : RepositorioGenerico<BCTContexto, Proceso>, IRepositorioProceso
+	public class RepositorioProceso : RepositorioGenerico<SGPContexto, Proceso>, IRepositorioProceso
 	{
-		public RepositorioProceso(BCTContexto context) : base(context) { }
+		public RepositorioProceso(SGPContexto context) : base(context) { }
 
-		public BCTContexto BCTContexto
+		public SGPContexto BCTContexto
 		{
 			get { return _contexto; }
 		}

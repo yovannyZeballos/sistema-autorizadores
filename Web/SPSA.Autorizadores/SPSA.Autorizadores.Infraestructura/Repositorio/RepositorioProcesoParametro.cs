@@ -12,7 +12,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 	{
 		public async Task<List<ProcesoParametro>> ListarPorProceso(decimal codProceso)
 		{
-			using (var bctContexto = new BCTContexto())
+			using (var bctContexto = new SGPContexto())
 			{
 				return await bctContexto.ProcesoParametros.Where(x => x.CodProceso == codProceso).ToListAsync();
 			}

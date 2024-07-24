@@ -19,7 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries
 
 	public class ObtenerMenuHandler : IRequestHandler<ObtenerMenuQuery, GenericResponseDTO<ListarMenuDTO>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger = SerilogClass._log;
 
@@ -27,7 +27,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries
 		public ObtenerMenuHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		public async Task<GenericResponseDTO<ListarMenuDTO>> Handle(ObtenerMenuQuery request, CancellationToken cancellationToken)

@@ -21,14 +21,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 
 	public class ProcesarActualizacionEstadoCierreHandler : IRequestHandler<ProcesarActualizacionEstadoCierreCommand, RespuestaComunDTO>
 	{
-		private IBCTContexto _contexto;
+		private ISGPContexto _contexto;
 		private readonly ILogger _logger;
 		private readonly IRepositorioMonitorProcesoCierre _repositorioMonitorProcesoCierre;
 
 
 		public ProcesarActualizacionEstadoCierreHandler(IRepositorioMonitorProcesoCierre repositorioMonitorProcesoCierre)
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 			_repositorioMonitorProcesoCierre = repositorioMonitorProcesoCierre;
 		}

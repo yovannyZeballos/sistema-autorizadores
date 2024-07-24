@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioTmpMonCierreLocal : RepositorioGenerico<BCTContexto, TmpMonCierreLocal>, IRepositorioTmpMonCierreLocal
+	public class RepositorioTmpMonCierreLocal : RepositorioGenerico<SGPContexto, TmpMonCierreLocal>, IRepositorioTmpMonCierreLocal
 	{
-		public RepositorioTmpMonCierreLocal(BCTContexto context) : base(context) { }
+		public RepositorioTmpMonCierreLocal(SGPContexto context) : base(context) { }
 
-		public BCTContexto BCTContexto
+		public SGPContexto BCTContexto
 		{
 			get { return _contexto; }
 		}

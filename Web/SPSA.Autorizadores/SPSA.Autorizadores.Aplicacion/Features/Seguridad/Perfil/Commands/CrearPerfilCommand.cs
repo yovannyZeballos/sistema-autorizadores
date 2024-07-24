@@ -39,7 +39,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands
 	/// </summary>
 	public class CrearPerfilHandler : IRequestHandler<CrearPerfilCommand, RespuestaComunDTO>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger = SerilogClass._log;
 
@@ -50,7 +50,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands
 		public CrearPerfilHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		/// <summary>

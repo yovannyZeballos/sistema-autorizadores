@@ -25,13 +25,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Queries
 	public class ListarZonasAsociadasHandler : IRequestHandler<ListarZonasAsociadasQuery, GenericResponseDTO<List<ListarZonaDTO>>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly ILogger _logger;
 
 		public ListarZonasAsociadasHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

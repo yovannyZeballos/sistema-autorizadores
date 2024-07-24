@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-	public interface IBCTContexto : IDisposable
+	public interface ISGPContexto : IDisposable
 	{
 		IRepositorioSegSistema RepositorioSegSistema { get; }
 		IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; }

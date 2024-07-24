@@ -30,14 +30,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 
     public class CrearMaeLocalHandler : IRequestHandler<CrearMaeLocalCommand, RespuestaComunDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public CrearMaeLocalHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

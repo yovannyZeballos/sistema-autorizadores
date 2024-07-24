@@ -25,11 +25,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands
 
 	public class AsociarMenusHandler : IRequestHandler<AsociarMenusCommand, RespuestaComunDTO>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly ILogger _logger = SerilogClass._log;
 		public AsociarMenusHandler()
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 		public async Task<RespuestaComunDTO> Handle(AsociarMenusCommand request, CancellationToken cancellationToken)
 		{

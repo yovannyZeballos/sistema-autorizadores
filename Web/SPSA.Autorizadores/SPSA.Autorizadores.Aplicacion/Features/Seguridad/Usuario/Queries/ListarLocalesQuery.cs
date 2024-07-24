@@ -50,7 +50,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 	/// </summary>
 	public class ListarLocalesHandler : IRequestHandler<ListarLocalesQuery, GenericResponseDTO<List<ListarLocalDTO>>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger;
 
@@ -59,7 +59,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 		/// </summary>
 		public ListarLocalesHandler(IMapper mapper)
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_mapper = mapper;
 			_logger = SerilogClass._log;
 		}
