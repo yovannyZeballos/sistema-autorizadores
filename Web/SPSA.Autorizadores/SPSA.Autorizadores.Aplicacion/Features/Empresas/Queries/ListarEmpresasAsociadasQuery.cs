@@ -31,7 +31,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
 	public class ListarEmpresasAsociadasHandler : IRequestHandler<ListarEmpresasAsociadasQuery, GenericResponseDTO<List<ListarEmpresaDTO>>>
 	{
 		private readonly IMapper _mapper;
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly ILogger _logger;
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
 		public ListarEmpresasAsociadasHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

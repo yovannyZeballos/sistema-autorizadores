@@ -4,11 +4,11 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-    public class RepositorioUbiDistrito : RepositorioGenerico<BCTContexto, UbiDistrito>, IRepositorioUbiDistrito
+    public class RepositorioUbiDistrito : RepositorioGenerico<SGPContexto, UbiDistrito>, IRepositorioUbiDistrito
     {
-        public RepositorioUbiDistrito(BCTContexto context) : base(context) { }
+        public RepositorioUbiDistrito(SGPContexto context) : base(context) { }
 
-        public BCTContexto AppDBMyBDContext
+        public SGPContexto AppDBMyBDContext
         {
             get { return _contexto; }
         }

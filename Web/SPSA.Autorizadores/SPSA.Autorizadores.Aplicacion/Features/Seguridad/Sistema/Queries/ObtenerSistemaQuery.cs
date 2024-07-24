@@ -28,7 +28,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries
 	/// </summary>
 	public class ObtenerSistemaHandler : IRequestHandler<ObtenerSistemaQuery, GenericResponseDTO<ObtenerSistemaDTO>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger;
 
@@ -38,7 +38,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries
 		public ObtenerSistemaHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

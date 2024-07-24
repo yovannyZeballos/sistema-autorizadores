@@ -23,14 +23,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
 
     public class LoginHandler : IRequestHandler<LoginCommand, UsuarioDTO>
     {
-        private readonly IBCTContexto _bCTContexto;
+        private readonly ISGPContexto _bCTContexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public LoginHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _bCTContexto = new BCTContexto();
+            _bCTContexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

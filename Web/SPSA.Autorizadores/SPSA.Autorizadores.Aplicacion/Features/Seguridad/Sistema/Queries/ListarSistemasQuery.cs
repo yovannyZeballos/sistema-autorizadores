@@ -22,7 +22,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries
 
 	public class ListarSistemasHandler : IRequestHandler<ListarSistemasQuery, GenericResponseDTO<List<ListarSistemaDTO>>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger = SerilogClass._log;
 
@@ -30,7 +30,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries
 		public ListarSistemasHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		/// <summary>

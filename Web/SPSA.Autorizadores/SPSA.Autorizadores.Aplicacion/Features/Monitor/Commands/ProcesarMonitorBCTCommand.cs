@@ -23,11 +23,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 
 	public class ProcesarMonitorBCTHandler : IRequestHandler<ProcesarMonitorBCTCommand, ObtenerComunDTO<(bool, bool, bool, int)>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 
 		public ProcesarMonitorBCTHandler()
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		public async Task<ObtenerComunDTO<(bool, bool, bool, int)>> Handle(ProcesarMonitorBCTCommand request, CancellationToken cancellationToken)

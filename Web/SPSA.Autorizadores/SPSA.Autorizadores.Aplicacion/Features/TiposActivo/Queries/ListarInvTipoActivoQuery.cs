@@ -21,12 +21,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries
     public class ListarInvTipoActivoHandler : IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>
     {
         private readonly IMapper _mapper;
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
         public ListarInvTipoActivoHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

@@ -22,14 +22,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
 
     public class ImportarAperturaHandler : IRequestHandler<ImportarAperturaCommand, RespuestaComunExcelDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ImportarAperturaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

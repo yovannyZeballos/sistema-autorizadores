@@ -30,12 +30,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
     public class ListarInvCajaHandler : IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>
     {
         private readonly IMapper _mapper;
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
         public ListarInvCajaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

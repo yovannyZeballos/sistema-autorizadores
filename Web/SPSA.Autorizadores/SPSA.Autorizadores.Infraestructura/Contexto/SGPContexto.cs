@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace SPSA.Autorizadores.Infraestructura.Contexto
 {
 	[DbConfigurationType(typeof(NpgsqlConfiguration))]
-	public class BCTContexto : DbContext, IBCTContexto
+	public class SGPContexto : DbContext, ISGPContexto
 	{
 		public DbSet<ProcesoParametro> ProcesoParametros { get; set; }
 
-		public BCTContexto() : base("SGP")
+		public SGPContexto() : base("SGP")
 		{
 			RepositorioSegSistema = new RepositorioSegSistema(this);
 			RepositorioProcesoParametroEmpresa = new RepositorioProcesoParametroEmpresa(this);

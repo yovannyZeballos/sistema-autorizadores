@@ -24,12 +24,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries
 
 	public class ObtenerJerarquiaOrganizacionalHandler : IRequestHandler<ObtenerJerarquiaOrganizacionalQuery, JerarquiaOrganizacionalDTO>
 	{
-		private readonly IBCTContexto _bCTContexto;
+		private readonly ISGPContexto _bCTContexto;
 		private readonly ILogger _logger;
 
 		public ObtenerJerarquiaOrganizacionalHandler()
 		{
-			_bCTContexto = new BCTContexto();
+			_bCTContexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

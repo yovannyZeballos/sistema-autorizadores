@@ -24,14 +24,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands
 
     public class ActualizarMaestroEmpresaHandler : IRequestHandler<ActualizarMaeEmpresaCommand, RespuestaComunDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ActualizarMaestroEmpresaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
