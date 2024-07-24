@@ -22,14 +22,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
     public class DescargarInvActivoHandler : IRequestHandler<DescargarInvActivoCommand, DescargarMaestroDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public DescargarInvActivoHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

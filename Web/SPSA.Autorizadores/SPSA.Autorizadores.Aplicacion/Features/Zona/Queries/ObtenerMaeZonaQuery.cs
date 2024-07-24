@@ -22,14 +22,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Queries
 
     public class ObtenerMaeZonaHandler : IRequestHandler<ObtenerMaeZonaQuery, GenericResponseDTO<ObtenerMaeZonaDTO>>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ObtenerMaeZonaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

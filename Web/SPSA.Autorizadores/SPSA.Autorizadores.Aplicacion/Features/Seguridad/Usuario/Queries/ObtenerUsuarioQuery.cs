@@ -19,13 +19,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries
 
 	public class ObtenerUsuarioHandler : IRequestHandler<ObtenerUsuarioQuery, GenericResponseDTO<ObtenerUsuarioDTO>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger;
 
 		public ObtenerUsuarioHandler(IMapper mapper)
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_mapper = mapper;
 			_logger = SerilogClass._log;
 		}

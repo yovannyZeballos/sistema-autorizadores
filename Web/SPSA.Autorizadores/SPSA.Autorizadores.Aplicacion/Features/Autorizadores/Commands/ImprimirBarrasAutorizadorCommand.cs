@@ -30,11 +30,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands
 	public sealed class ImprimirBarrasAutorizadorHandler : IRequestHandler<ImprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>
 	{
 		private readonly ILogger _logger;
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 
 		public ImprimirBarrasAutorizadorHandler()
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

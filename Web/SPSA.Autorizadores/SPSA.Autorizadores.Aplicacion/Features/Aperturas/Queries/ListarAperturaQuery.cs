@@ -22,13 +22,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Queries
     public class ListarAperturaHandler : IRequestHandler<ListarAperturaQuery, GenericResponseDTO<List<ListarAperturaDTO>>>
     {
         private readonly IMapper _mapper;
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
 
         public ListarAperturaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

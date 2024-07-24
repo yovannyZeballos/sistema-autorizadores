@@ -29,14 +29,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Commands
 
     public class ActualizarMaeZonaHandler : IRequestHandler<ActualizarMaeZonaCommand, RespuestaComunDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ActualizarMaeZonaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

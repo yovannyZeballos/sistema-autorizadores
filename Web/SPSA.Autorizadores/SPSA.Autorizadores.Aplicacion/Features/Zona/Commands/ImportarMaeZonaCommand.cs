@@ -24,14 +24,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Zona.Commands
 
     public class ImportarMaeZonaHandler : IRequestHandler<ImportarMaeZonaCommand, RespuestaComunExcelDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ImportarMaeZonaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

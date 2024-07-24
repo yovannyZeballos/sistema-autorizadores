@@ -23,14 +23,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 
     public class ImportarMaeLocalHandler : IRequestHandler<ImportarMaeLocalCommand, RespuestaComunExcelDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ImportarMaeLocalHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

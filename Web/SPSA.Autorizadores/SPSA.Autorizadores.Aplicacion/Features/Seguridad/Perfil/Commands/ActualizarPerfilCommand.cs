@@ -40,7 +40,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands
 	/// </summary>
 	public class ActualizarPerfilHandler : IRequestHandler<ActualizarPerfilCommand, RespuestaComunDTO>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger = SerilogClass._log;
 
@@ -51,7 +51,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands
 		public ActualizarPerfilHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		/// <summary>

@@ -22,7 +22,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries
 
     public class ListarMenuHandler : IRequestHandler<ListarMenuQuery, GenericResponseDTO<List<ListarMenuDTO>>>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger = SerilogClass._log;
 
@@ -30,7 +30,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries
 		public ListarMenuHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		public async Task<GenericResponseDTO<List<ListarMenuDTO>>> Handle(ListarMenuQuery request, CancellationToken cancellationToken)

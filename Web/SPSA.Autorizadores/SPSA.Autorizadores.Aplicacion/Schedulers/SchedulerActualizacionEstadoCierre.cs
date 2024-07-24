@@ -28,7 +28,7 @@ namespace SPSA.Autorizadores.Aplicacion.Schedulers
 					return;
 				}
 
-				IBCTContexto contexto = new BCTContexto();
+				ISGPContexto contexto = new SGPContexto();
 				var proceso = contexto.RepositorioProceso.Obtener(x => x.CodProceso == Constantes.CodigoProcesoActualizacionEstadoCierre).FirstOrDefault();
 
 				if (proceso == null)

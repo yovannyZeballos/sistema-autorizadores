@@ -23,14 +23,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands
 
     public class ImportarMaeCadenaHandler : IRequestHandler<ImportarMaeCadenaCommand, RespuestaComunExcelDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ImportarMaeCadenaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

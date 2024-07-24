@@ -48,7 +48,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands
 	/// </summary>
 	public class ActualizarSistemaHandler : IRequestHandler<ActualizarSistemaCommand, RespuestaComunDTO>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly IMapper _mapper;
 		private readonly ILogger _logger = SerilogClass._log;
 
@@ -59,7 +59,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands
 		public ActualizarSistemaHandler(IMapper mapper)
 		{
 			_mapper = mapper;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		/// <summary>
