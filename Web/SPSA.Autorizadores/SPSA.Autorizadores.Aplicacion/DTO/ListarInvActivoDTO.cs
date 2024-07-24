@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SPSA.Autorizadores.Dominio.Entidades;
+using System;
 
 namespace SPSA.Autorizadores.Aplicacion.DTO
 {
@@ -23,5 +24,7 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public string Observacion { get; set; }
         public string Garantia { get; set; }
         public DateTime? FecActualiza { get; set; }
+
+        public InvTipoActivo InvTipoActivo { get; set; }
     }
 }

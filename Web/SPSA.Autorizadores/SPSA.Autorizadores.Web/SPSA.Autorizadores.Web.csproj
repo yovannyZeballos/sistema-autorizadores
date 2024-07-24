@@ -217,6 +217,7 @@
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
     <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioActivoController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
@@ -2748,6 +2749,8 @@
     <Content Include="Areas\Reportes\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Reportes\Views\AdministrarReportes\Index.cshtml" />
     <Content Include="Plantilla_Inventarios_v2\Plantilla_Carga_Inventario_Caja_v2.xlsx" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearInvActivo.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\_EditarInvActivo.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2792,6 +2795,7 @@
     <Folder Include="Areas\DataTables\Data\" />
     <Folder Include="Areas\DataTables\Views\Shared\" />
     <Folder Include="Areas\Inventario\Data\" />
+    <Folder Include="Areas\Inventario\Views\InventarioTipoActivo\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
     <Folder Include="Areas\Maestros\Views\MaeCaja\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />

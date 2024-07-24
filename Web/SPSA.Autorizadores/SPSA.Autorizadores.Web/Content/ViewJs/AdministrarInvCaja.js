@@ -17,6 +17,7 @@ var urlEliminarInvCajaPorLocal = baseUrl + 'Inventario/InventarioCaja/EliminarIn
 
 var urlImportarInventario = baseUrl + 'Inventario/InventarioCaja/Importar';
 var urlDescargarPlantilla = baseUrl + 'Inventario/InventarioCaja/DescargarPlantillas';
+var urlDescargarInvTiposActivo = baseUrl + 'Inventario/InventarioTipoActivo/DescargarInvTiposActivo';
 
 var dtListaNumCajas = null;
 var dtListaCajas = null;
@@ -112,8 +113,6 @@ var AdministrarInvCajas = function () {
             }
 
             const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
-
-            console.log(NUM_CAJA);
 
             abrirModalNuevoInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA);
         });
@@ -396,6 +395,9 @@ var AdministrarInvCajas = function () {
 
         $("#btnDescargarPlantillas").on("click", function () {
             descargarPlantillas();
+        });
+        $("#btnDescargarTiposActivo").on("click", function () {
+            descargarTiposActivo();
         });
     }
 
@@ -1236,6 +1238,42 @@ var AdministrarInvCajas = function () {
                 downloadLink.download = fileName;
                 downloadLink.click();
 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const descargarTiposActivo = function () {
+
+        const request = {
+        };
+
+        $.ajax({
+            url: urlDescargarInvTiposActivo,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });

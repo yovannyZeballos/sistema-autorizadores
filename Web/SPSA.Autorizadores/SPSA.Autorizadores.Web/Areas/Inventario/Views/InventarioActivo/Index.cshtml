@@ -64,14 +64,6 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-2 col-md-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label"></label>
-                            <button type="button" id="btnBuscarInvActivoPorLocal" class="btn btn-sm btn-primary btn-block"><i class="fa fa-search"></i> Buscar</button>
-                        </div>
-                    </div>
                     <div class="col-xl-2 col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label"></label>
@@ -81,21 +73,59 @@
                     <div class="col-xl-2 col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label"></label>
-                            <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-primary btn-block"><i class="fa fa-pencil"></i> Editar</button>
+                            <button type="button" id="btnDescargarInvActivoPorEmpresa" class="btn btn-sm btn-outline-secondary btn-block"><i class="fa fa-download"></i> Inventario x Empresa</button>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-md-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label"></label>
-                            <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Nuevo</button>
-                        </div>
-                    </div>
+                   
+                    @*<div class="col-xl-2 col-md-6">
+                            <div class="form-group select2-sm">
+                                <label class="form-label"></label>
+                                <button type="button" id="btnEliminarPorLocal" class="btn btn-sm btn-outline-danger btn-block"><i class="fa fa-trash"></i> Eliminar Bloque</button>
+                            </div>
+                        </div>*@
                 </div>
+
             </div>
 
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
+
+
+                        <div class="row">
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Nuevo</button>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-primary btn-block"><i class="fa fa-pencil"></i> Editar</button>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnImportar" class="btn btn-sm btn-outline-success btn-block"><i class="fa fa-upload"></i> Cargar Excel</button>
+                                    <input type="file" id="excelInventario" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-outline-secondary btn-block"><i class="fa fa-download"></i> Plantilla Excel</button>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label"></label>
+                                    <button type="button" id="btnDescargarTiposActivo" class="btn btn-sm btn-outline-secondary btn-block"><i class="fa fa-download"></i> Tipos Activo</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <table id="tableActivos" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>
@@ -124,10 +154,10 @@
     </div>
 </div>
 
-<div>
-    <button id="btnCargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Cargar Excel</button>
-    <button id="btnPlantillaArchivo" class="btn btn-sm btn-warning mb-4 ms-1"><i class="fe fe-download me-1"></i>Plantilla Excel</button>
-</div>
+@*<div>
+        <button id="btnCargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Cargar Excel</button>
+        <button id="btnPlantillaArchivo" class="btn btn-sm btn-warning mb-4 ms-1"><i class="fe fe-download me-1"></i>Plantilla Excel</button>
+    </div>*@
 
 <!-- MODAL LOCAL-->
 <div class="modal fade" id="modalLocales" data-bs-backdrop="static">
@@ -255,4 +285,11 @@
             AdministrarInvActivo.init();
         });
     </script>
+    @*<script>
+             var codEmpresaSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa';
+             var codCadenaSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodCadena';
+             var codRegionSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodRegion';
+             var codZonaSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodZona';
+             var codLocalSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodLocal';
+        </script>*@
 }

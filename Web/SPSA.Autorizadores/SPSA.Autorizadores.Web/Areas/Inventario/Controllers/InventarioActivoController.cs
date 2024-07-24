@@ -2,6 +2,9 @@
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Command;
+using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
+using SPSA.Autorizadores.Aplicacion.ViewModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,6 +30,38 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         public ActionResult CrearEditarInvActivo(InvActivoDTO model)
         {
             return PartialView("_CrearEditarActivo", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CrearFormInvActivo(InvActivoDTO model)
+        {
+            ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
+            var tiposActivo = await _mediator.Send(modelTiposActivo);
+
+            var viewModel = new InvActivoViewModel
+            {
+                InvActivo = model,
+                TiposActivo = tiposActivo.Data
+            };
+
+            return PartialView("_CrearInvActivo", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditarFormInvActivo(InvActivoDTO model)
+        {
+            ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
+            var tiposActivo = await _mediator.Send(modelTiposActivo);
+
+            var viewModel = new InvActivoViewModel
+            {
+                InvActivo = model,
+                TiposActivo = tiposActivo.Data
+            };
+
+            viewModel.InvActivo.CodActivo = model.CodActivo.PadLeft(2, '0');
+
+            return PartialView("_EditarInvActivo", viewModel);
         }
 
         [HttpPost]
@@ -58,28 +93,42 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarExcelInventario(HttpPostedFileBase archivoExcel)
+        public async Task<JsonResult> ImportarExcelInventario()
         {
-            if (archivoExcel is null)
+            var respuesta = new RespuestaComunExcelDTO();
+            foreach (var fileKey in Request.Files)
             {
-                var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
-                response.Ok = false;
-                response.Mensaje = "Se encontraron algunos errores en el archivo";
-                response.Errores.Add(new ErroresExcelDTO
+                HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
+                if (archivo is null)
                 {
-                    Fila = 1,
-                    Mensaje = "No se ha seleccionado ningun archivo."
-                });
+                    var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
+                    response.Ok = false;
+                    response.Mensaje = "Se encontraron algunos errores en el archivo";
+                    response.Errores.Add(new ErroresExcelDTO
+                    {
+                        Fila = 1,
+                        Mensaje = "No se ha seleccionado ningun archivo."
+                    });
 
-                return Json(response);
-            }
-            else
-            {
-                var command = new ImportarInventarioActivoCommand { ArchivoExcel = archivoExcel.InputStream };
-                var response = await _mediator.Send(command);
+                    return Json(response);
+                }
+                else
+                {
+                    var command = new ImportarInventarioActivoCommand { ArchivoExcel = archivo.InputStream };
+                    var response = await _mediator.Send(command);
 
-                return Json(response);
+                    return Json(response);
+                }
             }
+
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarInvActivo(DescargarInvActivoCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
         }
     }
 }
