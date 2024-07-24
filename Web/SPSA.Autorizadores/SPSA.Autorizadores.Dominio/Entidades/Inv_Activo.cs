@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
@@ -23,5 +24,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string Observacion { get; set; }
         public string Garantia { get; set; }
         public DateTime? FecActualiza { get; set; }
+
+        [ForeignKey("CodActivo")]
+        public virtual InvTipoActivo InvTipoActivo { get; set; }
     }
 }
