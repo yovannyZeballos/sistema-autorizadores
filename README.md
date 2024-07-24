@@ -1,3 +1,5 @@
+[![Generar Release](https://github.com/yovannyZeballos/sistema-autorizadores/actions/workflows/publish-release.yml/badge.svg)](https://github.com/yovannyZeballos/sistema-autorizadores/actions/workflows/publish-release.yml)
+
 # Sistema de Gestión POS y BackOffice
 
 Aplicación web desarrollada en ASP.NET que administra la creación de autorizadores para las cajas.
