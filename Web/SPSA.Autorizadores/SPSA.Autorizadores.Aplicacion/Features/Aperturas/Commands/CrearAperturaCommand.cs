@@ -46,14 +46,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands
 
     public class CrearAperturaHandler : IRequestHandler<CrearAperturaCommand, RespuestaComunDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public CrearAperturaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

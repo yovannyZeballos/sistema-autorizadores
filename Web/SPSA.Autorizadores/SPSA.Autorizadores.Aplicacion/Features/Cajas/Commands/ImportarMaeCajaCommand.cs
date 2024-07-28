@@ -23,14 +23,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
 
     public class ImportarMaeCajaHandler : IRequestHandler<ImportarMaeCajaCommand, RespuestaComunExcelDTO>
     {
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public ImportarMaeCajaHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

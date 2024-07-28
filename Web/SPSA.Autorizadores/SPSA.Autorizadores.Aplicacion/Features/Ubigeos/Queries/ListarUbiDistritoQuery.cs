@@ -23,13 +23,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Ubigeos.Queries
     public class ListarUbiDistritoHandler : IRequestHandler<ListarUbiDistritoQuery, GenericResponseDTO<List<ListarUbiDistritoDTO>>>
     {
         private readonly IMapper _mapper;
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
 
         public ListarUbiDistritoHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

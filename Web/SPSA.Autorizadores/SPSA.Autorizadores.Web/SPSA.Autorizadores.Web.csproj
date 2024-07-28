@@ -229,6 +229,7 @@
     <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeTablasController.cs" />
     <Compile Include="Areas\Maestros\MaestrosAreaRegistration.cs" />
+    <Compile Include="Areas\Monitor\Controllers\DiferenciaTransaccionesController.cs" />
     <Compile Include="Areas\Monitor\Controllers\BCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
     <Compile Include="Areas\Monitor\Controllers\ControlBCTController.cs" />
@@ -2312,6 +2313,7 @@
     <Content Include="Content\ViewJs\CajaDefectuosa.js" />
     <Content Include="Content\ViewJs\AdministrarReportes.js" />
     <Content Include="Content\ViewJs\ControlBCT.js" />
+    <Content Include="Content\ViewJs\DiferenciaTransacciones.js" />
     <Content Include="Content\ViewJs\EliminarAutorizador.js" />
     <Content Include="Content\ViewJs\Autorizador.js" />
     <Content Include="Content\ViewJs\CambioLocal.js" />
@@ -2748,6 +2750,7 @@
     <Content Include="Areas\Reportes\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Reportes\Views\AdministrarReportes\Index.cshtml" />
     <Content Include="Plantilla_Inventarios_v2\Plantilla_Carga_Inventario_Caja_v2.xlsx" />
+    <Content Include="Areas\Monitor\Views\DiferenciaTransacciones\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

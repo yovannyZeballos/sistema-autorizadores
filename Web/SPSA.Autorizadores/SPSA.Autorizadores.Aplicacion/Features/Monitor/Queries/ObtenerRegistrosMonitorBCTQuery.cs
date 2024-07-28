@@ -19,12 +19,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 	public class ObtenerRegistrosMonitorBCTHandler : IRequestHandler<ObtenerRegistrosMonitorBCTQuery, ObtenerComunDTO<TransactionXmlCT2>>
 	{
 		private readonly IRepositorioTransactionXmlCT2 _repositorioTransactionXmlCT2;
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 
 		public ObtenerRegistrosMonitorBCTHandler(IRepositorioTransactionXmlCT2 repositorioTransactionXmlCT2)
 		{
 			_repositorioTransactionXmlCT2 = repositorioTransactionXmlCT2;
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 		}
 
 		public async Task<ObtenerComunDTO<TransactionXmlCT2>> Handle(ObtenerRegistrosMonitorBCTQuery request, CancellationToken cancellationToken)

@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 	/// </summary>
 	public class AsociarUsuarioEmpresaHandler : IRequestHandler<AsociarUsuarioEmpresaCommand, RespuestaComunDTO>
 	{
-		private readonly IBCTContexto _contexto;
+		private readonly ISGPContexto _contexto;
 		private readonly ILogger _logger;
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands
 		/// </summary>
 		public AsociarUsuarioEmpresaHandler()
 		{
-			_contexto = new BCTContexto();
+			_contexto = new SGPContexto();
 			_logger = SerilogClass._log;
 		}
 

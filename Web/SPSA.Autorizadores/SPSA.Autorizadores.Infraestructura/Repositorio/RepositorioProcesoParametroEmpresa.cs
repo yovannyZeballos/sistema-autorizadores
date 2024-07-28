@@ -4,11 +4,11 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioProcesoParametroEmpresa : RepositorioGenerico<BCTContexto, ProcesoParametroEmpresa>, IRepositorioProcesoParametroEmpresa
+	public class RepositorioProcesoParametroEmpresa : RepositorioGenerico<SGPContexto, ProcesoParametroEmpresa>, IRepositorioProcesoParametroEmpresa
 	{
-		public RepositorioProcesoParametroEmpresa(BCTContexto context) : base(context) { }
+		public RepositorioProcesoParametroEmpresa(SGPContexto context) : base(context) { }
 
-		public BCTContexto AppDBMyBDContext
+		public SGPContexto AppDBMyBDContext
 		{
 			get { return _contexto; }
 		}

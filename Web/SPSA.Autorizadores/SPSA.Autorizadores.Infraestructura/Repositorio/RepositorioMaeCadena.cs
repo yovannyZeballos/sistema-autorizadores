@@ -4,11 +4,11 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioMaeCadena : RepositorioGenerico<BCTContexto, Mae_Cadena>, IRepositorioMaeCadena
+	public class RepositorioMaeCadena : RepositorioGenerico<SGPContexto, Mae_Cadena>, IRepositorioMaeCadena
 	{
-		public RepositorioMaeCadena(BCTContexto context) : base(context) { }
+		public RepositorioMaeCadena(SGPContexto context) : base(context) { }
 
-		public BCTContexto AppDBMyBDContext
+		public SGPContexto AppDBMyBDContext
 		{
 			get { return _contexto; }
 		}

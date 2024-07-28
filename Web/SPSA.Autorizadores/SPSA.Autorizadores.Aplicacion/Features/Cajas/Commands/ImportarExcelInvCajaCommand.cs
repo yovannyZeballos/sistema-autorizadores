@@ -30,12 +30,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
     public class ImportarExcelInvCajaHandler : IRequestHandler<ImportarExcelInvCajaCommand, RespuestaComunExcelDTO>
     {
 
-        private readonly IBCTContexto _contexto;
+        private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
 
         public ImportarExcelInvCajaHandler()
         {
-            _contexto = new BCTContexto();
+            _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 

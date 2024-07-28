@@ -1,21 +1,16 @@
 ﻿using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-	public class RepositorioProcesoParametro : IRepositorioProcesoParametro
+	public class RepositorioProcesoParametro : RepositorioGenerico<SGPContexto, ProcesoParametro>, IRepositorioProcesoParametro
 	{
-		public async Task<List<ProcesoParametro>> ListarPorProceso(decimal codProceso)
+		public RepositorioProcesoParametro(SGPContexto context) : base(context) { }
+
+		public SGPContexto Contexto
 		{
-			using (var bctContexto = new BCTContexto())
-			{
-				return await bctContexto.ProcesoParametros.Where(x => x.CodProceso == codProceso).ToListAsync();
-			}
+			get { return _contexto; }
 		}
 	}
 }
