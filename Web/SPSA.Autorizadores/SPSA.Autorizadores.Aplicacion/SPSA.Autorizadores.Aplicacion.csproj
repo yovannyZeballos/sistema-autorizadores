@@ -363,6 +363,7 @@
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
     <Compile Include="Features\InventarioActivo\Commands\ActualizarInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\CrearInvActivoCommand.cs" />
+    <Compile Include="Features\InventarioActivo\Commands\DescargarInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ListarInvActivoQuery.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ObtenerInvActivoQuery.cs" />
@@ -497,6 +498,7 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
+    <Compile Include="Features\TiposActivo\Commands\DescargarInvTiposActivoCommand.cs" />
     <Compile Include="Features\TiposActivo\Queries\ListarInvTipoActivoQuery.cs" />
     <Compile Include="Features\Ubigeos\Queries\ListarUbiDepartamentoQuery.cs" />
     <Compile Include="Features\Ubigeos\Queries\ListarUbiDistritoQuery.cs" />
@@ -518,6 +520,7 @@
     <Compile Include="ReportUtils\ReportePDFServicio.cs" />
     <Compile Include="Schedulers\SchedulerActualizacionEstadoCierre.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="ViewModel\InvActivoViewModel.cs" />
     <Compile Include="ViewModel\InvCajaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -541,7 +544,6 @@
   <ItemGroup>
     <Folder Include="Features\Reportes\Commands\" />
     <Folder Include="Features\TablasMae\Queries\" />
-    <Folder Include="Features\TiposActivo\Commands\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Localization\ar.xml" />

@@ -46,6 +46,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.TablasMae.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Command;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Ubigeos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
