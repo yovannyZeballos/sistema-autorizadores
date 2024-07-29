@@ -101,11 +101,11 @@ var DiferenciaTransacciones = function () {
             rowCallback: function (row, data, index) {
                 $("td.estado", row).addClass("text-white");
                 if (data.ColorEstado == "VERDE") {
-                    $("td.estado", row).addClass("bg-primary");
+                    $("td.estado", row).addClass("bg-ok");
                 } else if (data.ColorEstado == "AMARILLO") {
-                    $("td.estado", row).addClass("bg-warning");
+                    $("td.estado", row).addClass("bg-warn");
                 } else if (data.ColorEstado == "ROJO") {
-                    $("td.estado", row).addClass("bg-danger");
+                    $("td.estado", row).addClass("bg-error");
                 }
             },
             buttons: [

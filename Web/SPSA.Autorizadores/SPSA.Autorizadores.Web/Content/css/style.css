@@ -71685,3 +71685,18 @@ table thead tr th {
     border-color: #ced4da;
 }
 
+.bg-ok {
+    background-color: #0db300 !important;
+}
+
+.bg-warn {
+    background-color: #ffe800 !important;
+}
+
+.bg-error {
+    background-color: #f30000 !important;
+}
+
+
+ 
+
