@@ -28,7 +28,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 			using (NpgsqlConnection connection = new NpgsqlConnection(cdenaConexion))
 			{
-				var command = new NpgsqlCommand("select trx_data from mtxadmin.electronicjournal where date = @fecha and  action_code in (0,4) and action_sub_code in (0,0)", connection)
+				var command = new NpgsqlCommand("SELECT trx_data FROM mtxadmin.electronicjournal WHERE date = @fecha AND action_code in (0,4) AND action_sub_code IN (0) AND trx_data NOT LIKE '%CANCELADO%'", connection)
 				{
 					CommandType = CommandType.Text,
 					CommandTimeout = _commandTimeout
