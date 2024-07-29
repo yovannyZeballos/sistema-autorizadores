@@ -77,7 +77,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 
 
 			//Recorrer BD POS SERVER
-			var batchSize = 10;
+			var batchSize = 20;
 			for (int i = 0; i < respuesta.Data.Count; i += batchSize)
 			{
 				var batch = respuesta.Data.Skip(i).Take(batchSize).ToList();
@@ -110,6 +110,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 							var data = transaccion.TrxData;
 
 							var valorTotal = ExtraerValorDeParametro(data, "T O T A L");
+
+							if (valorTotal.HasValue && valorTotal < 0)
+							{
+								continue;
+							}
+
 							var valorPeruChamps = ExtraerValorDeParametro(data, "PERU CHAMPS");
 							var valorTeleton = ExtraerValorDeParametro(data, "TELETON");
 							var valorExcRedondeo = ExtraerValorDeParametro(data, "EXC.REDONDEO");
@@ -273,7 +279,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 			// Extraemos el substring que contiene el valor.
 			// Asumimos que el valor termina al encontrar un espacio después del número o al final de la trama.
 			int posicionFinValor = posicionInicioValor;
-			while (posicionFinValor < trama.Length && (char.IsDigit(trama[posicionFinValor]) || trama[posicionFinValor] == '.'))
+			while (posicionFinValor < trama.Length && (char.IsDigit(trama[posicionFinValor]) || trama[posicionFinValor] == '.' || trama[posicionFinValor] == '-'))
 			{
 				// Avanzamos hasta encontrar un carácter que no sea un dígito o punto.
 				posicionFinValor++;
