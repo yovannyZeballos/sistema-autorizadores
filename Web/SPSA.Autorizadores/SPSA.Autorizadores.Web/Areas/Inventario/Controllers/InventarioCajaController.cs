@@ -7,6 +7,7 @@ using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.ViewModel;
 using SPSA.Autorizadores.Web.Utiles;
+using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -29,12 +30,6 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditarFormInvCaja(InvCajaDTO model)
-        {
-            return PartialView("_EditarInvCaja", model);
-        }
-
-        [HttpPost]
         public async Task<ActionResult> CrearFormInvCaja(InvCajaDTO model)
         {
             ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
@@ -48,6 +43,21 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 
 
             return PartialView("_CrearInvCaja", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditarFormInvCaja(InvCajaDTO model)
+        {
+            ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
+            var tiposActivo = await _mediator.Send(modelTiposActivo);
+
+            var viewModel = new InvCajaViewModel
+            {
+                InvCaja = model,
+                TiposActivo = tiposActivo.Data
+            };
+
+            return PartialView("_EditarInvCaja", viewModel);
         }
 
         [HttpPost]

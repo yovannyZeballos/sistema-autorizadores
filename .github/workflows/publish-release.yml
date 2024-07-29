@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code.
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         token: ${{ secrets.PAT_GITHUB_ACTION }}
           
@@ -35,21 +35,8 @@ jobs:
     - name: Build
       run: msbuild Web/SPSA.Autorizadores/SPSA.Autorizadores.sln /p:DeployOnBuild=true /p:PublishProfile=PublishProfile.xml
 
-    - name: Zip Compilado Directory 
-      uses: thedoctor0/zip-release@0.7.5
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
       with:
-        type: 'zip'
-        filename: 'release.zip'
+        name: realease
         path: ./Compilado
-
-    - name: Delete Directory Compilado
-      run: rm ./Compilado -r -force
-
-    - name: Upload file to Google Drive
-      uses: yovannyZeballos/upload-to-download-from-gdrive@master
-      with:
-        credentials: ${{ secrets.GSA_CREDENTIALS }}
-        actionType: upload
-        localPath: ./release.zip
-        googleFolderId: 1fNjxXpjvjsE8Dlvr7QAtB2td9moYERZA
-        emptyUploadFolder: true

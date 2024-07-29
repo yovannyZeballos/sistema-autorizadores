@@ -217,6 +217,7 @@
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
     <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioActivoController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
@@ -2742,7 +2743,6 @@
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <Content Include="Areas\DataTables\Views\web.config" />
     <Content Include="Areas\Monitor\Views\ControlBCT\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearEditarActivo.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioCaja\_CrearInvCaja.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioCaja\_EditarInvCaja.cshtml" />
     <Content Include="Areas\Reportes\Views\web.config" />
@@ -2795,6 +2795,7 @@
     <Folder Include="Areas\DataTables\Data\" />
     <Folder Include="Areas\DataTables\Views\Shared\" />
     <Folder Include="Areas\Inventario\Data\" />
+    <Folder Include="Areas\Inventario\Views\InventarioTipoActivo\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
     <Folder Include="Areas\Maestros\Views\MaeCaja\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
