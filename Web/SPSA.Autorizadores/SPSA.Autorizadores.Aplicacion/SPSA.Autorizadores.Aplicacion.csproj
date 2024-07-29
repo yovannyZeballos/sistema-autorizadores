@@ -313,6 +313,7 @@
     <Compile Include="DTO\ObtenerUbiDistritoDTO.cs" />
     <Compile Include="DTO\ObtenerUsuarioDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
+    <Compile Include="DTO\ProcesarMonitorLocalBCTDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
     <Compile Include="DTO\PermisoDTO.cs" />
     <Compile Include="DTO\ProcesoMonitorDTO.cs" />
@@ -356,6 +357,7 @@
     <Compile Include="Features\Empresas\Commands\ActualizarMaeEmpresaCommand.cs" />
     <Compile Include="Features\Empresas\Commands\CrearMaeEmpresaCommand.cs" />
     <Compile Include="Features\Empresas\Commands\ImportarMaeEmpresaCommand.cs" />
+    <Compile Include="Features\Empresas\Queries\ListarEmpresasPorProcesoQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarEmpresasAsociadasQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
@@ -389,6 +391,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Commands\ProcesarMonitorLocalBCTCommand.cs" />
     <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />

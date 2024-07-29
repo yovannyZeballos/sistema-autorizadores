@@ -1,4 +1,5 @@
-﻿using SPSA.Autorizadores.Dominio.Entidades;
+﻿using SPSA.Autorizadores.Aplicacion.Entities;
+using SPSA.Autorizadores.Dominio.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-	public interface IRepositorioProcesoParametro
+	public interface IRepositorioProcesoParametro : IRepositorioGenerico<ProcesoParametro>
 	{
-		Task<List<ProcesoParametro>> ListarPorProceso(decimal codProceso);
 	}
 }

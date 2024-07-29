@@ -136,6 +136,7 @@
     <Compile Include="Configuracion\AperturaTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
+    <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
     <Compile Include="Configuracion\TmpMonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeLocalAlternoTypeConfiguration.cs" />
@@ -165,12 +166,14 @@
     <Compile Include="Contexto\SGPContexto.cs" />
     <Compile Include="IoC\InfraestructuraModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
     <Compile Include="Repositorio\RepositorioAutImpresion.cs" />
     <Compile Include="Repositorio\RepositorioAutorizadores.cs" />
     <Compile Include="Repositorio\RepositorioCajaCierre.cs" />
     <Compile Include="Repositorio\RepositorioCajero.cs" />
     <Compile Include="Repositorio\RepositorioDataTable.cs" />
+    <Compile Include="Repositorio\RepositorioElectronicJournal.cs" />
     <Compile Include="Repositorio\RepositorioEmpresa.cs" />
     <Compile Include="Repositorio\RepositorioGenerico.cs" />
     <Compile Include="Repositorio\RepositorioInvCajas.cs" />

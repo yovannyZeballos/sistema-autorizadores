@@ -44,5 +44,6 @@
         public string CodLocalOfiplan { get; set; }
         public string NomLocalOfiplan { get; set; }
         public string CodLocalSunat { get; set; }
-    }
+        public string Ip { get; set; }
+	}
 }

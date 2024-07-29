@@ -1,4 +1,6 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿using Npgsql;
+using NpgsqlTypes;
+using Oracle.ManagedDataAccess.Client;
 using SPSA.Autorizadores.Dominio.Entidades;
 using System;
 using System.Collections.Generic;
@@ -63,7 +65,28 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
                 };
         }
 
-        public async Task ExecuteNonQuery(string query, SqlParameter[] dbParams = null)
+		public NpgsqlParameter MakeParam(string paramName, object value, NpgsqlDbType dbType, ParameterDirection direction, int size = 0)
+		{
+			if (size > 0)
+				return new NpgsqlParameter
+				{
+					NpgsqlDbType = dbType,
+					Direction = direction,
+					Size = size,
+					Value = value,
+					ParameterName = paramName
+				};
+			else
+				return new NpgsqlParameter
+				{
+					NpgsqlDbType = dbType,
+					Direction = direction,
+					Value = value,
+					ParameterName = paramName
+				};
+		}
+
+		public async Task ExecuteNonQuery(string query, SqlParameter[] dbParams = null)
         {
             using (var connection = new SqlConnection(CadenaConexion))
             {
@@ -213,5 +236,25 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
             }
         }
 
-    }
+		public async Task<NpgsqlDataReader> ExecuteReaderText(string query, NpgsqlParameter[] dbParams = null)
+		{
+			var connection = new NpgsqlConnection(CadenaConexion);
+
+			using (var command = new NpgsqlCommand(query, connection)
+			{
+				CommandType = CommandType.Text,
+				CommandTimeout = _commandTimeout
+			})
+			{
+				await command.Connection.OpenAsync();
+
+				if (dbParams != null)
+					command.Parameters.AddRange(dbParams);
+
+				var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+				return dr;
+			}
+		}
+
+	}
 }

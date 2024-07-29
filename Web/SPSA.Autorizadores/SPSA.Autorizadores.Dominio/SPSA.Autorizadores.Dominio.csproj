@@ -53,6 +53,7 @@
     <Compile Include="Entidades\CaracteristicaCaja.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
+    <Compile Include="Entidades\ElectronicJournal.cs" />
     <Compile Include="Entidades\Empresa.cs" />
     <Compile Include="Entidades\EstadoCierre.cs" />
     <Compile Include="Entidades\InvCajas.cs" />

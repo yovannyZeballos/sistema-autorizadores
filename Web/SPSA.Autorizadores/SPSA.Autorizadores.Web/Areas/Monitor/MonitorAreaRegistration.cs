@@ -48,6 +48,12 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor
 				   "Monitor/{controller}/{action}/{id}",
 					new { controller = "ControlBCT", action = "Index", id = UrlParameter.Optional }
 			   );
+
+			context.MapRoute(
+				   "DiferenciaTransacciones_default",
+				   "Monitor/{controller}/{action}/{id}",
+					new { controller = "DiferenciaTransacciones", action = "Index", id = UrlParameter.Optional }
+			   );
 		}
     }
 }
