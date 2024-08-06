@@ -56,10 +56,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 
 				var impresiones = await ObtenerImpresiones(request.CodigoLocal);
 
+				// Convertir la lista de impresiones a un diccionario para búsquedas rápidas
+				var impresionesDict = impresiones.ToDictionary(x => x.CodAutorizador, x => x.Correlativo);
+
+				// Optimización utilizando el diccionario
 				lst = lst.Select(autorizador =>
 				{
-					var impresion = impresiones.FirstOrDefault(x => x.CodAutorizador == autorizador["Autorizador"].ToString());
-					autorizador["Impresion"] = impresion?.Correlativo ?? 0;
+					if (impresionesDict.TryGetValue(autorizador["Autorizador"].ToString(), out var correlativo))
+					{
+						autorizador["Impresion"] = correlativo;
+					}
 					return autorizador;
 				}).ToList();
 
