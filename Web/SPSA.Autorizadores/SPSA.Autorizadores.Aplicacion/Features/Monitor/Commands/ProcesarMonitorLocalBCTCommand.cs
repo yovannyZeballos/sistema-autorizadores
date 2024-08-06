@@ -103,7 +103,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 						localPos.CantTransaccionesLocal = transacciones.Count();
 						localPos.NontoTransaccionesLocal = 0;
 
-						_logger.Information($"{localDescripcion}: conexion exitosa, cantidad transacciones {localPos.CantTransaccionesLocal}");
+						_logger.Information($"{localDescripcion}: conexion exitosa");
 
 						foreach (var transaccion in transacciones)
 						{
