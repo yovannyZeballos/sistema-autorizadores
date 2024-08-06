@@ -6,6 +6,7 @@ var urlEliminarAutorizador = baseUrl + 'Autorizadores/Autorizador/EliminarAutori
 var urlActualizarEstadoArchivoAutorizador = baseUrl + 'Autorizadores/Autorizador/ActualizarEstadoArchivoAutorizador';
 var urlImprimir = baseUrl + 'Autorizadores/Autorizador/Imprimir';
 var urlReimprimir = baseUrl + 'Autorizadores/Autorizador/Reimprimir';
+var urlListarMotivoReimpresion = baseUrl + 'Autorizadores/Autorizador/ListarMotivoReimprimir';
 
 
 var Autorizador = function () {
@@ -75,6 +76,16 @@ var Autorizador = function () {
 
         $("#btnReimprimir").on('click', function () {
             reimprimir();
+        });
+
+        $("#btnAbrirModalReimprimir").on('click', function () {
+            const registrosSeleccionados = dataTableAutorizador.rows('.selected').data().toArray();
+
+            if (!validarSelecion(registrosSeleccionados.length)) {
+                return;
+            }
+            $('#modalMotivo').modal('show');
+            listarMotivosReimpresion();
         });
 
     }
@@ -168,17 +179,10 @@ var Autorizador = function () {
 
                 response.Columnas.forEach((x) => {
 
-                    let visible = true;
-
-                    /*if (x === "Autorizador") {
-                        visible = false;
-                    }*/
-
                     columnas.push({
                         title: x,
                         data: x.replace(" ", "").replace(".", ""),
                         defaultContent: "",
-                        visible: visible
                     });
                 });
 
@@ -776,6 +780,7 @@ var Autorizador = function () {
                 }
 
                 mandarImpresora(response.Contenido);
+                cargarAutorizadores();
 
                 swal({ text: response.Mensaje, icon: icon });
 
@@ -791,7 +796,7 @@ var Autorizador = function () {
 
     const reimprimir = function () {
 
-        let motivo = $("#txtMotivo").val();
+        let motivo = $("#cboMotivo").find("option:selected").text();
 
         if (motivo === "") {
             swal({
@@ -839,6 +844,7 @@ var Autorizador = function () {
                 }
 
                 mandarImpresora(response.Contenido);
+                cargarAutorizadores();
 
                 swal({ text: response.Mensaje, icon: icon });
 
@@ -901,6 +907,65 @@ var Autorizador = function () {
         };
     }
 
+    const listarMotivosReimpresion = function () {
+        $.ajax({
+            url: urlListarMotivoReimpresion,
+            type: "post",
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: 'error' });
+                    return;
+                }
+
+                const array = Object.entries(response.Data).map(([codigo, valor]) => ({
+                    codigo: parseInt(codigo, 10),
+                    valor: valor
+                }));
+
+                let results = array.map(item => {
+                    return {
+                        id: item.codigo,
+                        text: item.valor
+                    }
+                });
+
+                $("#cboMotivo").empty();
+
+                $("#cboMotivo").select2({
+                    data: results,
+                    minimumResultsForSearch: '',
+                    placeholder: "Seleccionar",
+                    dropdownParent: $('#modalMotivo .modal-content'),
+                    width: '100%',
+                    language: {
+                        noResults: function () {
+                            return "No hay resultado";
+                        },
+                        searching: function () {
+                            return "Buscando..";
+                        }
+                    }
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error",
+                });
+            }
+        });
+    }
+
     return {
         init: function () {
             checkSession(function () {
@@ -909,6 +974,8 @@ var Autorizador = function () {
                 visualizarDataTableAutorizador();
                 visualizarDataTableBusquedaColaborador();
                 $('input[type="search"]').addClass("form-control-sm");
+                $('#cboMotivo').select2();
+
             });
         }
     }
