@@ -66,6 +66,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
 					{
 						autorizador["Impresion"] = correlativo;
 					}
+					else
+					{
+						autorizador["Impresion"] = 0;
+					}
+
 					return autorizador;
 				}).ToList();
 
