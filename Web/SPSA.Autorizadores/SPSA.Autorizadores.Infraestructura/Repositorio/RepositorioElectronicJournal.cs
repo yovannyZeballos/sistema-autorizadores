@@ -28,13 +28,12 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 			using (NpgsqlConnection connection = new NpgsqlConnection(cdenaConexion))
 			{
-				var command = new NpgsqlCommand("SELECT trx_data FROM mtxadmin.electronicjournal WHERE date = @fecha AND action_code in (0,4) AND action_sub_code IN (0) AND trx_data NOT LIKE '%CANCELADO%'", connection)
+				var command = new NpgsqlCommand($"SELECT trx_data FROM mtxadmin.electronicjournal WHERE date = '{fecha}' AND action_code in (0,4) AND action_sub_code IN (0) AND trx_data NOT LIKE '%CANCELADO%'", connection)
 				{
 					CommandType = CommandType.Text,
 					CommandTimeout = _commandTimeout
 				};
 
-				command.Parameters.AddWithValue("fecha", fecha);
 
 				await command.Connection.OpenAsync();
 
