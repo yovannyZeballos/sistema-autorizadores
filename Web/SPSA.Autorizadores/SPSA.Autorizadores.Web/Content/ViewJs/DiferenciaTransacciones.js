@@ -1,5 +1,6 @@
 ﻿var urlProcesar = baseUrl + 'Monitor/DiferenciaTransacciones/Procesar';
 var urlEmpresas = baseUrl + 'Empresa/ListarEmpresasPorProceso';
+var urlLocales = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
 var dataTableMonitor = null;
 
 var DiferenciaTransacciones = function () {
@@ -8,6 +9,10 @@ var DiferenciaTransacciones = function () {
 
         $("#btnProcesar").on('click', function () {
             procesar();
+        });
+
+        $("#cboEmpresa").on('change', function () {
+            listarLocales();
         });
 
     }
@@ -60,6 +65,18 @@ var DiferenciaTransacciones = function () {
             {
                 title: 'MONTO TRX BCT',
                 data: 'MontoTransaccionesBCT',
+                className: "text-center",
+                defaultContent: ""
+            },
+            {
+                title: 'DIF. TRX',
+                data: 'DiferenciaCantidad',
+                className: "text-center",
+                defaultContent: ""
+            },
+            {
+                title: 'DIF. MONTO',
+                data: 'DiferenciaMonto',
                 className: "text-center",
                 defaultContent: ""
             },
@@ -156,7 +173,8 @@ var DiferenciaTransacciones = function () {
 
         const request = {
             Empresas: [codEmpresa],
-            Fecha: fecha
+            Fecha: fecha,
+            CodLocal: $("#cboLocal").val()
         }
 
         $.ajax({
@@ -244,8 +262,13 @@ var DiferenciaTransacciones = function () {
             $('#cboEmpresa').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
         });
         $('#cboEmpresa').val(rucSession);
+    }
 
-
+    const cargarLocales = function (locales) {
+        $('#cboLocal').empty().append($('<option>', { value: '0', text: 'TODOS' }));
+        locales.map(local => {
+            $('#cboLocal').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
+        });
     }
 
     const fechaActual = function () {
@@ -279,6 +302,44 @@ var DiferenciaTransacciones = function () {
             yearSuffix: '',
             changeMonth: true,
             changeYear: true
+        });
+    }
+
+    const listarLocales = function () {
+
+
+        const request = {
+            CodEmpresa: $('#cboEmpresa').val()
+        }
+
+        $.ajax({
+            url: urlLocales,
+            type: "post",
+            data: { request: request },
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+
+                if (response.Ok === true) {
+                    cargarLocales(response.Data);
+                } else {
+                    swal({
+                        text: response.Mensaje,
+                        icon: "error"
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error"
+
+                });
+            }
         });
     }
 

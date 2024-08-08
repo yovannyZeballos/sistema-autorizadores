@@ -19,6 +19,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 	{
 		public DateTime Fecha { get; set; }
 		public List<string> Empresas { get; set; }
+		public string CodLocal { get; set; }
+		
 	}
 
 	public class ProcesarMonitorLocalBCTHandler : IRequestHandler<ProcesarMonitorLocalBCTCommand, GenericResponseDTO<List<ProcesarMonitorLocalBCTDTO>>>
@@ -62,7 +64,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 					procesoParametro = await contexto.RepositorioProcesoParametro.Obtener(x => x.CodProceso == Constantes.CodigoProcesoDiferenciaTransacciones && x.CodParametro == "01").FirstOrDefaultAsync();
 
 					var empresas = await ObtenerEmpresasActivas(contexto, request.Empresas);
-					respuesta.Data = await ObtenerLocalesDeEmpresas(contexto, empresas);
+					respuesta.Data = await ObtenerLocalesDeEmpresas(contexto, empresas, request.CodLocal);
 					procesoParametroEmpresas = await contexto.RepositorioProcesoParametroEmpresa.Obtener(x => x.CodProceso == Constantes.CodigoProcesoDiferenciaTransacciones && x.IndActivo == "S").ToListAsync();
 
 				}
@@ -185,6 +187,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 							localPos.Observacion = $"Se halló una diferencia de {diferenciaMonto} soles";
 							localPos.ColorEstado = "AMARILLO";
 						}
+
+						localPos.DiferenciaCantidad = diferenciaCantidad;
+						localPos.DiferenciaMonto = diferenciaMonto;
 					}
 					catch (Exception ex)
 					{
@@ -217,7 +222,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		private async Task<List<Mae_Empresa>> ObtenerEmpresasActivas(ISGPContexto contexto, List<string> empresas) =>
 			await contexto.RepositorioMaeEmpresa.Obtener(x => empresas.Contains(x.CodEmpresa)).ToListAsync();
 
-		private async Task<List<ProcesarMonitorLocalBCTDTO>> ObtenerLocalesDeEmpresas(ISGPContexto contexto, List<Mae_Empresa> empresas)
+		private async Task<List<ProcesarMonitorLocalBCTDTO>> ObtenerLocalesDeEmpresas(ISGPContexto contexto, List<Mae_Empresa> empresas, string codLocal)
 		{
 			var locales = new List<Mae_Local>();
 			foreach (var empresa in empresas)
@@ -230,7 +235,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 					continue;
 				}
 
-				locales.AddRange(await ObtenerLocales(contexto, empresa.CodEmpresa));
+				locales.AddRange(await ObtenerLocales(contexto, empresa.CodEmpresa, codLocal));
 			}
 
 			return locales.Select(local =>
@@ -244,8 +249,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				}).ToList();
 		}
 
-		private async Task<List<Mae_Local>> ObtenerLocales(ISGPContexto contexto, string codEmpresa) =>
-			await contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == codEmpresa).ToListAsync();
+		private async Task<List<Mae_Local>> ObtenerLocales(ISGPContexto contexto, string codEmpresa, string codLocal)
+		{
+			return codLocal == "0"
+			? await contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == codEmpresa).ToListAsync()
+			: await contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == codEmpresa && x.CodLocal == codLocal).ToListAsync();
+		}
 
 		private string ArmarCadenaConexion(ProcesarMonitorLocalBCTDTO local)
 		{
