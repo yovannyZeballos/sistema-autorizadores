@@ -15,6 +15,7 @@
 		public const decimal CodigoProcesoBct = 29;
 		public const decimal CodigoProcesoActualizacionEstadoCierre = 30;
 		public const decimal CodigoProcesoDiferenciaTransacciones = 31;
+		public const decimal CodigoProcesoImpresionCodigoBarras = 32;
 		public const string CodigoParametroToleranciaSegundos = "01";
 		public const string CodigoParametroToleranciaCantidad = "02";
 		public const string CodigoParametroServidorBD = "03";

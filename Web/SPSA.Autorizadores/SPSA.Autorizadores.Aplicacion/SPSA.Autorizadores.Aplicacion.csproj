@@ -243,6 +243,7 @@
     <Compile Include="DTO\InvTipoActivoDTO.cs" />
     <Compile Include="DTO\JerarquiaOrganizacionalDTO.cs" />
     <Compile Include="DTO\ListarAperturaDTO.cs" />
+    <Compile Include="DTO\ListarAutorizadorDTO.cs" />
     <Compile Include="DTO\ListarCadenaDTO.cs" />
     <Compile Include="DTO\ListarEmpresaDTO.cs" />
     <Compile Include="DTO\ListarInvActivoDTO.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="Features\Aperturas\Queries\ObtenerAperturaQuery.cs" />
     <Compile Include="Features\Autorizadores\Commands\ImprimirBarrasAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Commands\ReimprimirBarrasAutorizadorCommand.cs" />
+    <Compile Include="Features\Autorizadores\Queries\ListarMotivosReimpresionQuery.cs" />
     <Compile Include="Features\Cajas\Commands\ImportarExcelInvCajaCommand.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />

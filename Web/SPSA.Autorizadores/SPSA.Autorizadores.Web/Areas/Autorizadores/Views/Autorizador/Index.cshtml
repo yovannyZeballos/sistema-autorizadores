@@ -37,7 +37,7 @@
                         <button id="btnEliminar" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-remove"></span> Eliminar Autorizador</button>
                         <button id="btnBuscarColaborador" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-search"></span> Buscar empleado</button>
                         <button id="btnImprimir" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-print"></span> Imprimir</button>
-                        <button id="btnAbrirModalReimprimir" class="btn btn-sm btn-primary mb-4 ms-1" data-bs-toggle="modal" data-bs-target="#modalMotivo"><span class="fa fa-print"></span> Reimprimir</button>
+                        <button id="btnAbrirModalReimprimir" class="btn btn-sm btn-primary mb-4 ms-1"><span class="fa fa-print"></span> Reimprimir</button>
                     </div>
                     <div class="col-xl-12">
                         <div class="form-group data-table-btn">
@@ -148,9 +148,14 @@
             <div class="modal-body">
                 <!-- Formulario dentro del modal -->
                 <form>
-                    <div class="mb-3">
-                        <label for="txtMotivo" class="form-label">Motivo</label>
-                        <input type="text" class="form-control" id="txtMotivo" placeholder="Escribe tu motivo aquí">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Motivo</label>
+                                <select class="form-control custom-select" id="cboMotivo">
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
