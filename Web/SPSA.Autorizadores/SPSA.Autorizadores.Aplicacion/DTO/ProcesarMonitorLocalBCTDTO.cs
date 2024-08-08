@@ -11,7 +11,9 @@
         public int CanTransaccionesBCT { get; set; }
         public decimal NontoTransaccionesLocal { get; set; }
         public decimal MontoTransaccionesBCT { get; set; }
-        public string Estado { get; set; }
+        public decimal DiferenciaMonto { get; set; }
+        public decimal DiferenciaCantidad { get; set; }
+		public string Estado { get; set; }
         public string ColorEstado { get; set; }
 		public string Observacion { get; set; }
     }
