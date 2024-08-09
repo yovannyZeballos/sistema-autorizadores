@@ -13,6 +13,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Caja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Colaborador.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Colaborador.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
@@ -205,7 +207,13 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ActualizarMaeZonaHandler>().As<IRequestHandler<ActualizarMaeZonaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImportarMaeZonaHandler>().As<IRequestHandler<ImportarMaeZonaCommand, RespuestaComunExcelDTO>>();
 
-			builder.RegisterType<ListarMaeLocalHandler>().As<IRequestHandler<ListarMaeLocalQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>>();
+            builder.RegisterType<ListarMaeColaboradorHandler>().As<IRequestHandler<ListarMaeColaboradorQuery, GenericResponseDTO<List<ListarMaeColaboradorDTO>>>>();
+            builder.RegisterType<ObtenerMaeColaboradorHandler>().As<IRequestHandler<ObtenerMaeColaboradorQuery, GenericResponseDTO<ObtenerMaeColaboradorDTO>>>();
+            builder.RegisterType<CrearMaeColaboradorHandler>().As<IRequestHandler<CrearMaeColaboradorCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeColaboradorHandler>().As<IRequestHandler<ActualizarMaeColaboradorCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<ImportarMaeZonaHandler>().As<IRequestHandler<ImportarMaeZonaCommand, RespuestaComunExcelDTO>>();
+
+            builder.RegisterType<ListarMaeLocalHandler>().As<IRequestHandler<ListarMaeLocalQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>>();
 			builder.RegisterType<ListarMaeLocalXEmpresaHandler>().As<IRequestHandler<ListarMaeLocalXEmpresaQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>>();
 			builder.RegisterType<ObtenerMaeLocalHandler>().As<IRequestHandler<ObtenerMaeLocalQuery, GenericResponseDTO<ObtenerMaeLocalDTO>>>();
 			builder.RegisterType<CrearMaeLocalHandler>().As<IRequestHandler<CrearMaeLocalCommand, RespuestaComunDTO>>();

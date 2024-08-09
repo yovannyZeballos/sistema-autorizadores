@@ -4,6 +4,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
+using SPSA.Autorizadores.Aplicacion.Features.Colaborador.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
@@ -135,6 +136,11 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ObtenerMaeCajaDTO, Mae_Caja>().ReverseMap();
             CreateMap<CrearMaeCajaCommand, Mae_Caja>().ReverseMap();
             CreateMap<ActualizarMaeCajaCommand, Mae_Caja>().ReverseMap();
+
+            CreateMap<ListarMaeColaboradorDTO, Mae_Colaborador>().ReverseMap();
+            CreateMap<ObtenerMaeColaboradorDTO, Mae_Colaborador>().ReverseMap();
+            CreateMap<CrearMaeColaboradorCommand, Mae_Colaborador>().ReverseMap();
+            CreateMap<ActualizarMaeColaboradorCommand, Mae_Colaborador>().ReverseMap();
 
             CreateMap<InvTipoActivoDTO, InvTipoActivo>().ReverseMap();
 

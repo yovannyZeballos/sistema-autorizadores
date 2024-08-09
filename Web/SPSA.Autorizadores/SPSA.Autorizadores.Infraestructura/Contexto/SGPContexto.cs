@@ -30,7 +30,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioSegMenu = new RepositorioSegMenu(this);
 			RepositorioSegPerfilMenu = new RepositorioSegPerfilMenu(this);
 
-			RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
+            RepositorioMaeColaborador = new RepositorioMaeColaborador(this);
+            RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
 			RepositorioMaeCadena = new RepositorioMaeCadena(this);
 			RepositorioMaeRegion = new RepositorioMaeRegion(this);
 			RepositorioMaeZona = new RepositorioMaeZona(this);
@@ -97,9 +98,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; private set; }
 		public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
 		public IRepositorioProcesoParametro RepositorioProcesoParametro { get; private set; }
+        public IRepositorioMaeColaborador RepositorioMaeColaborador { get; private set; }
 
-
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoParametroEmpresaTypeConfiguration());
@@ -121,6 +122,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeColaboradorTypeConfiguration());
 
 			modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
 			modelBuilder.Configurations.Add(new AperturaTypeConfiguration());

@@ -251,6 +251,7 @@
     <Compile Include="DTO\ListarLocalDTO.cs" />
     <Compile Include="DTO\ListarMaeCadenaDTO.cs" />
     <Compile Include="DTO\ListarMaeCajaDTO.cs" />
+    <Compile Include="DTO\ListarMaeColaboradorDTO.cs" />
     <Compile Include="DTO\ListarMaeEmpresaDTO.cs" />
     <Compile Include="DTO\ListarMaeLocalDTO.cs" />
     <Compile Include="DTO\ListarMaeRegionDTO.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="DTO\ObtenerInvCajaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCadenaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCajaDTO.cs" />
+    <Compile Include="DTO\ObtenerMaeColaboradorDTO.cs" />
     <Compile Include="DTO\ObtenerMaeEmpresaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeLocalDTO.cs" />
     <Compile Include="DTO\ObtenerMaeRegionDTO.cs" />
@@ -338,6 +340,10 @@
     <Compile Include="Features\Autorizadores\Commands\ReimprimirBarrasAutorizadorCommand.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarMotivosReimpresionQuery.cs" />
     <Compile Include="Features\Cajas\Commands\ImportarExcelInvCajaCommand.cs" />
+    <Compile Include="Features\Colaborador\Commands\ActualizarMaeColaboradorCommand.cs" />
+    <Compile Include="Features\Colaborador\Commands\CrearMaeColaboradorCommand.cs" />
+    <Compile Include="Features\Colaborador\Queries\ListarMaeColaboradorQuery.cs" />
+    <Compile Include="Features\Colaborador\Queries\ObtenerMaeColaboradorQuery.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />

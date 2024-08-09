@@ -19,6 +19,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		IRepositorioSegMenu RepositorioSegMenu { get; }
 		IRepositorioSegPerfilMenu RepositorioSegPerfilMenu { get; }
 
+		IRepositorioMaeColaborador RepositorioMaeColaborador { get; }
 		IRepositorioMaeEmpresa RepositorioMaeEmpresa { get; }
 		IRepositorioMaeCadena RepositorioMaeCadena { get; }
 		IRepositorioMaeRegion RepositorioMaeRegion { get; }

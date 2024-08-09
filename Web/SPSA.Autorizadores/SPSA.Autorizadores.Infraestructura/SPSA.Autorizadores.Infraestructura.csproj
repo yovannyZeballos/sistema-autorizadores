@@ -136,6 +136,7 @@
     <Compile Include="Configuracion\AperturaTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MaeColaboradorTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
     <Compile Include="Configuracion\TmpMonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreLocalTypeConfiguration.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Contexto\SGPContexto.cs" />
     <Compile Include="IoC\InfraestructuraModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositorio\RepositorioMaeColaborador.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
     <Compile Include="Repositorio\RepositorioAutImpresion.cs" />
