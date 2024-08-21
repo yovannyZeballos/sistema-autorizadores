@@ -14,7 +14,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 	[DbConfigurationType(typeof(NpgsqlConfiguration))]
 	public class SGPContexto : DbContext, ISGPContexto
 	{
-		public DbSet<ProcesoParametro> ProcesoParametros { get; set; }
 
 		public SGPContexto() : base("SGP")
 		{
@@ -39,25 +38,26 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMaeCaja = new RepositorioMaeCaja(this);
 			RepositorioInvCajas = new RepositorioInvCajas(this);
 			RepositorioInvTipoActivo = new RepositorioInvTipoActivo(this);
-            RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
-            RepositorioMaeCadena = new RepositorioMaeCadena(this);
-            RepositorioMaeRegion = new RepositorioMaeRegion(this);
-            RepositorioMaeZona = new RepositorioMaeZona(this);
-            RepositorioMaeLocal = new RepositorioMaeLocal(this);
-            RepositorioMaeCaja = new RepositorioMaeCaja(this);
+			RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
+			RepositorioMaeCadena = new RepositorioMaeCadena(this);
+			RepositorioMaeRegion = new RepositorioMaeRegion(this);
+			RepositorioMaeZona = new RepositorioMaeZona(this);
+			RepositorioMaeLocal = new RepositorioMaeLocal(this);
+			RepositorioMaeCaja = new RepositorioMaeCaja(this);
 
-            RepositorioInventarioActivo = new RepositorioInventarioActivo(this);
-            RepositorioApertura = new RepositorioApertura(this);
+			RepositorioInventarioActivo = new RepositorioInventarioActivo(this);
+			RepositorioApertura = new RepositorioApertura(this);
 
-            RepositorioUbiDepartamento = new RepositorioUbiDepartamento(this);
-            RepositorioUbiProvincia = new RepositorioUbiProvincia(this);
-            RepositorioUbiDistrito = new RepositorioUbiDistrito(this);
+			RepositorioUbiDepartamento = new RepositorioUbiDepartamento(this);
+			RepositorioUbiProvincia = new RepositorioUbiProvincia(this);
+			RepositorioUbiDistrito = new RepositorioUbiDistrito(this);
 			RepositorioProceso = new RepositorioProceso(this);
 			RepositorioProcesoEmpresa = new RepositorioProcesoEmpresa(this);
 			RepositorioMaeLocalAlterno = new RepositorioMaeLocalAlterno(this);
-			RepositorioMonCierreLocal = new	RepositorioMonCierreLocal(this);
+			RepositorioMonCierreLocal = new RepositorioMonCierreLocal(this);
 			RepositorioTmpMonCierreLocal = new RepositorioTmpMonCierreLocal(this);
 			RepositorioAutImpresion = new RepositorioAutImpresion(this);
+			RepositorioProcesoParametro = new RepositorioProcesoParametro(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -84,18 +84,19 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioInvCajas RepositorioInvCajas { get; private set; }
 		public IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; private set; }
 
-        public IRepositorioInventarioActivo RepositorioInventarioActivo { get; private set; }
-        public IRepositorioApertura RepositorioApertura { get; private set; }
+		public IRepositorioInventarioActivo RepositorioInventarioActivo { get; private set; }
+		public IRepositorioApertura RepositorioApertura { get; private set; }
 
-        public IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; private set; }
-        public IRepositorioUbiProvincia RepositorioUbiProvincia { get; private set; }
-        public IRepositorioUbiDistrito RepositorioUbiDistrito { get; private set; }
-        public IRepositorioProceso RepositorioProceso { get; private set; }
-        public IRepositorioProcesoEmpresa RepositorioProcesoEmpresa { get; private set; }
-        public IRepositorioMaeLocalAlterno RepositorioMaeLocalAlterno { get; private set; }
-        public IRepositorioMonCierreLocal RepositorioMonCierreLocal { get; private set; }
-        public IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; private set; }
-        public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
+		public IRepositorioUbiDepartamento RepositorioUbiDepartamento { get; private set; }
+		public IRepositorioUbiProvincia RepositorioUbiProvincia { get; private set; }
+		public IRepositorioUbiDistrito RepositorioUbiDistrito { get; private set; }
+		public IRepositorioProceso RepositorioProceso { get; private set; }
+		public IRepositorioProcesoEmpresa RepositorioProcesoEmpresa { get; private set; }
+		public IRepositorioMaeLocalAlterno RepositorioMaeLocalAlterno { get; private set; }
+		public IRepositorioMonCierreLocal RepositorioMonCierreLocal { get; private set; }
+		public IRepositorioTmpMonCierreLocal RepositorioTmpMonCierreLocal { get; private set; }
+		public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
+		public IRepositorioProcesoParametro RepositorioProcesoParametro { get; private set; }
 
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -114,19 +115,19 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new SegMenuTypeConfiguration());
 			modelBuilder.Configurations.Add(new SegPerfilMenuTypeConfiguration());
 
-            modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
-            modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
-            modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
-            modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
-            modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
-            modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeEmpresaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeCadenaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeRegionTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
 
-            modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
-            modelBuilder.Configurations.Add(new AperturaTypeConfiguration());
+			modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
+			modelBuilder.Configurations.Add(new AperturaTypeConfiguration());
 
-            modelBuilder.Configurations.Add(new UbiDepartamentoTypeConfiguration());
-            modelBuilder.Configurations.Add(new UbiProvinciaTypeConfiguration());
-            modelBuilder.Configurations.Add(new UbiDistritoTypeConfiguration());
+			modelBuilder.Configurations.Add(new UbiDepartamentoTypeConfiguration());
+			modelBuilder.Configurations.Add(new UbiProvinciaTypeConfiguration());
+			modelBuilder.Configurations.Add(new UbiDistritoTypeConfiguration());
 			modelBuilder.Configurations.Add(new InvCajasTypeConfiguration());
 			modelBuilder.Configurations.Add(new InvTipoActivoTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoTypeConfiguration());
@@ -156,30 +157,19 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			.ForEach(x => x.Reload());
 		}
 
-        public void Rollback()
-        {
+		public void Rollback()
+		{
 			ChangeTracker
 				.Entries()
 				.ToList()
 				.ForEach(entry => entry.State = EntityState.Detached);
-        }
+		}
 
-        #region IDisposable Support
-        public new void Dispose()
+		#region IDisposable Support
+		public new void Dispose()
 		{
 			GC.SuppressFinalize(this);
 		}
 		#endregion
-	}
-
-
-	class NpgsqlConfiguration : DbConfiguration
-	{
-		public NpgsqlConfiguration()
-		{
-			SetProviderServices("Npgsql", NpgsqlServices.Instance);
-			SetProviderFactory("Npgsql", NpgsqlFactory.Instance);
-			SetDefaultConnectionFactory(new NpgsqlConnectionFactory());
-		}
 	}
 }

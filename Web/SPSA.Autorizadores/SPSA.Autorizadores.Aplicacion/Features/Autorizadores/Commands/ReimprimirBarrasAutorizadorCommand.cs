@@ -45,7 +45,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands
 			{
 				foreach (var autorizador in request.Autorizadores)
 				{
-					autorizador.CodLocal = autorizador.CodLocal.PadLeft(4, '0');
+					//autorizador.CodLocal = autorizador.CodLocal.PadLeft(4, '0');
 
 					var autImpresionBd = await _contexto.RepositorioAutImpresion.Obtener(x => x.CodLocal == autorizador.CodLocal && x.CodAutorizador == autorizador.CodAutorizador).AsNoTracking().SingleOrDefaultAsync();
 
