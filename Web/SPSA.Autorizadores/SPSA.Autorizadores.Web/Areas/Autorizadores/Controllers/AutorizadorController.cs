@@ -9,6 +9,7 @@ using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,34 +116,7 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
 		[HttpPost]
 		public async Task<JsonResult> ListarAutorizador()
 		{
-			var respuesta = new ListarAutorizadorResponse();
-			var local = WebSession.Local;
-
-			try
-			{
-				var autorizadoresDatatable = await _mediator.Send(new ListarAutorizadoresQuery { CodigoLocal = local });
-				respuesta.Columnas = new List<string>();
-				foreach (DataColumn colum in autorizadoresDatatable.Columns)
-				{
-					respuesta.Columnas.Add(colum.ColumnName);
-				}
-
-				var lst = autorizadoresDatatable.AsEnumerable()
-						 .Select(r => r.Table.Columns.Cast<DataColumn>()
-						 .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
-					  ).ToDictionary(z => z.Key.Replace(" ", "").Replace(".", ""), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
-				   ).ToList();
-
-
-				respuesta.Ok = true;
-				respuesta.Autorizadores = lst;
-			}
-			catch (System.Exception ex)
-			{
-				respuesta.Ok = false;
-				respuesta.Mensaje = ex.Message;
-			}
-
+			var respuesta = await _mediator.Send(new ListarAutorizadoresQuery { CodigoLocal = WebSession.Local });
 			return Json(respuesta);
 		}
 
@@ -265,6 +239,13 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
 			command.NomEmpresa = WebSession.JerarquiaOrganizacional.NomEmpresa;
 			command.NomLocal = WebSession.JerarquiaOrganizacional.NomLocal;
 			var respuesta = await _mediator.Send(command);
+			return Json(respuesta);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> ListarMotivoReimprimir()
+		{
+			var respuesta = await _mediator.Send(new ListarMotivosReimpresionQuery());
 			return Json(respuesta);
 		}
 

@@ -80,7 +80,7 @@ namespace SPSA.Autorizadores.Aplicacion.Entities
 			if (string.IsNullOrWhiteSpace(usuImpresion)) throw new ArgumentException("El usuario de impresión es obligatorio.", nameof(usuImpresion));
 
 			CodColaborador = codColaborador;
-			CodLocal = codLocal.PadLeft(4,'0');
+			CodLocal = codLocal;
 			CodAutorizador = codAutorizador;
 			UsuImpresion = usuImpresion;
 			FecImpresion = DateTime.Now;
