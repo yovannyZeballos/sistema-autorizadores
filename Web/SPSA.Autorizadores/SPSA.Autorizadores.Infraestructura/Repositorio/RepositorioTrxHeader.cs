@@ -28,8 +28,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			using (var connection = new SqlConnection(CadenaConexionBCT))
 			{
 				var command = new SqlCommand(
-					"select count(1) from trxheader where budate = @fecha and branchid = @local and idtransactiontype in (2,10,56) and void = 0; " +
-					"select sum(T.amount - T.changeAmount + T.amttnfee) as montofinal from trxheader H inner join trxtender T ON H.trxid = T.trxid where H.budate = @fecha and H.branchid = @local and H.idtransactiontype in (10,56) and void = 0;",
+					"select count(1) from trxheader where budate = @fecha and branchid = @local and idtransactiontype in (2,10,56) and void = 0 and idpos not in (994,999,995,996); " +
+					"select sum(T.amount - T.changeAmount + T.amttnfee) as montofinal from trxheader H inner join trxtender T ON H.trxid = T.trxid where H.budate = @fecha and H.branchid = @local and H.idtransactiontype in (10,56) and void = 0 and H.idpos not in (994,999,995,996);",
 					connection)
 				{
 					CommandType = CommandType.Text,
