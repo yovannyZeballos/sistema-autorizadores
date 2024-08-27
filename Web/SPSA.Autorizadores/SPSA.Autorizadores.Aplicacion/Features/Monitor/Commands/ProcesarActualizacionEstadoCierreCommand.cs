@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 
 		public async Task<RespuestaComunDTO> Handle(ProcesarActualizacionEstadoCierreCommand request, CancellationToken cancellationToken)
 		{
-			var respuesta = new RespuestaComunDTO { Ok = true };
+			var respuesta = new RespuestaComunDTO { Ok = true, Mensaje = "Proceso ejecutado" };
 			var fechaFin = DateTime.Now;
 			var fechaInicio = fechaFin.AddDays(-40);
 			const int batchSize = 1000; // Define el tamaño del lote aquí
