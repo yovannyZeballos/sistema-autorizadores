@@ -257,6 +257,7 @@
     <Compile Include="DTO\ListarMaeZonaDTO.cs" />
     <Compile Include="DTO\ListarMenuDTO.cs" />
     <Compile Include="DTO\ListarPerfilDTO.cs" />
+    <Compile Include="DTO\ListarProcesoDTO.cs" />
     <Compile Include="DTO\ListarUbiDepartamentoDTO.cs" />
     <Compile Include="DTO\ListarUbiDistritoDTO.cs" />
     <Compile Include="DTO\ListarUbiProvinciaDTO.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorLocalBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Queries\ListarProcesosQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />
