@@ -265,6 +265,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ProcesarMonitorLocalBCTHandler>().As<IRequestHandler<ProcesarMonitorLocalBCTCommand, GenericResponseDTO<List<ProcesarMonitorLocalBCTDTO>>>>();
 			builder.RegisterType<ListarEmpresasPorProcesoHandler>().As<IRequestHandler<ListarEmpresasPorProcesoQuery, GenericResponseDTO<List<ListarEmpresaDTO>>>>();
 			builder.RegisterType<ListarMotivosReimpresionHandler>().As<IRequestHandler<ListarMotivosReimpresionQuery, GenericResponseDTO<Dictionary<string,string>>>>();
+			builder.RegisterType<ListarProcesosHandler>().As<IRequestHandler<ListarProcesosQuery, ListarComunDTO<ListarProcesoDTO>>>();
 
 
 			base.Load(builder);
