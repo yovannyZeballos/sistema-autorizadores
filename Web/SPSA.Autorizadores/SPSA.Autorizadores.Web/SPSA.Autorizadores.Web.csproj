@@ -2754,6 +2754,8 @@
     <Content Include="Plantilla_Inventarios_v2\Plantilla_Carga_Inventario_Caja_v2.xlsx" />
     <Content Include="Areas\Monitor\Views\DiferenciaTransacciones\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\Proceso\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearInvActivo.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioActivo\_EditarInvActivo.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

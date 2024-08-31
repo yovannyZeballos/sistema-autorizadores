@@ -19,6 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
         public string NumGuia { get; set; }
         public DateTime? FecSalida { get; set; }
         public int Antiguedad { get; set; }
+        public int Cantidad { get; set; }
         public string IndOperativo { get; set; }
         public string Observacion { get; set; }
         public string Garantia { get; set; }

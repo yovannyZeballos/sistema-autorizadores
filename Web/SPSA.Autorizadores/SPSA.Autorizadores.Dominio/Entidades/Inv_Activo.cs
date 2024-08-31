@@ -20,6 +20,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string NumGuia { get; set; }
         public DateTime? FecSalida{ get; set; }
         public int Antiguedad { get; set; }
+        public int Cantidad { get; set; }
         public string IndOperativo { get; set; }
         public string Observacion { get; set; }
         public string Garantia { get; set; }
@@ -27,5 +28,12 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 
         [ForeignKey("CodActivo")]
         public virtual InvTipoActivo InvTipoActivo { get; set; }
+
+        [ForeignKey("CodEmpresa, CodCadena, CodRegion, CodZona, CodLocal")]
+        public virtual Mae_Local MaeLocal { get; set; }
+
+        [ForeignKey("CodEmpresa")]
+        public virtual Mae_Empresa MaeEmpresa { get; set; }
+
     }
 }
