@@ -33,6 +33,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.Observacion).HasColumnName("OBSERVACION");
             Property(x => x.Garantia).HasColumnName("GARANTIA");
             Property(x => x.FecActualiza).HasColumnName("FEC_ACTUALIZA");
+            Property(x => x.Cantidad).HasColumnName("CANTIDAD");
         }
     }
 }

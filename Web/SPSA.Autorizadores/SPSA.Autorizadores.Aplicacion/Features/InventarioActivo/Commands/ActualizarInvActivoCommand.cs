@@ -23,6 +23,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
         public string CodModelo { get; set; }
         public string CodSerie { get; set; }
         public string NomMarca { get; set; }
+        public int Cantidad { get; set; }
         public string Ip { get; set; }
         public string NomArea { get; set; }
         public string NumOc { get; set; }
