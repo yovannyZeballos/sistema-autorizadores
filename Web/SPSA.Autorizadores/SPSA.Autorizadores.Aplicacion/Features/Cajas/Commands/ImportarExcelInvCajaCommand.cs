@@ -486,24 +486,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                             }
                         }
 
-                        var batchSize = 100;
-                        var invCajasExistentes = new List<InvCajas>();
-
-                        for (int i = 0; i < invCajasList.Count; i += batchSize)
-                        {
-                            var batch = invCajasList.Skip(i).Take(batchSize).ToList();
-                            var codigosUnicos = batch.Select(y => $"{y.CodEmpresa}{y.CodCadena}{y.CodRegion}{y.CodZona}{y.CodLocal}{y.NumCaja}{y.CodActivo}").ToList();
-
-                            var batchResult = await _contexto.RepositorioInvCajas.Obtener(x => codigosUnicos.Any(y => y == x.CodEmpresa + x.CodCadena + x.CodRegion + x.CodZona + x.CodLocal + x.NumCaja + x.CodActivo)).ToListAsync();
-
-                            invCajasExistentes.AddRange(batchResult);
-                        }
-
                         foreach (var invCajas in invCajasList)
                         {
-                            var invCajaExistente = invCajasExistentes.FirstOrDefault(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena
+                            var invCajaExistente = _contexto.RepositorioInvCajas.Obtener(x => x.CodEmpresa == invCajas.CodEmpresa && x.CodCadena == invCajas.CodCadena
                             && x.CodRegion == invCajas.CodRegion && x.CodZona == invCajas.CodZona && x.CodLocal == invCajas.CodLocal
-                            && x.NumCaja == invCajas.NumCaja && x.CodActivo == invCajas.CodActivo);
+                            && x.NumCaja == invCajas.NumCaja && x.CodActivo == invCajas.CodActivo).FirstOrDefault();
 
                             if (invCajaExistente != null)
                             {
@@ -539,6 +526,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                         Fila = 0,
                                         Mensaje = $"{errorMessage}"
                                     });
+
+                                    // Descartar cambios de la entidad problemática
+                                    _contexto.RepositorioInvCajas.DescartarCambios(invCajas);
+
                                     continue;
                                 }
                             }
