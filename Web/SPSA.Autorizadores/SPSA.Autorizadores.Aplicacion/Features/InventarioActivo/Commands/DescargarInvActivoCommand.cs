@@ -39,7 +39,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
             try
             {
-                // Realiza la consulta a la base de datos y guarda los resultados en memoria
+                var lista3333 = await _contexto.RepositorioInventarioActivo
+                    .Obtener(x => x.CodEmpresa == request.CodEmpresa)
+                    .ToListAsync(cancellationToken);
+
                 // Realiza la consulta a la base de datos y proyecta a un objeto anónimo
                 var lista = await _contexto.RepositorioInventarioActivo
                     .Obtener(x => x.CodEmpresa == request.CodEmpresa)
@@ -51,11 +54,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                         x.CodRegion,
                         x.CodZona,
                         x.CodLocal,
+                        x.MaeLocal.NomLocal,
+                        x.MaeEmpresa.CodSociedad,
                         x.CodActivo,
                         x.InvTipoActivo.NomActivo,
                         x.CodModelo,
                         x.NomMarca,
                         x.CodSerie,
+                        x.Cantidad,
                         x.Ip,
                         x.NomArea,
                         x.NumOc,

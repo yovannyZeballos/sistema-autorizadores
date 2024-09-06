@@ -229,8 +229,9 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<CrearInvActivoHandler>().As<IRequestHandler<CrearInvActivoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarInvActivoHandler>().As<IRequestHandler<ActualizarInvActivoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImportarInventarioActivoHandler>().As<IRequestHandler<ImportarInventarioActivoCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarInvActivoHandler>().As<IRequestHandler<DescargarInvActivoCommand, DescargarMaestroDTO>>();
 
-			builder.RegisterType<ListarInvCajaHandler>().As<IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>>();
+            builder.RegisterType<ListarInvCajaHandler>().As<IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>>();
 			builder.RegisterType<ObtenerInvCajaHandler>().As<IRequestHandler<ObtenerInvCajaQuery, GenericResponseDTO<ObtenerInvCajaDTO>>>();
 			builder.RegisterType<CrearInvCajaHandler>().As<IRequestHandler<CrearInvCajaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarInvCajaHandler>().As<IRequestHandler<ActualizarInvCajaCommand, RespuestaComunDTO>>();
@@ -265,6 +266,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ProcesarMonitorLocalBCTHandler>().As<IRequestHandler<ProcesarMonitorLocalBCTCommand, GenericResponseDTO<List<ProcesarMonitorLocalBCTDTO>>>>();
 			builder.RegisterType<ListarEmpresasPorProcesoHandler>().As<IRequestHandler<ListarEmpresasPorProcesoQuery, GenericResponseDTO<List<ListarEmpresaDTO>>>>();
 			builder.RegisterType<ListarMotivosReimpresionHandler>().As<IRequestHandler<ListarMotivosReimpresionQuery, GenericResponseDTO<Dictionary<string,string>>>>();
+			builder.RegisterType<ListarProcesosHandler>().As<IRequestHandler<ListarProcesosQuery, ListarComunDTO<ListarProcesoDTO>>>();
 
 
 			base.Load(builder);

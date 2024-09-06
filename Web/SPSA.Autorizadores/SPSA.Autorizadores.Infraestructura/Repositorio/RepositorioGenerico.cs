@@ -70,6 +70,16 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             return await _contexto.Database.ExecuteSqlCommandAsync(sql, parameters);
         }
 
+        // Método para descartar cambios en una entidad específica
+        public void DescartarCambios(TEntidad entidad)
+        {
+            var entry = _contexto.Entry(entidad);
+            if (entry != null)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
+
         #region IDisposable Support
         private bool disposedValue; // To detect redundant calls
 

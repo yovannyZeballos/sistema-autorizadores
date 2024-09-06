@@ -2,7 +2,6 @@
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Command;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.ViewModel;
 using System.Collections.Generic;

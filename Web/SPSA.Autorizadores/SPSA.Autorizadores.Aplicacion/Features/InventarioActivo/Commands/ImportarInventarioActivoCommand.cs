@@ -63,6 +63,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                                     CodModelo = worksheet.Cell(row, 12).Value.ToString(),
                                     NomMarca = worksheet.Cell(row, 13).Value.ToString(),
                                     CodSerie = worksheet.Cell(row, 14).Value.ToString(),
+                                    Cantidad = Convert.ToInt32(worksheet.Cell(row, 15).Value),
                                     Ip = worksheet.Cell(row, 16).Value.ToString(),
                                     NomArea = worksheet.Cell(row, 17).Value.ToString(),
                                     NumOc = worksheet.Cell(row, 18).Value.ToString(),
