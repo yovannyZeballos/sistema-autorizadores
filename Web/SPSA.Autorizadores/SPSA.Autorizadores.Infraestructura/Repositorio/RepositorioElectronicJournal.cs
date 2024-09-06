@@ -34,20 +34,27 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 						parsed_data AS (
 							SELECT
 								trx_data,
-								COALESCE((SELECT (regexp_matches(trx_data, 'T O T A L\s+(-?[\d\.]+)', 'g'))[1]::numeric), 0) AS total,
-								COALESCE((SELECT (regexp_matches(trx_data, 'PERU CHAMPS\s+(-?[\d\.]+)', 'g'))[1]::numeric), 0) AS peru_champs,
-								COALESCE((SELECT (regexp_matches(trx_data, '\bTELETON\b\s+(-?[\d\.]+)', 'g'))[1]::numeric), 0) AS teleton,
-								COALESCE((SELECT (regexp_matches(trx_data, 'TELETON PERU\s+(-?[\d\.]+)', 'g'))[1]::numeric), 0) AS teleton_peru,
-								COALESCE((SELECT (regexp_matches(trx_data, 'APOYO A LA TELETON\s+(-?[\d\.]+)', 'g'))[1]::numeric), 0) AS teleton_apoyo,
-								COALESCE((SELECT (regexp_matches(trx_data, 'APOYA A LA TELETON\s+IMPORTE:\s+(\d+\.\d+)', 'g'))[1]::numeric), 0) AS teleton_apoyo_importe,
-								COALESCE((SELECT (regexp_matches(trx_data, 'EXC.REDONDEO\s+(-?[\d\.]+)', 'g'))[1]::numeric), 0) AS exc_redondeo
+								COALESCE((SELECT (regexp_matches(trx_data, 'T O T A L\s+(-?[\d\.]+)', 'g'))[1]::NUMERIC LIMIT 1), 0) AS total,
+								COALESCE((SELECT (regexp_matches(trx_data, 'PERU CHAMPS\s+(-?[\d\.]+)', 'g'))[1]::NUMERIC LIMIT 1), 0) AS peru_champs,
+								COALESCE(
+											(SELECT 
+												CASE 
+													WHEN trx_data ~* 'APOYO A LA TELETON|TELETON PERU' THEN 0
+													ELSE (regexp_matches(trx_data, 'TELETON\s+(-?[\d\.]+)', 'g'))[1]::NUMERIC 
+												END 
+											 LIMIT 1), 
+							0
+						) AS teleton,
+								COALESCE((SELECT (regexp_matches(trx_data, 'TELETON PERU\s+(-?[\d\.]+)', 'g'))[1]::NUMERIC LIMIT 1), 0) AS teleton_peru,
+								COALESCE((SELECT (regexp_matches(trx_data, 'APOYO A LA TELETON\s+(-?[\d\.]+)', 'g'))[1]::NUMERIC LIMIT 1), 0) AS teleton_apoyo,
+								COALESCE((SELECT (regexp_matches(trx_data, 'EXC.REDONDEO\s+(-?[\d\.]+)', 'g'))[1]::NUMERIC LIMIT 1), 0) AS exc_redondeo
 							FROM transaction_data
 						),
 						final_amount AS (
 							SELECT
 								trx_data,
 								CASE
-									WHEN total >= 0 THEN total + peru_champs + teleton + teleton_peru + teleton_apoyo + teleton_apoyo_importe - exc_redondeo
+									WHEN total >= 0 THEN total + peru_champs + teleton + teleton_peru + teleton_apoyo - exc_redondeo
 										ELSE 0
 								END AS final_amount
 							FROM parsed_data

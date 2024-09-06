@@ -199,7 +199,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 					}
 					catch (Exception ex)
 					{
-						respuesta.Ok = false;
+						localPos.Observacion = $"{localDescripcion}: {ex.Message}";
+						localPos.Estado = "Error";
+						localPos.ColorEstado = "ROJO";
 						respuesta.Mensaje = $"{localDescripcion}: Ocurrio un error al obtener información de la BD BCT";
 						_logger.Error(ex, respuesta.Mensaje);
 					}
