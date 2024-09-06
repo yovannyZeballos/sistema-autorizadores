@@ -6,6 +6,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
 	public interface IRepositorioElectronicJournal
 	{
-		Task<List<ElectronicJournal>> ListarTransacciones(string cdenaConexion, string date);
+		Task<(int cantidadTransacciones, decimal montoFinal)> ListarTransacciones(string cdenaConexion, string date);
 	}
 }

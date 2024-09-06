@@ -20,7 +20,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		public DateTime Fecha { get; set; }
 		public List<string> Empresas { get; set; }
 		public string CodLocal { get; set; }
-		
+
 	}
 
 	public class ProcesarMonitorLocalBCTHandler : IRequestHandler<ProcesarMonitorLocalBCTCommand, GenericResponseDTO<List<ProcesarMonitorLocalBCTDTO>>>
@@ -101,45 +101,51 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 
 						var cadenaConexion = ArmarCadenaConexion(localPos);
 						var reintentos = procesoParametro.ValParametro == null ? 1 : Convert.ToInt32(procesoParametro.ValParametro);
-						var transacciones = await EjecutarConReintento(() => _repositorioElectronicJournal.ListarTransacciones(cadenaConexion, fecha), reintentos);
-						localPos.CantTransaccionesLocal = transacciones.Count();
-						localPos.NontoTransaccionesLocal = 0;
+						var (cantidadTransacciones, montoTransacciones) = await EjecutarConReintento(() => _repositorioElectronicJournal.ListarTransacciones(cadenaConexion, fecha), reintentos);
+						localPos.CantTransaccionesLocal = cantidadTransacciones;
+						localPos.NontoTransaccionesLocal = montoTransacciones;
 
 						_logger.Information($"{localDescripcion}: conexion exitosa");
 
-						foreach (var transaccion in transacciones)
-						{
-							var data = transaccion.TrxData;
+						//decimal total;
 
-							var valorTotal = ExtraerValorDeParametro(data, "T O T A L");
+						//foreach (var transaccion in transacciones)
+						//{
+						//	total = 0;
+						//	var data = transaccion.TrxData;
 
-							if (valorTotal.HasValue && valorTotal < 0)
-							{
-								continue;
-							}
+						//	var valorTotal = ExtraerValorDeParametro(data, "T O T A L");
 
-							var valorPeruChamps = ExtraerValorDeParametro(data, "PERU CHAMPS");
-							var valorTeleton = ExtraerValorDeParametro(data, "TELETON");
-							var valorExcRedondeo = ExtraerValorDeParametro(data, "EXC.REDONDEO");
+						//	if (valorTotal.HasValue && valorTotal < 0)
+						//	{
+						//		continue;
+						//	}
+
+						//	var valorPeruChamps = ExtraerValorDeParametro(data, "PERU CHAMPS");
+						//	var valorTeleton = ExtraerValorDeParametro(data, "TELETON");
+						//	var valorTeletonPeru = ExtraerValorDeParametro(data, "TELETON PERU");
+						//	var valorApoyoTeleton = ExtraerValorDeParametro(data, "APOYO A LA TELETON");
+						//	var valorExcRedondeo = ExtraerValorDeParametro(data, "EXC.REDONDEO");
 
 
-							if (valorTotal.HasValue)
-							{
-								localPos.NontoTransaccionesLocal += valorTotal.Value;
-								if (valorPeruChamps.HasValue)
-								{
-									localPos.NontoTransaccionesLocal += valorPeruChamps.Value;
-								}
-								if (valorTeleton.HasValue)
-								{
-									localPos.NontoTransaccionesLocal += valorTeleton.Value;
-								}
-								if (valorExcRedondeo.HasValue)
-								{
-									localPos.NontoTransaccionesLocal -= valorExcRedondeo.Value;
-								}
-							}
-						}
+						//	if (valorTotal.HasValue)
+						//	{
+						//		total += valorTotal.Value;
+						//		if (valorPeruChamps.HasValue)
+						//		{
+						//			total += valorPeruChamps.Value;
+						//		}
+						//		if (valorTeleton.HasValue || valorTeletonPeru.HasValue || valorApoyoTeleton.HasValue)
+						//		{
+						//			total += (valorTeleton.Value + valorTeletonPeru.Value + valorApoyoTeleton.Value);
+						//		}
+						//		if (valorExcRedondeo.HasValue)
+						//		{
+						//			total -= valorExcRedondeo.Value;
+						//		}
+						//		localPos.NontoTransaccionesLocal += total;
+						//	}
+						//}
 					}
 					catch (Exception ex)
 					{
@@ -193,7 +199,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 					}
 					catch (Exception ex)
 					{
-						respuesta.Ok = false;
+						localPos.Observacion = $"{localDescripcion}: {ex.Message}";
+						localPos.Estado = "Error";
+						localPos.ColorEstado = "ROJO";
 						respuesta.Mensaje = $"{localDescripcion}: Ocurrio un error al obtener información de la BD BCT";
 						_logger.Error(ex, respuesta.Mensaje);
 					}
@@ -268,7 +276,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		private decimal? ExtraerValorDeParametro(string trama, string parametro)
 		{
 			trama = trama.Replace("S/.", ""); // Eliminamos el símbolo de la moneda
-			// Buscamos la posición del parámetro en la trama.
+											  // Buscamos la posición del parámetro en la trama.
 			int posicionParametro = trama.IndexOf(parametro);
 			if (posicionParametro == -1)
 			{
@@ -307,7 +315,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		}
 
 
-		private async Task<List<ElectronicJournal>> EjecutarConReintento(Func<Task<List<ElectronicJournal>>> funcion, int reintentos = 3)
+		private async Task<(int cantidadTransacciones, decimal montoFinal)> EjecutarConReintento(Func<Task<(int cantidadTransacciones, decimal montoFinal)>> funcion, int reintentos = 3)
 		{
 			for (int intento = 0; intento < reintentos; intento++)
 			{
