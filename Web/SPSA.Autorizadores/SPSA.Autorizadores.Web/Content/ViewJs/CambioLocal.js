@@ -5,15 +5,16 @@ const urlListarCadenasAsociadas = baseUrl + 'Maestros/MaeCadena/ListarCadenasAso
 const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesAsociadas';
 const urlListarZonasAsociadas = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
 const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
+const urlListarLocalesAsociadosPorEmpresa = baseUrl + 'Local/ListarLocalesAsociadasPorEmpresa';
 
 var dataTableLocal = null;
+var dataTableLocalAsociados = null;
 
 var CambioLocal = function () {
 
     var eventos = function () {
 
         $("#btnGuardar").on("click", function () {
-
             const registrosSeleccionados = dataTableLocal.rows('.selected').data().toArray();
 
             if (!validarSelecion(registrosSeleccionados.length)) {
@@ -23,6 +24,55 @@ var CambioLocal = function () {
             btnLoading($("#btnGuardar"), true);
             guardarLocalSession(registrosSeleccionados[0].CodLocal);
 
+        });
+
+        $("#btnObtenerLocal").on("click", async function () {
+            var filasSeleccionada = document.querySelectorAll("#tableBuscarLocales tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+
+            btnLoading($("#btnObtenerLocal"), true);
+
+            const COD_EMPRESA = filasSeleccionada[0].querySelector('td:nth-child(3)').textContent;
+            const COD_CADENA = filasSeleccionada[0].querySelector('td:nth-child(4)').textContent;
+            const COD_REGION = filasSeleccionada[0].querySelector('td:nth-child(5)').textContent;
+            const COD_ZONA = filasSeleccionada[0].querySelector('td:nth-child(6)').textContent;
+            const COD_LOCAL = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+
+            let datos = {
+                /*CodUsuario: $('#txtUsuario').val(),*/
+                CodEmpresa: COD_EMPRESA,
+                CodCadena: COD_CADENA,
+                CodRegion: COD_REGION,
+                CodZona: COD_ZONA,
+                CodLocal: COD_LOCAL
+            };
+
+            $.ajax({
+                url: urlGuardarLocalSession,
+                type: "post",
+                data: { query: datos },
+                success: function (response) {
+                    swal({
+                        text: "Se cambio el local correctamente, se reinicara el sistema.",
+                        icon: "success"
+                    }).then(() => {
+                        document.location = home;
+                        btnLoading($("#btnGuardar"), false);
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal({
+                        text: jqXHR.responseText,
+                        icon: "error",
+                    });
+                }
+            });
+
+            $("#modalLocales").modal('hide');
+
+            guardarLocalSession(COD_LOCAL);
         });
 
         $("#cboEmpresa").on("change", function () {
@@ -41,14 +91,30 @@ var CambioLocal = function () {
             listarLocalesAsociados('#cboLocal', '#cboEmpresa', '#cboCadena', '#cboRegion', '#cboZona');
         });
 
-
-
         $('#tableLocales tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
             } else {
                 dataTableLocal.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
+            }
+        });
+
+        $('#tableBuscarLocales tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                dataTableLocalAsociados.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        $("#btnBuscarLocalPorEmpresa").on("click", function () {
+            if (validarBuscarLocalPorEmpresa()) {
+                //permitirCambioZonaRegion = false;
+
+                $("#modalLocales").modal('show');
+                listarLocalesAsociadosPorEmpresa();
             }
         });
     };
@@ -372,6 +438,49 @@ var CambioLocal = function () {
         });
     }
 
+    const listarLocalesAsociadosPorEmpresa = function () {
+
+        let data = {
+            CodUsuario: $("#txtUsuario").val(),
+            CodEmpresa: $("#cboEmpresa").val()
+        };
+
+        $.ajax({
+            url: urlListarLocalesAsociadosPorEmpresa,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (data) {
+                if (!data.Ok) {
+                    notif({
+                        type: "error",
+                        msg: data.Mensaje,
+                        height: 100,
+                        position: "right"
+                    });
+                    return;
+                }
+                cargarLocalesAsociados(data.Data);
+                //seleccionarLocal();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                notif({
+                    type: "error",
+                    msg: jqXHR.responseText,
+                    height: 100,
+                    position: "right"
+                });
+            }
+        });
+    }
+
     const cargarEmpresas = function (empresas) {
         $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
         empresas.map(empresa => {
@@ -383,10 +492,15 @@ var CambioLocal = function () {
     }
 
     const cargarLocales = function (locales) {
-        dataTableLocal.clear();
+        dataTableLocal.clear().draw();
         dataTableLocal.rows.add(locales);
         dataTableLocal.draw();
+    }
 
+    const cargarLocalesAsociados = function (locales) {
+        dataTableLocalAsociados.clear();
+        dataTableLocalAsociados.rows.add(locales);
+        dataTableLocalAsociados.draw();
     }
 
     const guardarLocalSession = function (codigo) {
@@ -423,6 +537,27 @@ var CambioLocal = function () {
         });
     }
 
+    var visualizarDataTableLocalesAsociados = function () {
+        dataTableLocalAsociados = $('#tableBuscarLocales').DataTable({
+            language: {
+                searchPlaceholder: 'Buscar...',
+                sSearch: '',
+            },
+            scrollY: '180px',
+            scrollCollapse: true,
+            paging: false,
+            "bAutoWidth": false,
+            "columns": [
+                { data: "CodLocal" },
+                { data: "NomLocal" },
+                { data: "CodEmpresa" },
+                { data: "CodCadena" },
+                { data: "CodRegion" },
+                { data: "CodZona" }
+            ]
+        });
+    };
+
     var visualizarDataTableLocales = function () {
         dataTableLocal = $('#tableLocales').DataTable({
             language: {
@@ -452,6 +587,17 @@ var CambioLocal = function () {
         return true;
     }
 
+    const validarBuscarLocalPorEmpresa = function () {
+        let validate = true;
+
+        if ($("#cboEmpresa").val() === '') {
+            validate = false;
+            swal({ text: 'Debe seleccionar la empresa.', icon: "warning", });
+        }
+
+        return validate;
+    }
+
     const seleccionarLocal = function () {
         var i = 0;
         dataTableLocal.rows().every(function () {
@@ -469,8 +615,11 @@ var CambioLocal = function () {
                 eventos();
                 /*listarEmpresas();*/
                 listarEmpresasAsociadas('#cboEmpresa');
+
                 
                 visualizarDataTableLocales();
+                visualizarDataTableLocalesAsociados();
+
                 $('input[type="search"]').addClass("form-control-sm");
 
                 $('#cboEmpresa').select2();

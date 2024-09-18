@@ -171,6 +171,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarMenusHandler>().As<IRequestHandler<ListarMenusQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
 			builder.RegisterType<ObtenerUsuarioHandler>().As<IRequestHandler<ObtenerUsuarioQuery, GenericResponseDTO<ObtenerUsuarioDTO>>>();
 			builder.RegisterType<ListarLocalesAsociadasHandler>().As<IRequestHandler<ListarLocalesAsociadasQuery, GenericResponseDTO<List<ListarLocalDTO>>>>();
+			builder.RegisterType<ListarLocalesAsociadasPorEmpresaHandler>().As<IRequestHandler<ListarLocalesAsociadasPorEmpresaQuery, GenericResponseDTO<List<ListarLocalDTO>>>>();
 			builder.RegisterType<ObtenerJerarquiaOrganizacionalHandler>().As<IRequestHandler<ObtenerJerarquiaOrganizacionalQuery, JerarquiaOrganizacionalDTO>>();
 			builder.RegisterType<ObtenerMenuHandler>().As<IRequestHandler<ObtenerMenuQuery, GenericResponseDTO<ListarMenuDTO>>>();
 			builder.RegisterType<ObtenerMenusUsuarioHandler>().As<IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
