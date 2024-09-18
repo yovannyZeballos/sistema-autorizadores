@@ -381,6 +381,7 @@
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalXEmpresaCommand.cs" />
     <Compile Include="Features\Locales\Commands\ImportarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Queries\ListarLocalesAsociadasPorEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalXEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerMaeLocalQuery.cs" />
