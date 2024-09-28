@@ -376,6 +376,16 @@
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaPorLocalCommand.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ListarInvCajaQuery.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ObtenerInvCajaQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\CrearInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\InvKardexActivoDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\InvKardexDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexActivoDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexDTO.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexActivoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ObtenerInvKardexActivoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ObtenerInvKardexQuery.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
