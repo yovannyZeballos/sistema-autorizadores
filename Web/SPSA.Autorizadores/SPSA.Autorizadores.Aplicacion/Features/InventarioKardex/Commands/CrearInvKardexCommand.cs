@@ -2,15 +2,11 @@
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,14 +46,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands
             var respuesta = new RespuestaComunDTO { Ok = true };
             try
             {
-                //bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == request.CodEmpresa);
-                //if (existe)
-                //{
-                //    respuesta.Ok = false;
-                //    respuesta.Mensaje = "Inventario kardex ya existe";
-                //    return respuesta;
-                //}
-
                 var invKardex = _mapper.Map<InvKardex>(request);
                 _contexto.RepositorioInvKardex.Agregar(invKardex);
                 await _contexto.GuardarCambiosAsync();

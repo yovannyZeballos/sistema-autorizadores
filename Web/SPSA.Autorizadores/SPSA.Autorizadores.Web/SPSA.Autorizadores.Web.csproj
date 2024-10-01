@@ -217,6 +217,7 @@
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\InventarioKardexActivoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioKardexController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
     <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
@@ -2302,6 +2303,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarInvKardexActivo.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardex.js" />
     <Content Include="Content\ViewJs\AdministrarInvCaja.js" />
     <Content Include="Content\ViewJs\AdministrarLocal.js" />
@@ -2761,6 +2763,9 @@
     <Content Include="Areas\Inventario\Views\InventarioKardex\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioKardex\_CrearInvKardex.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioKardex\_EditarInvKardex.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\_CrearInvkardexActivo.cshtml" />
+    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\_EditarInvkardexActivo.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

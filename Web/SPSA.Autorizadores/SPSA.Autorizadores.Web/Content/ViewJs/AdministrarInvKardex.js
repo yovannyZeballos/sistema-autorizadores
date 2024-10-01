@@ -13,6 +13,11 @@ var AdministrarInvKardex = function () {
 
     const eventos = function () {
 
+        $("#btnIrActivos").click(function () {
+            window.location.href = '/Inventario/InventarioKardexActivo'; // Reemplaza con la ruta a la vista
+
+        });
+
         $("#btnNuevoInvKardex").click(function () {
 
             //if (validarNuevoInvActivo()) {

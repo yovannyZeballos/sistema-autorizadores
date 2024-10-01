@@ -276,6 +276,9 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
             builder.RegisterType<ListarInvKardexActivoHandler>().As<IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>>();
             builder.RegisterType<ObtenerInvKardexActivoHandler>().As<IRequestHandler<ObtenerInvKardexActivoQuery, GenericResponseDTO<InvKardexActivoDTO>>>();
+            builder.RegisterType<CrearInvKardexActivoHandler>().As<IRequestHandler<CrearInvKardexActivoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarInvKardexActivoHandler>().As<IRequestHandler<ActualizarInvKardexActivoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<EliminarInvKardexActivoHandler>().As<IRequestHandler<EliminarInvKardexActivoCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<ListarInvKardexHandler>().As<IRequestHandler<ListarInvKardexQuery, GenericResponseDTO<List<ListarInvKardexDTO>>>>();
             builder.RegisterType<ObtenerInvKardexHandler>().As<IRequestHandler<ObtenerInvKardexQuery, GenericResponseDTO<InvKardexDTO>>>();

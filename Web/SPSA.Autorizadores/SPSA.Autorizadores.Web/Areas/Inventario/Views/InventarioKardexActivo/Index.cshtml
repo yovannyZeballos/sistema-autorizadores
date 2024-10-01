@@ -6,13 +6,13 @@
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">Inventario Kardex</div>
+        <div class="page-title">Listado De Activos (Kardex)</div>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
             <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
             <li class="breadcrumb-item1 active">Inventario</li>
-            <li class="breadcrumb-item1 active">Kardex</li>
+            <li class="breadcrumb-item1 active">Kardex Activos</li>
         </ol>
     </div>
 </div>
@@ -26,42 +26,31 @@
                     <div class="col-12 d-flex justify-content-between mb-3">
                         <!-- Botones alineados a la izquierda -->
                         <div class="d-flex">
-                            <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary me-2">
+                            <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary me-2">
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-                            <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2">
+                            <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-warning me-2">
                                 <i class="fa fa-pencil"></i> Editar
                             </button>
-                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger">
+                            <button type="button" id="btnEliminarInvActivo" class="btn btn-sm btn-danger">
                                 <i class="fa fa-remove"></i> Eliminar
                             </button>
                         </div>
                         <!-- Botón alineado a la derecha -->
-                        <button type="button" id="btnIrActivos" class="btn btn-sm btn-success">
-                            <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Activos
+                        <button type="button" id="btnIrKardex" class="btn btn-sm btn-success">
+                            <i class="fa fa-arrow-right fa-2x"></i> Ir a Kardex
                         </button>
                     </div>
                     <div class="col-12">
-                        <table id="tableKardex" class="table text-nowrap border-bottom">
+                        <table id="tableActivos" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr class="table-primary">
                                     <th class="border-bottom-0" style="font-size: 15px;">ID</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">KARDEX</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">FECHA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">DESCRIPCION</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">AREA</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">TIPO</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">GUIA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">CATEGORIA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">ORIGEN</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">DESTINO</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">TK</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">CANTIDAD</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">TIPO_STOCK</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">OC</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">SOCIEDAD</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center">
@@ -75,17 +64,17 @@
 </div>
 
 <!-- MODAL CREAR INV KARDEX -->
-<div class="modal fade" id="modalInvKardex" data-bs-backdrop="static">
+<div class="modal fade" id="modalInvActivo" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
-                <h6 class="modal-title" id="tituloModalInvKardex"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h6 class="modal-title" id="tituloModalInvActivo"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button id="btnActualizarInvKardex" class="btn btn-primary">Guardar</button>
-                <button id="btnGuardarInvKardex" class="btn btn-primary">Guardar</button>
+                <button id="btnActualizarInvActivo" class="btn btn-primary">Guardar</button>
+                <button id="btnGuardarInvActivo" class="btn btn-primary">Guardar</button>
                 <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -108,10 +97,11 @@
     <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/Content/ViewJs/AdministrarInvKardex.js"></script>
+    <script src="~/Content/ViewJs/AdministrarInvKardexActivo.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            AdministrarInvKardex.init();
+            AdministrarInvKardexActivo.init();
         });
     </script>
 }
+

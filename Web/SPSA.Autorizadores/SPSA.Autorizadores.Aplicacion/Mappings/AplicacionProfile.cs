@@ -169,6 +169,8 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 
             CreateMap<ListarInvKardexActivoDTO, InvKardexActivo>().ReverseMap();
             CreateMap<InvKardexActivoDTO, InvKardexActivo>().ReverseMap();
+            CreateMap<CrearInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
+            CreateMap<ActualizarInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
 
             CreateMap<ListarInvKardexDTO, InvKardex>().ReverseMap();
             CreateMap<InvKardexDTO, InvKardex>().ReverseMap();
