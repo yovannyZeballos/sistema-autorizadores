@@ -1,6 +1,6 @@
 ﻿@model SPSA.Autorizadores.Aplicacion.ViewModel.InvKardexViewModel
 
-<div class="row needs-validation" id="formInvActivo">
+<div class="row needs-validation" id="formInvKardex">
     <div class="col-xl-6 col-md-6">
         <div class="form-group">
             <label for="cboCodActivo" class="form-label">Activo</label>
@@ -18,17 +18,11 @@
             <label for="cboIndOperativo" class="form-label">Kardex</label>
             <select class="form-control custom-select" id="cboIndKardex" required>
                 <option value="">Seleccionar</option>
-                <option value="ENTRADA" @(Model.InvKardex.Kardex == "ENTRADA" ? "selected" : "")>ENTRADA</option>
+                <option value="INGRESO" @(Model.InvKardex.Kardex == "INGRESO" ? "selected" : "")>INGRESO</option>
                 <option value="SALIDA" @(Model.InvKardex.Kardex == "SALIDA" ? "selected" : "")>SALIDA</option>
             </select>
         </div>
     </div>
-    @*<div class="col-xl-3 col-md-3">
-        <div class="form-group">
-            <label for="txtKardex" class="form-label">Kardex</label>
-            <input type="text" class="form-control" id="txtKardex" value="@Model.InvKardex.Kardex" required>
-        </div>
-    </div>*@
     <div class="col-xl-3 col-md-3">
         <div class="form-group">
             <label for="txtFecha" class="form-label">Fecha</label>
@@ -50,13 +44,13 @@
     <div class="col-xl-3 col-md-4">
         <div class="form-group">
             <label for="txtOrigen" class="form-label">Origen</label>
-            <input type="text" class="form-control" id="txtOrigen" value="@Model.InvKardex.Origen">
+            <input type="text" class="form-control" id="txtOrigen" value="@Model.InvKardex.Origen" required>
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
         <div class="form-group">
             <label for="txtDestino" class="form-label">Destino</label>
-            <input type="text" class="form-control" id="txtDestino" value="@Model.InvKardex.Destino">
+            <input type="text" class="form-control" id="txtDestino" value="@Model.InvKardex.Destino" required>
         </div>
     </div>
     <div class="col-xl-3 col-md-4">

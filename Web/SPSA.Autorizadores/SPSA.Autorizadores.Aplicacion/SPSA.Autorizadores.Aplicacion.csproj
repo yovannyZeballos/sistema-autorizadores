@@ -378,6 +378,7 @@
     <Compile Include="Features\InventarioCaja\Queries\ObtenerInvCajaQuery.cs" />
     <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\CrearInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexActivoDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexActivoDTO.cs" />

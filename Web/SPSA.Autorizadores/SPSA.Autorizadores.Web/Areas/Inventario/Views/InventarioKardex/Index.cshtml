@@ -23,21 +23,23 @@
             @Html.Partial("_CardHeader", "Listado")
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-xl-3 col-md-3">
-                                <div class="form-group select2-sm">
-                                    <label class="form-label"></label>
-                                    <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Nuevo</button>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-3">
-                                <div class="form-group select2-sm">
-                                    <label class="form-label"></label>
-                                    <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-primary btn-block"><i class="fa fa-pencil"></i> Editar</button>
-                                </div>
-                            </div>
+                    <div class="col-12 d-flex justify-content-between mb-3">
+                        <!-- Botones alineados a la izquierda -->
+                        <div class="d-flex">
+                            <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary me-2">
+                                <i class="fa fa-plus"></i> Nuevo
+                            </button>
+                            <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2">
+                                <i class="fa fa-pencil"></i> Editar
+                            </button>
+                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger">
+                                <i class="fa fa-remove"></i> Eliminar
+                            </button>
                         </div>
+                        <!-- Botón alineado a la derecha -->
+                        <button type="button" id="btnExtra" class="btn btn-sm btn-success">
+                            <i class="fa fa-check"></i> Lista Activos
+                        </button>
                     </div>
                     <div class="col-12">
                         <table id="tableKardex" class="table text-nowrap border-bottom">
@@ -50,7 +52,6 @@
                                     <th class="border-bottom-0" style="font-size: 15px;">TIPO</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">GUIA</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">CATEGORIA</th>
-                                    @*<th class="border-bottom-0" style="font-size: 15px;">ACTIVOID</th>*@
                                     <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
@@ -83,7 +84,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                @*<button id="btnActualizarInvKardex" class="btn btn-primary">Guardar</button>*@
+                <button id="btnActualizarInvKardex" class="btn btn-primary">Guardar</button>
                 <button id="btnGuardarInvKardex" class="btn btn-primary">Guardar</button>
                 <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>

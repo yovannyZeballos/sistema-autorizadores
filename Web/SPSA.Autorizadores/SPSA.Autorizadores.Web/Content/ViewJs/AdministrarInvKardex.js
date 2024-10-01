@@ -3,6 +3,11 @@
 var urlModalCrearInvKardex = baseUrl + 'Inventario/InventarioKardex/CrearFormInvKardex';
 var urlModalEditarInvKardex = baseUrl + 'Inventario/InventarioKardex/EditarFormInvKardex';
 
+var urlCrearInvKardex = baseUrl + 'Inventario/InventarioKardex/CrearInvKardex';
+var urlActualizarInvKardex = baseUrl + 'Inventario/InventarioKardex/ActualizarInvKardex';
+var urlEliminarInvKardex = baseUrl + 'Inventario/InventarioKardex/EliminarInvKardex';
+var urlObtenerInvKardex = baseUrl + 'Inventario/InventarioKardex/ObtenerInvKardex';
+
 var dtListaKardex = null;
 var AdministrarInvKardex = function () {
 
@@ -10,13 +15,104 @@ var AdministrarInvKardex = function () {
 
         $("#btnNuevoInvKardex").click(function () {
 
-            if (validarNuevoInvActivo()) {
-                abrirModalNuevoInvActivo();
-            }
+            //if (validarNuevoInvActivo()) {
+            abrirModalNuevoInvKardex();           
+            //}
         });
 
-        $("#btnEditarInvKardex").click(function () {
-            abrirModalEditarInvActivo();
+        $("#btnEditarInvKardex").click(async function () {
+
+            var filasSeleccionada = document.querySelectorAll("#tableKardex tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+            const kardex_id = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+
+            const objKardex = await obtenerKardex(kardex_id);
+
+            if (objKardex === undefined) return;
+
+            abrirModalEditarInvKardex(objKardex);
+        });
+
+        $("#btnGuardarInvKardex").on("click", async function () {
+            var inv_kardex = {
+                ActivoId: $("#cboActivoId").val(),
+                Kardex: $("#cboIndKardex").val(),
+                Fecha: $("#txtFecha").val(),
+                Guia: $("#txtGuia").val(),
+                Serie: $("#txtSerie").val(),
+                Origen: $("#txtOrigen").val(),
+                Destino: $("#txtDestino").val(),
+                Tk: $("#txtTk").val(),
+                Cantidad: $("#txtCantidad").val(),
+                TipoStock: $("#txtTipoStock").val(),
+                Oc: $("#txtOc").val(),
+                Sociedad: $("#txtSociedad").val()
+            };
+
+            if (validarFormInvKardex(inv_kardex))
+                await guardarInvKardex(inv_kardex, urlCrearInvKardex);
+        });
+
+        $("#btnActualizarInvKardex").on("click", async function () {
+            var inv_kardex = {
+                Id: $("#txtId").val(),
+                ActivoId: $("#cboActivoId").val(),
+                Kardex: $("#cboIndKardex").val(),
+                Fecha: $("#txtFecha").val(),
+                Guia: $("#txtGuia").val(),
+                Serie: $("#txtSerie").val(),
+                Origen: $("#txtOrigen").val(),
+                Destino: $("#txtDestino").val(),
+                Tk: $("#txtTk").val(),
+                Cantidad: $("#txtCantidad").val(),
+                TipoStock: $("#txtTipoStock").val(),
+                Oc: $("#txtOc").val(),
+                Sociedad: $("#txtSociedad").val()
+            };
+
+            if (validarFormInvKardex(inv_kardex))
+                await guardarInvKardex(inv_kardex, urlActualizarInvKardex);
+        });
+
+        $("#btnEliminarInvKardex").on("click", function () {
+            var filasSeleccionada = document.querySelectorAll("#tableKardex tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+
+            //const kardex_id = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+
+            const request = {
+                Id: filasSeleccionada[0].querySelector('td:nth-child(1)').textContent
+            };
+
+            swal({
+                title: "¿Estás seguro?",
+                text: "No podrás revertir esto",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Sí, eliminarlo",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                }
+            }).then(async (isConfirm) => {
+                if (isConfirm) {
+                    await eliminarInvKardex(request);
+                }
+            });
         });
 
         $('#tableKardex tbody').on('click', 'tr', function () {
@@ -44,58 +140,48 @@ var AdministrarInvKardex = function () {
     }
 
 
-    const validarFormInvActivo = function (invactivo) {
+    const validarFormInvKardex = function (invKardex) {
         let validate = true;
 
-        if (invactivo.CodEmpresa === '' || invactivo.CodCadena === '' || invactivo.CodRegion === '' || invactivo.CodZona === '' || invactivo.CodLocal === ''
-            || invactivo.CodActivo === '' || invactivo.CodModelo === '' || invactivo.NomMarca === '' || invactivo.CodSerie === '') {
+        if (invKardex.ActivoId === '' || invKardex.Kardex === '' || invKardex.Fecha === '' || invKardex.Guia === '' || invKardex.Serie === ''
+            || invKardex.Origen === '' || invKardex.Destino === '') {
             validate = false;
-            $("#formInvActivo").addClass("was-validated");
+            $("#formInvKardex").addClass("was-validated");
             swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning", });
         }
 
         return validate;
     }
 
-    const validarNuevoInvActivo = function () {
-        let validate = true;
-
-        if ($("#cboEmpresa").val() === '' || $("#cboCadena").val() === '' || $("#cboRegion").val() === '' || $("#cboZona").val() === '' || $("#cboLocal").val() === '') {
-            validate = false;
-            swal({ text: 'Debe seleccionar la empresa, cadena, region, zona y local.', icon: "warning", });
+    const validarSelecion = function (count) {
+        if (count === 0) {
+            swal({
+                text: "Debe seleccionar un registro",
+                icon: "warning",
+            });
+            return false;
         }
-
-        return validate;
+        return true;
     }
 
-    const abrirModalEditarInvActivo = async function (codEmpresa, codCadena, codRegion, codZona, codLocal, codActivo, codModelo, nomMarca, codSerie) {
+    const abrirModalEditarInvKardex = async function (objKardex) {
         $("#tituloModalInvKardex").html("Editar Activo");
-        $("#btnActualizarInvActivo").show();
-        $("#btnGuardarInvActivo").hide();
+        $("#btnActualizarInvKardex").show();
+        $("#btnGuardarInvKardex").hide();
 
-        const response = await obtenerInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, codActivo, codModelo, nomMarca, codSerie);
-        const model = response.Data;
-
-        if (model.FecActualiza != "" && model.FecActualiza != null) {
-            let timestamp = parseInt(model.FecActualiza.match(/\d+/)[0], 10);
+        if (objKardex.Fecha != "" && objKardex.Fecha != null) {
+            let timestamp = parseInt(objKardex.Fecha.match(/\d+/)[0], 10);
             let date = new Date(timestamp);
             let formattedDate = date.toISOString().split('T')[0];
-            model.FecActualiza = formattedDate;
+            objKardex.Fecha = formattedDate;
         }
 
-        if (model.FecSalida != "" && model.FecSalida != null) {
-            let timestamp = parseInt(model.FecSalida.match(/\d+/)[0], 10);
-            let date = new Date(timestamp);
-            let formattedDate = date.toISOString().split('T')[0];
-            model.FecSalida = formattedDate;
-        }
-
-        await cargarFormEditarInvActivo(model);
+        await cargarFormEditarInvKardex(objKardex);
     }
 
-    const abrirModalNuevoInvActivo = async function () {
+    const abrirModalNuevoInvKardex = async function () {
         $("#tituloModalInvKardex").html("Ingresar Kardex");
-        //$("#btnActualizarInvActivo").hide();
+        $("#btnActualizarInvKardex").hide();
         $("#btnGuardarInvKardex").show();
 
         const model = {};
@@ -125,9 +211,9 @@ var AdministrarInvKardex = function () {
         });
     }
 
-    const cargarFormEditarInvActivo = async function (model) {
+    const cargarFormEditarInvKardex = async function (model) {
         $.ajax({
-            url: urlModalEditarInvActivo,
+            url: urlModalEditarInvKardex,
             type: "post",
             data: { model },
             dataType: "html",
@@ -138,8 +224,79 @@ var AdministrarInvKardex = function () {
                 closeLoading();
             },
             success: async function (response) {
-                $("#modalInvActivo").find(".modal-body").html(response);
-                $("#modalInvActivo").modal('show');
+                $("#modalInvKardex").find(".modal-body").html(response);
+                $("#modalInvKardex").modal('show');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const guardarInvKardex = function (invKardex, url) {
+        $.ajax({
+            url: url,
+            type: "post",
+            data: { command: invKardex },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                swal({ text: response.Mensaje, icon: "success", });
+                recargarDataTableKardex();
+                $("#modalInvKardex").modal('hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const obtenerKardex = function (kardexId) {
+        return new Promise((resolve, reject) => {
+            const request = {
+                Id: kardexId
+            };
+
+            $.ajax({
+                url: urlObtenerInvKardex,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response.Data)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+    }
+
+    const eliminarInvKardex = async function (request) {
+        $.ajax({
+            url: urlEliminarInvKardex,
+            type: "post",
+            data: { request },
+            dataType: "html",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+                swal("Eliminado!", "Registro eliminado exitosamente.", "success");
+                recargarDataTableKardex(request);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -172,10 +329,25 @@ var AdministrarInvKardex = function () {
                     });
                 }
             },
+            //responsive: true, // Habilitar el modo responsivo
+            scrollY: '400px',
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
             columns: [
                 { data: "Id" },
                 { data: "Kardex" },
-                { data: "Fecha" },
+                {
+                    data: "Fecha",
+                    render: function (data, type, row) {
+                        if (data) {
+                            var timestamp = parseInt(data.match(/\d+/)[0]);
+                            var fecha = new Date(timestamp);
+                            return fecha.toLocaleDateString();
+                        }
+                        return '';
+                    }
+                },
                 { data: "ActivoArea" },
                 { data: "ActivoTipo" },
                 { data: "Guia" },
@@ -195,12 +367,7 @@ var AdministrarInvKardex = function () {
                 searchPlaceholder: 'Buscar...',
                 sSearch: '',
             },
-            scrollY: '400px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: true,
             rowCallback: function (row, data, index) {
-
             },
             bAutoWidth: false
         });
