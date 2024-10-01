@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\IContexto.cs" />
+    <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
+    <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />
     <Compile Include="Repositorio\IRepositorioApertura.cs" />

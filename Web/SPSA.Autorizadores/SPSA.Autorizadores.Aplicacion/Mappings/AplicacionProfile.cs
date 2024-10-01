@@ -7,6 +7,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
@@ -161,8 +163,21 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ListarUbiDistritoDTO, UbiDistrito>().ReverseMap();
             CreateMap<ObtenerUbiDistritoDTO, UbiDistrito>().ReverseMap();
 
-
             #endregion <--TABLA MAESTROS SGP-->
+
+            #region <--INV KARDEX-->
+
+            CreateMap<ListarInvKardexActivoDTO, InvKardexActivo>().ReverseMap();
+            CreateMap<InvKardexActivoDTO, InvKardexActivo>().ReverseMap();
+            CreateMap<CrearInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
+            CreateMap<ActualizarInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
+
+            CreateMap<ListarInvKardexDTO, InvKardex>().ReverseMap();
+            CreateMap<InvKardexDTO, InvKardex>().ReverseMap();
+            CreateMap<CrearInvKardexCommand, InvKardex>().ReverseMap();
+            CreateMap<ActualizarInvKardexCommand, InvKardex>().ReverseMap();
+
+            #endregion <--INV KARDEX-->
 
         }
     }

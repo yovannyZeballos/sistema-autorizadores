@@ -59,6 +59,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioAutImpresion = new RepositorioAutImpresion(this);
 			RepositorioProcesoParametro = new RepositorioProcesoParametro(this);
 
+            RepositorioInvKardex = new RepositorioInvKardex(this);
+            RepositorioInvKardexActivo = new RepositorioInvKardexActivo(this);
+
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
@@ -98,6 +101,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
 		public IRepositorioProcesoParametro RepositorioProcesoParametro { get; private set; }
 
+		public IRepositorioInvKardex RepositorioInvKardex { get; private set; }
+		public IRepositorioInvKardexActivo RepositorioInvKardexActivo { get; private set; }
+
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -136,6 +142,13 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new TmpMonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new AutImpresionTypeConfiguracion());
+
+
+			modelBuilder.Configurations.Add(new InvKardexActivoTypeConfiguration());
+			modelBuilder.Configurations.Add(new InvKardexTypeConfiguration());
+
+
+
 		}
 
 		public bool GuardarCambios()
