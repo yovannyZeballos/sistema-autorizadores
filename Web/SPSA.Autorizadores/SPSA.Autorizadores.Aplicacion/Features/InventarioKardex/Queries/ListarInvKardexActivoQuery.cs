@@ -15,11 +15,11 @@ using System.Data.Entity;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries
 {
-    public class ListarInvKardexActivoQuery : IRequest<GenericResponseDTO<List<ListarInvKardexActivoDTO>>>
+    public class ListarInvKardexActivoQuery : IRequest<GenericResponseDTO<List<InvKardexActivoDTO>>>
     {
     }
 
-    public class ListarInvKardexActivoHandler : IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<ListarInvKardexActivoDTO>>>
+    public class ListarInvKardexActivoHandler : IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>
     {
         private readonly IMapper _mapper;
         private readonly ISGPContexto _contexto;
@@ -31,16 +31,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries
             _logger = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<List<ListarInvKardexActivoDTO>>> Handle(ListarInvKardexActivoQuery request, CancellationToken cancellationToken)
+        public async Task<GenericResponseDTO<List<InvKardexActivoDTO>>> Handle(ListarInvKardexActivoQuery request, CancellationToken cancellationToken)
         {
-            var response = new GenericResponseDTO<List<ListarInvKardexActivoDTO>> { Ok = true, Data = new List<ListarInvKardexActivoDTO>() };
+            var response = new GenericResponseDTO<List<InvKardexActivoDTO>> { Ok = true, Data = new List<InvKardexActivoDTO>() };
 
             try
             {
                 var activos = await _contexto.RepositorioInvKardexActivo.Obtener()
                                                                         .OrderBy(x => x.Id)
                                                                         .ToListAsync();
-                response.Data = _mapper.Map<List<ListarInvKardexActivoDTO>>(activos);
+                response.Data = _mapper.Map<List<InvKardexActivoDTO>>(activos);
                 //response.Ok = true;
                 //response.Mensaje = "Se ha generado la lista correctamente";
             }

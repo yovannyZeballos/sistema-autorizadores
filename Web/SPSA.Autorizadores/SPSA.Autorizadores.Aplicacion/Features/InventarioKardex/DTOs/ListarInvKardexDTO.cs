@@ -13,7 +13,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs
         public string Kardex { get; set; }
         public DateTime Fecha { get; set; }
         public string Guia { get; set; }
-        public string ActivoId { get; set; }
+        //public string ActivoId { get; set; }
         public string Serie { get; set; }
         public string Origen { get; set; }
         public string Destino { get; set; }
@@ -25,11 +25,51 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs
 
         public InvKardexActivo InvKardexActivo { get; set; }
 
-        public string NomActivo
+        public string ActivoId
+        {
+            get
+            {
+                return InvKardexActivo?.Id;
+            }
+        }
+
+        public string ActivoModelo
+        {
+            get
+            {
+                return InvKardexActivo?.Modelo;
+            }
+        }
+
+        public string ActivoDescripcion
+        {
+            get
+            {
+                return InvKardexActivo?.Descripcion;
+            }
+        }
+
+        public string ActivoMarca
         {
             get
             {
                 return InvKardexActivo?.Marca;
+            }
+        }
+
+        public string ActivoArea
+        {
+            get
+            {
+                return InvKardexActivo?.Area;
+            }
+        }
+
+        public string ActivoTipo
+        {
+            get
+            {
+                return InvKardexActivo?.Tipo;
             }
         }
     }

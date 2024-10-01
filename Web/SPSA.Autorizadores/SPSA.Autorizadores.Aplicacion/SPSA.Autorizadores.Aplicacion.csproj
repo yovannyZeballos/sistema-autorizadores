@@ -537,6 +537,7 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="ViewModel\InvActivoViewModel.cs" />
     <Compile Include="ViewModel\InvCajaViewModel.cs" />
+    <Compile Include="ViewModel\InvKardexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

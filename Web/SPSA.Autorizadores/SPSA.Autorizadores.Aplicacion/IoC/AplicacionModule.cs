@@ -20,6 +20,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
@@ -269,8 +271,24 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarMotivosReimpresionHandler>().As<IRequestHandler<ListarMotivosReimpresionQuery, GenericResponseDTO<Dictionary<string,string>>>>();
 			builder.RegisterType<ListarProcesosHandler>().As<IRequestHandler<ListarProcesosQuery, ListarComunDTO<ListarProcesoDTO>>>();
 
+            #region INV KARDEX
 
-			base.Load(builder);
+            builder.RegisterType<ListarInvKardexActivoHandler>().As<IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>>();
+            builder.RegisterType<ObtenerInvKardexActivoHandler>().As<IRequestHandler<ObtenerInvKardexActivoQuery, GenericResponseDTO<InvKardexActivoDTO>>>();
+
+            builder.RegisterType<ListarInvKardexHandler>().As<IRequestHandler<ListarInvKardexQuery, GenericResponseDTO<List<ListarInvKardexDTO>>>>();
+            builder.RegisterType<ObtenerInvKardexHandler>().As<IRequestHandler<ObtenerInvKardexQuery, GenericResponseDTO<InvKardexDTO>>>();
+
+
+            builder.RegisterType<CrearAperturaHandler>().As<IRequestHandler<CrearAperturaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarAperturaHandler>().As<IRequestHandler<ActualizarAperturaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarAperturaHandler>().As<IRequestHandler<ImportarAperturaCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<DescargarAperturaHandler>().As<IRequestHandler<DescargarAperturaCommand, DescargarMaestroDTO>>();
+
+            #endregion INV KARDEX
+
+
+            base.Load(builder);
 		}
 	}
 }
