@@ -1381,7 +1381,7 @@ var AdministrarMaestroLocal = function () {
                                 html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
                             });
                             $('#tbodyErroresCaja').html(html);
-                            $('#modalErroresImportacionExcel').modal("show");
+                            $('#modalErroresImportacion').modal("show");
                         }
                     });
                     return;
