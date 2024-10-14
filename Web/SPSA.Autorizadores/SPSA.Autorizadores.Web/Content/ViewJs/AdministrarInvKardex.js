@@ -47,8 +47,8 @@ var AdministrarInvKardex = function () {
                 Fecha: $("#txtFecha").val(),
                 Guia: $("#txtGuia").val(),
                 Serie: $("#txtSerie").val(),
-                Origen: $("#txtOrigen").val(),
-                Destino: $("#txtDestino").val(),
+                OrigenId: $("#cboOrigen").val(),
+                DestinoId: $("#cboDestino").val(),
                 Tk: $("#txtTk").val(),
                 Cantidad: $("#txtCantidad").val(),
                 TipoStock: $("#txtTipoStock").val(),
@@ -68,8 +68,8 @@ var AdministrarInvKardex = function () {
                 Fecha: $("#txtFecha").val(),
                 Guia: $("#txtGuia").val(),
                 Serie: $("#txtSerie").val(),
-                Origen: $("#txtOrigen").val(),
-                Destino: $("#txtDestino").val(),
+                OrigenId: $("#cboOrigen").val(),
+                DestinoId: $("#cboDestino").val(),
                 Tk: $("#txtTk").val(),
                 Cantidad: $("#txtCantidad").val(),
                 TipoStock: $("#txtTipoStock").val(),
@@ -136,8 +136,8 @@ var AdministrarInvKardex = function () {
             const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
 
-            console.log("child(1)" + NUM_CAJA);
-            console.log("child(2)" + COD_ACTIVO);
+            //console.log("child(1)" + NUM_CAJA);
+            //console.log("child(2)" + COD_ACTIVO);
 
             //abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
         });
@@ -360,8 +360,8 @@ var AdministrarInvKardex = function () {
                 { data: "ActivoModelo" },
                 { data: "ActivoMarca" },
                 { data: "Serie" },
-                { data: "Origen" },
-                { data: "Destino" },
+                { data: "OrigenLocal" },
+                { data: "DestinoLocal" },
                 { data: "Tk" },
                 { data: "Cantidad" },
                 { data: "TipoStock" },

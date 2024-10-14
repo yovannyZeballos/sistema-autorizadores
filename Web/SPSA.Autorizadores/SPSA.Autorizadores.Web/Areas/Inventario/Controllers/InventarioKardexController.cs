@@ -30,10 +30,14 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             ListarInvKardexActivoQuery modelTiposActivo = new ListarInvKardexActivoQuery();
             var tiposActivo = await _mediator.Send(modelTiposActivo);
 
+            ListarInvKardexLocalQuery modelLocales = new ListarInvKardexLocalQuery();
+            var locales = await _mediator.Send(modelLocales);
+
             var viewModel = new InvKardexViewModel
             {
                 InvKardex = model,
-                Activos = tiposActivo.Data
+                Activos = tiposActivo.Data,
+                Locales = locales.Data
             };
 
             return PartialView("_CrearInvKardex", viewModel);
@@ -45,10 +49,14 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             ListarInvKardexActivoQuery modelTiposActivo = new ListarInvKardexActivoQuery();
             var tiposActivo = await _mediator.Send(modelTiposActivo);
 
+            ListarInvKardexLocalQuery modelLocales = new ListarInvKardexLocalQuery();
+            var locales = await _mediator.Send(modelLocales);
+
             var viewModel = new InvKardexViewModel
             {
                 InvKardex = model,
-                Activos = tiposActivo.Data
+                Activos = tiposActivo.Data,
+                Locales = locales.Data
             };
 
             return PartialView("_EditarInvKardex", viewModel);

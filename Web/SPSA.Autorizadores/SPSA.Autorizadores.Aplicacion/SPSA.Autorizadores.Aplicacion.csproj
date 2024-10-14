@@ -384,9 +384,12 @@
     <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexActivoDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\InvKardexLocalDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexActivoDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexLocalDTO.cs" />
     <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexActivoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexLocalQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\ObtenerInvKardexActivoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\ObtenerInvKardexQuery.cs" />

@@ -20,8 +20,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.Guia).HasColumnName("GUIA");
             Property(x => x.ActivoId).HasColumnName("ACTIVO_ID");
             Property(x => x.Serie).HasColumnName("SERIE");
-            Property(x => x.Origen).HasColumnName("ORIGEN");
-            Property(x => x.Destino).HasColumnName("DESTINO");
+            Property(x => x.OrigenId).HasColumnName("ORIGEN_ID");
+            Property(x => x.DestinoId).HasColumnName("DESTINO_ID");
             Property(x => x.Tk).HasColumnName("TK");
             Property(x => x.Cantidad).HasColumnName("CANTIDAD");
             Property(x => x.TipoStock).HasColumnName("TIPO_STOCK");

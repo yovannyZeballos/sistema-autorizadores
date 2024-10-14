@@ -13,8 +13,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs
         public string Guia { get; set; }
         public string ActivoId { get; set; }
         public string Serie { get; set; }
-        public string Origen { get; set; }
-        public string Destino { get; set; }
+        public int OrigenId { get; set; }
+        public int DestinoId { get; set; }
         public string Tk { get; set; }
         public int Cantidad { get; set; }
         public string TipoStock { get; set; }
@@ -22,5 +22,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs
         public string Sociedad { get; set; }
 
         public InvKardexActivo InvKardexActivo { get; set; }
+        public InvKardexLocal Origen { get; set; }
+        public InvKardexLocal Destino { get; set; }
     }
 }

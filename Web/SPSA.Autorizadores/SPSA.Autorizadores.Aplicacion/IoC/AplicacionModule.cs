@@ -280,6 +280,12 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ActualizarInvKardexActivoHandler>().As<IRequestHandler<ActualizarInvKardexActivoCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarInvKardexActivoHandler>().As<IRequestHandler<EliminarInvKardexActivoCommand, RespuestaComunDTO>>();
 
+            builder.RegisterType<ListarInvKardexLocalHandler>().As<IRequestHandler<ListarInvKardexLocalQuery, GenericResponseDTO<List<InvKardexLocalDTO>>>>();
+            //builder.RegisterType<ObtenerInvKardexLocalHandler>().As<IRequestHandler<ObtenerInvKardexLocalQuery, GenericResponseDTO<InvKardexLocalDTO>>>();
+            //builder.RegisterType<CrearInvKardexActivoHandler>().As<IRequestHandler<CrearInvKardexActivoCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<ActualizarInvKardexActivoHandler>().As<IRequestHandler<ActualizarInvKardexActivoCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<EliminarInvKardexActivoHandler>().As<IRequestHandler<EliminarInvKardexActivoCommand, RespuestaComunDTO>>();
+
             builder.RegisterType<ListarInvKardexHandler>().As<IRequestHandler<ListarInvKardexQuery, GenericResponseDTO<List<ListarInvKardexDTO>>>>();
             builder.RegisterType<ObtenerInvKardexHandler>().As<IRequestHandler<ObtenerInvKardexQuery, GenericResponseDTO<InvKardexDTO>>>();
             builder.RegisterType<CrearInvKardexHandler>().As<IRequestHandler<CrearInvKardexCommand, RespuestaComunDTO>>();

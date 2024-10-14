@@ -133,6 +133,7 @@
     <Compile Include="Configuracion\AutImpresionTypeConfiguracion.cs" />
     <Compile Include="Configuracion\InvCajasTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvKardexActivoTypeConfiguration.cs" />
+    <Compile Include="Configuracion\InvKardexLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvKardexTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvTipoActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\AperturaTypeConfiguration.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\RepositorioInvKardex.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexActivo.cs" />
+    <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
     <Compile Include="Repositorio\RepositorioAutImpresion.cs" />
