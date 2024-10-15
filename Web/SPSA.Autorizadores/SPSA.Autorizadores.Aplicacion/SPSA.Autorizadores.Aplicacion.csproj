@@ -315,6 +315,7 @@
     <Compile Include="DTO\ObtenerUbiDistritoDTO.cs" />
     <Compile Include="DTO\ObtenerUsuarioDTO.cs" />
     <Compile Include="DTO\ParametrosMonitorBctDTO.cs" />
+    <Compile Include="DTO\ProcesarMonitorArchivoDTO.cs" />
     <Compile Include="DTO\ProcesarMonitorLocalBCTDTO.cs" />
     <Compile Include="DTO\ProcesoRequestDTO.cs" />
     <Compile Include="DTO\PermisoDTO.cs" />
@@ -410,6 +411,7 @@
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorLocalBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Commands\ProcesarMonitorArchivoscommand.cs" />
     <Compile Include="Features\Monitor\Queries\ListarProcesosQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
