@@ -31,6 +31,7 @@ using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Commands
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Monitor;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
@@ -271,10 +272,13 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarEmpresasPorProcesoHandler>().As<IRequestHandler<ListarEmpresasPorProcesoQuery, GenericResponseDTO<List<ListarEmpresaDTO>>>>();
 			builder.RegisterType<ListarMotivosReimpresionHandler>().As<IRequestHandler<ListarMotivosReimpresionQuery, GenericResponseDTO<Dictionary<string,string>>>>();
 			builder.RegisterType<ListarProcesosHandler>().As<IRequestHandler<ListarProcesosQuery, ListarComunDTO<ListarProcesoDTO>>>();
+			builder.RegisterType<ListarParametrosMonitorArchivoHandler>().As<IRequestHandler<ListarParametrosMonitorArchivoQuery, GenericResponseDTO<MonitorArchivoParametrosDTO>>>();
+			builder.RegisterType<ProcesarMonitorArchivosHandler>().As<IRequestHandler<ProcesarMonitorArchivoscommand, GenericResponseDTO<List<ProcesarMonitorArchivoDTO>>>>();
 
-            #region INV KARDEX
 
-            builder.RegisterType<ListarInvKardexActivoHandler>().As<IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>>();
+			#region INV KARDEX
+
+			builder.RegisterType<ListarInvKardexActivoHandler>().As<IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>>();
             builder.RegisterType<ObtenerInvKardexActivoHandler>().As<IRequestHandler<ObtenerInvKardexActivoQuery, GenericResponseDTO<InvKardexActivoDTO>>>();
             builder.RegisterType<CrearInvKardexActivoHandler>().As<IRequestHandler<CrearInvKardexActivoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarInvKardexActivoHandler>().As<IRequestHandler<ActualizarInvKardexActivoCommand, RespuestaComunDTO>>();

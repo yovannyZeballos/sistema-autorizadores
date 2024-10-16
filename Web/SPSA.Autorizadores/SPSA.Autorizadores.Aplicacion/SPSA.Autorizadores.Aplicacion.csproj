@@ -272,6 +272,7 @@
     <Compile Include="DTO\MaeLocalDTO.cs" />
     <Compile Include="DTO\MaeRegionDTO.cs" />
     <Compile Include="DTO\MaeZonaDTO.cs" />
+    <Compile Include="DTO\MonitorArchivoParametrosDTO.cs" />
     <Compile Include="DTO\MonitorControlBCTDTO.cs" />
     <Compile Include="DTO\ObtenerAperturaDTO.cs" />
     <Compile Include="DTO\ObtenerComunDTO.cs" />
@@ -414,6 +415,7 @@
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorArchivoscommand.cs" />
     <Compile Include="Features\Monitor\Queries\ListarProcesosQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
+    <Compile Include="Features\Monitor\Queries\ListarParametrosMonitorArchivoQuery.cs" />
     <Compile Include="Features\Regiones\Commands\ActualizarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\CrearMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />

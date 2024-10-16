@@ -24,6 +24,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor
 		public string CodRegion { get; set; }
 		public string CodZona { get; set; }
 		public string CodLocal { get; set; }
+		public string Ruta { get; set; }
+		public string Usuario { get; set; }
+		public string Clave { get; set; }
 	}
 
 	public class ProcesarMonitorArchivosHandler : IRequestHandler<ProcesarMonitorArchivoscommand, GenericResponseDTO<List<ProcesarMonitorArchivoDTO>>>
@@ -42,29 +45,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor
 
 			try
 			{
-				using (ISGPContexto contexto = new SGPContexto())
-				{
-					var parametros = await contexto.RepositorioProcesoParametro
-						.Obtener(x => x.CodProceso == Constantes.CodigoProcesoMonitorArchivos)
-						.ToDictionaryAsync(x => x.CodParametro, x => x.ValParametro);
-
-					parametros.TryGetValue(Constantes.CodigoUsuarioCaja_ProcesoMonitorArchivo, out var usuarioCaja);
-					parametros.TryGetValue(Constantes.CodigoClaveCaja_ProcesoMonitorArchivo, out var claveCaja);
-					parametros.TryGetValue(Constantes.CodigoRutaArchivos1_ProcesoMonitorArchivo, out var rutaArchivos1);
-					parametros.TryGetValue(Constantes.CodigoRutaArchivos2_ProcesoMonitorArchivo, out var rutaArchivos2);
-
-					if (string.IsNullOrEmpty(usuarioCaja) || string.IsNullOrEmpty(claveCaja) || string.IsNullOrEmpty(rutaArchivos1) || string.IsNullOrEmpty(rutaArchivos2))
-					{
-						response.Ok = false;
-						response.Mensaje = "No se encontraron los parametros de configuración para el proceso de monitor de archivos.";
-						_logger.Error(response.Mensaje);
-						return response;
-					}
-
-					_clave = claveCaja;
-
-					response.Data = await ProcesarArchivos(contexto, request, usuarioCaja, claveCaja, rutaArchivos1, rutaArchivos2);
-				}
+				_clave = request.Clave;
+				response.Data = await ProcesarArchivos(request);
 			}
 			catch (Exception ex)
 			{
@@ -76,26 +58,33 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor
 			return response;
 		}
 
-		private async Task<List<ProcesarMonitorArchivoDTO>> ProcesarArchivos(ISGPContexto contexto, ProcesarMonitorArchivoscommand request, string usuarioCaja,
-			string claveCaja, string rutaArchivos1, string rutaArchivos2)
+		private async Task<List<ProcesarMonitorArchivoDTO>> ProcesarArchivos(ProcesarMonitorArchivoscommand request)
 		{
-			List<Mae_Caja> cajas = await contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa
+			List<Mae_Caja> cajas = new List<Mae_Caja>();
+			List<Mae_Local> locales = new List<Mae_Local>();
+			Mae_Empresa empresa = new Mae_Empresa();
+
+			using (ISGPContexto contexto = new SGPContexto())
+			{
+				cajas = await contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa
 															&& (request.CodCadena == "0" || x.CodCadena == request.CodCadena)
 															&& (request.CodRegion == "0" || x.CodRegion == request.CodRegion)
 															&& (request.CodZona == "0" || x.CodZona == request.CodZona)
 															&& (request.CodLocal == "0" || x.CodLocal == request.CodLocal)).ToListAsync();
 
-			List<string> localesDictinct = cajas.Select(x => x.CodLocal).Distinct().ToList();
-			Mae_Empresa empresa = await contexto.RepositorioMaeEmpresa.Obtener(x => x.CodEmpresa == request.CodEmpresa).FirstOrDefaultAsync();
-			var locales = await contexto.RepositorioMaeLocal.Obtener(x => localesDictinct.Contains(x.CodLocal)).ToListAsync();
+				List<string> localesDictinct = cajas.Select(x => x.CodLocal).Distinct().ToList();
+				empresa = await contexto.RepositorioMaeEmpresa.Obtener(x => x.CodEmpresa == request.CodEmpresa).FirstOrDefaultAsync();
+				locales = await contexto.RepositorioMaeLocal.Obtener(x => localesDictinct.Contains(x.CodLocal)).ToListAsync();
+			}
+				
 
-			var tasks = cajas.Select(caja => ProcesarCajaAsync(caja, usuarioCaja, claveCaja, rutaArchivos1, rutaArchivos2, locales, empresa.Ruc)).ToList();
+			var tasks = cajas.Select(caja => ProcesarCajaAsync(caja, request.Usuario, request.Clave, request.Ruta, locales, empresa.Ruc)).ToList();
 			await Task.WhenAll(tasks);
 			return tasks.Select(x => x.Result).ToList();
 		}
 
 		private async Task<ProcesarMonitorArchivoDTO> ProcesarCajaAsync(Mae_Caja caja, string usuarioCaja, string claveCaja,
-			string rutaArchivos1, string rutaArchivos2, List<Mae_Local> locales, string rucEmpresa)
+			string rutaArchivo, List<Mae_Local> locales, string rucEmpresa)
 		{
 
 			return await Task.Run(() =>
@@ -120,8 +109,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor
 					{
 						client.ConnectionInfo.Timeout = TimeSpan.FromSeconds(30);
 						client.Connect();
-						IEnumerable<SftpFile> archivos = client.ListDirectory($"{rutaArchivos1}{rutaArchivos2}/{rucEmpresa}/{resultado.NumCaja}");
-						resultado.CantidadArchivos = archivos.Count();
+						IEnumerable<SftpFile> archivos = client.ListDirectory($"{rutaArchivo}/{rucEmpresa}/{resultado.NumCaja}");
+						resultado.CantidadArchivos = archivos.Where(x => !x.IsDirectory).Count();
 						client.Disconnect();
 					}
 				}

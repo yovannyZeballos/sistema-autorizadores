@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Monitor Archivos | Monitor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+
+        div.dt-buttons {
+            display: block !important;
+            width: 100% !important;
+        }
+    </style>
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Monitor de archivos</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Monitor</li>
+            <li class="breadcrumb-item1 active">Monitor de archivos</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Monitor de archivos")
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control is-valid select2-show-search custom-select" id="cboEmpresa" required>
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control select2-show-search custom-select" id="cboCadena" required>
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Region</label>
+                            <select class="form-control select2-show-search custom-select" id="cboRegion" required>
+                                <option label="Seleccione una region"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Zona</label>
+                            <select class="form-control select2-show-search custom-select" id="cboZona" required>
+                                <option label="Seleccione una zona"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local</label>
+                            <select class="form-control select2-show-search custom-select" id="cboLocal" required>
+                                <option label="Seleccione un local"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-5 col-md-6">
+                        <div class="form-group">
+                            <label for="txtRuta" class="form-label">Ruta Remota</label>
+                            <input type="text" class="form-control form-control-sm" id="txtRuta">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group">
+                            <label for="txtUsuario" class="form-label">Usuario Caja</label>
+                            <input type="text" class="form-control form-control-sm" id="txtUsuario">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6">
+                        <div class="form-group">
+                            <label for="txtClave" class="form-label">Clave Caja</label>
+                            <input type="password" class="form-control form-control-sm" id="txtClave">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary btn-sm mb-2 btn-block" id="btnProcesar" type="button"><i class="fa fa-refresh"></i> Procesar</button>
+                    </div>
+                    <div class="col-md-2" id="container-btn-exportar">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="tableMonitor" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/MonitorArchivos.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            MonitorArchivos.init();
+        });
+    </script>
+}
+
+
