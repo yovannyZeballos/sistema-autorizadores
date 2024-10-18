@@ -16,12 +16,12 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			_dbHelper = dbHelper;
 		}
 
-		public async Task<TransactionXmlCT2> Obtener(string cadenaConexion)
+		public async Task<TransactionXmlCT2> Obtener(string cadenaConexion, string nombreTabla)
 		{
 			_dbHelper.CadenaConexion = cadenaConexion;
 			SqlParameter[] dbParams = null;
 			var dr = await _dbHelper.ExecuteReaderText("SELECT CONVERT(char(12), insertdate, 113) FechaFormato, COUNT(*) Registros " +
-				"FROM dbo.TransactionXmlCT2 WHERE CONVERT(char, insertdate, 111) = CONVERT(char, GETDATE(), 111) " +
+				$"FROM dbo.{nombreTabla} WHERE CONVERT(char, insertdate, 111) = CONVERT(char, GETDATE(), 111) " +
 				"GROUP BY CONVERT(char(12), insertdate, 113)", dbParams);
 			TransactionXmlCT2 transactionXmlCT2 = new TransactionXmlCT2();
 

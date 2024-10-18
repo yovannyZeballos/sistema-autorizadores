@@ -12,6 +12,7 @@ const ReportesCajeroCierre = function () {
         $("#btnConsultar").on('click', function () {
             if (!validar()) return;
             visualizarDataTableReporte();
+            ajustarEncabezado();
             listarReporte();
         });
 
@@ -102,7 +103,8 @@ const ReportesCajeroCierre = function () {
                     else
                         columnas.push({
                             title: x.replace("_", " "),
-                            data: quitarTildes(x).replace(/ /g, "").replace(".", "")
+                            data: quitarTildes(x).replace(/ /g, "").replace(".", ""),
+                            className: "sticky-column sticky-header"
                         });
 
                 });
@@ -161,8 +163,11 @@ const ReportesCajeroCierre = function () {
                                 modifier: { page: 'all' }
                             }
                         },
-                    ],
+                    ]
                 });
+
+                // Sincronizar el scroll de la cabecera con el cuerpo después de la inicialización
+                ajustarEncabezado();
 
                 dataTableReporte.buttons().container().prependTo($('#tableReportes_filter'));
                 $('input[type="search"]').addClass("form-control-sm");
@@ -177,6 +182,18 @@ const ReportesCajeroCierre = function () {
         });
 
     }
+
+    const ajustarEncabezado = function () {
+        const scrollBody = document.querySelector('.dataTables_scrollBody');
+        const scrollHead = document.querySelector('.dataTables_scrollHead');
+
+        if (scrollBody && scrollHead) {
+            // Sincronizar el scroll del encabezado con el del cuerpo
+            scrollBody.addEventListener('scroll', function () {
+                scrollHead.scrollLeft = scrollBody.scrollLeft;
+            });
+        }
+    };
 
     const listarEmpresas = function () {
         $.ajax({

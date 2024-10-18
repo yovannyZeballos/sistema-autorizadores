@@ -48,14 +48,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                 {
                     var ds = reader.AsDataSet(new ExcelDataSetConfiguration()
                     {
-                        FilterSheet = (tableReader, sheetIndex) => tableReader.Name.ToLower().Contains("plantilla"),
+                        //FilterSheet = (tableReader, sheetIndex) => tableReader.Name.ToLower().Contains("plantilla"),
                         ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
                         {
                             UseHeaderRow = true,
                         },
                         UseColumnDataType = true
                     }).ToAllStringFields();
-
 
                     if (ds.Tables.Count > 0)
                     {

@@ -69,9 +69,12 @@
                         <div class="form-group select2-sm">
                             <label class="form-label">Zona</label>
                             <select class="form-control custom-select" id="cboZona">
-                                <option label="Seleccione una región"></option>
+                                <option label="Seleccione una zona"></option>
                             </select>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary btn-block">Buscar x Empresa</button>
                     </div>
                 </div>
             </div>
@@ -99,6 +102,41 @@
                     <tbody>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOCAL-->
+<div class="modal fade" id="modalLocales" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Seleccione un local</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tableBuscarLocales" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_EMPRESA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_CADENA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_REGION</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD_ZONA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnObtenerLocal" class="btn btn-sm btn-primary">Aceptar</button>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

@@ -58,5 +58,12 @@ namespace SPSA.Autorizadores.Web.Controllers
 			var respose = await _mediator.Send(query);
 			return Json(respose);
 		}
-	}
+
+        [HttpPost]
+        public async Task<JsonResult> ListarLocalesAsociadasPorEmpresa(ListarLocalesAsociadasPorEmpresaQuery query)
+        {
+            var respose = await _mediator.Send(query);
+            return Json(respose);
+        }
+    }
 }

@@ -26,6 +26,7 @@
 		public const string CodigoParametroToleranciaAlerta = "08";
 		public const string CodigoParametroFechaNegocioAlerta = "09";
 		public const string CodigoParametroConexionAlerta = "10";
+		public const string CodigoParametroNombreTabla = "11";
 
 		public const string CodigoParametroUsuarioBD_ProcesoCierre = "01";
 		public const string CodigoParametroClaveBD_ProcesoCierre = "02";

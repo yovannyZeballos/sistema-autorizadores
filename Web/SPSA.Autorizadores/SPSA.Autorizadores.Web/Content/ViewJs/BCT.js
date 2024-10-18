@@ -148,8 +148,7 @@ var BCT = function () {
             type: "post",
             dataType: "json",
             success: function (response) {
-
-                console.log(response);
+        
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning" });
                     return;
@@ -280,7 +279,6 @@ var BCT = function () {
             dataType: "json",
             success: function (response) {
 
-                console.log(response);
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning" });
                     return;

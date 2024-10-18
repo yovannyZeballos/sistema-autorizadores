@@ -45,58 +45,107 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
                     using (var workbook = new XLWorkbook(stream))
                     {
                         var worksheet = workbook.Worksheet(1);
+                        var headerRow = worksheet.FirstRowUsed();
                         var rowCount = worksheet.RowsUsed().Count();
+
+                        // Crear un diccionario para mapear los nombres de las columnas a sus índices
+                        var columnMap = headerRow.Cells()
+                            .ToDictionary(cell => cell.Value.ToString(), cell => cell.Address.ColumnNumber);
+
 
                         for (int row = 2; row <= rowCount; row++)
                         {
                             try
                             {
+                                // Validación y conversión segura de NumCaja
+                                int numCaja;
+                                if (!int.TryParse(worksheet.Cell(row, columnMap["NUM_CAJA"]).Value.ToString(), out numCaja))
+                                {
+                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    {
+                                        Fila = row,
+                                        Mensaje = "El valor de NumCaja no es un número válido."
+                                    });
+                                    continue;
+                                }
+
                                 var nuevoCaja = new Mae_Caja
                                 {
-                                    CodEmpresa = worksheet.Cell(row, 1).Value.ToString(),
-                                    CodCadena = worksheet.Cell(row, 2).Value.ToString(),
-                                    CodRegion = worksheet.Cell(row, 3).Value.ToString(),
-                                    CodZona = worksheet.Cell(row, 4).Value.ToString(),
-                                    CodLocal = worksheet.Cell(row, 5).Value.ToString(),
-                                    NumCaja = Convert.ToInt32(worksheet.Cell(row, 6).Value.ToString()),
-                                    IpAddress = worksheet.Cell(row, 7).Value.ToString(),
-                                    TipOs = worksheet.Cell(row, 8).Value.ToString(),
-                                    TipEstado = worksheet.Cell(row, 9).Value.ToString(),
+                                    CodEmpresa = worksheet.Cell(row, columnMap["COD_EMPRESA"]).Value.ToString(),
+                                    CodCadena = worksheet.Cell(row, columnMap["COD_CADENA"]).Value.ToString(),
+                                    CodRegion = worksheet.Cell(row, columnMap["COD_REGION"]).Value.ToString(),
+                                    CodZona = worksheet.Cell(row, columnMap["COD_ZONA"]).Value.ToString(),
+                                    CodLocal = worksheet.Cell(row, columnMap["COD_LOCAL"]).Value.ToString(),
+                                    NumCaja = numCaja,
+                                    IpAddress = worksheet.Cell(row, columnMap["IP_ADDRESS"]).Value.ToString(),
+                                    TipOs = worksheet.Cell(row, columnMap["TIP_OS"]).Value.ToString(),
+                                    TipEstado = worksheet.Cell(row, columnMap["TIP_ESTADO"]).Value.ToString(),
                                 };
 
-                                bool existe = await _contexto.RepositorioMaeCaja.Existe(x => x.CodEmpresa == nuevoCaja.CodEmpresa && x.CodCadena == nuevoCaja.CodCadena && x.CodRegion == nuevoCaja.CodRegion && x.CodZona == nuevoCaja.CodZona && x.CodLocal == nuevoCaja.CodLocal && x.NumCaja == nuevoCaja.NumCaja);
+                                bool existe = await _contexto.RepositorioMaeCaja.Existe(x =>
+                                                                                        x.CodEmpresa == nuevoCaja.CodEmpresa && x.CodCadena == nuevoCaja.CodCadena &&
+                                                                                        x.CodRegion == nuevoCaja.CodRegion && x.CodZona == nuevoCaja.CodZona &&
+                                                                                        x.CodLocal == nuevoCaja.CodLocal && x.NumCaja == nuevoCaja.NumCaja);
+
                                 if (existe)
                                 {
                                     _contexto.RepositorioMaeCaja.Actualizar(nuevoCaja);
+                                    await _contexto.GuardarCambiosAsync();
                                 }
                                 else
                                 {
-                                    _contexto.RepositorioMaeCaja.Agregar(nuevoCaja);
+                                    try
+                                    {
+                                        _contexto.RepositorioMaeCaja.Agregar(nuevoCaja);
+                                        await _contexto.GuardarCambiosAsync();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        string errorMessage = string.Empty;
+
+                                        Exception innerEx = ex.InnerException;
+                                        while (innerEx != null)
+                                        {
+                                            //errorMessage += " Error: " + innerEx.Message;
+
+                                            if (innerEx is Npgsql.PostgresException postgresEx)
+                                            {
+                                                errorMessage += " " + postgresEx.Detail;
+                                            }
+
+                                            innerEx = innerEx.InnerException;
+                                        }
+
+                                        respuesta.Errores.Add(new ErroresExcelDTO
+                                        {
+                                            Fila = 0,
+                                            Mensaje = $"{errorMessage}"
+                                        });
+
+                                        // Descartar cambios de la entidad problemática
+                                        _contexto.RepositorioMaeCaja.DescartarCambios(nuevoCaja);
+
+                                        continue;
+                                    }
+
                                 }
-                                await _contexto.GuardarCambiosAsync();
                             }
                             catch (Exception ex)
                             {
-                                _contexto.Rollback();
+                                //_contexto.Rollback();
 
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = row,
                                     Mensaje = ex.Message
                                 });
+                                continue;
                             }
                         }
 
-                        if (respuesta.Errores.Count == 0)
-                        {
-                            respuesta.Ok = true;
-                            respuesta.Mensaje = "Archivo importado correctamente";
-                        }
-                        else
-                        {
-                            respuesta.Ok = false;
-                            respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
-                        }
+                        respuesta.Ok = respuesta.Errores.Count == 0;
+                        respuesta.Mensaje = respuesta.Ok ? "Archivo importado correctamente." : "archivo importado con algunos errores.";
+
                     }
                 }
             }
