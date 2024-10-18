@@ -42,9 +42,9 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
-        <div class="form-group">
+        <div class="form-group select2-sm">
             <label for="cboOrigen" class="form-label">Origen</label>
-            <select class="form-control custom-select" id="cboOrigen" required>
+            <select class="form-control select2-show-search custom-select" id="cboOrigen" required>
                 <option value="">Seleccionar</option>
                 @foreach (var local in Model.Locales)
                 {
@@ -54,9 +54,9 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
-        <div class="form-group">
+        <div class="form-group select2-sm">
             <label for="cboDestino" class="form-label">Destino</label>
-            <select class="form-control custom-select" id="cboDestino" required>
+            <select class="form-control select2-show-search custom-select" id="cboDestino" required>
                 <option value="">Seleccionar</option>
                 @foreach (var local in Model.Locales)
                 {

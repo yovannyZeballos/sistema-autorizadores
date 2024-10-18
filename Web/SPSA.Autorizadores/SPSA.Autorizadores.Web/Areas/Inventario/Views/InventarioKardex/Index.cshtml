@@ -23,6 +23,62 @@
             @Html.Partial("_CardHeader", "Listado")
             <div class="card-body">
                 <div class="row">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label">Kardex</label>
+                                    <select class="form-control select2-show-search custom-select" id="cboFiltroKardex">
+                                        <option label="seleccionar"></option>
+                                        <option value="TODOS">TODOS</option>
+                                        <option value="INGRESO">INGRESO</option>
+                                        <option value="SALIDA">SALIDA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @*<div class="col-md-4">
+            <div class="form-group select2-sm">
+                <label class="form-label">Local</label>
+                <select class="form-control select2-show-search custom-select" id="cboLocal">
+                </select>
+            </div>
+        </div>*@
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Fecha Inicio</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <span class="feather feather-calendar"></span>
+                                            </div>
+                                        </div><input id="txtFechaInicio" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Fecha Fin</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <span class="feather feather-calendar"></span>
+                                            </div>
+                                        </div><input id="txtFechaFin" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnProcesar" type="button">Mostrar Información</button>
+                        </div>
+                        <div class="col-md-12" id="container-btn-exportar">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
                     <div class="col-12 d-flex justify-content-between mb-3">
                         <!-- Botones alineados a la izquierda -->
                         <div class="d-flex">
