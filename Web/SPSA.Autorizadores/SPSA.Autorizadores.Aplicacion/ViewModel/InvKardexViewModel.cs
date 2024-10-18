@@ -7,5 +7,6 @@ namespace SPSA.Autorizadores.Aplicacion.ViewModel
     {
         public InvKardexDTO InvKardex { get; set; }
         public List<InvKardexActivoDTO> Activos { get; set; }
+        public List<InvKardexLocalDTO> Locales { get; set; }
     }
 }

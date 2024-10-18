@@ -17,12 +17,12 @@ var AdministrarInvKardex = function () {
             window.location.href = '/Inventario/InventarioKardexActivo'; // Reemplaza con la ruta a la vista
 
         });
+        $("#btnProcesar").click(function () {
+            recargarDataTableKardex();
+        });
 
         $("#btnNuevoInvKardex").click(function () {
-
-            //if (validarNuevoInvActivo()) {
             abrirModalNuevoInvKardex();           
-            //}
         });
 
         $("#btnEditarInvKardex").click(async function () {
@@ -47,8 +47,8 @@ var AdministrarInvKardex = function () {
                 Fecha: $("#txtFecha").val(),
                 Guia: $("#txtGuia").val(),
                 Serie: $("#txtSerie").val(),
-                Origen: $("#txtOrigen").val(),
-                Destino: $("#txtDestino").val(),
+                OrigenId: $("#cboOrigen").val(),
+                DestinoId: $("#cboDestino").val(),
                 Tk: $("#txtTk").val(),
                 Cantidad: $("#txtCantidad").val(),
                 TipoStock: $("#txtTipoStock").val(),
@@ -68,8 +68,8 @@ var AdministrarInvKardex = function () {
                 Fecha: $("#txtFecha").val(),
                 Guia: $("#txtGuia").val(),
                 Serie: $("#txtSerie").val(),
-                Origen: $("#txtOrigen").val(),
-                Destino: $("#txtDestino").val(),
+                OrigenId: $("#cboOrigen").val(),
+                DestinoId: $("#cboDestino").val(),
                 Tk: $("#txtTk").val(),
                 Cantidad: $("#txtCantidad").val(),
                 TipoStock: $("#txtTipoStock").val(),
@@ -136,8 +136,8 @@ var AdministrarInvKardex = function () {
             const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
 
-            console.log("child(1)" + NUM_CAJA);
-            console.log("child(2)" + COD_ACTIVO);
+            //console.log("child(1)" + NUM_CAJA);
+            //console.log("child(2)" + COD_ACTIVO);
 
             //abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
         });
@@ -309,7 +309,14 @@ var AdministrarInvKardex = function () {
         });
     }
 
-    const recargarDataTableKardex = function (request) {
+    const recargarDataTableKardex = function () {
+
+        const request = {
+            Kardex: $("#cboFiltroKardex").val(),
+            FechaInicio: $("#txtFechaInicio").val(),
+            FechaFin: $("#txtFechaFin").val()
+        }
+
         if ($.fn.DataTable.isDataTable('#tableKardex')) {
             $('#tableKardex').DataTable().clear().draw();
             $('#tableKardex').DataTable().destroy();
@@ -360,8 +367,8 @@ var AdministrarInvKardex = function () {
                 { data: "ActivoModelo" },
                 { data: "ActivoMarca" },
                 { data: "Serie" },
-                { data: "Origen" },
-                { data: "Destino" },
+                { data: "OrigenLocal" },
+                { data: "DestinoLocal" },
                 { data: "Tk" },
                 { data: "Cantidad" },
                 { data: "TipoStock" },
@@ -374,7 +381,75 @@ var AdministrarInvKardex = function () {
             },
             rowCallback: function (row, data, index) {
             },
-            bAutoWidth: false
+            bAutoWidth: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Exportar excel',
+                    titleAttr: 'Exportar Excel',
+                    className: 'btn btn-primary btn-block btn-sm',
+                    exportOptions: {
+                        modifier: { page: 'all' }
+                    },
+                    filename: function () {
+                        const fecha = $("#txtFechaFin").val().replace('/', '');
+                        return `INV_KARDEX_${fecha}`;
+                    },
+                    action: function (e, dt, node, config) {
+
+                        if (!this.data().count()) {
+                            swal({
+                                text: "No hay información disponible para Exportar.",
+                                icon: "warning"
+                            });
+                            return;
+                        }
+                        $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, node, config);
+                    }
+                },
+            ],
+            order: [],
+            dom: 'Bfrtip' // Asegúrate de que los botones se rendericen correctamente
+        });
+
+        //$("#container-btn-exportar").append(dtListaKardex.buttons().container());
+        // Asegúrate de que los botones se agreguen al DOM después de inicializar el DataTable
+        dtListaKardex.buttons().container().appendTo('#container-btn-exportar');
+    }
+
+    const fechaActual = function () {
+        let date = new Date()
+
+        let day = `${(date.getDate())}`.padStart(2, '0');
+        let month = `${(date.getMonth() + 1)}`.padStart(2, '0');
+        let year = date.getFullYear();
+
+        $("#cboFiltroKardex").val("TODOS").trigger("change");
+        $("#txtFechaInicio").val(`${day}/${month}/${year}`);
+        $("#txtFechaFin").val(`${day}/${month}/${year}`);
+    }
+
+    const inicializarDatePicker = function () {
+        $('.fc-datepicker').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            closeText: 'Cerrar',
+            prevText: '<Ant',
+            nextText: 'Sig>',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            changeMonth: true,
+            changeYear: true
         });
     }
 
@@ -383,6 +458,8 @@ var AdministrarInvKardex = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
+                inicializarDatePicker();
+                fechaActual();
                 //await cargarComboEmpresa();
                 recargarDataTableKardex();
             });

@@ -43,7 +43,7 @@ var AdministrarInvKardexActivo = function () {
                 Modelo: $("#txtModelo").val(),
                 Descripcion: $("#txtDescripcion").val(),
                 Marca: $("#txtMarca").val(),
-                Area: $("#txtArea").val(),
+                Area: $("#cboArea").val(),
                 Tipo: $("#cboTipo").val()
             };
 
@@ -57,7 +57,7 @@ var AdministrarInvKardexActivo = function () {
                 Modelo: $("#txtModelo").val(),
                 Descripcion: $("#txtDescripcion").val(),
                 Marca: $("#txtMarca").val(),
-                Area: $("#txtArea").val(),
+                Area: $("#cboArea").val(),
                 Tipo: $("#cboTipo").val()
             };
 

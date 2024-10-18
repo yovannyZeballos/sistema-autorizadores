@@ -177,6 +177,9 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearInvKardexCommand, InvKardex>().ReverseMap();
             CreateMap<ActualizarInvKardexCommand, InvKardex>().ReverseMap();
 
+            CreateMap<ListarInvKardexLocalDTO, InvKardexLocal>().ReverseMap();
+            CreateMap<InvKardexLocalDTO, InvKardexLocal>().ReverseMap();
+
             #endregion <--INV KARDEX-->
 
         }

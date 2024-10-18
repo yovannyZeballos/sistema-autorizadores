@@ -12,11 +12,15 @@ using System.Threading;
 using Serilog;
 using System.Linq;
 using System.Data.Entity;
+using SPSA.Autorizadores.Dominio.Entidades;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries
 {
     public class ListarInvKardexQuery : IRequest<GenericResponseDTO<List<ListarInvKardexDTO>>>
     {
+        public string Kardex { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
     }
 
     public class ListarInvKardexHandler : IRequestHandler<ListarInvKardexQuery, GenericResponseDTO<List<ListarInvKardexDTO>>>
@@ -37,10 +41,25 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries
 
             try
             {
-                var activos = await _contexto.RepositorioInvKardex.Obtener()
-                                                                        .OrderBy(x => x.Id)
+                List<InvKardex> kardexLista;
+
+                if (request.Kardex == "TODOS") 
+                {
+                    kardexLista = await _contexto.RepositorioInvKardex.Obtener()
+                                                                        .Where(x => x.Fecha >= request.FechaInicio && x.Fecha <= request.FechaFin)
+                                                                        .OrderByDescending(x => x.Id)
                                                                         .ToListAsync();
-                response.Data = _mapper.Map<List<ListarInvKardexDTO>>(activos);
+                }
+                else
+                {
+                    kardexLista = await _contexto.RepositorioInvKardex.Obtener()
+                                                                        .Where(x => x.Fecha >= request.FechaInicio && x.Fecha <= request.FechaFin)
+                                                                        .Where(x => x.Kardex == request.Kardex)
+                                                                        .OrderByDescending(x => x.Id)
+                                                                        .ToListAsync();
+                }
+                
+                response.Data = _mapper.Map<List<ListarInvKardexDTO>>(kardexLista);
                 //response.Ok = true;
                 //response.Mensaje = "Se ha generado la lista correctamente";
             }

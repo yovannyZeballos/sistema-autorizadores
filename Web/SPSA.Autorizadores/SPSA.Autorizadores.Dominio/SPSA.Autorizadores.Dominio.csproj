@@ -62,6 +62,7 @@
     <Compile Include="Entidades\InventarioTipo.cs" />
     <Compile Include="Entidades\InvKardex.cs" />
     <Compile Include="Entidades\InvKardexActivo.cs" />
+    <Compile Include="Entidades\InvKardexLocal.cs" />
     <Compile Include="Entidades\InvTipoActivo.cs" />
     <Compile Include="Entidades\Inv_Activo.cs" />
     <Compile Include="Entidades\ListBox.cs" />
