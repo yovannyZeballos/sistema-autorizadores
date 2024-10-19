@@ -1,0 +1,52 @@
+﻿@model SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.InvKardexActivoDTO
+
+<div class="row needs-validation" id="formInvActivo">
+    <div class="col-xl-2 col-md-2">
+        <div class="form-group">
+            <label for="txtId" class="form-label">Id</label>
+            <input type="text" class="form-control" id="txtId" value="@Model.Id" required disabled readonly>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtModelo" class="form-label">Modelo</label>
+            <input type="text" class="form-control" id="txtModelo" value="@Model.Modelo" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtDescripcion" class="form-label">Descripcion</label>
+            <input type="text" class="form-control" id="txtDescripcion" value="@Model.Descripcion" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtMarca" class="form-label">Marca</label>
+            <input type="text" class="form-control" id="txtMarca" value="@Model.Marca" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtArea" class="form-label">Area</label>
+            @*<input type="text" class="form-control" id="txtArea" value="@Model.Area" required>*@
+            <select class="form-control custom-select" id="cboArea" required>
+                <option value="">Seleccionar</option>
+                <option value="SOP. OPERACION" @(Model.Area == "SOP. OPERACION" ? "selected" : "")>SOP. OPERACION</option>
+                <option value="CAJAS" @(Model.Area == "CAJAS" ? "selected" : "")>CAJAS</option>
+                <option value="SERVIDORES" @(Model.Area == "SERVIDORES" ? "selected" : "")>SERVIDORES</option>
+                <option value="SOP. MICRO OPERACIONES" @(Model.Area == "SOP. MICRO OPERACIONES" ? "selected" : "")>SOP. MICRO OPERACIONES</option>
+                <option value="TELCO" @(Model.Area == "TELCO" ? "selected" : "")>TELCO</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="form-group">
+            <label for="cboTipo" class="form-label">Tipo</label>
+            <select class="form-control custom-select" id="cboTipo" required>
+                <option value="">Seleccionar</option>
+                <option value="ACTIVO" @(Model.Tipo == "ACTIVO" ? "selected" : "")>ACTIVO</option>
+            </select>
+        </div>
+    </div>
+</div>
+

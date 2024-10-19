@@ -376,11 +376,29 @@
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaPorLocalCommand.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ListarInvCajaQuery.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ObtenerInvCajaQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexActivoCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\CrearInvKardexActivoCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\CrearInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexActivoCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\InvKardexActivoDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\InvKardexDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\InvKardexLocalDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexActivoDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexDTO.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\ListarInvKardexLocalDTO.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexActivoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexLocalQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ObtenerInvKardexActivoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\ObtenerInvKardexQuery.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\CrearMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalCommand.cs" />
     <Compile Include="Features\Locales\Commands\DescargarMaeLocalXEmpresaCommand.cs" />
     <Compile Include="Features\Locales\Commands\ImportarMaeLocalCommand.cs" />
+    <Compile Include="Features\Locales\Queries\ListarLocalesAsociadasPorEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalQuery.cs" />
     <Compile Include="Features\Locales\Queries\ListarMaeLocalXEmpresaQuery.cs" />
     <Compile Include="Features\Locales\Queries\ObtenerMaeLocalQuery.cs" />
@@ -526,6 +544,7 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="ViewModel\InvActivoViewModel.cs" />
     <Compile Include="ViewModel\InvCajaViewModel.cs" />
+    <Compile Include="ViewModel\InvKardexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

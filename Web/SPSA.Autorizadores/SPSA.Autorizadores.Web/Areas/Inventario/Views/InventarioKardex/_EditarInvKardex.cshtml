@@ -1,0 +1,116 @@
+﻿@model SPSA.Autorizadores.Aplicacion.ViewModel.InvKardexViewModel
+
+<div class="row needs-validation" id="formInvKardex">
+    <div class="col-xl-2 col-md-2">
+        <div class="form-group">
+            <label for="txtId" class="form-label">Id</label>
+            <input type="number" class="form-control" id="txtId" value="@Model.InvKardex.Id" disabled readonly required>
+        </div>
+    </div>
+    <div class="col-xl-10 col-md-10">
+        <div class="form-group">
+            <label for="cboCodActivo" class="form-label">Activo</label>
+            <select class="form-control custom-select" id="cboActivoId" required>
+                <option value="">Seleccionar</option>
+                @foreach (var activo in Model.Activos)
+                {
+                    <option value="@activo.Id" @(Model.InvKardex.ActivoId == activo.Id ? "selected" : "")>@(activo.Descripcion + " - " + activo.Modelo + " - " + activo.Marca)</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="cboIndOperativo" class="form-label">Kardex</label>
+            <select class="form-control custom-select" id="cboIndKardex" required>
+                <option value="">Seleccionar</option>
+                <option value="INGRESO" @(Model.InvKardex.Kardex == "INGRESO" ? "selected" : "")>INGRESO</option>
+                <option value="SALIDA" @(Model.InvKardex.Kardex == "SALIDA" ? "selected" : "")>SALIDA</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtFecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" id="txtFecha" value="@Model.InvKardex.Fecha.ToString("yyyy-MM-dd")" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtGuia" class="form-label">Guia</label>
+            <input type="text" class="form-control" id="txtGuia" value="@Model.InvKardex.Guia" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtSerie" class="form-label">Serie</label>
+            <input type="text" class="form-control" id="txtSerie" value="@Model.InvKardex.Serie" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="cboOrigen" class="form-label">Origen</label>
+            <select class="form-control custom-select" id="cboOrigen" required>
+                <option value="">Seleccionar</option>
+                @foreach (var local in Model.Locales)
+                {
+                    <option value="@local.Id" @(Model.InvKardex.OrigenId == local.Id ? "selected" : "")>@(local.NomLocal)</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="cboDestino" class="form-label">Destino</label>
+            <select class="form-control custom-select" id="cboDestino" required>
+                <option value="">Seleccionar</option>
+                @foreach (var local in Model.Locales)
+                {
+                    <option value="@local.Id" @(Model.InvKardex.DestinoId == local.Id ? "selected" : "")>@(local.NomLocal)</option>
+                }
+            </select>
+        </div>
+    </div>
+    @*<div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtOrigen" class="form-label">Origen</label>
+            <input type="text" class="form-control" id="txtOrigen" value="@Model.InvKardex.Origen" required>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtDestino" class="form-label">Destino</label>
+            <input type="text" class="form-control" id="txtDestino" value="@Model.InvKardex.Destino" required>
+        </div>
+    </div>*@
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtTk" class="form-label">Tk</label>
+            <input type="text" class="form-control" id="txtTk" value="@Model.InvKardex.Tk">
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtIp" class="form-label">Cantidad</label>
+            <input type="number" class="form-control" id="txtCantidad" value="@Model.InvKardex.Cantidad">
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-6">
+        <div class="form-group">
+            <label for="txtTipoStock" class="form-label">Tipo Stock</label>
+            <input type="text" class="form-control" id="txtTipoStock" value="@Model.InvKardex.TipoStock">
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtOc" class="form-label">Oc</label>
+            <input type="text" class="form-control" id="txtOc" value="@Model.InvKardex.Oc">
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-4">
+        <div class="form-group">
+            <label for="txtSociedad" class="form-label">Sociedad</label>
+            <input type="text" class="form-control" id="txtSociedad" value="@Model.InvKardex.Sociedad">
+        </div>
+    </div>
+</div>
