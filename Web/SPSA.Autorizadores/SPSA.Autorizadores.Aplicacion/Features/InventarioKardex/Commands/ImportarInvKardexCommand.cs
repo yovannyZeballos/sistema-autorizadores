@@ -47,41 +47,33 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands
                         var worksheet = workbook.Worksheet(1);
                         var rowCount = worksheet.RowsUsed().Count();
 
+                        var columnMapping = worksheet.Row(1).CellsUsed()
+                            .ToDictionary(cell => cell.GetString(), cell => cell.Address.ColumnNumber);
+
                         for (int row = 2; row <= rowCount; row++)
                         {
                             try
                             {
-
                                 var rowKardex = new InvKardex
                                 {
-                                    Kardex = worksheet.Cell(row, 1).Value.ToString(),
-                                    //Fecha = Convert.ToDateTime(worksheet.Cell(row, 2).Value),
-                                    Guia = worksheet.Cell(row, 3).Value.ToString(),
-                                    ActivoId = worksheet.Cell(row, 4).Value.ToString(),
-                                    Serie = worksheet.Cell(row, 5).Value.ToString(),
-                                    OrigenId = worksheet.Cell(row, 6).Value.ToString(),
-                                    DestinoId = worksheet.Cell(row, 7).Value.ToString(),
-                                    Tk = worksheet.Cell(row, 8).Value.ToString(),
-                                    Cantidad = Convert.ToInt32(worksheet.Cell(row, 9).Value),
-                                    TipoStock = worksheet.Cell(row, 10).Value.ToString(),
-                                    Oc = worksheet.Cell(row, 11).Value.ToString(),
-                                    Sociedad = worksheet.Cell(row, 12).Value.ToString(),
+                                    Kardex = worksheet.Cell(row, columnMapping["KARDEX"]).GetString(),
+                                    Guia = worksheet.Cell(row, columnMapping["GUIA"]).GetString(),
+                                    ActivoId = worksheet.Cell(row, columnMapping["ACTIVO_ID"]).GetString(),
+                                    Serie = worksheet.Cell(row, columnMapping["SERIE"]).GetString(),
+                                    OrigenId = worksheet.Cell(row, columnMapping["ORIGEN_ID"]).GetString(),
+                                    DestinoId = worksheet.Cell(row, columnMapping["DESTINO_ID"]).GetString(),
+                                    Tk = worksheet.Cell(row, columnMapping["TK"]).GetString(),
+                                    Cantidad = worksheet.Cell(row, columnMapping["CANTIDAD"]).GetValue<int>(),
+                                    TipoStock = worksheet.Cell(row, columnMapping["TIPO_STOCK"]).GetString(),
+                                    Oc = worksheet.Cell(row, columnMapping["OC"]).GetString(),
+                                    Sociedad = worksheet.Cell(row, columnMapping["SOCIEDAD"]).GetString(),
                                 };
 
-                                object cellValueFecha = worksheet.Cell(row, 2).Value;
+                                object cellValueFecha = worksheet.Cell(row, columnMapping["FECHA"]).Value;
                                 bool isEmptyOrNullFecha = cellValueFecha == null || string.IsNullOrWhiteSpace(cellValueFecha.ToString());
-                                rowKardex.Fecha = (DateTime)(isEmptyOrNullFecha ? null : DateTime.TryParse(cellValueFecha.ToString(), out DateTime fecha1) ? fecha1 : (DateTime?)null);
+                                rowKardex.Fecha = (DateTime)(isEmptyOrNullFecha ? (DateTime?)null : DateTime.Parse(cellValueFecha.ToString()));
 
-
-                                //bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == rowActivo.CodEmpresa && x.CodCadena == rowActivo.CodCadena && x.CodRegion == rowActivo.CodRegion && x.CodZona == rowActivo.CodZona && x.CodLocal == rowActivo.CodLocal && x.CodActivo == rowActivo.CodActivo && x.CodModelo == rowActivo.CodModelo && x.NomMarca == rowActivo.NomMarca && x.CodSerie == rowActivo.CodSerie);
-                                //if (existe)
-                                //{
-                                //    _contexto.RepositorioInvKardex.Actualizar(rowKardex);
-                                //}
-                                //else
-                                //{
                                 _contexto.RepositorioInvKardex.Agregar(rowKardex);
-                                //}
                                 await _contexto.GuardarCambiosAsync();
                             }
                             catch (Exception ex)

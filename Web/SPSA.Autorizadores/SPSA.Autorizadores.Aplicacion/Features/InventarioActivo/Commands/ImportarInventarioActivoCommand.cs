@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ClosedXML.Excel;
 using MediatR;
-using Npgsql;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
@@ -48,20 +47,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                         var worksheet = workbook.Worksheet(1);
                         var rowCount = worksheet.RowsUsed().Count();
 
+                        var columnMapping = worksheet.Row(1).CellsUsed()
+                            .ToDictionary(cell => cell.GetString(), cell => cell.Address.ColumnNumber);
+
                         for (int row = 2; row <= rowCount; row++)
                         {
                             try
                             {
-                                string codlocal = worksheet.Cell(row, 8).Value.ToString();
+                                string codlocal = worksheet.Cell(row, columnMapping["CodLocal"]).GetString(); ;
                                 Mae_Local maeLocal = _contexto.RepositorioMaeLocal.Obtener(x => x.CodLocal == codlocal).FirstOrDefault();
 
                                 if (maeLocal == null)
                                 {
                                     maeLocal = new Mae_Local();
-                                    maeLocal.CodEmpresa = worksheet.Cell(row, 4).Value.ToString();
-                                    maeLocal.CodCadena = worksheet.Cell(row, 5).Value.ToString();
-                                    maeLocal.CodRegion = worksheet.Cell(row, 6).Value.ToString();
-                                    maeLocal.CodZona = worksheet.Cell(row, 7).Value.ToString();
+                                    maeLocal.CodEmpresa = worksheet.Cell(row, columnMapping["CodEmpresa"]).GetString();
+                                    maeLocal.CodCadena = worksheet.Cell(row, columnMapping["CodCadena"]).GetString();
+                                    maeLocal.CodRegion = worksheet.Cell(row, columnMapping["CodRegion"]).GetString();
+                                    maeLocal.CodZona = worksheet.Cell(row, columnMapping["CodZona"]).GetString();
                                     maeLocal.CodLocal = codlocal;
 
                                     respuesta.Errores.Add(new ErroresExcelDTO
@@ -74,41 +76,32 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
                                 var rowActivo = new Inv_Activo
                                 {
-                                    //CodEmpresa = worksheet.Cell(row, 4).Value.ToString(),
-                                    //CodCadena = worksheet.Cell(row, 5).Value.ToString(),
-                                    //CodRegion = worksheet.Cell(row, 6).Value.ToString(),
-                                    //CodZona = worksheet.Cell(row, 7).Value.ToString(),
-                                    //CodLocal = worksheet.Cell(row, 8).Value.ToString(),
                                     CodEmpresa = maeLocal.CodEmpresa,
                                     CodCadena = maeLocal.CodCadena,
                                     CodRegion = maeLocal.CodRegion,
                                     CodZona = maeLocal.CodZona,
                                     CodLocal = maeLocal.CodLocal,
-                                    CodActivo = worksheet.Cell(row, 10).Value.ToString(),
-                                    CodModelo = worksheet.Cell(row, 12).Value.ToString(),
-                                    NomMarca = worksheet.Cell(row, 13).Value.ToString(),
-                                    CodSerie = worksheet.Cell(row, 14).Value.ToString(),
-                                    Cantidad = Convert.ToInt32(worksheet.Cell(row, 15).Value),
-                                    Ip = worksheet.Cell(row, 16).Value.ToString(),
-                                    NomArea = worksheet.Cell(row, 17).Value.ToString(),
-                                    NumOc = worksheet.Cell(row, 18).Value.ToString(),
-                                    NumGuia = worksheet.Cell(row, 19).Value.ToString(),
-                                    //FecSalida = Convert.ToDateTime(worksheet.Cell(row, 14).Value),
-                                    Antiguedad = Convert.ToInt32(worksheet.Cell(row, 21).Value),
-                                    IndOperativo = worksheet.Cell(row, 22).Value.ToString(),
-                                    Observacion = worksheet.Cell(row, 24).Value.ToString(),
-                                    Garantia = worksheet.Cell(row, 25).Value.ToString(),
-                                    //FecActualiza = Convert.ToDateTime(worksheet.Cell(row, 19).Value)
+                                    CodActivo = worksheet.Cell(row, columnMapping["CodActivo"]).GetString(),
+                                    CodModelo = worksheet.Cell(row, columnMapping["Modelo"]).GetString(),
+                                    NomMarca = worksheet.Cell(row, columnMapping["Marca"]).GetString(),
+                                    CodSerie = worksheet.Cell(row, columnMapping["Serie"]).GetString(),
+                                    Cantidad = Convert.ToInt32(worksheet.Cell(row, columnMapping["Cantidad"]).GetString()),
+                                    Ip = worksheet.Cell(row, columnMapping["IP"]).GetString(),
+                                    NomArea = worksheet.Cell(row, columnMapping["Area"]).GetString(),
+                                    NumOc = worksheet.Cell(row, columnMapping["OC"]).GetString(),
+                                    NumGuia = worksheet.Cell(row, columnMapping["Guia"]).GetString(),
+                                    Antiguedad = Convert.ToInt32(worksheet.Cell(row, columnMapping["Antiguedad"]).GetString()),
+                                    IndOperativo = worksheet.Cell(row, columnMapping["IndOperativo"]).GetString(),
+                                    Observacion = worksheet.Cell(row, columnMapping["Obs/TK"]).GetString(),
+                                    Garantia = worksheet.Cell(row, columnMapping["Garantia"]).GetString(),
                                 };
-
-                                object cellValueFecSalida = worksheet.Cell(row, 20).Value;
+                                object cellValueFecSalida = worksheet.Cell(row, columnMapping["FechaSalida"]).Value;
                                 bool isEmptyOrNullFecSalida = cellValueFecSalida == null || string.IsNullOrWhiteSpace(cellValueFecSalida.ToString());
                                 rowActivo.FecSalida = isEmptyOrNullFecSalida ? null : DateTime.TryParse(cellValueFecSalida.ToString(), out DateTime fecha1) ? fecha1 : (DateTime?)null;
 
-                                object cellValueFecActualiza = worksheet.Cell(row, 26).Value;
+                                object cellValueFecActualiza = worksheet.Cell(row, columnMapping["FechaActualiza"]).Value;
                                 bool isEmptyOrNullFecActualiza = cellValueFecActualiza == null || string.IsNullOrWhiteSpace(cellValueFecActualiza.ToString());
                                 rowActivo.FecActualiza = isEmptyOrNullFecActualiza ? null : DateTime.TryParse(cellValueFecActualiza.ToString(), out DateTime fecha2) ? fecha2 : (DateTime?)null;
-
 
                                 bool existe = await _contexto.RepositorioInventarioActivo.Existe(x => x.CodEmpresa == rowActivo.CodEmpresa && x.CodCadena == rowActivo.CodCadena && x.CodRegion == rowActivo.CodRegion && x.CodZona == rowActivo.CodZona && x.CodLocal == rowActivo.CodLocal && x.CodActivo == rowActivo.CodActivo && x.CodModelo == rowActivo.CodModelo && x.NomMarca == rowActivo.NomMarca && x.CodSerie == rowActivo.CodSerie);
                                 if (existe)
