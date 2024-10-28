@@ -98,7 +98,12 @@
     <div class="col-xl-6 col-md-6">
         <div class="form-group">
             <label for="txtTipoStock" class="form-label">Tipo Stock</label>
-            <input type="text" class="form-control" id="txtTipoStock" value="@Model.InvKardex.TipoStock">
+            @*<input type="text" class="form-control" id="txtTipoStock" value="@Model.InvKardex.TipoStock">*@
+            <select class="form-control custom-select" id="cboTipoStock" required>
+                <option value="">Seleccionar</option>
+                <option value="STOCK" @(Model.InvKardex.TipoStock == "STOCK" ? "selected" : "")>STOCK</option>
+                <option value="REMANUFACTURADO" @(Model.InvKardex.TipoStock == "REMANUFACTURADO" ? "selected" : "")>REMANUFACTURADO</option>
+            </select>
         </div>
     </div>
     <div class="col-xl-3 col-md-4">

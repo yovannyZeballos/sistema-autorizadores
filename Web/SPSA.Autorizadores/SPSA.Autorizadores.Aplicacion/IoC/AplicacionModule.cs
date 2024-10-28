@@ -49,6 +49,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.TablasMae.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Command;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Ubigeos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
@@ -227,8 +228,9 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<DescargarMaestroCajalHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
 
 			builder.RegisterType<ListarInvTipoActivoHandler>().As<IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>>();
+            builder.RegisterType<DescargarInvTiposActivoHandler>().As<IRequestHandler<DescargarInvTiposActivoCommand, DescargarMaestroDTO>>();
 
-			builder.RegisterType<ListarInvActivoHandler>().As<IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>>();
+            builder.RegisterType<ListarInvActivoHandler>().As<IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>>();
 			builder.RegisterType<ObtenerInvActivoHandler>().As<IRequestHandler<ObtenerInvActivoQuery, GenericResponseDTO<ObtenerInvActivoDTO>>>();
 			builder.RegisterType<CrearInvActivoHandler>().As<IRequestHandler<CrearInvActivoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarInvActivoHandler>().As<IRequestHandler<ActualizarInvActivoCommand, RespuestaComunDTO>>();
@@ -291,8 +293,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearInvKardexHandler>().As<IRequestHandler<CrearInvKardexCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarInvKardexHandler>().As<IRequestHandler<ActualizarInvKardexCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarInvKardexHandler>().As<IRequestHandler<EliminarInvKardexCommand, RespuestaComunDTO>>();
-
-            //builder.RegisterType<ImportarAperturaHandler>().As<IRequestHandler<ImportarAperturaCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<ImportarInvKardexHandler>().As<IRequestHandler<ImportarInvKardexCommand, RespuestaComunExcelDTO>>();
             //builder.RegisterType<DescargarAperturaHandler>().As<IRequestHandler<DescargarAperturaCommand, DescargarMaestroDTO>>();
 
             #endregion INV KARDEX

@@ -382,6 +382,7 @@
     <Compile Include="Features\InventarioKardex\Commands\CrearInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexActivoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\ImportarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexActivoDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexLocalDTO.cs" />
