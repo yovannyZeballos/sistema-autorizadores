@@ -37,12 +37,12 @@
                                 </div>
                             </div>
                             @*<div class="col-md-4">
-            <div class="form-group select2-sm">
-                <label class="form-label">Local</label>
-                <select class="form-control select2-show-search custom-select" id="cboLocal">
-                </select>
-            </div>
-        </div>*@
+                    <div class="form-group select2-sm">
+                        <label class="form-label">Local</label>
+                        <select class="form-control select2-show-search custom-select" id="cboLocal">
+                        </select>
+                    </div>
+                </div>*@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-label">Fecha Inicio</label>
@@ -70,13 +70,11 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="col-md-12">
-                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnProcesar" type="button">Mostrar Información</button>
-                        </div>
                         <div class="col-md-12" id="container-btn-exportar">
+                            <button class="btn btn-primary btn-sm" id="btnProcesar" type="button">Mostrar Información</button>
                         </div>
                     </div>
-
+                   
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between mb-3">
@@ -88,42 +86,54 @@
                             <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2">
                                 <i class="fa fa-pencil"></i> Editar
                             </button>
-                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger">
+                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger me-2">
                                 <i class="fa fa-remove"></i> Eliminar
                             </button>
+                            <button type="button" id="btnImportarInvKardex" class="btn btn-sm btn-outline-success me-2">
+                                <i class="fa fa-upload"></i> Cargar Excel
+                            </button>
+                            <input type="file" id="excelInventario" style="display: none;">
                         </div>
                         <!-- Botón alineado a la derecha -->
-                        <button type="button" id="btnIrActivos" class="btn btn-sm btn-success">
-                            <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Activos
-                        </button>
+                        <div class="d-flex">
+                            <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2">
+                                <i class="fa fa-download"></i> Plantilla Excel
+                            </button>
+                            <button type="button" id="btnIrActivos" class="btn btn-sm btn-dark me-2">
+                                <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Activos
+                            </button>
+                            <button type="button" id="btnIrLocales" class="btn btn-sm btn-gray-dark me-2">
+                                <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Locales
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <table id="tableKardex" class="table text-nowrap border-bottom">
-                            <thead>
-                                <tr class="table-primary">
-                                    <th class="border-bottom-0" style="font-size: 15px;">ID</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">KARDEX</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">FECHA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">AREA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">TIPO</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">GUIA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">CATEGORIA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">ORIGEN</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">DESTINO</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">TK</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">CANTIDAD</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">TIPO_STOCK</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">OC</th>
-                                    <th class="border-bottom-0" style="font-size: 15px;">SOCIEDAD</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
+                <div class="row">
+                    <table id="tableKardex" class="table text-nowrap border-bottom">
+                        <thead>
+                            <tr class="table-primary">
+                                <th class="border-bottom-0" style="font-size: 15px;">ID</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">KARDEX</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">FECHA</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">AREA</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">TIPO</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">GUIA</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">CATEGORIA</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">ORIGEN</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">DESTINO</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">TK</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">CANTIDAD</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">TIPO_STOCK</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">OC</th>
+                                <th class="border-bottom-0" style="font-size: 15px;">SOCIEDAD</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -143,6 +153,33 @@
                 <button id="btnActualizarInvKardex" class="btn btn-primary">Guardar</button>
                 <button id="btnGuardarInvKardex" class="btn btn-primary">Guardar</button>
                 <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ERRORES IMPORTAR EXCEL-->
+<div class="modal fade" id="modalErroresImportacionExcel" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalImportarEmpresa">Errores encontrados</h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
