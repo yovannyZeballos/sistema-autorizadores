@@ -52,13 +52,38 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                         {
                             try
                             {
+                                string codlocal = worksheet.Cell(row, 8).Value.ToString();
+                                Mae_Local maeLocal = _contexto.RepositorioMaeLocal.Obtener(x => x.CodLocal == codlocal).FirstOrDefault();
+
+                                if (maeLocal == null)
+                                {
+                                    maeLocal = new Mae_Local();
+                                    maeLocal.CodEmpresa = worksheet.Cell(row, 4).Value.ToString();
+                                    maeLocal.CodCadena = worksheet.Cell(row, 5).Value.ToString();
+                                    maeLocal.CodRegion = worksheet.Cell(row, 6).Value.ToString();
+                                    maeLocal.CodZona = worksheet.Cell(row, 7).Value.ToString();
+                                    maeLocal.CodLocal = codlocal;
+
+                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    {
+                                        Fila = row,
+                                        Mensaje = $"Local incorrecto: {codlocal}"
+                                    });
+                                    continue;
+                                }
+
                                 var rowActivo = new Inv_Activo
                                 {
-                                    CodEmpresa = worksheet.Cell(row, 4).Value.ToString(),
-                                    CodCadena = worksheet.Cell(row, 5).Value.ToString(),
-                                    CodRegion = worksheet.Cell(row, 6).Value.ToString(),
-                                    CodZona = worksheet.Cell(row, 7).Value.ToString(),
-                                    CodLocal = worksheet.Cell(row, 8).Value.ToString(),
+                                    //CodEmpresa = worksheet.Cell(row, 4).Value.ToString(),
+                                    //CodCadena = worksheet.Cell(row, 5).Value.ToString(),
+                                    //CodRegion = worksheet.Cell(row, 6).Value.ToString(),
+                                    //CodZona = worksheet.Cell(row, 7).Value.ToString(),
+                                    //CodLocal = worksheet.Cell(row, 8).Value.ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     CodActivo = worksheet.Cell(row, 10).Value.ToString(),
                                     CodModelo = worksheet.Cell(row, 12).Value.ToString(),
                                     NomMarca = worksheet.Cell(row, 13).Value.ToString(),

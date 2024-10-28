@@ -47,7 +47,36 @@
     <div class="col-xl-3">
         <div class="form-group">
             <label for="txtNomArea" class="form-label">Area</label>
-            <input type="text" class="form-control" id="txtNomArea" value="@Model.InvActivo.NomArea">
+            @*<input type="text" class="form-control" id="txtNomArea" value="@Model.InvActivo.NomArea">*@
+        <select class="form-control custom-select" id="cboNomArea">
+            <option value="">Seleccionar</option>
+            <option value="-" @(Model.InvActivo.NomArea == "-" ? "selected" : "")>-</option>
+            <option value="AREA COMERCIAL" @(Model.InvActivo.NomArea == "AREA COMERCIAL" ? "selected" : "")>AREA COMERCIAL</option>
+            <option value="CAJAS" @(Model.InvActivo.NomArea == "CAJAS" ? "selected" : "")>CAJAS</option>
+            <option value="CARNES" @(Model.InvActivo.NomArea == "CARNES" ? "selected" : "")>CARNES</option>
+            <option value="COMERCIAL" @(Model.InvActivo.NomArea == "COMERCIAL" ? "selected" : "")>COMERCIAL</option>
+            <option value="COMIDAS" @(Model.InvActivo.NomArea == "COMIDAS" ? "selected" : "")>COMIDAS</option>
+            <option value="COMIDAS PREPARADAS" @(Model.InvActivo.NomArea == "COMIDAS PREPARADAS" ? "selected" : "")>COMIDAS PREPARADAS</option>
+            <option value="CONTRALOR" @(Model.InvActivo.NomArea == "CONTRALOR" ? "selected" : "")>CONTRALOR</option>
+            <option value="ELECTRO" @(Model.InvActivo.NomArea == "ELECTRO" ? "selected" : "")>ELECTRO</option>
+            <option value="FIAMBRES" @(Model.InvActivo.NomArea == "FIAMBRES" ? "selected" : "")>FIAMBRES</option>
+            <option value="FRUTAS Y VERDURAS" @(Model.InvActivo.NomArea == "FRUTAS Y VERDURAS" ? "selected" : "")>FRUTAS Y VERDURAS</option>
+            <option value="GESTION HUMANA" @(Model.InvActivo.NomArea == "GESTION HUMANA" ? "selected" : "")>GESTION HUMANA</option>
+            <option value="LAB CARNES" @(Model.InvActivo.NomArea == "LAB CARNES" ? "selected" : "")>LAB CARNES</option>
+            <option value="LAB FYV" @(Model.InvActivo.NomArea == "LAB FYV" ? "selected" : "")>LAB FYV</option>
+            <option value="LABORATORIO" @(Model.InvActivo.NomArea == "LABORATORIO" ? "selected" : "")>LABORATORIO</option>
+            <option value="PANADERIA" @(Model.InvActivo.NomArea == "PANADERIA" ? "selected" : "")>PANADERIA</option>
+            <option value="PESCADOS" @(Model.InvActivo.NomArea == "PESCADOS" ? "selected" : "")>PESCADOS</option>
+            <option value="POOL OFICINA" @(Model.InvActivo.NomArea == "POOL OFICINA" ? "selected" : "")>POOL OFICINA</option>
+            <option value="RECEPCION" @(Model.InvActivo.NomArea == "RECEPCION" ? "selected" : "")>RECEPCION</option>
+            <option value="SALA CAPACITACIONES" @(Model.InvActivo.NomArea == "SALA CAPACITACIONES" ? "selected" : "")>SALA CAPACITACIONES</option>
+            <option value="SALA DE REUNIONES" @(Model.InvActivo.NomArea == "SALA DE REUNIONES" ? "selected" : "")>SALA DE REUNIONES</option>
+            <option value="SALA DE VENTAS" @(Model.InvActivo.NomArea == "SALA DE VENTAS" ? "selected" : "")>SALA DE VENTAS</option>
+            <option value="SELFCHECKOUT" @(Model.InvActivo.NomArea == "SELFCHECKOUT" ? "selected" : "")>SELFCHECKOUT</option>
+            <option value="SMS" @(Model.InvActivo.NomArea == "SMS" ? "selected" : "")>SMS</option>
+            <option value="TESORERIA" @(Model.InvActivo.NomArea == "TESORERIA" ? "selected" : "")>TESORERIA</option>
+            <option value="TIENDA" @(Model.InvActivo.NomArea == "TIENDA" ? "selected" : "")>TIENDA</option>
+        </select>
         </div>
     </div>
     <div class="col-xl-3">

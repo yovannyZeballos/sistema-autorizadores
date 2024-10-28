@@ -5,6 +5,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.ViewModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -40,7 +41,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             var viewModel = new InvActivoViewModel
             {
                 InvActivo = model,
-                TiposActivo = tiposActivo.Data
+                TiposActivo = tiposActivo.Data.Where(x => x.IndEstado == "A").ToList()
             };
 
             return PartialView("_CrearInvActivo", viewModel);
@@ -55,7 +56,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             var viewModel = new InvActivoViewModel
             {
                 InvActivo = model,
-                TiposActivo = tiposActivo.Data
+                TiposActivo = tiposActivo.Data.Where(x=> x.IndEstado == "A").ToList()
             };
 
             return PartialView("_EditarInvActivo", viewModel);
