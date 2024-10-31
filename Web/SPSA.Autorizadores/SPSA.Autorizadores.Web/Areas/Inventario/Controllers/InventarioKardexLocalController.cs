@@ -2,68 +2,72 @@
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 {
-    public class InventarioKardexActivoController : Controller
+    public class InventarioKardexLocalController : Controller
     {
         private readonly IMediator _mediator;
 
-        public InventarioKardexActivoController(IMediator mediator)
+        public InventarioKardexLocalController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        // GET: Inventario/InventarioKardexActivo
+        // GET: Inventario/InventarioKardexLocal
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> CrearFormInvKardexActivo(InvKardexActivoDTO model)
+        public async Task<ActionResult> CrearFormInvKardexLocal(InvKardexLocalDTO model)
         {
-            return PartialView("_CrearInvKardexActivo", model);
+            return PartialView("_CrearInvKardexLocal", model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditarFormInvKardexActivo(InvKardexActivoDTO model)
+        public async Task<ActionResult> EditarFormInvKardexLocal(InvKardexLocalDTO model)
         {
-            return PartialView("_EditarInvKardexActivo", model);
+            return PartialView("_EditarInvKardexLocal", model);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ObtenerInvKardexActivo(ObtenerInvKardexActivoQuery request)
-        {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> ListarInvKardexActivo(ListarInvKardexActivoQuery request)
+        public async Task<JsonResult> ObtenerInvKardexLocal(ObtenerInvKardexLocalQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> CrearInvKardexActivo(CrearInvKardexActivoCommand command)
+        public async Task<JsonResult> ListarInvKardexLocal(ListarInvKardexLocalQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CrearInvKardexLocal(CrearInvKardexLocalCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ActualizarInvKardexActivo(ActualizarInvKardexActivoCommand command)
+        public async Task<JsonResult> ActualizarInvKardexLocal(ActualizarInvKardexLocalCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> EliminarInvkardexActivo(EliminarInvKardexActivoCommand request)
+        public async Task<JsonResult> EliminarInvkardexLocal(EliminarInvKardexLocalCommand request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
