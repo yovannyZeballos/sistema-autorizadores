@@ -11,8 +11,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string Guia { get; set; }
         public string ActivoId { get; set; }
         public string Serie { get; set; }
-        public string OrigenId { get; set; }
-        public string DestinoId { get; set; }
+        public int OrigenId { get; set; }
+        public int DestinoId { get; set; }
         public string Tk { get; set; }
         public int Cantidad { get; set; }
         public string TipoStock { get; set; }

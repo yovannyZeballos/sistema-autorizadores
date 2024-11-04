@@ -47,14 +47,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
                 if (existe)
                 {
                     respuesta.Ok = false;
-                    respuesta.Mensaje = "Local ya existe";
+                    respuesta.Mensaje = "Caja ya existe";
                     return respuesta;
                 }
 
                 var caja = _mapper.Map<Mae_Caja>(request);
                 _contexto.RepositorioMaeCaja.Agregar(caja);
                 await _contexto.GuardarCambiosAsync();
-                respuesta.Mensaje = "Local creado exitosamente.";
+                respuesta.Mensaje = "Caja creado exitosamente.";
             }
             catch (Exception ex)
             {
