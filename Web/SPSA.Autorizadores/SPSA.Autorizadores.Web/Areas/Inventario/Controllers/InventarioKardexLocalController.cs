@@ -73,5 +73,12 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return Json(respuesta);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> DescargarInvKardexLocal(DescargarInvKardexLocalCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
     }
 }

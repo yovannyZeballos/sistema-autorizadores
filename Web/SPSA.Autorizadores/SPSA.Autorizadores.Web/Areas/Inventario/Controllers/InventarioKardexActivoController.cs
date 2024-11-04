@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries;
@@ -64,6 +65,13 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 
         [HttpPost]
         public async Task<JsonResult> EliminarInvkardexActivo(EliminarInvKardexActivoCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarInvKardexActivo(DescargarInvKardexActivoCommand request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);

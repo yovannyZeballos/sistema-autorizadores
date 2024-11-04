@@ -25,32 +25,34 @@
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between mb-3">
                         <!-- Botones alineados a la izquierda -->
-                        <div class="d-flex">
-                            <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary me-2">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
+                            <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary me-2 mb-2 mb-md-0">
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-                            <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-warning me-2">
+                            <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-warning me-2 mb-2 mb-md-0">
                                 <i class="fa fa-pencil"></i> Editar
                             </button>
-                            <button type="button" id="btnEliminarInvActivo" class="btn btn-sm btn-danger me-2">
+                            <button type="button" id="btnEliminarInvActivo" class="btn btn-sm btn-danger me-2 mb-2 mb-md-0">
                                 <i class="fa fa-remove"></i> Eliminar
                             </button>
                         </div>
 
                         <!-- Botón alineado a la derecha -->
-                        <div class="d-flex">
-                            <button type="button" id="btnDescargar" class="btn btn-sm btn-default me-2">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
+                            <button type="button" id="btnDescargarInvActivo" class="btn btn-sm btn-default me-2 mb-2 mb-md-0">
                                 <i class="fa fa-download"></i> Descargar Activos
                             </button>
-                            <button type="button" id="btnIrKardex" class="btn btn-sm btn-dark me-2">
+                            <button type="button" id="btnIrKardex" class="btn btn-sm btn-dark me-2 mb-2 mb-md-0">
                                 <i class="fa fa-arrow-right fa-2x"></i> Ir a Kardex
                             </button>
                         </div>
                     </div>
-                    <div class="col-12">
+                </div>
+                <div class="col-12">
+                    <div class="table-responsive">
                         <table id="tableActivos" class="table text-nowrap border-bottom">
                             <thead>
-                                <tr class="table-primary">
+                                <tr class="table-primary text-center">
                                     <th class="border-bottom-0" style="font-size: 15px;">ID</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">DESCRIPCION</th>
@@ -65,6 +67,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

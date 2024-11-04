@@ -20,6 +20,12 @@ var AdministrarInvKardex = function () {
             window.location.href = '/Inventario/InventarioKardexActivo'; // Reemplaza con la ruta a la vista
 
         });
+
+        $("#btnIrLocales").click(function () {
+            window.location.href = '/Inventario/InventarioKardexLocal'; // Reemplaza con la ruta a la vista
+
+        });
+
         $("#btnProcesar").click(function () {
             recargarDataTableKardex();
         });

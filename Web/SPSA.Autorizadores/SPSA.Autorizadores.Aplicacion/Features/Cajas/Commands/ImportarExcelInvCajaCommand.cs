@@ -108,7 +108,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                     continue;
                                 }
 
-
                                 var fechaGarantiaCpuString = row[18].ToString() ?? "";
                                 var fechaGarantiaImpresoraString = row[23].ToString() ?? "";
                                 var fechaGarantiaDynakeyString = row[28].ToString() ?? "";

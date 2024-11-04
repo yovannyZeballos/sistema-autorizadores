@@ -7,6 +7,7 @@ var urlCrearInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/CrearInvKar
 var urlActualizarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/ActualizarInvKardexActivo';
 var urlEliminarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/EliminarInvKardexActivo';
 var urlObtenerInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/ObtenerInvKardexActivo';
+var urlDescargarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/DescargarInvKardexActivo';
 
 var dtListaKardex = null;
 var AdministrarInvKardexActivo = function () {
@@ -100,6 +101,10 @@ var AdministrarInvKardexActivo = function () {
                     await eliminarInvActivo(request);
                 }
             });
+        });
+
+        $("#btnDescargarInvActivo").on("click", function () {
+            descargarInvActivos();
         });
 
         $('#tableActivos tbody').on('click', 'tr', function () {
@@ -284,6 +289,42 @@ var AdministrarInvKardexActivo = function () {
             success: async function (response) {
                 swal("Eliminado!", "Registro eliminado exitosamente.", "success");
                 recargarDataTableActivo(request);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const descargarInvActivos = function () {
+
+        const request = {
+        };
+
+        $.ajax({
+            url: urlDescargarInvActivo,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });

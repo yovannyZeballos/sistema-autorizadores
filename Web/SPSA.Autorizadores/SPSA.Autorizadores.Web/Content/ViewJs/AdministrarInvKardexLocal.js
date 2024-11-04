@@ -7,6 +7,7 @@ var urlCrearInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/CrearInvKarde
 var urlActualizarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/ActualizarInvKardexLocal';
 var urlEliminarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/EliminarInvKardexLocal';
 var urlObtenerInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/ObtenerInvKardexLocal';
+var urlDescargarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/DescargarInvKardexLocal';
 
 var dtListaKardex = null;
 var AdministrarInvKardexLocal = function () {
@@ -15,21 +16,18 @@ var AdministrarInvKardexLocal = function () {
 
         $("#btnIrKardex").click(function () {
             window.location.href = '/Inventario/InventarioKardex'; // Reemplaza con la ruta a la vista
-
         });
 
         $("#btnNuevoInvLocal").click(function () {
-            abrirModalNuevoInvActivo();           
+            abrirModalNuevoInvLocal();           
         });
 
         $("#btnEditarInvLocal").click(async function () {
-
             var filasSeleccionada = document.querySelectorAll("#tableLocales tbody tr.selected");
             if (!validarSelecion(filasSeleccionada.length)) {
                 return;
             }
             const local_id = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
-
             const objLocal = await obtenerLocal(local_id);
 
             if (objLocal === undefined) return;
@@ -40,11 +38,8 @@ var AdministrarInvKardexLocal = function () {
         $("#btnGuardarInvLocal").on("click", async function () {
             var inv_local = {
                 Id: $("#txtId").val(),
-                Modelo: $("#txtModelo").val(),
-                Descripcion: $("#txtDescripcion").val(),
-                Marca: $("#txtMarca").val(),
-                Area: $("#cboArea").val(),
-                Tipo: $("#cboTipo").val()
+                Sociedad: $("#txtSociedad").val(),
+                NomLocal: $("#txtNomLocal").val()
             };
 
             if (validarFormInvLocal(inv_local))
@@ -54,11 +49,8 @@ var AdministrarInvKardexLocal = function () {
         $("#btnActualizarInvLocal").on("click", async function () {
             var inv_local = {
                 Id: $("#txtId").val(),
-                Modelo: $("#txtModelo").val(),
-                Descripcion: $("#txtDescripcion").val(),
-                Marca: $("#txtMarca").val(),
-                Area: $("#cboArea").val(),
-                Tipo: $("#cboTipo").val()
+                Sociedad: $("#txtSociedad").val(),
+                NomLocal: $("#txtNomLocal").val()
             };
 
             if (validarFormInvLocal(inv_local))
@@ -102,6 +94,10 @@ var AdministrarInvKardexLocal = function () {
             });
         });
 
+        $("#btnDescargarInvLocal").on("click", function () {
+            descargarInvLocales();
+        });
+
         $('#tableLocales tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
@@ -118,9 +114,6 @@ var AdministrarInvKardexLocal = function () {
             const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
 
-            console.log("child(1)" + NUM_CAJA);
-            console.log("child(2)" + COD_ACTIVO);
-
             //abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
         });
 
@@ -130,10 +123,9 @@ var AdministrarInvKardexLocal = function () {
     const validarFormInvLocal = function (invLocal) {
         let validate = true;
 
-        if (invLocal.Id === '' || invLocal.Modelo === '' || invLocal.Descripcion === '' || invLocal.Marca === '' || invLocal.Area === ''
-            || invLocal.Tipo === '') {
+        if (invLocal.Id === '' || invLocal.Sociedad === '' || invLocal.NomLocal === '') {
             validate = false;
-            $("#formInvActivo").addClass("was-validated");
+            $("#formInvLocal").addClass("was-validated");
             swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning", });
         }
 
@@ -155,13 +147,6 @@ var AdministrarInvKardexLocal = function () {
         $("#titulomodalInvLocal").html("Editar Activo");
         $("#btnActualizarInvLocal").show();
         $("#btnGuardarInvLocal").hide();
-
-        //if (objKardex.Fecha != "" && objKardex.Fecha != null) {
-        //    let timestamp = parseInt(objKardex.Fecha.match(/\d+/)[0], 10);
-        //    let date = new Date(timestamp);
-        //    let formattedDate = date.toISOString().split('T')[0];
-        //    objKardex.Fecha = formattedDate;
-        //}
 
         await cargarFormEditarInvLocal(objActivo);
     }
@@ -291,6 +276,42 @@ var AdministrarInvKardexLocal = function () {
         });
     }
 
+    const descargarInvLocales = function () {
+
+        const request = {
+        };
+
+        $.ajax({
+            url: urlDescargarInvLocal,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
     const recargarDataTableLocales = function (request) {
         if ($.fn.DataTable.isDataTable('#tableLocales')) {
             $('#tableLocales').DataTable().clear().draw();
@@ -341,7 +362,7 @@ var AdministrarInvKardexLocal = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
-                recargarDataTableActivo();
+                recargarDataTableLocales();
             });
         }
     }

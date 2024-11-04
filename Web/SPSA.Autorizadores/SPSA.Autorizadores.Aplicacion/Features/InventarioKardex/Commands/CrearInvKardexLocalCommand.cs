@@ -14,7 +14,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands
 {
     public class CrearInvKardexLocalCommand : IRequest<RespuestaComunDTO>
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string Sociedad { get; set; }
         public string NomLocal { get; set; }
     }

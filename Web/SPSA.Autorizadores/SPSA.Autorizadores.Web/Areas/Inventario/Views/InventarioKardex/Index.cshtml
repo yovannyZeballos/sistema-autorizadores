@@ -72,61 +72,63 @@
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between mb-3">
                         <!-- Botones alineados a la izquierda -->
-                        <div class="d-flex">
-                            <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary me-2">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
+                            <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary me-2 mb-2 mb-md-0">
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-                            <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2">
+                            <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2 mb-2 mb-md-0">
                                 <i class="fa fa-pencil"></i> Editar
                             </button>
-                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger me-2">
+                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger me-2 mb-2 mb-md-0">
                                 <i class="fa fa-remove"></i> Eliminar
                             </button>
-                            <button type="button" id="btnImportarInvKardex" class="btn btn-sm btn-outline-success me-2">
+                            <button type="button" id="btnImportarInvKardex" class="btn btn-sm btn-outline-success me-2 mb-2 mb-md-0">
                                 <i class="fa fa-upload"></i> Cargar Excel
                             </button>
                             <input type="file" id="excelInventario" style="display: none;">
                         </div>
                         <!-- Botón alineado a la derecha -->
-                        <div class="d-flex">
-                            <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
+                            <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2 mb-2 mb-md-0">
                                 <i class="fa fa-download"></i> Plantilla Excel
                             </button>
-                            <button type="button" id="btnIrActivos" class="btn btn-sm btn-dark me-2">
+                            <button type="button" id="btnIrActivos" class="btn btn-sm btn-dark me-2 mb-2 mb-md-0">
                                 <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Activos
                             </button>
-                            <button type="button" id="btnIrLocales" class="btn btn-sm btn-gray-dark me-2">
+                            <button type="button" id="btnIrLocales" class="btn btn-sm btn-gray-dark me-2 mb-2 mb-md-0">
                                 <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Locales
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <table id="tableKardex" class="table text-nowrap border-bottom">
-                        <thead>
-                            <tr class="table-primary">
-                                <th class="border-bottom-0" style="font-size: 15px;">ID</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">KARDEX</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">FECHA</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">AREA</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">TIPO</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">GUIA</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">CATEGORIA</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">ORIGEN</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">DESTINO</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">TK</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">CANTIDAD</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">TIPO_STOCK</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">OC</th>
-                                <th class="border-bottom-0" style="font-size: 15px;">SOCIEDAD</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                        </tbody>
-                    </table>
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table id="tableKardex" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr class="table-primary text-center">
+                                    <th class="border-bottom-0" style="font-size: 15px;">ID</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">KARDEX</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">FECHA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">AREA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">TIPO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">GUIA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">CATEGORIA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">MODELO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">MARCA</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">SERIE</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">ORIGEN</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">DESTINO</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">TK</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">CANTIDAD</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">TIPO_STOCK</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">OC</th>
+                                    <th class="border-bottom-0" style="font-size: 15px;">SOCIEDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
