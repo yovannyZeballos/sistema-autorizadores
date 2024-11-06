@@ -16,6 +16,8 @@
 		public const decimal CodigoProcesoActualizacionEstadoCierre = 30;
 		public const decimal CodigoProcesoDiferenciaTransacciones = 31;
 		public const decimal CodigoProcesoImpresionCodigoBarras = 32;
+		public const decimal CodigoProcesoMonitorArchivos = 33;
+
 		public const string CodigoParametroToleranciaSegundos = "01";
 		public const string CodigoParametroToleranciaCantidad = "02";
 		public const string CodigoParametroServidorBD = "03";
@@ -34,5 +36,10 @@
 		public const string CodigoParametroServiceNameBD_ProcesoCierre = "04";
 		public const string CodigoParametroPuertoBD_ProcesoCierre = "05";
 		public const string CodigoParametroFormatoCodigoAlterno_ProcesoCierre = "06";
+
+		public const string CodigoUsuarioCaja_ProcesoMonitorArchivo = "01";
+		public const string CodigoClaveCaja_ProcesoMonitorArchivo = "02";
+		public const string CodigoRutaArchivos1_ProcesoMonitorArchivo = "03";
+		public const string CodigoRutaArchivos2_ProcesoMonitorArchivo = "04";
 	}
 }
