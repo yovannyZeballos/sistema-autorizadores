@@ -11,8 +11,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string Guia { get; set; }
         public string ActivoId { get; set; }
         public string Serie { get; set; }
-        public string Origen { get; set; }
-        public string Destino { get; set; }
+        public int OrigenId { get; set; }
+        public int DestinoId { get; set; }
         public string Tk { get; set; }
         public int Cantidad { get; set; }
         public string TipoStock { get; set; }
@@ -21,5 +21,11 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 
         [ForeignKey("ActivoId")]
         public virtual InvKardexActivo InvKardexActivo { get; set; }
+
+        [ForeignKey("OrigenId")]
+        public virtual InvKardexLocal Origen { get; set; }  // Relación para OrigenId
+
+        [ForeignKey("DestinoId")]
+        public virtual InvKardexLocal Destino { get; set; }  // Relación para DestinoId
     }
 }

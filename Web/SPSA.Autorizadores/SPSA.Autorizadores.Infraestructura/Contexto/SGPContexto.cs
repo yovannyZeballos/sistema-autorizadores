@@ -61,6 +61,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
             RepositorioInvKardex = new RepositorioInvKardex(this);
             RepositorioInvKardexActivo = new RepositorioInvKardexActivo(this);
+            RepositorioInvKardexLocal = new RepositorioInvKardexLocal(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -103,6 +104,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
 		public IRepositorioInvKardex RepositorioInvKardex { get; private set; }
 		public IRepositorioInvKardexActivo RepositorioInvKardexActivo { get; private set; }
+		public IRepositorioInvKardexLocal RepositorioInvKardexLocal { get; private set; }
 
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -143,11 +145,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new TmpMonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new AutImpresionTypeConfiguracion());
 
-
-			modelBuilder.Configurations.Add(new InvKardexActivoTypeConfiguration());
-			modelBuilder.Configurations.Add(new InvKardexTypeConfiguration());
-
-
+            modelBuilder.Configurations.Add(new InvKardexTypeConfiguration());
+            modelBuilder.Configurations.Add(new InvKardexActivoTypeConfiguration());
+			modelBuilder.Configurations.Add(new InvKardexLocalTypeConfiguration());
 
 		}
 

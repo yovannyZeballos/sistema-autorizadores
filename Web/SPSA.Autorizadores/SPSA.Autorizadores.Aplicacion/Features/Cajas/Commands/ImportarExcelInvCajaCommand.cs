@@ -76,6 +76,28 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                             {
                                 DataRow row = ds.Tables[0].Rows[i];
 
+                                string codlocal = row[4].ToString().Trim();
+
+                                Mae_Local maeLocal = _contexto.RepositorioMaeLocal.Obtener(x => x.CodLocal == codlocal).FirstOrDefault();
+
+                                if (maeLocal == null) 
+                                {
+                                    maeLocal = new Mae_Local();
+                                    maeLocal.CodEmpresa = row[0].ToString();
+                                    maeLocal.CodCadena = row[1].ToString();
+                                    maeLocal.CodRegion = row[2].ToString();
+                                    maeLocal.CodZona = row[3].ToString();
+                                    maeLocal.CodLocal = codlocal;
+
+                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    {
+                                        Fila = i + 2,
+                                        Mensaje = $"Local incorrecto: {row[4]}"
+                                    });
+                                    continue;
+                                }
+
+
                                 if (!int.TryParse(row[6].ToString(), out int numCaja))
                                 {
                                     respuesta.Errores.Add(new ErroresExcelDTO
@@ -85,7 +107,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                     });
                                     continue;
                                 }
-
 
                                 var fechaGarantiaCpuString = row[18].ToString() ?? "";
                                 var fechaGarantiaImpresoraString = row[23].ToString() ?? "";
@@ -190,11 +211,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 //ADD CPU
                                 var invCpu = new InvCajas
                                 {
-                                    CodEmpresa = row[0].ToString(),
-                                    CodCadena = row[1].ToString(),
-                                    CodRegion = row[2].ToString(),
-                                    CodZona = row[3].ToString(),
-                                    CodLocal = row[4].ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     NumCaja = numCaja,
                                     CodActivo = "01",
                                     CodModelo = row[8].ToString(),
@@ -237,11 +258,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 //ADD IMPRESORA
                                 var invImpresora = new InvCajas
                                 {
-                                    CodEmpresa = row[0].ToString(),
-                                    CodCadena = row[1].ToString(),
-                                    CodRegion = row[2].ToString(),
-                                    CodZona = row[3].ToString(),
-                                    CodLocal = row[4].ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     NumCaja = numCaja,
                                     CodActivo = "02",
                                     CodModelo = row[20].ToString(),
@@ -284,11 +305,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 //ADD DYNAKEY
                                 var invDynakey = new InvCajas
                                 {
-                                    CodEmpresa = row[0].ToString(),
-                                    CodCadena = row[1].ToString(),
-                                    CodRegion = row[2].ToString(),
-                                    CodZona = row[3].ToString(),
-                                    CodLocal = row[4].ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     NumCaja = numCaja,
                                     CodActivo = "03",
                                     CodModelo = row[25].ToString(),
@@ -331,11 +352,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 //ADD BALANZA
                                 var invBalanza = new InvCajas
                                 {
-                                    CodEmpresa = row[0].ToString(),
-                                    CodCadena = row[1].ToString(),
-                                    CodRegion = row[2].ToString(),
-                                    CodZona = row[3].ToString(),
-                                    CodLocal = row[4].ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     NumCaja = numCaja,
                                     CodActivo = "04",
                                     CodModelo = row[30].ToString(),
@@ -378,11 +399,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 //ADD GAVETA
                                 var invGaveta = new InvCajas
                                 {
-                                    CodEmpresa = row[0].ToString(),
-                                    CodCadena = row[1].ToString(),
-                                    CodRegion = row[2].ToString(),
-                                    CodZona = row[3].ToString(),
-                                    CodLocal = row[4].ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     NumCaja = numCaja,
                                     CodActivo = "05",
                                     CodModelo = row[35].ToString(),
@@ -428,11 +449,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 {
                                     var invPantalla = new InvCajas
                                     {
-                                        CodEmpresa = row[0].ToString(),
-                                        CodCadena = row[1].ToString(),
-                                        CodRegion = row[2].ToString(),
-                                        CodZona = row[3].ToString(),
-                                        CodLocal = row[4].ToString(),
+                                        CodEmpresa = maeLocal.CodEmpresa,
+                                        CodCadena = maeLocal.CodCadena,
+                                        CodRegion = maeLocal.CodRegion,
+                                        CodZona = maeLocal.CodZona,
+                                        CodLocal = maeLocal.CodLocal,
                                         NumCaja = numCaja,
                                         CodActivo = "15",
                                         CodModelo = row[40].ToString(),

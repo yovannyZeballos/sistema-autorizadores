@@ -1,62 +1,52 @@
 ﻿using AutoMapper;
 using MediatR;
+using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Serilog;
 using System.Data.Entity;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands
 {
-    public class ActualizarInvKardexCommand : IRequest<RespuestaComunDTO>
+    public class ActualizarInvKardexLocalCommand : IRequest<RespuestaComunDTO>
     {
         public int Id { get; set; }
-        public string Kardex { get; set; }
-        public DateTime Fecha { get; set; }
-        public string Guia { get; set; }
-        public string ActivoId { get; set; }
-        public string Serie { get; set; }
-        public int OrigenId { get; set; }
-        public int DestinoId { get; set; }
-        public string Tk { get; set; }
-        public int Cantidad { get; set; }
-        public string TipoStock { get; set; }
-        public string Oc { get; set; }
         public string Sociedad { get; set; }
+        public string NomLocal { get; set; }
     }
 
-    public class ActualizarInvKardexHandler : IRequestHandler<ActualizarInvKardexCommand, RespuestaComunDTO>
+    public class ActualizarInvKardexLocalHandler : IRequestHandler<ActualizarInvKardexLocalCommand, RespuestaComunDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ActualizarInvKardexHandler(IMapper mapper)
+        public ActualizarInvKardexLocalHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<RespuestaComunDTO> Handle(ActualizarInvKardexCommand request, CancellationToken cancellationToken)
+        public async Task<RespuestaComunDTO> Handle(ActualizarInvKardexLocalCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new RespuestaComunDTO { Ok = true };
             try
             {
-                var invKardex = await _contexto.RepositorioInvKardex.Obtener(x => x.Id == request.Id).FirstOrDefaultAsync();
+                var invKardexLocal = await _contexto.RepositorioInvKardexLocal.Obtener(x => x.Id == request.Id).FirstOrDefaultAsync();
 
-                if (invKardex is null)
+                if (invKardexLocal is null)
                 {
                     respuesta.Ok = false;
                     respuesta.Mensaje = "Registro no existe";
                     return respuesta;
                 }
 
-                _mapper.Map(request, invKardex);
+                _mapper.Map(request, invKardexLocal);
                 await _contexto.GuardarCambiosAsync();
                 respuesta.Mensaje = "Registro actualizado exitosamente.";
             }

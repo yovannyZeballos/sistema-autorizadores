@@ -1,73 +1,64 @@
-﻿var urlListarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/ListarInvKardexActivo';
+﻿var urlListarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/ListarInvKardexLocal';
 
-var urlModalCrearInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/CrearFormInvKardexActivo';
-var urlModalEditarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/EditarFormInvKardexActivo';
+var urlModalCrearInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/CrearFormInvKardexLocal';
+var urlModalEditarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/EditarFormInvKardexLocal';
 
-var urlCrearInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/CrearInvKardexActivo';
-var urlActualizarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/ActualizarInvKardexActivo';
-var urlEliminarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/EliminarInvKardexActivo';
-var urlObtenerInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/ObtenerInvKardexActivo';
-var urlDescargarInvActivo = baseUrl + 'Inventario/InventarioKardexActivo/DescargarInvKardexActivo';
+var urlCrearInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/CrearInvKardexLocal';
+var urlActualizarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/ActualizarInvKardexLocal';
+var urlEliminarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/EliminarInvKardexLocal';
+var urlObtenerInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/ObtenerInvKardexLocal';
+var urlDescargarInvLocal = baseUrl + 'Inventario/InventarioKardexLocal/DescargarInvKardexLocal';
 
 var dtListaKardex = null;
-var AdministrarInvKardexActivo = function () {
+var AdministrarInvKardexLocal = function () {
 
     const eventos = function () {
 
         $("#btnIrKardex").click(function () {
             window.location.href = '/Inventario/InventarioKardex'; // Reemplaza con la ruta a la vista
-
         });
 
-        $("#btnNuevoInvActivo").click(function () {
-            abrirModalNuevoInvActivo();           
+        $("#btnNuevoInvLocal").click(function () {
+            abrirModalNuevoInvLocal();           
         });
 
-        $("#btnEditarInvActivo").click(async function () {
-
-            var filasSeleccionada = document.querySelectorAll("#tableActivos tbody tr.selected");
+        $("#btnEditarInvLocal").click(async function () {
+            var filasSeleccionada = document.querySelectorAll("#tableLocales tbody tr.selected");
             if (!validarSelecion(filasSeleccionada.length)) {
                 return;
             }
-            const activo_id = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+            const local_id = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
+            const objLocal = await obtenerLocal(local_id);
 
-            const objActivo = await obtenerActivo(activo_id);
+            if (objLocal === undefined) return;
 
-            if (objActivo === undefined) return;
-
-            abrirModalEditarInvActivo(objActivo);
+            abrirModalEditarInvLocal(objLocal);
         });
 
-        $("#btnGuardarInvActivo").on("click", async function () {
-            var inv_activo = {
+        $("#btnGuardarInvLocal").on("click", async function () {
+            var inv_local = {
                 Id: $("#txtId").val(),
-                Modelo: $("#txtModelo").val(),
-                Descripcion: $("#txtDescripcion").val(),
-                Marca: $("#txtMarca").val(),
-                Area: $("#cboArea").val(),
-                Tipo: $("#cboTipo").val()
+                Sociedad: $("#txtSociedad").val(),
+                NomLocal: $("#txtNomLocal").val()
             };
 
-            if (validarFormInvActivo(inv_activo))
-                await guardarInvActivo(inv_activo, urlCrearInvActivo);
+            if (validarFormInvLocal(inv_local))
+                await guardarInvLocal(inv_local, urlCrearInvLocal);
         });
 
-        $("#btnActualizarInvActivo").on("click", async function () {
-            var inv_activo = {
+        $("#btnActualizarInvLocal").on("click", async function () {
+            var inv_local = {
                 Id: $("#txtId").val(),
-                Modelo: $("#txtModelo").val(),
-                Descripcion: $("#txtDescripcion").val(),
-                Marca: $("#txtMarca").val(),
-                Area: $("#cboArea").val(),
-                Tipo: $("#cboTipo").val()
+                Sociedad: $("#txtSociedad").val(),
+                NomLocal: $("#txtNomLocal").val()
             };
 
-            if (validarFormInvActivo(inv_activo))
-                await guardarInvActivo(inv_activo, urlActualizarInvActivo);
+            if (validarFormInvLocal(inv_local))
+                await guardarInvLocal(inv_local, urlActualizarInvLocal);
         });
 
-        $("#btnEliminarInvActivo").on("click", function () {
-            var filasSeleccionada = document.querySelectorAll("#tableActivos tbody tr.selected");
+        $("#btnEliminarInvLocal").on("click", function () {
+            var filasSeleccionada = document.querySelectorAll("#tableLocales tbody tr.selected");
             if (!validarSelecion(filasSeleccionada.length)) {
                 return;
             }
@@ -98,16 +89,16 @@ var AdministrarInvKardexActivo = function () {
                 }
             }).then(async (isConfirm) => {
                 if (isConfirm) {
-                    await eliminarInvActivo(request);
+                    await eliminarInvLocal(request);
                 }
             });
         });
 
-        $("#btnDescargarInvActivo").on("click", function () {
-            descargarInvActivos();
+        $("#btnDescargarInvLocal").on("click", function () {
+            descargarInvLocales();
         });
 
-        $('#tableActivos tbody').on('click', 'tr', function () {
+        $('#tableLocales tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
             } else {
@@ -116,15 +107,12 @@ var AdministrarInvKardexActivo = function () {
             }
         });
 
-        $('#tableActivos tbody').on('dblclick', 'tr', function () {
+        $('#tableLocales tbody').on('dblclick', 'tr', function () {
            
             var filasSeleccionada = $(this);
 
             const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
-
-            console.log("child(1)" + NUM_CAJA);
-            console.log("child(2)" + COD_ACTIVO);
 
             //abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
         });
@@ -132,13 +120,12 @@ var AdministrarInvKardexActivo = function () {
     }
 
 
-    const validarFormInvActivo = function (invActivo) {
+    const validarFormInvLocal = function (invLocal) {
         let validate = true;
 
-        if (invActivo.Id === '' || invActivo.Modelo === '' || invActivo.Descripcion === '' || invActivo.Marca === '' || invActivo.Area === ''
-            || invActivo.Tipo === '') {
+        if (invLocal.Id === '' || invLocal.Sociedad === '' || invLocal.NomLocal === '') {
             validate = false;
-            $("#formInvActivo").addClass("was-validated");
+            $("#formInvLocal").addClass("was-validated");
             swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning", });
         }
 
@@ -156,34 +143,27 @@ var AdministrarInvKardexActivo = function () {
         return true;
     }
 
-    const abrirModalEditarInvActivo = async function (objActivo) {
-        $("#titulomodalInvActivo").html("Editar Activo");
-        $("#btnActualizarInvActivo").show();
-        $("#btnGuardarInvActivo").hide();
+    const abrirModalEditarInvLocal = async function (objActivo) {
+        $("#titulomodalInvLocal").html("Editar Activo");
+        $("#btnActualizarInvLocal").show();
+        $("#btnGuardarInvLocal").hide();
 
-        //if (objKardex.Fecha != "" && objKardex.Fecha != null) {
-        //    let timestamp = parseInt(objKardex.Fecha.match(/\d+/)[0], 10);
-        //    let date = new Date(timestamp);
-        //    let formattedDate = date.toISOString().split('T')[0];
-        //    objKardex.Fecha = formattedDate;
-        //}
-
-        await cargarFormEditarInvActivo(objActivo);
+        await cargarFormEditarInvLocal(objActivo);
     }
 
-    const abrirModalNuevoInvActivo = async function () {
-        $("#tituloModalInvActivo").html("Ingresar Activo");
-        $("#btnActualizarInvActivo").hide();
-        $("#btnGuardarInvActivo").show();
+    const abrirModalNuevoInvLocal = async function () {
+        $("#tituloModalInvLocal").html("Ingresar Local");
+        $("#btnActualizarInvLocal").hide();
+        $("#btnGuardarInvLocal").show();
 
         const model = {};
 
-        await cargarFormCrearInvActivo(model);
+        await cargarFormCrearInvLocal(model);
     }
 
-    const cargarFormCrearInvActivo = async function (model) {
+    const cargarFormCrearInvLocal = async function (model) {
         $.ajax({
-            url: urlModalCrearInvActivo,
+            url: urlModalCrearInvLocal,
             type: "post",
             data: { model },
             dataType: "html",
@@ -194,8 +174,8 @@ var AdministrarInvKardexActivo = function () {
                 closeLoading();
             },
             success: async function (response) {
-                $("#modalInvActivo").find(".modal-body").html(response);
-                $("#modalInvActivo").modal('show');
+                $("#modalInvLocal").find(".modal-body").html(response);
+                $("#modalInvLocal").modal('show');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -203,9 +183,9 @@ var AdministrarInvKardexActivo = function () {
         });
     }
 
-    const cargarFormEditarInvActivo = async function (model) {
+    const cargarFormEditarInvLocal = async function (model) {
         $.ajax({
-            url: urlModalEditarInvActivo,
+            url: urlModalEditarInvLocal,
             type: "post",
             data: { model },
             dataType: "html",
@@ -216,8 +196,8 @@ var AdministrarInvKardexActivo = function () {
                 closeLoading();
             },
             success: async function (response) {
-                $("#modalInvActivo").find(".modal-body").html(response);
-                $("#modalInvActivo").modal('show');
+                $("#modalInvLocal").find(".modal-body").html(response);
+                $("#modalInvLocal").modal('show');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -225,11 +205,11 @@ var AdministrarInvKardexActivo = function () {
         });
     }
 
-    const guardarInvActivo = function (invActivo, url) {
+    const guardarInvLocal = function (invLocal, url) {
         $.ajax({
             url: url,
             type: "post",
-            data: { command: invActivo },
+            data: { command: invLocal },
             dataType: "json",
             beforeSend: function () {
                 showLoading();
@@ -245,8 +225,8 @@ var AdministrarInvKardexActivo = function () {
                 }
 
                 swal({ text: response.Mensaje, icon: "success", });
-                recargarDataTableActivo();
-                $("#modalInvActivo").modal('hide');
+                recargarDataTableLocales();
+                $("#modalInvLocal").modal('hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -254,14 +234,14 @@ var AdministrarInvKardexActivo = function () {
         });
     }
 
-    const obtenerActivo = function (activoId) {
+    const obtenerLocal = function (localId) {
         return new Promise((resolve, reject) => {
             const request = {
-                Id: activoId
+                Id: localId
             };
 
             $.ajax({
-                url: urlObtenerInvActivo,
+                url: urlObtenerInvLocal,
                 type: "post",
                 data: { request },
                 success: function (response) {
@@ -274,9 +254,9 @@ var AdministrarInvKardexActivo = function () {
         });
     }
 
-    const eliminarInvActivo = async function (request) {
+    const eliminarInvLocal = async function (request) {
         $.ajax({
-            url: urlEliminarInvActivo,
+            url: urlEliminarInvLocal,
             type: "post",
             data: { request },
             dataType: "html",
@@ -288,7 +268,7 @@ var AdministrarInvKardexActivo = function () {
             },
             success: async function (response) {
                 swal("Eliminado!", "Registro eliminado exitosamente.", "success");
-                recargarDataTableActivo(request);
+                recargarDataTableLocales(request);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -296,13 +276,13 @@ var AdministrarInvKardexActivo = function () {
         });
     }
 
-    const descargarInvActivos = function () {
+    const descargarInvLocales = function () {
 
         const request = {
         };
 
         $.ajax({
-            url: urlDescargarInvActivo,
+            url: urlDescargarInvLocal,
             type: "post",
             data: { request },
             dataType: "json",
@@ -332,14 +312,14 @@ var AdministrarInvKardexActivo = function () {
         });
     }
 
-    const recargarDataTableActivo = function (request) {
-        if ($.fn.DataTable.isDataTable('#tableActivos')) {
-            $('#tableActivos').DataTable().clear().draw();
-            $('#tableActivos').DataTable().destroy();
+    const recargarDataTableLocales = function (request) {
+        if ($.fn.DataTable.isDataTable('#tableLocales')) {
+            $('#tableLocales').DataTable().clear().draw();
+            $('#tableLocales').DataTable().destroy();
         }
-        dtListaKardex = $('#tableActivos').DataTable({
+        dtListaKardex = $('#tableLocales').DataTable({
             ajax: {
-                url: urlListarInvActivo,
+                url: urlListarInvLocal,
                 type: "post",
                 dataType: "JSON",
                 dataSrc: "Data",
@@ -352,7 +332,7 @@ var AdministrarInvKardexActivo = function () {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     swal({
-                        text: 'Error al listar activos: ' + jqXHR,
+                        text: 'Error al listar locales: ' + jqXHR,
                         icon: "error"
                     });
                 }
@@ -364,11 +344,8 @@ var AdministrarInvKardexActivo = function () {
             paging: true,
             columns: [
                 { data: "Id" },
-                { data: "Modelo" },
-                { data: "Descripcion" },
-                { data: "Marca" },
-                { data: "Area" },
-                { data: "Tipo" }
+                { data: "Sociedad" },
+                { data: "NomLocal" },
             ],
             language: {
                 searchPlaceholder: 'Buscar...',
@@ -385,7 +362,7 @@ var AdministrarInvKardexActivo = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
-                recargarDataTableActivo();
+                recargarDataTableLocales();
             });
         }
     }

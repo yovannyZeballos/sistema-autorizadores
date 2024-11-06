@@ -7,6 +7,9 @@ var urlCrearInvKardex = baseUrl + 'Inventario/InventarioKardex/CrearInvKardex';
 var urlActualizarInvKardex = baseUrl + 'Inventario/InventarioKardex/ActualizarInvKardex';
 var urlEliminarInvKardex = baseUrl + 'Inventario/InventarioKardex/EliminarInvKardex';
 var urlObtenerInvKardex = baseUrl + 'Inventario/InventarioKardex/ObtenerInvKardex';
+var urlImportarInvKardex = baseUrl + 'Inventario/InventarioKardex/ImportarExcelInvKardex';
+
+var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
 var dtListaKardex = null;
 var AdministrarInvKardex = function () {
@@ -18,11 +21,17 @@ var AdministrarInvKardex = function () {
 
         });
 
-        $("#btnNuevoInvKardex").click(function () {
+        $("#btnIrLocales").click(function () {
+            window.location.href = '/Inventario/InventarioKardexLocal'; // Reemplaza con la ruta a la vista
 
-            //if (validarNuevoInvActivo()) {
-            abrirModalNuevoInvKardex();           
-            //}
+        });
+
+        $("#btnProcesar").click(function () {
+            recargarDataTableKardex();
+        });
+
+        $("#btnNuevoInvKardex").click(function () {
+            abrirModalNuevoInvKardex();
         });
 
         $("#btnEditarInvKardex").click(async function () {
@@ -47,11 +56,11 @@ var AdministrarInvKardex = function () {
                 Fecha: $("#txtFecha").val(),
                 Guia: $("#txtGuia").val(),
                 Serie: $("#txtSerie").val(),
-                Origen: $("#txtOrigen").val(),
-                Destino: $("#txtDestino").val(),
+                OrigenId: $("#cboOrigen").val(),
+                DestinoId: $("#cboDestino").val(),
                 Tk: $("#txtTk").val(),
                 Cantidad: $("#txtCantidad").val(),
-                TipoStock: $("#txtTipoStock").val(),
+                TipoStock: $("#cboTipoStock").val(),
                 Oc: $("#txtOc").val(),
                 Sociedad: $("#txtSociedad").val()
             };
@@ -68,11 +77,11 @@ var AdministrarInvKardex = function () {
                 Fecha: $("#txtFecha").val(),
                 Guia: $("#txtGuia").val(),
                 Serie: $("#txtSerie").val(),
-                Origen: $("#txtOrigen").val(),
-                Destino: $("#txtDestino").val(),
+                OrigenId: $("#cboOrigen").val(),
+                DestinoId: $("#cboDestino").val(),
                 Tk: $("#txtTk").val(),
                 Cantidad: $("#txtCantidad").val(),
-                TipoStock: $("#txtTipoStock").val(),
+                TipoStock: $("#cboTipoStock").val(),
                 Oc: $("#txtOc").val(),
                 Sociedad: $("#txtSociedad").val()
             };
@@ -130,18 +139,39 @@ var AdministrarInvKardex = function () {
         });
 
         $('#tableKardex tbody').on('dblclick', 'tr', function () {
-           
+
             var filasSeleccionada = $(this);
 
             const NUM_CAJA = filasSeleccionada[0].querySelector('td:nth-child(1)').textContent;
             const COD_ACTIVO = filasSeleccionada[0].querySelector('td:nth-child(2)').textContent;
 
-            console.log("child(1)" + NUM_CAJA);
-            console.log("child(2)" + COD_ACTIVO);
+            //console.log("child(1)" + NUM_CAJA);
+            //console.log("child(2)" + COD_ACTIVO);
 
             //abrirModalEditarInvCaja(codEmpresa, codCadena, codRegion, codZona, codLocal, NUM_CAJA, COD_ACTIVO);
         });
 
+        $("#btnImportarInvKardex").on("click", function () { 
+            swal({
+                title: "¿Está seguro importar el archivo?",
+                text: "Asegurese que cumple con el formato y nombre columnas requeridos.",
+                icon: "warning",
+                buttons: ["No", "Si"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $("#excelInventario").trigger("click");
+                }
+            });
+        });
+
+        $('#excelInventario').change(function (e) {
+            importarExcelInvKardex();
+        });
+
+        $("#btnDescargarPlantillas").click(function () {
+            descargarPlantillas("Plantilla_InvKardex");
+        });
     }
 
 
@@ -309,7 +339,14 @@ var AdministrarInvKardex = function () {
         });
     }
 
-    const recargarDataTableKardex = function (request) {
+    const recargarDataTableKardex = function () {
+
+        const request = {
+            Kardex: $("#cboFiltroKardex").val(),
+            FechaInicio: $("#txtFechaInicio").val(),
+            FechaFin: $("#txtFechaFin").val()
+        }
+
         if ($.fn.DataTable.isDataTable('#tableKardex')) {
             $('#tableKardex').DataTable().clear().draw();
             $('#tableKardex').DataTable().destroy();
@@ -360,8 +397,8 @@ var AdministrarInvKardex = function () {
                 { data: "ActivoModelo" },
                 { data: "ActivoMarca" },
                 { data: "Serie" },
-                { data: "Origen" },
-                { data: "Destino" },
+                { data: "OrigenLocal" },
+                { data: "DestinoLocal" },
                 { data: "Tk" },
                 { data: "Cantidad" },
                 { data: "TipoStock" },
@@ -374,7 +411,145 @@ var AdministrarInvKardex = function () {
             },
             rowCallback: function (row, data, index) {
             },
-            bAutoWidth: false
+            bAutoWidth: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Exportar excel',
+                    titleAttr: 'Exportar Excel',
+                    className: 'btn btn-primary btn-block btn-sm',
+                    exportOptions: {
+                        modifier: { page: 'all' }
+                    },
+                    filename: function () {
+                        const fecha = $("#txtFechaFin").val().replace('/', '');
+                        return `INV_KARDEX_${fecha}`;
+                    },
+                    action: function (e, dt, node, config) {
+
+                        if (!this.data().count()) {
+                            swal({
+                                text: "No hay información disponible para Exportar.",
+                                icon: "warning"
+                            });
+                            return;
+                        }
+                        $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, node, config);
+                    }
+                },
+            ],
+            order: [],
+            dom: 'Bfrtip' // Asegúrate de que los botones se rendericen correctamente
+        });
+
+        //$("#container-btn-exportar").append(dtListaKardex.buttons().container());
+        // Asegúrate de que los botones se agreguen al DOM después de inicializar el DataTable
+        dtListaKardex.buttons().container().appendTo('#container-btn-exportar');
+    }
+
+    const fechaActual = function () {
+        let date = new Date()
+
+        let day = `${(date.getDate())}`.padStart(2, '0');
+        let month = `${(date.getMonth() + 1)}`.padStart(2, '0');
+        let year = date.getFullYear();
+
+        $("#cboFiltroKardex").val("TODOS").trigger("change");
+        $("#txtFechaInicio").val(`${day}/${month}/${year}`);
+        $("#txtFechaFin").val(`${day}/${month}/${year}`);
+    }
+
+    const inicializarDatePicker = function () {
+        $('.fc-datepicker').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            closeText: 'Cerrar',
+            prevText: '<Ant',
+            nextText: 'Sig>',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            changeMonth: true,
+            changeYear: true
+        });
+    }
+
+    const importarExcelInvKardex = function () {
+        var formData = new FormData();
+        var uploadFiles = $('#excelInventario').prop('files');
+        formData.append("excelInventario", uploadFiles[0]);
+
+        $.ajax({
+            url: urlImportarInvKardex,
+            type: "post",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+                $("#excelInventario").val(null);
+            },
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
+
+                        if (response.Errores.length > 0) {
+                            let html = "";
+                            response.Errores.map((error) => {
+                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
+                            });
+                            $('#tbodyErroresCaja').html(html);
+                            $('#modalErroresImportacionExcel').modal("show");
+                        }
+                    });
+                    return;
+                }
+                swal({ text: response.Mensaje, icon: "success", });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const descargarPlantillas = function (nombreCarpeta) {
+        $.ajax({
+            url: urlDescargarPlantilla,
+            type: "post",
+            data: { nombreCarpeta: nombreCarpeta },
+            dataType: "json",
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
         });
     }
 
@@ -383,6 +558,8 @@ var AdministrarInvKardex = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
+                inicializarDatePicker();
+                fechaActual();
                 //await cargarComboEmpresa();
                 recargarDataTableKardex();
             });

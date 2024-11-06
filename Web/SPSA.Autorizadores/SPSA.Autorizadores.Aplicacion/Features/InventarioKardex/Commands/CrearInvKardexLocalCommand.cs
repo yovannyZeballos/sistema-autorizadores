@@ -12,50 +12,41 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands
 {
-    public class CrearInvKardexCommand : IRequest<RespuestaComunDTO>
+    public class CrearInvKardexLocalCommand : IRequest<RespuestaComunDTO>
     {
-        public string Kardex { get; set; }
-        public DateTime Fecha { get; set; }
-        public string Guia { get; set; }
-        public string ActivoId { get; set; }
-        public string Serie { get; set; }
-        public int OrigenId { get; set; }
-        public int DestinoId { get; set; }
-        public string Tk { get; set; }
-        public int Cantidad { get; set; }
-        public string TipoStock { get; set; }
-        public string Oc { get; set; }
+        //public int Id { get; set; }
         public string Sociedad { get; set; }
+        public string NomLocal { get; set; }
     }
 
-    public class CrearInvKardexHandler : IRequestHandler<CrearInvKardexCommand, RespuestaComunDTO>
+    public class CrearInvKardexLocalHandler : IRequestHandler<CrearInvKardexLocalCommand, RespuestaComunDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public CrearInvKardexHandler(IMapper mapper)
+        public CrearInvKardexLocalHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<RespuestaComunDTO> Handle(CrearInvKardexCommand request, CancellationToken cancellationToken)
+        public async Task<RespuestaComunDTO> Handle(CrearInvKardexLocalCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new RespuestaComunDTO { Ok = true };
             try
             {
-                var invKardex = _mapper.Map<InvKardex>(request);
-                _contexto.RepositorioInvKardex.Agregar(invKardex);
+                var invKardexLocal = _mapper.Map<InvKardexLocal>(request);
+                _contexto.RepositorioInvKardexLocal.Agregar(invKardexLocal);
                 await _contexto.GuardarCambiosAsync();
                 respuesta.Mensaje = "Registro ingresado exitosamente.";
             }
             catch (Exception ex)
             {
                 respuesta.Ok = false;
-                respuesta.Mensaje = "Ocurrió un error al crear inv kardex";
-                _logger.Error(ex, "Ocurrió un error al crear inv kardex");
+                respuesta.Mensaje = "Ocurrió un error al crear";
+                _logger.Error(ex, "Ocurrió un error al crear KADEX LOCAL");
             }
             return respuesta;
         }

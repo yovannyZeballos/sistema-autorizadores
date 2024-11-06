@@ -23,28 +23,89 @@
             @Html.Partial("_CardHeader", "Listado")
             <div class="card-body">
                 <div class="row">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group select2-sm">
+                                    <label class="form-label">Kardex</label>
+                                    <select class="form-control select2-show-search custom-select" id="cboFiltroKardex">
+                                        <option label="seleccionar"></option>
+                                        <option value="TODOS">TODOS</option>
+                                        <option value="INGRESO">INGRESO</option>
+                                        <option value="SALIDA">SALIDA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Fecha Inicio</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <span class="feather feather-calendar"></span>
+                                            </div>
+                                        </div><input id="txtFechaInicio" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Fecha Fin</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <span class="feather feather-calendar"></span>
+                                            </div>
+                                        </div><input id="txtFechaFin" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-12" id="container-btn-exportar">
+                            <button class="btn btn-primary btn-sm" id="btnProcesar" type="button">Mostrar Información</button>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="row">
                     <div class="col-12 d-flex justify-content-between mb-3">
                         <!-- Botones alineados a la izquierda -->
-                        <div class="d-flex">
-                            <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary me-2">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
+                            <button type="button" id="btnNuevoInvKardex" class="btn btn-sm btn-primary me-2 mb-2 mb-md-0">
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-                            <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2">
+                            <button type="button" id="btnEditarInvKardex" class="btn btn-sm btn-warning me-2 mb-2 mb-md-0">
                                 <i class="fa fa-pencil"></i> Editar
                             </button>
-                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger">
+                            <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger me-2 mb-2 mb-md-0">
                                 <i class="fa fa-remove"></i> Eliminar
                             </button>
+                            <button type="button" id="btnImportarInvKardex" class="btn btn-sm btn-outline-success me-2 mb-2 mb-md-0">
+                                <i class="fa fa-upload"></i> Cargar Excel
+                            </button>
+                            <input type="file" id="excelInventario" style="display: none;">
                         </div>
                         <!-- Botón alineado a la derecha -->
-                        <button type="button" id="btnIrActivos" class="btn btn-sm btn-success">
-                            <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Activos
-                        </button>
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
+                            <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2 mb-2 mb-md-0">
+                                <i class="fa fa-download"></i> Plantilla Excel
+                            </button>
+                            <button type="button" id="btnIrActivos" class="btn btn-sm btn-dark me-2 mb-2 mb-md-0">
+                                <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Activos
+                            </button>
+                            <button type="button" id="btnIrLocales" class="btn btn-sm btn-gray-dark me-2 mb-2 mb-md-0">
+                                <i class="fa fa-arrow-right fa-2x"></i> Ir a Lista Locales
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-12">
+                </div>
+                <div class="col-12">
+                    <div class="table-responsive">
                         <table id="tableKardex" class="table text-nowrap border-bottom">
                             <thead>
-                                <tr class="table-primary">
+                                <tr class="table-primary text-center">
                                     <th class="border-bottom-0" style="font-size: 15px;">ID</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">KARDEX</th>
                                     <th class="border-bottom-0" style="font-size: 15px;">FECHA</th>
@@ -87,6 +148,33 @@
                 <button id="btnActualizarInvKardex" class="btn btn-primary">Guardar</button>
                 <button id="btnGuardarInvKardex" class="btn btn-primary">Guardar</button>
                 <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ERRORES IMPORTAR EXCEL-->
+<div class="modal fade" id="modalErroresImportacionExcel" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalImportarEmpresa">Errores encontrados</h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErroresCaja">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

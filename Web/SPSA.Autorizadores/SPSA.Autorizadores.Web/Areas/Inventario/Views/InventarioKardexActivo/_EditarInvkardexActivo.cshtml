@@ -28,7 +28,15 @@
     <div class="col-xl-3 col-md-4">
         <div class="form-group">
             <label for="txtArea" class="form-label">Area</label>
-            <input type="text" class="form-control" id="txtArea" value="@Model.Area" required>
+            @*<input type="text" class="form-control" id="txtArea" value="@Model.Area" required>*@
+            <select class="form-control custom-select" id="cboArea" required>
+                <option value="">Seleccionar</option>
+                <option value="SOP. OPERACION" @(Model.Area == "SOP. OPERACION" ? "selected" : "")>SOP. OPERACION</option>
+                <option value="CAJAS" @(Model.Area == "CAJAS" ? "selected" : "")>CAJAS</option>
+                <option value="SERVIDORES" @(Model.Area == "SERVIDORES" ? "selected" : "")>SERVIDORES</option>
+                <option value="SOP. MICRO OPERACIONES" @(Model.Area == "SOP. MICRO OPERACIONES" ? "selected" : "")>SOP. MICRO OPERACIONES</option>
+                <option value="TELCO" @(Model.Area == "TELCO" ? "selected" : "")>TELCO</option>
+            </select>
         </div>
     </div>
     <div class="col-xl-4 col-md-4">

@@ -42,15 +42,27 @@
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
-        <div class="form-group">
-            <label for="txtOrigen" class="form-label">Origen</label>
-            <input type="text" class="form-control" id="txtOrigen" value="@Model.InvKardex.Origen" required>
+        <div class="form-group select2-sm">
+            <label for="cboOrigen" class="form-label">Origen</label>
+            <select class="form-control select2-show-search custom-select" id="cboOrigen" required>
+                <option value="">Seleccionar</option>
+                @foreach (var local in Model.Locales)
+                {
+                    <option value="@local.Id" @(Model.InvKardex.OrigenId == local.Id ? "selected" : "")>@(local.NomLocal)</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
-        <div class="form-group">
-            <label for="txtDestino" class="form-label">Destino</label>
-            <input type="text" class="form-control" id="txtDestino" value="@Model.InvKardex.Destino" required>
+        <div class="form-group select2-sm">
+            <label for="cboDestino" class="form-label">Destino</label>
+            <select class="form-control select2-show-search custom-select" id="cboDestino" required>
+                <option value="">Seleccionar</option>
+                @foreach (var local in Model.Locales)
+                {
+                    <option value="@local.Id" @(Model.InvKardex.DestinoId == local.Id ? "selected" : "")>@(local.NomLocal)</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
@@ -68,7 +80,12 @@
     <div class="col-xl-6 col-md-6">
         <div class="form-group">
             <label for="txtTipoStock" class="form-label">Tipo Stock</label>
-            <input type="text" class="form-control" id="txtTipoStock" value="@Model.InvKardex.TipoStock">
+            @*<input type="text" class="form-control" id="txtTipoStock" value="@Model.InvKardex.TipoStock">*@
+            <select class="form-control custom-select" id="cboTipoStock" required>
+                <option value="">Seleccionar</option>
+                <option value="STOCK" @(Model.InvKardex.TipoStock == "STOCK" ? "selected" : "")>STOCK</option>
+                <option value="REMANUFACTURADO" @(Model.InvKardex.TipoStock == "REMANUFACTURADO" ? "selected" : "")>REMANUFACTURADO</option>
+            </select>
         </div>
     </div>
     <div class="col-xl-3 col-md-4">
