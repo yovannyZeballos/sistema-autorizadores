@@ -11,6 +11,7 @@ using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -56,7 +57,7 @@ namespace SPSA.Autorizadores.Web.Controllers
 					WebSession.Locales = usuario.Locales;
 					WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
 					WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
-					WebSession.MenusAsociados = usuario.MenusAsociados;
+					WebSession.MenusAsociados = usuario.MenusAsociados.OrderBy(x => x.CodMenu).ToList();
 
 
 
