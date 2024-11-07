@@ -23,7 +23,23 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 
 
 		[HttpPost]
-		public async Task<JsonResult> Procesar(ProcesarControlBCTCommand request)
+		public async Task<JsonResult> ProcesarSpsa(ProcesarControlBCTCommand request)
+		{
+			request.CodSucursal = 99999;
+			var response = await _mediator.Send(request);
+			return Json(response);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> ProcesarTpsa(ProcesarControlBCTTpsaCommand request)
+		{
+			request.CodSucursal = 99999;
+			var response = await _mediator.Send(request);
+			return Json(response);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> ProcesarHpsa(ProcesarControlBCTHpsaCommand request)
 		{
 			request.CodSucursal = 99999;
 			var response = await _mediator.Send(request);

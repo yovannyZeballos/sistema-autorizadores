@@ -2,6 +2,7 @@
 var idInterval = 0;
 var timeoutInterval = 60000;
 var dataTableListado = null;
+var empresa = '';
 var ControlBCT = function () {
 
     const eventos = function () {
@@ -26,9 +27,26 @@ var ControlBCT = function () {
 
     const cargarDatos = function () {
 
+        let url = baseUrl;  
+
+        switch (empresa) {
+            case 'SPSA':
+                url += 'Monitor/ControlBCT/ProcesarSpsa';
+                $(".titulo").text('Control BCT - SPSA');
+                break;
+            case 'TPSA':
+                url += 'Monitor/ControlBCT/ProcesarTpsa';
+                $(".titulo").text('Control BCT - TPSA');
+                break;
+            case 'HPSA':
+                url += 'Monitor/ControlBCT/ProcesarHpsa';
+                $(".titulo").text('Control BCT - HPSA');
+                break;
+        }
+
         dataTableListado = $('#tableMonitor').DataTable({
             ajax: {
-                url: urlProcesar,
+                url: url,
                 type: "post",
                 dataType: "json",
                 "data": function (d) {
@@ -143,9 +161,24 @@ var ControlBCT = function () {
         });
     }
 
+    const getQueryParams = function () {
+        var params = {};
+        var queryString = window.location.search.substring(1);
+        var regex = /([^&=]+)=([^&]*)/g;
+        var match;
+
+        while (match = regex.exec(queryString)) {
+            params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+        }
+
+        empresa = params.emp;
+        return params;
+    }
+
     return {
         init: function () {
             checkSession(function () {
+                getQueryParams();
                 eventos();
                 inicializarDatePicker();
                 fechaActual();

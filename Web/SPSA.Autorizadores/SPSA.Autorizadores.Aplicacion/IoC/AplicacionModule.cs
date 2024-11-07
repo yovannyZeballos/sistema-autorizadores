@@ -276,6 +276,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarProcesosHandler>().As<IRequestHandler<ListarProcesosQuery, ListarComunDTO<ListarProcesoDTO>>>();
 			builder.RegisterType<ListarParametrosMonitorArchivoHandler>().As<IRequestHandler<ListarParametrosMonitorArchivoQuery, GenericResponseDTO<MonitorArchivoParametrosDTO>>>();
 			builder.RegisterType<ProcesarMonitorArchivosHandler>().As<IRequestHandler<ProcesarMonitorArchivoscommand, GenericResponseDTO<List<ProcesarMonitorArchivoDTO>>>>();
+			builder.RegisterType<ProcesarControlBCTTpsaHandler>().As<IRequestHandler<ProcesarControlBCTTpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+			builder.RegisterType<ProcesarControlBCTHpsaHandler>().As<IRequestHandler<ProcesarControlBCTHpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 
 
 			#region INV KARDEX
