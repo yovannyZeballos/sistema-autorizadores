@@ -15,10 +15,6 @@ var ControlBCT = function () {
                 clearInterval(idInterval);
             }
         });
-
-        $("#btnConsultar").on("click", function () {
-            recargarDatos();
-        });
     }
 
     const recargarDatos = function () {
@@ -123,7 +119,7 @@ var ControlBCT = function () {
             },
             bAutoWidth: false,
             order: [],
-            searching: false
+            searching: true
         });
 
     }
@@ -183,6 +179,8 @@ var ControlBCT = function () {
                 inicializarDatePicker();
                 fechaActual();
                 cargarDatos();
+                $("#chkAutomatico").prop("checked", true);
+                idInterval = setInterval(recargarDatos, timeoutInterval);
             });
         }
     }
