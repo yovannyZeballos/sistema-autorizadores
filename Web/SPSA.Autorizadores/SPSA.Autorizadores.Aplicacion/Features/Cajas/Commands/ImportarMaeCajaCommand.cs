@@ -14,7 +14,7 @@ using Serilog;
 using System.Linq;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 {
     public class ImportarMaeCajaCommand : IRequest<RespuestaComunExcelDTO>
     {

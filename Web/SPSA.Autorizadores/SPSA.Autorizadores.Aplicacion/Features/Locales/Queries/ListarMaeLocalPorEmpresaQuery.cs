@@ -14,24 +14,24 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
 {
-    public class ListarMaeLocalXEmpresaQuery : IRequest<GenericResponseDTO<List<ListarMaeLocalDTO>>>
+    public class ListarMaeLocalPorEmpresaQuery : IRequest<GenericResponseDTO<List<ListarMaeLocalDTO>>>
     {
         public string CodEmpresa { get; set; }
     }
 
-    public class ListarMaeLocalXEmpresaHandler : IRequestHandler<ListarMaeLocalXEmpresaQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>
+    public class ListarMaeLocalPorEmpresaHandler : IRequestHandler<ListarMaeLocalPorEmpresaQuery, GenericResponseDTO<List<ListarMaeLocalDTO>>>
     {
         private readonly IMapper _mapper;
         private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
-        public ListarMaeLocalXEmpresaHandler(IMapper mapper)
+        public ListarMaeLocalPorEmpresaHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<List<ListarMaeLocalDTO>>> Handle(ListarMaeLocalXEmpresaQuery request, CancellationToken cancellationToken)
+        public async Task<GenericResponseDTO<List<ListarMaeLocalDTO>>> Handle(ListarMaeLocalPorEmpresaQuery request, CancellationToken cancellationToken)
         {
             var response = new GenericResponseDTO<List<ListarMaeLocalDTO>> { Ok = true, Data = new List<ListarMaeLocalDTO>() };
             try

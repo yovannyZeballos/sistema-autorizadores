@@ -2,7 +2,6 @@
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
@@ -23,6 +22,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
         public string NomLocal { get; set; }
         public string TipEstado { get; set; }
         public string CodLocalPMM { get; set; }
+        public string Ip { get; set; }
         public string CodLocalOfiplan { get; set; }
         public string NomLocalOfiplan { get; set; }
         public string CodLocalSunat { get; set; }
