@@ -10,6 +10,7 @@
         public string NomLocal { get; set; }
         public string TipEstado { get; set; }
         public string CodLocalPMM { get; set; }
+        public string Ip { get; set; }
         public string CodLocalOfiplan { get; set; }
         public string NomLocalOfiplan { get; set; }
         public string CodLocalSunat { get; set; }

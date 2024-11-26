@@ -18,8 +18,9 @@ var urlModalCrearEditarCaja = baseUrl + 'Maestros/MaeLocal/CrearEditarCaja';
 var urlImportarLocales = baseUrl + 'Maestros/MaeLocal/ImportarExcelLocal';
 var urlImportarCajas = baseUrl + 'Maestros/MaeCaja/ImportarExcelCaja';
 
-var urlDescargarLocales = baseUrl + 'Maestros/MaeLocal/DescargarLocal';
-var urlDescargarCajas = baseUrl + 'Maestros/MaeCaja/DescargarCaja';
+var urlDescargarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/DescargarLocalPorEmpresa';
+var urlDescargarCajasPorLocal = baseUrl + 'Maestros/MaeCaja/DescargarCajaPorLocal';
+var urlDescargarCajasPorEmpresa = baseUrl + 'Maestros/MaeCaja/DescargarCajaPorEmpresa';
 
 var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
@@ -65,12 +66,9 @@ var AdministrarMaestroLocal = function () {
                     CodZona: $("#cboZona").val(),
                     CodLocal: $("#cboLocal").val()
                 };
-
                 codRegionAnterior = request.CodRegion;
                 codZonaAnterior = request.CodZona;
-
                 obtenerLocal(request);
-
                 closeLoading();
             }
         });
@@ -99,6 +97,7 @@ var AdministrarMaestroLocal = function () {
                             NomLocal: $("#txtNomLocal").val(),
                             TipEstado: $("#cboTipEstado").val(),
                             CodLocalPMM: $("#txtCodLocalPMM").val(),
+                            Ip: $("#txtIP").val(),
                             CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
                             NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
                             CodLocalSunat: $("#txtCodLocalSunat").val()
@@ -130,6 +129,7 @@ var AdministrarMaestroLocal = function () {
                             NomLocal: $("#txtNomLocal").val(),
                             TipEstado: $("#cboTipEstado").val(),
                             CodLocalPMM: $("#txtCodLocalPMM").val(),
+                            Ip: $("#txtIP").val(),
                             CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
                             NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
                             CodLocalSunat: $("#txtCodLocalSunat").val(),
@@ -371,7 +371,7 @@ var AdministrarMaestroLocal = function () {
             };
 
             if (validarDescargarCajas(caja)) {
-                descargarCajas();
+                descargarCajas(urlDescargarCajasPorLocal);
             }
         });
 
@@ -380,8 +380,14 @@ var AdministrarMaestroLocal = function () {
         });
 
         $("#btnDescargarMaestroLocal").on("click", function () {
-            if (validarBuscarLocal()) {
-                descargarLocales();
+            if (validarBuscarEmpresa()) {
+                descargarLocalesPorEmpresa();
+            }
+        });
+
+        $("#btnDescargarMaestroCajas").on("click", function () {
+            if (validarBuscarEmpresa()) {
+                descargarCajas(urlDescargarCajasPorEmpresa);
             }
         });
     };
@@ -864,7 +870,6 @@ var AdministrarMaestroLocal = function () {
     }
 
     const guardarLocal = function (local) {
-        //console.log(local);
         $.ajax({
             url: urlCrearLocal,
             type: "post",
@@ -896,7 +901,6 @@ var AdministrarMaestroLocal = function () {
     }
 
     const actualizarLocal = function (local) {
-        //console.log(local);
         $.ajax({
             url: urlActualizarLocal,
             type: "post",
@@ -929,6 +933,17 @@ var AdministrarMaestroLocal = function () {
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
+    }
+
+    const validarBuscarEmpresa = function () {
+        let validate = true;
+
+        if ($("#cboEmpresa").val() === '') {
+            validate = false;
+            swal({ text: 'Debe seleccionar la empresa', icon: "warning", });
+        }
+
+        return validate;
     }
 
     const validarBuscarLocal = function () {
@@ -1042,6 +1057,7 @@ var AdministrarMaestroLocal = function () {
         $("#txtCodLocal").val(local.CodLocal);
         $("#txtNomLocal").val(local.NomLocal);
         $("#txtCodLocalPMM").val(local.CodLocalPMM);
+        $("#txtIP").val(local.Ip);
         $("#txtCodLocalOfiplan").val(local.CodLocalOfiplan);
         $("#txtNomLocalOfiplan").val(local.NomLocalOfiplan);
         $("#txtCodLocalSunat").val(local.CodLocalSunat);
@@ -1181,7 +1197,6 @@ var AdministrarMaestroLocal = function () {
 
     const desabilitarBotonosLocal = function (disable) {
         $("#btn-local :input").attr("disabled", disable);
-
     }
 
     const desabilitarControles = function (disable) {
@@ -1194,23 +1209,18 @@ var AdministrarMaestroLocal = function () {
     }
 
     const abrirModalNuevaCaja = function () {
-
         $("#tituloModalCaja").html("Nueva Caja");
-
         $("#btnActualizarCaja").hide();
         $("#btnGuardarCaja").show();
 
         const model = {};
-
         cargarFormCaja(model, false);
     }
 
     const abrirModalEditarCaja = function (model) {
-
         $("#tituloModalCaja").html("Actualizar Caja");
         $("#btnActualizarCaja").show();
         $("#btnGuardarCaja").hide();
-
         cargarFormCaja(model, true);
     }
 
@@ -1422,7 +1432,7 @@ var AdministrarMaestroLocal = function () {
         });
     }
 
-    const descargarLocales = function () {
+    const descargarLocalesPorEmpresa = function () {
 
         const request = {
             CodEmpresa: $("#cboEmpresa").val(),
@@ -1432,7 +1442,7 @@ var AdministrarMaestroLocal = function () {
         };
 
         $.ajax({
-            url: urlDescargarLocales,
+            url: urlDescargarLocalesPorEmpresa,
             type: "post",
             data: { request },
             dataType: "json",
@@ -1462,7 +1472,7 @@ var AdministrarMaestroLocal = function () {
         });
     }
 
-    const descargarCajas = function () {
+    const descargarCajas = function (url) {
 
         const request = {
             CodEmpresa: $("#cboEmpresa").val(),
@@ -1473,7 +1483,7 @@ var AdministrarMaestroLocal = function () {
         };
 
         $.ajax({
-            url: urlDescargarCajas,
+            url: url,
             type: "post",
             data: { request },
             dataType: "json",

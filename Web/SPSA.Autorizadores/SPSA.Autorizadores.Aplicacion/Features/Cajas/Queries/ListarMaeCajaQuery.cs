@@ -13,7 +13,7 @@ using Serilog;
 using System.Data.Entity;
 using System.Linq;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Queries
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries
 {
     public class ListarMaeCajaQuery : IRequest<GenericResponseDTO<List<ListarMaeCajaDTO>>>
     {

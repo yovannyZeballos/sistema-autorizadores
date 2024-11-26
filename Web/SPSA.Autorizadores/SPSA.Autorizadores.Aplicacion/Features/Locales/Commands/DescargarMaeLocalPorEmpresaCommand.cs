@@ -17,25 +17,25 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 {
-    public class DescargarMaeLocalXEmpresaCommand : IRequest<DescargarMaestroDTO>
+    public class DescargarMaeLocalPorEmpresaCommand : IRequest<DescargarMaestroDTO>
     {
         public string CodEmpresa { get; set; }
     }
 
-    public class DescargarMaeLocalXEmpresaHandler : IRequestHandler<DescargarMaeLocalXEmpresaCommand, DescargarMaestroDTO>
+    public class DescargarMaeLocalPorEmpresaHandler : IRequestHandler<DescargarMaeLocalPorEmpresaCommand, DescargarMaestroDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public DescargarMaeLocalXEmpresaHandler(IMapper mapper)
+        public DescargarMaeLocalPorEmpresaHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<DescargarMaestroDTO> Handle(DescargarMaeLocalXEmpresaCommand request, CancellationToken cancellationToken)
+        public async Task<DescargarMaestroDTO> Handle(DescargarMaeLocalPorEmpresaCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new DescargarMaestroDTO();
 

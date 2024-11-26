@@ -11,7 +11,7 @@ using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 {
     public class EliminarMaeCajasCommand : IRequest<RespuestaComunDTO>
     {

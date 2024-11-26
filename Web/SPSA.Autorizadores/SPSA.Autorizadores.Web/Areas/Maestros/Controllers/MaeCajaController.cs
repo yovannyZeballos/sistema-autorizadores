@@ -5,8 +5,8 @@ using System;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Web;
-using SPSA.Autorizadores.Aplicacion.Features.Caja.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Caja.Command;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
@@ -90,7 +90,14 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> DescargarCaja(DescargarMaeCajaCommand request)
+        public async Task<JsonResult> DescargarCajaPorLocal(DescargarMaeCajaCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarCajaPorEmpresa(DescargarMaeCajaPorEmpresaCommand request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
