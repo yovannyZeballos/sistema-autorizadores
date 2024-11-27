@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using Serilog;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System.Data.Entity;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Queries
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries
 {
     public class ObtenerMaeCajaQuery : IRequest<GenericResponseDTO<ObtenerMaeCajaDTO>>
     {

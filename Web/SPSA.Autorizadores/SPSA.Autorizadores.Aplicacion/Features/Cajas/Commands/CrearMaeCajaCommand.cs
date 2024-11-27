@@ -10,7 +10,7 @@ using System;
 using Serilog;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 {
     public class CrearMaeCajaCommand : IRequest<RespuestaComunDTO>
     {

@@ -10,7 +10,7 @@ using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System.Data.Entity;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 {
     public class ActualizarMaeCajaCommand : IRequest<RespuestaComunDTO>
     {

@@ -42,7 +42,7 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarLocalPorEmpresa(ListarMaeLocalXEmpresaQuery request)
+        public async Task<JsonResult> ListarLocalPorEmpresa(ListarMaeLocalPorEmpresaQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
@@ -99,7 +99,7 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> DescargarLocalPorEmpresa(DescargarMaeLocalXEmpresaCommand request)
+        public async Task<JsonResult> DescargarLocalPorEmpresa(DescargarMaeLocalPorEmpresaCommand request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);

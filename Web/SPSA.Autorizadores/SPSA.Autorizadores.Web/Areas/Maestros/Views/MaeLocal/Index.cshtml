@@ -24,14 +24,27 @@
             @Html.Partial("_CardHeader", "Local")
             <div class="card-body pt-1 pb-0">
                 <div class="row mb-4" id="btn-local">
-                    <div class="col-lg-2 col-md-3 col-sm-6">
-                        <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Nuevo</button>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-sm-6">
-                        <button type="button" id="btnDescargarMaestroLocal" class="btn btn-outline-secondary btn-block btn-sm "><i class="fa fa-download"></i> Descargar Maestro</button>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-sm-6">
-                        <button type="button" id="btnAbrirModalExcelLocal" class="btn btn-outline-success btn-block btn-sm"><i class="fa fa-upload"></i> Cargar Excel</button>
+                    <div class="col-12 d-flex justify-content-between mb-3">
+                        <div class="d-flex">
+                            <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary text-wrap me-2">
+                                <i class="fa fa-plus"></i> Nuevo
+                            </button>
+                            <button type="button" id="btnAbrirModalExcelLocal" class="btn btn-sm btn-outline-success text-wrap me-2">
+                                <i class="fa fa-upload"></i> Importar Locales
+                            </button>
+                        </div>
+                        <div class="d-flex">
+                            <button type="button" id="btnDescargarMaestroLocal" class="btn btn-sm btn-default text-wrap me-2">
+                                <i class="fa fa-download"></i> Locales x Empresa
+                            </button>
+                            <button type="button" id="btnDescargarMaestroCajas" class="btn btn-sm btn-default text-wrap me-2">
+                                <i class="fa fa-download"></i> Cajas x Empresa
+                            </button>
+                            <!-- Botón para descargar plantilla de Locales-->
+                            @*<button type="button" id="btnDescargarPlantillaLocal" class="btn btn-sm btn-default text-wrap me-2">
+                                <i class="fa fa-download"></i> Plantilla Locales
+                            </button>*@
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,9 +91,9 @@
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-6">
-                        <div class="form-group select2-sm">
+                        <div class="form-group w-100">
                             <label class="form-label"></label>
-                            <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary btn-block"><i class="fa fa-search"></i> Buscar x Empresa</button>
+                            <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary text-wrap w-100"><i class="fa fa-search"></i> Buscar x Empresa</button>
                         </div>
                     </div>
                 </div>
@@ -109,10 +122,16 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-md-4">
+                    <div class="col-xl-2 col-md-4">
                         <div class="form-group">
                             <label for="txtCodLocalPMM" class="form-label">Cod Local PMM</label>
                             <input type="number" class="form-control form-control-sm" value="0" id="txtCodLocalPMM" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4">
+                        <div class="form-group">
+                            <label for="txtIP" class="form-label">IP</label>
+                            <input type="text" class="form-control form-control-sm" maxlength="18" id="txtIP" required>
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4">
@@ -142,12 +161,6 @@
                     <div class="col-xl-2 col-md-4 col-sm-12">
                         <button type="button" id="btnHabilitarlCambioRegionZona" class="btn btn-default btn-block btn-sm" disabled><i class="fa fa-pencil"></i> Habilitar Región/Zona</button>
                     </div>
-                    @*<div class="col-xl-2">
-            <div class="form-group">
-                <label for="txtEl" class="form-label">El</label>
-                <input type="text" class="form-control form-control-sm" id="txtEl" value="@Model" disabled required>
-            </div>
-        </div>*@
                 </div>
             </div>
         </div>

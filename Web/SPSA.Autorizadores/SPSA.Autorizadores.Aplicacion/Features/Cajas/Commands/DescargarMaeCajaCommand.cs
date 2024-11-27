@@ -13,7 +13,7 @@ using Serilog;
 using System.Data.Entity;
 using System.Linq;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 {
     public class DescargarMaeCajaCommand : IRequest<DescargarMaestroDTO>
     {
@@ -24,13 +24,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
         public string CodLocal { get; set; }
     }
 
-    public class DescargarMaestroCajalHandler : IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>
+    public class DescargarMaestroCajaHandler : IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public DescargarMaestroCajalHandler(IMapper mapper)
+        public DescargarMaestroCajaHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
@@ -45,7 +45,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Caja.Command
             {
                 var listaCajas = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona && x.CodLocal == request.CodLocal).ToListAsync();
 
-                string fileName = $"Cajas_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
+                string fileName = $"CajasPorLocal_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
 
                 using (var wb = new XLWorkbook())
                 {
