@@ -436,6 +436,7 @@
     <Compile Include="Features\Regiones\Queries\ObtenerMaeRegionQuery.cs" />
     <Compile Include="Features\Reportes\Queries\ListarLocalesCambioPrecioQuery.cs" />
     <Compile Include="Features\Reportes\Queries\ListarLocalesNotaCreditoQuery.cs" />
+    <Compile Include="Features\Reportes\Queries\ListarValesRedimidosQuery.cs" />
     <Compile Include="Features\Seguridad\Login\Queries\ObtenerJerarquiaOrganizacionalQuery.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\EliminarMenuCommand.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\ActualizarMenuCommand .cs" />
@@ -580,6 +581,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\Reportes\Commands\" />
+    <Folder Include="Features\Reportes\DTOs\" />
     <Folder Include="Features\TablasMae\Queries\" />
   </ItemGroup>
   <ItemGroup>

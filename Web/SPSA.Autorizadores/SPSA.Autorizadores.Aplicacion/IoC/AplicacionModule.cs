@@ -263,6 +263,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
 			builder.RegisterType<ListarLocalesCambioPrecioHandler>().As<IRequestHandler<ListarLocalesCambioPrecioQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarLocalesNotaCreditoHandler>().As<IRequestHandler<ListarLocalesNotaCreditoQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<ListarValesRedimidosHandler>().As<IRequestHandler<ListarValesRedimidosQuery, ListarComunDTO<Dictionary<string, object>>>>();
 
 			#endregion <--REPORTES-->
 

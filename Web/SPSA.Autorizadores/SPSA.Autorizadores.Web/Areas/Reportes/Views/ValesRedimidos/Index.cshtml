@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "Reportes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Vales Redimidos</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1"><a href="javascript:;">Reportes</a></li>
+            <li class="breadcrumb-item1 active">Vales Redimidos</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            <div class="card-header bg-primary ">
+                <h3 class="card-title text-white">Completar Filtros</h3>
+                <div class="card-options ">
+                    <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3" style="display: none !important;">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1" class="form-label">Usuario</label>
+                            <input type="text" class="form-control form-control-sm" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa</label>
+                            <select class="form-control custom-select" id="cboEmpresa">
+                                <option label="Seleccione una empresa"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Cadena</label>
+                            <select class="form-control custom-select" id="cboCadena">
+                                <option label="Seleccione una cadena"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Región</label>
+                            <select class="form-control custom-select" id="cboRegion">
+                                <option label="Seleccione una región"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Zona</label>
+                            <select class="form-control custom-select" id="cboZona">
+                                <option label="Seleccione una región"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local</label>
+                            <select class="form-control custom-select" id="cboLocal">
+                                <option label="Seleccione un local"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">F. Inicio</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="feather feather-calendar"></span>
+                                    </div>
+                                </div><input id="txtFechaInicio" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">F. Fin</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="feather feather-calendar"></span>
+                                    </div>
+                                </div><input id="txtFechaFin" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="form-group data-table-btn">
+                            <button id="btnConsultar" class="btn btn-sm btn-primary text-wrap me-2">
+                                <i class="fa fa-eye"></i> Consultar
+                            </button>
+                            <button id="btnDescargar" class="btn btn-sm btn-default text-wrap me-2">
+                                <i class="fa fa-download"></i> Descargar csv
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                @*<div class="form-group data-table-btn">
+                        <button id="btnExportar" class="btn btn-sm btn-info mb-4">Exportar</button>
+                    </div>*@
+                <table id="tableReportes" class="table text-nowrap border-bottom">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/ValesRedimidos.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ValesRedimidos.init();
+        });
+    </script>
+    <script>
+        var codEmpresaSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa';
+        var codCadenaSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodCadena';
+        var codRegionSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodRegion';
+        var codZonaSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodZona';
+        var codLocalSession = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodLocal';
+    </script>
+}
