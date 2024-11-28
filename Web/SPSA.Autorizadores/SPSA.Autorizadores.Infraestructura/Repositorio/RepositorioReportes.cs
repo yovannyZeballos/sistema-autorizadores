@@ -72,5 +72,81 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 return datatable;
             }
         }
+
+        public async Task<DataTable> ListarValesRedimidosAsync(string codLocal, DateTime fechaInicio, DateTime fechaFin)
+        {
+            using (var connection = new OracleConnection(CadenaConexionCT2))
+            {
+                // Query con WITH (CTE)
+                string query = @"
+            WITH filtered_header AS (
+                SELECT HED_FCONTABLE, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX
+                FROM ect2sp.ctx_header_trx
+                WHERE HED_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
+                    AND HED_TIPOTRX = 'PVT'
+                    AND HED_ANULADO = 'N'
+                    AND HED_LOCAL = :codLocal
+            ),
+            filtered_pagos AS (
+                SELECT PAG_TIPOPAGO, PAG_MONTO, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX
+                FROM ect2sp.ctx_pagos_trx
+                WHERE PAG_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
+                    AND PAG_TIPOPAGO IN ('16', '06')
+                    AND HED_LOCAL = :codLocal
+            )
+            SELECT
+                FP.PAG_TIPOPAGO AS TIPO_PAGO,
+                tp.TPA_DESPAGO AS DES_PAGO,
+                IL.CAD_NUMERO,
+                IC.CAD_DESCRIPCION,
+                FH.HED_LOCAL AS LOC_NUMERO,
+                IL.LOC_DESCRIPCION,
+                FH.HED_POS AS NUM_CAJA,
+                FH.HED_NUMTRX AS NUM_TRX,
+                TO_CHAR(FH.HED_FCONTABLE, 'yyyy-mm-dd') AS FCONTABLE,
+                FP.PAG_MONTO
+            FROM
+                filtered_header FH
+            JOIN
+                filtered_pagos FP
+                ON FP.HED_PAIS = FH.HED_PAIS
+                AND FP.HED_ORIGENTRX = FH.HED_ORIGENTRX
+                AND FP.HED_LOCAL = FH.HED_LOCAL
+                AND FP.HED_POS = FH.HED_POS
+                AND FP.HED_FECHATRX = FH.HED_FECHATRX
+                AND FP.HED_HORATRX = FH.HED_HORATRX
+                AND FP.HED_NUMTRX = FH.HED_NUMTRX
+            JOIN
+                ECT2SP.CUA_TIPOS_PAGO tp
+                ON tp.TPA_CODIGO = FP.PAG_TIPOPAGO
+            JOIN
+                IRS_LOCALES IL
+                ON FH.HED_LOCAL = IL.LOC_NUMERO
+            JOIN
+                IRS_CADENAS IC
+                ON IL.CAD_NUMERO = IC.CAD_NUMERO";
+
+                var command = new OracleCommand(query, connection)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = 600
+                };
+
+                command.Parameters.Add(":fechaInicio", OracleDbType.Varchar2).Value = fechaInicio.ToString("dd-MM-yyyy");
+                command.Parameters.Add(":fechaFin", OracleDbType.Varchar2).Value = fechaFin.ToString("dd-MM-yyyy");
+                command.Parameters.Add(":codLocal", OracleDbType.Int32).Value = Convert.ToInt32(codLocal);
+
+                await connection.OpenAsync();
+
+                using (var reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection))
+                {
+                    var dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    connection.Close();
+                    return dataTable;
+                }
+            }
+        }
+
     }
 }

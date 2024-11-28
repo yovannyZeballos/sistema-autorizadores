@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Serilog;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
 {
@@ -42,6 +43,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
                     .Obtener(x => x.CodUsuario == request.CodUsuario
                             && x.CodEmpresa == request.CodEmpresa)
                     .Include(x => x.Mae_Local)
+                    .OrderBy(x => x.CodLocal)
                     .ToListAsync();
 
                 response.Data = _mapper.Map<List<ListarLocalDTO>>(Locales);

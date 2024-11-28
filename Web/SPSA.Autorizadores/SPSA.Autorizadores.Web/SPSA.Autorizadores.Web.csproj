@@ -244,6 +244,7 @@
     <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Reportes\Controllers\AdministrarReportesController.cs" />
+    <Compile Include="Areas\Reportes\Controllers\ValesRedimidosController.cs" />
     <Compile Include="Areas\Reportes\ReportesAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
     <Compile Include="Areas\Seguridad\Controllers\PerfilController.cs" />
@@ -2313,6 +2314,7 @@
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroTablas.js" />
+    <Content Include="Content\ViewJs\ValesRedimidos.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
     <Content Include="Content\ViewJs\AutorizadorMasivo.js" />
@@ -2775,6 +2777,7 @@
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_CrearInvKardexLocal.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_EditarInvKardexLocal.cshtml" />
+    <Content Include="Areas\Reportes\Views\ValesRedimidos\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

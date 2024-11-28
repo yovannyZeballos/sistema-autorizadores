@@ -34,5 +34,6 @@ namespace SPSA.Autorizadores.Web.Areas.Reportes.Controllers
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
+
     }
 }
