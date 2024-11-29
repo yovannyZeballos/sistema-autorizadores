@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Web;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {

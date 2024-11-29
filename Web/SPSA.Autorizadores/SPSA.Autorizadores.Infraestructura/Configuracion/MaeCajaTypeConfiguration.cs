@@ -23,6 +23,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.IpAddress).HasColumnName("IP_ADDRESS");
             Property(x => x.TipOs).HasColumnName("TIP_OS");
             Property(x => x.TipEstado).HasColumnName("TIP_ESTADO");
+            Property(x => x.TipUbicacion).HasColumnName("TIP_UBICACION");
+            Property(x => x.TipCaja).HasColumnName("TIP_CAJA");
         }
     }
 }

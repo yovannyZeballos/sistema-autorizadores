@@ -250,7 +250,6 @@
     <Compile Include="DTO\ListarInvCajaDTO.cs" />
     <Compile Include="DTO\ListarLocalDTO.cs" />
     <Compile Include="DTO\ListarMaeCadenaDTO.cs" />
-    <Compile Include="DTO\ListarMaeCajaDTO.cs" />
     <Compile Include="DTO\ListarMaeEmpresaDTO.cs" />
     <Compile Include="DTO\ListarMaeLocalDTO.cs" />
     <Compile Include="DTO\ListarMaeRegionDTO.cs" />
@@ -267,7 +266,6 @@
     <Compile Include="DTO\ListarUsuarioDTO.cs" />
     <Compile Include="DTO\LocalAsociadoDTO.cs" />
     <Compile Include="DTO\MaeCadenaDTO.cs" />
-    <Compile Include="DTO\MaeCajaDTO.cs" />
     <Compile Include="DTO\MaeEmpresaDTO.cs" />
     <Compile Include="DTO\MaeLocalDTO.cs" />
     <Compile Include="DTO\MaeRegionDTO.cs" />
@@ -307,7 +305,6 @@
     <Compile Include="DTO\ObtenerInvActivoDTO.cs" />
     <Compile Include="DTO\ObtenerInvCajaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeCadenaDTO.cs" />
-    <Compile Include="DTO\ObtenerMaeCajaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeEmpresaDTO.cs" />
     <Compile Include="DTO\ObtenerMaeLocalDTO.cs" />
     <Compile Include="DTO\ObtenerMaeRegionDTO.cs" />
@@ -342,6 +339,9 @@
     <Compile Include="Features\Autorizadores\Queries\ListarMotivosReimpresionQuery.cs" />
     <Compile Include="Features\Cajas\Commands\DescargarMaeCajaPorEmpresaCommand.cs" />
     <Compile Include="Features\Cajas\Commands\ImportarExcelInvCajaCommand.cs" />
+    <Compile Include="Features\Cajas\DTOs\ListarMaeCajaDTO.cs" />
+    <Compile Include="Features\Cajas\DTOs\MaeCajaDTO.cs" />
+    <Compile Include="Features\Cajas\DTOs\ObtenerMaeCajaDTO.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
@@ -370,6 +370,7 @@
     <Compile Include="Features\InventarioActivo\Commands\ActualizarInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\CrearInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\DescargarInvActivoCommand.cs" />
+    <Compile Include="Features\InventarioActivo\Commands\EliminarInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\ImportarInventarioActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ListarInvActivoQuery.cs" />
     <Compile Include="Features\InventarioActivo\Queries\ObtenerInvActivoQuery.cs" />

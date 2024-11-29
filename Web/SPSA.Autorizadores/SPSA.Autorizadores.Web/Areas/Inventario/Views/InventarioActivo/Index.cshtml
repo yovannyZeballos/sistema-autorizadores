@@ -84,39 +84,33 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-
-
                         <div class="row">
-
-
                             <div class="col-12 d-flex justify-content-between mb-3">
-                                <!-- Botones alineados a la izquierda -->
-                                <div class="d-flex">
+                                <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
                                     <button type="button" id="btnNuevoInvActivo" class="btn btn-sm btn-primary me-2">
                                         <i class="fa fa-plus"></i> Nuevo
                                     </button>
                                     <button type="button" id="btnEditarInvActivo" class="btn btn-sm btn-warning me-2">
                                         <i class="fa fa-pencil"></i> Editar
                                     </button>
-                                    <button type="button" id="btnEliminarInvKardex" class="btn btn-sm btn-danger me-2">
+                                    <button type="button" id="btnEliminarInvActivo" class="btn btn-sm btn-danger me-2">
                                         <i class="fa fa-remove"></i> Eliminar
                                     </button>
-                                    <button type="button" id="btnImportar" class="btn btn-sm btn-outline-success me-2">
-                                        <i class="fa fa-upload"></i> Cargar Excel
-                                    </button>
-                                    <input type="file" id="excelInventario" style="display: none;">
                                 </div>
-                                <!-- Botón alineado a la derecha -->
-                                <div class="d-flex">
+                                <div class="d-flex flex-wrap justify-content-center justify-content-md-end">
                                     <button type="button" id="btnDescargarInvActivoPorEmpresa" class="btn btn-sm btn-default me-2">
-                                        <i class="fa fa-download"></i> Descargar Inv
-                                    </button>
-                                    <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2">
-                                        <i class="fa fa-download"></i> Plantilla Excel
+                                        <i class="fa fa-download"></i> Descargar Inv.
                                     </button>
                                     <button type="button" id="btnDescargarTiposActivo" class="btn btn-sm btn-default me-2">
                                         <i class="fa fa-download"></i> Tipos Activo
                                     </button>
+                                    <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2">
+                                        <i class="fa fa-download"></i> Plantilla Inv
+                                    </button>
+                                    <button type="button" id="btnImportar" class="btn btn-sm btn-outline-success me-2">
+                                        <i class="fa fa-upload"></i> Importar Inv.
+                                    </button>
+                                    <input type="file" id="excelInventario" style="display: none;">
                                 </div>
                             </div>
                         </div>
@@ -149,11 +143,6 @@
         </div>
     </div>
 </div>
-
-@*<div>
-        <button id="btnCargarArchivo" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Cargar Excel</button>
-        <button id="btnPlantillaArchivo" class="btn btn-sm btn-warning mb-4 ms-1"><i class="fe fe-download me-1"></i>Plantilla Excel</button>
-    </div>*@
 
 <!-- MODAL LOCAL-->
 <div class="modal fade" id="modalLocales" data-bs-backdrop="static">
@@ -206,27 +195,6 @@
                 <button id="btnActualizarInvActivo" class="btn btn-primary">Guardar</button>
                 <button id="btnGuardarInvActivo" class="btn btn-primary">Guardar</button>
                 <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL IMPORTAR INV ACTIVO-->
-<div class="modal fade" id="modalImportarInvActivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tituloModalImportarInvActivo">Importar Inventario desde Excel </h5>
-                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="col-sm-12">
-                    <input class="form-control" type="file" id="archivoExcelInvActivo" />
-                    <br />
-                    <div class="text-center">
-                        <button class="btn btn-success" type="button" id="btnCargarExcelInvActivo">Cargar Excel</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

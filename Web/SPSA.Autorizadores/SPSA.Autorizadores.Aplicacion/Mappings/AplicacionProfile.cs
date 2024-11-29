@@ -4,6 +4,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
@@ -145,6 +146,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ObtenerInvActivoDTO, Inv_Activo>().ReverseMap();
             CreateMap<CrearInvActivoCommand, Inv_Activo>().ReverseMap();
             CreateMap<ActualizarInvActivoCommand, Inv_Activo>().ReverseMap();
+            CreateMap<EliminarInvActivoCommand, Inv_Activo>().ReverseMap();
 
             CreateMap<ListarInvCajaDTO, InvCajas>().ReverseMap();
             CreateMap<InvCajaDTO, InvCajas>().ReverseMap();

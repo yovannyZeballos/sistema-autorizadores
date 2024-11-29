@@ -1,6 +1,12 @@
-﻿namespace SPSA.Autorizadores.Aplicacion.DTO
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs
 {
-    public class MaeCajaDTO
+    public class ListarMaeCajaDTO
     {
         public string CodEmpresa { get; set; }
         public string CodCadena { get; set; }
@@ -11,5 +17,7 @@
         public string IpAddress { get; set; }
         public string TipOs { get; set; }
         public string TipEstado { get; set; }
+        public string TipUbicacion { get; set; }
+        public string TipCaja { get; set; }
     }
 }

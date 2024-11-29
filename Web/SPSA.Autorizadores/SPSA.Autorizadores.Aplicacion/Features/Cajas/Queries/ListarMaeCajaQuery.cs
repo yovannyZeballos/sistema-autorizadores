@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Data.Entity;
 using System.Linq;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries
 {
