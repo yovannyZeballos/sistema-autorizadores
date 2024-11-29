@@ -7,11 +7,7 @@ using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,32 +37,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 
             try
             {
-                //var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa).ToListAsync();
+                var dataTable = await _contexto.RepositorioMaeLocal.ObtenerLocalesPorEmpresaAsync(request.CodEmpresa);
 
-                var listaLocales = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == request.CodEmpresa)
-                                                                .Join(_contexto.RepositorioMaeEmpresa.Obtener(x => x.CodEmpresa == request.CodEmpresa),
-                                                                      local => local.CodEmpresa,
-                                                                      empresa => empresa.CodEmpresa,
-                                                                      (local, empresa) => new { Local = local, NomEmpresa = empresa.NomEmpresa })
-                                                                .Join(_contexto.RepositorioMaeCadena.Obtener(x => x.CodEmpresa == request.CodEmpresa),
-                                                                      localEmpresa => localEmpresa.Local.CodCadena,
-                                                                      cadena => cadena.CodCadena,
-                                                                      (localEmpresa, cadena) => new {
-                                                                          localEmpresa.Local.CodEmpresa,
-                                                                          NomEmpresa = localEmpresa.NomEmpresa,
-                                                                          localEmpresa.Local.CodCadena,
-                                                                          NomCadena = cadena.NomCadena,
-                                                                          localEmpresa.Local.CodRegion,
-                                                                          localEmpresa.Local.CodZona,
-                                                                          localEmpresa.Local.CodLocal,
-                                                                          localEmpresa.Local.NomLocal,
-                                                                          localEmpresa.Local.TipEstado,
-                                                                          localEmpresa.Local.CodLocalPMM,
-                                                                          localEmpresa.Local.CodLocalOfiplan,
-                                                                          localEmpresa.Local.NomLocalOfiplan,
-                                                                          localEmpresa.Local.CodLocalSunat
-                                                                      })
-                                                                .ToListAsync();
+                if (dataTable.Rows.Count == 0)
+                {
+                    respuesta.Ok = false;
+                    respuesta.Mensaje = "No se encontraron datos para la empresa especificada.";
+                    return respuesta;
+                }
 
                 string fileName = $"LocalesPorEmpresa_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
 
@@ -75,23 +53,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
                     var ws = wb.Worksheets.Add("Locales");
 
                     var headerRow = ws.Row(1);
-                    var properties = listaLocales.First().GetType().GetProperties();
-                    for (int i = 0; i < properties.Length; i++)
+                    for (int i = 0; i < dataTable.Columns.Count; i++)
                     {
-                        headerRow.Cell(i + 1).Value = properties[i].Name;
+                        headerRow.Cell(i + 1).Value = dataTable.Columns[i].ColumnName;
                     }
 
-                    for (int i = 0; i < listaLocales.Count; i++)
+                    for (int i = 0; i < dataTable.Rows.Count; i++)
                     {
-                        var rowData = listaLocales[i];
-                        for (int j = 0; j < properties.Length; j++)
+                        var row = dataTable.Rows[i];
+                        for (int j = 0; j < dataTable.Columns.Count; j++)
                         {
-                            var propValue = properties[j].GetValue(rowData);
-                            ws.Cell(i + 2, j + 1).Value = propValue != null ? "'" + propValue.ToString() : "";
+                            ws.Cell(i + 2, j + 1).Value = row[j] != DBNull.Value ? row[j].ToString() : "";
                         }
                     }
 
-                    using (MemoryStream stream = new MemoryStream())
+                    ws.Columns().AdjustToContents();
+
+                    using (var stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
                         respuesta.Archivo = Convert.ToBase64String(stream.ToArray());
@@ -104,6 +82,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
             {
                 respuesta.Ok = false;
                 respuesta.Mensaje = ex.Message;
+                _logger.Error(ex, "Error al generar el archivo Excel para la empresa {CodEmpresa}", request.CodEmpresa);
             }
 
             return respuesta;

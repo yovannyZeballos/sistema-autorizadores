@@ -9,6 +9,7 @@ using System;
 using Serilog;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System.Data.Entity;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries
 {

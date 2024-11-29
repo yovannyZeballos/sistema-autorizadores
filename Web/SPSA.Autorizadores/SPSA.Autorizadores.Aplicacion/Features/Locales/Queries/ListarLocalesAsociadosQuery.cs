@@ -8,6 +8,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,6 +49,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
 							&& x.CodZona == request.CodZona
 							&& x.CodRegion == request.CodRegion)
 					.Include(x => x.Mae_Local)
+					.OrderBy(x => x.CodLocal)
 					.ToListAsync();
 
 				response.Data = _mapper.Map<List<ListarLocalDTO>>(Locales);

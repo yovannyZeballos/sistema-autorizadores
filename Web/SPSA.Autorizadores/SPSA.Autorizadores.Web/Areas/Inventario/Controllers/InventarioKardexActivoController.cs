@@ -24,13 +24,13 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CrearFormInvKardexActivo(InvKardexActivoDTO model)
+        public ActionResult CrearFormInvKardexActivo(InvKardexActivoDTO model)
         {
             return PartialView("_CrearInvKardexActivo", model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditarFormInvKardexActivo(InvKardexActivoDTO model)
+        public ActionResult EditarFormInvKardexActivo(InvKardexActivoDTO model)
         {
             return PartialView("_EditarInvKardexActivo", model);
         }

@@ -16,7 +16,7 @@ var urlObtenerLocal = baseUrl + 'Maestros/MaeLocal/ObtenerLocal';
 var urlModalCrearEditarCaja = baseUrl + 'Maestros/MaeLocal/CrearEditarCaja';
 
 var urlImportarLocales = baseUrl + 'Maestros/MaeLocal/ImportarExcelLocal';
-var urlImportarCajas = baseUrl + 'Maestros/MaeCaja/ImportarExcelCaja';
+var urlImportarCajas = baseUrl + 'Maestros/MaeCaja/ImportarExcel';
 
 var urlDescargarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/DescargarLocalPorEmpresa';
 var urlDescargarCajasPorLocal = baseUrl + 'Maestros/MaeCaja/DescargarCajaPorLocal';
@@ -336,31 +336,6 @@ var AdministrarMaestroLocal = function () {
             }
         });
 
-        $("#btnAbrirModalExcelCaja").click(function () {
-            $("#modalImportarCaja").modal('show');
-        });
-
-        $("#btnCargarExcelCaja").on("click", function () {
-            var inputFile = document.getElementById('archivoExcelCaja');
-            var archivoSeleccionado = inputFile.files.length > 0;
-
-            if (archivoSeleccionado) {
-                swal({
-                    title: "¿Está seguro importar el archivo?",
-                    text: " Sí el número de caja existe, este sera actualizado con los nuevos datos recibidos.",
-                    icon: "warning",
-                    buttons: ["No", "Si"],
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        importarExcelCajas();
-                    }
-                });
-            } else {
-                alert('Por favor, seleccione un archivo antes de continuar.');
-            }
-        });
-
         $("#btnDescargarExcelCaja").on("click", function () {
             var caja = {
                 CodEmpresa: $("#cboEmpresa").val(),
@@ -389,6 +364,14 @@ var AdministrarMaestroLocal = function () {
             if (validarBuscarEmpresa()) {
                 descargarCajas(urlDescargarCajasPorEmpresa);
             }
+        });
+
+        $("#btnImportarCajas").on("click", function () {
+            $("#excelImportarCajas").trigger("click");
+        });
+
+        $('#excelImportarCajas').change(function (e) {
+            importarCajasDesdeExcel();
         });
     };
 
@@ -830,7 +813,6 @@ var AdministrarMaestroLocal = function () {
             bAutoWidth: false
         });
     }
-
 
     const limpiar = function () {
         permitirCambioZonaRegion = false;
@@ -1350,10 +1332,10 @@ var AdministrarMaestroLocal = function () {
         });
     }
 
-    const importarExcelCajas = function () {
-        var archivo = document.getElementById('archivoExcelCaja').files[0];
+    const importarCajasDesdeExcel = function () {
         var formData = new FormData();
-        formData.append('archivoExcel', archivo);
+        var uploadFiles = $('#excelImportarCajas').prop('files');
+        formData.append("excelImportarCajas", uploadFiles[0]);
 
         $.ajax({
             url: urlImportarCajas,
@@ -1367,20 +1349,9 @@ var AdministrarMaestroLocal = function () {
             },
             complete: function () {
                 closeLoading();
-                $("#archivoExcelCaja").val(null);
-                $("#modalImportarCaja").modal('hide');
+                $("#excelImportarCajas").val(null);
             },
-            success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
-                await recargarDataTableCajas();
-                $("#modalCaja").modal('hide');
-
+            success: function (response) {
 
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning", }).then(() => {
@@ -1397,7 +1368,7 @@ var AdministrarMaestroLocal = function () {
                     return;
                 }
                 swal({ text: response.Mensaje, icon: "success", });
-                await recargarDataTableCajas();
+                //await recargarDataTableCajas();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });

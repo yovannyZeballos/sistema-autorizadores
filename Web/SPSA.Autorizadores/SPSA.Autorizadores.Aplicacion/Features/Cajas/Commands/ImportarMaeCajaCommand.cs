@@ -36,6 +36,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 
         public async Task<RespuestaComunExcelDTO> Handle(ImportarMaeCajaCommand request, CancellationToken cancellationToken)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-PE");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-PE");
+
+
             var respuesta = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
 
             try
@@ -45,21 +49,55 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                     using (var workbook = new XLWorkbook(stream))
                     {
                         var worksheet = workbook.Worksheet(1);
-                        var headerRow = worksheet.FirstRowUsed();
                         var rowCount = worksheet.RowsUsed().Count();
 
-                        // Crear un diccionario para mapear los nombres de las columnas a sus índices
-                        var columnMap = headerRow.Cells()
-                            .ToDictionary(cell => cell.Value.ToString(), cell => cell.Address.ColumnNumber);
+                        var columnMapping = worksheet.Row(1).CellsUsed()
+                            .ToDictionary(cell => cell.GetString(), cell => cell.Address.ColumnNumber);
 
+                        var expectedColumns = new[]
+                        {
+                            "COD_EMPRESA", "COD_CADENA", "COD_REGION", "COD_ZONA", "COD_LOCAL",
+                            "NUM_CAJA", "IP_ADDRESS", "TIP_OS", "TIP_ESTADO", "TIP_UBICACION","TIP_CAJA"
+                        };
+
+                        foreach (var col in expectedColumns)
+                        {
+                            if (!columnMapping.ContainsKey(col))
+                            {
+                                throw new Exception($"La columna '{col}' no se encontró en el archivo Excel. Verifica que el archivo contenga todas las columnas requeridas.");
+                            }
+                        }
 
                         for (int row = 2; row <= rowCount; row++)
                         {
                             try
                             {
-                                // Validación y conversión segura de NumCaja
+                                var rowCells = worksheet.Row(row).CellsUsed().ToDictionary(cell => cell.WorksheetColumn().ColumnNumber(), cell => cell);
+                                string codlocal = rowCells[columnMapping["COD_LOCAL"]].GetString();
+
+                                Mae_Local maeLocal = _contexto.RepositorioMaeLocal.Obtener(x => x.CodLocal == codlocal).FirstOrDefault();
+
+                                if (maeLocal == null)
+                                {
+                                    maeLocal = new Mae_Local
+                                    {
+                                        CodEmpresa = worksheet.Cell(row, columnMapping["COD_EMPRESA"]).GetString(),
+                                        CodCadena = worksheet.Cell(row, columnMapping["COD_CADENA"]).GetString(),
+                                        CodRegion = worksheet.Cell(row, columnMapping["COD_REGION"]).GetString(),
+                                        CodZona = worksheet.Cell(row, columnMapping["COD_ZONA"]).GetString(),
+                                        CodLocal = codlocal
+                                    };
+
+                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    {
+                                        Fila = row,
+                                        Mensaje = $"Local incorrecto: {codlocal}"
+                                    });
+                                    continue;
+                                }
+
                                 int numCaja;
-                                if (!int.TryParse(worksheet.Cell(row, columnMap["NUM_CAJA"]).Value.ToString(), out numCaja))
+                                if (!int.TryParse(worksheet.Cell(row, columnMapping["NUM_CAJA"]).Value.ToString(), out numCaja))
                                 {
                                     respuesta.Errores.Add(new ErroresExcelDTO
                                     {
@@ -71,15 +109,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 
                                 var nuevoCaja = new Mae_Caja
                                 {
-                                    CodEmpresa = worksheet.Cell(row, columnMap["COD_EMPRESA"]).Value.ToString(),
-                                    CodCadena = worksheet.Cell(row, columnMap["COD_CADENA"]).Value.ToString(),
-                                    CodRegion = worksheet.Cell(row, columnMap["COD_REGION"]).Value.ToString(),
-                                    CodZona = worksheet.Cell(row, columnMap["COD_ZONA"]).Value.ToString(),
-                                    CodLocal = worksheet.Cell(row, columnMap["COD_LOCAL"]).Value.ToString(),
+                                    CodEmpresa = maeLocal.CodEmpresa,
+                                    CodCadena = maeLocal.CodCadena,
+                                    CodRegion = maeLocal.CodRegion,
+                                    CodZona = maeLocal.CodZona,
+                                    CodLocal = maeLocal.CodLocal,
                                     NumCaja = numCaja,
-                                    IpAddress = worksheet.Cell(row, columnMap["IP_ADDRESS"]).Value.ToString(),
-                                    TipOs = worksheet.Cell(row, columnMap["TIP_OS"]).Value.ToString(),
-                                    TipEstado = worksheet.Cell(row, columnMap["TIP_ESTADO"]).Value.ToString(),
+                                    IpAddress = worksheet.Cell(row, columnMapping["IP_ADDRESS"]).GetString(),
+                                    TipOs = worksheet.Cell(row, columnMapping["TIP_OS"]).GetString(),
+                                    TipEstado = worksheet.Cell(row, columnMapping["TIP_ESTADO"]).GetString(),
+                                    TipUbicacion = worksheet.Cell(row, columnMapping["TIP_UBICACION"]).GetString(),
+                                    TipCaja = worksheet.Cell(row, columnMapping["TIP_CAJA"]).GetString(),
                                 };
 
                                 bool existe = await _contexto.RepositorioMaeCaja.Existe(x =>
@@ -90,54 +130,38 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                 if (existe)
                                 {
                                     _contexto.RepositorioMaeCaja.Actualizar(nuevoCaja);
-                                    await _contexto.GuardarCambiosAsync();
                                 }
                                 else
                                 {
-                                    try
-                                    {
-                                        _contexto.RepositorioMaeCaja.Agregar(nuevoCaja);
-                                        await _contexto.GuardarCambiosAsync();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        string errorMessage = string.Empty;
-
-                                        Exception innerEx = ex.InnerException;
-                                        while (innerEx != null)
-                                        {
-                                            //errorMessage += " Error: " + innerEx.Message;
-
-                                            if (innerEx is Npgsql.PostgresException postgresEx)
-                                            {
-                                                errorMessage += " " + postgresEx.Detail;
-                                            }
-
-                                            innerEx = innerEx.InnerException;
-                                        }
-
-                                        respuesta.Errores.Add(new ErroresExcelDTO
-                                        {
-                                            Fila = 0,
-                                            Mensaje = $"{errorMessage}"
-                                        });
-
-                                        // Descartar cambios de la entidad problemática
-                                        _contexto.RepositorioMaeCaja.DescartarCambios(nuevoCaja);
-
-                                        continue;
-                                    }
-
+                                    _contexto.RepositorioMaeCaja.Agregar(nuevoCaja);
                                 }
+                                await _contexto.GuardarCambiosAsync();
                             }
                             catch (Exception ex)
                             {
-                                //_contexto.Rollback();
+                                _contexto.Rollback();
+
+                                string mensajeError = string.Empty;
+
+                                Exception innerEx = ex.InnerException;
+                                while (innerEx != null)
+                                {
+                                    if (innerEx is Npgsql.PostgresException postgresEx)
+                                    {
+                                        mensajeError += " " + innerEx.Message;
+                                    }
+                                    innerEx = innerEx.InnerException;
+                                }
+
+                                if (ex.HResult == -2146233079)
+                                {
+                                    mensajeError = "Ya existe un activo con estas características.";
+                                }
 
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = row,
-                                    Mensaje = ex.Message
+                                    Mensaje = mensajeError
                                 });
                                 continue;
                             }

@@ -36,6 +36,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
         public async Task<RespuestaComunExcelDTO> Handle(ImportarInventarioActivoCommand request, CancellationToken cancellationToken)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-PE");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-PE");
+
             var respuesta = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
 
             try
@@ -50,21 +53,40 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                         var columnMapping = worksheet.Row(1).CellsUsed()
                             .ToDictionary(cell => cell.GetString(), cell => cell.Address.ColumnNumber);
 
+                        var expectedColumns = new[]
+                                            {
+                                                "CodLocal", "CodEmpresa", "CodCadena", "CodRegion", "CodZona", "CodActivo",
+                                                "Modelo", "Marca", "Serie", "Cantidad", "IP", "Area", "OC", "Guia",
+                                                "Antiguedad", "IndOperativo", "Obs/TK", "Garantia", "FechaSalida", "FechaActualiza"
+                                            };
+
+                        foreach (var col in expectedColumns)
+                        {
+                            if (!columnMapping.ContainsKey(col))
+                            {
+                                throw new Exception($"La columna '{col}' no se encontró en el archivo Excel. Verifica que el archivo contenga todas las columnas requeridas.");
+                            }
+                        }
+
                         for (int row = 2; row <= rowCount; row++)
                         {
                             try
                             {
-                                string codlocal = worksheet.Cell(row, columnMapping["CodLocal"]).GetString(); ;
+                                var rowCells = worksheet.Row(row).CellsUsed().ToDictionary(cell => cell.WorksheetColumn().ColumnNumber(), cell => cell);
+                                string codlocal = rowCells[columnMapping["CodLocal"]].GetString();
+
                                 Mae_Local maeLocal = _contexto.RepositorioMaeLocal.Obtener(x => x.CodLocal == codlocal).FirstOrDefault();
 
                                 if (maeLocal == null)
                                 {
-                                    maeLocal = new Mae_Local();
-                                    maeLocal.CodEmpresa = worksheet.Cell(row, columnMapping["CodEmpresa"]).GetString();
-                                    maeLocal.CodCadena = worksheet.Cell(row, columnMapping["CodCadena"]).GetString();
-                                    maeLocal.CodRegion = worksheet.Cell(row, columnMapping["CodRegion"]).GetString();
-                                    maeLocal.CodZona = worksheet.Cell(row, columnMapping["CodZona"]).GetString();
-                                    maeLocal.CodLocal = codlocal;
+                                    maeLocal = new Mae_Local
+                                    {
+                                        CodEmpresa = worksheet.Cell(row, columnMapping["CodEmpresa"]).GetString(),
+                                        CodCadena = worksheet.Cell(row, columnMapping["CodCadena"]).GetString(),
+                                        CodRegion = worksheet.Cell(row, columnMapping["CodRegion"]).GetString(),
+                                        CodZona = worksheet.Cell(row, columnMapping["CodZona"]).GetString(),
+                                        CodLocal = codlocal
+                                    };
 
                                     respuesta.Errores.Add(new ErroresExcelDTO
                                     {
@@ -118,35 +140,33 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             {
                                 _contexto.Rollback();
 
-                                if (ex.HResult == -2146233079) 
+                                string mensajeError = string.Empty;
+
+                                Exception innerEx = ex.InnerException;
+                                while (innerEx != null)
                                 {
-                                    respuesta.Errores.Add(new ErroresExcelDTO
+                                    if (innerEx is Npgsql.PostgresException postgresEx)
                                     {
-                                        Fila = row,
-                                        Mensaje = "Ya existe un activo con estas caracteristicas."
-                                    });
+                                        mensajeError += " " + innerEx.Message;
+                                    }
+                                    innerEx = innerEx.InnerException;
                                 }
-                                else
+
+                                if (ex.HResult == -2146233079)
                                 {
-                                    respuesta.Errores.Add(new ErroresExcelDTO
-                                    {
-                                        Fila = row,
-                                        Mensaje = ex.Message
-                                    });
+                                    mensajeError = "Ya existe un activo con estas características.";
                                 }
+
+                                respuesta.Errores.Add(new ErroresExcelDTO
+                                {
+                                    Fila = row,
+                                    Mensaje = mensajeError
+                                });
                             }
                         }
 
-                        if (respuesta.Errores.Count == 0)
-                        {
-                            respuesta.Ok = true;
-                            respuesta.Mensaje = "Archivo importado correctamente";
-                        }
-                        else
-                        {
-                            respuesta.Ok = false;
-                            respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
-                        }
+                        respuesta.Ok = respuesta.Errores.Count == 0;
+                        respuesta.Mensaje = respuesta.Ok ? "Archivo importado correctamente." : "archivo importado con algunos errores.";
                     }
                 }
             }

@@ -27,13 +27,13 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CrearFormInvKardexLocal(InvKardexLocalDTO model)
+        public ActionResult CrearFormInvKardexLocal(InvKardexLocalDTO model)
         {
             return PartialView("_CrearInvKardexLocal", model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditarFormInvKardexLocal(InvKardexLocalDTO model)
+        public ActionResult EditarFormInvKardexLocal(InvKardexLocalDTO model)
         {
             return PartialView("_EditarInvKardexLocal", model);
         }

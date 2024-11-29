@@ -9,6 +9,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
@@ -237,6 +238,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ActualizarInvActivoHandler>().As<IRequestHandler<ActualizarInvActivoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImportarInventarioActivoHandler>().As<IRequestHandler<ImportarInventarioActivoCommand, RespuestaComunExcelDTO>>();
             builder.RegisterType<DescargarInvActivoHandler>().As<IRequestHandler<DescargarInvActivoCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<EliminarInvActivoHandler>().As<IRequestHandler<EliminarInvActivoCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<ListarInvCajaHandler>().As<IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>>();
 			builder.RegisterType<ObtenerInvCajaHandler>().As<IRequestHandler<ObtenerInvCajaQuery, GenericResponseDTO<ObtenerInvCajaDTO>>>();
@@ -263,6 +265,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
 			builder.RegisterType<ListarLocalesCambioPrecioHandler>().As<IRequestHandler<ListarLocalesCambioPrecioQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarLocalesNotaCreditoHandler>().As<IRequestHandler<ListarLocalesNotaCreditoQuery, ListarComunDTO<Dictionary<string, object>>>>();
+			builder.RegisterType<ListarValesRedimidosHandler>().As<IRequestHandler<ListarValesRedimidosQuery, ListarComunDTO<Dictionary<string, object>>>>();
 
 			#endregion <--REPORTES-->
 

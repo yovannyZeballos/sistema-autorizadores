@@ -1,13 +1,11 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using System.Threading.Tasks;
-using System;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Web;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
-
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
@@ -47,28 +45,35 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarExcelCaja(HttpPostedFileBase archivoExcel)
+        public async Task<JsonResult> ImportarExcel()
         {
-            if (archivoExcel is null)
+            var respuesta = new RespuestaComunExcelDTO();
+            foreach (var fileKey in Request.Files)
             {
-                var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
-                response.Ok = false;
-                response.Mensaje = "Se encontraron algunos errores en el archivo";
-                response.Errores.Add(new ErroresExcelDTO
+                HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
+                if (archivo is null)
                 {
-                    Fila = 1,
-                    Mensaje = "No se ha seleccionado ningun archivo."
-                });
+                    var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
+                    response.Ok = false;
+                    response.Mensaje = "Se encontraron algunos errores en el archivo";
+                    response.Errores.Add(new ErroresExcelDTO
+                    {
+                        Fila = 1,
+                        Mensaje = "No se ha seleccionado ningun archivo."
+                    });
 
-                return Json(response);
-            }
-            else
-            {
-                var command = new ImportarMaeCajaCommand { ArchivoExcel = archivoExcel.InputStream };
-                var response = await _mediator.Send(command);
+                    return Json(response);
+                }
+                else
+                {
+                    var command = new ImportarMaeCajaCommand { ArchivoExcel = archivo.InputStream };
+                    var response = await _mediator.Send(command);
 
-                return Json(response);
+                    return Json(response);
+                }
             }
+
+            return Json(respuesta);
         }
 
         [HttpPost]
