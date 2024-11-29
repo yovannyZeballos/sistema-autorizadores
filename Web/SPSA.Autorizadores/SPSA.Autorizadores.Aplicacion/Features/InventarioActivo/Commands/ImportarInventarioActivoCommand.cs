@@ -36,7 +36,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
         public async Task<RespuestaComunExcelDTO> Handle(ImportarInventarioActivoCommand request, CancellationToken cancellationToken)
         {
-            // Establecer la configuración regional
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-PE");
             System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-PE");
 
@@ -76,7 +75,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                                 var rowCells = worksheet.Row(row).CellsUsed().ToDictionary(cell => cell.WorksheetColumn().ColumnNumber(), cell => cell);
                                 string codlocal = rowCells[columnMapping["CodLocal"]].GetString();
 
-                                //string codlocal = worksheet.Cell(row, columnMapping["CodLocal"]).GetString();
                                 Mae_Local maeLocal = _contexto.RepositorioMaeLocal.Obtener(x => x.CodLocal == codlocal).FirstOrDefault();
 
                                 if (maeLocal == null)
@@ -142,32 +140,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             {
                                 _contexto.Rollback();
 
-                                string mensajeError;
+                                string mensajeError = string.Empty;
 
-                                // Detectar casos específicos por HResult u otras propiedades
+                                Exception innerEx = ex.InnerException;
+                                while (innerEx != null)
+                                {
+                                    if (innerEx is Npgsql.PostgresException postgresEx)
+                                    {
+                                        mensajeError += " " + innerEx.Message;
+                                    }
+                                    innerEx = innerEx.InnerException;
+                                }
+
                                 if (ex.HResult == -2146233079)
                                 {
                                     mensajeError = "Ya existe un activo con estas características.";
                                 }
-                                else if (ex is FormatException formatEx)
-                                {
-                                    mensajeError = $"Error de formato en la fila {row}: {formatEx.Message}";
-                                }
-                                else if (ex is NullReferenceException nullEx)
-                                {
-                                    mensajeError = $"Referencia nula en la fila {row}: {nullEx.Message}";
-                                }
-                                else if (ex is InvalidOperationException invalidOpEx)
-                                {
-                                    mensajeError = $"Operación inválida en la fila {row}: {invalidOpEx.Message}";
-                                }
-                                else
-                                {
-                                    // Mensaje general
-                                    mensajeError = $"Error desconocido en la fila {row}: {ex.Message}";
-                                }
 
-                                // Agregar detalle del error en la respuesta
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = row,
@@ -176,16 +165,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             }
                         }
 
-                        if (respuesta.Errores.Count == 0)
-                        {
-                            respuesta.Ok = true;
-                            respuesta.Mensaje = "Archivo importado correctamente";
-                        }
-                        else
-                        {
-                            respuesta.Ok = false;
-                            respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
-                        }
+                        respuesta.Ok = respuesta.Errores.Count == 0;
+                        respuesta.Mensaje = respuesta.Ok ? "Archivo importado correctamente." : "archivo importado con algunos errores.";
                     }
                 }
             }

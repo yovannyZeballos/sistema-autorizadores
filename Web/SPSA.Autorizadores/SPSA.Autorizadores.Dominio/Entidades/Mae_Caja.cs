@@ -11,5 +11,7 @@
         public string IpAddress { get; set; }
         public string TipOs { get; set; }
         public string TipEstado { get; set; }
+        public string TipUbicacion { get; set; }
+        public string TipCaja { get; set; }
     }
 }

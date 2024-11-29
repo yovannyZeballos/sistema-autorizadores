@@ -2,6 +2,7 @@
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.ViewModel;
 using System.Collections.Generic;
@@ -63,35 +64,42 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ObtenerInvActivo(ObtenerInvActivoQuery request)
+        public async Task<JsonResult> Obtener(ObtenerInvActivoQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarActivos(ListarInvActivoQuery request)
+        public async Task<JsonResult> Listar(ListarInvActivoQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> CrearInvActivo(CrearInvActivoCommand command)
+        public async Task<JsonResult> Crear(CrearInvActivoCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ActualizarInvActivo(ActualizarInvActivoCommand command)
+        public async Task<JsonResult> Actualizar(ActualizarInvActivoCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarExcelInventario()
+        public async Task<JsonResult> Eliminar(EliminarInvActivoCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ImportarExcel()
         {
             var respuesta = new RespuestaComunExcelDTO();
             foreach (var fileKey in Request.Files)

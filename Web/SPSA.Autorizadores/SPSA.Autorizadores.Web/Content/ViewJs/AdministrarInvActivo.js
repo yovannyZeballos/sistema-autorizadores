@@ -5,15 +5,14 @@ var urlListarZonas = baseUrl + 'Maestros/MaeZona/ListarZona';
 var urlListarLocales = baseUrl + 'Maestros/MaeLocal/ListarLocal';
 
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
-var urlListarActivos = baseUrl + 'Inventario/InventarioActivo/ListarActivos';
+var urlListarActivos = baseUrl + 'Inventario/InventarioActivo/Listar';
 var urlListarTiposActivo = baseUrl + 'Inventario/InventarioTipoActivo/ListarTiposActivo';
 
-var urlObtenerInvActivo = baseUrl + 'Inventario/InventarioActivo/ObtenerInvActivo';
-var urlCrearInvActivo = baseUrl + 'Inventario/InventarioActivo/CrearInvActivo';
-var urlActualizarInvActivo = baseUrl + 'Inventario/InventarioActivo/ActualizarInvActivo';
-var urlImportarInvActivo = baseUrl + 'Inventario/InventarioActivo/ImportarExcelInventario';
-
-var urlModalCrearEditarInvActivo = baseUrl + 'Inventario/InventarioActivo/CrearEditarInvActivo';
+var urlObtenerInvActivo = baseUrl + 'Inventario/InventarioActivo/Obtener';
+var urlCrearInvActivo = baseUrl + 'Inventario/InventarioActivo/Crear';
+var urlActualizarInvActivo = baseUrl + 'Inventario/InventarioActivo/Actualizar';
+var urlEliminarInvActivo = baseUrl + 'Inventario/InventarioActivo/Eliminar';
+var urlImportarInvActivo = baseUrl + 'Inventario/InventarioActivo/ImportarExcel';
 
 var urlModalCrearInvActivo = baseUrl + 'Inventario/InventarioActivo/CrearFormInvActivo';
 var urlModalEditarInvActivo = baseUrl + 'Inventario/InventarioActivo/EditarFormInvActivo';
@@ -96,6 +95,57 @@ var AdministrarInvActivo = function () {
             const COD_SERIE = filasSeleccionada[0].querySelector('td:nth-child(5)').textContent;
 
             abrirModalEditarInvActivo(codEmpresa, codCadena, codRegion, codZona, codLocal, COD_ACTIVO, COD_MODELO, NOM_MARCA, COD_SERIE);
+        });
+
+        $("#btnEliminarInvActivo").click(function () {
+            const codEmpresa = $("#cboEmpresa").val();
+            const codCadena = $("#cboCadena").val();
+            const codRegion = $("#cboRegion").val();
+            const codZona = $("#cboZona").val();
+            const codLocal = $("#cboLocal").val();
+
+            var filasSeleccionada = document.querySelectorAll("#tableActivos tbody tr.selected");
+            if (!validarSelecion(filasSeleccionada.length)) {
+                return;
+            }
+
+            const request = {
+                CodEmpresa: codEmpresa,
+                CodCadena: codCadena,
+                CodRegion: codRegion,
+                CodZona: codZona,
+                CodLocal: codLocal,
+                CodActivo: filasSeleccionada[0].querySelector('td:nth-child(1)').textContent,
+                CodModelo: filasSeleccionada[0].querySelector('td:nth-child(3)').textContent,
+                NomMarca: filasSeleccionada[0].querySelector('td:nth-child(4)').textContent,
+                CodSerie: filasSeleccionada[0].querySelector('td:nth-child(5)').textContent
+            };
+
+            swal({
+                title: "¿Estás seguro?",
+                text: "No podrás revertir esto",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Sí, eliminarlo",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                }
+            }).then(async (isConfirm) => {
+                if (isConfirm) {
+                    await eliminarInvActivo(request);
+                }
+            });
         });
 
         $("#btnGuardarInvActivo").on("click", async function () {
@@ -267,37 +317,11 @@ var AdministrarInvActivo = function () {
         });
 
         $('#excelInventario').change(function (e) {
-            //importarExcelInventario();
             importarExcelInvActivo();
-        });
-
-        $("#btnCargarArchivo").click(function () {
-            $("#modalImportarInvActivo").modal('show');
         });
 
         $("#btnDescargarPlantillas").click(function () {
             descargarPlantillas("Plantilla_InvActivo");
-        });
-
-        $("#btnCargarExcelInvActivo").on("click", function () {
-            var inputFile = document.getElementById('archivoExcelInvActivo');
-            var archivoSeleccionado = inputFile.files.length > 0;
-
-            if (archivoSeleccionado) {
-                swal({
-                    title: "¿Está seguro importar el archivo?",
-                    text: " Sí el código de activo existe, este sera actualizado con los nuevos datos recibidos.",
-                    icon: "warning",
-                    buttons: ["No", "Si"],
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        importarExcelInvActivo();
-                    }
-                });
-            } else {
-                alert('Por favor, seleccione un archivo antes de continuar.');
-            }
         });
 
         $("#btnDescargarTiposActivo").on("click", function () {
@@ -904,6 +928,28 @@ var AdministrarInvActivo = function () {
 
             },
             bAutoWidth: false
+        });
+    }
+
+    const eliminarInvActivo = async function (request) {
+        $.ajax({
+            url: urlEliminarInvActivo,
+            type: "post",
+            data: { request },
+            dataType: "html",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: async function (response) {
+                swal("Eliminado!", "Registro eliminado exitosamente.", "success");
+                recargarDataTableActivos(request);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
         });
     }
 

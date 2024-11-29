@@ -29,11 +29,10 @@
                             <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary text-wrap me-2">
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-                            <button type="button" id="btnAbrirModalExcelLocal" class="btn btn-sm btn-outline-success text-wrap me-2">
-                                <i class="fa fa-upload"></i> Importar Locales
-                            </button>
+                            
                         </div>
                         <div class="d-flex">
+
                             <button type="button" id="btnDescargarMaestroLocal" class="btn btn-sm btn-default text-wrap me-2">
                                 <i class="fa fa-download"></i> Locales x Empresa
                             </button>
@@ -42,8 +41,15 @@
                             </button>
                             <!-- Botón para descargar plantilla de Locales-->
                             @*<button type="button" id="btnDescargarPlantillaLocal" class="btn btn-sm btn-default text-wrap me-2">
-                                <i class="fa fa-download"></i> Plantilla Locales
-                            </button>*@
+            <i class="fa fa-download"></i> Plantilla Locales
+        </button>*@
+                            <button type="button" id="btnAbrirModalExcelLocal" class="btn btn-sm btn-outline-success text-wrap me-2">
+                                <i class="fa fa-upload"></i> Importar Locales
+                            </button>
+                            <button type="button" id="btnImportarCajas" class="btn btn-sm btn-outline-success text-wrap me-2">
+                                <i class="fa fa-upload"></i> Importar Cajas
+                            </button>
+                            <input type="file" id="excelImportarCajas" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -188,9 +194,6 @@
                     </div>
                     <div class="col-2" id="btn-cajas">
                         <div class="col-md-12">
-                            <button class="btn btn-outline-success btn-block  btn-sm mb-2" id="btnAbrirModalExcelCaja" type="button"><span><i class="fa fa-upload"></i> Importar</span></button>
-                        </div>
-                        <div class="col-md-12">
                             <button class="btn btn-primary btn-block btn-sm mb-2" id="btnNuevaCaja" type="button" disabled><i class="fa fa-plus"></i> Nuevo</button>
                         </div>
                         <div class="col-md-12">
@@ -271,29 +274,6 @@
     </div>
 </div>
 
-<!-- MODAL IMPORTAR CAJA -->
-<div class="modal fade" id="modalImportarCaja" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tituloModalImportarEmpresa">Importar Cajas desde Excel </h5>
-                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="col-sm-12">
-                    <input class="form-control" type="file" id="archivoExcelCaja" />
-                    <br />
-                    <div class="text-center">
-                        <button class="btn btn-success" type="button" id="btnCargarExcelCaja">Cargar Excel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 <!-- MODAL CAJA-->
 <div class="modal fade" id="modalCaja" data-bs-backdrop="static">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
@@ -311,8 +291,6 @@
         </div>
     </div>
 </div>
-
-
 
 <!-- MODAL ERRORES CAJA-->
 <div class="modal fade" id="modalErroresImportacion" data-bs-backdrop="static">
