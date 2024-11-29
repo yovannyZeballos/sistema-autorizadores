@@ -118,30 +118,21 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             {
                                 _contexto.Rollback();
 
-                                string mensajeError;
+                                string mensajeError = string.Empty;
 
-                                // Detectar casos específicos por HResult u otras propiedades
-                                if (ex.HResult == -2146233079)
+                                Exception innerEx = ex.InnerException;
+                                while (innerEx != null)
                                 {
-                                    mensajeError = "Ya existe un activo con estas características.";
-                                }
-                                else if (ex is FormatException formatEx)
-                                {
-                                    mensajeError = $"Error de formato en la fila {row}: {formatEx.Message}";
-                                }
-                                else if (ex is NullReferenceException nullEx)
-                                {
-                                    mensajeError = $"Referencia nula en la fila {row}: {nullEx.Message}";
-                                }
-                                else if (ex is InvalidOperationException invalidOpEx)
-                                {
-                                    mensajeError = $"Operación inválida en la fila {row}: {invalidOpEx.Message}";
+                                    if (innerEx is Npgsql.PostgresException postgresEx)
+                                    {
+                                        mensajeError += " " + postgresEx.Detail;
+                                    }
+                                    innerEx = innerEx.InnerException;
                                 }
 
                                 if (ex.HResult == -2146233079)
                                 {
-                                    // Mensaje general
-                                    mensajeError = $"Error desconocido en la fila {row}: {ex.Message}";
+                                    mensajeError = $"Ya existe un activo con estas características.";
                                 }
 
                                 // Agregar detalle del error en la respuesta
