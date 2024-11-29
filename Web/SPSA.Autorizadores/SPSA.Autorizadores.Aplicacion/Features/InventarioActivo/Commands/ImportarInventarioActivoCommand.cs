@@ -118,22 +118,38 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                             {
                                 _contexto.Rollback();
 
-                                if (ex.HResult == -2146233079) 
+                                string mensajeError;
+
+                                // Detectar casos específicos por HResult u otras propiedades
+                                if (ex.HResult == -2146233079)
                                 {
-                                    respuesta.Errores.Add(new ErroresExcelDTO
-                                    {
-                                        Fila = row,
-                                        Mensaje = "Ya existe un activo con estas caracteristicas."
-                                    });
+                                    mensajeError = "Ya existe un activo con estas características.";
                                 }
-                                else
+                                else if (ex is FormatException formatEx)
                                 {
-                                    respuesta.Errores.Add(new ErroresExcelDTO
-                                    {
-                                        Fila = row,
-                                        Mensaje = ex.Message
-                                    });
+                                    mensajeError = $"Error de formato en la fila {row}: {formatEx.Message}";
                                 }
+                                else if (ex is NullReferenceException nullEx)
+                                {
+                                    mensajeError = $"Referencia nula en la fila {row}: {nullEx.Message}";
+                                }
+                                else if (ex is InvalidOperationException invalidOpEx)
+                                {
+                                    mensajeError = $"Operación inválida en la fila {row}: {invalidOpEx.Message}";
+                                }
+
+                                if (ex.HResult == -2146233079)
+                                {
+                                    // Mensaje general
+                                    mensajeError = $"Error desconocido en la fila {row}: {ex.Message}";
+                                }
+
+                                // Agregar detalle del error en la respuesta
+                                respuesta.Errores.Add(new ErroresExcelDTO
+                                {
+                                    Fila = row,
+                                    Mensaje = mensajeError
+                                });
                             }
                         }
 
