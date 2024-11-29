@@ -59,12 +59,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
                                 if (maeLocal == null)
                                 {
-                                    maeLocal = new Mae_Local();
-                                    maeLocal.CodEmpresa = worksheet.Cell(row, columnMapping["CodEmpresa"]).GetString();
-                                    maeLocal.CodCadena = worksheet.Cell(row, columnMapping["CodCadena"]).GetString();
-                                    maeLocal.CodRegion = worksheet.Cell(row, columnMapping["CodRegion"]).GetString();
-                                    maeLocal.CodZona = worksheet.Cell(row, columnMapping["CodZona"]).GetString();
-                                    maeLocal.CodLocal = codlocal;
+                                    maeLocal = new Mae_Local
+                                    {
+                                        CodEmpresa = worksheet.Cell(row, columnMapping["CodEmpresa"]).GetString(),
+                                        CodCadena = worksheet.Cell(row, columnMapping["CodCadena"]).GetString(),
+                                        CodRegion = worksheet.Cell(row, columnMapping["CodRegion"]).GetString(),
+                                        CodZona = worksheet.Cell(row, columnMapping["CodZona"]).GetString(),
+                                        CodLocal = codlocal
+                                    };
 
                                     respuesta.Errores.Add(new ErroresExcelDTO
                                     {
