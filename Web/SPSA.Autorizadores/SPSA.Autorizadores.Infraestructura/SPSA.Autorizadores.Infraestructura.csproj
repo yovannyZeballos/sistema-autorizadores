@@ -139,6 +139,7 @@
     <Compile Include="Configuracion\AperturaTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MaeHorarioTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
     <Compile Include="Configuracion\TmpMonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreLocalTypeConfiguration.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Repositorio\RepositorioInvKardex.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
+    <Compile Include="Repositorio\RepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
     <Compile Include="Repositorio\RepositorioAutImpresion.cs" />

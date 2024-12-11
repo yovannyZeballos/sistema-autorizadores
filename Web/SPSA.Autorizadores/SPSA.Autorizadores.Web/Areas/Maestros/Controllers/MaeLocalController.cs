@@ -106,11 +106,11 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
             return Json(respuesta);
         }
 
-        [HttpPost]
-        public ActionResult CrearEditarCaja(MaeCajaDTO model)
-        {
-            return PartialView("_CrearEditarCaja", model);
-        }
+        //[HttpPost]
+        //public ActionResult CrearEditarCaja(MaeCajaDTO model)
+        //{
+        //    return PartialView("_CrearEditarCaja", model);
+        //}
 
     }
 }

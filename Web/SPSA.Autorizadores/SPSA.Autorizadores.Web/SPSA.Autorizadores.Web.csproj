@@ -228,6 +228,7 @@
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCajaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeHorarioController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeRegionController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
@@ -2723,7 +2724,6 @@
     <Content Include="Areas\Seguridad\Views\Perfil\Index.cshtml" />
     <Content Include="Areas\Seguridad\Views\Menu\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeLocal\Index.cshtml" />
-    <Content Include="Areas\Maestros\Views\MaeLocal\_CrearEditarCaja.cshtml" />
     <Content Include="Areas\Maestros\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeTablas\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarCadena.cshtml" />
@@ -2778,6 +2778,9 @@
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_CrearInvKardexLocal.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_EditarInvKardexLocal.cshtml" />
     <Content Include="Areas\Reportes\Views\ValesRedimidos\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeHorario\_CrearMaeHorario.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeHorario\_EditarMaeHorario.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeCaja\_CrearEditarCaja.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2824,7 +2827,6 @@
     <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Inventario\Views\InventarioTipoActivo\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
-    <Folder Include="Areas\Maestros\Views\MaeCaja\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
