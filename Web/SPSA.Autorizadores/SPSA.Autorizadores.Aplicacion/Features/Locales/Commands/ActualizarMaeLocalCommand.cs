@@ -52,10 +52,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
                 request.NomLocal = string.Empty;
             }
 
-
             if (request.NomLocalOfiplan is null)
             {
                 request.NomLocalOfiplan = string.Empty;
+            }
+
+            if (request.Ip is null)
+            {
+                request.Ip = "0.0.0.0";
             }
 
             var respuesta = new RespuestaComunDTO { Ok = true };

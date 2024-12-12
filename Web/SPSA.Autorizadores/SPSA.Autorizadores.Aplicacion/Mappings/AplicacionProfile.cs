@@ -6,6 +6,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
@@ -138,6 +140,12 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ObtenerMaeCajaDTO, Mae_Caja>().ReverseMap();
             CreateMap<CrearMaeCajaCommand, Mae_Caja>().ReverseMap();
             CreateMap<ActualizarMaeCajaCommand, Mae_Caja>().ReverseMap();
+
+            CreateMap<MaeHorarioDTO, Mae_Horario>().ReverseMap();
+            CreateMap<ListarMaeHorarioDTO, Mae_Horario>().ReverseMap();
+            CreateMap<ObtenerMaeHorarioDTO, Mae_Horario>().ReverseMap();
+            CreateMap<CrearMaeHorarioCommand, Mae_Horario>().ReverseMap();
+            CreateMap<ActualizarMaeHorarioCommand, Mae_Horario>().ReverseMap();
 
             CreateMap<InvTipoActivoDTO, InvTipoActivo>().ReverseMap();
 

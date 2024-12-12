@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Web;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
@@ -106,6 +107,12 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
+        }
+
+        [HttpPost]
+        public ActionResult CrearEditarCaja(MaeCajaDTO model)
+        {
+            return PartialView("_CrearEditarCaja", model);
         }
 
     }

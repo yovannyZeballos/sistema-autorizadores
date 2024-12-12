@@ -16,6 +16,9 @@ using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
@@ -229,7 +232,16 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<DescargarMaestroCajaHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<DescargarMaestroCajaPorEmpresaHandler>().As<IRequestHandler<DescargarMaeCajaPorEmpresaCommand, DescargarMaestroDTO>>();
 
-			builder.RegisterType<ListarInvTipoActivoHandler>().As<IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>>();
+            builder.RegisterType<ListarMaeHorarioHandler>().As<IRequestHandler<ListarMaeHorarioQuery, GenericResponseDTO<List<ListarMaeHorarioDTO>>>>();
+            builder.RegisterType<ObtenerMaeHorarioHandler>().As<IRequestHandler<ObtenerMaeHorarioQuery, GenericResponseDTO<ObtenerMaeHorarioDTO>>>();
+            builder.RegisterType<CrearMaeHorarioHandler>().As<IRequestHandler<CrearMaeHorarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeHorarioHandler>().As<IRequestHandler<ActualizarMaeHorarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeHorarioHandler>().As<IRequestHandler<ImportarMaeHorarioCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<EliminarMaeHorarioHandler>().As<IRequestHandler<EliminarMaeHorarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<DescargarMaestroHorarioHandler>().As<IRequestHandler<DescargarMaeHorarioCommand, DescargarMaestroDTO>>();
+            //builder.RegisterType<DescargarMaestroHorarioPorEmpresaHandler>().As<IRequestHandler<DescargarMaeHorarioPorEmpresaCommand, DescargarMaestroDTO>>();
+
+            builder.RegisterType<ListarInvTipoActivoHandler>().As<IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>>();
             builder.RegisterType<DescargarInvTiposActivoHandler>().As<IRequestHandler<DescargarInvTiposActivoCommand, DescargarMaestroDTO>>();
 
             builder.RegisterType<ListarInvActivoHandler>().As<IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>>();

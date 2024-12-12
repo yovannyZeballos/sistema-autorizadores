@@ -10,8 +10,6 @@ using AutoMapper;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
-using System.Data.Entity;
-using System.Linq;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 {
@@ -43,7 +41,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 
             try
             {
-                var listaCajas = await _contexto.RepositorioMaeCaja.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona && x.CodLocal == request.CodLocal).ToListAsync();
+                var dataTable = await _contexto.RepositorioMaeCaja.ObtenerCajasPorLocalAsync(request.CodEmpresa, request.CodCadena, request.CodRegion, request.CodZona, request.CodLocal);
+
+                if (dataTable.Rows.Count == 0)
+                {
+                    respuesta.Ok = false;
+                    respuesta.Mensaje = "No se encontraron datos para del local especificada.";
+                    return respuesta;
+                }
 
                 string fileName = $"CajasPorLocal_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
 
@@ -52,23 +57,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                     var ws = wb.Worksheets.Add("Cajas");
 
                     var headerRow = ws.Row(1);
-                    var properties = listaCajas.First().GetType().GetProperties();
-                    for (int i = 0; i < properties.Length; i++)
+                    for (int i = 0; i < dataTable.Columns.Count; i++)
                     {
-                        headerRow.Cell(i + 1).Value = properties[i].Name;
+                        headerRow.Cell(i + 1).Value = dataTable.Columns[i].ColumnName;
                     }
 
-                    for (int i = 0; i < listaCajas.Count; i++)
+                    for (int i = 0; i < dataTable.Rows.Count; i++)
                     {
-                        var rowData = listaCajas[i];
-                        for (int j = 0; j < properties.Length; j++)
+                        var row = dataTable.Rows[i];
+                        for (int j = 0; j < dataTable.Columns.Count; j++)
                         {
-                            var propValue = properties[j].GetValue(rowData);
-                            ws.Cell(i + 2, j + 1).Value = propValue != null ? "'" + propValue.ToString() : "";
+                            ws.Cell(i + 2, j + 1).Value = row[j] != DBNull.Value ? row[j].ToString() : "";
                         }
                     }
 
-                    using (MemoryStream stream = new MemoryStream())
+                    ws.Columns().AdjustToContents();
+
+                    using (var stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
                         respuesta.Archivo = Convert.ToBase64String(stream.ToArray());
@@ -81,36 +86,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
             {
                 respuesta.Ok = false;
                 respuesta.Mensaje = ex.Message;
+                _logger.Error(ex, "Error al generar el archivo Excel para el local {CodLocal}", request.CodLocal);
             }
 
             return respuesta;
-
-
-            //var respuesta = new DescargarMaestroDTO();
-
-            //try
-            //{
-            //    var dt = await _repositorioMaestroCaja.Descargar(request.CodEmpresa, request.CodCadena, request.CodRegion, request.CodZona, request.CodLocal);
-            //    dt.TableName = "Cajas";
-            //    string fileName = $"Cajas_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
-            //    using (XLWorkbook wb = new XLWorkbook())
-            //    {
-            //        wb.Worksheets.Add(dt);
-            //        using (MemoryStream stream = new MemoryStream())
-            //        {
-            //            wb.SaveAs(stream);
-            //            respuesta.Archivo = Convert.ToBase64String(stream.ToArray());
-            //            respuesta.NombreArchivo = fileName;
-            //            respuesta.Ok = true;
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    respuesta.Ok = false;
-            //    respuesta.Mensaje = ex.Message;
-            //}
-            //return respuesta;
         }
     }
 }

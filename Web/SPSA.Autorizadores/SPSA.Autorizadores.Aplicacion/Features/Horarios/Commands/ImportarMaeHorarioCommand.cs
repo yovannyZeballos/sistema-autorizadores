@@ -1,40 +1,40 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System;
+using System.IO;
+using AutoMapper;
 using ClosedXML.Excel;
+using System.Threading.Tasks;
+using System.Threading;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
-using System.Collections.Generic;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Threading;
+using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using System.Linq;
-using SPSA.Autorizadores.Infraestructura.Contexto;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
+namespace SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands
 {
-    public class ImportarMaeCajaCommand : IRequest<RespuestaComunExcelDTO>
+    public class ImportarMaeHorarioCommand : IRequest<RespuestaComunExcelDTO>
     {
         public Stream ArchivoExcel { get; set; }
     }
 
-    public class ImportarMaeCajaHandler : IRequestHandler<ImportarMaeCajaCommand, RespuestaComunExcelDTO>
+    public class ImportarMaeHorarioHandler : IRequestHandler<ImportarMaeHorarioCommand, RespuestaComunExcelDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ImportarMaeCajaHandler(IMapper mapper)
+        public ImportarMaeHorarioHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<RespuestaComunExcelDTO> Handle(ImportarMaeCajaCommand request, CancellationToken cancellationToken)
+        public async Task<RespuestaComunExcelDTO> Handle(ImportarMaeHorarioCommand request, CancellationToken cancellationToken)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-PE");
             System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-PE");
@@ -56,7 +56,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                         var expectedColumns = new[]
                         {
                             "COD_EMPRESA", "COD_CADENA", "COD_REGION", "COD_ZONA", "COD_LOCAL",
-                            "NUM_CAJA", "IP_ADDRESS", "TIP_OS", "TIP_ESTADO", "TIP_UBICACION","TIP_CAJA"
+                            "NUM_DIA", "COD_DIA", "HOR_OPEN", "HOR_CLOSE", "MIN_LMT"
                         };
 
                         foreach (var col in expectedColumns)
@@ -95,44 +95,43 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
                                     continue;
                                 }
 
-                                int numCaja;
-                                if (!int.TryParse(worksheet.Cell(row, columnMapping["NUM_CAJA"]).Value.ToString(), out numCaja))
+                                int numDia;
+                                if (!int.TryParse(worksheet.Cell(row, columnMapping["NUM_DIA"]).Value.ToString(), out numDia))
                                 {
                                     respuesta.Errores.Add(new ErroresExcelDTO
                                     {
                                         Fila = row,
-                                        Mensaje = "El valor de NumCaja no es un número válido."
+                                        Mensaje = "El valor de NumDia no es un número válido."
                                     });
                                     continue;
                                 }
 
-                                var nuevoCaja = new Mae_Caja
+                                var nuevoHorario = new Mae_Horario
                                 {
                                     CodEmpresa = maeLocal.CodEmpresa,
                                     CodCadena = maeLocal.CodCadena,
                                     CodRegion = maeLocal.CodRegion,
                                     CodZona = maeLocal.CodZona,
                                     CodLocal = maeLocal.CodLocal,
-                                    NumCaja = numCaja,
-                                    IpAddress = worksheet.Cell(row, columnMapping["IP_ADDRESS"]).GetString(),
-                                    TipOs = worksheet.Cell(row, columnMapping["TIP_OS"]).GetString(),
-                                    TipEstado = worksheet.Cell(row, columnMapping["TIP_ESTADO"]).GetString(),
-                                    TipUbicacion = worksheet.Cell(row, columnMapping["TIP_UBICACION"]).GetString(),
-                                    TipCaja = worksheet.Cell(row, columnMapping["TIP_CAJA"]).GetString(),
+                                    NumDia = numDia,
+                                    CodDia = worksheet.Cell(row, columnMapping["COD_DIA"]).GetString(),
+                                    HorOpen = worksheet.Cell(row, columnMapping["HOR_OPEN"]).GetString(),
+                                    HorClose = worksheet.Cell(row, columnMapping["HOR_CLOSE"]).GetString(),
+                                    MinLmt = worksheet.Cell(row, columnMapping["MIN_LMT"]).GetString()
                                 };
 
-                                bool existe = await _contexto.RepositorioMaeCaja.Existe(x =>
-                                                                                        x.CodEmpresa == nuevoCaja.CodEmpresa && x.CodCadena == nuevoCaja.CodCadena &&
-                                                                                        x.CodRegion == nuevoCaja.CodRegion && x.CodZona == nuevoCaja.CodZona &&
-                                                                                        x.CodLocal == nuevoCaja.CodLocal && x.NumCaja == nuevoCaja.NumCaja);
+                                bool existe = await _contexto.RepositorioMaeHorario.Existe(x =>
+                                                                                        x.CodEmpresa == nuevoHorario.CodEmpresa && x.CodCadena == nuevoHorario.CodCadena &&
+                                                                                        x.CodRegion == nuevoHorario.CodRegion && x.CodZona == nuevoHorario.CodZona &&
+                                                                                        x.CodLocal == nuevoHorario.CodLocal && x.NumDia == nuevoHorario.NumDia);
 
                                 if (existe)
                                 {
-                                    _contexto.RepositorioMaeCaja.Actualizar(nuevoCaja);
+                                    _contexto.RepositorioMaeHorario.Actualizar(nuevoHorario);
                                 }
                                 else
                                 {
-                                    _contexto.RepositorioMaeCaja.Agregar(nuevoCaja);
+                                    _contexto.RepositorioMaeHorario.Agregar(nuevoHorario);
                                 }
                                 await _contexto.GuardarCambiosAsync();
                             }
@@ -154,7 +153,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 
                                 if (ex.HResult == -2146233079)
                                 {
-                                    mensajeError = "Ya existe una caja con estas características.";
+                                    mensajeError = "Ya existe horario con estas características.";
                                 }
 
                                 respuesta.Errores.Add(new ErroresExcelDTO

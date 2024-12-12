@@ -1,59 +1,76 @@
-﻿using MediatR;
-using System.Globalization;
-using System;
-using System.Web.Mvc;
-using System.Threading.Tasks;
-using SPSA.Autorizadores.Aplicacion.DTO;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
+using System.Web.Mvc;
+using MediatR;
+using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Queries;
+using SPSA.Autorizadores.Web.Utiles;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
-    public class MaeLocalController : Controller
+    public class MaeHorarioController : Controller
     {
         private readonly IMediator _mediator;
 
-        public MaeLocalController(IMediator mediator)
+        public MaeHorarioController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
+        // GET: Maestros/MaeHorario
         public ActionResult Index()
         {
-            object fechaActual = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            return View(fechaActual);
-            //return View();
+            return View();
         }
 
         [HttpPost]
-        public async Task<JsonResult> ObtenerLocal(ObtenerMaeLocalQuery request)
+        public async Task<JsonResult> Obtener(ObtenerMaeHorarioQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarLocal(ListarMaeLocalQuery request)
+        public async Task<JsonResult> Listar(ListarMaeHorarioQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarLocalPorEmpresa(ListarMaeLocalPorEmpresaQuery request)
+        public async Task<JsonResult> Crear(CrearMaeHorarioCommand command)
         {
-            var respuesta = await _mediator.Send(request);
+            command.UsuCreacion = WebSession.Login;
+            command.FecCreacion = DateTime.Today;
+            var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ActualizarLocal(ActualizarMaeLocalCommand command)
+        public async Task<JsonResult> Actualizar(ActualizarMaeHorarioCommand command)
+        {
+            command.UsuModifica = WebSession.Login;
+            command.FecModifica = DateTime.Today;
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Eliminar(EliminarMaeHorarioCommand command)
         {
             var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarPorLocal(DescargarMaeHorarioCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
 
@@ -79,7 +96,7 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
                 }
                 else
                 {
-                    var command = new ImportarMaeLocalCommand { ArchivoExcel = archivo.InputStream };
+                    var command = new ImportarMaeHorarioCommand { ArchivoExcel = archivo.InputStream };
                     var response = await _mediator.Send(command);
 
                     return Json(response);
@@ -90,28 +107,15 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> CrearLocal(CrearMaeLocalCommand command)
+        public ActionResult FormularioCrear(MaeHorarioDTO model)
         {
-            command.CodLocalOfiplan = (command.CodLocalOfiplan is null) ? "" : command.CodLocalOfiplan;
-            command.NomLocalOfiplan = (command.NomLocalOfiplan is null) ? "" : command.NomLocalOfiplan;
-
-            //command.UsuCreacion = WebSession.Login;
-            var respuesta = await _mediator.Send(command);
-            return Json(respuesta);
+            return PartialView("_CrearMaeHorario", model);
         }
 
         [HttpPost]
-        public async Task<JsonResult> DescargarLocal(DescargarMaeLocalCommand request)
+        public ActionResult FormularioEditar(MaeHorarioDTO model)
         {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> DescargarLocalPorEmpresa(DescargarMaeLocalPorEmpresaCommand request)
-        {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta);
+            return PartialView("_EditarMaeHorario", model);
         }
 
     }

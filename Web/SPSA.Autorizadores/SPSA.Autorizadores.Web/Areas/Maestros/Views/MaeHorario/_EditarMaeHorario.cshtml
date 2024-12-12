@@ -1,0 +1,37 @@
+﻿@model SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs.MaeHorarioDTO
+
+<div class="row needs-validation" id="formHorario">
+    <div class="col-xl-6 col-md-6 col-sm-12">
+        <div class="form-group select2-sm">
+            <label for="cboNumDia" class="form-label">Día</label>
+            <select class="form-control select2-show-modal custom-select" id="cboNumDia" required>
+                <option value="">Seleccionar</option>
+                <option value="1" @(Model.NumDia == 1 ? "selected" : "")>Lunes</option>
+                <option value="2" @(Model.NumDia == 2 ? "selected" : "")>Martes</option>
+                <option value="3" @(Model.NumDia == 3 ? "selected" : "")>Miercoles</option>
+                <option value="4" @(Model.NumDia == 4 ? "selected" : "")>Jueves</option>
+                <option value="5" @(Model.NumDia == 5 ? "selected" : "")>Viernes</option>
+                <option value="6" @(Model.NumDia == 6 ? "selected" : "")>Sabado</option>
+                <option value="7" @(Model.NumDia == 7 ? "selected" : "")>Domingo</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-6 col-sm-12">
+        <div class="form-group select2-sm">
+            <label for="txtHorOpen" class="form-label">Hora Apertura</label>
+            <input type="text" class="form-control form-control-sm" id="txtHorOpen" value="@Model.HorOpen" placeholder="00:00" required>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-6 col-sm-12">
+        <div class="form-group select2-sm">
+            <label for="txtHorClose" class="form-label">Hora Cierre</label>
+            <input type="text" class="form-control form-control-sm" id="txtHorClose" value="@Model.HorClose" placeholder="00:00" required>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-6 col-sm-12">
+        <div class="form-group select2-sm">
+            <label for="txtMinLmt" class="form-label">Min Lmt</label>
+            <input type="text" class="form-control form-control-sm" id="txtMinLmt" value="@Model.MinLmt" placeholder="0" required>
+        </div>
+    </div>
+</div>
