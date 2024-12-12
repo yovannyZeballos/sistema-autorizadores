@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs
+﻿namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs
 {
     public class ListarMaeCajaDTO
     {

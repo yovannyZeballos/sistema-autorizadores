@@ -51,6 +51,7 @@
     <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />
     <Compile Include="Repositorio\IRepositorioApertura.cs" />

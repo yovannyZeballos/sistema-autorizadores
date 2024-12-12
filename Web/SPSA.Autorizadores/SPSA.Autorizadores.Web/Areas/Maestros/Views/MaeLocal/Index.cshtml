@@ -29,23 +29,22 @@
                             <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary text-wrap me-2">
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-                            
+
                         </div>
                         <div class="d-flex">
-
-                            <button type="button" id="btnDescargarMaestroLocal" class="btn btn-sm btn-default text-wrap me-2">
+                            <button type="button" id="btnDescargarLocalesPorEmpresa" class="btn btn-sm btn-default text-wrap me-2">
                                 <i class="fa fa-download"></i> Locales x Empresa
                             </button>
-                            <button type="button" id="btnDescargarMaestroCajas" class="btn btn-sm btn-default text-wrap me-2">
+                            <button type="button" id="btnDescargarCajasPorEmpresa" class="btn btn-sm btn-default text-wrap me-2">
                                 <i class="fa fa-download"></i> Cajas x Empresa
                             </button>
-                            <!-- Botón para descargar plantilla de Locales-->
-                            @*<button type="button" id="btnDescargarPlantillaLocal" class="btn btn-sm btn-default text-wrap me-2">
-            <i class="fa fa-download"></i> Plantilla Locales
-        </button>*@
-                            <button type="button" id="btnAbrirModalExcelLocal" class="btn btn-sm btn-outline-success text-wrap me-2">
+                            <button type="button" id="btnPlantillas" class="btn btn-sm btn-default text-wrap me-2 text-blue">
+                                <i class="fa fa-download"></i> Plantillas
+                            </button>
+                            <button type="button" id="btnImportarLocales" class="btn btn-sm btn-outline-success text-wrap me-2">
                                 <i class="fa fa-upload"></i> Importar Locales
                             </button>
+                            <input type="file" id="excelImportarLocales" style="display: none;">
                             <button type="button" id="btnImportarCajas" class="btn btn-sm btn-outline-success text-wrap me-2">
                                 <i class="fa fa-upload"></i> Importar Cajas
                             </button>
@@ -138,7 +137,7 @@
                     <div class="col-xl-2 col-md-4">
                         <div class="form-group">
                             <label for="txtIP" class="form-label">IP</label>
-                            <input type="text" class="form-control form-control-sm" maxlength="18" id="txtIP" required>
+                            <input type="text" class="form-control form-control-sm" maxlength="18" id="txtIP" value="0.0.0.0" required>
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4">
@@ -182,10 +181,11 @@
                         <table id="tableCajas" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>
-                                    @*<th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>*@
                                     <th class="border-bottom-0" style="font-size: 11px;">NUM CAJA</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">IP</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">OS</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">TIPO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">UBICACION</th>
                                     <th class="border-bottom-0" style="font-size: 11px;">ESTADO</th>
                                 </tr>
                             </thead>
@@ -204,16 +204,54 @@
                             <button class="btn btn-outline-danger btn-block btn-sm mb-2" id="btnEliminarCaja" type="button" disabled><i class="fa fa-remove"></i> Eliminar</button>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnDescargarExcelCaja" type="button" disabled><i class="fa fa-download"></i> Descargar</button>
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnDescargarCajasPorLocal" type="button" disabled><i class="fa fa-download"></i> Descargar</button>
                         </div>
-                        <div class="col-md-12 text-blue">
+                        @*<div class="col-md-12 text-blue">
                             <a class="btn btn-link btn-block btn-sm mb-2" id="btnDescargarPlantillas">Plantilla Caja</a>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        @*<div class="card overflow-hidden card-collapsed">*@
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Horarios")
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <table id="tableHorarios" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NUM DIA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD DIA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">APERTURA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">CIERRE</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">MIN LMT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-2" id="btn-horarios">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnNuevoHorario" type="button" disabled><i class="fa fa-plus"></i> Nuevo</button>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block btn-sm mb-2" id="btnEditarHorario" type="button" disabled><i class="fa fa-pencil"></i> Editar</button>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-outline-danger btn-block btn-sm mb-2" id="btnEliminarHorario" type="button" disabled><i class="fa fa-remove"></i> Eliminar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- MODAL LOCAL-->
@@ -254,20 +292,24 @@
     </div>
 </div>
 
-<!-- MODAL IMPORTAR LOCAL -->
-<div class="modal fade" id="modalImportarLocal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<!-- MODAL DESCARGAR PLANTILLAS -->
+<div class="modal fade" id="modalPlantillas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="tituloModalImportarEmpresa">Importar Locales desde Excel </h5>
+                <h6 class="modal-title" id="tituloModalPlantillas">Plantillas Excel </h6>
                 <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="col-sm-12">
-                    <input class="form-control" type="file" id="archivoExcelLocal" />
-                    <br />
-                    <div class="text-center">
-                        <button class="btn btn-success" type="button" id="btnCargarExcelLocal">Cargar Excel</button>
+                <div class="col-12" id="btn-plantillas">
+                    <div class="col-md-12">
+                        <button class="btn btn-default btn-block btn-sm mb-2" id="btnPlantillaLocal" type="button"><i class="fa fa-download"></i> Plantilla Local</button>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-default btn-block btn-sm mb-2" id="btnPlantillaCaja" type="button"><i class="fa fa-download"></i> Plantilla Caja</button>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-default btn-block btn-sm mb-2" id="btnPlantillaHorario" type="button"><i class="fa fa-download"></i> Plantilla Horario</button>
                     </div>
                 </div>
             </div>
@@ -293,12 +335,30 @@
     </div>
 </div>
 
-<!-- MODAL ERRORES CAJA-->
-<div class="modal fade" id="modalErroresImportacion" data-bs-backdrop="static">
+<!-- MODAL HORARIO -->
+<div class="modal fade" id="modalHorario" data-bs-backdrop="static">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
-                <h6 class="modal-title" id="tituloModalCaja"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h6 class="modal-title" id="tituloModalHorario"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnActualizarHorario" class="btn btn-primary">Guardar</button>
+                <button id="btnGuardarHorario" class="btn btn-primary">Guardar</button>
+                <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ERRORES -->
+<div class="modal fade" id="modalErrores" data-bs-backdrop="static">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalErrores"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <table class="table table-responsive">
@@ -308,7 +368,7 @@
                             <th>Mensaje</th>
                         </tr>
                     </thead>
-                    <tbody id="tbodyErroresCaja">
+                    <tbody id="tbodyErrores">
                     </tbody>
                 </table>
             </div>

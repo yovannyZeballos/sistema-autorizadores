@@ -36,14 +36,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMaeZona = new RepositorioMaeZona(this);
 			RepositorioMaeLocal = new RepositorioMaeLocal(this);
 			RepositorioMaeCaja = new RepositorioMaeCaja(this);
-			RepositorioInvCajas = new RepositorioInvCajas(this);
+            RepositorioMaeHorario = new RepositorioMaeHorario(this);
+
+            RepositorioInvCajas = new RepositorioInvCajas(this);
 			RepositorioInvTipoActivo = new RepositorioInvTipoActivo(this);
-			RepositorioMaeEmpresa = new RepositorioMaeEmpresa(this);
-			RepositorioMaeCadena = new RepositorioMaeCadena(this);
-			RepositorioMaeRegion = new RepositorioMaeRegion(this);
-			RepositorioMaeZona = new RepositorioMaeZona(this);
-			RepositorioMaeLocal = new RepositorioMaeLocal(this);
-			RepositorioMaeCaja = new RepositorioMaeCaja(this);
 
 			RepositorioInventarioActivo = new RepositorioInventarioActivo(this);
 			RepositorioApertura = new RepositorioApertura(this);
@@ -85,6 +81,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMaeZona RepositorioMaeZona { get; private set; }
 		public IRepositorioMaeLocal RepositorioMaeLocal { get; private set; }
 		public IRepositorioMaeCaja RepositorioMaeCaja { get; private set; }
+		public IRepositorioMaeHorario RepositorioMaeHorario { get; private set; }
 		public IRepositorioInvCajas RepositorioInvCajas { get; private set; }
 		public IRepositorioInvTipoActivo RepositorioInvTipoActivo { get; private set; }
 
@@ -129,6 +126,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MaeZonaTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeCajaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeHorarioTypeConfiguration());
 
 			modelBuilder.Configurations.Add(new InvActivoTypeConfiguration());
 			modelBuilder.Configurations.Add(new AperturaTypeConfiguration());
