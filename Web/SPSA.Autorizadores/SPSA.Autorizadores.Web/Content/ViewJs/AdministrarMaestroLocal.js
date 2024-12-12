@@ -21,7 +21,7 @@ var urlModalCrearEditarCaja = baseUrl + 'Maestros/MaeCaja/CrearEditarCaja';
 var urlFormCrearHorario = baseUrl + 'Maestros/MaeHorario/FormularioCrear';
 var urlFormEditarHorario = baseUrl + 'Maestros/MaeHorario/FormularioEditar';
 
-var urlImportarLocales = baseUrl + 'Maestros/MaeLocal/ImportarExcelLocal';
+var urlImportarLocales = baseUrl + 'Maestros/MaeLocal/ImportarExcel';
 var urlImportarCajas = baseUrl + 'Maestros/MaeCaja/ImportarExcel';
 
 var urlDescargarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/DescargarLocalPorEmpresa';
@@ -75,6 +75,10 @@ var AdministrarMaestroLocal = function () {
             codZonaAnterior = request.CodZona;
             obtenerLocal(request);
             closeLoading();
+        });
+
+        $("#btnPlantillas").on("click", function () {
+            $("#modalPlantillas").modal('show');
         });
 
         $("#btnNuevoLocal").on("click", function () {
@@ -371,35 +375,16 @@ var AdministrarMaestroLocal = function () {
             });
         });
 
-
-
-        $("#btnAbrirModalExcelLocal").click(function () {
-            $("#modalImportarLocal").modal('show');
+        $("#btnPlantillaLocal").on("click", function () {
+            descargarPlantillas("Plantilla_Local");
         });
 
-        $("#btnCargarExcelLocal").on("click", function () {
-            var inputFile = document.getElementById('archivoExcelLocal');
-            var archivoSeleccionado = inputFile.files.length > 0;
-
-            if (archivoSeleccionado) {
-                swal({
-                    title: "¿Está seguro importar el archivo?",
-                    text: " Sí el código de local existe, este sera actualizado con los nuevos datos recibidos.",
-                    icon: "warning",
-                    buttons: ["No", "Si"],
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        importarExcelLocales();
-                    }
-                });
-            } else {
-                alert('Por favor, seleccione un archivo antes de continuar.');
-            }
-        });
-
-        $("#btnDescargarPlantillas").on("click", function () {
+        $("#btnPlantillaCaja").on("click", function () {
             descargarPlantillas("Plantilla_Caja");
+        });
+
+        $("#btnPlantillaHorario").on("click", function () {
+            descargarPlantillas("Plantilla_Horario");
         });
 
         $("#btnDescargarLocalesPorEmpresa").on("click", function () {
@@ -423,6 +408,14 @@ var AdministrarMaestroLocal = function () {
 
         $('#excelImportarCajas').change(function (e) {
             importarCajasDesdeExcel();
+        });
+
+        $("#btnImportarLocales").on("click", function () {
+            $("#excelImportarLocales").trigger("click");
+        });
+
+        $('#excelImportarLocales').change(function (e) {
+            importarLocalesDesdeExcel();
         });
     };
 
@@ -1049,50 +1042,6 @@ var AdministrarMaestroLocal = function () {
         $("#txtCodLocalSunat").val(local.CodLocalSunat);
     }
 
-    const importarExcelLocales = function () {
-        var archivo = document.getElementById('archivoExcelLocal').files[0];
-        var formData = new FormData();
-        formData.append('archivoExcel', archivo);
-
-        $.ajax({
-            url: urlImportarLocales,
-            type: "post",
-            data: formData,
-            dataType: "json",
-            contentType: false,
-            processData: false,
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-                $("#archivoExcelLocal").val(null);
-                $("#modalImportarLocal").modal('hide');
-            },
-            success: function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
-
-                        if (response.Errores.length > 0) {
-                            let html = "";
-                            response.Errores.map((error) => {
-                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
-                            });
-                            $('#tbodyErroresCaja').html(html);
-                            $('#modalErroresImportacionExcel').modal("show");
-                        }
-                    });
-                    return;
-                }
-                swal({ text: response.Mensaje, icon: "success", });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
-    }
-
     const recargarDataTableCajas = async function () {
 
         const request = {
@@ -1494,8 +1443,8 @@ var AdministrarMaestroLocal = function () {
                             response.Errores.map((error) => {
                                 html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
                             });
-                            $('#tbodyErroresCaja').html(html);
-                            $('#modalErroresImportacion').modal("show");
+                            $('#tbodyErrores').html(html);
+                            $('#modalErrores').modal("show");
                         }
                     });
                     return;
@@ -1508,7 +1457,50 @@ var AdministrarMaestroLocal = function () {
             }
         });
     }
-    
+
+    const importarLocalesDesdeExcel = function () {
+        var formData = new FormData();
+        var uploadFiles = $('#excelImportarLocales').prop('files');
+        formData.append("excelImportarLocales", uploadFiles[0]);
+
+        $.ajax({
+            url: urlImportarLocales,
+            type: "post",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+                $("#excelImportarLocales").val(null);
+            },
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
+
+                        if (response.Errores.length > 0) {
+                            let html = "";
+                            response.Errores.map((error) => {
+                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
+                            });
+                            $('#tbodyErrores').html(html);
+                            $('#modalErrores').modal("show");
+                        }
+                    });
+                    return;
+                }
+                swal({ text: response.Mensaje, icon: "success", });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+  
     const descargarPlantillas = function (nombreCarpeta) {
         $.ajax({
             url: urlDescargarPlantilla,
@@ -1661,12 +1653,9 @@ var AdministrarMaestroLocal = function () {
             checkSession(async function () {
                 eventos();
                 inputMask();
-                showLoading();
+                //showLoading();
                 await cargarComboEmpresa();
-                //await cargarComboFormato();
-                //await visualizarDataTableCajas();
-                closeLoading();
-
+                //closeLoading();
                 visualizarDataTableLocales();
 
             });

@@ -9,6 +9,7 @@ using System.Web;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
@@ -57,28 +58,35 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarExcelLocal(HttpPostedFileBase archivoExcel)
+        public async Task<JsonResult> ImportarExcel()
         {
-            if (archivoExcel is null)
+            var respuesta = new RespuestaComunExcelDTO();
+            foreach (var fileKey in Request.Files)
             {
-                var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
-                response.Ok = false;
-                response.Mensaje = "Se encontraron algunos errores en el archivo";
-                response.Errores.Add(new ErroresExcelDTO
+                HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
+                if (archivo is null)
                 {
-                    Fila = 1,
-                    Mensaje = "No se ha seleccionado ningun archivo."
-                });
+                    var response = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
+                    response.Ok = false;
+                    response.Mensaje = "Se encontraron algunos errores en el archivo";
+                    response.Errores.Add(new ErroresExcelDTO
+                    {
+                        Fila = 1,
+                        Mensaje = "No se ha seleccionado ningun archivo."
+                    });
 
-                return Json(response);
-            }
-            else
-            {
-                var command = new ImportarMaeLocalCommand { ArchivoExcel = archivoExcel.InputStream };
-                var response = await _mediator.Send(command);
+                    return Json(response);
+                }
+                else
+                {
+                    var command = new ImportarMaeLocalCommand { ArchivoExcel = archivo.InputStream };
+                    var response = await _mediator.Send(command);
 
-                return Json(response);
+                    return Json(response);
+                }
             }
+
+            return Json(respuesta);
         }
 
         [HttpPost]
@@ -105,12 +113,6 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
         }
-
-        //[HttpPost]
-        //public ActionResult CrearEditarCaja(MaeCajaDTO model)
-        //{
-        //    return PartialView("_CrearEditarCaja", model);
-        //}
 
     }
 }

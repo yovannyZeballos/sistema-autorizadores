@@ -56,9 +56,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands
                         respuesta.Mensaje = "Horario no existe";
                         return respuesta;
                     }
-
-                    //_mapper.Map(request, horario);
-                    //var horario = _mapper.Map<Mae_Horario>(request);
                     _contexto.RepositorioMaeHorario.Eliminar(horario);
                     await _contexto.GuardarCambiosAsync();
                 }
