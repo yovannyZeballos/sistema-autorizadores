@@ -422,76 +422,109 @@ var ValesRedimidos = function () {
             FechaInicio: $("#txtFechaInicio").val(),
             FechaFin: $("#txtFechaFin").val(),
         };
+
+        var dataTableRegistrosId = "#tableReportes";
+
+        if ($.fn.DataTable.isDataTable(dataTableRegistrosId)) {
+            $(dataTableRegistrosId).DataTable().clear().destroy();
+            $(dataTableRegistrosId + " tbody").empty();
+            $(dataTableRegistrosId + " thead").empty();
+        }
+
+        showLoading();
+
         $.ajax({
             url: dtUrl,
-            type: "post",
-            data: { request },
-            dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                CodLocal: request.CodLocal,
+                FechaInicio: request.FechaInicio,
+                FechaFin: request.FechaFin,
+                draw: 1,
+                startRow: 1,
+                pageSize: 50
+            }),
             success: function (response) {
+                closeLoading();
 
                 if (!response.Ok) {
                     swal({
-                        text: "Ocurrio un error, vuelve a intentar. " + response.Mensaje,
+                        text: "Ocurrió un error: " + response.Mensaje,
                         icon: "error",
                     });
+                    return;
                 }
 
-                var columnas = [];
-
-                response.Columnas.forEach((x) => {
-                    columnas.push({
-                        title: x,
-                        data: x.replace(" ", "").replace(".", ""),
-                        defaultContent: "",
+                const columnas = [];
+                const totalColumnas = response.Columnas.length;
+                if (response.Columnas && response.Columnas.length > 0) {
+                    response.Columnas.forEach((col, index) => {
+                        columnas.push({
+                            title: col,
+                            data: col.replace(" ", "").replace(".", ""),
+                            defaultContent: "",
+                            orderable: false,
+                            visible: index < totalColumnas - 2
+                        });
                     });
-                });
-
-                if (dataTableRegistros != null) {
-                    dataTableRegistros.clear();
-                    dataTableRegistros.destroy();
-                    dataTableRegistros = null;
                 }
-
-                var dataTableRegistrosId = "#tableReportes";
-                $(dataTableRegistrosId + " tbody").empty();
-                $(dataTableRegistrosId + " thead").empty();
-
-                if (columnas.length == 0) return;
 
                 dataTableRegistros = $(dataTableRegistrosId).DataTable({
+                    pageLength: 50,
+                    searching: false,
+                    data: response.Data,
+                    columns: columnas,
+                    serverSide: true,
+                    processing: true,
+                    paging: true,
+                    scrollY: "400px",
+                    scrollX: true,
+                    ajax: {
+                        url: dtUrl,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: function (d) {
+                            return JSON.stringify({
+                                Draw: d.draw,
+                                StartRow: d.start + 1,
+                                PageSize: d.length,
+                                CodLocal: request.CodLocal,
+                                FechaInicio: request.FechaInicio,
+                                FechaFin: request.FechaFin
+                            });
+                        },
+                        dataSrc: function (json) {
+                            if (!json || !json.Columnas || !json.Data) {
+                                swal({
+                                    text: "La respuesta del servidor no contiene las propiedades esperadas.",
+                                    icon: "error",
+                                });
+                                return [];
+                            }
+                            return json.Data;
+                        }
+                    },
                     language: {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
+                        lengthMenu: "Mostrar _MENU_ registros por página",
+                        zeroRecords: "No se encontraron resultados",
+                        info: "Mostrando página _PAGE_ de _PAGES_",
+                        infoEmpty: "No hay registros disponibles",
+                        infoFiltered: "(filtrado de _MAX_ registros totales)"
                     },
-                    scrollY: '400px',
-                    scrollX: true,
-                    scrollCollapse: true,
-                    paging: false,
-                    "columns": columnas,
-                    "data": response.Data,
-                    "bAutoWidth": false
                 });
-
-                //dataTableRegistros.buttons().container().prependTo($('#tableColaboradorCesado_filter'));
-                $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                closeLoading();
                 swal({
-                    text: jqXHR.responseText,
+                    text: "Error de conexión: " + textStatus,
                     icon: "error",
                 });
             }
         });
-
-
     };
-
 
     const validarSelecion = function (count) {
         if (count === 0) {

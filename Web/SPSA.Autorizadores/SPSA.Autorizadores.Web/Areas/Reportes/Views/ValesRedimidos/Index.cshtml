@@ -5,6 +5,27 @@
 
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
+        <div class="page-title">Dasboard de inventario de cajas_2</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1"><a href="javascript:;">Reportes</a></li>
+            <li class="breadcrumb-item1 active">Dashboard Power BI</li>
+        </ol>
+    </div>
+</div>
+
+<iframe title="Dasboard de inventario de cajas_2" 
+        width="800" 
+        height="600" 
+        src="https://app.powerbi.com/view?r=eyJrIjoiZjMwY2Q0YjAtYjMwZC00OWJhLWE0MTctZDk1ODU4YTA4NGQ0IiwidCI6IjVkYWFiZTY1LWZmNTMtNDMzNi1hNDQ4LTJmNjFlY2YwYjA1OSIsImMiOjR9" 
+        frameborder="0">
+</iframe>
+
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
         <div class="page-title">Vales Redimidos</div>
     </div>
     <div class="page-rightheader ms-md-auto">
@@ -115,9 +136,6 @@
     <div class="col-xl-12">
         <div class="card overflow-hidden">
             <div class="card-body">
-                @*<div class="form-group data-table-btn">
-                        <button id="btnExportar" class="btn btn-sm btn-info mb-4">Exportar</button>
-                    </div>*@
                 <table id="tableReportes" class="table text-nowrap border-bottom">
                     <thead>
                     </thead>

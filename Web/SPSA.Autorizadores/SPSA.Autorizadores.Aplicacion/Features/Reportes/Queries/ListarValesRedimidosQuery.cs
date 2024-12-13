@@ -15,6 +15,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Reportes.Queries
         public string CodLocal { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
+        public int StartRow { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public int Draw { get; set; } = 0;
     }
 
     public class ListarValesRedimidosHandler : IRequestHandler<ListarValesRedimidosQuery, ListarComunDTO<Dictionary<string, object>>>
@@ -32,25 +35,52 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Reportes.Queries
 
             try
             {
-                response.Columnas = new List<string>();
-                response.Data = new List<Dictionary<string, object>>();
-                var dt = await _repositorioReportes.ListarValesRedimidosAsync(request.CodLocal, request.FechaInicio, request.FechaFin);
-                foreach (DataColumn colum in dt.Columns)
-                {
-                    response.Columnas.Add(colum.ColumnName);
-                }
+                int endRow = request.StartRow + request.PageSize - 1;
+
+                var dt = await _repositorioReportes.ListarValesRedimidosAsync(
+                    request.CodLocal,
+                    request.FechaInicio,
+                    request.FechaFin,
+                    request.StartRow,
+                    endRow
+                );
+
+                response.TotalRegistros = dt.Rows.Count > 0 ? Convert.ToInt32(dt.Rows[0]["TOTAL_RECORDS"]) : 0;
+
+                response.Columnas = dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
 
                 response.Data = dt.AsEnumerable()
-                         .Select(r => r.Table.Columns.Cast<DataColumn>()
-                         .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
-                      ).ToDictionary(z => z.Key.Replace(" ", "")
-                                              .Replace(".", "")
-                                              .Replace("á", "a")
-                                              .Replace("é", "e")
-                                              .Replace("í", "i")
-                                              .Replace("ó", "o")
-                                              .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
-                   ).ToList();
+                                .Select(r => r.Table.Columns.Cast<DataColumn>()
+                                .Select(c => new KeyValuePair<string, object>(
+                                    c.ColumnName,
+                                    r[c.Ordinal] is DateTime dateTime ? dateTime.ToString("dd/MM/yyyy") : r[c.Ordinal]
+                                ))
+                                .ToDictionary(
+                                    kvp => kvp.Key.Replace(" ", "").Replace(".", "").Replace("á", "a")
+                                        .Replace("é", "e").Replace("í", "i").Replace("ó", "o").Replace("ú", "u"),
+                                    kvp => kvp.Value
+                                ))
+                                .ToList();
+
+                //response.Columnas = new List<string>();
+                //response.Data = new List<Dictionary<string, object>>();
+                //var dt = await _repositorioReportes.ListarValesRedimidosAsync(request.CodLocal, request.FechaInicio, request.FechaFin);
+                //foreach (DataColumn colum in dt.Columns)
+                //{
+                //    response.Columnas.Add(colum.ColumnName);
+                //}
+
+                //response.Data = dt.AsEnumerable()
+                //         .Select(r => r.Table.Columns.Cast<DataColumn>()
+                //         .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
+                //      ).ToDictionary(z => z.Key.Replace(" ", "")
+                //                              .Replace(".", "")
+                //                              .Replace("á", "a")
+                //                              .Replace("é", "e")
+                //                              .Replace("í", "i")
+                //                              .Replace("ó", "o")
+                //                              .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
+                //   ).ToList();
             }
             catch (Exception ex)
             {

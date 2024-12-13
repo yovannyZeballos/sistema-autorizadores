@@ -6,5 +6,6 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
 	{
 		public List<T> Data { get; set; }
 		public List<string> Columnas { get; set; }
+		public int TotalRegistros { get; set; }
 	}
 }

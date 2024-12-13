@@ -245,6 +245,7 @@
     <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Reportes\Controllers\AdministrarReportesController.cs" />
+    <Compile Include="Areas\Reportes\Controllers\PowerBiController.cs" />
     <Compile Include="Areas\Reportes\Controllers\ValesRedimidosController.cs" />
     <Compile Include="Areas\Reportes\ReportesAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
@@ -2833,6 +2834,7 @@
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
     <Folder Include="Areas\Reportes\Data\" />
+    <Folder Include="Areas\Reportes\Views\PowerBi\" />
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />
