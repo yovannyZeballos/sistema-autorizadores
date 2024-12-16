@@ -9,7 +9,8 @@ const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesA
 const urlListarZonasAsociadas = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
 const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
 
-var urlListarValesRedimidos = baseUrl + 'Reportes/ValesRedimidos/Listar';
+var urlListarValesRedimidos = baseUrl + 'Reportes/ValesRedimidos/Descargar';
+var urlListarValesRedimidosPaginado = baseUrl + 'Reportes/ValesRedimidos/ListarPaginado';
 
 var dataTableRegistros = null;
 
@@ -18,41 +19,11 @@ var ValesRedimidos = function () {
     var eventos = function () {
 
         $("#btnConsultar").on('click', function () {
-            visualizarDataTable(urlListarValesRedimidos);
+            visualizarDataTable(urlListarValesRedimidosPaginado);
         });
 
         $('#btnDescargar').click(function () {
-            // Convertir la tabla HTML a una cadena CSV
-            var csv = [];
-            var rows = document.querySelectorAll("#tableReportes tr");
-
-            if (rows.length == 0) {
-                return;
-            }
-
-            for (var i = 0; i < rows.length; i++) {
-                var row = [], cols = rows[i].querySelectorAll("td, th");
-
-                for (var j = 0; j < cols.length; j++) {
-                    row.push(cols[j].innerText);
-                }
-
-                csv.push(row.join("|"));
-            }
-
-            // Crear un Blob a partir de la cadena CSV
-            var csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
-
-            // Crear un enlace de descarga para el archivo CSV
-            var downloadLink = document.createElement("a");
-            downloadLink.download = "ReporteValesRedimidos.csv";
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = "none";
-
-            // Agregar el enlace al documento y hacer clic en él
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+            descargarExcel();
         });
 
         $("#cboEmpresa").on("change", function () {
@@ -525,6 +496,53 @@ var ValesRedimidos = function () {
             }
         });
     };
+
+    function descargarExcel() {
+
+        showLoading();
+
+        fetch(urlListarValesRedimidos, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": $('input[name="__RequestVerificationToken"]').val() || ""
+            },
+
+            body: JSON.stringify({
+                CodLocal: $("#cboLocal").val(),
+                FechaInicio: $("#txtFechaInicio").val(),
+                FechaFin: $("#txtFechaFin").val()
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.mensaje || "Error desconocido en la descarga");
+                    });
+                }
+                return response.blob(); // Convertir la respuesta a Blob
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "ValesRedimidos.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                swal({
+                    text: "Ocurrió un error: " + error.message,
+                    icon: "error",
+                });
+            })
+            .finally(() => {
+                closeLoading();
+            });
+    }
 
     const validarSelecion = function (count) {
         if (count === 0) {

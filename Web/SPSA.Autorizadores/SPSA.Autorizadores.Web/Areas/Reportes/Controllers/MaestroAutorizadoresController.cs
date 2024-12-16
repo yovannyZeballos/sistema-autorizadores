@@ -1,30 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System;
 using System.Web.Mvc;
 using MediatR;
-using SPSA.Autorizadores.Aplicacion.Features.Reportes.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Reportes.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Reportes.Commands;
 
 namespace SPSA.Autorizadores.Web.Areas.Reportes.Controllers
 {
-    public class ValesRedimidosController : Controller
+    public class MaestroAutorizadoresController : Controller
     {
         private readonly IMediator _mediator;
 
-        public ValesRedimidosController(IMediator mediator)
+        public MaestroAutorizadoresController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        // GET: Reportes/ValesRedimidos
+        // GET: Reportes/MaestroAutorizadores
         public ActionResult Index()
         {
-            ViewBag.PowerBiEmbedUrl = "https://app.powerbi.com/view?r=eyJrIjoiZjMwY2Q0YjAtYjMwZC00OWJhLWE0MTctZDk1ODU4YTA4NGQ0IiwidCI6IjVkYWFiZTY1LWZmNTMtNDMzNi1hNDQ4LTJmNjFlY2YwYjA1OSIsImMiOjR9";
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Descargar(DescargarValesRedimidosCommand request)
+        public async Task<ActionResult> Descargar(DescargarMaeAutorizadoresCommand request)
         {
             try
             {
@@ -45,9 +44,8 @@ namespace SPSA.Autorizadores.Web.Areas.Reportes.Controllers
             }
         }
 
-
         [HttpPost]
-        public async Task<JsonResult> ListarPaginado(ListarValesRedimidosQuery request)
+        public async Task<JsonResult> ListarPaginado(ListarAutorizadoresPaginadoQuery request)
         {
             try
             {
@@ -56,8 +54,8 @@ namespace SPSA.Autorizadores.Web.Areas.Reportes.Controllers
                 return Json(new
                 {
                     draw = request.Draw,
-                    recordsTotal = respuesta.TotalRegistros, // Total de registros sin paginar
-                    recordsFiltered = respuesta.TotalRegistros, // Total de registros después de filtros (puede variar si hay filtros adicionales)
+                    recordsTotal = respuesta.TotalRegistros,
+                    recordsFiltered = respuesta.TotalRegistros,
                     respuesta.Data,
                     respuesta.Columnas,
                     respuesta.Ok
@@ -68,5 +66,6 @@ namespace SPSA.Autorizadores.Web.Areas.Reportes.Controllers
                 return Json(new { draw = request.Draw, Mensaje = ex.Message, Ok = false });
             }
         }
+
     }
 }
