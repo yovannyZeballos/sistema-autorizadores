@@ -36,6 +36,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 
         public async Task<RespuestaComunExcelDTO> Handle(ImportarMaeLocalCommand request, CancellationToken cancellationToken)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-PE");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-PE");
+
             var respuesta = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
 
             try
@@ -47,26 +50,49 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
                         var worksheet = workbook.Worksheet(1);
                         var rowCount = worksheet.RowsUsed().Count();
 
+                        var columnMapping = worksheet.Row(1).CellsUsed()
+                            .ToDictionary(cell => cell.GetString(), cell => cell.Address.ColumnNumber);
+
+                        var expectedColumns = new[]
+                        {
+                            "COD_EMPRESA", "COD_CADENA", "COD_REGION", "COD_ZONA", "COD_LOCAL", "NOM_LOCAL",
+                            "TIP_ESTADO", "COD_LOCAL_PMM", "COD_LOCAL_OFIPLAN", "NOM_LOCAL_OFIPLAN",
+                            "COD_LOCAL_SUNAT", "IP"
+                        };
+
+                        foreach (var col in expectedColumns)
+                        {
+                            if (!columnMapping.ContainsKey(col))
+                            {
+                                throw new Exception($"La columna '{col}' no se encontró en el archivo Excel. Verifica que el archivo contenga todas las columnas requeridas.");
+                            }
+                        }
+
                         for (int row = 2; row <= rowCount; row++)
                         {
                             try
                             {
                                 var nuevoLocal = new Mae_Local
                                 {
-                                    CodEmpresa = worksheet.Cell(row, 1).Value.ToString(),
-                                    CodCadena = worksheet.Cell(row, 2).Value.ToString(),
-                                    CodRegion = worksheet.Cell(row, 3).Value.ToString(),
-                                    CodZona = worksheet.Cell(row, 4).Value.ToString(),
-                                    CodLocal = worksheet.Cell(row, 5).Value.ToString(),
-                                    NomLocal = worksheet.Cell(row, 6).Value.ToString(),
-                                    TipEstado = worksheet.Cell(row, 7).Value.ToString(),
-                                    CodLocalPMM = worksheet.Cell(row, 8).Value.ToString(),
-                                    CodLocalOfiplan = worksheet.Cell(row, 9).Value.ToString(),
-                                    NomLocalOfiplan = worksheet.Cell(row, 10).Value.ToString(),
-                                    CodLocalSunat = worksheet.Cell(row, 11).Value.ToString()
+                                    CodEmpresa = worksheet.Cell(row, columnMapping["COD_EMPRESA"]).GetString(),
+                                    CodCadena = worksheet.Cell(row, columnMapping["COD_CADENA"]).GetString(),
+                                    CodRegion = worksheet.Cell(row, columnMapping["COD_REGION"]).GetString(),
+                                    CodZona = worksheet.Cell(row, columnMapping["COD_ZONA"]).GetString(),
+                                    CodLocal = worksheet.Cell(row, columnMapping["COD_LOCAL"]).GetString(),
+                                    NomLocal = worksheet.Cell(row, columnMapping["NOM_LOCAL"]).GetString(),
+                                    TipEstado = worksheet.Cell(row, columnMapping["TIP_ESTADO"]).GetString(),
+                                    CodLocalPMM = worksheet.Cell(row, columnMapping["COD_LOCAL_PMM"]).GetString(),
+                                    CodLocalOfiplan = worksheet.Cell(row, columnMapping["COD_LOCAL_OFIPLAN"]).GetString(),
+                                    NomLocalOfiplan = worksheet.Cell(row, columnMapping["NOM_LOCAL_OFIPLAN"]).GetString(),
+                                    CodLocalSunat = worksheet.Cell(row, columnMapping["COD_LOCAL_SUNAT"]).GetString(),
+                                    Ip = worksheet.Cell(row, columnMapping["IP"]).GetString(),
                                 };
 
-                                bool existe = await _contexto.RepositorioMaeLocal.Existe(x => x.CodEmpresa == nuevoLocal.CodEmpresa && x.CodCadena == nuevoLocal.CodCadena && x.CodRegion == nuevoLocal.CodRegion && x.CodZona == nuevoLocal.CodZona && x.CodLocal == nuevoLocal.CodLocal);
+                                bool existe = await _contexto.RepositorioMaeLocal.Existe(x =>
+                                                                                        x.CodEmpresa == nuevoLocal.CodEmpresa && x.CodCadena == nuevoLocal.CodCadena &&
+                                                                                        x.CodRegion == nuevoLocal.CodRegion && x.CodZona == nuevoLocal.CodZona &&
+                                                                                        x.CodLocal == nuevoLocal.CodLocal);
+
                                 if (existe)
                                 {
                                     _contexto.RepositorioMaeLocal.Actualizar(nuevoLocal);
@@ -80,24 +106,36 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
                             catch (Exception ex)
                             {
                                 _contexto.Rollback();
+
+                                string mensajeError = string.Empty;
+
+                                Exception innerEx = ex.InnerException;
+                                while (innerEx != null)
+                                {
+                                    if (innerEx is Npgsql.PostgresException postgresEx)
+                                    {
+                                        mensajeError += " " + innerEx.Message;
+                                    }
+                                    innerEx = innerEx.InnerException;
+                                }
+
+                                if (ex.HResult == -2146233079)
+                                {
+                                    mensajeError = "Ya existe un local con estas características.";
+                                }
+
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = row,
-                                    Mensaje = ex.Message
+                                    Mensaje = mensajeError
                                 });
+                                continue;
                             }
                         }
 
-                        if (respuesta.Errores.Count == 0)
-                        {
-                            respuesta.Ok = true;
-                            respuesta.Mensaje = "Archivo importado correctamente";
-                        }
-                        else
-                        {
-                            respuesta.Ok = false;
-                            respuesta.Mensaje = "Se encontraron algunos errores en el archivo";
-                        }
+                        respuesta.Ok = respuesta.Errores.Count == 0;
+                        respuesta.Mensaje = respuesta.Ok ? "Archivo importado correctamente." : "archivo importado con algunos errores.";
+
                     }
                 }
             }

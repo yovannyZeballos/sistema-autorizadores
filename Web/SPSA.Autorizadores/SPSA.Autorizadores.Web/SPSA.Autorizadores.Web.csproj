@@ -69,6 +69,15 @@
     <Reference Include="MediatR, Version=9.0.0.0, Culture=neutral, PublicKeyToken=bb9a41a5e8aaa7e2, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.9.0.0\lib\net461\MediatR.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Routing.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Routing.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -81,6 +90,12 @@
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.Headers.2.2.0\lib\netstandard2.0\Microsoft.Net.Http.Headers.dll</HintPath>
     </Reference>
     <Reference Include="Npgsql, Version=4.1.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.4.1.3\lib\net461\Npgsql.dll</HintPath>
@@ -228,6 +243,7 @@
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCajaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeHorarioController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeRegionController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
@@ -244,6 +260,9 @@
     <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
     <Compile Include="Areas\Reportes\Controllers\AdministrarReportesController.cs" />
+    <Compile Include="Areas\Reportes\Controllers\MaestroAutorizadoresController.cs" />
+    <Compile Include="Areas\Reportes\Controllers\MaestroCajerosController.cs" />
+    <Compile Include="Areas\Reportes\Controllers\PowerBiController.cs" />
     <Compile Include="Areas\Reportes\Controllers\ValesRedimidosController.cs" />
     <Compile Include="Areas\Reportes\ReportesAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
@@ -2314,6 +2333,8 @@
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroTablas.js" />
+    <Content Include="Content\ViewJs\MaestroCajeros.js" />
+    <Content Include="Content\ViewJs\MaestroAutorizadores.js" />
     <Content Include="Content\ViewJs\ValesRedimidos.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
@@ -2723,7 +2744,6 @@
     <Content Include="Areas\Seguridad\Views\Perfil\Index.cshtml" />
     <Content Include="Areas\Seguridad\Views\Menu\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeLocal\Index.cshtml" />
-    <Content Include="Areas\Maestros\Views\MaeLocal\_CrearEditarCaja.cshtml" />
     <Content Include="Areas\Maestros\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeTablas\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarCadena.cshtml" />
@@ -2778,6 +2798,13 @@
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_CrearInvKardexLocal.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_EditarInvKardexLocal.cshtml" />
     <Content Include="Areas\Reportes\Views\ValesRedimidos\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeHorario\_CrearMaeHorario.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeHorario\_EditarMaeHorario.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeCaja\_CrearEditarCaja.cshtml" />
+    <Content Include="Plantillas_Tablas\Plantilla_Horario\TablaHorario.xlsx" />
+    <Content Include="Plantillas_Tablas\Plantilla_Local\TablaLocal.xlsx" />
+    <Content Include="Areas\Reportes\Views\MaestroAutorizadores\Index.cshtml" />
+    <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2824,16 +2851,15 @@
     <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Inventario\Views\InventarioTipoActivo\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
-    <Folder Include="Areas\Maestros\Views\MaeCaja\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
     <Folder Include="Areas\Reportes\Data\" />
+    <Folder Include="Areas\Reportes\Views\PowerBi\" />
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />
     <Folder Include="Plantillas_Tablas\Plantilla_Empresa\" />
-    <Folder Include="Plantillas_Tablas\Plantilla_Local\" />
     <Folder Include="Plantillas_Tablas\Plantilla_Region\" />
     <Folder Include="Plantillas_Tablas\Plantilla_Zona\" />
     <Folder Include="Views\Reportes\" />

@@ -16,6 +16,9 @@ using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.Horarios.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
@@ -38,6 +41,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Reportes.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Reportes.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries;
@@ -229,7 +233,16 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<DescargarMaestroCajaHandler>().As<IRequestHandler<DescargarMaeCajaCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<DescargarMaestroCajaPorEmpresaHandler>().As<IRequestHandler<DescargarMaeCajaPorEmpresaCommand, DescargarMaestroDTO>>();
 
-			builder.RegisterType<ListarInvTipoActivoHandler>().As<IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>>();
+            builder.RegisterType<ListarMaeHorarioHandler>().As<IRequestHandler<ListarMaeHorarioQuery, GenericResponseDTO<List<ListarMaeHorarioDTO>>>>();
+            builder.RegisterType<ObtenerMaeHorarioHandler>().As<IRequestHandler<ObtenerMaeHorarioQuery, GenericResponseDTO<ObtenerMaeHorarioDTO>>>();
+            builder.RegisterType<CrearMaeHorarioHandler>().As<IRequestHandler<CrearMaeHorarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMaeHorarioHandler>().As<IRequestHandler<ActualizarMaeHorarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMaeHorarioHandler>().As<IRequestHandler<ImportarMaeHorarioCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<EliminarMaeHorarioHandler>().As<IRequestHandler<EliminarMaeHorarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<DescargarMaestroHorarioHandler>().As<IRequestHandler<DescargarMaeHorarioCommand, DescargarMaestroDTO>>();
+            //builder.RegisterType<DescargarMaestroHorarioPorEmpresaHandler>().As<IRequestHandler<DescargarMaeHorarioPorEmpresaCommand, DescargarMaestroDTO>>();
+
+            builder.RegisterType<ListarInvTipoActivoHandler>().As<IRequestHandler<ListarInvTipoActivoQuery, GenericResponseDTO<List<InvTipoActivoDTO>>>>();
             builder.RegisterType<DescargarInvTiposActivoHandler>().As<IRequestHandler<DescargarInvTiposActivoCommand, DescargarMaestroDTO>>();
 
             builder.RegisterType<ListarInvActivoHandler>().As<IRequestHandler<ListarInvActivoQuery, GenericResponseDTO<List<ListarInvActivoDTO>>>>();
@@ -266,10 +279,15 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarLocalesCambioPrecioHandler>().As<IRequestHandler<ListarLocalesCambioPrecioQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarLocalesNotaCreditoHandler>().As<IRequestHandler<ListarLocalesNotaCreditoQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarValesRedimidosHandler>().As<IRequestHandler<ListarValesRedimidosQuery, ListarComunDTO<Dictionary<string, object>>>>();
+            builder.RegisterType<DescargarValesRedimidosHandler>().As<IRequestHandler<DescargarValesRedimidosCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<ListarAutorizadoresPaginadoHandler>().As<IRequestHandler<ListarAutorizadoresPaginadoQuery, ListarComunDTO<Dictionary<string, object>>>>();
+            builder.RegisterType<DescargarMaeAutorizadoresHandler>().As<IRequestHandler<DescargarMaeAutorizadoresCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<ListarCajerosPaginadoHandler>().As<IRequestHandler<ListarCajerosPaginadoQuery, ListarComunDTO<Dictionary<string, object>>>>();
+            builder.RegisterType<DescargarMaeCajerosHandler>().As<IRequestHandler<DescargarMaeCajerosCommand, DescargarMaestroDTO>>();
 
-			#endregion <--REPORTES-->
+            #endregion <--REPORTES-->
 
-			builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+            builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 			builder.RegisterType<ProcesarActualizacionEstadoCierreHandler>().As<IRequestHandler<ProcesarActualizacionEstadoCierreCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImprimirBarrasAutorizadorHandler>().As<IRequestHandler<ImprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
 			builder.RegisterType<ReimprimirBarrasAutorizadorHandler>().As<IRequestHandler<ReimprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();

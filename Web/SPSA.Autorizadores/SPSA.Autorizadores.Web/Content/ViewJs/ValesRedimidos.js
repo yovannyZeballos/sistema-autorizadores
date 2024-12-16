@@ -9,7 +9,8 @@ const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesA
 const urlListarZonasAsociadas = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
 const urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadas';
 
-var urlListarValesRedimidos = baseUrl + 'Reportes/ValesRedimidos/Listar';
+var urlListarValesRedimidos = baseUrl + 'Reportes/ValesRedimidos/Descargar';
+var urlListarValesRedimidosPaginado = baseUrl + 'Reportes/ValesRedimidos/ListarPaginado';
 
 var dataTableRegistros = null;
 
@@ -18,41 +19,11 @@ var ValesRedimidos = function () {
     var eventos = function () {
 
         $("#btnConsultar").on('click', function () {
-            visualizarDataTable(urlListarValesRedimidos);
+            visualizarDataTable(urlListarValesRedimidosPaginado);
         });
 
         $('#btnDescargar').click(function () {
-            // Convertir la tabla HTML a una cadena CSV
-            var csv = [];
-            var rows = document.querySelectorAll("#tableReportes tr");
-
-            if (rows.length == 0) {
-                return;
-            }
-
-            for (var i = 0; i < rows.length; i++) {
-                var row = [], cols = rows[i].querySelectorAll("td, th");
-
-                for (var j = 0; j < cols.length; j++) {
-                    row.push(cols[j].innerText);
-                }
-
-                csv.push(row.join("|"));
-            }
-
-            // Crear un Blob a partir de la cadena CSV
-            var csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
-
-            // Crear un enlace de descarga para el archivo CSV
-            var downloadLink = document.createElement("a");
-            downloadLink.download = "ReporteValesRedimidos.csv";
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = "none";
-
-            // Agregar el enlace al documento y hacer clic en él
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+            descargarExcel();
         });
 
         $("#cboEmpresa").on("change", function () {
@@ -422,76 +393,156 @@ var ValesRedimidos = function () {
             FechaInicio: $("#txtFechaInicio").val(),
             FechaFin: $("#txtFechaFin").val(),
         };
+
+        var dataTableRegistrosId = "#tableReportes";
+
+        if ($.fn.DataTable.isDataTable(dataTableRegistrosId)) {
+            $(dataTableRegistrosId).DataTable().clear().destroy();
+            $(dataTableRegistrosId + " tbody").empty();
+            $(dataTableRegistrosId + " thead").empty();
+        }
+
+        showLoading();
+
         $.ajax({
             url: dtUrl,
-            type: "post",
-            data: { request },
-            dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                CodLocal: request.CodLocal,
+                FechaInicio: request.FechaInicio,
+                FechaFin: request.FechaFin,
+                draw: 1,
+                startRow: 1,
+                pageSize: 50
+            }),
             success: function (response) {
+                closeLoading();
 
                 if (!response.Ok) {
                     swal({
-                        text: "Ocurrio un error, vuelve a intentar. " + response.Mensaje,
+                        text: "Ocurrió un error: " + response.Mensaje,
                         icon: "error",
                     });
+                    return;
                 }
 
-                var columnas = [];
-
-                response.Columnas.forEach((x) => {
-                    columnas.push({
-                        title: x,
-                        data: x.replace(" ", "").replace(".", ""),
-                        defaultContent: "",
+                const columnas = [];
+                const totalColumnas = response.Columnas.length;
+                if (response.Columnas && response.Columnas.length > 0) {
+                    response.Columnas.forEach((col, index) => {
+                        columnas.push({
+                            title: col,
+                            data: col.replace(" ", "").replace(".", ""),
+                            defaultContent: "",
+                            orderable: false,
+                            visible: index < totalColumnas - 2
+                        });
                     });
-                });
-
-                if (dataTableRegistros != null) {
-                    dataTableRegistros.clear();
-                    dataTableRegistros.destroy();
-                    dataTableRegistros = null;
                 }
-
-                var dataTableRegistrosId = "#tableReportes";
-                $(dataTableRegistrosId + " tbody").empty();
-                $(dataTableRegistrosId + " thead").empty();
-
-                if (columnas.length == 0) return;
 
                 dataTableRegistros = $(dataTableRegistrosId).DataTable({
+                    pageLength: 50,
+                    searching: false,
+                    data: response.Data,
+                    columns: columnas,
+                    serverSide: true,
+                    processing: true,
+                    paging: true,
+                    scrollY: "400px",
+                    scrollX: true,
+                    ajax: {
+                        url: dtUrl,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: function (d) {
+                            return JSON.stringify({
+                                Draw: d.draw,
+                                StartRow: d.start + 1,
+                                PageSize: d.length,
+                                CodLocal: request.CodLocal,
+                                FechaInicio: request.FechaInicio,
+                                FechaFin: request.FechaFin
+                            });
+                        },
+                        dataSrc: function (json) {
+                            if (!json || !json.Columnas || !json.Data) {
+                                swal({
+                                    text: "La respuesta del servidor no contiene las propiedades esperadas.",
+                                    icon: "error",
+                                });
+                                return [];
+                            }
+                            return json.Data;
+                        }
+                    },
                     language: {
                         searchPlaceholder: 'Buscar...',
                         sSearch: '',
+                        lengthMenu: "Mostrar _MENU_ registros por página",
+                        zeroRecords: "No se encontraron resultados",
+                        info: "Mostrando página _PAGE_ de _PAGES_",
+                        infoEmpty: "No hay registros disponibles",
+                        infoFiltered: "(filtrado de _MAX_ registros totales)"
                     },
-                    scrollY: '400px',
-                    scrollX: true,
-                    scrollCollapse: true,
-                    paging: false,
-                    "columns": columnas,
-                    "data": response.Data,
-                    "bAutoWidth": false
                 });
-
-                //dataTableRegistros.buttons().container().prependTo($('#tableColaboradorCesado_filter'));
-                $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                closeLoading();
                 swal({
-                    text: jqXHR.responseText,
+                    text: "Error de conexión: " + textStatus,
                     icon: "error",
                 });
             }
         });
-
-
     };
 
+    function descargarExcel() {
+
+        showLoading();
+
+        fetch(urlListarValesRedimidos, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": $('input[name="__RequestVerificationToken"]').val() || ""
+            },
+
+            body: JSON.stringify({
+                CodLocal: $("#cboLocal").val(),
+                FechaInicio: $("#txtFechaInicio").val(),
+                FechaFin: $("#txtFechaFin").val()
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.mensaje || "Error desconocido en la descarga");
+                    });
+                }
+                return response.blob(); // Convertir la respuesta a Blob
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "ValesRedimidos.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                swal({
+                    text: "Ocurrió un error: " + error.message,
+                    icon: "error",
+                });
+            })
+            .finally(() => {
+                closeLoading();
+            });
+    }
 
     const validarSelecion = function (count) {
         if (count === 0) {

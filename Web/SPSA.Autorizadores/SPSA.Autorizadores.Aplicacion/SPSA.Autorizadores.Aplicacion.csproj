@@ -367,6 +367,16 @@
     <Compile Include="Features\Empresas\Queries\ListarEmpresasAsociadasQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ListarMaeEmpresaQuery.cs" />
     <Compile Include="Features\Empresas\Queries\ObtenerMaeEmpresaQuery.cs" />
+    <Compile Include="Features\Horarios\Commands\ActualizarMaeHorarioCommand.cs" />
+    <Compile Include="Features\Horarios\Commands\CrearMaeHorarioCommand.cs" />
+    <Compile Include="Features\Horarios\Commands\DescargarMaeHorarioCommand.cs" />
+    <Compile Include="Features\Horarios\Commands\EliminarMaeHorarioCommand.cs" />
+    <Compile Include="Features\Horarios\Commands\ImportarMaeHorarioCommand.cs" />
+    <Compile Include="Features\Horarios\DTOs\ListarMaeHorarioDTO.cs" />
+    <Compile Include="Features\Horarios\DTOs\MaeHorarioDTO.cs" />
+    <Compile Include="Features\Horarios\DTOs\ObtenerMaeHorarioDTO.cs" />
+    <Compile Include="Features\Horarios\Queries\ListarMaeHorarioQuery.cs" />
+    <Compile Include="Features\Horarios\Queries\ObtenerMaeHorarioQuery.cs" />
     <Compile Include="Features\InventarioActivo\Commands\ActualizarInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\CrearInvActivoCommand.cs" />
     <Compile Include="Features\InventarioActivo\Commands\DescargarInvActivoCommand.cs" />
@@ -435,8 +445,13 @@
     <Compile Include="Features\Regiones\Commands\ImportarMaeRegionCommand.cs" />
     <Compile Include="Features\Regiones\Queries\ListarMaeRegionQuery.cs" />
     <Compile Include="Features\Regiones\Queries\ObtenerMaeRegionQuery.cs" />
+    <Compile Include="Features\Reportes\Commands\DescargarMaeAutorizadoresCommand.cs" />
+    <Compile Include="Features\Reportes\Commands\DescargarMaeCajerosCommand.cs" />
+    <Compile Include="Features\Reportes\Commands\DescargarValesRedimidosCommand.cs" />
+    <Compile Include="Features\Reportes\Queries\ListarCajerosPaginadoQuery.cs" />
     <Compile Include="Features\Reportes\Queries\ListarLocalesCambioPrecioQuery.cs" />
     <Compile Include="Features\Reportes\Queries\ListarLocalesNotaCreditoQuery.cs" />
+    <Compile Include="Features\Reportes\Queries\ListarAutorizadoresPaginadoQuery.cs" />
     <Compile Include="Features\Reportes\Queries\ListarValesRedimidosQuery.cs" />
     <Compile Include="Features\Seguridad\Login\Queries\ObtenerJerarquiaOrganizacionalQuery.cs" />
     <Compile Include="Features\Seguridad\Menu\Commands\EliminarMenuCommand.cs" />
@@ -581,7 +596,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Reportes\Commands\" />
     <Folder Include="Features\Reportes\DTOs\" />
     <Folder Include="Features\TablasMae\Queries\" />
   </ItemGroup>

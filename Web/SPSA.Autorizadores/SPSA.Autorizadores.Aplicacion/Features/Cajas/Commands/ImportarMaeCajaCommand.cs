@@ -39,7 +39,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-PE");
             System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-PE");
 
-
             var respuesta = new RespuestaComunExcelDTO { Errores = new List<ErroresExcelDTO>() };
 
             try
@@ -155,7 +154,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands
 
                                 if (ex.HResult == -2146233079)
                                 {
-                                    mensajeError = "Ya existe un activo con estas características.";
+                                    mensajeError = "Ya existe una caja con estas características.";
                                 }
 
                                 respuesta.Errores.Add(new ErroresExcelDTO
