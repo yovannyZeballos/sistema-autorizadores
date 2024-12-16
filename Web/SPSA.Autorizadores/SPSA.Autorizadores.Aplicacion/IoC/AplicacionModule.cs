@@ -41,6 +41,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Reportes.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Reportes.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries;
@@ -278,10 +279,15 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarLocalesCambioPrecioHandler>().As<IRequestHandler<ListarLocalesCambioPrecioQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarLocalesNotaCreditoHandler>().As<IRequestHandler<ListarLocalesNotaCreditoQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarValesRedimidosHandler>().As<IRequestHandler<ListarValesRedimidosQuery, ListarComunDTO<Dictionary<string, object>>>>();
+            builder.RegisterType<DescargarValesRedimidosHandler>().As<IRequestHandler<DescargarValesRedimidosCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<ListarAutorizadoresPaginadoHandler>().As<IRequestHandler<ListarAutorizadoresPaginadoQuery, ListarComunDTO<Dictionary<string, object>>>>();
+            builder.RegisterType<DescargarMaeAutorizadoresHandler>().As<IRequestHandler<DescargarMaeAutorizadoresCommand, DescargarMaestroDTO>>();
+            builder.RegisterType<ListarCajerosPaginadoHandler>().As<IRequestHandler<ListarCajerosPaginadoQuery, ListarComunDTO<Dictionary<string, object>>>>();
+            builder.RegisterType<DescargarMaeCajerosHandler>().As<IRequestHandler<DescargarMaeCajerosCommand, DescargarMaestroDTO>>();
 
-			#endregion <--REPORTES-->
+            #endregion <--REPORTES-->
 
-			builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+            builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 			builder.RegisterType<ProcesarActualizacionEstadoCierreHandler>().As<IRequestHandler<ProcesarActualizacionEstadoCierreCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImprimirBarrasAutorizadorHandler>().As<IRequestHandler<ImprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
 			builder.RegisterType<ReimprimirBarrasAutorizadorHandler>().As<IRequestHandler<ReimprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
