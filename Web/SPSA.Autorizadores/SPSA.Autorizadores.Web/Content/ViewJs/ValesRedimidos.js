@@ -526,7 +526,7 @@ var ValesRedimidos = function () {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = "ValesRedimidos.xlsx";
+                a.download = "RpteValesRedimidos.xlsx";
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
