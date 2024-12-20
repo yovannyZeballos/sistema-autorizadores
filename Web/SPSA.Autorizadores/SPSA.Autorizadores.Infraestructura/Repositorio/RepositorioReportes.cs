@@ -87,38 +87,39 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                                     AND HED_LOCAL = :codLocal
                                 ),
                                 filtered_pagos AS (
-                                SELECT PAG_TIPOPAGO, PAG_MONTO, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX
+                                SELECT PAG_TIPOPAGO, PAG_MONTO, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX,PAG_BMAGNETICA,PAG_NUMCTA
                                 FROM ect2sp.ctx_pagos_trx
                                 WHERE PAG_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
                                     AND PAG_TIPOPAGO IN ('16', '06')
                                     AND HED_LOCAL = :codLocal
                                 )
                                 SELECT
-	                                p.PAG_TIPOPAGO,
-	                                tp.TPA_DESPAGO,
-	                                IL.CAD_NUMERO,
-	                                IC.CAD_DESCRIPCION,
-	                                t.HED_LOCAL,
-	                                IL.LOC_DESCRIPCION,
-	                                t.HED_POS,
-	                                t.HED_NUMTRX,
-	                                TO_CHAR(t.HED_FCONTABLE, 'yyyy-mm-dd') AS HED_FCONTABLE,
-	                                p.PAG_MONTO
+                                    p.PAG_TIPOPAGO  AS TIPO,
+                                    tp.TPA_DESPAGO  AS DESCRIPCION,
+                                    DECODE(p.PAG_TIPOPAGO,'16',p.PAG_BMAGNETICA,'06',p.PAG_NUMCTA) NUMERO,
+                                    IL.CAD_NUMERO AS ""COD EMPRESA"",
+                                    IC.CAD_DESCRIPCION  AS ""NOM EMPRESA"",
+                                    t.HED_LOCAL  AS ""COD LOCAL"",
+                                    IL.LOC_DESCRIPCION AS ""NOM LOCAL"",
+                                    t.HED_POS AS CAJA,
+                                    t.HED_NUMTRX AS TICKET,
+                                    TO_CHAR(t.HED_FCONTABLE, 'yyyy-mm-dd') AS ""F.CONTABLE"",
+                                    p.PAG_MONTO AS IMPORTE
                                 FROM
-	                                filtered_header t
+                                    filtered_header t
                                 JOIN
                                     filtered_pagos p
                                     ON
-	                                p.HED_PAIS = t.HED_PAIS
-	                                AND p.HED_ORIGENTRX = t.HED_ORIGENTRX
-	                                AND p.HED_LOCAL = t.HED_LOCAL
-	                                AND p.HED_POS = t.HED_POS
-	                                AND p.HED_FECHATRX = t.HED_FECHATRX
-	                                AND p.HED_HORATRX = t.HED_HORATRX
-	                                AND p.HED_NUMTRX = t.HED_NUMTRX
+                                    p.HED_PAIS = t.HED_PAIS
+                                    AND p.HED_ORIGENTRX = t.HED_ORIGENTRX
+                                    AND p.HED_LOCAL = t.HED_LOCAL
+                                    AND p.HED_POS = t.HED_POS
+                                    AND p.HED_FECHATRX = t.HED_FECHATRX
+                                    AND p.HED_HORATRX = t.HED_HORATRX
+                                    AND p.HED_NUMTRX = t.HED_NUMTRX
                                 JOIN
                                     ECT2SP.CUA_TIPOS_PAGO tp
-                                    ON 
+                                    ON
                                     tp.TPA_CODIGO = p.PAG_TIPOPAGO
                                 JOIN
                                     IRS_LOCALES IL
@@ -154,58 +155,61 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             using (var connection = new OracleConnection(CadenaConexionCT2))
             {
                 string query = $@"
-            WITH filtered_header AS (
-                SELECT HED_FCONTABLE, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX
-                FROM ect2sp.ctx_header_trx
-                WHERE HED_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
-                    AND HED_TIPOTRX = 'PVT'
-                    AND HED_ANULADO = 'N'
-                    AND HED_LOCAL = :codLocal
-            ),
-            filtered_pagos AS (
-                SELECT PAG_TIPOPAGO, PAG_MONTO, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX
-                FROM ect2sp.ctx_pagos_trx
-                WHERE PAG_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
-                    AND PAG_TIPOPAGO IN ('16', '06')
-                    AND HED_LOCAL = :codLocal
-            )
-            SELECT *
-            FROM (
-                SELECT
-                    FP.PAG_TIPOPAGO AS TIPO_PAGO,
-                    tp.TPA_DESPAGO AS DES_PAGO,
-                    IL.CAD_NUMERO,
-                    IC.CAD_DESCRIPCION,
-                    FH.HED_LOCAL AS LOC_NUMERO,
-                    IL.LOC_DESCRIPCION,
-                    FH.HED_POS AS NUM_CAJA,
-                    FH.HED_NUMTRX AS NUM_TRX,
-                    TO_CHAR(FH.HED_FCONTABLE, 'yyyy-mm-dd') AS FCONTABLE,
-                    FP.PAG_MONTO,
-                    ROW_NUMBER() OVER (ORDER BY FH.HED_FCONTABLE, FH.HED_NUMTRX) AS ROW_NUM,
-                    COUNT(IL.CAD_NUMERO) OVER () AS TOTAL_RECORDS
-                FROM
-                    filtered_header FH
-                JOIN
-                    filtered_pagos FP
-                    ON FP.HED_PAIS = FH.HED_PAIS
-                        AND FP.HED_ORIGENTRX = FH.HED_ORIGENTRX
-                        AND FP.HED_LOCAL = FH.HED_LOCAL
-                        AND FP.HED_POS = FH.HED_POS
-                        AND FP.HED_FECHATRX = FH.HED_FECHATRX
-                        AND FP.HED_HORATRX = FH.HED_HORATRX
-                        AND FP.HED_NUMTRX = FH.HED_NUMTRX
-                JOIN
-                    ECT2SP.CUA_TIPOS_PAGO tp
-                    ON tp.TPA_CODIGO = FP.PAG_TIPOPAGO
-                JOIN
-                    IRS_LOCALES IL
-                    ON FH.HED_LOCAL = IL.LOC_NUMERO
-                JOIN
-                    IRS_CADENAS IC
-                    ON IL.CAD_NUMERO = IC.CAD_NUMERO
-            )
-            WHERE ROW_NUM BETWEEN {startRow} AND {endRow}";
+                                WITH filtered_header AS (
+                                SELECT HED_FCONTABLE, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX
+                                FROM ect2sp.ctx_header_trx
+                                WHERE HED_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
+                                    AND HED_TIPOTRX = 'PVT'
+                                    AND HED_ANULADO = 'N'
+                                    AND HED_LOCAL = :codLocal
+                                ),
+                                filtered_pagos AS (
+                                SELECT PAG_TIPOPAGO, PAG_MONTO, HED_PAIS, HED_ORIGENTRX, HED_LOCAL, HED_POS, HED_FECHATRX, HED_HORATRX, HED_NUMTRX,PAG_BMAGNETICA,PAG_NUMCTA
+                                FROM ect2sp.ctx_pagos_trx
+                                WHERE PAG_FCONTABLE BETWEEN TO_DATE(:fechaInicio, 'DD-MM-YYYY') AND TO_DATE(:fechaFin, 'DD-MM-YYYY')
+                                    AND PAG_TIPOPAGO IN ('16', '06')
+                                    AND HED_LOCAL = :codLocal
+                                )
+                                SELECT *
+                                FROM (
+                                    SELECT
+	                                    p.PAG_TIPOPAGO  AS TIPO,
+	                                    tp.TPA_DESPAGO  AS DESCRIPCION,
+	                                    DECODE(p.PAG_TIPOPAGO,'16',p.PAG_BMAGNETICA,'06',p.PAG_NUMCTA) NUMERO,
+	                                    IL.CAD_NUMERO AS ""COD EMPRESA"",
+	                                    IC.CAD_DESCRIPCION  AS ""NOM EMPRESA"",
+	                                    FH.HED_LOCAL  AS ""COD LOCAL"",
+	                                    IL.LOC_DESCRIPCION AS ""NOM LOCAL"",
+	                                    FH.HED_POS AS CAJA,
+	                                    FH.HED_NUMTRX AS TICKET,
+	                                    TO_CHAR(FH.HED_FCONTABLE, 'yyyy-mm-dd') AS ""F.CONTABLE"",
+	                                    p.PAG_MONTO AS IMPORTE,
+	                                    ROW_NUMBER() OVER (ORDER BY FH.HED_FCONTABLE, FH.HED_NUMTRX) AS ROW_NUM,
+		                                COUNT(IL.CAD_NUMERO) OVER () AS TOTAL_RECORDS
+	                                FROM
+	                                    filtered_header FH
+	                                JOIN
+	                                    filtered_pagos p
+	                                    ON
+	                                    p.HED_PAIS = FH.HED_PAIS
+	                                    AND p.HED_ORIGENTRX = FH.HED_ORIGENTRX
+	                                    AND p.HED_LOCAL = FH.HED_LOCAL
+	                                    AND p.HED_POS = FH.HED_POS
+	                                    AND p.HED_FECHATRX = FH.HED_FECHATRX
+	                                    AND p.HED_HORATRX = FH.HED_HORATRX
+	                                    AND p.HED_NUMTRX = FH.HED_NUMTRX
+	                                JOIN
+	                                    ECT2SP.CUA_TIPOS_PAGO tp
+	                                    ON
+	                                    tp.TPA_CODIGO = p.PAG_TIPOPAGO
+	                                JOIN
+	                                    IRS_LOCALES IL
+	                                    ON FH.HED_LOCAL = IL.LOC_NUMERO
+	                                JOIN
+	                                    IRS_CADENAS IC
+	                                    ON IL.CAD_NUMERO = IC.CAD_NUMERO
+                                )
+                                WHERE ROW_NUM BETWEEN {startRow} AND {endRow}";
 
                 var command = new OracleCommand(query, connection)
                 {
