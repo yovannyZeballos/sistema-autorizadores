@@ -325,7 +325,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             using (var connection = new OracleConnection(CadenaConexionCT2))
             {
                 string query = @"
-                                SELECT 	
+                                SELECT
 	                                irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
 	                                IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
 	                                irc.caj_activo  	 AS ""EST. CAJERO"",
@@ -333,19 +333,43 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 	                                ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
 	                                irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
 	                                irc.caj_rut  		 AS ""NUM. DOCUME"",
-	                                IRC.CAJ_FCREACION	 AS ""FEC. CREACION"",
+	                                TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
 	                                IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
-	                                IRC.CAJ_FBAJA		 AS ""FEC. BAJA"",
+	                                TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
 	                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
-	                                IDC.FE_INGR_EMPR 	 AS ""FEC. INGRESO"",
+	                                TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
 	                                IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
-	                                IDC.FE_CESE_TRAB 	 AS ""FEC. CESE"",
+	                                TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
 	                                IDC.DE_PUES_TRAB 	 AS ""PUESTO""
                                 FROM ECT2SP.IRS_CAJEROS irc
-                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
-                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc ON IDC.NU_DOCU_IDEN = IRC.CAJ_RUT
-                                WHERE  irc.caj_tipo = '01'
-                                ORDER BY IRC.CAJ_FCREACION DESC,IRC.CAJ_FBAJA
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
+                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
+                                       ON (  IDC.CODIGO_OFISIS = IRC.CAJ_CODIGO_EMP)
+                                WHERE irc.caj_tipo = '01'
+                                UNION
+                                SELECT
+	                                irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
+	                                IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
+	                                irc.caj_activo  	 AS ""EST. CAJERO"",
+	                                irc.loc_numero   	 AS ""COD. LOCAL"",
+	                                ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
+	                                irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
+	                                irc.caj_rut  		 AS ""NUM. DOCUME"",
+	                                TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
+	                                IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
+	                                TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
+	                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
+	                                TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
+	                                IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
+	                                TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
+	                                IDC.DE_PUES_TRAB 	 AS ""PUESTO""
+                                FROM ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
+                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
+                                       ON (IDC.NU_DOCU_IDEN = IRC.CAJ_RUT  )
+                                WHERE irc.caj_tipo = '01'
                                 ";
 
                 var command = new OracleCommand(query, connection)
@@ -370,33 +394,61 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             using (var connection = new OracleConnection(CadenaConexionCT2))
             {
                 string query = @"
-                               WITH paginated_data AS (
-                                    SELECT 	
-		                                irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
-		                                IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
-		                                irc.caj_activo  	 AS ""EST. CAJERO"",
-		                                irc.loc_numero   	 AS ""COD. LOCAL"",
-		                                ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
-		                                irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
-		                                irc.caj_rut  		 AS ""NUM. DOCUME"",
-		                                IRC.CAJ_FCREACION	 AS ""FEC. CREACION"",
-		                                IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
-		                                IRC.CAJ_FBAJA		 AS ""FEC. BAJA"",
-		                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
-		                                IDC.FE_INGR_EMPR 	 AS ""FEC. INGRESO"",
-		                                IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
-		                                IDC.FE_CESE_TRAB 	 AS ""FEC. CESE"",
-		                                IDC.DE_PUES_TRAB 	 AS ""PUESTO"",
-                                        ROW_NUMBER() OVER (ORDER BY irc.CAJ_FCREACION DESC, irc.CAJ_FBAJA) AS ROW_NUM,
-                                        COUNT(irc.CAJ_CODIGO) OVER () AS TOTAL_RECORDS
-                                    FROM ECT2SP.IRS_CAJEROS irc
-                                    LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
-                                    LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc ON IDC.NU_DOCU_IDEN = IRC.CAJ_RUT
-                                    WHERE  irc.caj_tipo = '01'
-                                    ORDER BY IRC.CAJ_FCREACION DESC,IRC.CAJ_FBAJA
-                                )
-                                SELECT *
-                                FROM paginated_data
+                               WITH combined_data AS (
+                                SELECT
+                                    irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
+                                    IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
+                                    irc.caj_activo  	 AS ""EST. CAJERO"",
+                                    irc.loc_numero   	 AS ""COD. LOCAL"",
+                                    ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
+                                    irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
+                                    irc.caj_rut  		 AS ""NUM. DOCUME"",
+                                    TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
+                                    IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
+                                    TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
+                                    IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
+                                    TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
+                                    IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
+                                    TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
+                                    IDC.DE_PUES_TRAB 	 AS ""PUESTO""
+                                FROM ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
+                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
+                                       ON IDC.CODIGO_OFISIS = IRC.CAJ_CODIGO_EMP
+                                WHERE irc.caj_tipo = '01'
+                                UNION ALL
+                                SELECT
+                                    irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
+                                    IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
+                                    irc.caj_activo  	 AS ""EST. CAJERO"",
+                                    irc.loc_numero   	 AS ""COD. LOCAL"",
+                                    ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
+                                    irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
+                                    irc.caj_rut  		 AS ""NUM. DOCUME"",
+                                    TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
+                                    IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
+                                    TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
+                                    IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
+                                    TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
+                                    IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
+                                    TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
+                                    IDC.DE_PUES_TRAB 	 AS ""PUESTO""
+                                FROM ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
+                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
+                                       ON IDC.NU_DOCU_IDEN = IRC.CAJ_RUT
+                                WHERE irc.caj_tipo = '01'
+                            )
+                            SELECT *
+                            FROM (
+                                SELECT 
+                                    combined_data.*,
+                                    ROW_NUMBER() OVER (ORDER BY ""FEC. CREACION"" DESC) AS ROW_NUM,
+                                    COUNT(*) OVER () AS TOTAL_RECORDS
+                                FROM combined_data
+                                ) paginated_data
                                 WHERE ROW_NUM BETWEEN :startRow AND :endRow
                                 ";
 
