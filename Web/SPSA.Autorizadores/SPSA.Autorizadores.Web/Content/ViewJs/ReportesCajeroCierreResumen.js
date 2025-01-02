@@ -30,6 +30,12 @@ const ReportesCajeroCierreResumen = function () {
                 $(this).addClass('selected');
             }
         });
+
+        $("#downloadExcel").on('click', function () {
+            const table = document.getElementById('tableReportes_3');
+            const workbook = XLSX.utils.table_to_book(table, { sheet: "Hoja1" });
+            XLSX.writeFile(workbook, "RpteCIerreResumen.xlsx");
+        });
     }
 
     const validar = function () {
@@ -256,6 +262,9 @@ const ReportesCajeroCierreResumen = function () {
                 closeLoading();
             },
             success: function (response) {
+
+                // Mostrar el botón de descarga cuando se carguen los datos
+                document.getElementById('downloadExcel').classList.remove('d-none');
 
                 var columnas = [];
 
