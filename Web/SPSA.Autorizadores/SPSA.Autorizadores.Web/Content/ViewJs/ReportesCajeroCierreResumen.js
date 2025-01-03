@@ -30,6 +30,34 @@ const ReportesCajeroCierreResumen = function () {
                 $(this).addClass('selected');
             }
         });
+
+        $("#downloadExcel").on('click', function () {
+            const table = document.getElementById('tableReportes_3');
+
+            const rows = Array.from(table.rows); // Obtener filas de la tabla
+
+            // Crear un workbook y una hoja manualmente
+            const workbook = XLSX.utils.book_new();
+            const sheetData = rows.map(row =>
+                Array.from(row.cells).map(cell => {
+                    const value = cell.innerText.trim(); // Obtener el texto de la celda
+
+                    // Verificar si es una fecha en formato dd/mm/yyyy
+                    if (value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                        return value; // Mantener como texto
+                    }
+
+                    // Convertir otros valores según sea necesario
+                    return value;
+                })
+            );
+
+            // Crear la hoja de cálculo a partir de los datos procesados
+            const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja1");
+
+            XLSX.writeFile(workbook, "RpteCierreResumen.xlsx");
+        });
     }
 
     const validar = function () {
@@ -104,7 +132,7 @@ const ReportesCajeroCierreResumen = function () {
                 $(tableReportesId + " tbody").empty();
                 $(tableReportesId + " thead").empty();
 
-                
+
 
                 dataTableReporte_1 = $('#tableReportes_1').DataTable({
                     language: {
@@ -124,7 +152,7 @@ const ReportesCajeroCierreResumen = function () {
                         keys.sort().forEach((k, index) => {
 
                             if (data[k] === "A") {
-                                $(`td:eq(${index+1})`, row).addClass("bg-danger");
+                                $(`td:eq(${index + 1})`, row).addClass("bg-danger");
                             }
                             else if (data[k] === "P") {
                                 $(`td:eq(${index + 1})`, row).addClass("bg-warning");
@@ -256,6 +284,9 @@ const ReportesCajeroCierreResumen = function () {
                 closeLoading();
             },
             success: function (response) {
+
+                // Mostrar el botón de descarga cuando se carguen los datos
+                document.getElementById('downloadExcel').classList.remove('d-none');
 
                 var columnas = [];
 
