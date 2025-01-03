@@ -1624,6 +1624,7 @@
     <Content Include="Content\js\tooltip.js" />
     <Content Include="Content\js\utiles.js" />
     <Content Include="Content\js\widgets.js" />
+    <Content Include="Content\js\xlsx.full.min.js" />
     <Content Include="Content\plugins\accordion-Wizard-Form\jquery.accordion-wizard.min.js" />
     <Content Include="Content\plugins\accordion\accordion.min.js" />
     <Content Include="Content\plugins\apexchart\apexcharts.js" />
