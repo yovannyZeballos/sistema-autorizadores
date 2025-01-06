@@ -53,7 +53,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Queries
 					if (!string.IsNullOrEmpty(menu.CodMenuPadre) && menu.CodMenuPadre != "0")
 						menu.IndAsociado = menusAsociados.Any(x => x.CodMenu == menu.CodMenu);
 				}
-				response.Data = menusDto;
+				response.Data = menusDto.OrderBy(x => x.NomMenu).ToList();
 			}
 			catch (Exception ex)
 			{

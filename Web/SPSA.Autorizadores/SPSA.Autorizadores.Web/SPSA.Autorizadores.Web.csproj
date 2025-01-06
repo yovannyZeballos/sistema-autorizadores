@@ -262,7 +262,6 @@
     <Compile Include="Areas\Reportes\Controllers\AdministrarReportesController.cs" />
     <Compile Include="Areas\Reportes\Controllers\MaestroAutorizadoresController.cs" />
     <Compile Include="Areas\Reportes\Controllers\MaestroCajerosController.cs" />
-    <Compile Include="Areas\Reportes\Controllers\PowerBiController.cs" />
     <Compile Include="Areas\Reportes\Controllers\ValesRedimidosController.cs" />
     <Compile Include="Areas\Reportes\ReportesAreaRegistration.cs" />
     <Compile Include="Areas\Seguridad\Controllers\MenuController.cs" />
@@ -2806,6 +2805,7 @@
     <Content Include="Plantillas_Tablas\Plantilla_Local\TablaLocal.xlsx" />
     <Content Include="Areas\Reportes\Views\MaestroAutorizadores\Index.cshtml" />
     <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
+    <Content Include="Areas\Monitor\Views\ReporteCierre\Dashboard.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2856,7 +2856,6 @@
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
     <Folder Include="Areas\Reportes\Data\" />
-    <Folder Include="Areas\Reportes\Views\PowerBi\" />
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />
