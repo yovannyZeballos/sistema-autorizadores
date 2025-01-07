@@ -18,8 +18,12 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 		{
 			return View();
 		}
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
 
-		public ActionResult Resumen()
+        public ActionResult Resumen()
 		{
 			return View();
 		}

@@ -39,7 +39,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Queries
 			try
 			{
 				var menus = await _contexto.RepositorioSegMenu.Obtener(x => x.CodSistema == request.CodSistema).ToListAsync();
-				response.Data = _mapper.Map<List<ListarMenuDTO>>(menus.OrderBy(x => x.CodMenu).ToList());
+				response.Data = _mapper.Map<List<ListarMenuDTO>>(menus.OrderBy(x => x.NomMenu).ToList());
 			}
 			catch (Exception ex)
 			{

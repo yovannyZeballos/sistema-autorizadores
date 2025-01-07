@@ -324,7 +324,7 @@
 
 @helper ObtenerSubMenus(SPSA.Autorizadores.Aplicacion.DTO.ListarMenuDTO menuPadre)
 {
-    var subMenus = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuPadre.CodMenu).ToList();
+    var subMenus = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuPadre.CodMenu).OrderBy(x => x.NomMenu).ToList();
 
     foreach (var menu in subMenus)
     {
