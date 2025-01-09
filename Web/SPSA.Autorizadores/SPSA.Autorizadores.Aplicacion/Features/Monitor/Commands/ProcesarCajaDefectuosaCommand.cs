@@ -52,7 +52,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		public async Task<RespuestaComunDTO> Handle(ProcesarCajaDefectuosaCommand request, CancellationToken cancellationToken)
 		{
 			var fechaProceso = DateTime.Now;
-			var fechaCierre = fechaProceso;
+			var fechaCierre = fechaProceso.Date;
 			var tareasCalculo = new List<Task<ProcesoMonitorDTO>>();
 			var resultadosProceso = new List<ProcesoMonitorDTO>();
 			var respuesta = new RespuestaComunDTO();
@@ -151,7 +151,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				KeyboardInteractiveAuthenticationMethod keybAuth = new KeyboardInteractiveAuthenticationMethod(_usuario);
 				keybAuth.AuthenticationPrompt += new EventHandler<AuthenticationPromptEventArgs>(HandleKeyEvent);
 
-				var connectionInfo = new ConnectionInfo(local.Ip, _usuario, keybAuth);
+				var connectionInfo = new ConnectionInfo(local.Ip.Trim(), _usuario, keybAuth);
 
 				using (var client = new SshClient(connectionInfo))
 				{
