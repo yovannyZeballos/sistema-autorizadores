@@ -192,8 +192,11 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
             CreateMap<ActualizarInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
 
-            #endregion <--INV KARDEX-->
+			#endregion <--INV KARDEX-->
 
-        }
-    }
+			CreateMap<MonCierreEOD, MonCierreEODHist>();
+
+
+		}
+	}
 }

@@ -76,6 +76,8 @@
     <Compile Include="Entidades\Mae_Local.cs" />
     <Compile Include="Entidades\Mae_Region.cs" />
     <Compile Include="Entidades\Mae_Zona.cs" />
+    <Compile Include="Entidades\MonCierreEOD.cs" />
+    <Compile Include="Entidades\MonCierreEODHist.cs" />
     <Compile Include="Entidades\TmpMonCierreLocal.cs" />
     <Compile Include="Entidades\MonCierreLocal.cs" />
     <Compile Include="Entidades\MonitorComando.cs" />
