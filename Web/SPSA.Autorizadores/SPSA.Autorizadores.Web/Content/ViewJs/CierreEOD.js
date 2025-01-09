@@ -1,6 +1,6 @@
 ﻿var urlListado = baseUrl + 'Monitor/CierreEOD/ListarMonitor';
 var urlProcesar = baseUrl + 'Monitor/CierreEOD/Procesar';
-var urlEmpresas = baseUrl + 'Monitor/CierreEOD/ListarEmpresas';
+var urlEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresa';
 var dataTableMonitor = null;
 
 var CierreEOD = function () {
@@ -246,7 +246,7 @@ var CierreEOD = function () {
     const listarEmpresas = function () {
         $.ajax({
             url: urlEmpresas,
-            type: "get",
+            type: "post",
             beforeSend: function () {
                 showLoading();
             },
@@ -256,7 +256,7 @@ var CierreEOD = function () {
             success: function (response) {
 
                 if (response.Ok === true) {
-                    cargarEmpresas(response.Empresas);
+                    cargarEmpresas(response.Data);
                 } else {
                     swal({
                         text: response.Mensaje,
@@ -276,8 +276,9 @@ var CierreEOD = function () {
 
     const cargarEmpresas = function (empresas) {
         $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
+        $('#cboEmpresa').append($('<option>', { value: '0', text: 'TODOS' }));
         empresas.map(empresa => {
-            $('#cboEmpresa').append($('<option>', { value: empresa.Codigo, text: empresa.Descripcion }));
+            $('#cboEmpresa').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
         });
         $('#cboEmpresa').val(rucSession);
 

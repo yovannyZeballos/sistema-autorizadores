@@ -1,13 +1,16 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
+using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -25,6 +28,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		private readonly IRepositorioMonitorReporte _repositorioLocalMonitor;
 		private readonly IRepositorioSovosLocal _repositorioSovosLocal;
 		private readonly IRepositorioMonitorComando _repositorioMonitorComando;
+		private readonly IMapper _mapper;
 
 		private readonly string _usuario;
 		private readonly string _clave;
@@ -36,25 +40,22 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		private string NOMBRE_ARCHIVO;
 
 		public ProcesarMonitorHandler(IRepositorioMonitorReporte repositorioLocalMonitor, IRepositorioSovosLocal repositorioSovosLocal,
-			IRepositorioMonitorComando repositorioMonitorComando)
+			IRepositorioMonitorComando repositorioMonitorComando, IMapper mapper)
 		{
 			_usuario = ConfigurationManager.AppSettings["Usuario"];
 			_clave = ConfigurationManager.AppSettings["Clave"];
 			_maximoTareasEncoladas = Convert.ToInt32(ConfigurationManager.AppSettings["MaximoProcesosBloque"]);
 			_repositorioLocalMonitor = repositorioLocalMonitor;
 			_repositorioSovosLocal = repositorioSovosLocal;
-			//COMANDO_EXISTE_ARCHIVO = ConfigurationManager.AppSettings["ObtenerArchivo"].ToString();
-			//COMANDO_HORA_INICIO = ConfigurationManager.AppSettings["HoraInicio"].ToString();
-			//COMANDO_HORA_FIN = ConfigurationManager.AppSettings["HoraFin"].ToString();
-			//NOMBRE_ARCHIVO = ConfigurationManager.AppSettings["NombreArchivo"].ToString();
 			_repositorioMonitorComando = repositorioMonitorComando;
+			_mapper = mapper;
 
 		}
 
 		public async Task<RespuestaComunDTO> Handle(ProcesarMonitorCommand request, CancellationToken cancellationToken)
 		{
 			var fechaProceso = DateTime.Now;
-			var fechaCierre = fechaProceso.AddDays(-1);
+			var fechaCierre = fechaProceso.AddDays(-1).Date;
 			var tareasCalculo = new List<Task<ProcesoMonitorDTO>>();
 			var resultadosProceso = new List<ProcesoMonitorDTO>();
 			var respuesta = new RespuestaComunDTO();
@@ -64,50 +65,65 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				var timer = new Stopwatch();
 				timer.Start();
 
-				var comandos = await _repositorioMonitorComando.ListarPorTipo((int)TipoMonitor.CIERRE_FIN_DIA);
-				COMANDO_EXISTE_ARCHIVO = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoObtenerArchivoCierreEOD).Comando;
-				COMANDO_HORA_INICIO = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoHoraInicioArchivoCierreEOD).Comando;
-				COMANDO_HORA_FIN = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoHoraFinArchivoCierreEOD).Comando;
-				NOMBRE_ARCHIVO = comandos.FirstOrDefault(x => x.Codigo == Constantes.CodigoComandoNombreArchivoCierreEOD).Comando;
-
-				var localesAProcesar = await _repositorioSovosLocal.ListarMonitor(request.CodEmpresa, fechaCierre, (int)TipoMonitor.CIERRE_FIN_DIA);
-
-				int cantidadTareas = 0;
-				foreach (var local in localesAProcesar)
+				using (ISGPContexto contexto = new SGPContexto())
 				{
-					tareasCalculo.Add(Task.Run(() => Procesar(local)));
+					List<ProcesoParametro> parametros = await contexto.RepositorioProcesoParametro
+						.Obtener(x => x.CodProceso == Constantes.CodigoProcesoMonitorCierreEOD)
+						.ToListAsync();
 
-					cantidadTareas++;
-					if (cantidadTareas == _maximoTareasEncoladas)
+					COMANDO_EXISTE_ARCHIVO = parametros.FirstOrDefault(x => x.CodParametro == Constantes.CodigoComandoObtenerArchivo_ProcesoMonitorCierreEOD).ValParametro;
+					COMANDO_HORA_INICIO = parametros.FirstOrDefault(x => x.CodParametro == Constantes.CodigoComandoHoraInicioArchivo_ProcesoMonitorCierreEOD).ValParametro;
+					COMANDO_HORA_FIN = parametros.FirstOrDefault(x => x.CodParametro == Constantes.CodigoComandoHoraFinArchivo_ProcesoMonitorCierreEOD).ValParametro;
+					NOMBRE_ARCHIVO = parametros.FirstOrDefault(x => x.CodParametro == Constantes.CodigoComandoNombreArchivo_ProcesoMonitorCierreEOD).ValParametro;
+
+					var localesAProcesar = await contexto.RepositorioMonCierreEOD.Listar(request.CodEmpresa, fechaCierre, (int)TipoMonitor.CIERRE_FIN_DIA);
+
+					int cantidadTareas = 0;
+					foreach (var local in localesAProcesar)
+					{
+						tareasCalculo.Add(Task.Run(() => Procesar(local)));
+
+						cantidadTareas++;
+						if (cantidadTareas == _maximoTareasEncoladas)
+						{
+							await Task.WhenAll(tareasCalculo);
+							resultadosProceso.AddRange(tareasCalculo.Select(t => t.Result));
+							tareasCalculo.Clear();
+							cantidadTareas = 0;
+						}
+					}
+
+					if (cantidadTareas > 0)
 					{
 						await Task.WhenAll(tareasCalculo);
 						resultadosProceso.AddRange(tareasCalculo.Select(t => t.Result));
-						tareasCalculo.Clear();
-						cantidadTareas = 0;
 					}
+
+					//Insertar BD
+					var monCierres = resultadosProceso.Select(x => new MonCierreEOD
+					{
+						CodCadena = x.CodCadena,
+						CodEmpresa = x.CodEmpresa,
+						CodLocal = x.CodLocal,
+						CodRegion = x.CodRegion,
+						CodZona = x.CodZona,
+						Estado = x.Estado,
+						FechaCierre = fechaCierre,
+						FechaProceso = fechaProceso,
+						HoraInicio = x.HoraInicio,
+						HoraFin = x.HoraFin,
+						Observacion = x.Observacion != null && x.Observacion.Length > 250 ? x.Observacion.Substring(0, 250) : x.Observacion,
+						Tipo = (int)TipoMonitor.CIERRE_FIN_DIA
+					}).ToList();
+
+					await InsertarMonCierreEOD(monCierres, contexto);
+
+					timer.Stop();
+					TimeSpan timeTaken = timer.Elapsed;
+
+					respuesta.Ok = true;
+					respuesta.Mensaje = $"Proceso exitoso, el proceso se ejecuto en {timeTaken:hh\\:mm\\:ss}";
 				}
-
-				if (cantidadTareas > 0)
-				{
-					await Task.WhenAll(tareasCalculo);
-					resultadosProceso.AddRange(tareasCalculo.Select(t => t.Result));
-				}
-
-				//Insertar BD
-				foreach (var resultado in resultadosProceso)
-				{
-					var localMonitor = new MonitorReporte(resultado.CodEmpresa, resultado.CodLocal, fechaProceso,
-					   fechaCierre, resultado.HoraInicio, resultado.HoraFin, resultado.Estado, resultado.Observacion,
-					   resultado.CodFormato, (int)TipoMonitor.CIERRE_FIN_DIA);
-
-					await _repositorioLocalMonitor.Crear(localMonitor);
-				}
-
-				timer.Stop();
-				TimeSpan timeTaken = timer.Elapsed;
-
-				respuesta.Ok = true;
-				respuesta.Mensaje = $"Proceso exitoso, el proceso se ejecuto en {timeTaken:hh\\:mm\\:ss}";
 			}
 			catch (Exception ex)
 			{
@@ -118,13 +134,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 			return respuesta;
 		}
 
-		private ProcesoMonitorDTO Procesar(SovosLocal local)
+		private ProcesoMonitorDTO Procesar(Mae_Local local)
 		{
 			var procesoMonitorDTO = new ProcesoMonitorDTO
 			{
 				CodLocal = local.CodLocal,
-				CodFormato = local.CodFormato,
-				CodEmpresa = local.CodEmpresa
+				CodEmpresa = local.CodEmpresa,
+				CodCadena = local.CodCadena,
+				CodRegion = local.CodRegion,
+				CodZona = local.CodZona
 			};
 
 			string[] formats = new[] { "yyyy-MM-dd", "yyyy-MM-d", "yyyy-M-dd", "yyyy-M-d" };
@@ -134,7 +152,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				KeyboardInteractiveAuthenticationMethod keybAuth = new KeyboardInteractiveAuthenticationMethod(_usuario);
 				keybAuth.AuthenticationPrompt += new EventHandler<AuthenticationPromptEventArgs>(HandleKeyEvent);
 
-				var connectionInfo = new ConnectionInfo(local.Ip, _usuario, keybAuth);
+				var connectionInfo = new ConnectionInfo(local.Ip.Trim(), _usuario, keybAuth);
 
 				using (var client = new SshClient(connectionInfo))
 				{
@@ -205,5 +223,29 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				}
 			}
 		}
+
+		private async Task InsertarMonCierreEOD(List<MonCierreEOD> monCierres, ISGPContexto contexto)
+		{
+			foreach (var monCierreEOD in monCierres)
+			{
+				var fechaCierre = monCierreEOD.FechaCierre.Value.Date;
+				var existe = await contexto.RepositorioMonCierreEOD.Existe(x => x.CodEmpresa == monCierreEOD.CodEmpresa &&
+																				x.CodCadena == monCierreEOD.CodCadena &&
+																				x.CodRegion == monCierreEOD.CodRegion &&
+																				x.CodZona == monCierreEOD.CodZona &&
+																				x.CodLocal == monCierreEOD.CodLocal &&
+																				x.FechaCierre == fechaCierre &&
+																				x.Tipo == monCierreEOD.Tipo);
+				if (existe) 
+				{
+					MonCierreEODHist hist = _mapper.Map<MonCierreEODHist>(monCierreEOD);
+					contexto.RepositorioMonCierreEODHist.Agregar(hist);
+				}
+
+				contexto.RepositorioMonCierreEOD.AgregarActualizar(monCierreEOD);
+			}
+			await contexto.GuardarCambiosAsync();
+		}
 	}
 }
+

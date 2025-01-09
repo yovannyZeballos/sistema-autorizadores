@@ -1,6 +1,6 @@
 ﻿var urlListado = baseUrl + 'Monitor/CajaDefectuosa/ListarMonitor';
 var urlProcesar = baseUrl + 'Monitor/CajaDefectuosa/Procesar';
-var urlEmpresas = baseUrl + 'Empresa/Listar';
+var urlEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresa';
 var dataTableMonitor = null;
 
 var CajaDefectuosa = function () {
@@ -254,7 +254,7 @@ var CajaDefectuosa = function () {
             success: function (response) {
 
                 if (response.Ok === true) {
-                    cargarEmpresas(response.Empresas);
+                    cargarEmpresas(response.Data);
                 } else {
                     swal({
                         text: response.Mensaje,
@@ -274,9 +274,9 @@ var CajaDefectuosa = function () {
 
     const cargarEmpresas = function (empresas) {
         $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
-        $('#cboEmpresa').append($('<option>', { value: '000', text: 'TODOS' }));
+        $('#cboEmpresa').append($('<option>', { value: '0', text: 'TODOS' }));
         empresas.map(empresa => {
-            $('#cboEmpresa').append($('<option>', { value: empresa.Codigo, text: empresa.Descripcion }));
+            $('#cboEmpresa').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
         });
         $('#cboEmpresa').val(rucSession);
 

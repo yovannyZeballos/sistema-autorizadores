@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -46,29 +48,65 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 
 				response.Columnas = new List<string>();
 				response.Data = new List<Dictionary<string, object>>();
-				var dt = await _repositorioLocalMonitor.ListarMonitorReporte(request.CodEmpresa, fecha, request.Estado, request.Tipo);
-				foreach (DataColumn colum in dt.Columns)
-				{
-					response.Columnas.Add(colum.ColumnName);
-				}
 
-				response.Data = dt.AsEnumerable()
-						.Select(r => r.Table.Columns.Cast<DataColumn>()
-						.Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
-					 ).ToDictionary(z => z.Key.Replace(" ", "")
-											  .Replace(".", "")
-											  .Replace("á", "a")
-											  .Replace("é", "e")
-											  .Replace("í", "i")
-											  .Replace("ó", "o")
-											  .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy HH:mm:ss") : z.Value)
-				  ).ToList();
-
-				if (response.Data.Count == 0)
+				using (ISGPContexto contexto = new SGPContexto())
 				{
-					response.Ok = false;
-					response.Mensaje = "No se encuentra información de cierre sobre la fecha ingresada.";
-					return response;
+					var lista = await contexto.RepositorioMonCierreEOD.Obtener(x => (request.CodEmpresa == "0" || x.CodEmpresa == request.CodEmpresa) &&
+																					x.FechaCierre == fecha &&
+																					(request.Estado == "0" || x.Estado == request.Estado) &&
+																					x.Tipo == request.Tipo)
+						.Join(contexto.RepositorioMaeLocal.Obtener(),
+							  cierre => cierre.CodLocal,
+							  local => local.CodLocal,
+							  (cierre, local) => new { Cierre = cierre, Local = local })
+						.Join(contexto.RepositorioMaeEmpresa.Obtener(),
+							  cierreLocal => cierreLocal.Cierre.CodEmpresa,
+							  empresa => empresa.CodEmpresa,
+							  (cierreLocal, empresa) => new { CierreLocal = cierreLocal, Empresa = empresa })
+						.Where(x => x.CierreLocal.Local.TipEstado == "A")
+						.ToListAsync();
+
+					if (request.Tipo == 1)
+					{
+						response.Columnas.AddRange(new List<string> { "TIP_ESTADO", "NOM EMPRESA", "COD", "NOM LOCAL", "IP", "F.CIERRE", "ESTADO", "INICIO", "FIN", "OBS", "FEC PROCESO" });
+
+						response.Data = lista.Select(item => new Dictionary<string, object>
+						{
+							{ "TIP_ESTADO", item.CierreLocal.Cierre.Estado },
+							{ "NOMEMPRESA", item.Empresa.NomEmpresa },
+							{ "COD", item.CierreLocal.Cierre.CodLocal },
+							{ "NOMLOCAL", item.CierreLocal.Local.NomLocal },
+							{ "IP", item.CierreLocal.Local.Ip },
+							{ "FCIERRE", item.CierreLocal.Cierre.FechaCierre?.ToString("dd/MM/yyyy") },
+							{ "ESTADO", GetEstadoCierreEOD(item.CierreLocal.Cierre.Estado) },
+							{ "INICIO", item.CierreLocal.Cierre.HoraInicio },
+							{ "FIN", item.CierreLocal.Cierre.HoraFin },
+							{ "OBS", item.CierreLocal.Cierre.Observacion },
+							{ "FECPROCESO", item.CierreLocal.Cierre.FechaProceso.ToString("dd/MM/yyyy HH:mm:ss") }
+						}).ToList();
+					}
+					else
+					{
+						response.Columnas.AddRange(new List<string> { "TIP_ESTADO", "EMPRESA", "COD", "NOM LOCAL", "IP SERVER", "¿CAJA DEFECTUOSA?", "OBS", "FEC PROCESO" });
+						response.Data = lista.Select(item => new Dictionary<string, object>
+						{
+							{ "TIP_ESTADO", item.CierreLocal.Cierre.Estado },
+							{ "EMPRESA", item.Empresa.NomEmpresa },
+							{ "COD", item.CierreLocal.Cierre.CodLocal },
+							{ "NOMLOCAL", item.CierreLocal.Local.NomLocal },
+							{ "IPSERVER", item.CierreLocal.Local.Ip },
+							{ "¿CAJADEFECTUOSA?", GetEstadoCajaDefectuosa(item.CierreLocal.Cierre.Estado) },
+							{ "OBS", item.CierreLocal.Cierre.Observacion },
+							{ "FECPROCESO", item.CierreLocal.Cierre.FechaProceso.ToString("dd/MM/yyyy HH:mm:ss") }
+						}).ToList();
+					}
+
+					if (response.Data.Count == 0)
+					{
+						response.Ok = false;
+						response.Mensaje = "No se encuentra información de cierre sobre la fecha ingresada.";
+						return response;
+					}
 				}
 			}
 			catch (Exception ex)
@@ -78,5 +116,36 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 			}
 			return response;
 		}
+
+		private string GetEstadoCierreEOD(string estado)
+		{
+			switch (estado)
+			{
+				case "1":
+					return "CIERRE REALIZADO";
+				case "2":
+					return "PENDIENTE VALIDACION DE CIERRE";
+				case "3":
+					return "NO SE HA REALIZADO CIERRE";
+				default:
+					return string.Empty;
+			}
+		}
+
+		private string GetEstadoCajaDefectuosa(string estado)
+		{
+			switch (estado)
+			{
+				case "2":
+					return "PENDIENTE VALIDACION DE CIERRE";
+				case "4":
+					return "SI";
+				case "5":
+					return "NO";
+				default:
+					return string.Empty;
+			}
+		}
 	}
+
 }
