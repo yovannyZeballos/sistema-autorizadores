@@ -56,8 +56,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 																					(request.Estado == "0" || x.Estado == request.Estado) &&
 																					x.Tipo == request.Tipo)
 						.Join(contexto.RepositorioMaeLocal.Obtener(),
-							  cierre => cierre.CodLocal,
-							  local => local.CodLocal,
+							  cierre => new { cierre.CodEmpresa, cierre.CodCadena, cierre.CodZona, cierre.CodRegion, cierre.CodLocal },
+							  local => new { local.CodEmpresa, local.CodCadena, local.CodZona, local.CodRegion, local.CodLocal },
 							  (cierre, local) => new { Cierre = cierre, Local = local })
 						.Join(contexto.RepositorioMaeEmpresa.Obtener(),
 							  cierreLocal => cierreLocal.Cierre.CodEmpresa,
