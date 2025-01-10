@@ -5,18 +5,14 @@
 		public const string MensajeArchivoNoEncontrado = "No se encontró el archivo de cierre.";
 		public const string MensajeFechaInicioNoEncontrado = "No existe fecha inicial en el archivo de cierre, validar en unos minutos!";
 		public const string MensajeFechaFinNoEncontrado = "No existe fecha final en el archivo de cierre, validar en unos minutos!";
-		public const string CodigoComandoCantidadCajasDefectuosos = "001";
-		public const string CodigoComandoCajasDefectuosos = "002";
-		public const string CodigoComandoNombreArchivoCierreEOD = "001";
-		public const string CodigoComandoObtenerArchivoCierreEOD = "002";
-		public const string CodigoComandoHoraInicioArchivoCierreEOD = "003";
-		public const string CodigoComandoHoraFinArchivoCierreEOD = "004";
-
+		
 		public const decimal CodigoProcesoBct = 29;
 		public const decimal CodigoProcesoActualizacionEstadoCierre = 30;
 		public const decimal CodigoProcesoDiferenciaTransacciones = 31;
 		public const decimal CodigoProcesoImpresionCodigoBarras = 32;
 		public const decimal CodigoProcesoMonitorArchivos = 33;
+		public const decimal CodigoProcesoMonitorCierreEOD = 34;
+		public const decimal CodigoProcesoMonitorCajaDefectuosa = 35;
 
 		public const string CodigoParametroToleranciaSegundos = "01";
 		public const string CodigoParametroToleranciaCantidad = "02";
@@ -41,5 +37,13 @@
 		public const string CodigoClaveCaja_ProcesoMonitorArchivo = "02";
 		public const string CodigoRutaArchivos1_ProcesoMonitorArchivo = "03";
 		public const string CodigoRutaArchivos2_ProcesoMonitorArchivo = "04";
+
+		public const string CodigoComandoCantidad_ProcesoMonitorCajaDefectuosa = "01";
+		public const string CodigoComandoCajasDefectuosos_ProcesoMonitorCajaDefectuosa = "02";
+		public const string CodigoComandoNombreArchivo_ProcesoMonitorCierreEOD = "01";
+		public const string CodigoComandoObtenerArchivo_ProcesoMonitorCierreEOD = "02";
+		public const string CodigoComandoHoraInicioArchivo_ProcesoMonitorCierreEOD = "03";
+		public const string CodigoComandoHoraFinArchivo_ProcesoMonitorCierreEOD = "04";
+
 	}
 }
