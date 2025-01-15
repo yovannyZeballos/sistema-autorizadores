@@ -14,5 +14,7 @@
         public string NomLocalOfiplan { get; set; }
         public string CodLocalSunat { get; set; }
         public string Ip { get; set; }
+        public string DirLocal { get; set; }
+        public string Ubigeo { get; set; }
     }
 }

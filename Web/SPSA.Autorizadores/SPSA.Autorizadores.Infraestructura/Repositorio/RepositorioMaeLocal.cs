@@ -31,6 +31,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 				mz.""COD_ZONA"" || ' ' || mz.""NOM_ZONA"" as ""ZONA"",
 				ml.""COD_LOCAL"",
 				ml.""NOM_LOCAL"",
+				ml.""DIR_LOCAL"",
+				ml.""UBIGEO"",
 				CASE ml.""TIP_ESTADO""
 					WHEN 'A' THEN 'ACTIVO'
 					WHEN 'I' THEN 'INACTIVO'

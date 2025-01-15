@@ -113,6 +113,8 @@ var AdministrarMaestroLocal = function () {
                     CodLocalOfiplan: $("#txtCodLocalOfiplan").val(),
                     NomLocalOfiplan: $("#txtNomLocalOfiplan").val(),
                     CodLocalSunat: $("#txtCodLocalSunat").val(),
+                    DirLocal: $("#txtDirLocal").val(),
+                    Ubigeo: $("#txtUbigeo").val(),
                     ...(isGuardarCambios && {
                         CodRegionAnterior: codRegionAnterior,
                         CodZonaAnterior: codZonaAnterior,
@@ -1040,6 +1042,8 @@ var AdministrarMaestroLocal = function () {
         $("#txtCodLocalOfiplan").val(local.CodLocalOfiplan);
         $("#txtNomLocalOfiplan").val(local.NomLocalOfiplan);
         $("#txtCodLocalSunat").val(local.CodLocalSunat);
+        $("#txtDirLocal").val(local.DirLocal);
+        $("#txtUbigeo").val(local.Ubigeo);
     }
 
     const recargarDataTableCajas = async function () {
