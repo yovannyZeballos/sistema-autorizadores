@@ -28,9 +28,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
         public string CodLocalOfiplan { get; set; }
         public string NomLocalOfiplan { get; set; }
         public string CodLocalSunat { get; set; }
+        public string DirLocal { get; set; }
+        public string Ubigeo { get; set; }
 
         public string CodRegionAnterior { get; set; }
         public string CodZonaAnterior { get; set; }
+        
     }
 
     public class ActualizarMaeLocalHandler : IRequestHandler<ActualizarMaeLocalCommand, RespuestaComunDTO>
@@ -67,7 +70,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
             {
                 var sql = @"UPDATE ""SGP"".""MAE_LOCAL""
                                 SET ""COD_REGION""=@nuevaRegion, ""COD_ZONA""=@nuevaZona, ""NOM_LOCAL""=@nomLocal, ""TIP_ESTADO""=@tipEstado, ""COD_LOCAL_PMM""=@codLocalPMM, 
-                                    ""COD_LOCAL_OFIPLAN""=@codLocalOfiplan, ""NOM_LOCAL_OFIPLAN""=@nomLocalOfiplan, ""COD_LOCAL_SUNAT""=@codLocalSunat, ""IP""=@ip
+                                    ""COD_LOCAL_OFIPLAN""=@codLocalOfiplan, ""NOM_LOCAL_OFIPLAN""=@nomLocalOfiplan, ""COD_LOCAL_SUNAT""=@codLocalSunat, ""IP""=@ip,
+                                    ""DIR_LOCAL""=@dirLocal, ""UBIGEO""=@ubigeo
                                 WHERE ""COD_EMPRESA""=@codEmpresa AND ""COD_CADENA""=@codCadena 
                                     AND ""COD_REGION""=@codRegionAnterior  AND ""COD_ZONA""=@codZonaAnterior 
                                     AND ""COD_LOCAL""=@codLocal;";
@@ -86,6 +90,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
             new NpgsqlParameter("@codLocalOfiplan", request.CodLocalOfiplan),
             new NpgsqlParameter("@nomLocalOfiplan", request.NomLocalOfiplan),
             new NpgsqlParameter("@codLocalSunat", request.CodLocalSunat),
+            new NpgsqlParameter("@dirLocal", request.DirLocal),
+            new NpgsqlParameter("@ubigeo", request.Ubigeo),
             new NpgsqlParameter("@codRegionAnterior", request.CodRegionAnterior),
             new NpgsqlParameter("@codZonaAnterior", request.CodZonaAnterior)
         };
