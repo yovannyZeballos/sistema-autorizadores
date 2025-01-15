@@ -18,7 +18,6 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 
 			// Configura la clave primaria de la entidad Mae_Local.
 			HasKey(x => new { x.CodEmpresa, x.CodCadena, x.CodRegion, x.CodZona, x.CodLocal });
-			//HasKey(x => new { x.CodEmpresa, x.CodCadena, x.CodLocal });
 
 			// Configura las propiedades de la entidad Mae_Local.
 			Property(x => x.CodEmpresa).HasColumnName("COD_EMPRESA");
@@ -33,6 +32,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(x => x.NomLocalOfiplan).HasColumnName("NOM_LOCAL_OFIPLAN");
 			Property(x => x.CodLocalSunat).HasColumnName("COD_LOCAL_SUNAT");
 			Property(x => x.Ip).HasColumnName("IP");
+			Property(x => x.DirLocal).HasColumnName("DIR_LOCAL");
+			Property(x => x.Ubigeo).HasColumnName("UBIGEO");
 		}
 	}
 }
