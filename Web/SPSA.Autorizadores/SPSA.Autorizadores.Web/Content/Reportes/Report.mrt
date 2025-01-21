@@ -3,25 +3,32 @@
   <CalculationMode>Interpretation</CalculationMode>
   <Dictionary Ref="1" type="Dictionary" isKey="true">
     <BusinessObjects isList="true" count="0" />
-    <Databases isList="true" count="1">
+    <Databases isList="true" count="2">
       <HP Ref="2" type="Stimulsoft.Report.Dictionary.StiPostgreSQLDatabase" isKey="true">
         <Alias>HP</Alias>
         <ConnectionStringEncrypted>4/D560ZK04HiX9W9SgXhatUM0QLjTXnI6lux2HcNJT+NVLeD5GipgUMQuejpXLFr0dLhw1UDWchqHbCEYQGtXotWaSPoSEnZ+R+shMMl90bVevvC7wERzcxH</ConnectionStringEncrypted>
         <Key>759f1f62afd147cabc82b610dc5f5b03</Key>
         <Name>HP</Name>
       </HP>
+      <Tp Ref="3" type="Stimulsoft.Report.Dictionary.StiPostgreSQLDatabase" isKey="true">
+        <Alias>Tp</Alias>
+        <ConnectionStringEncrypted>4/D560ZK04HiX9W9SgXhatUM0QLjTXnI6lux2HcNJT+NVLeDZWipgUMQuZjpXLFr0dLhw1UDWchqHbCEYQGtXotWaSPoSEnZ+R+shMMl90bVevvC7wERzcxH</ConnectionStringEncrypted>
+        <Name>Tp</Name>
+      </Tp>
     </Databases>
-    <DataSources isList="true" count="1">
-      <FuenteDeDatos1 Ref="3" type="Stimulsoft.Report.Dictionary.StiPostgreSQLSource" isKey="true">
+    <DataSources isList="true" count="2">
+      <FuenteDeDatos1 Ref="4" type="Stimulsoft.Report.Dictionary.StiPostgreSQLSource" isKey="true">
         <Alias>FuenteDeDatos1</Alias>
-        <Columns isList="true" count="7">
-          <value>loc_numero,System.Decimal</value>
-          <value>periodo,System.String</value>
-          <value>cie_fcierre,System.DateTime</value>
-          <value>cie_estado,System.String</value>
-          <value>cie_fcontable,System.DateTime</value>
-          <value>dia,System.String</value>
-          <value>local,System.String</value>
+        <Columns isList="true" count="9">
+          <value>ORIGINAL,loc_numero,loc_numero,loc_numero,System.Decimal,e3ffbd19f8c24e8ab3692e892c9184b6</value>
+          <value>ORIGINAL,periodo,periodo,periodo,System.String,b1cc65075f8e47d1ac836596dc59fe17</value>
+          <value>ORIGINAL,cie_fcierre,cie_fcierre,cie_fcierre,System.DateTime,cd1f5cf0f75946f4a600eef5f67353c8</value>
+          <value>ORIGINAL,cie_estado,cie_estado,cie_estado,System.String,_x0039_90bacac81174d86bff5a79d48df4d94</value>
+          <value>ORIGINAL,cie_fcontable,cie_fcontable,cie_fcontable,System.DateTime,_x0031_12401d9c8e24946815d3bfbf360039f</value>
+          <value>ORIGINAL,dia,dia,dia,System.String,c8a772c8d44649048986745bdcc916b7</value>
+          <value>ORIGINAL,local,local,local,System.String,_x0034_b9ca0b08db149289ab455068249ef62</value>
+          <value>ORIGINAL,num_estado,num_estado,num_estado,System.Int32,db5e35b6f37e4493aa37764336872912</value>
+          <value>ORIGINAL,nom_estado,nom_estado,nom_estado,System.String,edcf8316d008415eb5a42d95e2d65203</value>
         </Columns>
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
@@ -36,11 +43,64 @@
 	TO_CHAR(C.cie_fcontable,'DD') as dia,
 	C.cie_fcierre,
 	C.cie_estado,
-	C.cie_fcontable
+	case  C.cie_estado
+	when 'A' then 0
+	when 'P' then 1
+	when 'C' then 2
+	end num_estado,
+		case  C.cie_estado
+	when 'A' then 'Abierto'
+	when 'P' then 'PreCerrado'
+	when 'C' then 'Cerrado'
+	end nom_estado,
+	C.cie_fcontable 
 from
 	ct3m.cua_cierre C
-	left join ct3m.irs_locales il on (il.loc_numero  = c.loc_numero  )</SqlCommand>
+	left join ct3m.irs_locales il on (il.loc_numero  = c.loc_numero  )
+where c.cie_fcontable &gt;= '20240401'</SqlCommand>
       </FuenteDeDatos1>
+      <FuenteDeDatos2 Ref="5" type="Stimulsoft.Report.Dictionary.StiPostgreSQLSource" isKey="true">
+        <Alias>FuenteDeDatos2</Alias>
+        <Columns isList="true" count="9">
+          <value>loc_numero,System.Decimal</value>
+          <value>local,System.String</value>
+          <value>periodo,System.String</value>
+          <value>dia,System.String</value>
+          <value>cie_fcierre,System.DateTime</value>
+          <value>cie_estado,System.String</value>
+          <value>num_estado,System.Int32</value>
+          <value>nom_estado,System.String</value>
+          <value>cie_fcontable,System.DateTime</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>e25937e3c74e4b73815333df9bf62e0a</Key>
+        <Name>FuenteDeDatos2</Name>
+        <NameInSource>Tp</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>select
+	C.loc_numero,
+	il.loc_descripcion local,
+	TO_CHAR(C.cie_fcontable,'YYYY-MM') as Periodo,
+	TO_CHAR(C.cie_fcontable,'DD') as dia,
+	C.cie_fcierre,
+	C.cie_estado,
+	case  C.cie_estado
+	when 'A' then 0
+	when 'P' then 1
+	when 'C' then 2
+	end num_estado,
+		case  C.cie_estado
+	when 'A' then 'Abierto'
+	when 'P' then 'PreCerrado'
+	when 'C' then 'Cerrado'
+	end nom_estado,
+	C.cie_fcontable 
+from
+	ct3m.cua_cierre C
+	left join ct3m.irs_locales il on (il.loc_numero  = c.loc_numero  )
+where c.cie_fcontable &gt;= '20240401'</SqlCommand>
+      </FuenteDeDatos2>
     </DataSources>
     <Relations isList="true" count="0" />
     <Report isRef="0" />
@@ -53,41 +113,43 @@ from
   <Key>6fa2dfbb44574959a020f86820299d9b</Key>
   <MetaTags isList="true" count="0" />
   <Pages isList="true" count="2">
-    <Dashboard1 Ref="4" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
-      <Components isList="true" count="5">
-        <PivotTable1 Ref="5" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotTableElement" isKey="true">
+    <Promart Ref="6" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
+      <BackColor>253, 234, 218</BackColor>
+      <Components isList="true" count="6">
+        <PivotTable1 Ref="7" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotTableElement" isKey="true">
           <ClientRectangle>0,60,840,560</ClientRectangle>
           <Columns isList="true" count="1">
-            <Item5 Ref="6" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotColumn" isKey="true">
+            <Item7 Ref="8" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotColumn" isKey="true">
               <ExpandExpression />
               <Expression>FuenteDeDatos1.dia</Expression>
               <Key>cd176cd09da441c0a7b93cd297348e0b</Key>
               <Label>dia</Label>
-            </Item5>
+            </Item7>
           </Columns>
           <DataFilters isList="true" count="0" />
           <Expressions isList="true" count="0" />
           <Guid>9d29f67feb7c46088880961fa20bf6f7</Guid>
           <Name>PivotTable1</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
+          <Page isRef="6" />
+          <Parent isRef="6" />
           <PivotTableConditions isList="true" count="0" />
           <Rows isList="true" count="1">
-            <Item6 Ref="7" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotRow" isKey="true">
+            <Item8 Ref="9" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotRow" isKey="true">
               <ExpandExpression />
               <Expression>FuenteDeDatos1.local</Expression>
               <Key>9e1df5dc683841f1b843ea5fd89e4712</Key>
               <Label>local</Label>
-            </Item6>
+            </Item8>
           </Rows>
+          <Style>Turquoise</Style>
           <Summaries isList="true" count="1">
-            <Item7 Ref="8" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotSummary" isKey="true">
+            <Item9 Ref="10" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotSummary" isKey="true">
               <Expression>Count(FuenteDeDatos1.cie_estado)</Expression>
               <Key>3533fa1bc4914e6bbd827c967256ebfe</Key>
               <Label>cie_estado</Label>
-            </Item7>
+            </Item9>
           </Summaries>
-          <Title Ref="9" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Title Ref="11" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Tabla de pivote</Text>
           </Title>
@@ -95,39 +157,42 @@ from
           <TransformFilters isList="true" count="0" />
           <TransformSorts isList="true" count="0" />
         </PivotTable1>
-        <ComboBox1 Ref="10" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
-          <ClientRectangle>880,80,200,40</ClientRectangle>
+        <CB_Periodo Ref="12" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+          <ClientRectangle>1060,80,120,40</ClientRectangle>
           <DataFilters isList="true" count="0" />
           <Expressions isList="true" count="0" />
           <Font>Arial,8</Font>
+          <ForeColor>Black</ForeColor>
           <Guid>966210ef251a424cb993df498ba4a370</Guid>
-          <InitialValue>2024-04</InitialValue>
-          <KeyMeter Ref="11" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+          <InitialValue>2025-01</InitialValue>
+          <KeyMeter Ref="13" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
             <Expression>FuenteDeDatos1.periodo</Expression>
             <Key>c4b05865023e488fbff79dc9052aaac9</Key>
             <Label>periodo</Label>
           </KeyMeter>
-          <Name>ComboBox1</Name>
-          <NameMeter Ref="12" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+          <Name>CB_Periodo</Name>
+          <NameMeter Ref="14" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
             <Expression>FuenteDeDatos1.periodo</Expression>
             <Key>b4afb74de1344cb39cbaae22c207280a</Key>
             <Label>periodo</Label>
           </NameMeter>
-          <Page isRef="4" />
-          <Parent isRef="4" />
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <ParentKey>1906122758ba4b19ad29603cc942cd87</ParentKey>
+          <Shadow>[68:34:34:34];3, 3;5;False</Shadow>
           <TransformActions isList="true" count="0" />
           <TransformFilters isList="true" count="0" />
           <TransformSorts isList="true" count="0" />
           <UserFilters isList="true" count="0" />
-        </ComboBox1>
-        <Chart1 Ref="13" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
-          <Area Ref="14" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
-            <InterlacingHor Ref="15" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
-            <InterlacingVert Ref="16" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
+        </CB_Periodo>
+        <Chart1 Ref="15" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
+          <Area Ref="16" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
+            <InterlacingHor Ref="17" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
+            <InterlacingVert Ref="18" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
           </Area>
           <Arguments isList="true" count="0" />
           <ChartConditions isList="true" count="0" />
-          <ClientRectangle>880,320,320,280</ClientRectangle>
+          <ClientRectangle>880,320,300,280</ClientRectangle>
           <CloseValues isList="true" count="0" />
           <ConstantLines isList="true" count="0" />
           <DataFilters isList="true" count="0" />
@@ -135,40 +200,41 @@ from
           <Expressions isList="true" count="0" />
           <Guid>4c26bc4909234f77a54230b58b8aaf46</Guid>
           <HighValues isList="true" count="0" />
-          <Labels Ref="17" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
+          <Labels Ref="19" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
             <AxisStyle>PercentOfTotal</AxisStyle>
             <Font>Arial,8</Font>
             <Style>PercentOfTotal</Style>
           </Labels>
-          <Legend Ref="18" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
-            <Labels Ref="19" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
+          <Legend Ref="20" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
+            <Labels Ref="21" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
               <Font>Arial,8</Font>
             </Labels>
-            <Title Ref="20" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
+            <Title Ref="22" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
               <Font>Arial,12,Bold</Font>
             </Title>
           </Legend>
           <LowValues isList="true" count="0" />
-          <ManuallyEnteredChartMeter Ref="21" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+          <ManuallyEnteredChartMeter Ref="23" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
             <Key>f352f51d6d35488c8b558c044ef67038</Key>
           </ManuallyEnteredChartMeter>
           <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKEUo6UFYknOWck1+cGpaYU5oKF/LJL0cV8MhMz0AVcSxKL81NzSuBC4SnAtUguKiqXfNSUAWCU4syU4uVQLxYXq5YALzbJDalAAAAWklQ</ManuallyEnteredData>
-          <Marker Ref="22" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
+          <Marker Ref="24" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
           <Name>Chart1</Name>
           <NegativeSeriesColors />
-          <Page isRef="4" />
-          <Parent isRef="4" />
+          <Page isRef="6" />
+          <Parent isRef="6" />
           <ParetoSeriesColors />
           <RoundValues>True</RoundValues>
-          <Series Ref="23" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
+          <Series Ref="25" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
             <Expression>FuenteDeDatos1.cie_estado</Expression>
             <Key>9d511b987a864ddab1a2c5ee6d483b0a</Key>
             <Label>cie_estado</Label>
           </Series>
           <SeriesColors>[255:0:0], [43:120:140], [255:192:0]</SeriesColors>
-          <Title Ref="24" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Title Ref="26" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Gráfico</Text>
+            <Visible>False</Visible>
           </Title>
           <TransformActions isList="true" count="0" />
           <TransformFilters isList="true" count="0" />
@@ -177,43 +243,44 @@ from
           <UserFilters isList="true" count="0" />
           <UserSorts isList="true" count="0" />
           <UserViewStates isList="true" count="0" />
-          <ValueFormat Ref="25" type="NumberFormat" isKey="true">
-            <DecimalDigits>0</DecimalDigits>
+          <ValueFormat Ref="27" type="PercentageFormat" isKey="true">
+            <DecimalDigits>2</DecimalDigits>
             <GroupSeparator>,</GroupSeparator>
-            <NegativePattern>1</NegativePattern>
-            <State>DecimalDigits, Abbreviation</State>
+            <NegativePattern>0</NegativePattern>
+            <PositivePattern>0</PositivePattern>
+            <Symbol>%</Symbol>
           </ValueFormat>
           <Values isList="true" count="1">
-            <Item10 Ref="26" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+            <Item12 Ref="28" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
               <Expression>Sum(FuenteDeDatos1.loc_numero)</Expression>
               <Key>8f1cc409bfc145c481ca7667f37e577d</Key>
               <Label>loc_numero</Label>
               <SeriesType>Pie3d</SeriesType>
-            </Item10>
+            </Item12>
           </Values>
           <Weights isList="true" count="0" />
           <XValues isList="true" count="0" />
           <YValues isList="true" count="0" />
         </Chart1>
-        <Text1 Ref="27" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
+        <Text1 Ref="29" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
           <BackColor>227, 108, 9</BackColor>
           <ClientRectangle>-20,0,1240,40</ClientRectangle>
           <Expressions isList="true" count="0" />
           <Guid>38f4f9ff42794d7c94532f4395c32302</Guid>
           <Measures isList="true" count="0" />
           <Name>Text1</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
+          <Page isRef="6" />
+          <Parent isRef="6" />
           <SizeMode>Fit</SizeMode>
           <Text>&lt;font face="Bahnschrift Condensed" size="36"&gt;&lt;text-align="Center"&gt;&lt;font-color="White"&gt;Cierre de Cuadratura&lt;/font-color&gt;&lt;/text-align&gt;&lt;/font&gt;</Text>
-          <Title Ref="28" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Title Ref="30" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Texto</Text>
             <Visible>False</Visible>
           </Title>
           <VertAlignment>Bottom</VertAlignment>
         </Text1>
-        <Image1 Ref="29" type="Stimulsoft.Dashboard.Components.Image.StiImageElement" isKey="true">
+        <Image1 Ref="31" type="Stimulsoft.Dashboard.Components.Image.StiImageElement" isKey="true">
           <ClientRectangle>880,140,300,160</ClientRectangle>
           <Expressions isList="true" count="0" />
           <Guid>d3af89e9c7994d83b91832230dbf9bf4</Guid>
@@ -347,56 +414,82 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAZqn+P2+zqGhhWjCcAAAAAElFTkSuQmCC</Image>
           <Name>Image1</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Title Ref="30" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <Title Ref="32" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Imagen</Text>
             <Visible>False</Visible>
           </Title>
         </Image1>
+        <ComboBox3 Ref="33" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+          <ClientRectangle>880,80,160,40</ClientRectangle>
+          <DataFilters isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Font>Arial,8</Font>
+          <Guid>1906122758ba4b19ad29603cc942cd87</Guid>
+          <KeyMeter Ref="34" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+            <Expression>FuenteDeDatos1.cie_estado</Expression>
+            <Key>02d8eef07ca747c0bb7d5ec748efe385</Key>
+            <Label>cie_estado</Label>
+          </KeyMeter>
+          <Name>ComboBox3</Name>
+          <NameMeter Ref="35" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+            <Expression>FuenteDeDatos1.nom_estado</Expression>
+            <Key>23c18080f7f44df8835358ec708ad7d2</Key>
+            <Label>nom_estado</Label>
+          </NameMeter>
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <ShowAllValue>True</ShowAllValue>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <UserFilters isList="true" count="0" />
+        </ComboBox3>
       </Components>
       <Expressions isList="true" count="0" />
       <Guid>5d881cb98dcd45319c1cb8bb7d61059e</Guid>
-      <Name>Dashboard1</Name>
+      <Name>Promart</Name>
       <Report isRef="0" />
       <Style>Orange</Style>
-    </Dashboard1>
-    <Dashboard2 Ref="31" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
-      <Components isList="true" count="5">
-        <PivotTable2 Ref="32" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotTableElement" isKey="true">
+    </Promart>
+    <Oeshle Ref="36" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
+      <BackColor>255, 147, 147</BackColor>
+      <Components isList="true" count="6">
+        <PivotTable2 Ref="37" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotTableElement" isKey="true">
           <ClientRectangle>0,40,840,560</ClientRectangle>
           <Columns isList="true" count="1">
-            <Item15 Ref="33" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotColumn" isKey="true">
+            <Item18 Ref="38" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotColumn" isKey="true">
               <ExpandExpression />
-              <Expression>FuenteDeDatos1.dia</Expression>
-              <Key>de2fa39cfe0c4ae481e8f5c2725920b6</Key>
+              <Expression>FuenteDeDatos2.dia</Expression>
+              <Key>08df8077839240459b45a809a50d3793</Key>
               <Label>dia</Label>
-            </Item15>
+            </Item18>
           </Columns>
           <DataFilters isList="true" count="0" />
           <Expressions isList="true" count="0" />
           <Guid>7a23e91c42d044ff8d46e0d78c40c872</Guid>
           <Name>PivotTable2</Name>
-          <Page isRef="31" />
-          <Parent isRef="31" />
+          <Page isRef="36" />
+          <Parent isRef="36" />
           <PivotTableConditions isList="true" count="0" />
           <Rows isList="true" count="1">
-            <Item16 Ref="34" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotRow" isKey="true">
+            <Item19 Ref="39" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotRow" isKey="true">
               <ExpandExpression />
-              <Expression>FuenteDeDatos1.loc_numero</Expression>
-              <Key>2992b0e410ac46ca8d38b2f7d58eea8a</Key>
-              <Label>loc_numero</Label>
-            </Item16>
+              <Expression>FuenteDeDatos2.local</Expression>
+              <Key>64e8080ae4b94e49a92dfef6596c265e</Key>
+              <Label>local</Label>
+            </Item19>
           </Rows>
           <Summaries isList="true" count="1">
-            <Item17 Ref="35" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotSummary" isKey="true">
-              <Expression>Count(FuenteDeDatos1.cie_estado)</Expression>
-              <Key>90dd1580300841b796bc72521f73f138</Key>
+            <Item20 Ref="40" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotSummary" isKey="true">
+              <Expression>Count(FuenteDeDatos2.cie_estado)</Expression>
+              <Key>a7fa268cf8ef4c069ca174ad447ec1e8</Key>
               <Label>cie_estado</Label>
-            </Item17>
+            </Item20>
           </Summaries>
-          <Title Ref="36" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Title Ref="41" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Tabla de pivote</Text>
           </Title>
@@ -404,39 +497,40 @@ AAAAAAAAAAAAZqn+P2+zqGhhWjCcAAAAAElFTkSuQmCC</Image>
           <TransformFilters isList="true" count="0" />
           <TransformSorts isList="true" count="0" />
         </PivotTable2>
-        <ComboBox2 Ref="37" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
-          <ClientRectangle>880,60,200,40</ClientRectangle>
+        <ComboBox2 Ref="42" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+          <ClientRectangle>1040,80,160,40</ClientRectangle>
           <DataFilters isList="true" count="0" />
           <Expressions isList="true" count="0" />
           <Font>Arial,8</Font>
           <Guid>1d3972921ad941759f91f45d5e660d9e</Guid>
           <InitialValue>2024-04</InitialValue>
-          <KeyMeter Ref="38" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
-            <Expression>FuenteDeDatos1.periodo</Expression>
+          <KeyMeter Ref="43" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+            <Expression>FuenteDeDatos2.periodo</Expression>
             <Key>40413646b8784301adcc21193f977e0a</Key>
             <Label>periodo</Label>
           </KeyMeter>
           <Name>ComboBox2</Name>
-          <NameMeter Ref="39" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
-            <Expression>FuenteDeDatos1.periodo</Expression>
-            <Key>174c7edd932a4a29a8aa8516cf76efe3</Key>
+          <NameMeter Ref="44" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+            <Expression>FuenteDeDatos2.periodo</Expression>
+            <Key>911047f792494bb0a788494d03fe69ef</Key>
             <Label>periodo</Label>
           </NameMeter>
-          <Page isRef="31" />
-          <Parent isRef="31" />
+          <Page isRef="36" />
+          <Parent isRef="36" />
+          <ParentKey>c3da898574264afdaef491e7c573b39f</ParentKey>
           <TransformActions isList="true" count="0" />
           <TransformFilters isList="true" count="0" />
           <TransformSorts isList="true" count="0" />
           <UserFilters isList="true" count="0" />
         </ComboBox2>
-        <Chart2 Ref="40" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
-          <Area Ref="41" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
-            <InterlacingHor Ref="42" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
-            <InterlacingVert Ref="43" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
+        <Chart2 Ref="45" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
+          <Area Ref="46" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
+            <InterlacingHor Ref="47" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
+            <InterlacingVert Ref="48" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
           </Area>
           <Arguments isList="true" count="0" />
           <ChartConditions isList="true" count="0" />
-          <ClientRectangle>880,300,320,280</ClientRectangle>
+          <ClientRectangle>880,320,300,280</ClientRectangle>
           <CloseValues isList="true" count="0" />
           <ConstantLines isList="true" count="0" />
           <DataFilters isList="true" count="0" />
@@ -444,38 +538,39 @@ AAAAAAAAAAAAZqn+P2+zqGhhWjCcAAAAAElFTkSuQmCC</Image>
           <Expressions isList="true" count="0" />
           <Guid>c074d954280a45c08d0eac6d4c4e419a</Guid>
           <HighValues isList="true" count="0" />
-          <Labels Ref="44" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
+          <Labels Ref="49" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
             <Font>Arial,8</Font>
           </Labels>
-          <Legend Ref="45" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
-            <Labels Ref="46" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
+          <Legend Ref="50" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
+            <Labels Ref="51" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
               <Font>Arial,8</Font>
             </Labels>
-            <Title Ref="47" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
+            <Title Ref="52" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
               <Font>Arial,12,Bold</Font>
             </Title>
           </Legend>
           <LowValues isList="true" count="0" />
-          <ManuallyEnteredChartMeter Ref="48" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+          <ManuallyEnteredChartMeter Ref="53" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
             <Key>4243183d65ff48d0a2c8d8707e7b9b69</Key>
           </ManuallyEnteredChartMeter>
           <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKEUo6UFYknOWck1+cGpaYU5oKF/LJL0cV8MhMz0AVcSxKL81NzSuBC4SnAtUguKiqXfNSUAWCU4syU4uVQLxYXq5YALzbJDalAAAAWklQ</ManuallyEnteredData>
-          <Marker Ref="49" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
+          <Marker Ref="54" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
           <Name>Chart2</Name>
           <NegativeSeriesColors />
-          <Page isRef="31" />
-          <Parent isRef="31" />
+          <Page isRef="36" />
+          <Parent isRef="36" />
           <ParetoSeriesColors />
           <RoundValues>True</RoundValues>
-          <Series Ref="50" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
-            <Expression>FuenteDeDatos1.cie_estado</Expression>
-            <Key>ffd5b953e6764485ac18652825d5e655</Key>
+          <Series Ref="55" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
+            <Expression>FuenteDeDatos2.cie_estado</Expression>
+            <Key>97ae11d5707a4ed08dc66ade6d015984</Key>
             <Label>cie_estado</Label>
           </Series>
           <SeriesColors>[255:0:0], [43:120:140], [255:192:0]</SeriesColors>
-          <Title Ref="51" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Title Ref="56" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Gráfico</Text>
+            <Visible>False</Visible>
           </Title>
           <TransformActions isList="true" count="0" />
           <TransformFilters isList="true" count="0" />
@@ -484,43 +579,44 @@ AAAAAAAAAAAAZqn+P2+zqGhhWjCcAAAAAElFTkSuQmCC</Image>
           <UserFilters isList="true" count="0" />
           <UserSorts isList="true" count="0" />
           <UserViewStates isList="true" count="0" />
-          <ValueFormat Ref="52" type="NumberFormat" isKey="true">
+          <ValueFormat Ref="57" type="NumberFormat" isKey="true">
             <DecimalDigits>0</DecimalDigits>
             <GroupSeparator>,</GroupSeparator>
             <NegativePattern>1</NegativePattern>
             <State>DecimalDigits, Abbreviation</State>
           </ValueFormat>
           <Values isList="true" count="1">
-            <Item20 Ref="53" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
-              <Expression>Sum(FuenteDeDatos1.loc_numero)</Expression>
-              <Key>1e4fb211c80c4356982fb1b87f0a5b41</Key>
+            <Item23 Ref="58" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Count(FuenteDeDatos2.loc_numero)</Expression>
+              <Key>1925e17661554ba89b7012b60db50453</Key>
               <Label>loc_numero</Label>
               <SeriesType>Pie3d</SeriesType>
-            </Item20>
+            </Item23>
           </Values>
           <Weights isList="true" count="0" />
           <XValues isList="true" count="0" />
           <YValues isList="true" count="0" />
         </Chart2>
-        <Text2 Ref="54" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
-          <BackColor>255, 0, 0</BackColor>
+        <Text2 Ref="59" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
+          <BackColor>Red</BackColor>
           <ClientRectangle>-60,0,1280,40</ClientRectangle>
           <Expressions isList="true" count="0" />
           <Guid>d512cf8e41494dddab179ba6b8a02c63</Guid>
           <Measures isList="true" count="0" />
           <Name>Text2</Name>
-          <Page isRef="31" />
-          <Parent isRef="31" />
+          <Page isRef="36" />
+          <Parent isRef="36" />
           <SizeMode>Fit</SizeMode>
           <Text>&lt;font face="Arial" size="36"&gt;&lt;text-align="Center"&gt;&lt;font-color="White"&gt;Cierre de Cuadratura&lt;/font-color&gt;&lt;/text-align&gt;&lt;/font&gt;</Text>
-          <Title Ref="55" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Title Ref="60" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Texto</Text>
             <Visible>False</Visible>
           </Title>
           <VertAlignment>Bottom</VertAlignment>
         </Text2>
-        <Image2 Ref="56" type="Stimulsoft.Dashboard.Components.Image.StiImageElement" isKey="true">
+        <Image2 Ref="61" type="Stimulsoft.Dashboard.Components.Image.StiImageElement" isKey="true">
+          <BackColor>255, 147, 147</BackColor>
           <ClientRectangle>880,120,300,160</ClientRectangle>
           <Expressions isList="true" count="0" />
           <Guid>915b2958f7ef49bda8592e9467d70571</Guid>
@@ -1317,20 +1413,45 @@ igAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKK
 ACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA
 KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Z</Image>
           <Name>Image2</Name>
-          <Page isRef="31" />
-          <Parent isRef="31" />
-          <Title Ref="57" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+          <Page isRef="36" />
+          <Parent isRef="36" />
+          <Title Ref="62" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
             <Font>Arial,11</Font>
             <Text>Imagen</Text>
             <Visible>False</Visible>
           </Title>
         </Image2>
+        <ComboBox1 Ref="63" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+          <ClientRectangle>880,80,140,40</ClientRectangle>
+          <DataFilters isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Font>Arial,8</Font>
+          <Guid>c3da898574264afdaef491e7c573b39f</Guid>
+          <KeyMeter Ref="64" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+            <Expression>FuenteDeDatos2.cie_estado</Expression>
+            <Key>8b98571940494fbbac959599b89ebed8</Key>
+            <Label>cie_estado</Label>
+          </KeyMeter>
+          <Name>ComboBox1</Name>
+          <NameMeter Ref="65" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+            <Expression>FuenteDeDatos2.nom_estado</Expression>
+            <Key>ca90236d7790449f891890ce46e56740</Key>
+            <Label>nom_estado</Label>
+          </NameMeter>
+          <Page isRef="36" />
+          <Parent isRef="36" />
+          <ShowAllValue>True</ShowAllValue>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <UserFilters isList="true" count="0" />
+        </ComboBox1>
       </Components>
       <Expressions isList="true" count="0" />
       <Guid>214b88c538cb4321999f67341827e8d1</Guid>
-      <Name>Dashboard2</Name>
+      <Name>Oeshle</Name>
       <Report isRef="0" />
-    </Dashboard2>
+    </Oeshle>
   </Pages>
   <ReferencedAssemblies isList="true" count="8">
     <value>System.Dll</value>
@@ -1344,10 +1465,10 @@ KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Z</Image>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
   <ReportAuthor>Magalli Vera Quispe</ReportAuthor>
-  <ReportChanged>1/20/2025 2:51:37 PM</ReportChanged>
+  <ReportChanged>1/20/2025 8:26:36 PM</ReportChanged>
   <ReportCreated>1/8/2025 5:20:09 PM</ReportCreated>
   <ReportFile>D:\disco d\Elvis Velasquez\7 dashBoard Stimulsoft\DB Cierre Cuadratura.mrt</ReportFile>
-  <ReportGuid>5991815296b641ba84ebdcdf6f1c55ce</ReportGuid>
+  <ReportGuid>4c230eea1d9a432894e9ca8792cd452b</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
   <ReportVersion>2025.1.2.0</ReportVersion>
@@ -1376,7 +1497,7 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="1">
-    <Estilo1 Ref="58" type="Stimulsoft.Report.StiTableStyle" isKey="true">
+    <Estilo1 Ref="66" type="Stimulsoft.Report.StiTableStyle" isKey="true">
       <AlternatingDataColor>238, 238, 238</AlternatingDataColor>
       <AlternatingDataForeground>34, 34, 34</AlternatingDataForeground>
       <BackColor>White</BackColor>

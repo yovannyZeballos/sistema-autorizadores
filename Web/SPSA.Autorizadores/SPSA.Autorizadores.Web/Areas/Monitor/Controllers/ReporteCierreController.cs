@@ -32,7 +32,6 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
         public ActionResult GetReport()
         {
             var report = StiReport.CreateNewDashboard();
-            //StiReport report = new StiReport();
             var path = Server.MapPath("~/Content/Reportes/Report.mrt");
             report.Load(path);
 
