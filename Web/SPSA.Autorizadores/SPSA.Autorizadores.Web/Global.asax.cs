@@ -24,6 +24,6 @@ namespace SPSA.Autorizadores.Web
 
 			var log = SerilogClass._log;
 			log.Information("Aplicación iniciada");
-		}
+        }
 	}
 }

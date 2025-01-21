@@ -1,7 +1,10 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
+using Stimulsoft.Report.Mvc;
+using Stimulsoft.Report;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.IO;
 
 namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 {
@@ -12,7 +15,10 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 		public ReporteCierreController(IMediator mediator)
 		{
 			_mediator = mediator;
-		}
+
+            var path = System.Web.HttpContext.Current.Server.MapPath("~/Content/licencia/license.key");
+            Stimulsoft.Base.StiLicense.LoadFromFile(path);
+        }
 
 		public ActionResult Index()
 		{
@@ -21,6 +27,21 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
         public ActionResult Dashboard()
         {
             return View();
+        }
+
+        public ActionResult GetReport()
+        {
+            var report = StiReport.CreateNewDashboard();
+            //StiReport report = new StiReport();
+            var path = Server.MapPath("~/Content/Reportes/Report.mrt");
+            report.Load(path);
+
+            return StiMvcViewer.GetReportResult(report);
+        }
+
+        public ActionResult ViewerEvent()
+        {
+            return StiMvcViewer.ViewerEventResult();
         }
 
         public ActionResult Resumen()
