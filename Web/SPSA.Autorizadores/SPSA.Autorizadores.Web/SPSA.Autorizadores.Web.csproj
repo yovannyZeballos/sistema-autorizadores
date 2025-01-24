@@ -2895,7 +2895,6 @@
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\licencia\license.key" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2964,6 +2963,10 @@
     <ProjectReference Include="..\SPSA.Autorizadores.Aplicacion\SPSA.Autorizadores.Aplicacion.csproj">
       <Project>{de177fe3-7042-48d3-a5a4-b31cb97218e0}</Project>
       <Name>SPSA.Autorizadores.Aplicacion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPSA.Autorizadores.Dominio.Contrato\SPSA.Autorizadores.Dominio.Contrato.csproj">
+      <Project>{3E97C529-D7B0-47FA-B25D-B82C7CBD9C79}</Project>
+      <Name>SPSA.Autorizadores.Dominio.Contrato</Name>
     </ProjectReference>
     <ProjectReference Include="..\SPSA.Autorizadores.Dominio\SPSA.Autorizadores.Dominio.csproj">
       <Project>{4E952E2E-F720-4907-9A07-E5F1E70E5108}</Project>

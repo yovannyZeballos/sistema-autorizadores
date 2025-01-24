@@ -5,19 +5,24 @@ using Stimulsoft.Report;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.IO;
+using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using System.Linq;
+using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 {
 	public class ReporteCierreController : Controller
 	{
 		private readonly IMediator _mediator;
+		private readonly ISGPContexto _contexto;
 
 		public ReporteCierreController(IMediator mediator)
 		{
 			_mediator = mediator;
+            _contexto = new SGPContexto();
 
-            var path = System.Web.HttpContext.Current.Server.MapPath("~/Content/licencia/license.key");
-            Stimulsoft.Base.StiLicense.LoadFromFile(path);
+			var procesoParametro = _contexto.RepositorioProcesoParametro.Obtener(x => x.CodProceso == 36 && x.CodParametro == "01" ).FirstOrDefault();
+            Stimulsoft.Base.StiLicense.LoadFromFile(procesoParametro.ValParametro);
         }
 
 		public ActionResult Index()
