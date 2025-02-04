@@ -64,7 +64,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries
 			catch (Exception ex)
 			{
 				response.Ok = false;
-				response.Mensaje = "Ocurrió un error al listar las mepresas asociadas";
+				response.Mensaje = "Ocurrió un error al listar las empresas asociadas";
 				_logger.Error(ex, response.Mensaje);
 			}
 			return response;

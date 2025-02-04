@@ -387,6 +387,7 @@
     <Compile Include="Features\InventarioCaja\Commands\ActualizarInvCajaCommand.cs" />
     <Compile Include="Features\InventarioCaja\Commands\CrearInvCajaCommand.cs" />
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaCommand.cs" />
+    <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaPorCajaCommand.cs" />
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaPorLocalCommand.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ListarInvCajaQuery.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ObtenerInvCajaQuery.cs" />
