@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 using System;
@@ -24,6 +25,13 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ListarEmpresasAsociadas(ListarEmpresasAsociadasQuery request)
+        {
+            var respose = await _mediator.Send(request);
+            return Json(respose);
         }
 
         [HttpPost]

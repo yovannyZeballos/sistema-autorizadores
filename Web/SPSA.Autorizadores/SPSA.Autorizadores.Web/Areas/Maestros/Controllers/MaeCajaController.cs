@@ -7,6 +7,7 @@ using System.Web;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
+using System.Linq;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
@@ -35,6 +36,17 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         public async Task<JsonResult> ListarCaja(ListarMaeCajaQuery request)
         {
             var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ListarCajasActivas(ListarMaeCajaQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+
+            var localesActivos = respuesta.Data.Where(x => x.TipEstado == "A").ToList();
+            respuesta.Data = localesActivos;
+
             return Json(respuesta);
         }
 
