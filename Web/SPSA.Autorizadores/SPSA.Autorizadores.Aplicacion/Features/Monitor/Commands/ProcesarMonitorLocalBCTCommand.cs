@@ -102,6 +102,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 						var cadenaConexion = ArmarCadenaConexion(localPos);
 						var reintentos = procesoParametro.ValParametro == null ? 1 : Convert.ToInt32(procesoParametro.ValParametro);
 						var (cantidadTransacciones, montoTransacciones) = await EjecutarConReintento(() => _repositorioElectronicJournal.ListarTransacciones(cadenaConexion, fecha), reintentos);
+
 						localPos.CantTransaccionesLocal = cantidadTransacciones;
 						localPos.NontoTransaccionesLocal = montoTransacciones;
 
@@ -160,13 +161,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 					try
 					{
 						//BD BCT
-						var (cantidadTransacciones, montoTransacciones) = await _repositorioTrxHeader.ObtenerCantidadTransacciones(Convert.ToInt32(localPos.CodLocal), fecha);
+						var monitorTrxInfo = await _repositorioTrxHeader.ObtenerCantidadTransacciones(Convert.ToInt32(localPos.CodLocal), fecha);
 
-						localPos.CanTransaccionesBCT = cantidadTransacciones;
-						localPos.MontoTransaccionesBCT = montoTransacciones;
+                        localPos.CanTransaccionesBCT = monitorTrxInfo.NoCantTrx;
+                        localPos.MontoTransaccionesBCT = monitorTrxInfo.NoImpVta;
 
-						// Estado y observacion
-						var diferenciaCantidad = Math.Abs(localPos.CantTransaccionesLocal - localPos.CanTransaccionesBCT);
+                        // Estado y observacion
+                        var diferenciaCantidad = Math.Abs(localPos.CantTransaccionesLocal - localPos.CanTransaccionesBCT);
 						var diferenciaMonto = Math.Abs(localPos.NontoTransaccionesLocal - localPos.MontoTransaccionesBCT);
 
 						if (diferenciaCantidad == 0 && diferenciaMonto == 0)
