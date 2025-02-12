@@ -1,5 +1,6 @@
 ﻿@using Stimulsoft.Report.Web;
 @using Stimulsoft.Report.Mvc;
+@using System.Web.UI.WebControls;
 
 @{
     ViewBag.Title = "Dashboard | Cierre Tesoreria";
@@ -13,13 +14,26 @@
             frameborder="0">
     </iframe>*@
 
-@Html.Stimulsoft().StiMvcViewer("StiMvcViewer", new StiMvcViewerOptions()
+@Html.Stimulsoft().StiMvcViewer(new StiMvcViewerOptions()
 {
     Actions =
     {
         GetReport = "GetReport",
         ViewerEvent = "ViewerEvent"
-    }
+    },
+    Appearance =
+    {
+        //BackgroundColor = System.Drawing.Color.Gainsboro,
+        ScrollbarsMode = true
+    },
+    Toolbar =
+    {
+        DisplayMode = StiToolbarDisplayMode.Separated,
+        ShowDesignButton = true
+    },
+    Theme = StiViewerTheme.Office2013VeryDarkGrayPurple,
+    //Width = Unit.Percentage(100),
+    //Height = Unit.Percentage(100)
 })
 
 
