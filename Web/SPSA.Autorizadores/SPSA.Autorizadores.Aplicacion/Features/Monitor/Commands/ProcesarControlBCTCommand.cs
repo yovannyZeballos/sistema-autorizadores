@@ -41,7 +41,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				var fechaStr = fecha.ToString("yyyyMMdd", culture);
 
 				var horariosCT2 = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalCT2(fechaStr, request.CodSucursal);
-				var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCT(fechaStr, request.CodSucursal);
+				var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCT(fecha.ToString("dd/MM/yyyy"), request.CodSucursal);
 				var localesActivos = await ListarLocalesActivos();
 
 				respuesta.Data = (from a in horariosCT2
