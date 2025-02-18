@@ -887,6 +887,7 @@ var AdministrarMaestroLocal = function () {
 
     const validarLocal = function (local) {
         let validate = true;
+
         if (local.CodEmpresa === '' || local.CodCadena === '' || local.CodRegion === '' || local.CodZona === '' || local.CodLocal === '' ||
             local.NomLocal === '' || local.TipEstado === '' || local.CodLocalPMM === '' || local.Ip === '' || local.CodLocalSunat === '') {
             validate = false;

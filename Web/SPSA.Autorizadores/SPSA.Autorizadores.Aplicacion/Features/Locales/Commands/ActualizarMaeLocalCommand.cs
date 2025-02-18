@@ -50,21 +50,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
         }
         public async Task<RespuestaComunDTO> Handle(ActualizarMaeLocalCommand request, CancellationToken cancellationToken)
         {
-            if (request.NomLocal is null)
-            {
-                request.NomLocal = string.Empty;
-            }
-
-            if (request.NomLocalOfiplan is null)
-            {
-                request.NomLocalOfiplan = string.Empty;
-            }
-
-            if (request.Ip is null)
-            {
-                request.Ip = "0.0.0.0";
-            }
-
             var respuesta = new RespuestaComunDTO { Ok = true };
             try
             {
@@ -83,15 +68,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
             new NpgsqlParameter("@codEmpresa", request.CodEmpresa),
             new NpgsqlParameter("@codCadena", request.CodCadena),
             new NpgsqlParameter("@codLocal", request.CodLocal),
-            new NpgsqlParameter("@nomLocal", request.NomLocal),
+            new NpgsqlParameter("@nomLocal", request.NomLocal ?? string.Empty),
             new NpgsqlParameter("@tipEstado", request.TipEstado),
             new NpgsqlParameter("@codLocalPMM", Convert.ToInt32(request.CodLocalPMM)),
-            new NpgsqlParameter("@ip", request.Ip),
-            new NpgsqlParameter("@codLocalOfiplan", request.CodLocalOfiplan),
-            new NpgsqlParameter("@nomLocalOfiplan", request.NomLocalOfiplan),
+            new NpgsqlParameter("@ip", request.Ip ?? "0.0.0.0"),
+            new NpgsqlParameter("@codLocalOfiplan", request.CodLocalOfiplan ?? string.Empty),
+            new NpgsqlParameter("@nomLocalOfiplan", request.NomLocalOfiplan ?? string.Empty),
             new NpgsqlParameter("@codLocalSunat", request.CodLocalSunat),
-            new NpgsqlParameter("@dirLocal", request.DirLocal),
-            new NpgsqlParameter("@ubigeo", request.Ubigeo),
+            new NpgsqlParameter("@dirLocal", request.DirLocal ?? string.Empty),
+            new NpgsqlParameter("@ubigeo", request.Ubigeo ?? string.Empty),
             new NpgsqlParameter("@codRegionAnterior", request.CodRegionAnterior),
             new NpgsqlParameter("@codZonaAnterior", request.CodZonaAnterior)
         };
