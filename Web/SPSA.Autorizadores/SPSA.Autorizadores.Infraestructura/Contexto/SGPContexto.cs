@@ -61,6 +61,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMonCierreEOD = new RepositorioMonCierreEOD(this);
 			RepositorioMonCierreEODHist = new RepositorioMonCierreEODHist(this);
 
+            RepositorioMaeColaboradorExt = new RepositorioMaeColaboradorExt(this);
+
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
@@ -106,6 +108,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioInvKardexLocal RepositorioInvKardexLocal { get; private set; }
 		public IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; private set; }
 		public IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; private set; }
+		public IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; private set; }
 
 
 
@@ -154,6 +157,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
 			modelBuilder.Configurations.Add(new MonCierreEODTypeConfiguration());
 			modelBuilder.Configurations.Add(new MonCierreEODHistTypeConfiguration());
+
+			modelBuilder.Configurations.Add(new MaeColaboradorExtTypeConfiguration());
 
 		}
 

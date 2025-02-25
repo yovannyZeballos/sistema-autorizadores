@@ -1,0 +1,190 @@
+﻿@model string
+@{
+    ViewBag.Title = "Mantenimiento de Colaboradores Externos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Mantenimiento de Colaboradores Externos</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Colaboradores Externos</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @*@Html.Partial("_CardHeader", "Colaboradores Externos")*@
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="col-md-3 d-none">
+                        <div class="form-group">
+                            <label for="txtUsuario" class="form-label">Usuario</label>
+                            <input type="text" class="form-control form-control-sm" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
+                                <select class="form-control form-control-sm form-select" id="cboEmpresaBuscar">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="cboLocalBuscar" class="form-label">Local</label>
+                                <select class="form-control form-control-sm form-select" id="cboLocalBuscar">
+                                    <option label="Todos"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="txtCodOfisisBuscar" class="form-label">Código Ofisis</label>
+                                <input type="text" class="form-control form-control-sm" id="txtCodOfisisBuscar" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="txtNroDocBuscar" class="form-label">Nro Doc.</label>
+                                <input type="text" class="form-control form-control-sm" id="txtNroDocBuscar" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="txtNroDocBuscar" class="form-label"></label>
+                                <button id="btnBuscarColabExt" class="btn btn-sm btn-info mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<hr />*@
+
+                <div class="col-xl-12">
+                    <button id="btnModalNuevoColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Colaborador</button>
+                    <button id="btnModalModificarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Colaborador</button>
+                    @*<button id="btnBuscarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>*@
+                    @*<button id="btnDescargarMaestro" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Maestro</button>*@
+                    <button id="btnImportarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Colaboradores</button>
+                    <input type="file" id="excelImportar" style="display: none;">
+                </div>
+                <div class="col-xl-12">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="checkbox ms-2" style="display: inline-block;">
+                                <label class="unselectable ms-2">
+                                    <input id="chkPersonal" type="checkbox"> Personal
+                                </label>
+                                <label class="unselectable ms-2">
+                                    <input id="chkGenerico" type="checkbox"> Generico
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table id="tableColaboradoresExt" class="table text-nowrap border-bottom">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD. LOCAL</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">CODIGO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">A. PATERNO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">A. MATERNO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">TIPO DOC</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NUM. DOC</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">PUESTO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">F. INGRESO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">F. CESE</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">ESTADO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL COLABORADOR EXTERNO -->
+<div class="modal fade" id="modalColabExt" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title" id="tituloModalColabExt"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="btnGrabarModifica" class="btn btn-primary">Grabar</button>
+                <button id="btnGrabarNuevo" class="btn btn-primary">Grabar</button>
+                <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ERRORES IMPORTAR EXCEL-->
+<div class="modal fade" id="modalErroresImportacionExcel" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModalImportarEmpresa">Errores encontrados</h5>
+                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyErrores">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarColaboradorExt.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarColaboradorExt.init();
+        });
+    </script>
+}
+

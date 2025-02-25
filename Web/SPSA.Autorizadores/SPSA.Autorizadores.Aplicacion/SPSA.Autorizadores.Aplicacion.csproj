@@ -342,6 +342,15 @@
     <Compile Include="Features\Cajas\DTOs\ListarMaeCajaDTO.cs" />
     <Compile Include="Features\Cajas\DTOs\MaeCajaDTO.cs" />
     <Compile Include="Features\Cajas\DTOs\ObtenerMaeCajaDTO.cs" />
+    <Compile Include="Features\ColaboradoresExt\Commands\ActualizarMaeColaboradorExtCommand.cs" />
+    <Compile Include="Features\ColaboradoresExt\Commands\CrearMaeColaboradorExtCommand.cs" />
+    <Compile Include="Features\ColaboradoresExt\Commands\EliminarMaeColaboradorExtCommand.cs" />
+    <Compile Include="Features\ColaboradoresExt\Commands\ImportarMaeColaboradorExtCommand.cs" />
+    <Compile Include="Features\ColaboradoresExt\DTOs\ListarMaeColaboradorExtDTO.cs" />
+    <Compile Include="Features\ColaboradoresExt\DTOs\MaeColaboradorExtDTO.cs" />
+    <Compile Include="Features\ColaboradoresExt\DTOs\ObtenerMaeColaboradorExtDTO.cs" />
+    <Compile Include="Features\ColaboradoresExt\Queries\ListarMaeColaboradorExtQuery.cs" />
+    <Compile Include="Features\ColaboradoresExt\Queries\ObtenerMaeColaboradorExtQuery.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
@@ -577,6 +586,7 @@
     <Compile Include="ViewModel\InvActivoViewModel.cs" />
     <Compile Include="ViewModel\InvCajaViewModel.cs" />
     <Compile Include="ViewModel\InvKardexViewModel.cs" />
+    <Compile Include="ViewModel\MaeColaboradorExtViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

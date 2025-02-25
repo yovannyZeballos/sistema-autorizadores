@@ -1,0 +1,140 @@
+﻿@model SPSA.Autorizadores.Aplicacion.ViewModel.MaeColaboradorExtViewModel
+
+<div class="row needs-validation" id="formColabExt">
+    <div class="col-md-12">
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label class="form-label mb-4">Indicador</label>
+                <div class="d-flex align-items-center">
+                    <div class="form-check form-check-inline me-3">
+                        <input class="form-check-input" type="radio"
+                               name="IndicadorPersonal" id="Personal" value="S"
+                               @(Model.ColaboradorExt.IndPersonal == "S" ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="Personal">Personal</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio"
+                               name="IndicadorPersonal" id="Generico" value="N"
+                               @(Model.ColaboradorExt.IndPersonal == "N" ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="Generico">Genérico</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label mb-4">Tipo Colaborador</label>
+                <div class="d-flex align-items-center">
+                    <div class="form-check form-check-inline me-3">
+                        <input class="form-check-input" type="radio"
+                               name="TipoColaborador" id="Cajero" value="C"
+                               @(Model.ColaboradorExt.TipoUsuario == "C" ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="Cajero">Cajero</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio"
+                               name="TipoColaborador" id="Autorizador" value="A"
+                               @(Model.ColaboradorExt.TipoUsuario == "A" ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="Autorizador">Autorizador</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="cboEmpresa" class="form-label">Empresa</label>
+                    <select class="form-control form-select" id="cboEmpresa" required>
+                        <option value="">Seleccione una empresa</option>
+                        @foreach (var empresa in Model.Empresas)
+                        {
+                            <option value="@empresa.CodEmpresa" @(Model.ColaboradorExt.CodEmpresa == empresa.CodEmpresa ? "selected" : "")>@empresa.NomEmpresa</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="cboLocal" class="form-label">Local</label>
+                    <select class="form-control form-select" id="cboLocal" required>
+                        <option label="Seleccione un local"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-2">
+            @*<div class="col-md-3">
+                <div class="form-group">
+                    <label for="txtCodOfisis" class="form-label">Código</label>
+                    <input type="text" class="form-control" id="txtCodOfisis" value="@Model.ColaboradorExt.CodigoOfisis" maxlength="20" required />
+                </div>
+            </div>*@
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cboTiSitu" class="form-label">Estado</label>
+                    <select class="form-control form-select" id="cboTiSitu" required>
+                        <option value="ACT" @(Model.ColaboradorExt.TiSitu == "ACT" ? "selected" : "")>Activo</option>
+                        <option value="ANU" @(Model.ColaboradorExt.TiSitu == "ANU" ? "selected" : "")>Anulado</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtApPaterno" class="form-label">Ap. Paterno</label>
+                    <input type="text" class="form-control uppercase" id="txtApPaterno" value="@Model.ColaboradorExt.ApelPaterno" required/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtApMaterno" class="form-label">Ap. Materno</label>
+                    <input type="text" class="form-control uppercase" id="txtApMaterno" value="@Model.ColaboradorExt.ApelMaterno" required/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtNomTrabajador" class="form-label">Nombre</label>
+                    <input type="text" class="form-control uppercase" id="txtNomTrabajador" value="@Model.ColaboradorExt.NombreTrabajador" required/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cboTipoDoc" class="form-label">Tipo Doc</label>
+                    <select class="form-control form-select" id="cboTipoDoc" required>
+                        <option value="CEX" @(Model.ColaboradorExt.TipoDocIdent == "CEX" ? "selected" : "")>CEX</option>
+                        <option value="DNI" @(Model.ColaboradorExt.TipoDocIdent == "DNI" ? "selected" : "")>DNI</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="txtNroDoc" class="form-label">Nro. Doc</label>
+                    <input type="text" class="form-control uppercase" id="txtNroDoc" value="@Model.ColaboradorExt.NumDocIndent" maxlength="15" required />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="txtPuesto" class="form-label">Puesto</label>
+                    <input type="text" class="form-control uppercase" id="txtPuesto" value="@Model.ColaboradorExt.PuestoTrabajo" required />
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label for="txtFecIngreso" class="form-label">F. Ingreso</label>
+                <input type="date" class="form-control" id="txtFecIngreso" value="@Model.ColaboradorExt.FechaIngresoEmpresa" required />
+            </div>
+            <div class="col-md-3">
+                <label for="txtFecCese" class="form-label">F. Cese</label>
+                <input type="date" class="form-control" id="txtFecCese" value="@Model.ColaboradorExt.FechaCeseTrabajador" />
+            </div>
+        </div>
+    </div>
+</div>

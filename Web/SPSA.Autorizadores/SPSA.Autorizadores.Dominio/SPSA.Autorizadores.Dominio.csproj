@@ -71,6 +71,7 @@
     <Compile Include="Entidades\MaeLocalAlterno.cs" />
     <Compile Include="Entidades\Mae_Caja.cs" />
     <Compile Include="Entidades\Mae_Cadena.cs" />
+    <Compile Include="Entidades\Mae_ColaboradorExt.cs" />
     <Compile Include="Entidades\Mae_Empresa.cs" />
     <Compile Include="Entidades\Mae_Horario.cs" />
     <Compile Include="Entidades\Mae_Local.cs" />

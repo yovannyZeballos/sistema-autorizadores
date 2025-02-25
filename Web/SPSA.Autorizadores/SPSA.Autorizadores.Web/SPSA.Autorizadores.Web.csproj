@@ -287,6 +287,7 @@
     <Compile Include="Areas\Locales\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCajaController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeColaboradorExtController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeHorarioController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
@@ -2370,6 +2371,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexActivo.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardex.js" />
@@ -2891,6 +2893,9 @@
     <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteCierre\Dashboard.cshtml" />
     <Content Include="Content\reportes\report1.mrt" />
+    <Content Include="Areas\Maestros\Views\MaeColaboradorExt\Index.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_NuevoForm.cshtml" />
+    <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_ModificarForm.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

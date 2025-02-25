@@ -34,6 +34,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(x => x.Ip).HasColumnName("IP");
 			Property(x => x.DirLocal).HasColumnName("DIR_LOCAL");
 			Property(x => x.Ubigeo).HasColumnName("UBIGEO");
+			Property(x => x.CodLocalAlterno).HasColumnName("COD_LOCAL_ALTERNO");
 		}
 	}
 }

@@ -46,11 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auxiliar\PagedResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\IContexto.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeColaboradorExt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />

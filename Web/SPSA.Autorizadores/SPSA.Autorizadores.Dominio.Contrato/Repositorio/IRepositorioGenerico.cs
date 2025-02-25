@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SPSA.Autorizadores.Dominio.Contrato.Auxiliar;
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
@@ -62,6 +63,13 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		/// </summary>
 		/// <param name="entity">La entidad a agregar.</param>
 		void AgregarActualizar(TEntidad entity);
+
+		Task<PagedResult<TEntidad>> ObtenerPaginado(
+						Expression<Func<TEntidad, bool>> predicado = null,
+						int pageNumber = 1,
+						int pageSize = 10,
+						Expression<Func<TEntidad, object>> orderBy = null,
+						bool ascending = true);
 
         Task<int> ExecuteSqlCommandAsync(string sql, params object[] parameters);
 
