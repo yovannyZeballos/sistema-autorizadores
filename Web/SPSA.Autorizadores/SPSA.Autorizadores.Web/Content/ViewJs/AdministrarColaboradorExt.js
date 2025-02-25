@@ -11,6 +11,9 @@ var urlCrearColabExt = baseUrl + 'Maestros/MaeColaboradorExt/CrearColaborador';
 var urlModificarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/ModificarColaborador';
 var urlImportarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/Importar';
 
+
+var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
+
 var codLocalAlternoAnterior = "";
 var dataTableColaboradoresExt = null;
 
@@ -128,6 +131,10 @@ var AdministrarColaboradorExt = function () {
 
         $("#excelImportar").on("change", function () {
             importarExcelMaeColabExt();
+        });
+
+        $("#btnDescargarPlantilla").click(function () {
+            descargarPlantilla("Plantilla_ColaboradorExt");
         });
     };
 
@@ -542,6 +549,33 @@ var AdministrarColaboradorExt = function () {
                 $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
 
                 swal({ text: response.Mensaje, icon: "success", });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const descargarPlantilla = function (nombreCarpeta) {
+        $.ajax({
+            url: urlDescargarPlantilla,
+            type: "post",
+            data: { nombreCarpeta: nombreCarpeta },
+            dataType: "json",
+            success: function (response) {
+
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning", });
+                    return;
+                }
+
+                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo;
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });

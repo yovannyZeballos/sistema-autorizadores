@@ -13,7 +13,6 @@ using Serilog;
 using SPSA.Autorizadores.Dominio.Contrato.Auxiliar;
 using SPSA.Autorizadores.Dominio.Entidades;
 using System.Data.Entity;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
@@ -23,9 +22,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
 
-        public string CodLocalAlterno { get; set; }   // Nuevo filtro
-        public string CodigoOfisis { get; set; } // Nuevo filtro
-        public string NroDocIdent { get; set; }       // Nuevo filtro
+        public string CodLocalAlterno { get; set; }
+        public string CodigoOfisis { get; set; }
+        public string NroDocIdent { get; set; }
     }
 
     public class ListarMaeColaboradorExtHandler : IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDTO>>>
@@ -95,7 +94,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
 
                 var mappedItems = _mapper.Map<List<ListarMaeColaboradorExtDTO>>(pagedColaboradores.Items);
 
-                // Asigna el nombre del local a cada DTO
                 foreach (var item in mappedItems)
                 {
                     Mae_Local maeLocal = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodLocalAlterno == item.CodLocalAlterno).FirstOrDefaultAsync();
