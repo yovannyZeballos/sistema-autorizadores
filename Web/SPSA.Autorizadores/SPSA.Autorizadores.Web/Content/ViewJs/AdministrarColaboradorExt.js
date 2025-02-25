@@ -261,6 +261,7 @@ var AdministrarColaboradorExt = function () {
 
     const visualizarDataTableColaboradores = function () {
         $('#tableColaboradoresExt').DataTable({
+            searching: false,
             processing: true,
             serverSide: true,
             ajax: function (data, callback, settings) {
