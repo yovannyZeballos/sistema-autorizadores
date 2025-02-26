@@ -1,25 +1,24 @@
 ﻿@model string
 @{
-    ViewBag.Title = "Mantenimiento de Colaboradores Externos";
+    ViewBag.Title = "Mantenimiento de Puestos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">Mantenimiento de Colaboradores Externos</div>
+        <div class="page-title">Mantenimiento de Puestos</div>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
             <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
-            <li class="breadcrumb-item1 active">Colaboradores Externos</li>
+            <li class="breadcrumb-item1 active">Puestos</li>
             <li class="breadcrumb-item1 active">Administrar</li>
         </ol>
     </div>
 </div>
 <div class="col-xl-12">
     <div class="card overflow-hidden">
-        @*@Html.Partial("_CardHeader", "Colaboradores Externos")*@
         <div class="card-body">
             <div class="row">
                 <div class="col-xl-12">
@@ -41,79 +40,62 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        @*<div class="col-md-3">
                             <div class="form-group">
                                 <label for="cboLocalBuscar" class="form-label">Local</label>
                                 <select class="form-control form-control-sm form-select" id="cboLocalBuscar">
                                     <option label="Todos"></option>
                                 </select>
                             </div>
-                        </div>
+                        </div>*@
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="txtCodOfisisBuscar" class="form-label">Código Ofisis</label>
-                                <input type="text" class="form-control form-control-sm" id="txtCodOfisisBuscar" />
+                                <label for="txtCodPuestoBuscar" class="form-label">Código Puesto</label>
+                                <input type="text" class="form-control form-control-sm" id="txtCodPuestoBuscar" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="txtNroDocBuscar" class="form-label">Nro Doc.</label>
-                                <input type="text" class="form-control form-control-sm" id="txtNroDocBuscar" />
+                                <label for="txtDesPuestoBuscar" class="form-label">Descripción</label>
+                                <input type="text" class="form-control form-control-sm" id="txtDesPuestoBuscar" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="txtNroDocBuscar" class="form-label"></label>
-                                <button id="btnBuscarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>
+                                <label for="txtBuscar" class="form-label"></label>
+                                <button id="btnBuscarPuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar Puesto</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-12">
-                    <button id="btnModalNuevoColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Colaborador</button>
-                    <button id="btnModalModificarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Colaborador</button>
-                    @*<button id="btnBuscarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>*@
+                @*<div class="col-xl-12">
+                    <button id="btnModalNuevoMaePuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Puesto</button>
+                    <button id="btnModalModificarMaePuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Puesto</button>
                     <button id="btnDescargarPlantilla" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Plantilla</button>
-                    <button id="btnImportarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Colaboradores</button>
+                    <button id="btnImportarMaePuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Puestos</button>
                     <input type="file" id="excelImportar" style="display: none;">
-                </div>
+                </div>*@
                 <div class="col-xl-12">
-                    @*<div class="row">
-                        <div class="form-group">
-                            <div class="checkbox ms-2" style="display: inline-block;">
-                                <label class="unselectable ms-2">
-                                    <input id="chkPersonal" type="checkbox"> Personal
-                                </label>
-                                <label class="unselectable ms-2">
-                                    <input id="chkGenerico" type="checkbox"> Generico
-                                </label>
-                            </div>
-                        </div>
-                    </div>*@
+
                     <div class="row">
-                        <table id="tableColaboradoresExt" class="table text-nowrap border-bottom">
+                        <table id="tablePuestos" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>
-                                    <th class="border-bottom-0" style="font-size: 11px;">COD. LOCAL</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">CODIGO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">A. PATERNO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">A. MATERNO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">TIPO DOC</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NUM. DOC</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">PUESTO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">F. INGRESO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">F. CESE</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">ESTADO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD. EMPRESA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">NOM. EMPRESA</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">COD. PUESTO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">DES. PUESTO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">A. AUTOMATICO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">O. AUTOMATICO</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">A. MANUAL</th>
+                                    <th class="border-bottom-0" style="font-size: 11px;">O. MANUAL</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
                     </div>
-
 
                 </div>
             </div>
@@ -179,10 +161,10 @@
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
-    <script src="~/Content/ViewJs/AdministrarColaboradorExt.js"></script>
+    <script src="~/Content/ViewJs/AdministrarPuesto.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            AdministrarColaboradorExt.init();
+            AdministrarPuesto.init();
         });
     </script>
 }

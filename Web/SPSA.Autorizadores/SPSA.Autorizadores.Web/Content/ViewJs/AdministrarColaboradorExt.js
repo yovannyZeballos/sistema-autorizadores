@@ -321,17 +321,18 @@ var AdministrarColaboradorExt = function () {
                 { targets: 0, visible: false }  // Oculta la primera columna "COD. LOCAL"
             ],
             columns: [
-                { data: "CodLocalAlterno" },
-                { data: "NomLocal" },
-                { data: "CodigoOfisis" },
-                { data: "ApelPaterno" },
-                { data: "ApelMaterno" },
-                { data: "NombreTrabajador" },
-                { data: "TipoDocIdent" },
-                { data: "NumDocIndent" },
-                { data: "PuestoTrabajo" },
+                { data: "CodLocalAlterno", title: "Código Local" },
+                { data: "NomLocal", title: "Local" },
+                { data: "CodigoOfisis", title: "Código" },
+                { data: "ApelPaterno", title: "Ape. Paterno" },
+                { data: "ApelMaterno", title: "Ape. Materno" },
+                { data: "NombreTrabajador", title: "Nombre" },
+                { data: "TipoDocIdent", title: "Tipo Doc" },
+                { data: "NumDocIndent", title: "Nro Doc" },
+                { data: "PuestoTrabajo", title: "Puesto" },
                 {
                     data: "FechaIngresoEmpresa",
+                    title: "Fec. Ingreso",
                     render: function (data, type, row) {
                         if (data) {
                             var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
@@ -343,6 +344,7 @@ var AdministrarColaboradorExt = function () {
                 },
                 {
                     data: "FechaCeseTrabajador",
+                    title: "Fec. Cese",
                     render: function (data, type, row) {
                         if (data) {
                             var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
@@ -352,7 +354,7 @@ var AdministrarColaboradorExt = function () {
                         return "";
                     }
                 },
-                { data: "TiSitu" }
+                { data: "TiSitu", title: "Estado" }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',

@@ -291,6 +291,7 @@
     <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeHorarioController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaePuestoController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeRegionController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeTablasController.cs" />
@@ -2380,6 +2381,7 @@
     <Content Include="Content\ViewJs\AdministrarMaestroLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvActivo.js" />
     <Content Include="Content\ViewJs\AdministrarMaestroTablas.js" />
+    <Content Include="Content\ViewJs\AdministrarPuesto.js" />
     <Content Include="Content\ViewJs\MaestroCajeros.js" />
     <Content Include="Content\ViewJs\MaestroAutorizadores.js" />
     <Content Include="Content\ViewJs\ValesRedimidos.js" />
@@ -2897,6 +2899,7 @@
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_NuevoForm.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_ModificarForm.cshtml" />
     <Content Include="Plantillas_Tablas\Plantilla_ColaboradorExt\Plantilla_ColaboradorExt.xlsx" />
+    <Content Include="Areas\Maestros\Views\MaePuesto\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

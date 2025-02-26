@@ -141,6 +141,7 @@
     <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeColaboradorExtTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeHorarioTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MaePuestoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
     <Compile Include="Repositorio\RepositorioMaeColaboradorExt.cs" />
     <Compile Include="Repositorio\RepositorioMaeHorario.cs" />
+    <Compile Include="Repositorio\RepositorioMaePuesto.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />

@@ -15,6 +15,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
@@ -207,10 +209,18 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<MaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<CrearMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<ActualizarMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
-            
+
             //CreateMap<EliminarInvCajaCommand, InvCajas>().ReverseMap();
 
             #endregion <--COLABORADOR EXTERNO-->
+
+            #region <--MAE_PUESTO-->
+            CreateMap<ListarMaePuestoDTO, Mae_Puesto>().ReverseMap();
+            CreateMap<ObtenerMaePuestoDTO, Mae_Puesto>().ReverseMap();
+            CreateMap<MaePuestoDTO, Mae_Puesto>().ReverseMap();
+            //CreateMap<CrearMaePuestoCommand, Mae_Puesto>().ReverseMap();
+            CreateMap<ActualizarMaePuestoCommand, Mae_Puesto>().ReverseMap();
+            #endregion <--MAE_PUESTO-->
 
             CreateMap<MonCierreEOD, MonCierreEODHist>();
 

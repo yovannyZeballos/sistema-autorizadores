@@ -24,7 +24,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
 
         public string CodLocalAlterno { get; set; }
         public string CodigoOfisis { get; set; }
-        public string NroDocIdent { get; set; }
+        public string NroDocIdent { get; set; } 
     }
 
     public class ListarMaeColaboradorExtHandler : IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDTO>>>

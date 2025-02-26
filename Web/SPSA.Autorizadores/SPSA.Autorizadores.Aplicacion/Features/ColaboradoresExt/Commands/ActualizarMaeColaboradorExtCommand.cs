@@ -47,23 +47,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands
 
             try
             {
-                var selectSql = @"
-            SELECT 
-                ""FE_INGR_EMPR"", 
-                ""FE_CESE_TRAB"", 
-                ""TI_SITU"", 
-                ""NO_PUES_TRAB"", 
-                ""NO_MOTI_SEPA""
-            FROM ""SGP"".""MAE_COLABORADOR_EXT""
-            WHERE ""COD_LOCAL_ALTERNO"" = @codLocalAlternoAnterior
-              AND ""CODIGO_OFISIS"" = @codigoOfisis;";
-
-                var selectParams = new List<NpgsqlParameter>
-        {
-            new NpgsqlParameter("@codLocalAlternoAnterior", Convert.ToInt32(request.CodLocalAlternoAnterior)),
-            new NpgsqlParameter("@codigoOfisis", request.CodigoOfisis)
-        };
-
                 var oldRecord = await _contexto.RepositorioMaeColaboradorExt.Obtener(x => x.CodigoOfisis == request.CodigoOfisis).FirstOrDefaultAsync();
                 if (oldRecord == null)
                 {

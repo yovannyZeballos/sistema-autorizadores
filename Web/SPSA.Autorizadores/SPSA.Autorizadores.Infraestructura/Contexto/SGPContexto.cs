@@ -62,6 +62,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMonCierreEODHist = new RepositorioMonCierreEODHist(this);
 
             RepositorioMaeColaboradorExt = new RepositorioMaeColaboradorExt(this);
+            RepositorioMaePuesto = new RepositorioMaePuesto(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -109,6 +110,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; private set; }
 		public IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; private set; }
 		public IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; private set; }
+		public IRepositorioMaePuesto RepositorioMaePuesto { get; private set; }
 
 
 
@@ -159,6 +161,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MonCierreEODHistTypeConfiguration());
 
 			modelBuilder.Configurations.Add(new MaeColaboradorExtTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaePuestoTypeConfiguration());
 
 		}
 
