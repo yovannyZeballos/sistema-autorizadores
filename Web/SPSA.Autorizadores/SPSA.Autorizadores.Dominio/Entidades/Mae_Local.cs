@@ -18,5 +18,6 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string Ip { get; set; }
         public string DirLocal { get; set; }
         public string Ubigeo { get; set; }
+        public string CodLocalAlterno { get; set; }
 	}
 }

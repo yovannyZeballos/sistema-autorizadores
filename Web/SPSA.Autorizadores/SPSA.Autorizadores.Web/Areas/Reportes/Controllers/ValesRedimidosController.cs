@@ -56,8 +56,8 @@ namespace SPSA.Autorizadores.Web.Areas.Reportes.Controllers
                 return Json(new
                 {
                     draw = request.Draw,
-                    recordsTotal = respuesta.TotalRegistros, // Total de registros sin paginar
-                    recordsFiltered = respuesta.TotalRegistros, // Total de registros después de filtros (puede variar si hay filtros adicionales)
+                    recordsTotal = respuesta.TotalRegistros,
+                    recordsFiltered = respuesta.TotalRegistros,
                     respuesta.Data,
                     respuesta.Columnas,
                     respuesta.Ok

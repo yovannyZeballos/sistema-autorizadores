@@ -50,7 +50,7 @@ var AdministrarInvCajas = function () {
                 CodCadena: $("#cboCadena").val(),
                 CodRegion: $("#cboRegion").val(),
                 CodZona: $("#cboZona").val(),
-                CodLocal: $("#cboLocal").val()
+                CodLocal:   
             };
             recargarDataTableNumCajas(request);
         });

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Web;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
 
 namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
 {
@@ -46,6 +47,13 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ListarLocalPorEmpresaAsociada(ListarEmpresasAsociadasQuery request)
+        {
+            var respose = await _mediator.Send(request);
+            return Json(respose);
         }
 
         [HttpPost]
