@@ -5,6 +5,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Aperturas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
@@ -13,6 +15,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
@@ -85,9 +89,13 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 				.ForPath(dest => dest.NomCadena, opt => opt.MapFrom(src => src.Mae_Cadena == null ? "" : src.Mae_Cadena.NomCadena));
 			CreateMap<Seg_Region, ListarRegionDTO>()
 				.ForPath(dest => dest.NomRegion, opt => opt.MapFrom(src => src.Mae_Region == null ? "" : src.Mae_Region.NomRegion));
-			CreateMap<Seg_Local, ListarLocalDTO>()
-				.ForPath(dest => dest.NomLocal, opt => opt.MapFrom(src => src.Mae_Local == null ? "" : src.Mae_Local.NomLocal));
-			CreateMap<Mae_Cadena, ListarCadenaDTO>();
+			//CreateMap<Seg_Local, ListarLocalDTO>()
+			//	.ForPath(dest => dest.NomLocal, opt => opt.MapFrom(src => src.Mae_Local == null ? "" : src.Mae_Local.NomLocal));
+            CreateMap<Seg_Local, ListarLocalDTO>()
+                .ForMember(dest => dest.NomLocal, opt => opt.MapFrom(src => src.Mae_Local == null ? "" : src.Mae_Local.NomLocal))
+                .ForMember(dest => dest.CodLocalAlterno, opt => opt.MapFrom(src => src.Mae_Local == null ? "" : src.Mae_Local.CodLocalAlterno));
+
+            CreateMap<Mae_Cadena, ListarCadenaDTO>();
 			CreateMap<Mae_Region, ListarRegionDTO>();
 			CreateMap<Mae_Zona, ListarZonaDTO>();
 			CreateMap<Seg_Zona, ListarZonaDTO>()
@@ -192,9 +200,29 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
             CreateMap<ActualizarInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
 
-			#endregion <--INV KARDEX-->
+            #endregion <--INV KARDEX-->
 
-			CreateMap<MonCierreEOD, MonCierreEODHist>();
+            #region <--COLABORADOR EXTERNO-->
+
+            CreateMap<ListarMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
+            CreateMap<ObtenerMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
+            CreateMap<MaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
+            CreateMap<CrearMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
+            CreateMap<ActualizarMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
+
+            //CreateMap<EliminarInvCajaCommand, InvCajas>().ReverseMap();
+
+            #endregion <--COLABORADOR EXTERNO-->
+
+            #region <--MAE_PUESTO-->
+            CreateMap<ListarMaePuestoDTO, Mae_Puesto>().ReverseMap();
+            CreateMap<ObtenerMaePuestoDTO, Mae_Puesto>().ReverseMap();
+            CreateMap<MaePuestoDTO, Mae_Puesto>().ReverseMap();
+            //CreateMap<CrearMaePuestoCommand, Mae_Puesto>().ReverseMap();
+            CreateMap<ActualizarMaePuestoCommand, Mae_Puesto>().ReverseMap();
+            #endregion <--MAE_PUESTO-->
+
+            CreateMap<MonCierreEOD, MonCierreEODHist>();
 
 
 		}

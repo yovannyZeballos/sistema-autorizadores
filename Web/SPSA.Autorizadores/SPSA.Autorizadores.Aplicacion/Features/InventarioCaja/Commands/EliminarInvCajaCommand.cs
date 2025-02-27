@@ -42,10 +42,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands
 
             try
             {
-                var existeMenu = await _contexto.RepositorioInvCajas.Existe(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena
+                var existeInvCaja = await _contexto.RepositorioInvCajas.Existe(x => x.CodEmpresa == request.CodEmpresa && x.CodCadena == request.CodCadena
                                                                         && x.CodRegion == request.CodRegion && x.CodZona == request.CodZona && x.CodLocal == request.CodLocal
                                                                         && x.NumCaja == request.NumCaja && x.CodActivo == request.CodActivo);
-                if (!existeMenu)
+                if (!existeInvCaja)
                 {
                     respuesta.Ok = false;
                     respuesta.Mensaje = "El inventario caja no existe";

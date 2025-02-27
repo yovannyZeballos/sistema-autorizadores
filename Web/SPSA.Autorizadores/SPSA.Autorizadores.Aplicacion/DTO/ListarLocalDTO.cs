@@ -35,9 +35,14 @@
 		/// </summary>
 		public string NomLocal { get; set; }
 
-		/// <summary>
-		/// Indicador de si el local está asociada.
-		/// </summary>
-		public bool IndAsociado { get; set; }
+        /// <summary>
+        /// Obtiene o establece el codigo del local alterno.
+        /// </summary>
+        public string CodLocalAlterno { get; set; }
+
+        /// <summary>
+        /// Indicador de si el local está asociada.
+        /// </summary>
+        public bool IndAsociado { get; set; }
 	}
 }
