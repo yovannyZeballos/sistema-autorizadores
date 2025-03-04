@@ -66,6 +66,7 @@ var AdministrarPuesto = function () {
                 success: function (response) {
                     if (response.Ok) {
                         //swal("Actualizado", "El puesto se actualizó correctamente.", "success");
+                        $('#tablePuestos').DataTable().ajax.reload(null, false);
                     } else {
                         swal("Error", response.Mensaje, "error");
                     }
