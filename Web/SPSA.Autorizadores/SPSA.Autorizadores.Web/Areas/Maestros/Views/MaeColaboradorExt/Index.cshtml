@@ -19,8 +19,8 @@
 </div>
 <div class="col-xl-12">
     <div class="card overflow-hidden">
-        @*@Html.Partial("_CardHeader", "Colaboradores Externos")*@
-        <div class="card-body">
+        @Html.Partial("_CardHeader", "Filtros")
+        <div class="card-body pb-0">
             <div class="row">
                 <div class="col-xl-12">
                     <div class="col-md-3 d-none">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-xl-12">
-                    <div class="row mb-2">
+                    <div class="row mb-0">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
@@ -52,13 +52,13 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="txtCodOfisisBuscar" class="form-label">Código Ofisis</label>
-                                <input type="text" class="form-control form-control-sm" id="txtCodOfisisBuscar" />
+                                <input type="text" class="form-control form-control-sm" id="txtCodOfisisBuscar" placeholder="Ingrese código colaborador"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="txtNroDocBuscar" class="form-label">Nro Doc.</label>
-                                <input type="text" class="form-control form-control-sm" id="txtNroDocBuscar" />
+                                <input type="text" class="form-control form-control-sm" id="txtNroDocBuscar"placeholder="Ingrese número de documento" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -70,54 +70,45 @@
                     </div>
                 </div>
 
-                <div class="col-xl-12">
-                    <button id="btnModalNuevoColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Colaborador</button>
-                    <button id="btnModalModificarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Colaborador</button>
-                    @*<button id="btnBuscarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>*@
-                    <button id="btnDescargarPlantilla" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Plantilla</button>
-                    <button id="btnImportarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Colaboradores</button>
-                    <input type="file" id="excelImportar" style="display: none;">
-                </div>
-                <div class="col-xl-12">
-                    @*<div class="row">
-                        <div class="form-group">
-                            <div class="checkbox ms-2" style="display: inline-block;">
-                                <label class="unselectable ms-2">
-                                    <input id="chkPersonal" type="checkbox"> Personal
-                                </label>
-                                <label class="unselectable ms-2">
-                                    <input id="chkGenerico" type="checkbox"> Generico
-                                </label>
-                            </div>
-                        </div>
-                    </div>*@
-                    <div class="row">
-                        <table id="tableColaboradoresExt" class="table text-nowrap border-bottom">
-                            <thead>
-                                <tr>
-                                    <th class="border-bottom-0" style="font-size: 11px;">COD. LOCAL</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">CODIGO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">A. PATERNO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">A. MATERNO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">TIPO DOC</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NUM. DOC</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">PUESTO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">F. INGRESO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">F. CESE</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">ESTADO</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-
-
-                </div>
+                
+                
             </div>
         </div>
+
+        @Html.Partial("_CardHeader", "Listado de Colaboradores")
+    <div class="card-body">
+        <div class="col-xl-12">
+            <button id="btnModalNuevoColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Colaborador</button>
+            <button id="btnModalModificarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Colaborador</button>
+            <button id="btnDescargarPlantilla" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Plantilla</button>
+            <button id="btnImportarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Colaboradores</button>
+            <input type="file" id="excelImportar" style="display: none;">
+        </div>
+        <div class="col-xl-12">
+            <div class="row">
+                <table id="tableColaboradoresExt" class="table text-nowrap border-bottom">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0" style="font-size: 11px;">COD. LOCAL</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">LOCAL</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">CODIGO</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">A. PATERNO</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">A. MATERNO</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">NOMBRE</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">TIPO DOC</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">NUM. DOC</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">PUESTO</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">F. INGRESO</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">F. CESE</th>
+                            <th class="border-bottom-0" style="font-size: 11px;">ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 

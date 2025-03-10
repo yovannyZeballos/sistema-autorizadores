@@ -18,9 +18,12 @@
     </div>
 </div>
 <div class="col-xl-12">
+
     <div class="card overflow-hidden">
-        <div class="card-body">
+        @Html.Partial("_CardHeader", "Filtros")
+        <div class="card-body pb-0">
             <div class="row">
+
                 <div class="col-xl-12">
                     <div class="col-md-3 d-none">
                         <div class="form-group">
@@ -31,7 +34,7 @@
                 </div>
 
                 <div class="col-xl-12">
-                    <div class="row mb-2">
+                    <div class="row mb-0">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
@@ -40,27 +43,38 @@
                                 </select>
                             </div>
                         </div>
-                        @*<div class="col-md-3">
-                            <div class="form-group">
-                                <label for="cboLocalBuscar" class="form-label">Local</label>
-                                <select class="form-control form-control-sm form-select" id="cboLocalBuscar">
-                                    <option label="Todos"></option>
-                                </select>
-                            </div>
-                        </div>*@
-                        <div class="col-md-2">
+                        @*<div class="col-md-2">
                             <div class="form-group">
                                 <label for="txtCodPuestoBuscar" class="form-label">Código Puesto</label>
-                                <input type="text" class="form-control form-control-sm" id="txtCodPuestoBuscar" />
+                                <input type="text" class="form-control form-control-sm" id="txtCodPuestoBuscar" placeholder="Ingrese un código del puesto" />
                             </div>
-                        </div>
-                        <div class="col-md-2">
+                        </div>*@
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtDesPuestoBuscar" class="form-label">Descripción</label>
-                                <input type="text" class="form-control form-control-sm" id="txtDesPuestoBuscar" />
+                                <input type="text" class="form-control form-control-sm" id="txtDesPuestoBuscar" placeholder="Ingrese un puesto" />
                             </div>
                         </div>
                         <div class="col-md-2">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkAutorizadorAutomatico">
+                                    <label class="form-check-label" for="checkAutorizadorAutomatico">Autorizador Automático</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkOperadorAutomatico">
+                                    <label class="form-check-label" for="checkOperadorAutomatico">Operador  Automático</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkAutorizadorManual">
+                                    <label class="form-check-label" for="checkAutorizadorManual">Autorizador Manual</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkOperadorManual">
+                                    <label class="form-check-label" for="checkOperadorManual">Operador  Manual</label>
+                                </div>
+                            </div>
+
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtBuscar" class="form-label"></label>
                                 <button id="btnBuscarPuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar Puesto</button>
@@ -69,35 +83,30 @@
                     </div>
                 </div>
 
-                @*<div class="col-xl-12">
-                    <button id="btnModalNuevoMaePuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Puesto</button>
-                    <button id="btnModalModificarMaePuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Puesto</button>
-                    <button id="btnDescargarPlantilla" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Plantilla</button>
-                    <button id="btnImportarMaePuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Puestos</button>
-                    <input type="file" id="excelImportar" style="display: none;">
-                </div>*@
-                <div class="col-xl-12">
-
-                    <div class="row">
-                        <table id="tablePuestos" class="table text-nowrap border-bottom">
-                            <thead>
-                                <tr>
-                                    <th class="border-bottom-0" style="font-size: 11px;">COD. EMPRESA</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">NOM. EMPRESA</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">COD. PUESTO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">DES. PUESTO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">A. AUTOMATICO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">O. AUTOMATICO</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">A. MANUAL</th>
-                                    <th class="border-bottom-0" style="font-size: 11px;">O. MANUAL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-
+            </div>
+        </div>
+        @Html.Partial("_CardHeader", "Listado de Puestos")
+        <div class="card-body">
+            <div class="col-xl-12">
+                <div class="row">
+                    <table id="tablePuestos" class="table text-nowrap border-bottom">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0" style="font-size: 11px;">COD. EMPRESA</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">NOM. EMPRESA</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">COD. PUESTO</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">DES. PUESTO</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">A. AUTOMATICO</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">O. AUTOMATICO</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">A. MANUAL</th>
+                                <th class="border-bottom-0" style="font-size: 11px;">O. MANUAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
     </div>
@@ -147,6 +156,7 @@
         </div>
     </div>
 </div>
+
 
 @section scripts{
     <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>

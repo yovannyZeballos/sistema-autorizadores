@@ -22,8 +22,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
         public int PageSize { get; set; } = 10;
 
         public string CodEmpresa { get; set; }
-        public string CodPuesto { get; set; }
+        //public string CodPuesto { get; set; }
         public string DesPuesto { get; set; }
+        public string IndAutAut { get; set; }
+        public string IndAutOpe { get; set; }
+        public string IndManAut { get; set; }
+        public string IndManOpe { get; set; }
     }
 
     public class ListarMaePuestoHandler : IRequestHandler<ListarMaePuestoQuery, GenericResponseDTO<PagedResult<ListarMaePuestoDTO>>>
@@ -61,14 +65,50 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, codEmpresaEqual);
                 }
 
-                if (!string.IsNullOrEmpty(request.CodPuesto))
+                if (!string.IsNullOrEmpty(request.IndAutAut))
                 {
-                    Expression codPuestoProperty = Expression.Property(param, nameof(Mae_Puesto.CodPuesto));
-                    Expression codPuestoValue = Expression.Constant(request.CodPuesto);
-                    Expression codPuestoEqual = Expression.Equal(codPuestoProperty, codPuestoValue);
+                    Expression indAutAutProperty = Expression.Property(param, nameof(Mae_Puesto.IndAutAut));
+                    Expression indAutAutValue = Expression.Constant(request.IndAutAut);
+                    Expression indAutAutEqual = Expression.Equal(indAutAutProperty, indAutAutValue);
 
-                    combined = Expression.AndAlso(combined, codPuestoEqual);
+                    combined = Expression.AndAlso(combined, indAutAutEqual);
                 }
+
+                if (!string.IsNullOrEmpty(request.IndAutOpe))
+                {
+                    Expression indAutOpeProperty = Expression.Property(param, nameof(Mae_Puesto.IndAutOpe));
+                    Expression indAutOpeValue = Expression.Constant(request.IndAutOpe);
+                    Expression indAutOpeEqual = Expression.Equal(indAutOpeProperty, indAutOpeValue);
+
+                    combined = Expression.AndAlso(combined, indAutOpeEqual);
+                }
+
+                if (!string.IsNullOrEmpty(request.IndManAut))
+                {
+                    Expression indManAutProperty = Expression.Property(param, nameof(Mae_Puesto.IndManAut));
+                    Expression indManAutValue = Expression.Constant(request.IndManAut);
+                    Expression indManAutEqual = Expression.Equal(indManAutProperty, indManAutValue);
+
+                    combined = Expression.AndAlso(combined, indManAutEqual);
+                }
+
+                if (!string.IsNullOrEmpty(request.IndManOpe))
+                {
+                    Expression indAutOpeProperty = Expression.Property(param, nameof(Mae_Puesto.IndManOpe));
+                    Expression indAutOpeValue = Expression.Constant(request.IndManOpe);
+                    Expression indAutOpeEqual = Expression.Equal(indAutOpeProperty, indAutOpeValue);
+
+                    combined = Expression.AndAlso(combined, indAutOpeEqual);
+                }
+
+                //if (!string.IsNullOrEmpty(request.CodPuesto))
+                //{
+                //    Expression codPuestoProperty = Expression.Property(param, nameof(Mae_Puesto.CodPuesto));
+                //    Expression codPuestoValue = Expression.Constant(request.CodPuesto);
+                //    Expression codPuestoEqual = Expression.Equal(codPuestoProperty, codPuestoValue);
+
+                //    combined = Expression.AndAlso(combined, codPuestoEqual);
+                //}
 
                 if (!string.IsNullOrEmpty(request.DesPuesto))
                 {
@@ -79,6 +119,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
 
                     combined = Expression.AndAlso(combined, desPuestoContains);
                 }
+
+
 
                 Expression<Func<Mae_Puesto, bool>> predicate = Expression.Lambda<Func<Mae_Puesto, bool>>(combined, param);
 
