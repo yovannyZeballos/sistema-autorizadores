@@ -32,7 +32,7 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 		{
 			get
 			{
-				return ConfigurationManager.ConnectionStrings["BCT_SP"].ConnectionString;
+				return ConfigurationManager.ConnectionStrings["BCT"].ConnectionString;
 			}
 		}
 

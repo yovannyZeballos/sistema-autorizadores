@@ -66,7 +66,6 @@ var AdministrarPuesto = function () {
                 success: function (response) {
                     if (response.Ok) {
                         //swal("Actualizado", "El puesto se actualizó correctamente.", "success");
-                        $('#tablePuestos').DataTable().ajax.reload(null, false);
                     } else {
                         swal("Error", response.Mensaje, "error");
                     }
@@ -145,12 +144,8 @@ var AdministrarPuesto = function () {
 
                 var filtros = {
                     CodEmpresa: $("#cboEmpresaBuscar").val(),
-                    //CodPuesto: $("#txtCodPuestoBuscar").val(),
-                    DesPuesto: $("#txtDesPuestoBuscar").val(),
-                    IndAutAut: $("#checkAutorizadorAutomatico").is(":checked") ? "S" : "N",
-                    IndAutOpe: $("#checkOperadorAutomatico").is(":checked") ? "S" : "N",
-                    IndManAut: $("#checkAutorizadorManual").is(":checked") ? "S" : "N",
-                    IndManOpe: $("#checkOperadorManual").is(":checked") ? "S" : "N"
+                    CodPuesto: $("#txtCodPuestoBuscar").val(),
+                    DesPuesto: $("#txtDesPuestoBuscar").val()
                 };
 
                 // Combinar los parámetros de paginación con los filtros

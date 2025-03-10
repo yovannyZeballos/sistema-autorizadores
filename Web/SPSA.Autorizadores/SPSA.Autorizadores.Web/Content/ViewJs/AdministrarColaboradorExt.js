@@ -494,6 +494,7 @@ var AdministrarColaboradorExt = function () {
                     swal({ text: response.Mensaje, icon: "warning", });
                     return;
                 }
+                // Actualiza (refresca) el DataTable para mostrar los datos actualizados
                 $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
 
                 swal({ text: response.Mensaje, icon: "success", });

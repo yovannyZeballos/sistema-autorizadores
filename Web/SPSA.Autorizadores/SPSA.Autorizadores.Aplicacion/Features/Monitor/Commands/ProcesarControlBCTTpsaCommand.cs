@@ -41,10 +41,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				var fechaStr = fecha.ToString("yyyyMMdd", culture);
 
 				var horariosCT2 = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalCT2Tpsa(fechaStr, request.CodSucursal);
-				//var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCTTpsa(fechaStr);
-                var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCT(fecha.ToString("dd/MM/yyyy"), request.CodSucursal);
+				var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCTTpsa(fechaStr);
 
-                respuesta.Data = (from a in horariosCT2
+				respuesta.Data = (from a in horariosCT2
 								  join b in horariosBCT on a.CodSucursal equals b.CodSucursal
 								  orderby (b.Diferencia <= a.TiempoLim ? "SI" : "NO"), b.Diferencia descending
 								  select new MonitorControlBCTDTO
