@@ -1,0 +1,28 @@
+﻿@using Stimulsoft.Report.Web;
+@using Stimulsoft.Report.Mvc;
+@using System.Web.UI.WebControls;
+
+@{
+    ViewBag.Title = "Dashboard | Cierre Tesoreria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Stimulsoft().StiMvcViewer(new StiMvcViewerOptions()
+{
+    Actions =
+    {
+         GetReport = "GetReportCierreTesoreria",
+         ViewerEvent = "ViewerEvent"
+    },
+    Appearance =
+    {
+        ScrollbarsMode = true
+    },
+    Toolbar =
+    {
+        DisplayMode = StiToolbarDisplayMode.Separated,
+        ShowDesignButton = true
+    },
+    Theme = StiViewerTheme.Office2013VeryDarkGrayPurple,
+})
+
