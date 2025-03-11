@@ -274,6 +274,8 @@
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\Dashboards\Controllers\AdministrarDashboardController.cs" />
+    <Compile Include="Areas\Dashboards\DashboardsAreaRegistration.cs" />
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
@@ -2894,12 +2896,18 @@
     <Content Include="Areas\Reportes\Views\MaestroAutorizadores\Index.cshtml" />
     <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteCierre\Dashboard.cshtml" />
-    <Content Include="Content\reportes\report1.mrt" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_NuevoForm.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_ModificarForm.cshtml" />
     <Content Include="Plantillas_Tablas\Plantilla_ColaboradorExt\Plantilla_ColaboradorExt.xlsx" />
     <Content Include="Areas\Maestros\Views\MaePuesto\Index.cshtml" />
+    <Content Include="Areas\Dashboards\Views\web.config" />
+    <Content Include="Areas\Dashboards\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Dashboards\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\CierreTesoreria.cshtml" />
+    <Content Include="Content\reportes\cierre-cuadratura.mrt" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\InventarioLocal.cshtml" />
+    <Content Include="Content\reportes\inventario-local.mrt" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2941,6 +2949,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Aperturas\Data\" />
+    <Folder Include="Areas\Dashboards\Data\" />
     <Folder Include="Areas\DataTables\Data\" />
     <Folder Include="Areas\DataTables\Views\Shared\" />
     <Folder Include="Areas\Inventario\Data\" />
