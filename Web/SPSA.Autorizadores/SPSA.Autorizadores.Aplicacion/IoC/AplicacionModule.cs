@@ -16,6 +16,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
@@ -57,6 +59,9 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.TablasMae.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Command;
 using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
@@ -307,7 +312,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ProcesarControlBCTHpsaHandler>().As<IRequestHandler<ProcesarControlBCTHpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 
 
-			#region INV KARDEX
+			#region INV_KARDEX
 
 			builder.RegisterType<ListarInvKardexActivoHandler>().As<IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>>();
             builder.RegisterType<ObtenerInvKardexActivoHandler>().As<IRequestHandler<ObtenerInvKardexActivoQuery, GenericResponseDTO<InvKardexActivoDTO>>>();
@@ -330,7 +335,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<EliminarInvKardexHandler>().As<IRequestHandler<EliminarInvKardexCommand, RespuestaComunDTO>>();
             builder.RegisterType<ImportarInvKardexHandler>().As<IRequestHandler<ImportarInvKardexCommand, RespuestaComunExcelDTO>>();
 
-            #endregion INV KARDEX
+            #endregion
 
             #region MAE_COLABORADOR_EXT
             builder.RegisterType<ListarMaeColaboradorExtHandler>().As<IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDTO>>>>();
@@ -340,7 +345,17 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<EliminarMaeColaboradorExtHandler>().As<IRequestHandler<EliminarMaeColaboradorExtCommand, RespuestaComunDTO>>();
             //builder.RegisterType<DescargarMaeColaboradorExtoHandler>().As<IRequestHandler<DescargarMaeColaboradorExtCommand, DescargarMaestroDTO>>();
             builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
-            #endregion MAE_COLABORADOR_EXT
+            #endregion 
+
+            #region MAE_COLABORADOR_INT
+            builder.RegisterType<ListarMaeColaboradorIntHandler>().As<IRequestHandler<ListarMaeColaboradorIntQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorIntDTO>>>>();
+            builder.RegisterType<ObtenerMaeColaboradorIntHandler>().As<IRequestHandler<ObtenerMaeColaboradorIntQuery, GenericResponseDTO<ObtenerMaeColaboradorIntDTO>>>();
+            //builder.RegisterType<CrearMaeColaboradorExtHandler>().As<IRequestHandler<CrearMaeColaboradorExtCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<ActualizarMaeColaboradorExtHandler>().As<IRequestHandler<ActualizarMaeColaboradorExtCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<EliminarMaeColaboradorExtHandler>().As<IRequestHandler<EliminarMaeColaboradorExtCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<DescargarMaeColaboradorExtoHandler>().As<IRequestHandler<DescargarMaeColaboradorExtCommand, DescargarMaestroDTO>>();
+            //builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
+            #endregion 
 
             #region MAE_PUESTO
             builder.RegisterType<ListarMaePuestoHandler>().As<IRequestHandler<ListarMaePuestoQuery, GenericResponseDTO<PagedResult<ListarMaePuestoDTO>>>>();
@@ -349,7 +364,17 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ActualizarMaePuestoHandler>().As<IRequestHandler<ActualizarMaePuestoCommand, RespuestaComunDTO>>();
             //builder.RegisterType<EliminarMaeColaboradorExtHandler>().As<IRequestHandler<EliminarMaeColaboradorExtCommand, RespuestaComunDTO>>();
             //builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
-            #endregion MAE_PUESTO
+            #endregion
+
+            #region ASR_SOLICITUD_USUARIO
+            builder.RegisterType<ListarSolicitudUsuarioHandler>().As<IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>>();
+            //builder.RegisterType<ObtenerMaeColaboradorExtHandler>().As<IRequestHandler<ObtenerMaeColaboradorExtQuery, GenericResponseDTO<ObtenerMaeColaboradorExtDTO>>>();
+            builder.RegisterType<CrearSolicitudUsuarioHandler>().As<IRequestHandler<CrearSolicitudUsuarioCommand, RespuestaComunDTO>>();
+            //builder.RegisterType<ActualizarMaeColaboradorExtHandler>().As<IRequestHandler<ActualizarMaeColaboradorExtCommand, RespuestaComunDTO>>();
+            builder.RegisterType<EliminarSolicitudUsuarioHandler>().As<IRequestHandler<EliminarSolicitudUsuarioCommand, RespuestaComunDTO>>();
+            builder.RegisterType<DescargarSolicitudesUsuarioHandler>().As<IRequestHandler<DescargarSolicitudesUsuarioCommand, DescargarMaestroDTO>>();
+            //builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
+            #endregion
 
 
             base.Load(builder);

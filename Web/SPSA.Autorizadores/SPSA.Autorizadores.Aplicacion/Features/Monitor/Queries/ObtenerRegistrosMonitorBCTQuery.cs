@@ -49,21 +49,25 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 
 			try
 			{
-                if (request.CodEmpresa == "09")
+
+				switch (request.CodEmpresa)
 				{
-                    response.Data = await _repositorioTransactionXmlCT2.ObtenerTpsa();
+                    case "09":
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerTpsa();
+                        break;
+                    case "10":
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerHpsa();
+                        break;
+                    default:
+                        string cadenaConexion = await ArmarCadenaconexion(request.CodEmpresa);
+                        string nombreTabla = await ObtenerNombreTabla(request.CodEmpresa);
+
+                        if (cadenaConexion == null) return response;
+
+                        response.Data = await _repositorioTransactionXmlCT2.Obtener(cadenaConexion, nombreTabla);
+                        break;
                 }
-				else
-				{
-                    string cadenaConexion = await ArmarCadenaconexion(request.CodEmpresa);
-                    string nombreTabla = await ObtenerNombreTabla(request.CodEmpresa);
 
-                    if (cadenaConexion == null) return response;
-
-                    response.Data = await _repositorioTransactionXmlCT2.Obtener(cadenaConexion, nombreTabla);
-                }
-
-				
 			}
 			catch (Exception ex)
 			{

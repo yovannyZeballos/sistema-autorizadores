@@ -53,10 +53,12 @@
     <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorExt.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\IRepositorioMaePuesto.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
+    <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />
     <Compile Include="Repositorio\IRepositorioApertura.cs" />

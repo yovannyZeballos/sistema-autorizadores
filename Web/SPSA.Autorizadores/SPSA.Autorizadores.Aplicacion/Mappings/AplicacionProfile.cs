@@ -7,6 +7,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Cajas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
@@ -22,6 +23,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 using SPSA.Autorizadores.Dominio.Entidades;
 
@@ -109,7 +112,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 			CreateMap<ActualizarMenuCommand, Seg_Menu>();
 			CreateMap<Seg_Usuario, ObtenerUsuarioDTO>();
 
-            #region <--TABLA MAESTROS SGP-->
+            #region <--TABLA_MAESTROS_SGP-->
 
             CreateMap<MaeEmpresaDTO, Mae_Empresa>().ReverseMap();
             CreateMap<MaeCadenaDTO, Mae_Cadena>().ReverseMap();
@@ -181,9 +184,9 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ListarUbiDistritoDTO, UbiDistrito>().ReverseMap();
             CreateMap<ObtenerUbiDistritoDTO, UbiDistrito>().ReverseMap();
 
-            #endregion <--TABLA MAESTROS SGP-->
+            #endregion
 
-            #region <--INV KARDEX-->
+            #region <--INV_KARDEX-->
 
             CreateMap<ListarInvKardexActivoDTO, InvKardexActivo>().ReverseMap();
             CreateMap<InvKardexActivoDTO, InvKardexActivo>().ReverseMap();
@@ -200,27 +203,40 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
             CreateMap<ActualizarInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
 
-            #endregion <--INV KARDEX-->
+            #endregion
 
-            #region <--COLABORADOR EXTERNO-->
-
+            #region <--COLABORADOR_EXTERNO-->
             CreateMap<ListarMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<ObtenerMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<MaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<CrearMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<ActualizarMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
+            #endregion
 
-            //CreateMap<EliminarInvCajaCommand, InvCajas>().ReverseMap();
-
-            #endregion <--COLABORADOR EXTERNO-->
+            #region <--COLABORADOR_INTERNO-->
+            CreateMap<ListarMaeColaboradorIntDTO, Mae_ColaboradorInt>().ReverseMap();
+            CreateMap<ObtenerMaeColaboradorIntDTO, Mae_ColaboradorInt>().ReverseMap();
+            CreateMap<MaeColaboradorIntDTO, Mae_ColaboradorInt>().ReverseMap();
+            //CreateMap<CrearMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
+            //CreateMap<ActualizarMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
+            #endregion
 
             #region <--MAE_PUESTO-->
             CreateMap<ListarMaePuestoDTO, Mae_Puesto>().ReverseMap();
             CreateMap<ObtenerMaePuestoDTO, Mae_Puesto>().ReverseMap();
             CreateMap<MaePuestoDTO, Mae_Puesto>().ReverseMap();
-            //CreateMap<CrearMaePuestoCommand, Mae_Puesto>().ReverseMap();
             CreateMap<ActualizarMaePuestoCommand, Mae_Puesto>().ReverseMap();
-            #endregion <--MAE_PUESTO-->
+            #endregion
+
+
+            #region <--ASR_SOLICITUD_USUARIO-->
+            CreateMap<ListarSolictudUsuarioDTO, ASR_SolicitudUsuario>().ReverseMap();
+            //CreateMap<ObtenerMaeColaboradorExtDTO, ASR_SolicitudUsuario>().ReverseMap();
+            //CreateMap<MaeColaboradorExtDTO, ASR_SolicitudUsuario>().ReverseMap();
+            CreateMap<CrearSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
+            CreateMap<EliminarSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
+            //CreateMap<ActualizarMaeColaboradorExtCommand, ASR_SolicitudUsuario>().ReverseMap();
+            #endregion
 
             CreateMap<MonCierreEOD, MonCierreEODHist>();
 

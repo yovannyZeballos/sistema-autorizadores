@@ -452,7 +452,7 @@ var BCT = function () {
                             if (colorSemaforo == 2 || envioNotificacion == 1)
                                 fechaAlertaPromart = convertirfecha(new Date());
                             break;
-                        case "11":
+                        case "12":
                             if (colorSemaforo == 2 || envioNotificacion == 1)
                                 fechaAlertaPromartEcu = convertirfecha(new Date());
                             break;
