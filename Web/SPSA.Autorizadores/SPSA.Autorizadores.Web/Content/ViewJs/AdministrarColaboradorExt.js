@@ -268,21 +268,17 @@ var AdministrarColaboradorExt = function () {
                 var pageNumber = (data.start / data.length) + 1;
                 var pageSize = data.length;
 
-                // Recoger los filtros de la página
                 var filtros = {
                     CodLocalAlterno: $("#cboLocalBuscar").val(),
                     CodigoOfisis: $("#txtCodOfisisBuscar").val(),
                     NroDocIdent: $("#txtNroDocBuscar").val()
                 };
 
-                // Combinar los parámetros de paginación con los filtros
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
-
 
                 $.ajax({
                     url: urlListarColaboradoresExt,
                     type: "GET",
-                    //data: { PageNumber: pageNumber, PageSize: pageSize },
                     data: params,
                     dataType: "json",
                     success: function (response) {
@@ -318,7 +314,7 @@ var AdministrarColaboradorExt = function () {
                 });
             },
             columnDefs: [
-                { targets: 0, visible: false }  // Oculta la primera columna "COD. LOCAL"
+                { targets: 0, visible: false }
             ],
             columns: [
                 { data: "CodLocalAlterno", title: "Código Local" },

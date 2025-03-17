@@ -7,5 +7,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 	{
 		Task<TransactionXmlCT2> Obtener(string cadenaConexion,string nombreTabla);
 		Task<TransactionXmlCT2> ObtenerTpsa();
+		Task<TransactionXmlCT2> ObtenerHpsa();
 	}
 }

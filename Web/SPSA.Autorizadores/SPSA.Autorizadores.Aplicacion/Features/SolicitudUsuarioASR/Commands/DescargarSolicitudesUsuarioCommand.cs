@@ -1,4 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
 using ClosedXML.Excel;
 using MediatR;
 using Serilog;
@@ -6,72 +12,38 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
-using System;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
+namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 {
-    public class DescargarInvActivoCommand : IRequest<DescargarMaestroDTO>
+    public class DescargarSolicitudesUsuarioCommand : IRequest<DescargarMaestroDTO>
     {
-        public string CodEmpresa { get; set; }
+        public string CodLocalAlterno { get; set; }
     }
 
-    public class DescargarInvActivoHandler : IRequestHandler<DescargarInvActivoCommand, DescargarMaestroDTO>
+    public class DescargarSolicitudesUsuarioHandler : IRequestHandler<DescargarSolicitudesUsuarioCommand, DescargarMaestroDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public DescargarInvActivoHandler(IMapper mapper)
+        public DescargarSolicitudesUsuarioHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<DescargarMaestroDTO> Handle(DescargarInvActivoCommand request, CancellationToken cancellationToken)
+        public async Task<DescargarMaestroDTO> Handle(DescargarSolicitudesUsuarioCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new DescargarMaestroDTO();
 
             try
             {
-                // Realiza la consulta a la base de datos y proyecta a un objeto anónimo
-                var lista = await _contexto.RepositorioInventarioActivo
-                    .Obtener(x => x.CodEmpresa == request.CodEmpresa)
-                    .OrderBy(x => x.CodLocal)
-                    .Select(x => new
-                    {
-                        x.CodEmpresa,
-                        x.CodCadena,
-                        x.CodRegion,
-                        x.CodZona,
-                        x.CodLocal,
-                        x.MaeLocal.NomLocal,
-                        x.MaeEmpresa.CodSociedad,
-                        x.CodActivo,
-                        x.InvTipoActivo.NomActivo,
-                        x.CodModelo,
-                        x.NomMarca,
-                        x.CodSerie,
-                        x.Cantidad,
-                        x.Ip,
-                        x.NomArea,
-                        x.NumOc,
-                        x.NumGuia,
-                        x.FecSalida,
-                        x.Antiguedad,
-                        x.IndOperativo,
-                        x.Observacion,
-                        x.Garantia,
-                        x.FecActualiza
-                    })
+                var lista = await _contexto.RepositorioSolicitudUsuarioASR
+                    .Obtener(x => x.CodLocalAlterno == request.CodLocalAlterno)
+                    .OrderBy(x => x.CodLocalAlterno)
                     .ToListAsync(cancellationToken);
 
-                // Verifica si la lista está vacía
                 if (lista == null || !lista.Any())
                 {
                     respuesta.Ok = false;
@@ -79,17 +51,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                     return respuesta;
                 }
 
-                // Genera el nombre del archivo
-                string fileName = $"Activos_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
+                string fileName = $"SolicitudesUsuariosASR{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
 
-                // Crea el archivo Excel
                 using (var wb = new XLWorkbook())
                 {
-                    var ws = wb.Worksheets.Add("Activos");
+                    var ws = wb.Worksheets.Add("Solicitudes");
 
                     if (ws == null)
                     {
-                        throw new NullReferenceException("La hoja de cálculo 'Activos' no se pudo crear.");
+                        throw new NullReferenceException("La hoja de cálculo 'Solicitudes' no se pudo crear.");
                     }
 
                     var properties = lista.First().GetType().GetProperties();
@@ -98,14 +68,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                         throw new NullReferenceException("No se pudieron obtener las propiedades del objeto.");
                     }
 
-                    // Escribe el encabezado
                     var headerRow = ws.Row(1);
                     for (int i = 0; i < properties.Length; i++)
                     {
                         headerRow.Cell(i + 1).Value = properties[i].Name;
                     }
 
-                    // Escribe los datos
                     for (int i = 0; i < lista.Count; i++)
                     {
                         var rowData = lista[i];
@@ -133,9 +101,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
                 respuesta.Ok = false;
                 respuesta.Mensaje = ex.Message;
             }
-
             return respuesta;
         }
-
     }
 }
