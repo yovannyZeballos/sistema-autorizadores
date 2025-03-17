@@ -24,7 +24,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
 
         public string CodLocalAlterno { get; set; }
         public string CodigoOfisis { get; set; }
-        public string NroDocIdent { get; set; } 
+        public string NroDocIdent { get; set; }
+        public string TipoUsuario { get; set; }
+        public string FiltroVarios { get; set; }
     }
 
     public class ListarMaeColaboradorExtHandler : IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDTO>>>
@@ -62,6 +64,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
                     combined = Expression.AndAlso(combined, codLocalEqual);
                 }
 
+                if (!string.IsNullOrEmpty(request.TipoUsuario))
+                {
+                    Expression tipoUsuarioProperty = Expression.Property(param, nameof(Mae_ColaboradorExt.TipoUsuario));
+                    Expression tipoUsuarioValue = Expression.Constant(request.TipoUsuario);
+                    Expression tipoUsuarioEqual = Expression.Equal(tipoUsuarioProperty, tipoUsuarioValue);
+
+                    combined = Expression.AndAlso(combined, tipoUsuarioEqual);
+                }
+
                 if (!string.IsNullOrEmpty(request.CodigoOfisis))
                 {
                     Expression codigoOfisisProperty = Expression.Property(param, nameof(Mae_ColaboradorExt.CodigoOfisis));
@@ -80,6 +91,43 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
                     Expression nroDocContains = Expression.Call(nroDocProperty, containsMethod2, nroDocValue);
 
                     combined = Expression.AndAlso(combined, nroDocContains);
+                }
+
+                if (!string.IsNullOrEmpty(request.FiltroVarios))
+                {
+                    Expression filtroConst = Expression.Constant(request.FiltroVarios);
+                    var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+
+                    Expression numDocContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_ColaboradorExt.NumDocIndent)),
+                        containsMethod,
+                        filtroConst
+                    );
+
+                    Expression nomTrabajadorContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_ColaboradorExt.NombreTrabajador)),
+                        containsMethod,
+                        filtroConst
+                    );
+
+                    Expression apelPaternoContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_ColaboradorExt.ApelPaterno)),
+                        containsMethod,
+                        filtroConst
+                    );
+
+                    Expression codigoOfisisContainsFiltro = Expression.Call(
+                        Expression.Property(param, nameof(Mae_ColaboradorExt.CodigoOfisis)),
+                        containsMethod,
+                        filtroConst
+                    );
+
+                    Expression filtroOr = Expression.OrElse(
+                        Expression.OrElse(numDocContains, nomTrabajadorContains),
+                        Expression.OrElse(apelPaternoContains, codigoOfisisContainsFiltro)
+                    );
+
+                    combined = Expression.AndAlso(combined, filtroOr);
                 }
 
                 Expression<Func<Mae_ColaboradorExt, bool>> predicate = Expression.Lambda<Func<Mae_ColaboradorExt, bool>>(combined, param);

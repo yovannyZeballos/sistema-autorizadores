@@ -130,6 +130,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuracion\AsrSolicitudUsuarioTypeConfiguration.cs" />
     <Compile Include="Configuracion\AutImpresionTypeConfiguracion.cs" />
     <Compile Include="Configuracion\InvCajasTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvKardexActivoTypeConfiguration.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Configuracion\InvActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeCajaTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeColaboradorExtTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MaeColaboradorIntTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeHorarioTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaePuestoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
@@ -178,10 +180,12 @@
     <Compile Include="Repositorio\RepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
     <Compile Include="Repositorio\RepositorioMaeColaboradorExt.cs" />
+    <Compile Include="Repositorio\RepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\RepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\RepositorioMaePuesto.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
+    <Compile Include="Repositorio\RepositorioSolicitudUsuarioASR.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
     <Compile Include="Repositorio\RepositorioAutImpresion.cs" />

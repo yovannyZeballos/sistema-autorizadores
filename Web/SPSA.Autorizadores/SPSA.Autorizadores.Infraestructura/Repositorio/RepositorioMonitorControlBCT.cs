@@ -9,7 +9,6 @@ using System.Data;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using System.Text;
-using System.Runtime.Remoting;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
@@ -263,38 +262,45 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			return listado;
 		}
 
-		public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalBCTHpsa(string fecha)
-		{
-			_dbHelper.CadenaConexion = CadenaConexionBCT_HPSA;
+        public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalBCTHpsa(string fecha, int sucursal)
+        {
+            var listado = new List<MonitorControlBCT>();
 
-			SqlParameter[] dbParams = new SqlParameter[]
-			{
-				_dbHelper.MakeParam("@buDate",fecha,SqlDbType.VarChar,ParameterDirection.Input,10),
-				_dbHelper.MakeParam("@realDate",fecha,SqlDbType.VarChar,ParameterDirection.Input,10)
-			};
+            using (var connection = new OracleConnection(CadenaConexionBCT_HPSA))
+            {
+                using (var command = new OracleCommand("ADM_HPSA.SF_MONITOR_CONTROL_BCT_CT", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                })
+                {
+                    var returnParameter = new OracleParameter("return_value", OracleDbType.RefCursor)
+                    {
+                        Direction = ParameterDirection.ReturnValue
+                    };
+                    command.Parameters.Add(returnParameter);
 
-			var lista = new List<MonitorControlBCT>();
+                    command.Parameters.Add("p_fecha", OracleDbType.Varchar2, fecha, ParameterDirection.Input);
+                    command.Parameters.Add("p_suc", OracleDbType.Int32, sucursal, ParameterDirection.Input);
 
-			var query = @"Select a.branchId,
-							convert(varchar(8),max(insertDate),108),
-							datediff(MINUTE,max(a.insertDate),getDate()) as dif 
-							from trxheader a 
-							where a.buDate = @buDate AND a.realDate = @realDate
-							group by a.branchId";
+                    await connection.OpenAsync();
 
-			using (var dr = await _dbHelper.ExecuteReaderText(query, dbParams))
-			{
-				while (dr != null && await dr.ReadAsync())
-				{
-					lista.Add(new MonitorControlBCT
-					{
-						CodSucursal = dr.IsDBNull(0) ? 0 : dr.GetInt32(0),
-						UltimaTransf = dr.IsDBNull(1) ? string.Empty : dr.GetString(1),
-						Diferencia = dr.IsDBNull(2) ? 0 : dr.GetInt32(2)
-					});
-				}
-			}
-			return lista;
-		}
-	}
+                    using (var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection))
+                    {
+                        while (dr != null && await dr.ReadAsync())
+                        {
+                            listado.Add(new MonitorControlBCT
+                            {
+                                CodSucursal = dr.IsDBNull(0) ? 0 : dr.GetInt32(0),
+                                UltimaTransf = dr.IsDBNull(1) ? string.Empty : dr.GetString(1),
+                                Diferencia = dr.IsDBNull(2) ? 0 : dr.GetInt32(2)
+                            });
+                        }
+                    }
+                }
+            }
+            return listado;
+        }
+
+ 	}
 }

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Entidades\Apertura.cs" />
     <Compile Include="Entidades\ArchivoAutorizador.cs" />
+    <Compile Include="Entidades\ASR_SolicitudUsuario.cs" />
     <Compile Include="Entidades\AutImpresion.cs" />
     <Compile Include="Entidades\Autorizador.cs" />
     <Compile Include="Entidades\Cajero.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Entidades\Mae_Caja.cs" />
     <Compile Include="Entidades\Mae_Cadena.cs" />
     <Compile Include="Entidades\Mae_ColaboradorExt.cs" />
+    <Compile Include="Entidades\Mae_ColaboradorInt.cs" />
     <Compile Include="Entidades\Mae_Empresa.cs" />
     <Compile Include="Entidades\Mae_Horario.cs" />
     <Compile Include="Entidades\Mae_Local.cs" />

@@ -39,10 +39,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands
 
             try
             {
-                var lista3333 = await _contexto.RepositorioInventarioActivo
-                    .Obtener(x => x.CodEmpresa == request.CodEmpresa)
-                    .ToListAsync(cancellationToken);
-
                 // Realiza la consulta a la base de datos y proyecta a un objeto anónimo
                 var lista = await _contexto.RepositorioInventarioActivo
                     .Obtener(x => x.CodEmpresa == request.CodEmpresa)

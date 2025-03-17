@@ -351,6 +351,11 @@
     <Compile Include="Features\ColaboradoresExt\DTOs\ObtenerMaeColaboradorExtDTO.cs" />
     <Compile Include="Features\ColaboradoresExt\Queries\ListarMaeColaboradorExtQuery.cs" />
     <Compile Include="Features\ColaboradoresExt\Queries\ObtenerMaeColaboradorExtQuery.cs" />
+    <Compile Include="Features\ColaboradoresInt\DTOs\ListarMaeColaboradorIntDTO.cs" />
+    <Compile Include="Features\ColaboradoresInt\DTOs\MaeColaboradorIntDTO.cs" />
+    <Compile Include="Features\ColaboradoresInt\DTOs\ObtenerMaeColaboradorIntDTO.cs" />
+    <Compile Include="Features\ColaboradoresInt\Queries\ListarMaeColaboradorIntQuery.cs" />
+    <Compile Include="Features\ColaboradoresInt\Queries\ObtenerMaeColaboradorIntQuery.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />
@@ -565,6 +570,13 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\CrearSolicitudUsuarioCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\DescargarSolicitudesUsuarioCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\EliminarSolicitudUsuarioCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\DTOs\ObtenerSolicitudUsuarioDTO.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\DTOs\SolicitudUsuarioDTO.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\DTOs\ListarSolictudUsuarioDTO.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarSolicitudUsuarioQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
     <Compile Include="Features\TiposActivo\Commands\DescargarInvTiposActivoCommand.cs" />
     <Compile Include="Features\TiposActivo\Queries\ListarInvTipoActivoQuery.cs" />
@@ -612,6 +624,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Features\ColaboradoresInt\Commands\" />
     <Folder Include="Features\Reportes\DTOs\" />
     <Folder Include="Features\TablasMae\Queries\" />
   </ItemGroup>

@@ -1,12 +1,9 @@
-﻿using Npgsql;
-using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
-using SPSA.Autorizadores.Dominio.Entidades;
+﻿using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Configuracion;
 using SPSA.Autorizadores.Infraestructura.Repositorio;
 using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Contexto
@@ -62,7 +59,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioMonCierreEODHist = new RepositorioMonCierreEODHist(this);
 
             RepositorioMaeColaboradorExt = new RepositorioMaeColaboradorExt(this);
+            RepositorioMaeColaboradorInt = new RepositorioMaeColaboradorInt(this);
             RepositorioMaePuesto = new RepositorioMaePuesto(this);
+            RepositorioSolicitudUsuarioASR = new RepositorioSolicitudUsuarioASR(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -110,7 +109,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; private set; }
 		public IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; private set; }
 		public IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; private set; }
+		public IRepositorioMaeColaboradorInt RepositorioMaeColaboradorInt { get; private set; }
 		public IRepositorioMaePuesto RepositorioMaePuesto { get; private set; }
+		public IRepositorioSolicitudUsuarioASR RepositorioSolicitudUsuarioASR { get; private set; }
 
 
 
@@ -161,7 +162,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MonCierreEODHistTypeConfiguration());
 
 			modelBuilder.Configurations.Add(new MaeColaboradorExtTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeColaboradorIntTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaePuestoTypeConfiguration());
+			modelBuilder.Configurations.Add(new AsrSolicitudUsuarioTypeConfiguration());
 
 		}
 

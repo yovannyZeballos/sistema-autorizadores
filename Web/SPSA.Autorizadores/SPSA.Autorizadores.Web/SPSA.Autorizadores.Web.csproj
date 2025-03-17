@@ -274,6 +274,8 @@
     <Compile Include="Areas\Cajeros\Controllers\AdministrarCajeroController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\CajeroVolanteController.cs" />
     <Compile Include="Areas\Cajeros\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\Dashboards\Controllers\AdministrarDashboardController.cs" />
+    <Compile Include="Areas\Dashboards\DashboardsAreaRegistration.cs" />
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
@@ -288,6 +290,7 @@
     <Compile Include="Areas\Locales\Controllers\InventarioServidorController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeCajaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeColaboradorExtController.cs" />
+    <Compile Include="Areas\Maestros\Controllers\MaeColaboradorIntController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeEmpresaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeHorarioController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeLocalController.cs" />
@@ -317,6 +320,8 @@
     <Compile Include="Areas\Seguridad\Controllers\SistemaController.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeZonaController.cs" />
+    <Compile Include="Areas\SolicitudASR\Controllers\SolicitudUsuarioController.cs" />
+    <Compile Include="Areas\SolicitudASR\SolicitudASRAreaRegistration.cs" />
     <Compile Include="Areas\Ubigeos\Controllers\UbigeoController.cs" />
     <Compile Include="Areas\Ubigeos\UbigeosAreaRegistration.cs" />
     <Compile Include="AutofacConfig.cs" />
@@ -2372,6 +2377,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexActivo.js" />
@@ -2894,12 +2900,22 @@
     <Content Include="Areas\Reportes\Views\MaestroAutorizadores\Index.cshtml" />
     <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteCierre\Dashboard.cshtml" />
-    <Content Include="Content\reportes\report1.mrt" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_NuevoForm.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_ModificarForm.cshtml" />
     <Content Include="Plantillas_Tablas\Plantilla_ColaboradorExt\Plantilla_ColaboradorExt.xlsx" />
     <Content Include="Areas\Maestros\Views\MaePuesto\Index.cshtml" />
+    <Content Include="Areas\Dashboards\Views\web.config" />
+    <Content Include="Areas\Dashboards\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Dashboards\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\CierreTesoreria.cshtml" />
+    <Content Include="Content\reportes\cierre-cuadratura.mrt" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\InventarioLocal.cshtml" />
+    <Content Include="Content\reportes\inventario-local.mrt" />
+    <Content Include="Areas\SolicitudASR\Views\web.config" />
+    <Content Include="Areas\SolicitudASR\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\SolicitudASR\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\SolicitudASR\Views\SolicitudUsuario\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2941,15 +2957,18 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Aperturas\Data\" />
+    <Folder Include="Areas\Dashboards\Data\" />
     <Folder Include="Areas\DataTables\Data\" />
     <Folder Include="Areas\DataTables\Views\Shared\" />
     <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Inventario\Views\InventarioTipoActivo\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
+    <Folder Include="Areas\Maestros\Views\MaeColaboradorInt\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
     <Folder Include="Areas\Reportes\Data\" />
+    <Folder Include="Areas\SolicitudASR\Data\" />
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />

@@ -3,6 +3,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
+using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -48,12 +49,25 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 
 			try
 			{
-				string cadenaConexion = await ArmarCadenaconexion(request.CodEmpresa);
-				string nombreTabla = await ObtenerNombreTabla(request.CodEmpresa);
 
-				if (cadenaConexion == null) return response;
+				switch (request.CodEmpresa)
+				{
+                    case "09":
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerTpsa();
+                        break;
+                    case "10":
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerHpsa();
+                        break;
+                    default:
+                        string cadenaConexion = await ArmarCadenaconexion(request.CodEmpresa);
+                        string nombreTabla = await ObtenerNombreTabla(request.CodEmpresa);
 
-				response.Data = await _repositorioTransactionXmlCT2.Obtener(cadenaConexion, nombreTabla);
+                        if (cadenaConexion == null) return response;
+
+                        response.Data = await _repositorioTransactionXmlCT2.Obtener(cadenaConexion, nombreTabla);
+                        break;
+                }
+
 			}
 			catch (Exception ex)
 			{
