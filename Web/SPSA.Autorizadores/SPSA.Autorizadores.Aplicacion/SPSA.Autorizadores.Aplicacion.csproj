@@ -356,6 +356,7 @@
     <Compile Include="Features\ColaboradoresInt\DTOs\ObtenerMaeColaboradorIntDTO.cs" />
     <Compile Include="Features\ColaboradoresInt\Queries\ListarMaeColaboradorIntQuery.cs" />
     <Compile Include="Features\ColaboradoresInt\Queries\ObtenerMaeColaboradorIntQuery.cs" />
+    <Compile Include="Features\Correo\Commands\EnviarCorreoCommand.cs" />
     <Compile Include="Features\DataTableSGP\Queries\DataTableUsuariosQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarGrillaQuery.cs" />
     <Compile Include="Features\Autorizadores\Queries\ListarListBoxQuery.cs" />

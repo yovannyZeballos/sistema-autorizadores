@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,13 +21,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-
         public string CodEmpresa{ get; set; }
         public string CodLocal{ get; set; }
-
-        public string CodLocalAlterno { get; set; }
-        //public string TipUsuario { get; set; }
-        //public string TipColaborador { get; set; }
+        public string TipUsuario { get; set; }
+        public string TipColaborador { get; set; }
+        public string IndAprobado { get; set; }
+        public string FiltroVarios { get; set; }
     }
 
     public class ListarSolicitudUsuarioHandler : IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>
@@ -69,34 +67,54 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
                     combined = Expression.AndAlso(combined, codLocalEqual);
                 }
 
-                //if (!string.IsNullOrEmpty(request.CodLocalAlterno))
-                //{
-                //    Expression codLocalProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.CodLocalAlterno));
-                //    Expression codLocalValue = Expression.Constant(request.CodLocalAlterno);
-                //    Expression codLocalEqual = Expression.Equal(codLocalProperty, codLocalValue);
+                if (!string.IsNullOrEmpty(request.TipUsuario))
+                {
+                    Expression tipUsuarioProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.TipUsuario));
+                    Expression tipUsuarioValue = Expression.Constant(request.TipUsuario);
+                    Expression tipUsuarioEqual = Expression.Equal(tipUsuarioProperty, tipUsuarioValue);
 
-                //    combined = Expression.AndAlso(combined, codLocalEqual);
-                //}
+                    combined = Expression.AndAlso(combined, tipUsuarioEqual);
+                }
 
-                //if (!string.IsNullOrEmpty(request.CodigoOfisis))
-                //{
-                //    Expression codigoOfisisProperty = Expression.Property(param, nameof(Mae_ColaboradorExt.CodigoOfisis));
-                //    Expression codigoOfisisValue = Expression.Constant(request.CodigoOfisis);
-                //    var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                //    Expression codigoOfisisContains = Expression.Call(codigoOfisisProperty, containsMethod, codigoOfisisValue);
+                if (!string.IsNullOrEmpty(request.TipColaborador))
+                {
+                    Expression tipColaboradorProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.TipColaborador));
+                    Expression tipColaboradorValue = Expression.Constant(request.TipColaborador);
+                    Expression tipColaboradorEqual = Expression.Equal(tipColaboradorProperty, tipColaboradorValue);
 
-                //    combined = Expression.AndAlso(combined, codigoOfisisContains);
-                //}
+                    combined = Expression.AndAlso(combined, tipColaboradorEqual);
+                }
 
-                //if (!string.IsNullOrEmpty(request.NroDocIdent))
-                //{
-                //    Expression nroDocProperty = Expression.Property(param, nameof(Mae_ColaboradorExt.NumDocIndent));
-                //    Expression nroDocValue = Expression.Constant(request.NroDocIdent);
-                //    var containsMethod2 = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                //    Expression nroDocContains = Expression.Call(nroDocProperty, containsMethod2, nroDocValue);
+                if (!string.IsNullOrEmpty(request.IndAprobado))
+                {
+                    Expression indAprobadoProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.IndAprobado));
+                    Expression indAprobadoValue = Expression.Constant(request.IndAprobado);
+                    Expression indAprobadoEqual = Expression.Equal(indAprobadoProperty, indAprobadoValue);
 
-                //    combined = Expression.AndAlso(combined, nroDocContains);
-                //}
+                    combined = Expression.AndAlso(combined, indAprobadoEqual);
+                }
+
+                if (!string.IsNullOrEmpty(request.FiltroVarios))
+                {
+                    Expression filtroConst = Expression.Constant(request.FiltroVarios);
+                    var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+
+                    Expression codColabContains = Expression.Call(
+                        Expression.Property(param, nameof(ASR_SolicitudUsuario.CodColaborador)),
+                        containsMethod,
+                        filtroConst
+                    );
+
+                    Expression motivoContains = Expression.Call(
+                        Expression.Property(param, nameof(ASR_SolicitudUsuario.Motivo)),
+                        containsMethod,
+                        filtroConst
+                    );
+
+                    Expression filtroOr = Expression.OrElse(codColabContains, motivoContains);
+
+                    combined = Expression.AndAlso(combined, filtroOr);
+                }
 
                 Expression<Func<ASR_SolicitudUsuario, bool>> predicate = Expression.Lambda<Func<ASR_SolicitudUsuario, bool>>(combined, param);
 
@@ -110,12 +128,19 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
 
                 var mappedItems = _mapper.Map<List<ListarSolictudUsuarioDTO>>(pagedColaboradores.Items);
 
-                //foreach (var item in mappedItems)
-                //{
-                //    Mae_Local maeLocal = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodLocalAlterno == item.CodLocalAlterno).FirstOrDefaultAsync();
-
-                //    item.NomLocal = maeLocal.NomLocal;
-                //}
+                foreach (var item in mappedItems)
+                {
+                    if (item.TipColaborador == "I")
+                    {
+                        Mae_ColaboradorInt maeColab = await _contexto.RepositorioMaeColaboradorInt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
+                        item.NomColaborador = $"{maeColab.NomTrabajador} {maeColab.ApePaterno} {maeColab.ApeMaterno}";
+                    }
+                    else
+                    {
+                        Mae_ColaboradorExt maeColab = await _contexto.RepositorioMaeColaboradorExt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
+                        item.NomColaborador = $"{maeColab.NombreTrabajador} {maeColab.ApelPaterno} {maeColab.ApelMaterno}";
+                    }
+                }
 
                 var pagedResult = new PagedResult<ListarSolictudUsuarioDTO>
                 {

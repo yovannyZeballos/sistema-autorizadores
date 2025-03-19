@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Correo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries;
@@ -35,6 +37,24 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
         public async Task<JsonResult> CrearSolicitud(CrearSolicitudUsuarioCommand command)
         {
             var respuesta = await _mediator.Send(command);
+
+            if (respuesta.Ok)
+            {
+                //var emailCommand = new EnviarCorreoCommand
+                //{
+                //    CodProceso = 37,
+                //    CodEmpresa = "01",
+                //    Subject = "Solicitud Creada",
+                //    Message = $"La solicitud de usuario {command.CodColaborador} se ha creado exitosamente."
+                //};
+
+                //var emailResponse = await _mediator.Send(emailCommand);
+                //if (!emailResponse.Ok)
+                //{
+                //    respuesta.Mensaje = $"La solicitud se creó, pero falló el envío del correo: {emailResponse.Mensaje}";
+                //}
+            }
+
             return Json(respuesta);
         }
 
