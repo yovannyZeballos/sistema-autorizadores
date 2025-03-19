@@ -25,9 +25,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.Queries
 
         public string CodEmpresa { get; set; }
         public string CodLocal { get; set; }
-        //public string CodigoOfisis { get; set; }
-        //public string NroDocIdent { get; set; }
-        //public string TipoUsuario { get; set; }
+        public string TipUsuario { get; set; }
         public string FiltroVarios { get; set; }
     }
 
@@ -75,34 +73,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.Queries
                     combined = Expression.AndAlso(combined, codLocalEqual);
                 }
 
-                //if (!string.IsNullOrEmpty(request.TipoUsuario))
-                //{
-                //    Expression tipoUsuarioProperty = Expression.Property(param, nameof(Mae_ColaboradorInt.TipoUsuario));
-                //    Expression tipoUsuarioValue = Expression.Constant(request.TipoUsuario);
-                //    Expression tipoUsuarioEqual = Expression.Equal(tipoUsuarioProperty, tipoUsuarioValue);
+                if (!string.IsNullOrEmpty(request.TipUsuario))
+                {
+                    Expression tipUsuarioProperty = Expression.Property(param, nameof(Mae_ColaboradorInt.TipUsuario));
+                    Expression tipUsuarioValue = Expression.Constant(request.TipUsuario);
+                    Expression tipUsuarioEqual = Expression.Equal(tipUsuarioProperty, tipUsuarioValue);
 
-                //    combined = Expression.AndAlso(combined, tipoUsuarioEqual);
-                //}
-
-                //if (!string.IsNullOrEmpty(request.CodigoOfisis))
-                //{
-                //    Expression codigoOfisisProperty = Expression.Property(param, nameof(Mae_ColaboradorInt.CodigoOfisis));
-                //    Expression codigoOfisisValue = Expression.Constant(request.CodigoOfisis);
-                //    var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                //    Expression codigoOfisisContains = Expression.Call(codigoOfisisProperty, containsMethod, codigoOfisisValue);
-
-                //    combined = Expression.AndAlso(combined, codigoOfisisContains);
-                //}
-
-                //if (!string.IsNullOrEmpty(request.NroDocIdent))
-                //{
-                //    Expression nroDocProperty = Expression.Property(param, nameof(Mae_ColaboradorInt.NumDocIdent));
-                //    Expression nroDocValue = Expression.Constant(request.NroDocIdent);
-                //    var containsMethod2 = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                //    Expression nroDocContains = Expression.Call(nroDocProperty, containsMethod2, nroDocValue);
-
-                //    combined = Expression.AndAlso(combined, nroDocContains);
-                //}
+                    combined = Expression.AndAlso(combined, tipUsuarioEqual);
+                }
 
                 if (!string.IsNullOrEmpty(request.FiltroVarios))
                 {

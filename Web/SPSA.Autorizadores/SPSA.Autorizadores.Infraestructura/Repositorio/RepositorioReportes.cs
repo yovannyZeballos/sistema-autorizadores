@@ -326,50 +326,56 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 string query = @"
                                 SELECT
-	                                irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
-	                                IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
-	                                irc.caj_activo  	 AS ""EST. CAJERO"",
-	                                irc.loc_numero   	 AS ""COD. LOCAL"",
-	                                ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
-	                                irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
-	                                irc.caj_rut  		 AS ""NUM. DOCUME"",
-	                                TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
-	                                IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
-	                                TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
+	                                irc.CAJ_CODIGO AS ""COD. CAJERO"",
+	                                IRC.CAJ_CODIGO_EMP AS ""COD. COLABORADOR"",
+	                                irc.caj_activo AS ""EST. CAJERO"",
+	                                irc.loc_numero AS ""COD. LOCAL"",
+	                                ilo.NOM_LOC_OFI AS ""NOM. LOCAL"",
+	                                irC.CAJ_NOMBRE AS ""NOM. CAJERO"",
+	                                irc.caj_rut AS ""NUM. DOCUME"",
+	                                TRUNC(IRC.CAJ_FCREACION) AS ""FEC. CREACION"",
+	                                IRC.CAJ_USUARIO_CREA AS ""USU. CREACION"",
+	                                TRUNC(IRC.CAJ_FBAJA) AS ""FEC. BAJA"",
 	                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
-	                                TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
-	                                IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
-	                                TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
-	                                IDC.DE_PUES_TRAB 	 AS ""PUESTO""
-                                FROM ECT2SP.IRS_CAJEROS irc
-                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
-                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
-                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
-                                       ON (  IDC.CODIGO_OFISIS = IRC.CAJ_CODIGO_EMP)
-                                WHERE irc.caj_tipo = '01'
+	                                TRUNC(IDC.FE_INGR_EMPR) AS ""FEC. INGRESO"",
+	                                IDC.TI_SITU AS ""EST. COLABORADOR"",
+	                                TRUNC(IDC.FE_CESE_TRAB) AS ""FEC. CESE"",
+	                                IDC.DE_PUES_TRAB AS ""PUESTO""
+                                FROM
+	                                ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo ON
+	                                ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc ON
+	                                ( IDC.CODIGO_OFISIS = IRC.CAJ_CODIGO_EMP )
+                                WHERE
+	                                irc.caj_tipo = '01'
+	                                AND NOT IRC.CAJ_CODIGO_EMP IS NULL
                                 UNION
                                 SELECT
-	                                irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
-	                                IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
-	                                irc.caj_activo  	 AS ""EST. CAJERO"",
-	                                irc.loc_numero   	 AS ""COD. LOCAL"",
-	                                ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
-	                                irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
-	                                irc.caj_rut  		 AS ""NUM. DOCUME"",
-	                                TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
-	                                IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
-	                                TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
+	                                irc.CAJ_CODIGO AS ""COD. CAJERO"",
+	                                IRC.CAJ_CODIGO_EMP AS ""COD. COLABORADOR"",
+	                                irc.caj_activo AS ""EST. CAJERO"",
+	                                irc.loc_numero AS ""COD. LOCAL"",
+	                                ilo.NOM_LOC_OFI AS ""NOM. LOCAL"",
+	                                irC.CAJ_NOMBRE AS ""NOM. CAJERO"",
+	                                irc.caj_rut AS ""NUM. DOCUME"",
+	                                TRUNC(IRC.CAJ_FCREACION) AS ""FEC. CREACION"",
+	                                IRC.CAJ_USUARIO_CREA AS ""USU. CREACION"",
+	                                TRUNC(IRC.CAJ_FBAJA) AS ""FEC. BAJA"",
 	                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
-	                                TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
-	                                IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
-	                                TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
-	                                IDC.DE_PUES_TRAB 	 AS ""PUESTO""
-                                FROM ECT2SP.IRS_CAJEROS irc
-                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
-                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
-                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
-                                       ON (IDC.NU_DOCU_IDEN = IRC.CAJ_RUT  )
-                                WHERE irc.caj_tipo = '01'
+	                                TRUNC(IDC.FE_INGR_EMPR) AS ""FEC. INGRESO"",
+	                                IDC.TI_SITU AS ""EST. COLABORADOR"",
+	                                TRUNC(IDC.FE_CESE_TRAB) AS ""FEC. CESE"",
+	                                IDC.DE_PUES_TRAB AS ""PUESTO""
+                                FROM
+	                                ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo ON
+	                                ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc ON
+	                                ( IDC.NU_DOCU_IDEN = IRC.CAJ_RUT )
+                                WHERE
+	                                irc.caj_tipo = '01'
+	                                AND IRC.CAJ_CODIGO_EMP IS NULL
                                 ";
 
                 var command = new OracleCommand(query, connection)
@@ -396,50 +402,56 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 string query = @"
                                WITH combined_data AS (
                                 SELECT
-                                    irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
-                                    IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
-                                    irc.caj_activo  	 AS ""EST. CAJERO"",
-                                    irc.loc_numero   	 AS ""COD. LOCAL"",
-                                    ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
-                                    irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
-                                    irc.caj_rut  		 AS ""NUM. DOCUME"",
-                                    TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
-                                    IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
-                                    TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
-                                    IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
-                                    TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
-                                    IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
-                                    TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
-                                    IDC.DE_PUES_TRAB 	 AS ""PUESTO""
-                                FROM ECT2SP.IRS_CAJEROS irc
-                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
-                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
-                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
-                                       ON IDC.CODIGO_OFISIS = IRC.CAJ_CODIGO_EMP
-                                WHERE irc.caj_tipo = '01'
-                                UNION ALL
+	                                irc.CAJ_CODIGO AS ""COD. CAJERO"",
+	                                IRC.CAJ_CODIGO_EMP AS ""COD. COLABORADOR"",
+	                                irc.caj_activo AS ""EST. CAJERO"",
+	                                irc.loc_numero AS ""COD. LOCAL"",
+	                                ilo.NOM_LOC_OFI AS ""NOM. LOCAL"",
+	                                irC.CAJ_NOMBRE AS ""NOM. CAJERO"",
+	                                irc.caj_rut AS ""NUM. DOCUME"",
+	                                TRUNC(IRC.CAJ_FCREACION) AS ""FEC. CREACION"",
+	                                IRC.CAJ_USUARIO_CREA AS ""USU. CREACION"",
+	                                TRUNC(IRC.CAJ_FBAJA) AS ""FEC. BAJA"",
+	                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
+	                                TRUNC(IDC.FE_INGR_EMPR) AS ""FEC. INGRESO"",
+	                                IDC.TI_SITU AS ""EST. COLABORADOR"",
+	                                TRUNC(IDC.FE_CESE_TRAB) AS ""FEC. CESE"",
+	                                IDC.DE_PUES_TRAB AS ""PUESTO""
+                                FROM
+	                                ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo ON
+	                                ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc ON
+	                                ( IDC.CODIGO_OFISIS = IRC.CAJ_CODIGO_EMP )
+                                WHERE
+	                                irc.caj_tipo = '01'
+	                                AND NOT IRC.CAJ_CODIGO_EMP IS NULL
+                                UNION
                                 SELECT
-                                    irc.CAJ_CODIGO		 AS ""COD. CAJERO"",
-                                    IRC.CAJ_CODIGO_EMP 	 AS ""COD. COLABORADOR"",
-                                    irc.caj_activo  	 AS ""EST. CAJERO"",
-                                    irc.loc_numero   	 AS ""COD. LOCAL"",
-                                    ilo.NOM_LOC_OFI    	 AS ""NOM. LOCAL"",
-                                    irC.CAJ_NOMBRE 		 AS ""NOM. CAJERO"",
-                                    irc.caj_rut  		 AS ""NUM. DOCUME"",
-                                    TRUNC(IRC.CAJ_FCREACION)	 AS ""FEC. CREACION"",
-                                    IRC.CAJ_USUARIO_CREA AS	""USU. CREACION"",
-                                    TRUNC(IRC.CAJ_FBAJA)		 AS ""FEC. BAJA"",
-                                    IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
-                                    TRUNC(IDC.FE_INGR_EMPR) 	 AS ""FEC. INGRESO"",
-                                    IDC.TI_SITU 	 	 AS ""EST. COLABORADOR"",
-                                    TRUNC(IDC.FE_CESE_TRAB) 	 AS ""FEC. CESE"",
-                                    IDC.DE_PUES_TRAB 	 AS ""PUESTO""
-                                FROM ECT2SP.IRS_CAJEROS irc
-                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo
-                                       ON ILO.COD_LOC_CT2 = irc.LOC_NUMERO
-                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc
-                                       ON IDC.NU_DOCU_IDEN = IRC.CAJ_RUT
-                                WHERE irc.caj_tipo = '01'
+	                                irc.CAJ_CODIGO AS ""COD. CAJERO"",
+	                                IRC.CAJ_CODIGO_EMP AS ""COD. COLABORADOR"",
+	                                irc.caj_activo AS ""EST. CAJERO"",
+	                                irc.loc_numero AS ""COD. LOCAL"",
+	                                ilo.NOM_LOC_OFI AS ""NOM. LOCAL"",
+	                                irC.CAJ_NOMBRE AS ""NOM. CAJERO"",
+	                                irc.caj_rut AS ""NUM. DOCUME"",
+	                                TRUNC(IRC.CAJ_FCREACION) AS ""FEC. CREACION"",
+	                                IRC.CAJ_USUARIO_CREA AS ""USU. CREACION"",
+	                                TRUNC(IRC.CAJ_FBAJA) AS ""FEC. BAJA"",
+	                                IRC.CAJ_USUARIO_BAJA AS ""USU. BAJA"",
+	                                TRUNC(IDC.FE_INGR_EMPR) AS ""FEC. INGRESO"",
+	                                IDC.TI_SITU AS ""EST. COLABORADOR"",
+	                                TRUNC(IDC.FE_CESE_TRAB) AS ""FEC. CESE"",
+	                                IDC.DE_PUES_TRAB AS ""PUESTO""
+                                FROM
+	                                ECT2SP.IRS_CAJEROS irc
+                                LEFT JOIN EAUTORIZADOR.INT_LOCAL_OFIPLAN ilo ON
+	                                ILO.COD_LOC_CT2 = irc.LOC_NUMERO
+                                LEFT JOIN EAUTORIZADOR.INT_DATOS_COLABORADOR idc ON
+	                                ( IDC.NU_DOCU_IDEN = IRC.CAJ_RUT )
+                                WHERE
+	                                irc.caj_tipo = '01'
+	                                AND IRC.CAJ_CODIGO_EMP IS NULL
                             )
                             SELECT *
                             FROM (

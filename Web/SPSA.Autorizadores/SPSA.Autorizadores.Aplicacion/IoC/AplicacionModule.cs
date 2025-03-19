@@ -18,6 +18,7 @@ using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Correo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.DataTableSGP.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
@@ -365,6 +366,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             //builder.RegisterType<EliminarMaeColaboradorExtHandler>().As<IRequestHandler<EliminarMaeColaboradorExtCommand, RespuestaComunDTO>>();
             //builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
             #endregion
+
+            builder.RegisterType<EnviarCorreoHandler>().As<IRequestHandler<EnviarCorreoCommand, RespuestaComunDTO>>();
 
             #region ASR_SOLICITUD_USUARIO
             builder.RegisterType<ListarSolicitudUsuarioHandler>().As<IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>>();

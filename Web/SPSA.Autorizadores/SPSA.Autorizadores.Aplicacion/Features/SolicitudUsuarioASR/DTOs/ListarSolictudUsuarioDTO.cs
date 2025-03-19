@@ -18,5 +18,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.DTOs
         public string Motivo { get; set; }
         public string UsuElimina { get; set; }
         public DateTime? FecElimina { get; set; }
+
+        public string NomColaborador { get; set; }
     }
 }

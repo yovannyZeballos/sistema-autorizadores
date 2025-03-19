@@ -2,9 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using DocumentFormat.OpenXml.Bibliography;
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.Correo.Commands;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
@@ -55,6 +57,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                 _contexto.RepositorioSolicitudUsuarioASR.Agregar(solicitudUsuario);
                 await _contexto.GuardarCambiosAsync();
                 respuesta.Mensaje = "Solicitud creado exitosamente.";
+
             }
             catch (Exception ex)
             {

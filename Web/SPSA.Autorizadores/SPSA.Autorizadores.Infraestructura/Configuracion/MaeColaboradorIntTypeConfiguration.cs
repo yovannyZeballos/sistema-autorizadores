@@ -42,7 +42,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(mc => mc.CodPuesTrab).HasColumnName("CO_PUES_TRAB");
             Property(mc => mc.CodSede).HasColumnName("CO_SEDE");
             Property(mc => mc.CodMotiSepa).HasColumnName("CO_MOTI_SEPA");
-            Property(mc => mc.IndInterno).HasColumnName("IND_INTERNO");
+            Property(mc => mc.TipUsuario).HasColumnName("TIP_USUARIO");
             Property(mc => mc.Codjerarquia).HasColumnName("COD_JERARQUIA");
             Property(mc => mc.UsuCreacion).HasColumnName("USU_CREACION");
             Property(mc => mc.FecCreacion).HasColumnName("FEC_CREACION");

@@ -8,6 +8,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.Correo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
@@ -228,6 +229,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ActualizarMaePuestoCommand, Mae_Puesto>().ReverseMap();
             #endregion
 
+            //CreateMap<EnviarCorreoCommand, ASR_SolicitudUsuario>().ReverseMap();
 
             #region <--ASR_SOLICITUD_USUARIO-->
             CreateMap<ListarSolictudUsuarioDTO, ASR_SolicitudUsuario>().ReverseMap();
