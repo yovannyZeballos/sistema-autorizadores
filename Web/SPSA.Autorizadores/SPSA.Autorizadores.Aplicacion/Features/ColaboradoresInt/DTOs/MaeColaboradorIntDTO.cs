@@ -23,7 +23,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.DTOs
         public string CodPuesTrab { get; set; }
         public string CodSede { get; set; }
         public string CodMotiSepa { get; set; }
-        public string IndInterno { get; set; }
         public int Codjerarquia { get; set; }
+        public string TipUsuario { get; set; }
     }
 }

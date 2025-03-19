@@ -16,11 +16,6 @@ var urlCrearSolicitud = baseUrl + 'SolicitudASR/SolicitudUsuario/CrearSolicitud'
 var urlEliminarSolicitud = baseUrl + 'SolicitudASR/SolicitudUsuario/EliminarSolicitud';
 var urlDescargarSolicitudes = baseUrl + 'SolicitudASR/SolicitudUsuario/DescargarSolicitudes';
 
-
-var urlModificarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/ModificarColaborador';
-var urlImportarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/Importar';
-
-
 var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
 var codLocalAlternoAnterior = "";
@@ -29,39 +24,43 @@ var dataTableColaboradoresExt = null;
 var SolicitudUsuarioASR = function () {
     const eventos = function () {
 
-        $(document).on('input', '#txtFiltroVariosExt', function (e) {
-            var valor = $(this).val().toUpperCase();
-            $(this).val(valor);
+        // Función para aplicar filtro y recargar DataTable
+        const aplicarFiltro = (inputSelector, tableSelector) => {
+            $(document).on('input', inputSelector, function (e) {
+                let valor = $(this).val().toUpperCase();
+                $(this).val(valor);
+                e.preventDefault();
+                $(tableSelector).DataTable().ajax.reload();
+            });
+        };
 
-            var table = $('#tableColaboradoresExt').DataTable();
+        aplicarFiltro('#txtFiltroVariosSolicitudes', '#tableSolicitudes');
+        aplicarFiltro('#txtFiltroVariosExt', '#tableColaboradoresExt');
+        aplicarFiltro('#txtFiltroVariosInt', '#tableColaboradoresInt');
+        aplicarFiltro('#txtFiltroVariosInt2', '#tableColaboradoresInt2');
+
+        // Combinar eventos change para filtros del DataTable de solicitudes
+        $("#cboEstadoBuscar, #cboTipUsuarioBuscar, #cboTipColaboradorBuscar").on("change", function (e) {
+            var table = $('#tableSolicitudes').DataTable();
             e.preventDefault();
             table.ajax.reload();
         });
 
-        $(document).on('input', '#txtFiltroVariosInt', function (e) {
-            var valor = $(this).val().toUpperCase();
-            $(this).val(valor);
-
-            var table = $('#tableColaboradoresInt').DataTable();
-            e.preventDefault();
-            table.ajax.reload();
-        });
-
-        $('#tableSolicitudes tbody').on('click', 'tr', function () {
-            $(this).toggleClass('selected');
-        });
-
-        $('#tableColaboradoresInt tbody').on('click', 'tr', function () {
-            $(this).toggleClass('selected');
-        });
-
-        $('#tableColaboradoresExt tbody').on('click', 'tr', function () {
-            $(this).toggleClass('selected');
+        // evento para seleccionar filas en múltiples tablas
+        ['#tableSolicitudes tbody', '#tableColaboradoresInt tbody', '#tableColaboradoresInt2 tbody', '#tableColaboradoresExt tbody'].forEach(selector => {
+            $(selector).on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
         });
 
         $("#btnModalColabInt").on("click", async function () {
             visualizarDataTableColaboradoresInt();
             $("#modalColabInt").modal('show');
+        });
+
+        $("#btnModalColabInt2").on("click", async function () {
+            visualizarDataTableColaboradoresInt2();
+            $("#modalColabInt2").modal('show');
         });
 
         $("#btnModalColabExt").on("click", async function () {
@@ -77,30 +76,31 @@ var SolicitudUsuarioASR = function () {
             descargarSolicitudesPorLocal(objLocal.CodLocalAlterno);
         });
 
-        $("#modalColabExt").on("shown.bs.modal", function () {
-            if ($.fn.DataTable.isDataTable('#tableColaboradoresExt')) {
-                $('#tableColaboradoresExt').DataTable().columns.adjust();
-            }
-        });
+        // Función para ajustar las columnas de DataTable al mostrar el modal
+        const ajustarColumnasModal = (modalSelector, tableSelector) => {
+            $(modalSelector).on("shown.bs.modal", function () {
+                if ($.fn.DataTable.isDataTable(tableSelector)) {
+                    $(tableSelector).DataTable().columns.adjust();
+                }
+            });
+        };
 
-        $("#modalColabInt").on("shown.bs.modal", function () {
-            if ($.fn.DataTable.isDataTable('#tableColaboradoresInt')) {
-                $('#tableColaboradoresInt').DataTable().columns.adjust();
-            }
-        });
+        ajustarColumnasModal("#modalColabExt", "#tableColaboradoresExt");
+        ajustarColumnasModal("#modalColabInt", "#tableColaboradoresInt");
+        ajustarColumnasModal("#modalColabInt2", "#tableColaboradoresInt2");
 
+        // Eventos para cambios en inputs tipo usuario
         $('input[name="tipoUsuarioExt"]').on('change', function (e) {
-            var table = $('#tableColaboradoresExt').DataTable();
             e.preventDefault();
-            table.ajax.reload();
+            $('#tableColaboradoresExt').DataTable().ajax.reload();
         });
 
         $('input[name="tipoUsuarioInt"]').on('change', function (e) {
-            //var table = $('#tableColaboradoresInt').DataTable();
-            //e.preventDefault();
-            //table.ajax.reload();
+            e.preventDefault();
+            $('#tableColaboradoresInt').DataTable().ajax.reload();
         });
 
+        // Evento para crear solicitudes
         $("#btnSolicitarColabInt").on("click", function () {
             var filasSeleccionadas = document.querySelectorAll("#tableColaboradoresInt tbody tr.selected");
 
@@ -172,6 +172,7 @@ var SolicitudUsuarioASR = function () {
                 });
         });
 
+        // Evento para eliminar solicitudes
         $("#btnEliminarSolicitud").on("click", function () {
             var filasSeleccionadas = document.querySelectorAll("#tableSolicitudes tbody tr.selected");
 
@@ -202,127 +203,6 @@ var SolicitudUsuarioASR = function () {
         });
     };
 
-    const listarEmpresasAsociadas = function () {
-        return new Promise((resolve, reject) => {
-
-            const codUsuario = $("#txtUsuario").val();
-
-            const request = {
-                CodUsuario: codUsuario,
-                Busqueda: ''
-            };
-
-            $.ajax({
-                url: urlListarEmpresasAsociadas,
-                type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
-            });
-        });
-    }
-
-    const listarLocalesAsociados = function (selectorEmpresa) {
-        return new Promise((resolve, reject) => {
-            //const codEmpresa = $("#cboEmpresa").val();
-            const codEmpresa = $(selectorEmpresa).val();
-            const codUsuario = $(document).find("#txtUsuario").val();
-
-            if (!codEmpresa) return resolve();
-            if (!codUsuario) return resolve();
-
-            const query = {
-                CodUsuario: codUsuario,
-                CodEmpresa: codEmpresa
-            };
-
-            $.ajax({
-                url: urlListarLocalesAsociados,
-                type: "post",
-                data: { query },
-                success: function (response) {
-                    resolve(response);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText);
-                }
-            });
-        });
-    };
-
-    const cargarComboEmpresa = async function () {
-        try {
-            const response = await listarEmpresasAsociadas();
-
-            if (response.Ok) {
-                $('#cboEmpresaBuscar').empty().append('<option label="Todos"></option>');
-                $('#cboLocalBuscar').empty().append('<option label="Todos"></option>');
-                response.Data.map(empresa => {
-                    $('#cboEmpresaBuscar').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
-                });
-            } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
-            }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
-        }
-    }
-
-    const cargarComboLocales = async function (selectorLocal, selectedLocal = null) {
-        try {
-            let response = null;
-
-            if (selectorLocal === '#cboLocalBuscar') {
-                response = await listarLocalesAsociados('#cboEmpresaBuscar');
-            } else {
-                response = await listarLocalesAsociados('#cboEmpresa');
-            }
-
-            if (!response) return;
-
-            if (response.Ok) {
-
-                if (selectorLocal === '#cboLocalBuscar') {
-                    $(selectorLocal).empty().append('<option label="Todos"></option>');
-                } else {
-                    $(selectorLocal).empty().append('<option label="Seleccionar"></option>');
-                }
-
-                //$(selectorLocal).empty().append('<option label="Seleccionar"></option>');
-
-                response.Data.map(local => {
-                    $(selectorLocal).append($('<option>', { value: local.CodLocalAlterno, text: local.NomLocal }));
-                });
-
-                // Si se pasó un valor seleccionado, lo asignamos
-                if (selectedLocal) {
-                    $(selectorLocal).val(selectedLocal);
-                }
-            } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-            }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
-        }
-    };
-
     const visualizarDataTableSolicitudes = function () {
         $('#tableSolicitudes').DataTable({
             searching: false,
@@ -336,7 +216,10 @@ var SolicitudUsuarioASR = function () {
                 var filtros = {
                     CodEmpresa: $("#txtCodEmpresaxx").val(),
                     CodLocal: $("#txtCodLocalxx").val(),
-                    //CodLocalAlterno: "3"
+                    TipUsuario: $("#cboTipUsuarioBuscar").val(),
+                    TipColaborador: $("#cboTipColaboradorBuscar").val(),
+                    IndAprobado: $("#cboEstadoBuscar").val(),
+                    FiltroVarios: $("#txtFiltroVariosSolicitudes").val()
                 };
 
                 // Combinar los parámetros de paginación con los filtros
@@ -388,7 +271,7 @@ var SolicitudUsuarioASR = function () {
                 { data: "NumSolicitud", title: "Nro. Solicitud" },
                 { data: "CodLocalAlterno", title: "CodLocalAlterno" },
                 { data: "CodColaborador", title: "Código" },
-                //{ data: "TipUsuario", title: "TipUsuario" },
+                { data: "NomColaborador", title: "Nombre y Apellido" },
                 {
                     data: "TipUsuario",
                     title: "Tipo Usuario",
@@ -622,8 +505,112 @@ var SolicitudUsuarioASR = function () {
                 var filtros = {
                     CodEmpresa: $("#txtCodEmpresaxx").val(),
                     CodLocal: $("#txtCodLocalxx").val(),
-                    //TipoUsuario: $('input[name="tipoUsuarioInt"]:checked').val(),
+                    TipUsuario: $('input[name="tipoUsuarioInt"]:checked').val(),
                     FiltroVarios: $("#txtFiltroVariosInt").val()
+                };
+
+                var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
+
+                $.ajax({
+                    url: urlListarColaboradoresInt,
+                    type: "GET",
+                    data: params,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.Ok) {
+                            var pagedData = response.Data;
+                            callback({
+                                draw: data.draw,
+                                recordsTotal: pagedData.TotalRecords,
+                                recordsFiltered: pagedData.TotalRecords,
+                                data: pagedData.Items
+                            });
+                        } else {
+                            callback({
+                                draw: data.draw,
+                                recordsTotal: 0,
+                                recordsFiltered: 0,
+                                data: []
+                            });
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        swal({
+                            text: jqXHR.responseText,
+                            icon: "error",
+                        });
+                        callback({
+                            draw: data.draw,
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: []
+                        });
+                    }
+                });
+            },
+            columnDefs: [
+                { targets: 0, visible: false }  // Oculta la primera columna "COD. LOCAL"
+            ],
+            columns: [
+                { data: "CodLocalAlterno", title: "Código Local" },
+                { data: "CodigoOfisis", title: "Código" },
+                {
+                    data: null,
+                    title: "Nombre Completo",
+                    render: function (data, type, row) {
+                        return row.ApePaterno + " " + row.ApeMaterno + " " + row.NomTrabajador;
+                    }
+                },
+                { data: "NomPuesto", title: "Puesto" },
+                { data: "TiSitu", title: "Estado" },
+                {
+                    data: "FecIngrEmp",
+                    title: "Fecha Ingreso",
+                    render: function (data, type, row) {
+                        if (data) {
+                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                            var date = new Date(timestamp);
+                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
+                        }
+                        return "";
+                    }
+                },
+                { data: "NumDocIdent", title: "Documento" },
+                { data: "NomLocal", title: "Local" }
+            ],
+            language: {
+                searchPlaceholder: 'Buscar...',
+                sSearch: '',
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                zeroRecords: "No se encontraron resultados",
+                info: "Mostrando página _PAGE_ de _PAGES_",
+                infoEmpty: "No hay registros disponibles",
+                infoFiltered: "(filtrado de _MAX_ registros totales)"
+            },
+            scrollY: '450px',
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            lengthMenu: [10, 25, 50, 100],
+        });
+    };
+
+    const visualizarDataTableColaboradoresInt2 = function () {
+
+        if ($.fn.DataTable.isDataTable('#tableColaboradoresInt2')) {
+            $('#tableColaboradoresInt2').DataTable().clear().destroy();
+        }
+
+        $('#tableColaboradoresInt2').DataTable({
+            searching: false,
+            processing: true,
+            serverSide: true,
+            ajax: function (data, callback, settings) {
+                var pageNumber = (data.start / data.length) + 1;
+                var pageSize = data.length;
+
+                var filtros = {
+                    FiltroVarios: $("#txtFiltroVariosInt2").val()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -737,30 +724,6 @@ var SolicitudUsuarioASR = function () {
 
     }
 
-    const obtenerColabExt = function (codLocalAlterno, codigoOfisis) {
-        return new Promise((resolve, reject) => {
-            if (!codLocalAlterno) return resolve();
-            if (!codigoOfisis) return resolve();
-
-            const request = {
-                CodLocalAlterno: codLocalAlterno,
-                CodigoOfisis: codigoOfisis
-            };
-
-            $.ajax({
-                url: urlObtenerColabExt,
-                type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
-            });
-        });
-    }
-
     const crearSolicitud = function (model) {
         return $.ajax({
             url: urlCrearSolicitud,
@@ -800,33 +763,6 @@ var SolicitudUsuarioASR = function () {
                 if (!response.Ok) {
                     swal({ text: response.Mensaje, icon: "warning" });
                 }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
-    }
-
-    const descargarPlantilla = function (nombreCarpeta) {
-        $.ajax({
-            url: urlDescargarPlantilla,
-            type: "post",
-            data: { nombreCarpeta: nombreCarpeta },
-            dataType: "json",
-            success: function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
-                const downloadLink = document.createElement("a");
-                const fileName = response.NombreArchivo;
-                downloadLink.href = linkSource;
-                downloadLink.download = fileName;
-                downloadLink.click();
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({ text: jqXHR.responseText, icon: "error" });
@@ -884,45 +820,6 @@ var SolicitudUsuarioASR = function () {
         return true;
     }
 
-    const validarFormularioColabExt = function (model) {
-        let validate = true;
-
-        if (
-            model.CodLocalAlterno === '' ||
-            model.CodigoOfisis === '' ||
-            model.ApelPaterno === '' ||
-            model.ApelMaterno === '' ||
-            model.NombreTrabajador === '' ||
-            model.TipoDocIdent === '' ||
-            model.NumDocIndent === '' ||
-            model.TiSitu === '' ||
-            model.PuestoTrabajo === '' ||
-            model.FechaIngresoEmpresa === ''
-        ) {
-            validate = false;
-            $("#formColabExt").addClass("was-validated");
-            swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning" });
-        }
-
-        if (model.TipoDocIdent === "DNI") {
-            // Para DNI, el número debe tener exactamente 8 dígitos y ser numérico
-            if (!/^\d{8}$/.test(model.NumDocIndent)) {
-                validate = false;
-                $("#txtNroDoc").addClass("error-input");
-                swal({ text: 'Para DNI, el número de documento debe tener exactamente 8 dígitos y ser numérico', icon: "warning" });
-            }
-        } else if (model.TipoDocIdent === "CEX") {
-            // Para CEX, el número puede ser alfanumérico pero debe tener al menos 9 caracteres
-            if (model.NumDocIndent.length < 9) {
-                validate = false;
-                $("#txtNroDoc").addClass("error-input");
-                swal({ text: 'Para CEX, el número de documento debe tener al menos 9 caracteres.', icon: "warning" });
-            }
-        }
-
-        return validate;
-    }
-
     const convertToISODate = (dateStr) => {
         if (!dateStr) return "";
 
@@ -961,9 +858,7 @@ var SolicitudUsuarioASR = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
-                //await cargarComboEmpresa();
                 visualizarDataTableSolicitudes();
-                //visualizarDataTableColaboradoresExt();
             });
         }
     }
