@@ -175,7 +175,7 @@ var MaestroCajeros = function () {
         init: function () {
             checkSession(function () {
                 eventos();
-                //visualizarDataTable();
+                visualizarDataTable();
             });
         }
     }
