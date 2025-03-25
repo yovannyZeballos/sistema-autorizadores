@@ -36,6 +36,11 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
             return View();
         }
 
+        public ActionResult CierreTesoreriaSpsa()
+        {
+            return View();
+        }
+
         public ActionResult InventarioLocal()
         {
             return View();
@@ -45,6 +50,15 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
         {
             var report = StiReport.CreateNewDashboard();
             var path = Server.MapPath("~/Content/reportes/cierre-cuadratura.mrt");
+            report.Load(path);
+
+            return StiMvcViewer.GetReportResult(report);
+        }
+
+        public ActionResult GetReportCierreTesoreriaSpsa()
+        {
+            var report = StiReport.CreateNewDashboard();
+            var path = Server.MapPath("~/Content/reportes/cierre-cuadratura-spsa.mrt");
             report.Load(path);
 
             return StiMvcViewer.GetReportResult(report);
