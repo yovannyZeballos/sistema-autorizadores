@@ -35,10 +35,19 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
             var tiposActivo = await _mediator.Send(modelTiposActivo);
 
+            ObtenerListasInvCajaQuery modelTipos = new ObtenerListasInvCajaQuery();
+            var tipos = await _mediator.Send(modelTipos);
+
             var viewModel = new InvCajaViewModel
             {
                 InvCaja = model,
-                TiposActivo = tiposActivo.Data
+                TiposActivo = tiposActivo.Data,
+                TiposProcesador = tipos.Data.TiposProcesador,
+                TiposMemoria = tipos.Data.TiposMemoria,
+                TiposSo = tipos.Data.TiposSo,
+                TiposVerSo = tipos.Data.TiposVerSo,
+                TiposCapDisco = tipos.Data.TiposCapDisco,
+                TiposPuertoBalanza = tipos.Data.TiposPuertoBalanza,
             };
 
 
@@ -50,11 +59,19 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         {
             ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
             var tiposActivo = await _mediator.Send(modelTiposActivo);
+            ObtenerListasInvCajaQuery modelTipos = new ObtenerListasInvCajaQuery();
+            var tipos = await _mediator.Send(modelTipos);
 
             var viewModel = new InvCajaViewModel
             {
                 InvCaja = model,
-                TiposActivo = tiposActivo.Data
+                TiposActivo = tiposActivo.Data,
+                TiposProcesador = tipos.Data.TiposProcesador,
+                TiposMemoria = tipos.Data.TiposMemoria,
+                TiposSo = tipos.Data.TiposSo,
+                TiposVerSo = tipos.Data.TiposVerSo,
+                TiposCapDisco = tipos.Data.TiposCapDisco,
+                TiposPuertoBalanza = tipos.Data.TiposPuertoBalanza,
             };
 
             return PartialView("_EditarInvCaja", viewModel);
