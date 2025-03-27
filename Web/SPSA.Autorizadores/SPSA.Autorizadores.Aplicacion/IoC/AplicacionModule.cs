@@ -28,6 +28,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Horarios.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
@@ -266,6 +267,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
             builder.RegisterType<ListarInvCajaHandler>().As<IRequestHandler<ListarInvCajaQuery, GenericResponseDTO<List<ListarInvCajaDTO>>>>();
 			builder.RegisterType<ObtenerInvCajaHandler>().As<IRequestHandler<ObtenerInvCajaQuery, GenericResponseDTO<ObtenerInvCajaDTO>>>();
+			builder.RegisterType<ObtenerListasInvCajaHandler>().As<IRequestHandler<ObtenerListasInvCajaQuery, GenericResponseDTO<ObtenerListasInvCajaDTO>>>();
 			builder.RegisterType<CrearInvCajaHandler>().As<IRequestHandler<CrearInvCajaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ActualizarInvCajaHandler>().As<IRequestHandler<ActualizarInvCajaCommand, RespuestaComunDTO>>();
 			builder.RegisterType<EliminarInvCajaHandler>().As<IRequestHandler<EliminarInvCajaCommand, RespuestaComunDTO>>();
