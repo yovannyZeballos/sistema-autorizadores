@@ -36,12 +36,14 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             var tiposActivo = await _mediator.Send(modelTiposActivo);
 
             ObtenerListasInvCajaQuery modelTipos = new ObtenerListasInvCajaQuery();
+            modelTipos.CodEmpresa = model.CodEmpresa;
             var tipos = await _mediator.Send(modelTipos);
 
             var viewModel = new InvCajaViewModel
             {
                 InvCaja = model,
                 TiposActivo = tiposActivo.Data,
+                TiposModelo = tipos.Data.TiposModelo,
                 TiposProcesador = tipos.Data.TiposProcesador,
                 TiposMemoria = tipos.Data.TiposMemoria,
                 TiposSo = tipos.Data.TiposSo,
@@ -59,13 +61,16 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         {
             ListarInvTipoActivoQuery modelTiposActivo = new ListarInvTipoActivoQuery();
             var tiposActivo = await _mediator.Send(modelTiposActivo);
+
             ObtenerListasInvCajaQuery modelTipos = new ObtenerListasInvCajaQuery();
+            modelTipos.CodEmpresa = model.CodEmpresa;
             var tipos = await _mediator.Send(modelTipos);
 
             var viewModel = new InvCajaViewModel
             {
                 InvCaja = model,
                 TiposActivo = tiposActivo.Data,
+                TiposModelo = tipos.Data.TiposModelo,
                 TiposProcesador = tipos.Data.TiposProcesador,
                 TiposMemoria = tipos.Data.TiposMemoria,
                 TiposSo = tipos.Data.TiposSo,

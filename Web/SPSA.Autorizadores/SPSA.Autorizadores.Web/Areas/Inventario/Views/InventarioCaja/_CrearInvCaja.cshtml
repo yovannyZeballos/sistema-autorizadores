@@ -19,10 +19,22 @@
             </select>
         </div>
     </div>
+    @*<div class="col-xl-3">
+            <div class="form-group">
+                <label for="txtCodModelo" class="form-label">Marca</label>
+                <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvCaja.CodModelo">
+            </div>
+        </div>*@
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtCodModelo" class="form-label">Marca</label>
-            <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvCaja.CodModelo">
+            <label for="cboCodModelo" class="form-label">Marca</label>
+            <select class="form-control custom-select" id="cboCodModelo" name="CodModelo" required>
+                <option value="">Seleccionar</option>
+                @foreach (var tp in Model.TiposModelo)
+                {
+                    <option value="@tp" @(Model.InvCaja.CodModelo == tp ? "selected" : "")>@tp</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
@@ -85,7 +97,7 @@
             </select>
         </div>
     </div>
-      <div class="col-xl-3">
+    <div class="col-xl-3">
         <div class="form-group">
             <label for="cboCapDisco" class="form-label">Cap Disco</label>
             <select class="form-control custom-select" id="cboCapDisco" name="CapDisco" required>
@@ -99,7 +111,7 @@
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="cboDesPuertoBalanza" class="form-label">Cap Disco</label>
+            <label for="cboDesPuertoBalanza" class="form-label">Puerto Balanza</label>
             <select class="form-control custom-select" id="cboDesPuertoBalanza" name="DesPuertoBalanza" required>
                 <option value="">Seleccionar</option>
                 @foreach (var c in Model.TiposPuertoBalanza)

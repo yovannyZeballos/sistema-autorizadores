@@ -14,15 +14,27 @@
                 <option value="">Seleccionar</option>
                 @foreach (var activo in Model.TiposActivo)
                 {
-                    <option value="@activo.CodActivo" @(Model.InvCaja.CodActivo == activo.CodActivo ? "selected" : "")>@activo.NomActivo</option>
+                <option value="@activo.CodActivo" @(Model.InvCaja.CodActivo == activo.CodActivo ? "selected" : "")>@activo.NomActivo</option>
                 }
             </select>
         </div>
     </div>
+    @*<div class="col-xl-3">
+            <div class="form-group">
+                <label for="txtCodModelo" class="form-label">Marca</label>
+                <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvCaja.CodModelo">
+            </div>
+        </div>*@
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtCodModelo" class="form-label">Marca</label>
-            <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvCaja.CodModelo">
+            <label for="cboCodModelo" class="form-label">Marca</label>
+            <select class="form-control custom-select" id="cboCodModelo" name="CodModelo" required>
+                <option value="">Seleccionar</option>
+                @foreach (var tp in Model.TiposModelo)
+             {
+                <option value="@tp" @(Model.InvCaja.CodModelo == tp ? "selected" : "")>@tp</option>
+             }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
@@ -44,7 +56,7 @@
                 <option value="">Seleccionar</option>
                 @foreach (var tp in Model.TiposProcesador)
                 {
-                    <option value="@tp" @(Model.InvCaja.TipProcesador == tp ? "selected" : "")>@tp</option>
+                <option value="@tp" @(Model.InvCaja.TipProcesador == tp ? "selected" : "")>@tp</option>
                 }
             </select>
         </div>
@@ -56,7 +68,7 @@
                 <option value="">Seleccionar</option>
                 @foreach (var m in Model.TiposMemoria)
                 {
-                    <option value="@m" @(Model.InvCaja.Memoria == m ? "selected" : "")>@m</option>
+                <option value="@m" @(Model.InvCaja.Memoria == m ? "selected" : "")>@m</option>
                 }
             </select>
         </div>
@@ -68,7 +80,7 @@
                 <option value="">Seleccionar</option>
                 @foreach (var s in Model.TiposSo)
                 {
-                    <option value="@s" @(Model.InvCaja.DesSo == s ? "selected" : "")>@s</option>
+                <option value="@s" @(Model.InvCaja.DesSo == s ? "selected" : "")>@s</option>
                 }
             </select>
         </div>
@@ -80,7 +92,7 @@
                 <option value="">Seleccionar</option>
                 @foreach (var v in Model.TiposVerSo)
                 {
-                    <option value="@v" @(Model.InvCaja.VerSo == v ? "selected" : "")>@v</option>
+                <option value="@v" @(Model.InvCaja.VerSo == v ? "selected" : "")>@v</option>
                 }
             </select>
         </div>
@@ -92,20 +104,20 @@
                 <option value="">Seleccionar</option>
                 @foreach (var c in Model.TiposCapDisco)
                 {
-                    <option value="@c" @(Model.InvCaja.CapDisco == c ? "selected" : "")>@c</option>
+                <option value="@c" @(Model.InvCaja.CapDisco == c ? "selected" : "")>@c</option>
                 }
             </select>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="cboDesPuertoBalanza" class="form-label">Cap Disco</label>
+            <label for="cboDesPuertoBalanza" class="form-label">Puerto Balanza</label>
             <select class="form-control custom-select" id="cboDesPuertoBalanza" name="DesPuertoBalanza" required>
                 <option value="">Seleccionar</option>
                 @foreach (var c in Model.TiposPuertoBalanza)
-                {
-                    <option value="@c" @(Model.InvCaja.DesPuertoBalanza == c ? "selected" : "")>@c</option>
-                }
+             {
+                <option value="@c" @(Model.InvCaja.DesPuertoBalanza == c ? "selected" : "")>@c</option>
+             }
             </select>
         </div>
     </div>

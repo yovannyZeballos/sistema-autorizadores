@@ -18,6 +18,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
 {
     public class ObtenerListasInvCajaQuery : IRequest<GenericResponseDTO<ObtenerListasInvCajaDTO>>
     {
+        public string CodEmpresa { get; set; }
     }
 
     public class ObtenerListasInvCajaHandler : IRequestHandler<ObtenerListasInvCajaQuery, GenericResponseDTO<ObtenerListasInvCajaDTO>>
@@ -38,20 +39,25 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
             var response = new GenericResponseDTO<ObtenerListasInvCajaDTO> { Ok = true, Data = new ObtenerListasInvCajaDTO() };
             try
             {
+                var listaModelo = await _contexto.RepositorioInvCajas.Obtener(x => x.CodEmpresa == request.CodEmpresa)
+                   .Select(x => x.CodModelo)
+                   .Distinct()
+                   .OrderBy(m => m)
+                   .ToListAsync();
 
-                var listaProcesador = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.TipProcesador))
+                var listaProcesador = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.TipProcesador) && x.CodEmpresa == request.CodEmpresa )
                     .Select(x => x.TipProcesador)
                     .Distinct()
                     .OrderBy(p => p)
                     .ToListAsync();
 
-                var listaMemoria = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.Memoria))
+                var listaMemoria = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.Memoria) && x.CodEmpresa == request.CodEmpresa)
                     .Select(x => x.Memoria)
                     .Distinct()
                     .OrderBy(m => m)
                     .ToListAsync();
 
-                var listaSo = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.DesSo))
+                var listaSo = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.DesSo) && x.CodEmpresa == request.CodEmpresa)
                     .Select(x => x.DesSo)
                     .Distinct()
                     .OrderBy(s => s)
@@ -75,6 +81,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
                     .OrderBy(b => b)
                     .ToListAsync();
 
+                response.Data.TiposModelo = listaModelo;
                 response.Data.TiposProcesador = listaProcesador;
                 response.Data.TiposMemoria = listaMemoria;
                 response.Data.TiposSo = listaSo;

@@ -8,6 +8,7 @@ namespace SPSA.Autorizadores.Aplicacion.ViewModel
         public InvCajaDTO InvCaja { get; set; }
         public List<InvTipoActivoDTO> TiposActivo { get; set; }
 
+        public List<string> TiposModelo { get; set; }
         public List<string> TiposProcesador { get; set; }
         public List<string> TiposMemoria { get; set; }
         public List<string> TiposSo { get; set; }
