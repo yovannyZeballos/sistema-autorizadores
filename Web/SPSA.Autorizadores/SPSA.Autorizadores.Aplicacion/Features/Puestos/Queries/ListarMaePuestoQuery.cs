@@ -22,7 +22,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
         public int PageSize { get; set; } = 10;
 
         public string CodEmpresa { get; set; }
-        //public string CodPuesto { get; set; }
         public string DesPuesto { get; set; }
         public string IndAutAut { get; set; }
         public string IndAutOpe { get; set; }
@@ -101,15 +100,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, indAutOpeEqual);
                 }
 
-                //if (!string.IsNullOrEmpty(request.CodPuesto))
-                //{
-                //    Expression codPuestoProperty = Expression.Property(param, nameof(Mae_Puesto.CodPuesto));
-                //    Expression codPuestoValue = Expression.Constant(request.CodPuesto);
-                //    Expression codPuestoEqual = Expression.Equal(codPuestoProperty, codPuestoValue);
-
-                //    combined = Expression.AndAlso(combined, codPuestoEqual);
-                //}
-
                 if (!string.IsNullOrEmpty(request.DesPuesto))
                 {
                     Expression desPuestoProperty = Expression.Property(param, nameof(Mae_Puesto.DesPuesto));
@@ -136,9 +126,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
 
                 foreach (var item in mappedItems)
                 {
-                    Mae_Empresa maeEmpresa = await _contexto.RepositorioMaeEmpresa.Obtener(s => s.CodEmpresa == item.CodEmpresa).FirstOrDefaultAsync();
+                    Mae_Empresa maeEmpresa = await _contexto.RepositorioMaeEmpresa.Obtener(s => s.CodEmpresa == item.CodEmpresa || s.CodEmpresaOfi == item.CodEmpresa).FirstOrDefaultAsync();
 
-                    item.NomEmpresa = maeEmpresa.NomEmpresa;
+                    if (maeEmpresa != null)
+                        item.NomEmpresa = maeEmpresa.NomEmpresa;
                 }
 
                 var pagedResult = new PagedResult<ListarMaePuestoDTO>
