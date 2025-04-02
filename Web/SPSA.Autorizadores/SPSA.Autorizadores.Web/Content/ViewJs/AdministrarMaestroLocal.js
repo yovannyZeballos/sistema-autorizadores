@@ -115,6 +115,7 @@ var AdministrarMaestroLocal = function () {
                     CodLocalSunat: $("#txtCodLocalSunat").val(),
                     DirLocal: $("#txtDirLocal").val(),
                     Ubigeo: $("#txtUbigeo").val(),
+                    FecEntrega: $("#txtFecEntrega").val(),
                     ...(isGuardarCambios && {
                         CodRegionAnterior: codRegionAnterior,
                         CodZonaAnterior: codZonaAnterior,
@@ -1035,6 +1036,30 @@ var AdministrarMaestroLocal = function () {
     }
 
     const setearLocal = function (local) {
+
+        if (local.FecApertura != "" && local.FecApertura != null) {
+            let timestamp = parseInt(local.FecApertura.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            local.FecApertura = formattedDate;
+        }
+
+        if (local.FecCierre != "" && local.FecCierre != null) {
+            let timestamp = parseInt(local.FecCierre.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            local.FecCierre = formattedDate;
+        }
+
+        if (local.FecEntrega != "" && local.FecEntrega != null) {
+            let timestamp = parseInt(local.FecEntrega.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            local.FecEntrega = formattedDate;
+        }
+
+        console.log(local);
+
         $("#cboTipEstado").val(local.TipEstado).trigger('change');
         $("#txtCodLocal").val(local.CodLocal);
         $("#txtNomLocal").val(local.NomLocal);
@@ -1045,6 +1070,9 @@ var AdministrarMaestroLocal = function () {
         $("#txtCodLocalSunat").val(local.CodLocalSunat);
         $("#txtDirLocal").val(local.DirLocal);
         $("#txtUbigeo").val(local.Ubigeo);
+        $("#txtFecApertura").val(local.FecApertura);
+        $("#txtFecCierre").val(local.FecCierre);
+        $("#txtFecEntrega").val(local.FecEntrega);
     }
 
     const recargarDataTableCajas = async function () {

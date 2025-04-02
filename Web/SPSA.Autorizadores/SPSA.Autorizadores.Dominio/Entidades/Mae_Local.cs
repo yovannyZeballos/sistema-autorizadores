@@ -19,5 +19,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string DirLocal { get; set; }
         public string Ubigeo { get; set; }
         public string CodLocalAlterno { get; set; }
+        public DateTime? FecApertura { get; set; }
+        public DateTime? FecCierre { get; set; }
+        public DateTime? FecEntrega { get; set; }
 	}
 }
