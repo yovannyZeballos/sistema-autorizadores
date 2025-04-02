@@ -1058,8 +1058,6 @@ var AdministrarMaestroLocal = function () {
             local.FecEntrega = formattedDate;
         }
 
-        console.log(local);
-
         $("#cboTipEstado").val(local.TipEstado).trigger('change');
         $("#txtCodLocal").val(local.CodLocal);
         $("#txtNomLocal").val(local.NomLocal);
