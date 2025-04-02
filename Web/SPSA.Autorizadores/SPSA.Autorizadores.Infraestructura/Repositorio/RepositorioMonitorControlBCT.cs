@@ -23,33 +23,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			_dbHelper = dbHelper;
 		}
 
-		public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalBCT(string fecha, int local)
-		{
-			_dbHelper.CadenaConexion = CadenaConexionBCT;
-
-			SqlParameter[] dbParams = new SqlParameter[]
-			{
-				_dbHelper.MakeParam("@p_fecha",fecha,SqlDbType.VarChar,ParameterDirection.Input,10),
-				_dbHelper.MakeParam("@p_suc",local,SqlDbType.Int,ParameterDirection.Input)
-			};
-
-			var lista = new List<MonitorControlBCT>();
-
-			using (var dr = await _dbHelper.ExecuteReader("SCTRX_SP_CONTROL_BCT_CT2", dbParams))
-			{
-				while (dr != null && await dr.ReadAsync())
-				{
-					lista.Add(new MonitorControlBCT
-					{
-						CodSucursal = dr.IsDBNull(0) ? 0 : dr.GetInt32(0),
-						UltimaTransf = dr.IsDBNull(1) ? string.Empty : dr.GetString(1),
-						Diferencia = dr.IsDBNull(2) ? 0 : dr.GetInt32(2)
-					});
-				}
-			}
-			return lista;
-		}
-
+		
 		public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalCT2(string fecha, int local)
 		{
 			var listado = new List<MonitorControlBCT>();
@@ -84,6 +58,70 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 				}
 			}
 			return listado;
+		}
+
+        public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalBCT(string fecha, int sucursal)
+        {
+			//var listado = new List<MonitorControlBCT>();
+
+			//using (var connection = new OracleConnection(CadenaConexionBCT))
+			//{
+			//    using (var command = new OracleCommand("ADM_SPSA.SF_MONITOR_CONTROL_BCT_CT", connection)
+			//    {
+			//        CommandType = CommandType.StoredProcedure,
+			//        CommandTimeout = _commandTimeout
+			//    })
+			//    {
+			//        var returnParameter = new OracleParameter("return_value", OracleDbType.RefCursor)
+			//        {
+			//            Direction = ParameterDirection.ReturnValue
+			//        };
+			//        command.Parameters.Add(returnParameter);
+
+			//        command.Parameters.Add("p_fecha", OracleDbType.Varchar2, fecha, ParameterDirection.Input);
+			//        command.Parameters.Add("p_suc", OracleDbType.Int32, sucursal, ParameterDirection.Input);
+
+			//        await connection.OpenAsync();
+
+			//        using (var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection))
+			//        {
+			//            while (dr != null && await dr.ReadAsync())
+			//            {
+			//                listado.Add(new MonitorControlBCT
+			//                {
+			//                    CodSucursal = dr.IsDBNull(0) ? 0 : dr.GetInt32(0),
+			//                    UltimaTransf = dr.IsDBNull(1) ? string.Empty : dr.GetString(1),
+			//                    Diferencia = dr.IsDBNull(2) ? 0 : dr.GetInt32(2)
+			//                });
+			//            }
+			//        }
+			//    }
+			//}
+			//return listado;
+
+			_dbHelper.CadenaConexion = CadenaConexionBCT;
+
+			SqlParameter[] dbParams = new SqlParameter[]
+			{
+				_dbHelper.MakeParam("@p_fecha",fecha,SqlDbType.VarChar,ParameterDirection.Input,10),
+				_dbHelper.MakeParam("@p_suc",sucursal,SqlDbType.Int,ParameterDirection.Input)
+			};
+
+			var lista = new List<MonitorControlBCT>();
+
+			using (var dr = await _dbHelper.ExecuteReader("SCTRX_SP_CONTROL_BCT_CT2", dbParams))
+			{
+				while (dr != null && await dr.ReadAsync())
+				{
+					lista.Add(new MonitorControlBCT
+					{
+						CodSucursal = dr.IsDBNull(0) ? 0 : dr.GetInt32(0),
+						UltimaTransf = dr.IsDBNull(1) ? string.Empty : dr.GetString(1),
+						Diferencia = dr.IsDBNull(2) ? 0 : dr.GetInt32(2)
+					});
+				}
+			}
+			return lista;
 		}
 
 		public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalCT2Tpsa(string fecha, int local)
@@ -160,36 +198,6 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 }
             }
             return listado;
-            //_dbHelper.CadenaConexion = CadenaConexionBCT_TPSA;
-
-            //SqlParameter[] dbParams = new SqlParameter[]
-            //{
-            //	_dbHelper.MakeParam("@buDate",fecha,SqlDbType.VarChar,ParameterDirection.Input,10),
-            //	_dbHelper.MakeParam("@realDate",fecha,SqlDbType.VarChar,ParameterDirection.Input,10)
-            //};
-
-            //var lista = new List<MonitorControlBCT>();
-
-            //var query = @"Select a.branchId,
-            //				convert(varchar(8),max(insertDate),108),
-            //				datediff(MINUTE,max(a.insertDate),getDate()) as dif 
-            //				from trxheader a 
-            //				where a.buDate = @buDate AND a.realDate = @realDate
-            //				group by a.branchId";
-
-            //using (var dr = await _dbHelper.ExecuteReaderText(query, dbParams))
-            //{
-            //	while (dr != null && await dr.ReadAsync())
-            //	{
-            //		lista.Add(new MonitorControlBCT
-            //		{
-            //			CodSucursal = dr.IsDBNull(0) ? 0 : dr.GetInt32(0),
-            //			UltimaTransf = dr.IsDBNull(1) ? string.Empty : dr.GetString(1),
-            //			Diferencia = dr.IsDBNull(2) ? 0 : dr.GetInt32(2)
-            //		});
-            //	}
-            //}
-            //return lista;
         }
 
 		public async Task<List<MonitorControlBCT>> ObtenerHorarioSucursalCT2Hpsa(string fecha, int local)
