@@ -1,4 +1,6 @@
-﻿namespace SPSA.Autorizadores.Aplicacion.DTO
+﻿using System;
+
+namespace SPSA.Autorizadores.Aplicacion.DTO
 {
     public class MaeLocalDTO
     {
@@ -17,5 +19,8 @@
         public string DirLocal { get; set; }
         public string Ubigeo { get; set; }
         public string CodLocalAlterno { get; set; }
+        public DateTime? FecApertura { get; set; }
+        public DateTime? FecCierre { get; set; }
+        public DateTime? FecEntrega { get; set; }
     }
 }
