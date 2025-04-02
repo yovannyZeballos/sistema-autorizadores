@@ -28,6 +28,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
         public string CodLocalSunat { get; set; }
         public string DirLocal { get; set; }
         public string Ubigeo { get; set; }
+        public DateTime? FecEntrega { get; set; }
     }
 
     public class CrearMaeLocalHandler : IRequestHandler<CrearMaeLocalCommand, RespuestaComunDTO>
