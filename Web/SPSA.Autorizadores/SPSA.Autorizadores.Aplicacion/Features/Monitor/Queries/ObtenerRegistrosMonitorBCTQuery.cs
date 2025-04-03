@@ -49,7 +49,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 
 			try
 			{
-
 				switch (request.CodEmpresa)
 				{
                     case "09":
@@ -59,15 +58,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
                         response.Data = await _repositorioTransactionXmlCT2.ObtenerHpsa();
                         break;
                     default:
-                        string cadenaConexion = await ArmarCadenaconexion(request.CodEmpresa);
-                        string nombreTabla = await ObtenerNombreTabla(request.CodEmpresa);
-
-                        if (cadenaConexion == null) return response;
-
-                        response.Data = await _repositorioTransactionXmlCT2.Obtener(cadenaConexion, nombreTabla);
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerSpsa();
                         break;
                 }
-
 			}
 			catch (Exception ex)
 			{

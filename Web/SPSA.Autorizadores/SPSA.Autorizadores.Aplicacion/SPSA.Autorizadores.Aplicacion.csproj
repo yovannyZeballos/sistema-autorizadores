@@ -450,7 +450,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
-    <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Commands\ProcesarControlBCTSpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTHpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTTpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorLocalBCTCommand.cs" />

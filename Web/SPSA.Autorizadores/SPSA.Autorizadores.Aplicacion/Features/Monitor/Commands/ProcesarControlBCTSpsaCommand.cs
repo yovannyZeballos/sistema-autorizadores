@@ -3,7 +3,6 @@ using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
-using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using System;
 using System.Collections.Generic;
@@ -15,23 +14,23 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 {
-	public class ProcesarControlBCTCommand : IRequest<GenericResponseDTO<List<MonitorControlBCTDTO>>>
+	public class ProcesarControlBCTSpsaCommand : IRequest<GenericResponseDTO<List<MonitorControlBCTDTO>>>
 	{
 		public int CodSucursal { get; set; }
 		public string Fecha { get; set; }
 	}
 
-	public class ProcesarControlBCTHandler : IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>
+	public class ProcesarControlBCTSpsaHandler : IRequestHandler<ProcesarControlBCTSpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>
 	{
 		private readonly IRepositorioMonitorControlBCT _repositorioMonitorControlBCT;
 		private readonly ILogger _logger;
 
-		public ProcesarControlBCTHandler(IRepositorioMonitorControlBCT repositorioMonitorControlBCT)
+		public ProcesarControlBCTSpsaHandler(IRepositorioMonitorControlBCT repositorioMonitorControlBCT)
 		{
 			_repositorioMonitorControlBCT = repositorioMonitorControlBCT;
 			_logger = SerilogClass._log;
 		}
-		public async Task<GenericResponseDTO<List<MonitorControlBCTDTO>>> Handle(ProcesarControlBCTCommand request, CancellationToken cancellationToken)
+		public async Task<GenericResponseDTO<List<MonitorControlBCTDTO>>> Handle(ProcesarControlBCTSpsaCommand request, CancellationToken cancellationToken)
 		{
 			var respuesta = new GenericResponseDTO<List<MonitorControlBCTDTO>> { Ok = true };
 			var culture = CultureInfo.InvariantCulture;
@@ -40,8 +39,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				var fecha = DateTime.ParseExact(request.Fecha, "dd/MM/yyyy", culture);
 				var fechaStr = fecha.ToString("yyyyMMdd", culture);
 
-				var horariosCT2 = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalCT2(fechaStr, request.CodSucursal);
-				var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCT(fechaStr, request.CodSucursal);
+				var horariosCT2 = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalCT2Spsa(fechaStr, request.CodSucursal);
+				var horariosBCT = await _repositorioMonitorControlBCT.ObtenerHorarioSucursalBCTSpsa(fecha.ToString("dd/MM/yyyy"), request.CodSucursal);
 				var localesActivos = await ListarLocalesActivos();
 
 				respuesta.Data = (from a in horariosCT2

@@ -300,8 +300,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<DescargarMaeCajerosHandler>().As<IRequestHandler<DescargarMaeCajerosCommand, DescargarMaestroDTO>>();
 
             #endregion <--REPORTES-->
-
-            builder.RegisterType<ProcesarControlBCTHandler>().As<IRequestHandler<ProcesarControlBCTCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+         
 			builder.RegisterType<ProcesarActualizacionEstadoCierreHandler>().As<IRequestHandler<ProcesarActualizacionEstadoCierreCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ImprimirBarrasAutorizadorHandler>().As<IRequestHandler<ImprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
 			builder.RegisterType<ReimprimirBarrasAutorizadorHandler>().As<IRequestHandler<ReimprimirBarrasAutorizadorCommand, ImprimirAutorizadorResponseDTO>>();
@@ -311,7 +310,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarProcesosHandler>().As<IRequestHandler<ListarProcesosQuery, ListarComunDTO<ListarProcesoDTO>>>();
 			builder.RegisterType<ListarParametrosMonitorArchivoHandler>().As<IRequestHandler<ListarParametrosMonitorArchivoQuery, GenericResponseDTO<MonitorArchivoParametrosDTO>>>();
 			builder.RegisterType<ProcesarMonitorArchivosHandler>().As<IRequestHandler<ProcesarMonitorArchivoscommand, GenericResponseDTO<List<ProcesarMonitorArchivoDTO>>>>();
-			builder.RegisterType<ProcesarControlBCTTpsaHandler>().As<IRequestHandler<ProcesarControlBCTTpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+            builder.RegisterType<ProcesarControlBCTSpsaHandler>().As<IRequestHandler<ProcesarControlBCTSpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
+            builder.RegisterType<ProcesarControlBCTTpsaHandler>().As<IRequestHandler<ProcesarControlBCTTpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 			builder.RegisterType<ProcesarControlBCTHpsaHandler>().As<IRequestHandler<ProcesarControlBCTHpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 
 

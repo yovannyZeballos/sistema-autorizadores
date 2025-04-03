@@ -21,32 +21,32 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
             _mediator = mediator;
             _contexto = new SGPContexto();
 
-            var procesoParametro = _contexto.RepositorioProcesoParametro.Obtener(x => x.CodProceso == 36 && x.CodParametro == "01").FirstOrDefault();
-            Stimulsoft.Base.StiLicense.LoadFromFile(procesoParametro.ValParametro);
+            //var procesoParametro = _contexto.RepositorioProcesoParametro.Obtener(x => x.CodProceso == 36 && x.CodParametro == "01").FirstOrDefault();
+            //Stimulsoft.Base.StiLicense.LoadFromFile(procesoParametro.ValParametro);
         }
 
 		public ActionResult Index()
 		{
 			return View();
 		}
-        public ActionResult Dashboard()
-        {
-            return View();
-        }
+        //public ActionResult Dashboard()
+        //{
+        //    return View();
+        //}
 
-        public ActionResult GetReport()
-        {
-            var report = StiReport.CreateNewDashboard();
-            var path = Server.MapPath("~/Content/reportes/report1.mrt");
-            report.Load(path);
+        //public ActionResult GetReport()
+        //{
+        //    var report = StiReport.CreateNewDashboard();
+        //    var path = Server.MapPath("~/Content/reportes/report1.mrt");
+        //    report.Load(path);
 
-            return StiMvcViewer.GetReportResult(report);
-        }
+        //    return StiMvcViewer.GetReportResult(report);
+        //}
 
-        public ActionResult ViewerEvent()
-        {
-            return StiMvcViewer.ViewerEventResult();
-        }
+        //public ActionResult ViewerEvent()
+        //{
+        //    return StiMvcViewer.ViewerEventResult();
+        //}
 
         public ActionResult Resumen()
 		{
