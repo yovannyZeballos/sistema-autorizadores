@@ -2899,7 +2899,6 @@
     <Content Include="Plantillas_Tablas\Plantilla_Local\TablaLocal.xlsx" />
     <Content Include="Areas\Reportes\Views\MaestroAutorizadores\Index.cshtml" />
     <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
-    <Content Include="Areas\Monitor\Views\ReporteCierre\Dashboard.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_NuevoForm.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\_ModificarForm.cshtml" />

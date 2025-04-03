@@ -1,4 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
@@ -26,18 +27,15 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = _commandTimeout;
 
-                // Parámetro de retorno (RETURN NUMBER)
                 var returnParam = new OracleParameter("RETURN_VALUE", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.ReturnValue
                 };
                 command.Parameters.Add(returnParam);
 
-                // Parámetros de entrada
                 command.Parameters.Add("V_FECHA", OracleDbType.Varchar2).Value = fecha;
                 command.Parameters.Add("N_SUCURSAL", OracleDbType.Int32).Value = local;
 
-                // Parámetros de salida
                 var cantTrxParam = new OracleParameter("NO_CANT_TRX", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Output
@@ -65,51 +63,15 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 await connection.OpenAsync();
                 await command.ExecuteNonQueryAsync();
 
-                // Leer los resultados
-                int cantidad = Convert.ToInt32(cantTrxParam.Value);
-                decimal monto = Convert.ToDecimal(impVtaParam.Value);
-                int returnCode = Convert.ToInt32(returnParam.Value);
-                int errorCode = Convert.ToInt32(sqlCodeParam.Value);
+                int cantidad = ((OracleDecimal)cantTrxParam.Value).ToInt32();
+                decimal monto = ((OracleDecimal)impVtaParam.Value).Value;
+                int returnCode = ((OracleDecimal)returnParam.Value).ToInt32();
+                int errorCode = ((OracleDecimal)sqlCodeParam.Value).ToInt32();
                 string errorMsg = errorParam.Value?.ToString();
 
                 return (cantidad, monto);
             }
 
-            //{
-            //	var command = new SqlCommand(
-            //		"select count(1) from trxheader WITH (NOLOCK) where budate = @fecha and branchid = @local and idtransactiontype in (2,10,56) and void = 0 and idpos not in (994,999,995,996); " +
-            //		"select sum(T.amount - T.changeAmount + T.amttnfee) as montofinal from trxheader H WITH (NOLOCK) inner join trxtender T WITH (NOLOCK) ON H.trxid = T.trxid where H.budate = @fecha and H.branchid = @local and H.idtransactiontype in (10,56) and void = 0 and H.idpos not in (994,999,995,996);",
-            //		connection)
-            //	{
-            //		CommandType = CommandType.Text,
-            //		CommandTimeout = _commandTimeout
-            //	};
-
-            //	command.Parameters.AddWithValue("@fecha", fecha);
-            //	command.Parameters.AddWithValue("@local", local);
-
-            //	await connection.OpenAsync();
-
-            //	using (var reader = await command.ExecuteReaderAsync())
-            //	{
-            //		int cantidadTransacciones = 0;
-            //		decimal montoFinal = 0;
-
-            //		// Leer el primer resultado
-            //		if (await reader.ReadAsync())
-            //		{
-            //			cantidadTransacciones = reader.GetInt32(0);
-            //		}
-
-            //		// Moverse al siguiente conjunto de resultados
-            //		if (await reader.NextResultAsync() && await reader.ReadAsync())
-            //		{
-            //			montoFinal = reader.IsDBNull(0) ? 0 : reader.GetDecimal(0);
-            //		}
-
-            //		return (cantidadTransacciones, montoFinal);
-            //	}
-            //}
         }
 	}
 }
