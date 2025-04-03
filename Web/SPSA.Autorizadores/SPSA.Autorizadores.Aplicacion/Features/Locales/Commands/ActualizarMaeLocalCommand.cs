@@ -78,7 +78,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
             new NpgsqlParameter("@codLocalSunat", request.CodLocalSunat),
             new NpgsqlParameter("@dirLocal", request.DirLocal ?? string.Empty),
             new NpgsqlParameter("@ubigeo", request.Ubigeo ?? string.Empty),
-            new NpgsqlParameter("@fecEntrega", request.FecEntrega),
+            new NpgsqlParameter("@fecEntrega", request.FecEntrega.HasValue ? (object)request.FecEntrega.Value : DBNull.Value),
             new NpgsqlParameter("@codRegionAnterior", request.CodRegionAnterior),
             new NpgsqlParameter("@codZonaAnterior", request.CodZonaAnterior)
             

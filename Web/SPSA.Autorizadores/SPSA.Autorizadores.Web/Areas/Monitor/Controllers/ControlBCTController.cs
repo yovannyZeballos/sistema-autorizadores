@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -23,7 +22,7 @@ namespace SPSA.Autorizadores.Web.Areas.Monitor.Controllers
 
 
 		[HttpPost]
-		public async Task<JsonResult> ProcesarSpsa(ProcesarControlBCTCommand request)
+		public async Task<JsonResult> ProcesarSpsa(ProcesarControlBCTSpsaCommand request)
 		{
 			request.CodSucursal = 99999;
 			var response = await _mediator.Send(request);
