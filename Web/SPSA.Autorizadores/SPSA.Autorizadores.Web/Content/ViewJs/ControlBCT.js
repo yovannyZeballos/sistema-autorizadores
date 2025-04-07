@@ -18,7 +18,9 @@ var ControlBCT = function () {
     }
 
     const recargarDatos = function () {
-        dataTableListado.ajax.reload();
+        dataTableListado.ajax.reload(function () {
+            actualizarFechaMonitor();
+        });
     }
 
     const cargarDatos = function () {
@@ -133,6 +135,18 @@ var ControlBCT = function () {
         $("#txtFecha").val(`${day}/${month}/${year}`);
     }
 
+    const actualizarFechaMonitor = function () {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = (now.getMonth() + 1).toString().padStart(2, '0');
+        var day = now.getDate().toString().padStart(2, '0');
+        var hours = now.getHours().toString().padStart(2, '0');
+        var minutes = now.getMinutes().toString().padStart(2, '0');
+        var seconds = now.getSeconds().toString().padStart(2, '0');
+        var fechaActualizada = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        $("#lblFechaActualizaMonitor").text(fechaActualizada);
+    };
+
     const inicializarDatePicker = function () {
         $('.fc-datepicker').datepicker({
             showOtherMonths: true,
@@ -181,6 +195,7 @@ var ControlBCT = function () {
                 cargarDatos();
                 $("#chkAutomatico").prop("checked", true);
                 idInterval = setInterval(recargarDatos, timeoutInterval);
+                actualizarFechaMonitor();
             });
         }
     }
