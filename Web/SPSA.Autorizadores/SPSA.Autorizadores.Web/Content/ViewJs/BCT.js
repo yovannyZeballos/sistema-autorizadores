@@ -521,7 +521,7 @@ var BCT = function () {
                 idIntervalSpsa = setInterval(cargarDatos, timeoutInterval, "02");
                 idIntervalOechsle = setInterval(cargarDatos, timeoutInterval, "09");
                 idIntervalPromart = setInterval(cargarDatos, timeoutInterval, "10");
-                idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "11");
+                idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "12");
             });
         }
     }
