@@ -51,6 +51,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
 			{
 				switch (request.CodEmpresa)
 				{
+                    case "02":
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerSpsa();
+                        break;
                     case "09":
                         response.Data = await _repositorioTransactionXmlCT2.ObtenerTpsa();
                         break;
@@ -58,7 +61,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
                         response.Data = await _repositorioTransactionXmlCT2.ObtenerHpsa();
                         break;
                     default:
-                        response.Data = await _repositorioTransactionXmlCT2.ObtenerSpsa();
+                        //response.Data = await _repositorioTransactionXmlCT2.ObtenerSpsa();
                         break;
                 }
 			}
