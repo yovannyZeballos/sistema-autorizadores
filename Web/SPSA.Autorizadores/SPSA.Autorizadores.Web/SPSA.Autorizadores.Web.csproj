@@ -2917,6 +2917,8 @@
     <Content Include="Areas\SolicitudASR\Views\SolicitudUsuario\Index.cshtml" />
     <Content Include="Areas\Dashboards\Views\AdministrarDashboard\CierreTesoreriaSpsa.cshtml" />
     <Content Include="Content\reportes\cierre-cuadratura-spsa.mrt" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\BctVsCt.cshtml" />
+    <Content Include="Content\reportes\mon-bct-vs-ct.mrt" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
