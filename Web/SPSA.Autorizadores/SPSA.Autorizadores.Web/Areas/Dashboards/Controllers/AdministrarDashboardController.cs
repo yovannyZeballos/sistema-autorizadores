@@ -46,6 +46,11 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
             return View();
         }
 
+        public ActionResult BctVsCt()
+        {
+            return View();
+        }
+
         public ActionResult GetReportCierreTesoreria()
         {
             var report = StiReport.CreateNewDashboard();
@@ -68,6 +73,15 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
         {
             var report = StiReport.CreateNewDashboard();
             var path = Server.MapPath("~/Content/reportes/inventario-local.mrt");
+            report.Load(path);
+
+            return StiMvcViewer.GetReportResult(report);
+        }
+
+        public ActionResult GetReportBctCt()
+        {
+            var report = StiReport.CreateNewDashboard();
+            var path = Server.MapPath("~/Content/reportes/mon-bct-vs-ct.mrt");
             report.Load(path);
 
             return StiMvcViewer.GetReportResult(report);
