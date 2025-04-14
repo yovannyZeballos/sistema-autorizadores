@@ -18,7 +18,7 @@ var ControlBCT = function () {
     }
 
     const recargarDatos = function () {
-yy        dataTableListado.ajax.reload(function () {
+            dataTableListado.ajax.reload(function () {
             actualizarFechaMonitor();
         });
     }
