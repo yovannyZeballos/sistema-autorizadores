@@ -65,7 +65,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 await command.Connection.OpenAsync();
 
                 command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+                command.Parameters.Add("resultado", OracleDbType.Varchar2, 10000, "", ParameterDirection.Output);
 
                 await command.ExecuteNonQueryAsync();
 
