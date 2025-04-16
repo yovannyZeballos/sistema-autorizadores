@@ -1,4 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Utiles;
@@ -125,30 +126,48 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 		{
 			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
 			{
-				var command = new OracleCommand("PKG_SGC_CAJERO.SP_CAJERO_GENERA_ARCHIVO", connection)
-				{
-					CommandType = CommandType.StoredProcedure,
-					CommandTimeout = _commandTimeout
-				};
+                using (var command = new OracleCommand("PKG_SGC_CAJERO.SP_CAJERO_GENERA_ARCHIVO", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = _commandTimeout
+                })
+                {
+                    await connection.OpenAsync();
 
-				await command.Connection.OpenAsync();
+                    command.Parameters.Add("NLOC_NUMERO", OracleDbType.Decimal, codigoLocal, ParameterDirection.Input);
+                    command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+                    command.Parameters.Add("resultado", OracleDbType.Clob, ParameterDirection.Output);
 
-				command.Parameters.Add("NLOC_NUMERO", OracleDbType.Decimal, codigoLocal, ParameterDirection.Input);
-				command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-				command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+                    await command.ExecuteNonQueryAsync();
 
-				await command.ExecuteNonQueryAsync();
+                    OracleClob clob = (OracleClob)command.Parameters["resultado"].Value;
+                    string resultado = clob != null ? clob.Value : string.Empty;
 
-				var resultado = command.Parameters["resultado"].Value.ToString().Replace("null", "");
+                    return resultado;
+                }
 
-				connection.Close();
-				connection.Dispose();
+				//var command = new OracleCommand("PKG_SGC_CAJERO.SP_CAJERO_GENERA_ARCHIVO", connection)
+				//{
+				//	CommandType = CommandType.StoredProcedure,
+				//	CommandTimeout = _commandTimeout
+				//};
 
-				return resultado;
+				//await command.Connection.OpenAsync();
+
+				//command.Parameters.Add("NLOC_NUMERO", OracleDbType.Decimal, codigoLocal, ParameterDirection.Input);
+				//command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+				//command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+
+				//await command.ExecuteNonQueryAsync();
+
+				//var resultado = command.Parameters["resultado"].Value.ToString().Replace("null", "");
+
+				//connection.Close();
+				//connection.Dispose();
+
+				//return resultado;
 
 			}
-
-
 		}
 
 		public async Task<DataTable> ReporteDiferenciaCajas(string codEmpresa, string codLocal, DateTime fechaInicio, DateTime fechaFin)
