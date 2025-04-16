@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using SPSA.Autorizadores.Dominio.Entidades;
 
@@ -6,6 +7,14 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
     public interface IRepositorioSolicitudUsuarioASR : IRepositorioGenerico<ASR_SolicitudUsuario>
     {
-        //Task<DataTable> ObtenerColaboradoresPorEmpresaAsync(string codEmpresa);
-    }
+        Task<List<ASR_UsuarioListado>> ListarUsuarios(string usuarioLogin, string codLocal, 
+            string usuAprobacion, string tipAccion, string indAprobado, string CodEmpresa,
+            int numeroPagina, int tamañoPagina);
+		Task<List<ASR_UsuarioListado>> ListarSolicitudes(string usuarioLogin, string tipoUsuario, string CodEmpresa,
+			int numeroPagina, int tamañoPagina);
+        Task ActualizarMotivoRechazo(int numSolicitud, string motivo, string estado);
+        Task AprobarSolicitud(ASR_Usuario usuario);
+		Task<List<ASR_UsuarioArchivo>> ListarArchivos();
+		Task ActualizarFlagEnvio(long numSolicitud, string flagEnvio);
+	}
 }

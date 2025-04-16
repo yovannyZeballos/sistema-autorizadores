@@ -571,13 +571,17 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\ActualizarMotivoRechazoCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\CrearSolicitudUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\DescargarSolicitudesUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\EliminarSolicitudUsuarioCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\ObtenerSolicitudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\SolicitudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\ListarSolictudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarSolicitudUsuarioQuery.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarSolicitudesSolicitadas.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarUsuariosQuery.cs" />
     <Compile Include="Features\TablasMae\Commands\DescargarTablaPlantillasCommand.cs" />
     <Compile Include="Features\TiposActivo\Commands\DescargarInvTiposActivoCommand.cs" />
     <Compile Include="Features\TiposActivo\Queries\ListarInvTipoActivoQuery.cs" />

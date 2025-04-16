@@ -320,6 +320,7 @@
     <Compile Include="Areas\Seguridad\Controllers\SistemaController.cs" />
     <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeZonaController.cs" />
+    <Compile Include="Areas\SolicitudASR\Controllers\AprobacionController.cs" />
     <Compile Include="Areas\SolicitudASR\Controllers\SolicitudUsuarioController.cs" />
     <Compile Include="Areas\SolicitudASR\SolicitudASRAreaRegistration.cs" />
     <Compile Include="Areas\Ubigeos\Controllers\UbigeoController.cs" />
@@ -2377,6 +2378,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexLocal.js" />
@@ -2916,6 +2918,7 @@
     <Content Include="Areas\SolicitudASR\Views\_ViewStart.cshtml" />
     <Content Include="Areas\SolicitudASR\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\SolicitudASR\Views\SolicitudUsuario\Index.cshtml" />
+    <Content Include="Areas\SolicitudASR\Views\Aprobacion\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

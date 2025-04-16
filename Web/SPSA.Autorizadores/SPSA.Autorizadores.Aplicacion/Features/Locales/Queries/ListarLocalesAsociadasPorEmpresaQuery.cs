@@ -41,7 +41,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Queries
             {
                 var Locales = await _contexto.RepositorioSegLocal
                     .Obtener(x => x.CodUsuario == request.CodUsuario
-                            && x.CodEmpresa == request.CodEmpresa)
+                            && (x.CodEmpresa == request.CodEmpresa || request.CodEmpresa == "0"))
                     .Include(x => x.Mae_Local)
                     .OrderBy(x => x.CodLocal)
                     .ToListAsync();
