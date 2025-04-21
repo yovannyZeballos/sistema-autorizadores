@@ -55,51 +55,34 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         public async Task<string> GenerarArchivo(string tipoSO)
         {
-            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            try
             {
-                using(var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                using (var connection = new OracleConnection(CadenaConexionAutorizadores))
                 {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = _commandTimeout
-                })
-                {   
-                    await connection.OpenAsync();
+                    using (var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure,
+                        CommandTimeout = _commandTimeout
+                    })
+                    {
+                        await connection.OpenAsync();
 
-                    command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                    command.Parameters.Add("resultado", OracleDbType.Clob, ParameterDirection.Output);
+                        command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+                        command.Parameters.Add("resultado", OracleDbType.Clob, ParameterDirection.Output);
 
-                    await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync();
 
-                    OracleClob clob = (OracleClob)command.Parameters["resultado"].Value;
-                    string resultado = clob != null ? clob.Value : string.Empty;
+                        OracleClob clob = (OracleClob)command.Parameters["resultado"].Value;
+                        string resultado = clob != null ? clob.Value : string.Empty;
 
-                    return resultado;
+                        return resultado;
+                    }
                 }
-
-                //var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
-                //{
-                //    CommandType = CommandType.StoredProcedure,
-                //    CommandTimeout = _commandTimeout
-                //};
-
-
-                //await command.Connection.OpenAsync();
-
-                //command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                //command.Parameters.Add("resultado", OracleDbType.Varchar2, 10000, "", ParameterDirection.Output);
-
-                //await command.ExecuteNonQueryAsync();
-
-                //var resultado = command.Parameters["resultado"].Value.ToString();
-
-                //connection.Close();
-                //connection.Dispose();
-
-                //return resultado;
-
             }
-
-
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
 
         public async Task<DataTable> ListarColaboradores(string codigoLocal, string codigoEmpresa)

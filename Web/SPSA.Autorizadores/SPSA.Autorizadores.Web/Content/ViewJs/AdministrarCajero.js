@@ -188,6 +188,7 @@ const AdministrarCajero = function () {
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
+
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
@@ -391,6 +392,7 @@ const AdministrarCajero = function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
+
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
