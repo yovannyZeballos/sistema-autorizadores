@@ -211,9 +211,16 @@ var AprobacionASR = function () {
                     title: "Fec. Solicitud",
                     render: function (data, type, row) {
                         if (data) {
-                            return formatearFecha(data);
+                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                            var date = new Date(timestamp);
+                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
                         }
                         return "";
+
+                        //if (data) {
+                        //    return formatearFecha(data);
+                        //}
+                        //return "";
                     }
                 },
                 {
@@ -228,9 +235,16 @@ var AprobacionASR = function () {
                     title: "Fec. Aprobación",
                     render: function (data, type, row) {
                         if (data) {
-                            return formatearFecha(data);
+                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                            var date = new Date(timestamp);
+                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
                         }
                         return "";
+
+                        //if (data) {
+                        //    return formatearFecha(data);
+                        //}
+                        //return "";
                     }
                 },
                 { title: "Motivo", data: "Motivo" },
@@ -353,9 +367,15 @@ var AprobacionASR = function () {
                     title: "Fec. Solicitud",
                     render: function (data, type, row) {
                         if (data) {
-                            return formatearFecha(data);
+                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                            var date = new Date(timestamp);
+                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
                         }
                         return "";
+                        //if (data) {
+                        //    return formatearFecha(data);
+                        //}
+                        //return "";
                     }
                 },
                 { title: "Documento", data: "NumDocumentoIdentidad" },
