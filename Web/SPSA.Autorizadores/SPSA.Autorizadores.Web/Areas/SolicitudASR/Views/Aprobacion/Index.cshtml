@@ -1,4 +1,5 @@
-﻿@model string
+﻿
+@model string
 @{
     ViewBag.Title = "Usuarios ASR";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,7 +41,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <button id="btnModalSolicitud" class="btn btn-sm btn-primary"><span><i class="fe fe-users me-1"></i></span> Solicitud</button>
+                    <button id="btnModalSolicitud" class="btn btn-sm btn-primary"><span><i class="fe fe-eye me-1"></i></span> Ver Solicitudes</button>
                 </div>
                 <div class="col-md-4" id="container-btn-exportar">
                 </div>
@@ -124,13 +125,13 @@
                     </div>
                     <div class="col-2">
                         <div class="form-check form-check-inline d-flex align-items-center">
-                            <input class="form-check-input radio-lg" type="radio" name="tipoUsuarioInt" id="radioAutorizador" value="A" checked>
+                            <input class="form-check-input radio-lg" type="radio" name="tipoUsuario" id="radioAutorizador" value="A" checked>
                             <label class="form-check-label radio-label-lg" for="radioAutorizador">Autorizador</label>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-check form-check-inline d-flex align-items-center">
-                            <input class="form-check-input radio-lg" type="radio" name="tipoUsuarioInt" id="radioCajero" value="C">
+                            <input class="form-check-input radio-lg" type="radio" name="tipoUsuario" id="radioCajero" value="C">
                             <label class="form-check-label radio-label-lg" for="radioCajero">Cajero</label>
                         </div>
                     </div>
@@ -204,7 +205,7 @@
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
-    <script src="~/Content/ViewJs/AprobacionASR.js"></script>
+    <script src="~/Content/ViewJs/SolicitudAprobacionASR.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             AprobacionASR.init();

@@ -14,7 +14,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 			int numeroPagina, int tamañoPagina);
         Task ActualizarMotivoRechazo(int numSolicitud, string motivo, string estado);
         Task AprobarSolicitud(ASR_Usuario usuario);
-		Task<List<ASR_UsuarioArchivo>> ListarArchivos();
+		Task<List<ASR_UsuarioArchivo>> ListarArchivos(string tipUsuario);
 		Task ActualizarFlagEnvio(long numSolicitud, string flagEnvio);
 	}
 }

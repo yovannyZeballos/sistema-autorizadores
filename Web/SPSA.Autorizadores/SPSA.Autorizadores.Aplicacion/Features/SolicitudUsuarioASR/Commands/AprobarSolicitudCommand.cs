@@ -25,14 +25,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 		public string UsuCreacion { get; set; }
 		public string UsuElimina { get; set; }
 		public DateTime? FecElimina { get; set; }
+        public string TipoUsuario { get; set; }
 
-	}
+    }
 
 	public class AprobarSolicitudHandler : IRequestHandler<AprobarSolicitudCommand, RespuestaComunDTO>
 	{
 		public async Task<RespuestaComunDTO> Handle(AprobarSolicitudCommand request, CancellationToken cancellationToken)
 		{
-			var respuesta = new RespuestaComunDTO { Ok = true, Mensaje = "Solicitud aprobada" };
+			var respuesta = new RespuestaComunDTO { Ok = true, Mensaje = "| " };
 			try
 			{
 				using (ISGPContexto contexto = new SGPContexto())
@@ -51,9 +52,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 							UsuElimina = request.UsuElimina,
 							FecElimina = request.FecElimina
 						});
-					}
 
-					List<ASR_UsuarioArchivo> archivos = await contexto.RepositorioSolicitudUsuarioASR.ListarArchivos();
+						respuesta.Mensaje += $"Solicitud Nro {numSolicitud} aprobado. | ";
+
+                    }
+
+					List<ASR_UsuarioArchivo> archivos = await contexto.RepositorioSolicitudUsuarioASR.ListarArchivos(request.TipoUsuario);
 					List<string> nombresArchivos = archivos.Select(x => x.NombreArchivo).Distinct().ToList();
 					ProcesoParametro parametro = await contexto.RepositorioProcesoParametro
 						.Obtener(x => x.CodParametro == "01" && x.CodProceso == 38 )
@@ -64,7 +68,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 						return new RespuestaComunDTO { Ok = false, Mensaje = "No se encontró la ruta para guardar los archivos" };
 					}
 
-
 					foreach (var nombreArchivo in nombresArchivos)
 					{
 						string rutaArchivo = Path.Combine(parametro.ValParametro, nombreArchivo);
@@ -74,9 +77,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 							{
 								writer.WriteLine(linea.Contenido);
 								await contexto.RepositorioSolicitudUsuarioASR.ActualizarFlagEnvio(linea.NumSolicitud,"S");
-							}
+                            }
 						}
-					}
+                        respuesta.Mensaje += $"Archivo {nombreArchivo} generado. | ";
+                    }
 					await contexto.GuardarCambiosAsync();
 				}
 			}

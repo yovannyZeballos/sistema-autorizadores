@@ -35,7 +35,7 @@ var AprobacionASR = function () {
             aprobar();
         });
 
-        $('input[name="tipoUsuarioInt"]').on('change', function (e) {
+        $('input[name="tipoUsuario"]').on('change', function (e) {
             visualizarDataTableSolicitud();
         });
 
@@ -299,7 +299,7 @@ var AprobacionASR = function () {
             ajax: function (data, callback, settings) {
                 // Recoger los filtros de la página
                 const request = {
-                    TipColaborador: $('input[name="tipoUsuarioInt"]:checked').val(),
+                    TipColaborador: $('input[name="tipoUsuario"]:checked').val(),
                     NumeroPagina: data.start / data.length + 1,
                     TamañoPagina: data.length,
                     Busqueda: $("#txtFiltroSolicitud").val(),
@@ -447,7 +447,8 @@ var AprobacionASR = function () {
         });
 
         const request = {
-            NumSolicitudes: numSolicitudes
+            NumSolicitudes: numSolicitudes,
+            TipoUsuario: $('input[name="tipoUsuario"]:checked').val(),
         }
 
         $.ajax({
