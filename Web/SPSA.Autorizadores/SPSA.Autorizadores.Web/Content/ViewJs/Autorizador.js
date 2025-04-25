@@ -8,7 +8,6 @@ var urlImprimir = baseUrl + 'Autorizadores/Autorizador/Imprimir';
 var urlReimprimir = baseUrl + 'Autorizadores/Autorizador/Reimprimir';
 var urlListarMotivoReimpresion = baseUrl + 'Autorizadores/Autorizador/ListarMotivoReimprimir';
 
-
 var Autorizador = function () {
 
     var eventos = function () {
@@ -21,7 +20,6 @@ var Autorizador = function () {
         });
 
         $("#btnEliminar").on('click', function () {
-
             swal({
                 title: "Confirmar!",
                 text: "¿Está seguro eliminar a los autorizadores?",
@@ -34,20 +32,19 @@ var Autorizador = function () {
                         eliminarAutorizador();
                     }
                 });
-
-
-
         });
 
         $("#btnBuscarColaborador").on('click', function () {
-            $('#modalBusqueda').modal('show');
+            
             cargarTodosColaboradores();
+            $('#modalBusqueda').modal('show');
         });
 
 
         $("#bntColaboradoresActivos").on('click', function () {
-            $('#modalColaboradoresActivos').modal('show');
+            
             cargarColaboradores();
+            $('#modalColaboradoresActivos').modal('show');
         });
 
         $("#btnAsignarAutorizadorBusqueda").on('click', function () {
@@ -103,8 +100,6 @@ var Autorizador = function () {
     });
 
     var visualizarDataTableColaborador = function () {
-
-
         $.ajax({
             url: urlColaborador,
             type: "post",
@@ -618,13 +613,64 @@ var Autorizador = function () {
                 closeLoading();
             },
             success: function (response) {
-                dataTableBusquedaColaborador.clear();
-                dataTableBusquedaColaborador.rows.add(response.Colaboradores);
-                dataTableBusquedaColaborador.draw();
+                if (!dataTableBusquedaColaborador) {
+                    var columnas = [];
 
-                setTimeout(() => {
-                    dataTableBusquedaColaborador.columns.adjust().draw();
-                }, 500);
+                    response.Columnas.forEach((x) => {
+                        columnas.push({
+                            title: x,
+                            data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
+                            defaultContent: "",
+                        });
+                    });
+
+                    dataTableBusquedaColaborador = $('#tableBusquedaColaborador').DataTable({
+                        language: {
+                            searchPlaceholder: 'Buscar...',
+                            sSearch: '',
+                        },
+                        scrollY: '300px',
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: false,
+                        columns: columnas,
+                        data: response.Colaboradores,
+                        bAutoWidth: false,
+                        rowCallback: function (row, data, index) {
+                            if (data.Estado == "ANU") {
+                                $("td", row).addClass("text-danger");
+                            }
+                        },
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Excel <i class="fa fa-cloud-download"></i>',
+                                titleAttr: 'Descargar Excel',
+                                className: 'btn-sm mb-1 ms-2',
+                                exportOptions: {
+                                    modifier: { page: 'all' }
+                                }
+                            },
+                        ],
+                    });
+
+                    dataTableBusquedaColaborador.buttons().container().prependTo($('#tableBusquedaColaborador_filter'));
+                } else {
+                    dataTableBusquedaColaborador.clear();
+                    dataTableBusquedaColaborador.rows.add(response.Colaboradores);
+                    dataTableBusquedaColaborador.draw();
+
+                    setTimeout(() => {
+                        dataTableBusquedaColaborador.columns.adjust().draw();
+                    }, 500);
+                }
+                //dataTableBusquedaColaborador.clear();
+                //dataTableBusquedaColaborador.rows.add(response.Colaboradores);
+                //dataTableBusquedaColaborador.draw();
+
+                //setTimeout(() => {
+                //    dataTableBusquedaColaborador.columns.adjust().draw();
+                //}, 500);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -672,13 +718,64 @@ var Autorizador = function () {
                 closeLoading();
             },
             success: function (response) {
-                dataTableColaborador.clear();
-                dataTableColaborador.rows.add(response.Colaboradores);
-                dataTableColaborador.draw();
+                if (!dataTableColaborador) {
+                    var columnas = [];
 
-                setTimeout(() => {
-                    dataTableColaborador.columns.adjust().draw();
-                }, 500);
+                    response.Columnas.forEach((x) => {
+                        columnas.push({
+                            title: x,
+                            data: x.replace(" ", "").replace(".", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u"),
+                            defaultContent: "",
+                        });
+                    });
+
+                    dataTableColaborador = $('#tableColaborador').DataTable({
+                        language: {
+                            searchPlaceholder: 'Buscar...',
+                            sSearch: '',
+                        },
+                        scrollY: '350px',
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: false,
+                        columns: columnas,
+                        data: response.Colaboradores,
+                        bAutoWidth: false,
+                        rowCallback: function (row, data, index) {
+                            if (data.Estado == "ANU") {
+                                $("td", row).addClass("text-danger");
+                            }
+                        },
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Excel <i class="fa fa-cloud-download"></i>',
+                                titleAttr: 'Descargar Excel',
+                                className: 'btn-sm mb-1 ms-2',
+                                exportOptions: {
+                                    modifier: { page: 'all' }
+                                }
+                            },
+                        ],
+                    });
+
+                    dataTableColaborador.buttons().container().prependTo($('#tableColaborador_filter'));
+                } else {
+                    dataTableColaborador.clear();
+                    dataTableColaborador.rows.add(response.Colaboradores);
+                    dataTableColaborador.draw();
+
+                    setTimeout(() => {
+                        dataTableColaborador.columns.adjust().draw();
+                    }, 500);
+                }
+                //dataTableColaborador.clear();
+                //dataTableColaborador.rows.add(response.Colaboradores);
+                //dataTableColaborador.draw();
+
+                //setTimeout(() => {
+                //    dataTableColaborador.columns.adjust().draw();
+                //}, 500);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 swal({
@@ -715,6 +812,7 @@ var Autorizador = function () {
             dataTableAutorizador.column(8).search('').draw();
         }
     }
+
     const chechTodos = function () {
 
         if ($("#chkTodos").prop('checked')) {
@@ -970,9 +1068,9 @@ var Autorizador = function () {
         init: function () {
             checkSession(function () {
                 eventos();
-                visualizarDataTableColaborador();
+                //visualizarDataTableColaborador();
                 visualizarDataTableAutorizador();
-                visualizarDataTableBusquedaColaborador();
+                //visualizarDataTableBusquedaColaborador();
                 $('input[type="search"]').addClass("form-control-sm");
                 $('#cboMotivo').select2();
 

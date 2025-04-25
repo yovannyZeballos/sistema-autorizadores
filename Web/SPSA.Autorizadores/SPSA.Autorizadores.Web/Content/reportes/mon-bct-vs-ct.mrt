@@ -1,0 +1,899 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <CalculationMode>Interpretation</CalculationMode>
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <SGP_DEV Ref="2" type="Stimulsoft.Report.Dictionary.StiPostgreSQLDatabase" isKey="true">
+        <Alias>SGP_DEV</Alias>
+        <ConnectionStringEncrypted>40T16+B92rxCDQlUThTgatU69SPSTgHN6RKxyetx9mrfFq2DYgUZnPdZ4TThXOHr+Xh5y2JKqYXiGqjJagWkXsRW889MGPoJR3U9COpJsUbgevfDSBZSvMFJ7Q==</ConnectionStringEncrypted>
+        <Key>79fb050ffd3145efb59882666326bdb9</Key>
+        <Name>SGP_DEV</Name>
+      </SGP_DEV>
+    </Databases>
+    <DataSources isList="true" count="2">
+      <FuenteDeDatos1 Ref="3" type="Stimulsoft.Report.Dictionary.StiPostgreSQLSource" isKey="true">
+        <Alias>FuenteDeDatos1</Alias>
+        <Columns isList="true" count="7">
+          <value>ORIGINAL,COD_EMPRESA,COD_EMPRESA,COD_EMPRESA,System.String,b1b86d88127b47a288182e95adcf4b50</value>
+          <value>ORIGINAL,NOM_EMPRESA,NOM_EMPRESA,NOM_EMPRESA,System.String,_x0036_1961efe85bd404f8f8db6127884f97f</value>
+          <value>ORIGINAL,FECHA_HORA,FECHA_HORA,FECHA_HORA,System.DateTime,_x0038_4ee53d37e354878b69f89e3dd95c31a</value>
+          <value>ORIGINAL,HORA,HORA,HORA,System.Int32,_x0035_dda24349ca4456a94bd1e924e5539bf</value>
+          <value>ORIGINAL,MINUTO,MINUTO,MINUTO,System.Int32,b8a3de2f54324032ae0f39bf53033fe6</value>
+          <value>ORIGINAL,FECHA,FECHA,FECHA,System.DateTime,_x0031_13f4d2859a14f169bccf55aa619e409</value>
+          <value>ORIGINAL,CANTIDAD,CANTIDAD,CANTIDAD,System.Decimal,d1d24f9f6118429dad5e6339c7ce91a8</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>374b48e398894bea8b81ad0969ee62bb</Key>
+        <Name>FuenteDeDatos1</Name>
+        <NameInSource>SGP_DEV</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>SELECT
+	"COD_EMPRESA",
+	"SGP".sf_obt_empresa("COD_EMPRESA") AS "NOM_EMPRESA",
+	"FECHA_HORA",
+	"FECHA",
+	"HORA",
+	"MINUTO",
+	"CANTIDAD"
+	FROM
+	"SGP"."MON_BCT_CT"
+	WHERE 
+	"HORA" BETWEEN EXTRACT(HOUR FROM NOW()) - 1 AND EXTRACT(HOUR FROM NOW())
+     AND TO_CHAR("FECHA_HORA", 'HH24:MI:SS') &lt;= TO_CHAR(NOW(), 'HH24:MI:SS')  
+ORDER BY 1, 2;</SqlCommand>
+      </FuenteDeDatos1>
+      <Ultimo_registro Ref="4" type="Stimulsoft.Report.Dictionary.StiPostgreSQLSource" isKey="true">
+        <Alias>Ultimo_registro</Alias>
+        <Columns isList="true" count="9">
+          <value>ORIGINAL,COD_EMPRESA,COD_EMPRESA,COD_EMPRESA,System.String,ea865a6e38324b6fb6412ee04be66582</value>
+          <value>NOM_EMPRESA,System.String</value>
+          <value>FECHA_HORA,System.DateTime</value>
+          <value>FECHA,System.DateTime</value>
+          <value>HORA,System.Int32</value>
+          <value>MINUTO,System.Int32</value>
+          <value>CANTIDAD,System.Decimal</value>
+          <value>LIMITE,System.Int32</value>
+          <value>SEMAFORO,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>ed82cacb468b4d59bf245731f465cb2e</Key>
+        <Name>Ultimo_registro</Name>
+        <NameInSource>SGP_DEV</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>
+SELECT DISTINCT ON ("COD_EMPRESA") 
+    "COD_EMPRESA",
+    "SGP".sf_obt_empresa("COD_EMPRESA") AS "NOM_EMPRESA",
+    "FECHA_HORA",
+    "FECHA",
+    "HORA",
+    "MINUTO",
+    "CANTIDAD",
+    "LIMITE",
+    CASE 
+        WHEN "CANTIDAD" &gt; "LIMITE" + 31 THEN 'R' -- Rojo
+        WHEN "CANTIDAD" BETWEEN "LIMITE" AND "LIMITE" + 30 THEN 'A' -- Amarillo
+        ELSE 'V' -- Verde
+    END AS "SEMAFORO"
+FROM "SGP"."MON_BCT_CT"
+WHERE "HORA" BETWEEN EXTRACT(HOUR FROM NOW()) - 1 AND EXTRACT(HOUR FROM NOW())
+  AND TO_CHAR("FECHA_HORA", 'HH24:MI:SS') &lt;= TO_CHAR(NOW(), 'HH24:MI:SS')  
+ORDER BY "COD_EMPRESA", "FECHA_HORA" DESC;
+</SqlCommand>
+      </Ultimo_registro>
+    </DataSources>
+    <Relations isList="true" count="1">
+      <Nombre Ref="5" type="DataRelation" isKey="true">
+        <Active>True</Active>
+        <Alias>Nombre</Alias>
+        <ChildColumns isList="true" count="1">
+          <value>COD_EMPRESA</value>
+        </ChildColumns>
+        <ChildSource isRef="4" />
+        <Dictionary isRef="1" />
+        <Key>ab717ea74b9b4b85bfafd6ba822dd7d9</Key>
+        <Name>Nombre</Name>
+        <NameInSource>Empresa</NameInSource>
+        <ParentColumns isList="true" count="1">
+          <value>COD_EMPRESA</value>
+        </ParentColumns>
+        <ParentSource isRef="3" />
+      </Nombre>
+    </Relations>
+    <Report isRef="0" />
+    <Resources isList="true" count="0" />
+    <UserFunctions isList="true" count="0" />
+    <Variables isList="true" count="0" />
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <Key>52e476aeae584a68bf3ea1d4d3e7fbab</Key>
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Dashboard1 Ref="6" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
+      <BackColor>190, 215, 231</BackColor>
+      <Components isList="true" count="7">
+        <Chart1 Ref="7" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
+          <Area Ref="8" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
+            <InterlacingHor Ref="9" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
+            <InterlacingVert Ref="10" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
+            <XAxis Ref="11" type="Stimulsoft.Dashboard.Components.Chart.StiXChartAxis" isKey="true">
+              <Labels Ref="12" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Color>Black</Color>
+                <Font>Microsoft Sans Serif,9</Font>
+                <Width>0</Width>
+                <WordWrap>True</WordWrap>
+              </Labels>
+              <Range Ref="13" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisRange" isKey="true" />
+              <Title Ref="14" type="Stimulsoft.Dashboard.Components.Chart.StiXChartAxisTitle" isKey="true">
+                <Font>Arial,12,Bold</Font>
+                <Visible>False</Visible>
+              </Title>
+            </XAxis>
+            <XTopAxis Ref="15" type="Stimulsoft.Dashboard.Components.Chart.StiXTopChartAxis" isKey="true">
+              <Labels Ref="16" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Color>0, 112, 192</Color>
+                <Font>Microsoft Sans Serif,8</Font>
+                <Width>0</Width>
+              </Labels>
+            </XTopAxis>
+            <YAxis Ref="17" type="Stimulsoft.Dashboard.Components.Chart.StiYChartAxis" isKey="true">
+              <Labels Ref="18" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Font>Microsoft Sans Serif,9</Font>
+                <Placement>OneLine</Placement>
+                <Width>0</Width>
+              </Labels>
+              <Range Ref="19" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisRange" isKey="true" />
+              <Title Ref="20" type="Stimulsoft.Dashboard.Components.Chart.StiYChartAxisTitle" isKey="true">
+                <Font>Microsoft Sans Serif,8,Bold</Font>
+                <Position>Inside</Position>
+                <Visible>False</Visible>
+              </Title>
+            </YAxis>
+          </Area>
+          <Arguments isList="true" count="2">
+            <Item7 Ref="21" type="Stimulsoft.Dashboard.Components.Chart.StiArgumentChartMeter" isKey="true">
+              <Expression>FuenteDeDatos1.HORA</Expression>
+              <Key>a66b888d3cee4f13afa82d5e9c2ba21c</Key>
+              <Label>HORA</Label>
+            </Item7>
+            <Item8 Ref="22" type="Stimulsoft.Dashboard.Components.Chart.StiArgumentChartMeter" isKey="true">
+              <Expression>FuenteDeDatos1.MINUTO</Expression>
+              <Key>03fdd2177610491f91a38154911feb73</Key>
+              <Label>MINUTO</Label>
+            </Item8>
+          </Arguments>
+          <ChartConditions isList="true" count="0" />
+          <ClientRectangle>607.87,-3.75,595.52,301.78</ClientRectangle>
+          <CloseValues isList="true" count="0" />
+          <ConstantLines isList="true" count="0" />
+          <DataFilters isList="true" count="1">
+            <Item9 Ref="23" type="Stimulsoft.Data.Engine.StiDataFilterRule" isKey="true">
+              <Path>FuenteDeDatos1.COD_EMPRESA</Path>
+              <Value>02</Value>
+              <Value2 />
+            </Item9>
+          </DataFilters>
+          <EndValues isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Guid>9211a2488eb24d48a017b89eefce8bee</Guid>
+          <HighValues isList="true" count="0" />
+          <Labels Ref="24" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
+            <AxisPosition>Outside</AxisPosition>
+            <AxisStyle>Value</AxisStyle>
+            <Font>Microsoft Sans Serif,8</Font>
+            <Style>Value</Style>
+          </Labels>
+          <Legend Ref="25" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
+            <HorAlignment>Center</HorAlignment>
+            <Labels Ref="26" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
+              <Font>Arial,8</Font>
+            </Labels>
+            <Title Ref="27" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
+              <Font>Arial,12,Bold</Font>
+            </Title>
+          </Legend>
+          <LowValues isList="true" count="0" />
+          <ManuallyEnteredChartMeter Ref="28" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+            <Key>6f02506bfb6e4b48aaf1fab0ab835ef5</Key>
+          </ManuallyEnteredChartMeter>
+          <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKEUo6UFYknOWck1+cGpaYU5oKF/LJL0cV8MhMz0AVcSxKL81NzSuBC4SnAtUguKiqXfNSUAWCU4syU4uVQLxYXq5YALzbJDalAAAAWklQ</ManuallyEnteredData>
+          <Marker Ref="29" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
+          <Name>Chart1</Name>
+          <NegativeSeriesColors />
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <ParetoSeriesColors />
+          <RoundValues>True</RoundValues>
+          <Series Ref="30" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
+            <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+            <Key>62c4a75984374102b0964337c79f58f4</Key>
+            <Label>NOM_EMPRESA</Label>
+          </Series>
+          <SeriesColors />
+          <SortBy Ref="31" type="Stimulsoft.Dashboard.Components.Chart.StiSortByChartMeter" isKey="true">
+            <Expression>FuenteDeDatos1.HORA</Expression>
+            <Key>4c50a75f7f0840eb84cc0d166addf087</Key>
+            <Label>HORA</Label>
+          </SortBy>
+          <Title Ref="32" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Arial,11</Font>
+            <Text>Gráfico</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <TrendLines isList="true" count="0" />
+          <UserFilters isList="true" count="0" />
+          <UserSorts isList="true" count="1">
+            <Item10 Ref="33" type="Stimulsoft.Data.Engine.StiDataSortRule" isKey="true">
+              <Key>4c50a75f7f0840eb84cc0d166addf087</Key>
+            </Item10>
+          </UserSorts>
+          <UserViewStates isList="true" count="0" />
+          <ValueFormat Ref="34" type="NumberFormat" isKey="true">
+            <DecimalDigits>0</DecimalDigits>
+            <GroupSeparator>,</GroupSeparator>
+            <NegativePattern>1</NegativePattern>
+            <State>DecimalDigits, Abbreviation</State>
+          </ValueFormat>
+          <Values isList="true" count="2">
+            <Item11 Ref="35" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Sum(FuenteDeDatos1.CANTIDAD)</Expression>
+              <Key>a12d4e934cf1425993074d5c7f1f283a</Key>
+              <Label>CANTIDAD</Label>
+              <SeriesType>Area</SeriesType>
+            </Item11>
+            <Item12 Ref="36" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Sum(Ultimo_registro.limite)</Expression>
+              <Key>36cf2e4de7794f2cad4bb4b79919973a</Key>
+              <Label>limite</Label>
+              <SeriesType>Line</SeriesType>
+            </Item12>
+          </Values>
+          <Weights isList="true" count="0" />
+          <XValues isList="true" count="0" />
+          <YValues isList="true" count="0" />
+        </Chart1>
+        <B_Refrescar_HP Ref="37" type="Stimulsoft.Dashboard.Components.Button.StiButtonElement" isKey="true">
+          <Border>All;[32:88:103];2;Solid</Border>
+          <Brush>[44:105:154]</Brush>
+          <ClickEvent>&lt;xml xmlns="https://developers.google.com/blockly/xml"&gt;&lt;block type="sti_refresh_viewer" id="5J%tmT{HTRL?]f:7c4IA" x="6" y="502"&gt;&lt;/block&gt;&lt;/xml&gt;</ClickEvent>
+          <ClientRectangle>3.39,259.65,105.18,40</ClientRectangle>
+          <Expressions isList="true" count="0" />
+          <Font>Microsoft Sans Serif,10,Bold</Font>
+          <Guid>f230bd27b1324236a765608aabc078f8</Guid>
+          <Name>B_Refrescar_HP</Name>
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <Shadow>Transparent;2, 2;5;False</Shadow>
+          <Text>Refrescar</Text>
+          <TextBrush>[255:255:255]</TextBrush>
+          <UserFilters isList="true" count="0" />
+        </B_Refrescar_HP>
+        <Cards1 Ref="38" type="Stimulsoft.Dashboard.Components.Gauge.StiGaugeElement" isKey="true">
+          <ClientRectangle>106.97,168.57,500,130.36</ClientRectangle>
+          <DataFilters isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Font>Arial,13</Font>
+          <Guid>809b62bd1cd94b61a712016f9041e79c</Guid>
+          <Labels Ref="39" type="Stimulsoft.Dashboard.Components.Gauge.StiGaugeLabels" isKey="true">
+            <Placement>Outside</Placement>
+          </Labels>
+          <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKYYk5palKOlBeSGJRemoJnBucWpSZWqwE4sXycsUCALmUbWY5AAAAWklQ</ManuallyEnteredData>
+          <Maximum>500</Maximum>
+          <MaximumDateTime>4/3/2026 11:24:10 AM</MaximumDateTime>
+          <Minimum>0</Minimum>
+          <MinimumDateTime>4/3/2025 11:24:10 AM</MinimumDateTime>
+          <Name>Cards1</Name>
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <RangeMode>Value</RangeMode>
+          <Ranges isList="true" count="3">
+            <Item15 Ref="40" type="Stimulsoft.Dashboard.Components.Gauge.StiGaugeRange" isKey="true">
+              <Color>58, 124, 165</Color>
+              <End>300</End>
+              <EndExpression>300</EndExpression>
+            </Item15>
+            <Item16 Ref="41" type="Stimulsoft.Dashboard.Components.Gauge.StiGaugeRange" isKey="true">
+              <Color>255, 192, 0</Color>
+              <End>500</End>
+              <EndExpression>500</EndExpression>
+              <Start>301</Start>
+              <StartExpression>301</StartExpression>
+            </Item16>
+            <Item17 Ref="42" type="Stimulsoft.Dashboard.Components.Gauge.StiGaugeRange" isKey="true">
+              <Color>240, 94, 94</Color>
+              <End>2000</End>
+              <EndExpression>2000</EndExpression>
+              <Start>501</Start>
+              <StartExpression>501</StartExpression>
+            </Item17>
+          </Ranges>
+          <RangeType>Color</RangeType>
+          <Series Ref="43" type="Stimulsoft.Dashboard.Components.Gauge.StiSeriesGaugeMeter" isKey="true">
+            <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+            <Key>e0530ca1ae9b4ae496d655197aa4fb46</Key>
+            <Label>NOM_EMPRESA</Label>
+          </Series>
+          <Target Ref="44" type="Stimulsoft.Dashboard.Components.Gauge.StiTargetGaugeMeter" isKey="true">
+            <Expression>Max(Ultimo_registro.limite)</Expression>
+            <Key>c8384941c9534a1d82976d34bc2f38a5</Key>
+            <Label>limite</Label>
+          </Target>
+          <TargetSettings Ref="45" type="Stimulsoft.Dashboard.Components.Gauge.StiGaugeTarget" isKey="true" />
+          <Title Ref="46" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Microsoft Sans Serif,8,Bold</Font>
+            <Text>Cartas</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <Type>HalfCircular</Type>
+          <UserSorts isList="true" count="0" />
+          <Value Ref="47" type="Stimulsoft.Dashboard.Components.Gauge.StiValueGaugeMeter" isKey="true">
+            <Expression>Max(Ultimo_registro.CANTIDAD)</Expression>
+            <Key>c874f090eb3243fea9c542dad9d627c6</Key>
+            <Label>CANTIDAD</Label>
+          </Value>
+          <ValueFormat Ref="48" type="NumberFormat" isKey="true">
+            <DecimalDigits>1</DecimalDigits>
+            <GroupSeparator>,</GroupSeparator>
+            <NegativePattern>1</NegativePattern>
+            <State>DecimalDigits, Abbreviation</State>
+          </ValueFormat>
+        </Cards1>
+        <Table1 Ref="49" type="Stimulsoft.Dashboard.Components.Table.StiTableElement" isKey="true">
+          <Cells Ref="50" type="Stimulsoft.Dashboard.Components.Table.StiTableCells" isKey="true">
+            <Columns Ref="51" type="Stimulsoft.Dashboard.Components.Table.StiTableSection" isKey="true">
+              <Font>Microsoft Sans Serif,8</Font>
+            </Columns>
+            <Data Ref="52" type="Stimulsoft.Dashboard.Components.Table.StiTableSection" isKey="true">
+              <Font>Microsoft Sans Serif,8</Font>
+            </Data>
+            <Totals Ref="53" type="Stimulsoft.Dashboard.Components.Table.StiTableSection" isKey="true">
+              <Font>Microsoft Sans Serif,8</Font>
+            </Totals>
+          </Cells>
+          <ClientRectangle>6.08,-6.42,600.89,180.34</ClientRectangle>
+          <Columns isList="true" count="5">
+            <Item19 Ref="54" type="Stimulsoft.Dashboard.Components.Table.StiDimensionColumn" isKey="true">
+              <Expression>Ultimo_registro.NOM_EMPRESA</Expression>
+              <Key>d8a1df06b55f4e0da9d5bf1c86755df5</Key>
+              <Label>NOM_EMPRESA</Label>
+              <VisibilityExpression />
+            </Item19>
+            <Item20 Ref="55" type="Stimulsoft.Dashboard.Components.Table.StiDimensionColumn" isKey="true">
+              <Expression>Ultimo_registro.FECHA_HORA</Expression>
+              <HorAlignment>Center</HorAlignment>
+              <Key>36c735ddfbc1442e93db73cf1c142585</Key>
+              <Label>FECHA_HORA</Label>
+              <TextFormat Ref="56" type="DateFormat" isKey="true" />
+            </Item20>
+            <Item21 Ref="57" type="Stimulsoft.Dashboard.Components.Table.StiDimensionColumn" isKey="true">
+              <Expression>Ultimo_registro.CANTIDAD</Expression>
+              <HorAlignment>Right</HorAlignment>
+              <Key>9512def76bdc4d4c9e819fcca505cc94</Key>
+              <Label>CANTIDAD</Label>
+              <TextFormat Ref="58" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+              </TextFormat>
+              <VisibilityExpression />
+            </Item21>
+            <Item22 Ref="59" type="Stimulsoft.Dashboard.Components.Table.StiDimensionColumn" isKey="true">
+              <Expression>Ultimo_registro.limite</Expression>
+              <HorAlignment>Right</HorAlignment>
+              <Key>2611dde7bf814e9ca50f84db6350bb56</Key>
+              <Label>limite</Label>
+              <TextFormat Ref="60" type="NumberFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <VisibilityExpression>{FuenteDeDatos1.CANTIDAD}&gt; {Ultimo_registro.limite}</VisibilityExpression>
+            </Item22>
+            <Item23 Ref="61" type="Stimulsoft.Dashboard.Components.Table.StiDimensionColumn" isKey="true">
+              <Expression>Ultimo_registro.SEMAFORO</Expression>
+              <HorAlignment>Right</HorAlignment>
+              <Key>a4c18734e0bf42c3bde7c0f7094baee3</Key>
+              <Label>SEMAFORO</Label>
+            </Item23>
+          </Columns>
+          <DataFilters isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Guid>103f62c87d3f4604b274efd78ad5cc7e</Guid>
+          <Name>Table1</Name>
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <TableConditions isList="true" count="3">
+            <Item24 Ref="62" type="Stimulsoft.Dashboard.Components.Table.StiTableElementCondition" isKey="true">
+              <BackColor>255, 192, 0</BackColor>
+              <DataType>String</DataType>
+              <Font>Arial,8</Font>
+              <Icon>CheckSquare</Icon>
+              <IconAlignment>Left</IconAlignment>
+              <IconColor>Black</IconColor>
+              <KeyDataFieldMeters isList="true" count="1">
+                <value>a4c18734e0bf42c3bde7c0f7094baee3</value>
+              </KeyDataFieldMeters>
+              <KeyDestinationMeters isList="true" count="5">
+                <value>d8a1df06b55f4e0da9d5bf1c86755df5</value>
+                <value>36c735ddfbc1442e93db73cf1c142585</value>
+                <value>9512def76bdc4d4c9e819fcca505cc94</value>
+                <value>2611dde7bf814e9ca50f84db6350bb56</value>
+                <value>a4c18734e0bf42c3bde7c0f7094baee3</value>
+              </KeyDestinationMeters>
+              <Permissions>FontStyleBold, FontStyleItalic, FontStyleUnderline, FontStyleStrikeout, ForeColor, BackColor</Permissions>
+              <Value>A</Value>
+            </Item24>
+            <Item25 Ref="63" type="Stimulsoft.Dashboard.Components.Table.StiTableElementCondition" isKey="true">
+              <BackColor>Red</BackColor>
+              <DataType>String</DataType>
+              <Font>Arial,8</Font>
+              <ForeColor>White</ForeColor>
+              <Icon>Arrows</Icon>
+              <IconAlignment>Left</IconAlignment>
+              <IconColor>White</IconColor>
+              <KeyDataFieldMeters isList="true" count="1">
+                <value>a4c18734e0bf42c3bde7c0f7094baee3</value>
+              </KeyDataFieldMeters>
+              <KeyDestinationMeters isList="true" count="5">
+                <value>d8a1df06b55f4e0da9d5bf1c86755df5</value>
+                <value>36c735ddfbc1442e93db73cf1c142585</value>
+                <value>9512def76bdc4d4c9e819fcca505cc94</value>
+                <value>2611dde7bf814e9ca50f84db6350bb56</value>
+                <value>a4c18734e0bf42c3bde7c0f7094baee3</value>
+              </KeyDestinationMeters>
+              <Permissions>FontStyleBold, FontStyleItalic, FontStyleUnderline, FontStyleStrikeout, ForeColor, BackColor</Permissions>
+              <Value>R</Value>
+            </Item25>
+            <Item26 Ref="64" type="Stimulsoft.Dashboard.Components.Table.StiTableElementCondition" isKey="true">
+              <BackColor>58, 124, 165</BackColor>
+              <DataType>String</DataType>
+              <Font>Arial,8,Bold</Font>
+              <ForeColor>White</ForeColor>
+              <Icon>Check</Icon>
+              <IconAlignment>Left</IconAlignment>
+              <IconColor>White</IconColor>
+              <KeyDataFieldMeters isList="true" count="5">
+                <value>d8a1df06b55f4e0da9d5bf1c86755df5</value>
+                <value>36c735ddfbc1442e93db73cf1c142585</value>
+                <value>9512def76bdc4d4c9e819fcca505cc94</value>
+                <value>2611dde7bf814e9ca50f84db6350bb56</value>
+                <value>a4c18734e0bf42c3bde7c0f7094baee3</value>
+              </KeyDataFieldMeters>
+              <KeyDestinationMeters isList="true" count="5">
+                <value>d8a1df06b55f4e0da9d5bf1c86755df5</value>
+                <value>36c735ddfbc1442e93db73cf1c142585</value>
+                <value>9512def76bdc4d4c9e819fcca505cc94</value>
+                <value>2611dde7bf814e9ca50f84db6350bb56</value>
+                <value>a4c18734e0bf42c3bde7c0f7094baee3</value>
+              </KeyDestinationMeters>
+              <Permissions>FontStyleBold, FontStyleItalic, FontStyleUnderline, FontStyleStrikeout, ForeColor, BackColor</Permissions>
+              <Value>V</Value>
+            </Item26>
+          </TableConditions>
+          <Title Ref="65" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Microsoft Sans Serif,8</Font>
+            <Text>Tabla</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <UserFilters isList="true" count="0" />
+          <UserSorts isList="true" count="0" />
+        </Table1>
+        <Chart2 Ref="66" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
+          <Area Ref="67" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
+            <InterlacingHor Ref="68" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
+            <InterlacingVert Ref="69" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
+            <XAxis Ref="70" type="Stimulsoft.Dashboard.Components.Chart.StiXChartAxis" isKey="true">
+              <Labels Ref="71" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Color>Black</Color>
+                <Font>Microsoft Sans Serif,9</Font>
+                <Width>0</Width>
+                <WordWrap>True</WordWrap>
+              </Labels>
+              <Range Ref="72" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisRange" isKey="true" />
+              <Title Ref="73" type="Stimulsoft.Dashboard.Components.Chart.StiXChartAxisTitle" isKey="true">
+                <Font>Arial,12,Bold</Font>
+                <Visible>False</Visible>
+              </Title>
+            </XAxis>
+            <XTopAxis Ref="74" type="Stimulsoft.Dashboard.Components.Chart.StiXTopChartAxis" isKey="true">
+              <Labels Ref="75" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Color>0, 112, 192</Color>
+                <Font>Microsoft Sans Serif,8</Font>
+                <Width>0</Width>
+              </Labels>
+            </XTopAxis>
+            <YAxis Ref="76" type="Stimulsoft.Dashboard.Components.Chart.StiYChartAxis" isKey="true">
+              <Labels Ref="77" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Font>Microsoft Sans Serif,9</Font>
+                <Placement>OneLine</Placement>
+                <Width>0</Width>
+              </Labels>
+              <Range Ref="78" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisRange" isKey="true" />
+              <Title Ref="79" type="Stimulsoft.Dashboard.Components.Chart.StiYChartAxisTitle" isKey="true">
+                <Font>Microsoft Sans Serif,8,Bold</Font>
+                <Position>Inside</Position>
+                <Visible>False</Visible>
+              </Title>
+            </YAxis>
+          </Area>
+          <Arguments isList="true" count="2">
+            <Item28 Ref="80" type="Stimulsoft.Dashboard.Components.Chart.StiArgumentChartMeter" isKey="true">
+              <Expression>FuenteDeDatos1.HORA</Expression>
+              <Key>fdf66d21a7ed4901827f75f99764c974</Key>
+              <Label>HORA</Label>
+            </Item28>
+            <Item29 Ref="81" type="Stimulsoft.Dashboard.Components.Chart.StiArgumentChartMeter" isKey="true">
+              <Expression>FuenteDeDatos1.MINUTO</Expression>
+              <Key>f35932b68ce04a4a85d7cc7c795262b9</Key>
+              <Label>MINUTO</Label>
+            </Item29>
+          </Arguments>
+          <ChartConditions isList="true" count="0" />
+          <ClientRectangle>608.76,306.98,596.43,296.42</ClientRectangle>
+          <CloseValues isList="true" count="0" />
+          <ConstantLines isList="true" count="0" />
+          <DataFilters isList="true" count="1">
+            <Item30 Ref="82" type="Stimulsoft.Data.Engine.StiDataFilterRule" isKey="true">
+              <Path>FuenteDeDatos1.COD_EMPRESA</Path>
+              <Value>10</Value>
+              <Value2 />
+            </Item30>
+          </DataFilters>
+          <EndValues isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Guid>6b022333912649019128ca7b04add452</Guid>
+          <HighValues isList="true" count="0" />
+          <Labels Ref="83" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
+            <AxisPosition>Outside</AxisPosition>
+            <AxisStyle>Value</AxisStyle>
+            <Font>Microsoft Sans Serif,8</Font>
+            <Style>Value</Style>
+          </Labels>
+          <Legend Ref="84" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
+            <HorAlignment>Center</HorAlignment>
+            <Labels Ref="85" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
+              <Font>Arial,8</Font>
+            </Labels>
+            <Title Ref="86" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
+              <Font>Microsoft Sans Serif,8,Bold</Font>
+            </Title>
+          </Legend>
+          <LowValues isList="true" count="0" />
+          <ManuallyEnteredChartMeter Ref="87" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+            <Key>5d44b4435192422aa979eaaef7eb6a4b</Key>
+          </ManuallyEnteredChartMeter>
+          <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKEUo6UFYknOWck1+cGpaYU5oKF/LJL0cV8MhMz0AVcSxKL81NzSuBC4SnAtUguKiqXfNSUAWCU4syU4uVQLxYXq5YALzbJDalAAAAWklQ</ManuallyEnteredData>
+          <Marker Ref="88" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
+          <Name>Chart2</Name>
+          <NegativeSeriesColors />
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <ParetoSeriesColors />
+          <RoundValues>True</RoundValues>
+          <Series Ref="89" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
+            <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+            <Key>6de45dc80e1f4af8a6449b5af31ee363</Key>
+            <Label>NOM_EMPRESA</Label>
+          </Series>
+          <SeriesColors />
+          <SortBy Ref="90" type="Stimulsoft.Dashboard.Components.Chart.StiSortByChartMeter" isKey="true">
+            <Expression>FuenteDeDatos1.HORA</Expression>
+            <Key>d4731ab9ad40451e9f1e6753343941e7</Key>
+            <Label>HORA</Label>
+          </SortBy>
+          <Title Ref="91" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Microsoft Sans Serif,8</Font>
+            <Text>ddddddddddddddd</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <TrendLines isList="true" count="0" />
+          <UserFilters isList="true" count="0" />
+          <UserSorts isList="true" count="1">
+            <Item31 Ref="92" type="Stimulsoft.Data.Engine.StiDataSortRule" isKey="true">
+              <Key>4c50a75f7f0840eb84cc0d166addf087</Key>
+            </Item31>
+          </UserSorts>
+          <UserViewStates isList="true" count="0" />
+          <ValueFormat Ref="93" type="NumberFormat" isKey="true">
+            <DecimalDigits>0</DecimalDigits>
+            <GroupSeparator>,</GroupSeparator>
+            <NegativePattern>1</NegativePattern>
+            <State>DecimalDigits, Abbreviation</State>
+          </ValueFormat>
+          <Values isList="true" count="2">
+            <Item32 Ref="94" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Max(FuenteDeDatos1.CANTIDAD)</Expression>
+              <Key>ec5c0877790645c2886c46b41281d0f2</Key>
+              <Label>CANTIDAD</Label>
+              <SeriesType>Area</SeriesType>
+            </Item32>
+            <Item33 Ref="95" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Max(Ultimo_registro.limite)</Expression>
+              <Key>fe2429a3a5b54f1ba62a68442ec753ab</Key>
+              <Label>limite</Label>
+              <SeriesType>SteppedLine</SeriesType>
+            </Item33>
+          </Values>
+          <Weights isList="true" count="0" />
+          <XValues isList="true" count="0" />
+          <YValues isList="true" count="0" />
+        </Chart2>
+        <Chart3 Ref="96" type="Stimulsoft.Dashboard.Components.Chart.StiChartElement" isKey="true">
+          <Area Ref="97" type="Stimulsoft.Dashboard.Components.Chart.StiChartArea" isKey="true">
+            <InterlacingHor Ref="98" type="Stimulsoft.Dashboard.Components.Chart.StiHorChartInterlacing" isKey="true" />
+            <InterlacingVert Ref="99" type="Stimulsoft.Dashboard.Components.Chart.StiVertChartInterlacing" isKey="true" />
+            <XAxis Ref="100" type="Stimulsoft.Dashboard.Components.Chart.StiXChartAxis" isKey="true">
+              <Labels Ref="101" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Color>Black</Color>
+                <Font>Microsoft Sans Serif,9</Font>
+                <Width>0</Width>
+                <WordWrap>True</WordWrap>
+              </Labels>
+              <Range Ref="102" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisRange" isKey="true" />
+              <Title Ref="103" type="Stimulsoft.Dashboard.Components.Chart.StiXChartAxisTitle" isKey="true">
+                <Font>Arial,12,Bold</Font>
+                <Visible>False</Visible>
+              </Title>
+            </XAxis>
+            <XTopAxis Ref="104" type="Stimulsoft.Dashboard.Components.Chart.StiXTopChartAxis" isKey="true">
+              <Labels Ref="105" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Color>0, 112, 192</Color>
+                <Font>Microsoft Sans Serif,8</Font>
+                <Width>0</Width>
+              </Labels>
+            </XTopAxis>
+            <YAxis Ref="106" type="Stimulsoft.Dashboard.Components.Chart.StiYChartAxis" isKey="true">
+              <Labels Ref="107" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisLabels" isKey="true">
+                <Font>Microsoft Sans Serif,9</Font>
+                <Placement>OneLine</Placement>
+                <Width>0</Width>
+              </Labels>
+              <Range Ref="108" type="Stimulsoft.Dashboard.Components.Chart.StiChartAxisRange" isKey="true" />
+              <Title Ref="109" type="Stimulsoft.Dashboard.Components.Chart.StiYChartAxisTitle" isKey="true">
+                <Font>Microsoft Sans Serif,8,Bold</Font>
+                <Position>Inside</Position>
+                <Visible>False</Visible>
+              </Title>
+            </YAxis>
+          </Area>
+          <Arguments isList="true" count="2">
+            <Item35 Ref="110" type="Stimulsoft.Dashboard.Components.Chart.StiArgumentChartMeter" isKey="true">
+              <Expression>FuenteDeDatos1.HORA</Expression>
+              <Key>fdf66d21a7ed4901827f75f99764c974</Key>
+              <Label>HORA</Label>
+            </Item35>
+            <Item36 Ref="111" type="Stimulsoft.Dashboard.Components.Chart.StiArgumentChartMeter" isKey="true">
+              <Expression>FuenteDeDatos1.MINUTO</Expression>
+              <Key>f35932b68ce04a4a85d7cc7c795262b9</Key>
+              <Label>MINUTO</Label>
+            </Item36>
+          </Arguments>
+          <ChartConditions isList="true" count="0" />
+          <ClientRectangle>-1.08,305.18,601.79,300.9</ClientRectangle>
+          <CloseValues isList="true" count="0" />
+          <ConstantLines isList="true" count="0" />
+          <DataFilters isList="true" count="1">
+            <Item37 Ref="112" type="Stimulsoft.Data.Engine.StiDataFilterRule" isKey="true">
+              <Path>FuenteDeDatos1.COD_EMPRESA</Path>
+              <Value>09</Value>
+              <Value2 />
+            </Item37>
+          </DataFilters>
+          <EndValues isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Guid>497797096c7f4722ac6c6140635cfc4d</Guid>
+          <HighValues isList="true" count="0" />
+          <Labels Ref="113" type="Stimulsoft.Dashboard.Components.Chart.StiChartLabels" isKey="true">
+            <AxisPosition>Outside</AxisPosition>
+            <AxisStyle>Value</AxisStyle>
+            <Font>Microsoft Sans Serif,8</Font>
+            <Style>Value</Style>
+          </Labels>
+          <Legend Ref="114" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegend" isKey="true">
+            <HorAlignment>Center</HorAlignment>
+            <Labels Ref="115" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendLabels" isKey="true">
+              <Font>Microsoft Sans Serif,8</Font>
+            </Labels>
+            <Title Ref="116" type="Stimulsoft.Dashboard.Components.Chart.StiChartLegendTitle" isKey="true">
+              <Color>White</Color>
+              <Font>Microsoft Sans Serif,8,Bold</Font>
+            </Title>
+          </Legend>
+          <Linked>True</Linked>
+          <LowValues isList="true" count="0" />
+          <ManuallyEnteredChartMeter Ref="117" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+            <Key>5d44b4435192422aa979eaaef7eb6a4b</Key>
+          </ManuallyEnteredChartMeter>
+          <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKEUo6UFYknOWck1+cGpaYU5oKF/LJL0cV8MhMz0AVcSxKL81NzSuBC4SnAtUguKiqXfNSUAWCU4syU4uVQLxYXq5YALzbJDalAAAAWklQ</ManuallyEnteredData>
+          <Marker Ref="118" type="Stimulsoft.Dashboard.Components.Chart.StiChartMarker" isKey="true" />
+          <Name>Chart3</Name>
+          <NegativeSeriesColors />
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <ParetoSeriesColors />
+          <RoundValues>True</RoundValues>
+          <Series Ref="119" type="Stimulsoft.Dashboard.Components.Chart.StiSeriesChartMeter" isKey="true">
+            <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+            <Key>2eec33aa36964ca1ae08d998e414ecb1</Key>
+            <Label>NOM_EMPRESA</Label>
+          </Series>
+          <SeriesColors />
+          <ShowViewTitle>True</ShowViewTitle>
+          <SortBy Ref="120" type="Stimulsoft.Dashboard.Components.Chart.StiSortByChartMeter" isKey="true">
+            <Expression>FuenteDeDatos1.HORA</Expression>
+            <Key>d4731ab9ad40451e9f1e6753343941e7</Key>
+            <Label>HORA</Label>
+          </SortBy>
+          <Title Ref="121" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Arial,11</Font>
+            <Text>Gráfico</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <TrendLines isList="true" count="0" />
+          <UserFilters isList="true" count="0" />
+          <UserSorts isList="true" count="1">
+            <Item38 Ref="122" type="Stimulsoft.Data.Engine.StiDataSortRule" isKey="true">
+              <Key>4c50a75f7f0840eb84cc0d166addf087</Key>
+            </Item38>
+          </UserSorts>
+          <UserViewStates isList="true" count="0" />
+          <ValueFormat Ref="123" type="NumberFormat" isKey="true">
+            <DecimalDigits>0</DecimalDigits>
+            <GroupSeparator>,</GroupSeparator>
+            <NegativePattern>1</NegativePattern>
+            <State>DecimalDigits, Abbreviation</State>
+          </ValueFormat>
+          <Values isList="true" count="2">
+            <Item39 Ref="124" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Sum(FuenteDeDatos1.CANTIDAD)</Expression>
+              <Key>ec5c0877790645c2886c46b41281d0f2</Key>
+              <Label>CANTIDAD</Label>
+              <SeriesType>Area</SeriesType>
+            </Item39>
+            <Item40 Ref="125" type="Stimulsoft.Dashboard.Components.Chart.StiValueChartMeter" isKey="true">
+              <Expression>Sum(Ultimo_registro.limite)</Expression>
+              <Key>cdbc1b3291434692801fc27438d8066e</Key>
+              <Label>limite</Label>
+              <SeriesType>Line</SeriesType>
+            </Item40>
+          </Values>
+          <Weights isList="true" count="0" />
+          <XValues isList="true" count="0" />
+          <YValues isList="true" count="0" />
+        </Chart3>
+        <Chart4 Ref="126" type="Stimulsoft.Dashboard.Components.Progress.StiProgressElement" isKey="true">
+          <ClientRectangle>5.19,168.57,104.1,94.28</ClientRectangle>
+          <DataFilters isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Font>Microsoft Sans Serif,8</Font>
+          <Guid>7ee6159b330e4036807b72c7c76322cc</Guid>
+          <ManuallyEnteredData>H4sIAAAAAAAEAIvm5VJQiAYRCgpKYYk5palKOlBeSGJRemoJnBucWpSZWqwE4sXycsUCALmUbWY5AAAAWklQ</ManuallyEnteredData>
+          <Name>Chart4</Name>
+          <Page isRef="6" />
+          <Parent isRef="6" />
+          <ProgressConditions isList="true" count="3">
+            <Item42 Ref="127" type="Stimulsoft.Dashboard.Components.Progress.StiProgressElementCondition" isKey="true">
+              <Color>240, 94, 94</Color>
+              <Field>Series</Field>
+              <Font>Arial,8</Font>
+              <Permissions>FontStyleBold, FontStyleItalic, FontStyleUnderline, FontStyleStrikeout, TextColor, Color, TrackColor</Permissions>
+              <TrackColor>Red</TrackColor>
+              <Value>R</Value>
+            </Item42>
+            <Item43 Ref="128" type="Stimulsoft.Dashboard.Components.Progress.StiProgressElementCondition" isKey="true">
+              <Color>146, 208, 80</Color>
+              <Field>Series</Field>
+              <Font>Arial,8</Font>
+              <Permissions>FontStyleBold, FontStyleItalic, FontStyleUnderline, FontStyleStrikeout, TextColor, Color, TrackColor</Permissions>
+              <TrackColor>73, 164, 138</TrackColor>
+              <Value>V</Value>
+            </Item43>
+            <Item44 Ref="129" type="Stimulsoft.Dashboard.Components.Progress.StiProgressElementCondition" isKey="true">
+              <Color>255, 192, 0</Color>
+              <Field>Series</Field>
+              <Font>Arial,8</Font>
+              <Permissions>FontStyleBold, FontStyleItalic, FontStyleUnderline, FontStyleStrikeout, TextColor, Color, TrackColor</Permissions>
+              <TrackColor>255, 192, 0</TrackColor>
+              <Value>A</Value>
+            </Item44>
+          </ProgressConditions>
+          <Series Ref="130" type="Stimulsoft.Dashboard.Components.Progress.StiSeriesProgressMeter" isKey="true">
+            <Expression>Ultimo_registro.SEMAFORO</Expression>
+            <Key>f3bdd9d164c349e5ba95696596393afd</Key>
+            <Label>SEMAFORO</Label>
+          </Series>
+          <SeriesColors />
+          <Shadow>Transparent;3, -3;5;True</Shadow>
+          <Target Ref="131" type="Stimulsoft.Dashboard.Components.Progress.StiTargetProgressMeter" isKey="true">
+            <Expression>Sum(Ultimo_registro.limite)</Expression>
+            <Key>863dc30e9b204668b737c2d1f1c13b3c</Key>
+            <Label>limite</Label>
+          </Target>
+          <Title Ref="132" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Microsoft Sans Serif,8</Font>
+            <Text>Gráfico</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+          <UserSorts isList="true" count="0" />
+          <Value Ref="133" type="Stimulsoft.Dashboard.Components.Progress.StiValueProgressMeter" isKey="true">
+            <Expression>Sum(Ultimo_registro.CANTIDAD)</Expression>
+            <Key>d0e5201dba9e4fa79292512f53aab15f</Key>
+            <Label>CANTIDAD</Label>
+          </Value>
+        </Chart4>
+      </Components>
+      <Expressions isList="true" count="0" />
+      <Guid>ef29b7ceb4ea4396a44eb98d8850995b</Guid>
+      <Name>Dashboard1</Name>
+      <Report isRef="0" />
+    </Dashboard1>
+  </Pages>
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <RefreshTime>300</RefreshTime>
+  <ReportAlias>Report</ReportAlias>
+  <ReportAuthor>Magalli Vera Quispe</ReportAuthor>
+  <ReportChanged>4/8/2025 3:54:43 PM</ReportChanged>
+  <ReportCreated>4/3/2025 11:24:19 AM</ReportCreated>
+  <ReportFile>D:\disco d\Elvis Velasquez\7 dashBoard Stimulsoft\MON-BCT-VS-CT.mrt</ReportFile>
+  <ReportGuid>b978e04e1e1d49bd9760cf349a225d3e</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2025.1.2.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

@@ -1,13 +1,9 @@
-﻿using SPSA.Autorizadores.Aplicacion.DTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SPSA.Autorizadores.Aplicacion.ViewModel
+namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.DTOs
 {
-    public class InvCajaViewModel
+    public class ObtenerListasInvCajaDTO
     {
-        public InvCajaDTO InvCaja { get; set; }
-        public List<InvTipoActivoDTO> TiposActivo { get; set; }
-
         public List<string> TiposModelo { get; set; }
         public List<string> TiposProcesador { get; set; }
         public List<string> TiposMemoria { get; set; }

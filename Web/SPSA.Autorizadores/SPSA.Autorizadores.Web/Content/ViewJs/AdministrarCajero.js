@@ -188,6 +188,7 @@ const AdministrarCajero = function () {
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
+
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
@@ -391,6 +392,7 @@ const AdministrarCajero = function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
+
                 swal({
                     text: jqXHR.responseText,
                     icon: "error",
@@ -490,7 +492,7 @@ const AdministrarCajero = function () {
     const generarArchivo = function () {
 
         const registrosSeleccionados = dataTableCajeros.rows('.selected').data().toArray();
-        debugger;
+        //debugger;
         if (!validarSelecion(registrosSeleccionados.length)) {
             return;
         }

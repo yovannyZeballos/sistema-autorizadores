@@ -35,6 +35,9 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 			Property(x => x.DirLocal).HasColumnName("DIR_LOCAL");
 			Property(x => x.Ubigeo).HasColumnName("UBIGEO");
 			Property(x => x.CodLocalAlterno).HasColumnName("COD_LOCAL_ALTERNO");
+			Property(x => x.FecApertura).HasColumnName("FEC_APERTURA");
+			Property(x => x.FecCierre).HasColumnName("FEC_CIERRE");
+			Property(x => x.FecEntrega).HasColumnName("FEC_ENTREGA");
 		}
 	}
 }

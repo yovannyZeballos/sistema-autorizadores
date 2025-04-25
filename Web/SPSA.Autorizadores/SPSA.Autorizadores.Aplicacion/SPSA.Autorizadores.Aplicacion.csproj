@@ -404,8 +404,10 @@
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaCommand.cs" />
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaPorCajaCommand.cs" />
     <Compile Include="Features\InventarioCaja\Commands\EliminarInvCajaPorLocalCommand.cs" />
+    <Compile Include="Features\InventarioCaja\DTOs\ObtenerListasInvCajaDTO.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ListarInvCajaQuery.cs" />
     <Compile Include="Features\InventarioCaja\Queries\ObtenerInvCajaQuery.cs" />
+    <Compile Include="Features\InventarioCaja\Queries\ObtenerListasInvCajaQuery.cs" />
     <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexActivoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\ActualizarInvKardexLocalCommand.cs" />
@@ -448,7 +450,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
-    <Compile Include="Features\Monitor\Commands\ProcesarControlBCTCommand.cs" />
+    <Compile Include="Features\Monitor\Commands\ProcesarControlBCTSpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTHpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTTpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarMonitorLocalBCTCommand.cs" />

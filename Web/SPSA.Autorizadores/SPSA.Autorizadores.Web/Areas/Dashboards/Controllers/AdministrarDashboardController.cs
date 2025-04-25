@@ -36,7 +36,17 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
             return View();
         }
 
+        public ActionResult CierreTesoreriaSpsa()
+        {
+            return View();
+        }
+
         public ActionResult InventarioLocal()
+        {
+            return View();
+        }
+
+        public ActionResult BctVsCt()
         {
             return View();
         }
@@ -50,10 +60,28 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
             return StiMvcViewer.GetReportResult(report);
         }
 
+        public ActionResult GetReportCierreTesoreriaSpsa()
+        {
+            var report = StiReport.CreateNewDashboard();
+            var path = Server.MapPath("~/Content/reportes/cierre-cuadratura-spsa.mrt");
+            report.Load(path);
+
+            return StiMvcViewer.GetReportResult(report);
+        }
+
         public ActionResult GetReportInvLocal()
         {
             var report = StiReport.CreateNewDashboard();
             var path = Server.MapPath("~/Content/reportes/inventario-local.mrt");
+            report.Load(path);
+
+            return StiMvcViewer.GetReportResult(report);
+        }
+
+        public ActionResult GetReportBctCt()
+        {
+            var report = StiReport.CreateNewDashboard();
+            var path = Server.MapPath("~/Content/reportes/mon-bct-vs-ct.mrt");
             report.Load(path);
 
             return StiMvcViewer.GetReportResult(report);

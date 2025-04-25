@@ -7,6 +7,7 @@ using System.Configuration;
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using Oracle.ManagedDataAccess.Types;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
@@ -54,31 +55,34 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         public async Task<string> GenerarArchivo(string tipoSO)
         {
-            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            try
             {
-                var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                using (var connection = new OracleConnection(CadenaConexionAutorizadores))
                 {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = _commandTimeout
-                };
+                    using (var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure,
+                        CommandTimeout = _commandTimeout
+                    })
+                    {
+                        await connection.OpenAsync();
 
-                await command.Connection.OpenAsync();
+                        command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+                        command.Parameters.Add("resultado", OracleDbType.Clob, ParameterDirection.Output);
 
-                command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+                        await command.ExecuteNonQueryAsync();
 
-                await command.ExecuteNonQueryAsync();
+                        OracleClob clob = (OracleClob)command.Parameters["resultado"].Value;
+                        string resultado = clob != null ? clob.Value : string.Empty;
 
-                var resultado = command.Parameters["resultado"].Value.ToString();
-
-                connection.Close();
-                connection.Dispose();
-
-                return resultado;
-
+                        return resultado;
+                    }
+                }
             }
-
-
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
 
         public async Task<DataTable> ListarColaboradores(string codigoLocal, string codigoEmpresa)

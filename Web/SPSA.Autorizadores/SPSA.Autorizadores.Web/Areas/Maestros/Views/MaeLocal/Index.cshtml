@@ -4,6 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    input.form-control-sm {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        height: calc(1.5em + 0.5rem + 2px);
+        line-height: 1.5;
+        font-size: 0.87rem;
+    }
+</style>
+
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
@@ -26,10 +36,9 @@
                 <div class="row mb-4" id="btn-local">
                     <div class="col-12 d-flex justify-content-between mb-3">
                         <div class="d-flex">
-                            <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary text-wrap me-2">
+                            <button type="button" id="btnNuevoLocal" class="btn btn-sm btn-primary text-wrap me-2" hidden>
                                 <i class="fa fa-plus"></i> Nuevo
                             </button>
-
                         </div>
                         <div class="d-flex">
                             <button type="button" id="btnDescargarLocalesPorEmpresa" class="btn btn-sm btn-default text-wrap me-2">
@@ -141,7 +150,7 @@
                             <input type="text" class="form-control form-control-sm" maxlength="18" id="txtIP" value="0.0.0.0" required>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-md-12">
+                    <div class="col-xl-4 col-md-12">
                         <div class="form-group">
                             <label for="txtDirLocal" class="form-label">Dirección</label>
                             <input type="text" class="form-control form-control-sm" maxlength="50" id="txtDirLocal">
@@ -162,7 +171,7 @@
                     <div class="col-xl-2 col-md-4">
                         <div class="form-group">
                             <label for="txtNomLocalOfiplan" class="form-label">Nombre Local Ofiplan</label>
-                            <input type="text" class="form-control form-control-sm" maxlength="50" id="txtNomLocalOfiplan">
+                            <input type="text" class="form-control form-control-sm" id="txtNomLocalOfiplan">
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4">
@@ -171,15 +180,34 @@
                             <input type="number" class="form-control form-control-sm" maxlength="10" id="txtCodLocalSunat" value="0" required>
                         </div>
                     </div>
+                    <div class="col-xl-2 col-md-4">
+                        <div class="form-group">
+                            <label for="txtFecApertura" class="form-label">Fecha Apertura</label>
+                            <input type="date" class="form-control form-control-sm" id="txtFecApertura" disabled>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4">
+                        <div class="form-group">
+                            <label for="txtFecCierre" class="form-label">Fecha Cierre</label>
+                            <input type="date" class="form-control form-control-sm" id="txtFecCierre">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4">
+                        <div class="form-group">
+                            <label for="txtFecEntrega" class="form-label">Fecha Entrega</label>
+                            <input type="date" class="form-control form-control-sm" id="txtFecEntrega">
+                           
+                        </div>
+                    </div>
 
                     <div class="col-lg-2 col-md-4 col-sm-12">
-                        <button type="button" id="btnGuardarLocal" class="btn btn-primary btn-block btn-sm "><i class="fa fa-save"></i> Guardar</button>
+                        <button type="button" id="btnGuardarLocal" class="btn btn-primary btn-sm btn-block text-wrap"><i class="fa fa-save"></i> Guardar</button>
                     </div>
-                    <div class="col-xl-2 col-md-4 col-sm-12">
-                        <button type="button" id="btnGuardarCambiosLocal" class="btn btn-primary btn-block btn-sm" disabled><i class="fa fa-save"></i> Guardar Cambios</button>
+                    <div class="col-lg-2 col-md-4 col-sm-12">
+                        <button type="button" id="btnGuardarCambiosLocal" class="btn btn-primary btn-sm btn-block text-wrap" disabled><i class="fa fa-save"></i> Guardar Cambios</button>
                     </div>
-                    <div class="col-xl-2 col-md-4 col-sm-12">
-                        <button type="button" id="btnHabilitarlCambioRegionZona" class="btn btn-default btn-block btn-sm" disabled><i class="fa fa-pencil"></i> Habilitar Región/Zona</button>
+                    <div class="col-lg-2 col-md-4 col-sm-12">
+                        <button type="button" id="btnHabilitarlCambioRegionZona" class="btn btn-default btn-sm btn-block text-wrap" disabled><i class="fa fa-pencil"></i> Habilitar Región/Zona</button>
                     </div>
                 </div>
             </div>
@@ -220,9 +248,6 @@
                         <div class="col-md-12">
                             <button class="btn btn-primary btn-block btn-sm mb-2" id="btnDescargarCajasPorLocal" type="button" disabled><i class="fa fa-download"></i> Descargar</button>
                         </div>
-                        @*<div class="col-md-12 text-blue">
-                            <a class="btn btn-link btn-block btn-sm mb-2" id="btnDescargarPlantillas">Plantilla Caja</a>
-                        </div>*@
                     </div>
                 </div>
             </div>
@@ -230,7 +255,6 @@
     </div>
 
     <div class="col-xl-12">
-        @*<div class="card overflow-hidden card-collapsed">*@
         <div class="card overflow-hidden">
             @Html.Partial("_CardHeader", "Horarios")
             <div class="card-body">

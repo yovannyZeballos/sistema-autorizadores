@@ -115,6 +115,8 @@ var AdministrarMaestroLocal = function () {
                     CodLocalSunat: $("#txtCodLocalSunat").val(),
                     DirLocal: $("#txtDirLocal").val(),
                     Ubigeo: $("#txtUbigeo").val(),
+                    FecCierre: $("#txtFecCierre").val(),
+                    FecEntrega: $("#txtFecEntrega").val(),
                     ...(isGuardarCambios && {
                         CodRegionAnterior: codRegionAnterior,
                         CodZonaAnterior: codZonaAnterior,
@@ -748,63 +750,6 @@ var AdministrarMaestroLocal = function () {
         });
     }
 
-    const recargarDataTableLocales = function () {
-        const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            CodCadena: $("#cboCadena").val(),
-            CodRegion: $("#cboRegion").val(),
-            CodZona: $("#cboZona").val()
-        };
-
-        if ($.fn.DataTable.isDataTable('#tableLocales')) {
-            $('#tableLocales').DataTable().destroy();
-        }
-        dtListaLocales = $('#tableLocales').DataTable({
-            ajax: {
-                url: urlListarLocales,
-                type: "post",
-                dataType: "JSON",
-                dataSrc: "Data",
-                data: { request },
-                beforeSend: function () {
-                    showLoading();
-                },
-                complete: function () {
-                    closeLoading();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal({
-                        text: 'Error al listar los locales: ' + jqXHR,
-                        icon: "error"
-                    });
-                }
-            },
-            columns: [
-                { data: "CodLocal" },
-                { data: "NomLocal" },
-                { data: "CodLocalPMM" },
-                { data: "NomLocalOfiplan" },
-                { data: "CodLocalSunat" },
-                { data: "CodEmpresa" },
-                { data: "CodCadena" },
-                { data: "CodRegion" },
-                { data: "CodZona" }
-            ],
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-            },
-            scrollY: '400px',
-            scrollX: true,
-            scrollCollapse: true,
-            paging: true,
-            rowCallback: function (row, data, index) {
-
-            },
-            bAutoWidth: false
-        });
-    }
-
     const recargarDataTableLocalesPorEmpresa = function () {
         const request = {
             CodEmpresa: $("#cboEmpresa").val()
@@ -874,6 +819,11 @@ var AdministrarMaestroLocal = function () {
         $("#txtCodLocalOfiplan").val('0');
         $("#txtNomLocalOfiplan").val('');
         $("#txtCodLocalSunat").val('0');
+        $("#txtDirLocal").val('0');
+        $("#txtUbigeo").val('000000');
+        $("#txtFecApertura").val('');
+        $("#txtFecCierre").val('');
+        $("#txtFecEntrega").val('');
         $("#btnGuardarLocal").prop("disabled", false);
         deshabilitarGrupoBotones("#btn-cajas", true);
         deshabilitarGrupoBotones("#btn-horarios", true);
@@ -881,8 +831,6 @@ var AdministrarMaestroLocal = function () {
         obtenerFechaSistema();
         $("#btnGuardarCambiosLocal").prop("disabled", true);
         $("#btnHabilitarlCambioRegionZona").prop("disabled", true);
-        //dataTableCajas.clear();
-        //dataTableCajas.draw();
     }
 
     const validarLocal = function (local) {
@@ -1035,6 +983,28 @@ var AdministrarMaestroLocal = function () {
     }
 
     const setearLocal = function (local) {
+
+        if (local.FecApertura != "" && local.FecApertura != null) {
+            let timestamp = parseInt(local.FecApertura.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            local.FecApertura = formattedDate;
+        }
+
+        if (local.FecCierre != "" && local.FecCierre != null) {
+            let timestamp = parseInt(local.FecCierre.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            local.FecCierre = formattedDate;
+        }
+
+        if (local.FecEntrega != "" && local.FecEntrega != null) {
+            let timestamp = parseInt(local.FecEntrega.match(/\d+/)[0], 10);
+            let date = new Date(timestamp);
+            let formattedDate = date.toISOString().split('T')[0];
+            local.FecEntrega = formattedDate;
+        }
+
         $("#cboTipEstado").val(local.TipEstado).trigger('change');
         $("#txtCodLocal").val(local.CodLocal);
         $("#txtNomLocal").val(local.NomLocal);
@@ -1045,6 +1015,9 @@ var AdministrarMaestroLocal = function () {
         $("#txtCodLocalSunat").val(local.CodLocalSunat);
         $("#txtDirLocal").val(local.DirLocal);
         $("#txtUbigeo").val(local.Ubigeo);
+        $("#txtFecApertura").val(local.FecApertura);
+        $("#txtFecCierre").val(local.FecCierre);
+        $("#txtFecEntrega").val(local.FecEntrega);
     }
 
     const recargarDataTableCajas = async function () {
@@ -1170,6 +1143,7 @@ var AdministrarMaestroLocal = function () {
         $("#cboZona").prop("disabled", disable);
         $("#cboLocal").prop("disabled", disable);
         $("#txtCodLocal").prop("disabled", disable);
+        $("#txtNomLocal").prop("disabled", disable);
     }
 
     const abrirModalCaja = function (esEdicion, model = {}) {

@@ -1,5 +1,4 @@
-﻿
-@model SPSA.Autorizadores.Aplicacion.ViewModel.InvCajaViewModel
+﻿@model SPSA.Autorizadores.Aplicacion.ViewModel.InvCajaViewModel
 
 <div class="row needs-validation" id="formInvCaja">
     <div class="col-xl-3">
@@ -20,10 +19,22 @@
             </select>
         </div>
     </div>
+    @*<div class="col-xl-3">
+            <div class="form-group">
+                <label for="txtCodModelo" class="form-label">Marca</label>
+                <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvCaja.CodModelo">
+            </div>
+        </div>*@
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtCodModelo" class="form-label">Marca</label>
-            <input type="text" class="form-control" id="txtCodModelo" value="@Model.InvCaja.CodModelo">
+            <label for="cboCodModelo" class="form-label">Marca</label>
+            <select class="form-control custom-select" id="cboCodModelo" name="CodModelo" required>
+                <option value="">Seleccionar</option>
+                @foreach (var tp in Model.TiposModelo)
+                {
+                    <option value="@tp" @(Model.InvCaja.CodModelo == tp ? "selected" : "")>@tp</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
@@ -40,38 +51,74 @@
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtTipProcesador" class="form-label">Tip Procesador</label>
-            <input type="text" class="form-control" id="txtTipProcesador" value="@Model.InvCaja.TipProcesador">
+            <label for="cboTipProcesador" class="form-label">Tip Procesador</label>
+            <select class="form-control custom-select" id="cboTipProcesador" name="TipProcesador" required>
+                <option value="">Seleccionar</option>
+                @foreach (var tp in Model.TiposProcesador)
+                {
+                    <option value="@tp" @(Model.InvCaja.TipProcesador == tp ? "selected" : "")>@tp</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtMemoria" class="form-label">Memoria</label>
-            <input type="text" class="form-control" id="txtMemoria" value="@Model.InvCaja.Memoria">
+            <label for="cboMemoria" class="form-label">Memoria</label>
+            <select class="form-control custom-select" id="cboMemoria" name="Memoria" required>
+                <option value="">Seleccionar</option>
+                @foreach (var m in Model.TiposMemoria)
+                {
+                    <option value="@m" @(Model.InvCaja.Memoria == m ? "selected" : "")>@m</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtDesSo" class="form-label">SO</label>
-            <input type="text" class="form-control" id="txtDesSo" value="@Model.InvCaja.DesSo">
+            <label for="cboSo" class="form-label">SO</label>
+            <select class="form-control custom-select" id="cboSo" name="DesSo" required>
+                <option value="">Seleccionar</option>
+                @foreach (var s in Model.TiposSo)
+                {
+                    <option value="@s" @(Model.InvCaja.DesSo == s ? "selected" : "")>@s</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtVerSo" class="form-label">VerSo</label>
-            <input type="text" class="form-control" id="txtVerSo" value="@Model.InvCaja.VerSo">
+            <label for="cboVerSo" class="form-label">Ver So</label>
+            <select class="form-control custom-select" id="cboVerSo" name="VerSo" required>
+                <option value="">Seleccionar</option>
+                @foreach (var v in Model.TiposVerSo)
+                {
+                    <option value="@v" @(Model.InvCaja.VerSo == v ? "selected" : "")>@v</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtCapDisco" class="form-label">CapDisco</label>
-            <input type="text" class="form-control" id="txtCapDisco" value="@Model.InvCaja.CapDisco">
+            <label for="cboCapDisco" class="form-label">Cap Disco</label>
+            <select class="form-control custom-select" id="cboCapDisco" name="CapDisco" required>
+                <option value="">Seleccionar</option>
+                @foreach (var c in Model.TiposCapDisco)
+                {
+                    <option value="@c" @(Model.InvCaja.CapDisco == c ? "selected" : "")>@c</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
         <div class="form-group">
-            <label for="txtDesPuertoBalanza" class="form-label">DesPuertoBalanza</label>
-            <input type="text" class="form-control" id="txtDesPuertoBalanza" value="@Model.InvCaja.DesPuertoBalanza">
+            <label for="cboDesPuertoBalanza" class="form-label">Puerto Balanza</label>
+            <select class="form-control custom-select" id="cboDesPuertoBalanza" name="DesPuertoBalanza" required>
+                <option value="">Seleccionar</option>
+                @foreach (var c in Model.TiposPuertoBalanza)
+                {
+                    <option value="@c" @(Model.InvCaja.DesPuertoBalanza == c ? "selected" : "")>@c</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-xl-3">
