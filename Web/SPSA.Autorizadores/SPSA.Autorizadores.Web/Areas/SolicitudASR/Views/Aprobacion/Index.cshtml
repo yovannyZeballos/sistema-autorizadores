@@ -1,0 +1,214 @@
+﻿
+@model string
+@{
+    ViewBag.Title = "Usuarios ASR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .radio-lg {
+        transform: scale(2.0); /* Agranda el radio button */
+        margin-right: 0.5rem; /* Espaciado a la derecha si lo necesitas */
+    }
+
+    .radio-label-lg {
+        font-size: 0.8rem;
+        margin-left: 0.2rem;
+    }
+
+    #tableSolicitudes thead th, #tableUsuario thead th {
+        padding: 0px 22px !important;
+    }
+</style>
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Solicitud Usuarios ASR</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Usuarios ASR</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @Html.Partial("_CardHeader", "Aprobación de Solcitud para creación o eliminación de usuarios ASR")
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <button id="btnModalSolicitud" class="btn btn-sm btn-primary"><span><i class="fe fe-eye me-1"></i></span> Ver Solicitudes</button>
+                </div>
+                <div class="col-md-4" id="container-btn-exportar">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="cboLocalBuscar" class="form-label">Local</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboLocalBuscar">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="cboUsuarioBuscar" class="form-label">Usuario</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboUsuarioBuscar">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="cboEstadoBuscar" class="form-label">Estado</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboEstadoBuscar">
+                            <option value="0">Todos</option>
+                            <option value="S">Solicitado</option>
+                            <option value="A">Aprobado</option>
+                            <option value="R">Rechazado</option>
+                            <option value="N">Anulado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="cboTipoSolicitudBuscar" class="form-label">Tipo</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboTipoSolicitudBuscar">
+                            <option value="0">Todos</option>
+                            <option value="C">Crear</option>
+                            <option value="E">Eliminar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xl-12 d-flex justify-content-end">
+                    <input type="text" style="width:200px;" class="form-control form-control-sm border-secondary" id="txtFiltroUsuario" placeholder="Buscar..." />
+                </div>
+                <div class="col-xl-12">
+                    <table id="tableUsuario" class="table text-nowrap border-bottom">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+
+<!-- Modal Solicitudes pendientes-->
+<div class="modal fade" id="solicitudesModal" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Solicitudes pendientes</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-2">
+                        <button type="button" class="btn btn-primary btn-block btn-sm" id="btnAprobar">
+                            <i class="fe fe-check-circle"></i> Aprobar
+                        </button>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-danger btn-block btn-sm" id="btnRechazarModal">
+                            <i class="fe fe-x-circle"></i> Rechazar
+                        </button>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-check form-check-inline d-flex align-items-center">
+                            <input class="form-check-input radio-lg" type="radio" name="tipoUsuario" id="radioAutorizador" value="A" checked>
+                            <label class="form-check-label radio-label-lg" for="radioAutorizador">Autorizador</label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-check form-check-inline d-flex align-items-center">
+                            <input class="form-check-input radio-lg" type="radio" name="tipoUsuario" id="radioCajero" value="C">
+                            <label class="form-check-label radio-label-lg" for="radioCajero">Cajero</label>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 d-flex justify-content-end">
+                        <input type="text" style="width:200px;" class="form-control form-control-sm border-secondary" id="txtFiltroSolicitud" placeholder="Buscar..." />
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <table id="tableSolicitudes" class="table text-nowrap border-bottom">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal motivo rechazo-->
+<div class="modal fade" id="motivoRechazoModal" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Ingrese el motivo de rechazo</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="txtMotivo" class="form-label">Motivo rechazo</label>
+                            <input type="text" class="form-control form-control-sm" multiple id="txtMotivo" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                    <i class="fe fe-delete"></i> Cerrar
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" id="btnRechazar">
+                    <i class="fe fe-check-circle"></i> Rechazar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/SolicitudAprobacionASR.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AprobacionASR.init();
+        });
+    </script>
+}

@@ -76,5 +76,13 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 			}
 		}
 
-	}
+        public static string CadenaConexionCT3_SPSA
+        {
+            get
+            {
+                return ConfigurationManager.ConnectionStrings["CT3_SP"].ConnectionString;
+            }
+        }
+
+    }
 }

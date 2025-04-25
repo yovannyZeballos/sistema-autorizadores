@@ -46,7 +46,11 @@
   <ItemGroup>
     <Compile Include="Entidades\Apertura.cs" />
     <Compile Include="Entidades\ArchivoAutorizador.cs" />
+    <Compile Include="Entidades\ASR_CajeroPaso.cs" />
+    <Compile Include="Entidades\ASR_UsuarioArchivo.cs" />
     <Compile Include="Entidades\ASR_SolicitudUsuario.cs" />
+    <Compile Include="Entidades\ASR_Usuario.cs" />
+    <Compile Include="Entidades\ASR_UsuarioListado.cs" />
     <Compile Include="Entidades\AutImpresion.cs" />
     <Compile Include="Entidades\Autorizador.cs" />
     <Compile Include="Entidades\Cajero.cs" />

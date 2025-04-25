@@ -133,7 +133,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
                     if (item.TipColaborador == "I")
                     {
                         Mae_ColaboradorInt maeColab = await _contexto.RepositorioMaeColaboradorInt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
-                        item.NomColaborador = $"{maeColab.NomTrabajador} {maeColab.ApePaterno} {maeColab.ApeMaterno}";
+                        if (maeColab != null)
+                        {
+                            item.NomColaborador = $"{maeColab.NomTrabajador} {maeColab.ApePaterno} {maeColab.ApeMaterno}";
+                        }
                     }
                     else
                     {
