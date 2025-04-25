@@ -16,5 +16,14 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task AprobarSolicitud(ASR_Usuario usuario);
 		Task<List<ASR_UsuarioArchivo>> ListarArchivos(string tipUsuario);
 		Task ActualizarFlagEnvio(long numSolicitud, string flagEnvio);
-	}
+
+
+        Task<List<int>> ObtenerLocalesPorProcesar(int codEmpresa);
+        Task<List<ASR_CajeroPaso>> ObtenerCajerosPorProcesar(int codEmpresa, int codLocal);
+        Task ActualizarFlagProcesado(int codComercio, int codLocal, string codCajero, string flagProcesado);
+        Task InsertarCajeroPaso(ASR_CajeroPaso cajero);
+
+        Task ProcesarCajero(int codComercio, int codLocal, string codCajero, string flagProcesado, ASR_CajeroPaso cajero);
+
+    }
 }

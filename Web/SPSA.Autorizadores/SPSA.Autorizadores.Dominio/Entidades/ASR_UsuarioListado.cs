@@ -6,6 +6,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
     {
 		public int NumSolicitud { get; set; }
 		public string CodLocal { get; set; }
+		public string CodLocalAlterno { get; set; }
 		public string NomLocal { get; set; }
 		public string CodColaborador { get; set; }
 		public string CodUsuarioAsr { get; set; }
@@ -28,7 +29,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 		public string UsuAprNoTrab { get; set; }
 		public DateTime? FecAprobacion { get; set; }
 		public string Motivo { get; set; }
-		public string NumDocumentoIdentidad { get; set; }
+        public string TipDocumentoIdentidad { get; set; }
+        public string NumDocumentoIdentidad { get; set; }
 		public int TotalRegistros { get; set; }
 
 		public override string ToString()

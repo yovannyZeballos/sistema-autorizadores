@@ -2,6 +2,7 @@
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
+using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -86,6 +87,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                                 {
                                     NumSolicitud = Convert.ToInt32(dr["NUM_SOLICITUD"]),
                                     CodLocal = dr["COD_LOCAL"].ToString(),
+                                    CodLocalAlterno = dr["COD_LOCAL"].ToString(),
                                     NomLocal = dr["NOM_LOCAL"].ToString(),
                                     CodColaborador = dr["COD_COLABORADOR"] != DBNull.Value ? dr["COD_COLABORADOR"].ToString() : string.Empty,
                                     NoApelPate = dr["NO_APEL_PATE"] != DBNull.Value ? dr["NO_APEL_PATE"].ToString() : string.Empty,
@@ -227,5 +229,308 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 }
             }
         }
+
+
+        public async Task<List<int>> ObtenerLocalesPorProcesar(int codEmpresa)
+        {
+            List<int> locales = new List<int>();
+
+            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
+            {
+                await connection.OpenAsync();
+
+                string query = @"SELECT DISTINCT
+	                                loc_numero 
+                                FROM
+	                                cajeros_interface 
+                                WHERE
+	                                cod_pais = 10 
+	                                AND cod_comercio = :p_cod_comercio 
+	                                AND caj_procesado = 'N' 
+                                ORDER BY
+	                                loc_numero";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new NpgsqlParameter(":p_cod_comercio", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codEmpresa });
+
+                    using (var dr = await command.ExecuteReaderAsync())
+                    {
+                        if (dr != null && dr.HasRows)
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                locales.Add(dr["loc_numero"] != DBNull.Value ? Convert.ToInt32(dr["loc_numero"]) : 0);
+                            }
+                        }
+                        return locales;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<ASR_CajeroPaso>> ObtenerCajerosPorProcesar(int codEmpresa, int codLocal)
+        {
+            List<ASR_CajeroPaso> cajeros = new List<ASR_CajeroPaso>();
+
+            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
+            {
+                await connection.OpenAsync();
+
+                string query = @"SELECT *
+                                FROM ct3m.cajeros_interface
+                                WHERE cod_comercio = :p_cod_comercio AND loc_numero = :p_loc_numero AND caj_procesado = 'N'";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new NpgsqlParameter(":p_cod_comercio", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codEmpresa });
+                    command.Parameters.Add(new NpgsqlParameter(":p_loc_numero", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codLocal });
+
+                    using (var dr = await command.ExecuteReaderAsync())
+                    {
+                        if (dr != null && dr.HasRows)
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                cajeros.Add(new ASR_CajeroPaso
+                                {
+                                    CajCodigo = dr["caj_codigo"] as string ?? null,
+                                    LocNumero = dr["loc_numero"] != DBNull.Value ? Convert.ToInt32(dr["loc_numero"]) : 0,
+                                    CajNombre = dr["caj_nombre"] as string ?? null,
+                                    CajRut = dr["caj_rut"] as string ?? null,
+                                    CajTipo = dr["caj_tipo"] as string ?? null,
+                                    CajActivo = dr["caj_activo"] as string ?? null,
+                                    CajCodigoEmp = dr["caj_codigo_emp"] as string ?? null,
+                                    CajEstado = dr["caj_estado"] as string ?? null,
+                                    CajNom = dr["caj_nom"] as string ?? null,
+                                    CajApellidos = dr["caj_apellidos"] as string ?? null,
+                                    CajTipoDocId = dr["caj_tipo_docid"] as string ?? null,
+                                    CajFcreacion = dr["caj_fcreacion"] != DBNull.Value ? (DateTime?)dr["caj_fcreacion"] : null,
+                                    CajFbaja = dr["caj_fbaja"] != DBNull.Value ? (DateTime?)dr["caj_fbaja"] : null,
+                                    Cajfactualiza = dr["caj_factualiza"] != DBNull.Value ? (DateTime?)dr["caj_factualiza"] : null,
+                                    CajTipoContrato = dr["caj_tipo_contrato"] as string ?? null,
+                                    CajCorrExtranjero = dr["caj_corr_extranjero"] as string ?? null,
+                                    CodPais = dr["cod_pais"] != DBNull.Value ? Convert.ToInt32(dr["cod_pais"]) : 0,
+                                    CodComercio = dr["cod_comercio"] != DBNull.Value ? Convert.ToInt32(dr["cod_comercio"]) : 0
+                                });
+                            }
+                        }
+                        return cajeros;
+                    }
+                }
+            }
+        }
+
+        public async Task ActualizarFlagProcesado(int codComercio, int codLocal, string codCajero, string flagProcesado)
+        {
+
+            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
+            {
+                await connection.OpenAsync();
+
+                string query = @"UPDATE ""ct3m"".""cajeros_interface""
+                                    SET ""caj_procesado""  = :p_caj_procesado
+                                WHERE ""cod_comercio"" = :p_cod_comercio 
+                                    AND ""loc_numero"" = :p_loc_numero
+                                    AND ""caj_codigo"" = :p_caj_codigo";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new NpgsqlParameter(":p_cod_comercio", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codComercio });
+                    command.Parameters.Add(new NpgsqlParameter(":p_loc_numero", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codLocal });
+                    command.Parameters.Add(new NpgsqlParameter(":p_caj_codigo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = codCajero });
+                    command.Parameters.Add(new NpgsqlParameter(":p_caj_procesado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = flagProcesado });
+
+                    var fdfd = await command.ExecuteNonQueryAsync();
+                }
+            }
+
+        }
+
+        public async Task InsertarCajeroPaso(ASR_CajeroPaso cajero)
+        {
+
+            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
+            {
+                await connection.OpenAsync();
+
+                string query = @"INSERT
+	                                    INTO
+	                                    ""ct3m"".""irs_cajeros_paso"" (""caj_codigo"",
+	                                    ""loc_numero"",
+	                                    ""caj_nombre"",
+	                                    ""caj_nom"",
+	                                    ""caj_apellidos"",
+	                                    ""caj_rut"",
+	                                    ""caj_tipo"",
+	                                    ""caj_tipo_contrato"",
+	                                    ""caj_tipo_docid"",
+	                                    ""caj_codigo_emp"",
+	                                    ""caj_estado"",
+	                                    ""caj_activo"",
+	                                    ""caj_login"",
+	                                    ""caj_fcreacion"",
+	                                    ""caj_usuario_crea"",
+	                                    ""caj_fbaja"",
+	                                    ""caj_usuario_baja"",
+	                                    ""caj_factualiza"",
+	                                    ""caj_usuario_actualiza"",
+	                                    ""caj_corr_extranjero"",
+	                                    ""caj_rendauto"",
+	                                    ""caj_carga"",
+	                                    ""cod_pais"",
+	                                    ""cod_comercio"")
+                                    VALUES (:caj_codigo,
+                                    :loc_numero,
+                                    :caj_nombre,
+                                    :caj_nom,
+                                    :caj_apellidos,
+                                    :caj_rut,
+                                    :caj_tipo,
+                                    :caj_tipo_contrato,
+                                    :caj_tipo_docid,
+                                    :caj_codigo_emp,
+                                    :caj_estado,
+                                    :caj_activo,
+                                    :caj_login,
+                                    :caj_fcreacion,
+                                    :caj_usuario_crea,
+                                    :caj_fbaja,
+                                    :caj_usuario_baja,
+                                    :caj_factualiza,
+                                    :caj_usuario_actualiza,
+                                    :caj_corr_extranjero,
+                                    :caj_rendauto,
+                                    :caj_carga,
+                                    :cod_pais,
+                                    :cod_comercio)";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new NpgsqlParameter(":caj_codigo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCodigo });
+                    command.Parameters.Add(new NpgsqlParameter(":loc_numero", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.LocNumero });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_nombre", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajNombre ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_nom", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajNom ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_apellidos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajApellidos ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_rut", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajRut ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_tipo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipo ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_tipo_contrato", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipoContrato ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_tipo_docid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipoDocId ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_codigo_emp", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCodigoEmp ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_estado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajEstado ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_activo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajActivo ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_login", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajLogin ?? (object)DBNull.Value });
+
+                    // Manejo de fechas nulas
+                    command.Parameters.Add(new NpgsqlParameter(":caj_fcreacion", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.CajFcreacion ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_fbaja", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.CajFbaja ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_factualiza", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.Cajfactualiza ?? (object)DBNull.Value });
+
+                    // Resto de campos
+                    command.Parameters.Add(new NpgsqlParameter(":caj_usuario_crea", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioCrea ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_usuario_baja", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioBaja ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_usuario_actualiza", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioActualiza ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_corr_extranjero", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCorrExtranjero ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_rendauto", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajRendAuto ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":caj_carga", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCarga ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":cod_pais", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodPais });
+                    command.Parameters.Add(new NpgsqlParameter(":cod_comercio", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodComercio });
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+
+
+        }
+
+        public async Task ProcesarCajero(int codComercio, int codLocal, string codCajero, string flagProcesado, ASR_CajeroPaso cajero)
+        {
+            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
+            {
+                await connection.OpenAsync();
+
+                // Iniciar una transacción si prefieres hacerlo en una única transacción
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. Actualizar el flag de procesado
+                        string updateQuery = @"UPDATE ""ct3m"".""cajeros_interface""
+                                       SET ""caj_procesado"" = :p_caj_procesado
+                                       WHERE ""cod_comercio"" = :p_cod_comercio
+                                       AND ""loc_numero"" = :p_loc_numero
+                                       AND ""caj_codigo"" = :p_caj_codigo";
+
+                        using (var updateCommand = new NpgsqlCommand(updateQuery, connection, transaction))
+                        {
+                            updateCommand.Parameters.Add(new NpgsqlParameter(":p_cod_comercio", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codComercio });
+                            updateCommand.Parameters.Add(new NpgsqlParameter(":p_loc_numero", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = codLocal });
+                            updateCommand.Parameters.Add(new NpgsqlParameter(":p_caj_codigo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = codCajero });
+                            updateCommand.Parameters.Add(new NpgsqlParameter(":p_caj_procesado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = flagProcesado });
+
+                            await updateCommand.ExecuteNonQueryAsync();
+                        }
+
+                        // 2. Insertar el nuevo cajero
+                        string insertQuery = @"INSERT INTO ""ct3m"".""irs_cajeros_paso"" 
+                                       (""caj_codigo"", ""loc_numero"", ""caj_nombre"", ""caj_nom"", ""caj_apellidos"",
+                                        ""caj_rut"", ""caj_tipo"", ""caj_tipo_contrato"", ""caj_tipo_docid"", ""caj_codigo_emp"",
+                                        ""caj_estado"", ""caj_activo"", ""caj_login"", ""caj_fcreacion"", ""caj_usuario_crea"",
+                                        ""caj_fbaja"", ""caj_usuario_baja"", ""caj_factualiza"", ""caj_usuario_actualiza"",
+                                        ""caj_corr_extranjero"", ""caj_rendauto"", ""caj_carga"", ""cod_pais"", ""cod_comercio"")
+                                       VALUES (:p_caj_codigo, :p_loc_numero, :p_caj_nombre, :p_caj_nom, :p_caj_apellidos,
+                                               :p_caj_rut, :p_caj_tipo, :p_caj_tipo_contrato, :p_caj_tipo_docid, :p_caj_codigo_emp,
+                                               :p_caj_estado, :p_caj_activo, :p_caj_login, :p_caj_fcreacion, :p_caj_usuario_crea,
+                                               :p_caj_fbaja, :p_caj_usuario_baja, :p_caj_factualiza, :p_caj_usuario_actualiza,
+                                               :p_caj_corr_extranjero, :p_caj_rendauto, :p_caj_carga, :p_cod_pais, :p_cod_comercio)";
+
+                        using (var insertCommand = new NpgsqlCommand(insertQuery, connection, transaction))
+                        {
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_codigo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCodigo });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_loc_numero", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.LocNumero });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_nombre", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajNombre ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_nom", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajNom ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_apellidos", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajApellidos ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_rut", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajRut ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_tipo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipo ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_tipo_contrato", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipoContrato ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_tipo_docid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipoDocId ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_codigo_emp", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCodigoEmp ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_estado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajEstado ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_activo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajActivo ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_login", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajLogin ?? (object)DBNull.Value });
+
+                            // Manejo de fechas nulas
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_fcreacion", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.CajFcreacion ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_fbaja", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.CajFbaja ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_factualiza", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.Cajfactualiza ?? (object)DBNull.Value });
+
+                            // Resto de campos
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_usuario_crea", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioCrea ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_usuario_baja", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioBaja ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_usuario_actualiza", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioActualiza ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_corr_extranjero", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCorrExtranjero ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_rendauto", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajRendAuto ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_caj_carga", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCarga ?? (object)DBNull.Value });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_cod_pais", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodPais });
+                            insertCommand.Parameters.Add(new NpgsqlParameter(":p_cod_comercio", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodComercio });
+
+                            await insertCommand.ExecuteNonQueryAsync();
+                        }
+
+                        // Si todo fue bien, hacer commit de la transacción
+                        await transaction.CommitAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Si hubo un error, revertir la transacción
+                        await transaction.RollbackAsync();
+                        throw new Exception("Error en el procesamiento del cajero: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+
     }
 }

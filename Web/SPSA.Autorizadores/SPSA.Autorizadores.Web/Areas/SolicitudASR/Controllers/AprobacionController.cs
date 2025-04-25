@@ -53,12 +53,13 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
 			return Json(response);
 		}
 
-
 		[HttpPost]
 		public async Task<JsonResult> Aprobar(AprobarSolicitudCommand request)
 		{
 			request.UsuAutoriza = WebSession.Login;
 			request.UsuCreacion = WebSession.Login;
+			//request.CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa;
+			//request.CodLocal = WebSession.Local;
 			request.IndActivo = "S";
 			request.FlgEnvio = "N";
 			var response = await _mediator.Send(request);
