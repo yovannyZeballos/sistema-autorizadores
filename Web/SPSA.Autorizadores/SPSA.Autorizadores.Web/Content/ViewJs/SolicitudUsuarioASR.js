@@ -117,13 +117,12 @@ var SolicitudUsuarioASR = function () {
                 var model = {
                     CodLocalAlterno: rowData.CodLocalAlterno,
                     CodColaborador: rowData.CodigoOfisis,
-                    //TipUsuario: rowData.TipoUsuario,
-                    TipUsuario: 'A',
+                    TipUsuario: rowData.TipUsuario,
                     TipColaborador: 'I',
                     UsuSolicita: $("#txtUsuario").val(),
                     Motivo: ''
                 };
-
+                console.log(rowData);
                 solicitudesCrear.push(crearSolicitud(model));
             });
 
@@ -158,7 +157,7 @@ var SolicitudUsuarioASR = function () {
                     UsuSolicita: $("#txtUsuario").val(),
                     Motivo: ''
                 };
-
+                console.log(rowData);
                 solicitudesCrear.push(crearSolicitud(model));
             });
 

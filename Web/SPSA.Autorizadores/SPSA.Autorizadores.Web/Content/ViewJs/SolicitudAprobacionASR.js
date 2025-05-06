@@ -441,17 +441,15 @@ var AprobacionASR = function () {
             return;
         }
 
-        let numSolicitudes = [];
         let solicitudes = [];
 
         registrosSeleccionados.map((item) => {
-            numSolicitudes.push(item.NumSolicitud);
-            console.log(item);
-            // Aquí vamos a crear los objetos SolicitudUsuarioDTO
             solicitudes.push({
                 NumSolicitud: item.NumSolicitud,
                 CodLocal: item.CodLocal,
                 CodLocalAlterno: item.CodLocalAlterno,
+                CodPais: item.CodPais,
+                CodComercio: item.CodComercio,
                 DePuesTrab: item.DePuesTrab,
                 IndAprobado: item.IndAprobado,
                 NoApelMate: item.NoApelMate,
@@ -459,12 +457,11 @@ var AprobacionASR = function () {
                 NoTrab: item.NoTrab,
                 NomLocal: item.NomLocal,
                 NumDocumentoIdentidad: item.NumDocumentoIdentidad,
-                TipoUsuario: item.TipoUsuario,
+                TipUsuario: item.TipUsuario,
             });
         });
 
         const request = {
-            NumSolicitudes: numSolicitudes,
             Solicitudes: solicitudes,
             TipoUsuario: $('input[name="tipoUsuario"]:checked').val(),
         }
