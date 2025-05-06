@@ -58,8 +58,6 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
 		{
 			request.UsuAutoriza = WebSession.Login;
 			request.UsuCreacion = WebSession.Login;
-			//request.CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa;
-			//request.CodLocal = WebSession.Local;
 			request.IndActivo = "S";
 			request.FlgEnvio = "N";
 			var response = await _mediator.Send(request);

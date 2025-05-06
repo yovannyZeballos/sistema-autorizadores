@@ -10,20 +10,17 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task<List<ASR_UsuarioListado>> ListarUsuarios(string usuarioLogin, string codLocal, 
             string usuAprobacion, string tipAccion, string indAprobado, string CodEmpresa,
             int numeroPagina, int tamañoPagina);
-		Task<List<ASR_UsuarioListado>> ListarSolicitudes(string usuarioLogin, string tipoUsuario, string CodEmpresa,
-			int numeroPagina, int tamañoPagina);
+		Task<List<ASR_UsuarioListado>> ListarSolicitudes(string usuarioLogin, string tipoUsuario, string CodEmpresa, int numeroPagina, int tamañoPagina);
         Task ActualizarMotivoRechazo(int numSolicitud, string motivo, string estado);
         Task AprobarSolicitud(ASR_Usuario usuario);
 		Task<List<ASR_UsuarioArchivo>> ListarArchivos(string tipUsuario);
 		Task ActualizarFlagEnvio(long numSolicitud, string flagEnvio);
 
+        Task<List<int>> ObtenerLocalesPorProcesarAsync(int codPais, int codComercio);
+        Task<List<ASR_CajeroPaso>> ObtenerCajerosPorProcesarAsync(int codPais, int codComercio, int codLocal);
+        Task ActualizarFlagProcesadoAsync(int codPais, int codComercio, int codLocal, string codCajero, string flagProcesado);
 
-        Task<List<int>> ObtenerLocalesPorProcesar(int codEmpresa);
-        Task<List<ASR_CajeroPaso>> ObtenerCajerosPorProcesar(int codEmpresa, int codLocal);
-        Task ActualizarFlagProcesado(int codComercio, int codLocal, string codCajero, string flagProcesado);
-        Task InsertarCajeroPaso(ASR_CajeroPaso cajero);
-
-        Task ProcesarCajero(int codComercio, int codLocal, string codCajero, string flagProcesado, ASR_CajeroPaso cajero);
+        Task NuevoCajeroAsync(ASR_CajeroPaso cajero);
 
     }
 }

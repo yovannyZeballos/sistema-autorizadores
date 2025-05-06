@@ -1,4 +1,5 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿using Microsoft.Extensions.Logging;
+using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
@@ -6,6 +7,7 @@ using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
@@ -142,16 +144,39 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
                         await command.ExecuteNonQueryAsync();
 
-                        OracleClob clob = (OracleClob)command.Parameters["resultado"].Value;
-                        string resultado = clob != null ? clob.Value : string.Empty;
+                        string resultado = string.Empty;
+                        var value = command.Parameters["resultado"].Value;
+
+                        if (value != DBNull.Value && value is OracleClob clob)
+                        {
+                            try
+                            {
+                                if (!clob.IsNull)
+                                {
+                                    resultado = clob.Value;
+                                }
+                            }
+                            finally
+                            {
+                                clob.Dispose(); // Libera recursos asociados al CLOB
+                            }
+                        }
 
                         return resultado;
                     }
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                string mensajeError = $"[ERROR Generar Archivo] Local: {codigoLocal}, TipoSO: {tipoSO}, Error: {ex}";
+
+                if (!EventLog.SourceExists("SGP_Autorizadores"))
+                {
+                    EventLog.CreateEventSource("SGP_Autorizadores", "Application");
+                }
+
+                EventLog.WriteEntry("SGP_Autorizadores", mensajeError, EventLogEntryType.Error);
                 return string.Empty;
             }
         }

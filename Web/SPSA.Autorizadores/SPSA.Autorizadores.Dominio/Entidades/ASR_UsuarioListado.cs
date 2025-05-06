@@ -7,6 +7,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 		public int NumSolicitud { get; set; }
 		public string CodLocal { get; set; }
 		public string CodLocalAlterno { get; set; }
+		public int CodPais { get; set; }
+		public int CodComercio { get; set; }
 		public string NomLocal { get; set; }
 		public string CodColaborador { get; set; }
 		public string CodUsuarioAsr { get; set; }
