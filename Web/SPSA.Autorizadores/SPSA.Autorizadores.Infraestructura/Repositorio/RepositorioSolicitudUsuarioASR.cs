@@ -7,6 +7,7 @@ using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
@@ -26,11 +27,11 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                using (var command = new NpgsqlCommand(@"CALL ""SGP"".""SP_ASR_ACTUALIZAR_MOTIVO_RECHAZO""(@P_NUM_SOLICITUD, @P_MOTIVO, @P_IND_APROBADO)", connection))
+                using (var command = new NpgsqlCommand(@"CALL ""SGP"".""sp_asr_actualizar_motivo_rechazo""(@p_num_solicitud, @p_motivo, @p_ind_aprobado)", connection))
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@P_NUM_SOLICITUD", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = numSolicitud });
-                    command.Parameters.Add(new NpgsqlParameter("@P_MOTIVO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivo });
-                    command.Parameters.Add(new NpgsqlParameter("@P_IND_APROBADO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = estado });
+                    command.Parameters.Add(new NpgsqlParameter("@p_num_solicitud", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = numSolicitud });
+                    command.Parameters.Add(new NpgsqlParameter("@p_motivo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = motivo });
+                    command.Parameters.Add(new NpgsqlParameter("@p_ind_aprobado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = estado });
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -43,16 +44,16 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                using (var command = new NpgsqlCommand(@"CALL ""SGP"".""SP_ASR_APROBAR_SOLICITUD""(@P_NUM_SOLICITUD, @P_IND_ACTIVO, @P_FLG_ENVIO, @P_FEC_ENVIO, @P_USU_AUTORIZA, @P_USU_CREACION, @P_USU_ELIMINA, @P_FEC_ELIMINA)", connection))
+                using (var command = new NpgsqlCommand(@"CALL ""SGP"".""sp_asr_aprobar_solicitud""(@p_num_solicitud, @p_ind_activo, @p_flg_envio, @p_fec_envio, @p_usu_autoriza, @p_usu_creacion, @p_usu_elimina, @p_fec_elimina)", connection))
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@P_NUM_SOLICITUD", NpgsqlTypes.NpgsqlDbType.Integer) { Value = usuario.NumSolicitud });
-                    command.Parameters.Add(new NpgsqlParameter("@P_IND_ACTIVO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.IndActivo ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("@P_FLG_ENVIO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.FlgEnvio ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("@P_FEC_ENVIO", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)usuario.FecEnvio ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("@P_USU_AUTORIZA", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.UsuAutoriza ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("@P_USU_CREACION", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.UsuCreacion ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("@P_USU_ELIMINA", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.UsuElimina ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("@P_FEC_ELIMINA", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)usuario.FecElimina ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_num_solicitud", NpgsqlTypes.NpgsqlDbType.Integer) { Value = usuario.NumSolicitud });
+                    command.Parameters.Add(new NpgsqlParameter("@p_ind_activo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.IndActivo ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_flg_envio", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.FlgEnvio ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_fec_envio", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)usuario.FecEnvio ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_usu_autoriza", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.UsuAutoriza ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_usu_creacion", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.UsuCreacion ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_usu_elimina", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)usuario.UsuElimina ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("@p_fec_elimina", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)usuario.FecElimina ?? DBNull.Value });
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -69,15 +70,15 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 await connection.OpenAsync();
 
                 string query = @"
-                    SELECT * FROM ""SGP"".""SF_ASR_SOLICITUD_USUARIO_LISTAR""(@P_USUARIO_LOGIN, @P_TIP_USUARIO, @P_COD_EMPRESA, @P_PAGE_NUMBER, @P_PAGE_SIZE)";
+                    SELECT * FROM ""SGP"".""sf_asr_solicitud_usuario_listar""(@p_usuario_login, @p_tip_usuario, @p_cod_empresa, @p_page_number, @p_page_size)";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@P_USUARIO_LOGIN", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuarioLogin });
-                    command.Parameters.Add(new NpgsqlParameter("@P_TIP_USUARIO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = tipoUsuario });
-                    command.Parameters.Add(new NpgsqlParameter("@P_COD_EMPRESA", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = CodEmpresa });
-                    command.Parameters.Add(new NpgsqlParameter("@P_PAGE_NUMBER", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numeroPagina });
-                    command.Parameters.Add(new NpgsqlParameter("@P_PAGE_SIZE", NpgsqlTypes.NpgsqlDbType.Integer) { Value = tamañoPagina });
+                    command.Parameters.Add(new NpgsqlParameter("@p_usuario_login", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuarioLogin });
+                    command.Parameters.Add(new NpgsqlParameter("@p_tip_usuario", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = tipoUsuario });
+                    command.Parameters.Add(new NpgsqlParameter("@p_cod_empresa", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = CodEmpresa });
+                    command.Parameters.Add(new NpgsqlParameter("@p_page_number", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numeroPagina });
+                    command.Parameters.Add(new NpgsqlParameter("@p_page_size", NpgsqlTypes.NpgsqlDbType.Integer) { Value = tamañoPagina });
 
                     using (var dr = await command.ExecuteReaderAsync())
                     {
@@ -122,18 +123,18 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 await connection.OpenAsync();
 
                 string query = @"
-                    SELECT * FROM ""SGP"".""SF_ASR_USUARIO_LISTAR""(@P_USUARIO_LOGIN, @P_COD_LOCAL, @P_USU_APROBACION, @P_TIP_ACCION, @P_IND_APROBADO, @P_COD_EMPRESA, @P_PAGE_NUMBER, @P_PAGE_SIZE)";
+                    SELECT * FROM ""SGP"".""sf_asr_usuario_listar""(@p_usuario_login, @p_cod_local, @p_usu_aprobacion, @p_tip_accion, @p_ind_aprobado, @p_cod_empresa, @p_page_number, @p_page_size)";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@P_USUARIO_LOGIN", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuarioLogin });
-                    command.Parameters.Add(new NpgsqlParameter("@P_COD_LOCAL", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = codLocal });
-                    command.Parameters.Add(new NpgsqlParameter("@P_USU_APROBACION", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuAprobacion });
-                    command.Parameters.Add(new NpgsqlParameter("@P_TIP_ACCION", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = tipAccion });
-                    command.Parameters.Add(new NpgsqlParameter("@P_IND_APROBADO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = indAprobado });
-                    command.Parameters.Add(new NpgsqlParameter("@P_COD_EMPRESA", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = CodEmpresa });
-                    command.Parameters.Add(new NpgsqlParameter("@P_PAGE_NUMBER", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numeroPagina });
-                    command.Parameters.Add(new NpgsqlParameter("@P_PAGE_SIZE", NpgsqlTypes.NpgsqlDbType.Integer) { Value = tamañoPagina });
+                    command.Parameters.Add(new NpgsqlParameter("@p_usuario_login", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuarioLogin });
+                    command.Parameters.Add(new NpgsqlParameter("@p_cod_local", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = codLocal });
+                    command.Parameters.Add(new NpgsqlParameter("@p_usu_aprobacion", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuAprobacion });
+                    command.Parameters.Add(new NpgsqlParameter("@p_tip_accion", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = tipAccion });
+                    command.Parameters.Add(new NpgsqlParameter("@p_ind_aprobado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = indAprobado });
+                    command.Parameters.Add(new NpgsqlParameter("@p_cod_empresa", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = CodEmpresa });
+                    command.Parameters.Add(new NpgsqlParameter("@p_page_number", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numeroPagina });
+                    command.Parameters.Add(new NpgsqlParameter("@p_page_size", NpgsqlTypes.NpgsqlDbType.Integer) { Value = tamañoPagina });
 
                     using (var dr = await command.ExecuteReaderAsync())
                     {
@@ -189,11 +190,11 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
                 if (tipUsuario == "A")
                 {
-                    query = @"SELECT * FROM ""SGP"".""SF_ASR_GENERAR_ARCHIVO_AUTORIZADOR""()";
+                    query = @"SELECT * FROM ""SGP"".""sf_asr_generar_archivo_autorizador""()";
                 }
                 else
                 {
-                    query = @"SELECT * FROM ""SGP"".""SF_ASR_GENERAR_ARCHIVO_CAJERO""()";
+                    query = @"SELECT * FROM ""SGP"".""sf_asr_generar_archivo_cajero""()";
                 }
 
                 using (var command = new NpgsqlCommand(query, connection))
@@ -224,10 +225,10 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                using (var command = new NpgsqlCommand(@"CALL ""SGP"".""SP_ASR_ACTUALIZAR_FLG_ENVIO""(@P_NUM_SOLICITUD, @P_FLG_ENVIO)", connection))
+                using (var command = new NpgsqlCommand(@"CALL ""SGP"".""sp_asr_actualizar_flg_envio""(@p_num_solicitud, @p_flg_envio)", connection))
                 {
-                    command.Parameters.Add(new NpgsqlParameter("@P_NUM_SOLICITUD", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numSolicitud });
-                    command.Parameters.Add(new NpgsqlParameter("@P_FLG_ENVIO", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = flagEnvio });
+                    command.Parameters.Add(new NpgsqlParameter("@p_num_solicitud", NpgsqlTypes.NpgsqlDbType.Integer) { Value = numSolicitud });
+                    command.Parameters.Add(new NpgsqlParameter("@p_flg_envio", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = flagEnvio });
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -354,19 +355,26 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         public async Task NuevoCajeroAsync(ASR_CajeroPaso cajero)
         {
-            var usuario = ConstruirUsuario(cajero.CajUsuarioCrea);
+            try
+            {
+                var usuario = ConstruirUsuario(cajero.CajUsuarioCrea);
 
-            // 1) Elimina paso previo
-            await EliminarCajeroPaso(cajero.CajRut);
+                // 1. Elimina paso previo
+                await EliminarCajeroPaso(cajero.CajRut);
 
-            // 2) Inserta paso
-            await InsertarCajeroPaso(cajero);
+                // 2. Inserta paso
+                await InsertarCajeroPaso(cajero);
 
-            // 3) Importa cajeros
-            var (ret, err) = await CallImportarCajerosAsync(cajero.LocNumero, usuario);
-            if (ret < 0)
-                throw new ApplicationException($"Importar cajeros falló: {err}");
-
+                // 3. Importa cajeros
+                var (ret, err) = await CallImportarCajerosAsync(cajero.LocNumero, usuario);
+                if (ret < 0)
+                    throw new ApplicationException($"Importar cajeros falló: {err}");
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Importar cajeros falló: {ex.Message}");
+            }
+            
         }
 
         private string ConstruirUsuario(string codUsuario)

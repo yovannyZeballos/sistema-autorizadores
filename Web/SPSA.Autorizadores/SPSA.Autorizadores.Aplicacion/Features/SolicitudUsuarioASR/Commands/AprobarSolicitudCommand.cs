@@ -160,7 +160,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 
                         var contenido = $"{estado},{codigoLocal},CAJERO,{cajero.CajNom},{cajero.CajApellidos},{estado},{tipoDoc},{corrExt}";
                         writer.WriteLine(contenido);
-                        //await contexto.RepositorioSolicitudUsuarioASR.ActualizarFlagProcesadoAsync(cajero.CodPais,  cajero.CodComercio, cajero.LocNumero, cajero.CajCodigo, "S");
+                        await contexto.RepositorioSolicitudUsuarioASR.ActualizarFlagProcesadoAsync(cajero.CodPais,  cajero.CodComercio, cajero.LocNumero, cajero.CajCodigo, "S");
                     }
                 }
                 respuesta.Mensaje += $"Archivo cajero {nombreArchivo} generado | ";
