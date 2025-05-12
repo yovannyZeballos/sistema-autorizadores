@@ -8,6 +8,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Types;
+using System.Diagnostics;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
@@ -57,49 +58,45 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
         {
             using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                using(var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                try
                 {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = _commandTimeout
-                })
-                {   
-                    await connection.OpenAsync();
+                    using (var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure,
+                        CommandTimeout = _commandTimeout
+                    })
+                    {
+                        await connection.OpenAsync();
 
-                    command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                    command.Parameters.Add("resultado", OracleDbType.Clob, ParameterDirection.Output);
+                        command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+                        command.Parameters.Add("resultado", OracleDbType.Clob, ParameterDirection.Output);
 
-                    await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync();
 
-                    OracleClob clob = (OracleClob)command.Parameters["resultado"].Value;
-                    string resultado = clob != null ? clob.Value : string.Empty;
+                        var value = command.Parameters["resultado"].Value;
 
-                    return resultado;
+                        if (value != DBNull.Value && value is OracleClob clob)
+                        {
+                            using (clob) // <-- Esto llama Dispose automáticamente
+                            {
+                                return clob.IsNull ? string.Empty : clob.Value;
+                            }
+                        }
+                        return string.Empty;
+                    }
                 }
-
-                //var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
-                //{
-                //    CommandType = CommandType.StoredProcedure,
-                //    CommandTimeout = _commandTimeout
-                //};
-
-
-                //await command.Connection.OpenAsync();
-
-                //command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                //command.Parameters.Add("resultado", OracleDbType.Varchar2, 10000, "", ParameterDirection.Output);
-
-                //await command.ExecuteNonQueryAsync();
-
-                //var resultado = command.Parameters["resultado"].Value.ToString();
-
-                //connection.Close();
-                //connection.Dispose();
-
-                //return resultado;
-
+                catch (OracleException ex) when (ex.Number == 29283)
+                {
+                    OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ORA-29283], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ERROR GenerarArchivo], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
             }
-
-
         }
 
         public async Task<DataTable> ListarColaboradores(string codigoLocal, string codigoEmpresa)
@@ -322,33 +319,50 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 		public async Task<string> GenerarArchivoLocal(decimal codLocal,string tipoSO)
 		{
-			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
-			{
-				var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
-				{
-					CommandType = CommandType.StoredProcedure,
-					CommandTimeout = _commandTimeout
-				};
-				
-				await command.Connection.OpenAsync();
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            {
+                try
+                {
+                    using (var command = new OracleCommand("PKG_SGC_CAJERO.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure,
+                        CommandTimeout = _commandTimeout
+                    })
+                    {
+                        await connection.OpenAsync();
 
-				command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-				command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
-				command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+                        command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+                        command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
+                        command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
 
-				await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync();
 
-				var resultado = command.Parameters["resultado"].Value.ToString();
+                        var value = command.Parameters["resultado"].Value;
 
-				connection.Close();
-				connection.Dispose();
+                        if (value != DBNull.Value && value is OracleClob clob)
+                        {
+                            using (clob) // <-- Esto llama Dispose automáticamente
+                            {
+                                return clob.IsNull ? string.Empty : clob.Value;
+                            }
+                        }
 
-				return resultado;
-
-			}
-
-
-		}
+                        return string.Empty;
+                    }
+                }
+                catch (OracleException ex) when (ex.Number == 29283)
+                {
+                    OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ORA-29283], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ERROR GenerarArchivo], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
+            }
+        }
 
 	}
 }

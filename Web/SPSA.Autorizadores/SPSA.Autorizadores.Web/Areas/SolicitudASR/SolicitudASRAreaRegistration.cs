@@ -14,11 +14,17 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
-            context.MapRoute(
-                "SolicitudASR_default",
-                "SolicitudASR/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
-        }
+			context.MapRoute(
+				"SolicitudASR_default",
+				"SolicitudASR/{controller}/{action}/{id}",
+				new { controller = "SolicitudUsuario", action = "Index", id = UrlParameter.Optional }
+			);
+
+			context.MapRoute(
+				"AprobacionASR_default",
+				"SolicitudASR/{controller}/{action}/{id}",
+				new { controller = "Aprobacion", action = "Index", id = UrlParameter.Optional }
+			);
+		}
     }
 }

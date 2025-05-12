@@ -34,7 +34,7 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> ListarColaboradores(bool todos)
+		public async Task<ActionResult> ListarColaboradores(bool todos)
 		{
 			string local = "0";
 
@@ -43,8 +43,10 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 
 			var empresa = WebSession.CodigoEmpresa;
 			var response = await _mediator.Send(new ListarColaboradoresQuery { CodigoLocal = local, CodigoEmpresa = empresa });
-			return Json(response);
-		}
+			//return Json(response);
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            return Content(json, "application/json");
+        }
 
 		[HttpPost]
 		public async Task<JsonResult> AsignarCajero(List<CajeroDTO> cajeros)

@@ -378,11 +378,16 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             //builder.RegisterType<ActualizarMaeColaboradorExtHandler>().As<IRequestHandler<ActualizarMaeColaboradorExtCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarSolicitudUsuarioHandler>().As<IRequestHandler<EliminarSolicitudUsuarioCommand, RespuestaComunDTO>>();
             builder.RegisterType<DescargarSolicitudesUsuarioHandler>().As<IRequestHandler<DescargarSolicitudesUsuarioCommand, DescargarMaestroDTO>>();
-            //builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
-            #endregion
+			//builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
+			builder.RegisterType<ListarUsuariosHandler>().As<IRequestHandler<ListarUsuariosQuery, GenericResponseDTO<PagedResult<ASR_UsuarioListado>>>>();
+			builder.RegisterType<ListarSolicitudesSolicitadasHandler>().As<IRequestHandler<ListarSolicitudesSolicitadasQuery, GenericResponseDTO<PagedResult<ASR_UsuarioListado>>>>();
+			builder.RegisterType<ActualizarMotivoRechazoHandler>().As<IRequestHandler<ActualizarMotivoRechazoCommand, RespuestaComunDTO>>();
+			builder.RegisterType<AprobarSolicitudHandler>().As<IRequestHandler<AprobarSolicitudCommand, RespuestaComunDTO>>();
+
+			#endregion
 
 
-            base.Load(builder);
+			base.Load(builder);
 		}
 	}
 }
