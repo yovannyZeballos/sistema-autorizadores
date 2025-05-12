@@ -56,9 +56,9 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         public async Task<string> GenerarArchivo(string tipoSO)
         {
-            try
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+                try
                 {
                     using (var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO", connection)
                     {
@@ -73,39 +73,29 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
                         await command.ExecuteNonQueryAsync();
 
-                        string resultado = string.Empty;
                         var value = command.Parameters["resultado"].Value;
 
                         if (value != DBNull.Value && value is OracleClob clob)
                         {
-                            try
+                            using (clob) // <-- Esto llama Dispose automáticamente
                             {
-                                if (!clob.IsNull)
-                                {
-                                    resultado = clob.Value;
-                                }
-                            }
-                            finally
-                            {
-                                clob.Dispose(); // Libera recursos asociados al CLOB
+                                return clob.IsNull ? string.Empty : clob.Value;
                             }
                         }
-
-                        return resultado;
+                        return string.Empty;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                string mensajeError = $"[ERROR Generar Archivo] Error: {ex}";
-
-                if (!EventLog.SourceExists("SGP_Autorizadores"))
+                catch (OracleException ex) when (ex.Number == 29283)
                 {
-                    EventLog.CreateEventSource("SGP_Autorizadores", "Application");
+                    OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ORA-29283], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
                 }
-
-                EventLog.WriteEntry("SGP_Autorizadores", mensajeError, EventLogEntryType.Error);
-                return string.Empty;
+                catch (Exception ex)
+                {
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ERROR GenerarArchivo], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
             }
         }
 
@@ -329,33 +319,50 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
 		public async Task<string> GenerarArchivoLocal(decimal codLocal,string tipoSO)
 		{
-			using (var connection = new OracleConnection(CadenaConexionAutorizadores))
-			{
-				var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
-				{
-					CommandType = CommandType.StoredProcedure,
-					CommandTimeout = _commandTimeout
-				};
-				
-				await command.Connection.OpenAsync();
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+            {
+                try
+                {
+                    using (var command = new OracleCommand("PKG_SGC_CAJERO.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure,
+                        CommandTimeout = _commandTimeout
+                    })
+                    {
+                        await connection.OpenAsync();
 
-				command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-				command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
-				command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+                        command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+                        command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
+                        command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
 
-				await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync();
 
-				var resultado = command.Parameters["resultado"].Value.ToString();
+                        var value = command.Parameters["resultado"].Value;
 
-				connection.Close();
-				connection.Dispose();
+                        if (value != DBNull.Value && value is OracleClob clob)
+                        {
+                            using (clob) // <-- Esto llama Dispose automáticamente
+                            {
+                                return clob.IsNull ? string.Empty : clob.Value;
+                            }
+                        }
 
-				return resultado;
-
-			}
-
-
-		}
+                        return string.Empty;
+                    }
+                }
+                catch (OracleException ex) when (ex.Number == 29283)
+                {
+                    OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ORA-29283], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    EventLog.WriteEntry("SGP_Autorizadores", $"[ERROR GenerarArchivo], Error: {ex}", EventLogEntryType.Error);
+                    return string.Empty;
+                }
+            }
+        }
 
 	}
 }

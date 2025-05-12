@@ -126,9 +126,9 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
         public async Task<string> GenerarArchivo(string codigoLocal, string tipoSO)
         {
-            try
+            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
             {
-                using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+                try
                 {
                     using (var command = new OracleCommand("PKG_SGC_CAJERO.SP_CAJERO_GENERA_ARCHIVO", connection)
                     {
@@ -144,40 +144,37 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
                         await command.ExecuteNonQueryAsync();
 
-                        string resultado = string.Empty;
                         var value = command.Parameters["resultado"].Value;
 
                         if (value != DBNull.Value && value is OracleClob clob)
                         {
-                            try
+                            using (clob) // <-- Esto llama Dispose automáticamente
                             {
-                                if (!clob.IsNull)
-                                {
-                                    resultado = clob.Value;
-                                }
-                            }
-                            finally
-                            {
-                                clob.Dispose(); // Libera recursos asociados al CLOB
+                                return clob.IsNull ? string.Empty : clob.Value;
                             }
                         }
 
-                        return resultado;
+                        return string.Empty;
                     }
-
                 }
-            }
-            catch (Exception ex)
-            {
-                string mensajeError = $"[ERROR Generar Archivo] Local: {codigoLocal}, TipoSO: {tipoSO}, Error: {ex}";
-
-                if (!EventLog.SourceExists("SGP_Autorizadores"))
+                catch (OracleException ex) when (ex.Number == 29283)
                 {
-                    EventLog.CreateEventSource("SGP_Autorizadores", "Application");
-                }
+                    OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
 
-                EventLog.WriteEntry("SGP_Autorizadores", mensajeError, EventLogEntryType.Error);
-                return string.Empty;
+                    EventLog.WriteEntry("SGP_Autorizadores",
+                        $"[ORA-29283] Local: {codigoLocal}, TipoSO: {tipoSO}, Error: {ex}",
+                        EventLogEntryType.Error);
+
+                    return string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    EventLog.WriteEntry("SGP_Autorizadores",
+                        $"[ERROR GenerarArchivo] Local: {codigoLocal}, TipoSO: {tipoSO}, Error: {ex}",
+                        EventLogEntryType.Error);
+
+                    return string.Empty;
+                }
             }
         }
 
