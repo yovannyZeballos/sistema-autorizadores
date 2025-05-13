@@ -52,5 +52,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMaeColaboradorInt RepositorioMaeColaboradorInt { get; }
         IRepositorioMaePuesto RepositorioMaePuesto { get; }
         IRepositorioSolicitudUsuarioASR RepositorioSolicitudUsuarioASR { get; }
+        IRepositorioCComSolicitudCab RepositorioCComSolicitudCab { get; }
 	}
 }

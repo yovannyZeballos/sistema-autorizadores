@@ -323,6 +323,8 @@
     <Compile Include="Areas\SolicitudASR\Controllers\AprobacionController.cs" />
     <Compile Include="Areas\SolicitudASR\Controllers\SolicitudUsuarioController.cs" />
     <Compile Include="Areas\SolicitudASR\SolicitudASRAreaRegistration.cs" />
+    <Compile Include="Areas\SolicitudCodComercio\Controllers\AdministrarSolicitudComercioController.cs" />
+    <Compile Include="Areas\SolicitudCodComercio\SolicitudCodComercioAreaRegistration.cs" />
     <Compile Include="Areas\Ubigeos\Controllers\UbigeoController.cs" />
     <Compile Include="Areas\Ubigeos\UbigeosAreaRegistration.cs" />
     <Compile Include="AutofacConfig.cs" />
@@ -2378,6 +2380,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
@@ -2922,6 +2925,10 @@
     <Content Include="Content\reportes\cierre-cuadratura-spsa.mrt" />
     <Content Include="Areas\Dashboards\Views\AdministrarDashboard\BctVsCt.cshtml" />
     <Content Include="Content\reportes\mon-bct-vs-ct.mrt" />
+    <Content Include="Areas\SolicitudCodComercio\Views\web.config" />
+    <Content Include="Areas\SolicitudCodComercio\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\SolicitudCodComercio\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\SolicitudCodComercio\Views\AdministrarSolicitudComercio\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2975,6 +2982,7 @@
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
     <Folder Include="Areas\Reportes\Data\" />
     <Folder Include="Areas\SolicitudASR\Data\" />
+    <Folder Include="Areas\SolicitudCodComercio\Data\" />
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />

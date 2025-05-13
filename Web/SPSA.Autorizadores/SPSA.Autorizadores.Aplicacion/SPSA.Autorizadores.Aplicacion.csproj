@@ -573,6 +573,11 @@
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarEmpresasQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ListarUsuarioQuery.cs" />
     <Compile Include="Features\Seguridad\Usuario\Queries\ObtenerUsuarioQuery.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\ListarSolicitudCComercioCabDTO.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\MaeCodComercioDTO.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioCabDTO.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioDetDTO.cs" />
+    <Compile Include="Features\SolicitudCodComercio\Queries\ListarSolicitudCComercioCabQuery.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\ActualizarMotivoRechazoCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\CrearSolicitudUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\DescargarSolicitudesUsuarioCommand.cs" />
@@ -633,6 +638,7 @@
   <ItemGroup>
     <Folder Include="Features\ColaboradoresInt\Commands\" />
     <Folder Include="Features\Reportes\DTOs\" />
+    <Folder Include="Features\SolicitudCodComercio\Commands\" />
     <Folder Include="Features\TablasMae\Queries\" />
   </ItemGroup>
   <ItemGroup>

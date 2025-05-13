@@ -69,7 +69,8 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 						int pageNumber = 1,
 						int pageSize = 10,
 						Expression<Func<TEntidad, object>> orderBy = null,
-						bool ascending = true);
+						bool ascending = true,
+                        params Expression<Func<TEntidad, object>>[] includes);
 
         Task<int> ExecuteSqlCommandAsync(string sql, params object[] parameters);
 

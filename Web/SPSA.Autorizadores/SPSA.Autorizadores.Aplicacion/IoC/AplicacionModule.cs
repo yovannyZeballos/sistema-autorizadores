@@ -61,6 +61,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries;
@@ -384,10 +386,14 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ActualizarMotivoRechazoHandler>().As<IRequestHandler<ActualizarMotivoRechazoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<AprobarSolicitudHandler>().As<IRequestHandler<AprobarSolicitudCommand, RespuestaComunDTO>>();
 
-			#endregion
+            #endregion
+
+            #region SOLICITUD_COD_COMERCIO
+            builder.RegisterType<ListarSolicitudCComercioCabHandler>().As<IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>>>();
+            #endregion
 
 
-			base.Load(builder);
+            base.Load(builder);
 		}
 	}
 }
