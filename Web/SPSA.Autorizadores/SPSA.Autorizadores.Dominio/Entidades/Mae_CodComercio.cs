@@ -9,6 +9,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string CodComercio { get; set; }
         public string NomCanalVta { get; set; }
         public string DesOperador { get; set; }
+        public string NroCaso { get; set; }
+        public DateTime? FecComercio { get; set; }
         public string IndActiva { get; set; }
         public DateTime? FecCreacion { get; set; }
         public string UsuCreacion { get; set; }

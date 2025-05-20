@@ -13,6 +13,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 
             Property(det => det.NroSolicitud).HasColumnName("NRO_SOLICITUD");
             Property(det => det.CodLocalAlterno).HasColumnName("COD_LOCAL_ALTERNO");
+            Property(det => det.TipEstado).HasColumnName("TIP_ESTADO");
             Property(det => det.FecCreacion).HasColumnName("FEC_CREACION");
             Property(det => det.UsuCreacion).HasColumnName("USU_CREACION");
             Property(det => det.FecModifica).HasColumnName("FEC_MODIFICA");

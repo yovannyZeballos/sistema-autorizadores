@@ -64,6 +64,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioSolicitudUsuarioASR = new RepositorioSolicitudUsuarioASR(this);
 
             RepositorioCComSolicitudCab = new RepositorioCComSolicitudCab(this);
+            RepositorioCComSolicitudDet = new RepositorioCComSolicitudDet(this);
+            RepositorioMaeCodComercio = new RepositorioMaeCodComercio(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -115,6 +117,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMaePuesto RepositorioMaePuesto { get; private set; }
 		public IRepositorioSolicitudUsuarioASR RepositorioSolicitudUsuarioASR { get; private set; }
 		public IRepositorioCComSolicitudCab RepositorioCComSolicitudCab { get; private set; }
+		public IRepositorioCComSolicitudDet RepositorioCComSolicitudDet { get; private set; }
+		public IRepositorioMaeCodComercio RepositorioMaeCodComercio { get; private set; }
 
 
 

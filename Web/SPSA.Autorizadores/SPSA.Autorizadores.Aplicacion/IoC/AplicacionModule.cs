@@ -61,6 +61,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
@@ -390,7 +391,12 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
             #region SOLICITUD_COD_COMERCIO
             builder.RegisterType<ListarSolicitudCComercioCabHandler>().As<IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>>>();
+            builder.RegisterType<ImportarSolicitudCodComercioHandler>().As<IRequestHandler<ImportarSolicitudCodComercioCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<ImportarMaeLocalComercioHandler>().As<IRequestHandler<ImportarMaeLocalComercioCommand, RespuestaComunExcelDTO>>();
+            builder.RegisterType<CrearEditarMaeCodComercioHandler>().As<IRequestHandler<CrearEditarMaeCodComercioCommand, RespuestaComunDTO>>();
             #endregion
+
+
 
 
             base.Load(builder);

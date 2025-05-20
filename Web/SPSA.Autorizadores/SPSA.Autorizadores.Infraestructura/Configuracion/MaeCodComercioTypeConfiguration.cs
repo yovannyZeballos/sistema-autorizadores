@@ -16,6 +16,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(loc => loc.CodComercio).HasColumnName("COD_COMERCIO");
             Property(loc => loc.NomCanalVta).HasColumnName("NOM_CANAL_VTA");
             Property(loc => loc.DesOperador).HasColumnName("DES_OPERADOR");
+            Property(loc => loc.NroCaso).HasColumnName("NRO_CASO");
+            Property(loc => loc.FecComercio).HasColumnName("FEC_COMERCIO");
             Property(loc => loc.IndActiva).HasColumnName("IND_ACTIVA");
             Property(loc => loc.FecCreacion).HasColumnName("FEC_CREACION");
             Property(loc => loc.UsuCreacion).HasColumnName("USU_CREACION");

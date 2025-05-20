@@ -7,16 +7,16 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-    public class RepositorioCComSolicitudCab : RepositorioGenerico<SGPContexto, CCom_SolicitudCab>, IRepositorioCComSolicitudCab
+    public class RepositorioCComSolicitudDet : RepositorioGenerico<SGPContexto, CCom_SolicitudDet>, IRepositorioCComSolicitudDet
     {
-        public RepositorioCComSolicitudCab(SGPContexto context) : base(context) { }
+        public RepositorioCComSolicitudDet(SGPContexto context) : base(context) { }
 
         public SGPContexto AppDBMyBDContext
         {
             get { return _contexto; }
         }
 
-        public Task<DataTable> ObtenerSolicitudCabPorEmpresaAsync(string codEmpresa)
+        public Task<DataTable> ObtenerSolicitudDetPorEmpresaAsync(string codEmpresa)
         {
             throw new NotImplementedException();
         }

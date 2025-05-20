@@ -180,9 +180,11 @@
     <Compile Include="IoC\InfraestructuraModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\RepositorioCComSolicitudCab.cs" />
+    <Compile Include="Repositorio\RepositorioCComSolicitudDet.cs" />
     <Compile Include="Repositorio\RepositorioInvKardex.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
+    <Compile Include="Repositorio\RepositorioMaeCodComercio.cs" />
     <Compile Include="Repositorio\RepositorioMaeColaboradorExt.cs" />
     <Compile Include="Repositorio\RepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\RepositorioMaeHorario.cs" />

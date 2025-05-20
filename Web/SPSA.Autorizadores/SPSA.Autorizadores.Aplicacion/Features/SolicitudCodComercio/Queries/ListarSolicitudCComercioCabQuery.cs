@@ -14,6 +14,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs;
 using System.Linq;
+using System.Data.Entity;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
 {
@@ -79,10 +80,41 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
                     predicado: predicate,
                     pageNumber: request.PageNumber,
                     pageSize: request.PageSize,
-                    orderBy: x => new { x.NroSolicitud},
-                    ascending: true,
+                    orderBy: x => new { x.NroSolicitud },
+                    ascending: false,
                     includes: cab => cab.Detalles.Select(det => det.Comercios)
                 );
+
+                var codLocales = pagedSolicitudes.Items
+                    .SelectMany(cab => cab.Detalles)
+                    .Select(det => det.CodLocalAlterno.ToString())
+                    .Distinct()
+                    .ToList();
+
+                var locales = await _contexto.RepositorioMaeLocal.Obtener(x => codLocales.Contains(x.CodLocalAlterno))
+                            .Join(_contexto.RepositorioMaeEmpresa.Obtener(),
+                                  loc => loc.CodEmpresa,
+                                  emp => emp.CodEmpresa,
+                                  (loc, emp) => new
+                                  {
+                                      loc.CodLocalAlterno,
+                                      loc.NomLocal,
+                                      emp.NomEmpresa
+                                  })
+                            .ToListAsync();
+
+                foreach (var cab in pagedSolicitudes.Items)
+                {
+                    foreach (var det in cab.Detalles)
+                    {
+                        var localData = locales.FirstOrDefault(l => l.CodLocalAlterno == det.CodLocalAlterno.ToString());
+                        if (localData != null)
+                        {
+                            det.NomLocal = localData.NomLocal;
+                            det.NomEmpresa = localData.NomEmpresa;
+                        }
+                    }
+                }
 
                 var mappedItems = _mapper.Map<List<SolicitudCComercioCabDTO>>(pagedSolicitudes.Items);
 
