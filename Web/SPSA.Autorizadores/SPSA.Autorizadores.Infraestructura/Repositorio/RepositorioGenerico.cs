@@ -59,10 +59,20 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                         int pageNumber = 1,
                         int pageSize = 10,
                         Expression<Func<TEntidad, object>> orderBy = null,
-                        bool ascending = true)
+                        bool ascending = true,
+                        params Expression<Func<TEntidad, object>>[] includes)
         {
             // Obtiene la consulta base
             IQueryable<TEntidad> query = _contexto.Set<TEntidad>();
+
+            // Aplicar Includes dinámicos
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
 
             // Aplica el predicado si se ha definido
             if (predicado != null)

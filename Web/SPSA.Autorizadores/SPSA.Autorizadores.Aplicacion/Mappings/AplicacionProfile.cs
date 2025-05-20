@@ -24,6 +24,8 @@ using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Sistema.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Seguridad.Usuario.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
@@ -233,11 +235,22 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 
             #region <--ASR_SOLICITUD_USUARIO-->
             CreateMap<ListarSolictudUsuarioDTO, ASR_SolicitudUsuario>().ReverseMap();
-            //CreateMap<ObtenerMaeColaboradorExtDTO, ASR_SolicitudUsuario>().ReverseMap();
-            //CreateMap<MaeColaboradorExtDTO, ASR_SolicitudUsuario>().ReverseMap();
             CreateMap<CrearSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
             CreateMap<EliminarSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
-            //CreateMap<ActualizarMaeColaboradorExtCommand, ASR_SolicitudUsuario>().ReverseMap();
+            #endregion
+
+            #region <--SOLICITUD_COD_COMERCIO-->
+            CreateMap<SolicitudCComercioCabDTO, CCom_SolicitudCab>().ReverseMap();
+            CreateMap<SolicitudCComercioDetDTO, CCom_SolicitudDet>().ReverseMap();
+            CreateMap<MaeCodComercioDTO, Mae_CodComercio>().ReverseMap();
+
+            CreateMap<CCom_SolicitudDet, SolicitudCComercioDetDTO>()
+                .ForMember(dest => dest.NomEmpresa, opt => opt.MapFrom(src => src.NomEmpresa))
+                .ForMember(dest => dest.NomLocal, opt => opt.MapFrom(src => src.NomLocal));
+
+            CreateMap<CrearEditarMaeCodComercioCommand, Mae_CodComercio>().ReverseMap();
+            //CreateMap<ActualizarMaeCodComercioCommand, Mae_CodComercio>().ReverseMap();
+
             #endregion
 
             CreateMap<MonCierreEOD, MonCierreEODHist>();
