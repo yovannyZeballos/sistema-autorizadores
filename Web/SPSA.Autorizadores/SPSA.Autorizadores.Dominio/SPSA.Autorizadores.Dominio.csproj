@@ -56,6 +56,8 @@
     <Compile Include="Entidades\Cajero.cs" />
     <Compile Include="Entidades\CajeroVolante.cs" />
     <Compile Include="Entidades\CaracteristicaCaja.cs" />
+    <Compile Include="Entidades\CCom_SolicitudCab.cs" />
+    <Compile Include="Entidades\CCom_SolicitudDet.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
     <Compile Include="Entidades\ElectronicJournal.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Entidades\MaeLocalAlterno.cs" />
     <Compile Include="Entidades\Mae_Caja.cs" />
     <Compile Include="Entidades\Mae_Cadena.cs" />
+    <Compile Include="Entidades\Mae_CodComercio.cs" />
     <Compile Include="Entidades\Mae_ColaboradorExt.cs" />
     <Compile Include="Entidades\Mae_ColaboradorInt.cs" />
     <Compile Include="Entidades\Mae_Empresa.cs" />

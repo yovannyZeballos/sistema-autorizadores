@@ -63,6 +63,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMaePuesto = new RepositorioMaePuesto(this);
             RepositorioSolicitudUsuarioASR = new RepositorioSolicitudUsuarioASR(this);
 
+            RepositorioCComSolicitudCab = new RepositorioCComSolicitudCab(this);
+            RepositorioCComSolicitudDet = new RepositorioCComSolicitudDet(this);
+            RepositorioMaeCodComercio = new RepositorioMaeCodComercio(this);
+
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
@@ -112,6 +116,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMaeColaboradorInt RepositorioMaeColaboradorInt { get; private set; }
 		public IRepositorioMaePuesto RepositorioMaePuesto { get; private set; }
 		public IRepositorioSolicitudUsuarioASR RepositorioSolicitudUsuarioASR { get; private set; }
+		public IRepositorioCComSolicitudCab RepositorioCComSolicitudCab { get; private set; }
+		public IRepositorioCComSolicitudDet RepositorioCComSolicitudDet { get; private set; }
+		public IRepositorioMaeCodComercio RepositorioMaeCodComercio { get; private set; }
 
 
 
@@ -165,6 +172,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MaeColaboradorIntTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaePuestoTypeConfiguration());
 			modelBuilder.Configurations.Add(new AsrSolicitudUsuarioTypeConfiguration());
+
+			modelBuilder.Configurations.Add(new CcomSolicitudCabTypeConfiguration());
+			modelBuilder.Configurations.Add(new CcomSolicitudDetTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeCodComercioTypeConfiguration());
 
 		}
 

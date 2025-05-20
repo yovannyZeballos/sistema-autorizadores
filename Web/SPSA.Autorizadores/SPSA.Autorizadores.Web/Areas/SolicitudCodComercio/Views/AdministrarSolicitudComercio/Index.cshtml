@@ -1,0 +1,251 @@
+﻿@model string
+@{
+    ViewBag.Title = "Administrar Solicitudes Cod. Comercio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Solicitudes Cod. Comercio</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Solicitudes Cod. Comercio</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @*@Html.Partial("_CardHeader", "Filtros")
+        <div class="card-body pb-0">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="row mb-0">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
+                                <select class="form-control form-control-sm form-select" id="cboEmpresaBuscar">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="cboLocalBuscar" class="form-label">Local</label>
+                                <select class="form-control form-control-sm form-select" id="cboLocalBuscar">
+                                    <option label="Todos"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="txtCodOfisisBuscar" class="form-label">Código Ofisis</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtCodOfisisBuscar" placeholder="Ingrese código colaborador" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="txtNroDocBuscar" class="form-label">Nro Doc.</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtNroDocBuscar" placeholder="Ingrese número de documento" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="txtNroDocBuscar" class="form-label"></label>
+                                    <button id="btnBuscarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar colaborador</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>*@
+
+        @Html.Partial("_CardHeader", "Listado de solicitudes")
+        <div class="card-body">
+            <div class="col-xl-12">
+                @*<button id="btnModalNuevoColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Colaborador</button>
+                    <button id="btnModalModificarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Colaborador</button>
+                    <button id="btnDescargarPlantilla" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Plantilla</button>*@
+                <button id="btnImportarSolicitudCab" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Solicitud</button>
+                <input type="file" id="excelImportar" style="display: none;">
+            </div>
+            <div class="col-xl-12">
+                <div class="row">
+                    <table id="tableSolicitudesCab" class="table table-sm border-bottom">
+                        <thead>
+                            <tr>
+                                <th>Nro. Solicitud</th>
+                                <th>Estado</th>
+                                <th>F. Solicitud</th>
+                                <th>F. Recepción</th>
+                                <th>F. Registro</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Detalle y Comercios -->
+<div class="modal fade" id="modalDetalleComercio" tabindex="-1" role="dialog" aria-labelledby="modalDetalleComercioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalleLabel">Detalle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <table id="tableSolicitudDet" class="table border-bottom">
+                            <thead>
+                                <tr>
+                                    <th>Empresa</th>
+                                    <th>Local</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-start">
+                        @*<button id="btnNuevoDetalle" class="btn btn-sm btn-primary mb-2">
+                            <i class="fe fe-plus"></i> Nuevo
+                        </button>
+                        <button id="btnEliminarDetalle" class="btn btn-sm btn-danger mb-2">
+                            <i class="fe fe-trash"></i> Eliminar
+                        </button>*@
+                        <button id="btnImportarMaeLocalComercio" class="btn btn-sm btn-primary mb-2">
+                            <i class="fe fe-upload me-1"></i>Importar Comercios
+                        </button>
+                        <input type="file" id="excelImportarComercios" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalComerciosLabel">Comercios</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <table id="tableLocalComercio" class="table table-sm border-bottom">
+                            <thead>
+                                <tr>
+                                    <th>Cod. Comercio</th>
+                                    <th>Canal Venta</th>
+                                    <th>Operador</th>
+                                    <th>Activo</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-2 d-flex flex-column align-items-start">
+                        <button id="btnNuevoComercio" class="btn btn-sm btn-primary mb-2">
+                            <i class="fe fe-plus"></i> Nuevo
+                        </button>
+                        <button id="btnGuardarNuevoComercio" class="btn btn-sm btn-primary mb-2" disabled>
+                            <i class="fe fe-save"></i> Guardar
+                        </button>
+                        <button id="btnEditarComercio" class="btn btn-sm btn-primary mb-2">
+                            <i class="fe fe-edit"></i> Editar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Cod Comercio -->
+<div class="modal fade" id="modalNuevoCodComercio" tabindex="-1" aria-labelledby="modalNuevoCodComercioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Código Comercio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoCodComercio">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txtCodLocalAlterno" class="form-label">Código Local Alterno</label>
+                                <input type="text" id="txtCodLocalAlterno" class="form-control form-control-sm" required>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txtCodComercio" class="form-label">Código Comercio</label>
+                                <input type="text" id="txtCodComercio" class="form-control form-control-sm" required>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txtNomCanalVta" class="form-label">Canal Venta</label>
+                                <input type="text" id="txtNomCanalVta" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txtDesOperador" class="form-label">Operador</label>
+                                <select id="txtDesOperador" class="form-select form-select-sm">
+                                    <option value="IZIPAY">IZIPAY</option>
+                                    <option value="NIUBIZ">NIUBIZ</option>
+                                    <option value="DINNERS">DINNERS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="chkIndActiva" class="form-label">Activo</label>
+                                <select id="chkIndActiva" class="form-select form-select-sm">
+                                    <option value="S">Sí</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarCodComercio">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarSolicitudComercio.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarSolicitudComercio.init();
+        });
+    </script>
+}

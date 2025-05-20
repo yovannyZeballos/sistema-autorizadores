@@ -49,9 +49,12 @@
     <Compile Include="Auxiliar\PagedResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\IContexto.cs" />
+    <Compile Include="Repositorio\IRepositorioCComSolicitudCab.cs" />
+    <Compile Include="Repositorio\IRepositorioCComSolicitudDet.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeCodComercio.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorExt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
