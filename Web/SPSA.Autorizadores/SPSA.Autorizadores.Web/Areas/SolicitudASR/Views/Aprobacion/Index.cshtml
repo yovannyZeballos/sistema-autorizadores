@@ -19,6 +19,15 @@
     #tableSolicitudes thead th, #tableUsuario thead th {
         padding: 0px 22px !important;
     }
+
+    .select2-container--default .select2-selection--single {
+        font-size: 0.745rem;
+    }
+
+    .select2-results__option {
+        font-size: 0.745rem;
+    }
+
 </style>
 
 <!--Page header-->
@@ -49,6 +58,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
+                        <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboEmpresaBuscar">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         <label for="cboLocalBuscar" class="form-label">Local</label>
                         <select class="form-control select2-show-search custom-select filtro" id="cboLocalBuscar">
                         </select>
@@ -57,11 +73,11 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="cboUsuarioBuscar" class="form-label">Usuario</label>
-                        <select class="form-control select2-show-search custom-select filtro" id="cboUsuarioBuscar">
+                        <select class="form-control select2-sm select2-show-search custom-select filtro" id="cboUsuarioBuscar">
                         </select>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="cboEstadoBuscar" class="form-label">Estado</label>
                         <select class="form-control select2-show-search custom-select filtro" id="cboEstadoBuscar">
@@ -73,9 +89,9 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label for="cboTipoSolicitudBuscar" class="form-label">Tipo</label>
+                        <label for="cboTipoSolicitudBuscar" class="form-label">Tipo Acción</label>
                         <select class="form-control select2-show-search custom-select filtro" id="cboTipoSolicitudBuscar">
                             <option value="0">Todos</option>
                             <option value="C">Crear</option>
@@ -84,7 +100,7 @@
                     </div>
                 </div>
                 <div class="col-xl-12 d-flex justify-content-end">
-                    <input type="text" style="width:200px;" class="form-control form-control-sm border-secondary" id="txtFiltroUsuario" placeholder="Buscar..." />
+                    <input type="text" style="width:200px;" class="form-control" id="txtFiltroUsuario" placeholder="Buscar..." />
                 </div>
                 <div class="col-xl-12">
                     <table id="tableUsuario" class="table text-nowrap border-bottom">
@@ -95,7 +111,6 @@
                     </table>
                 </div>
             </div>
-
             
         </div>
     </div>

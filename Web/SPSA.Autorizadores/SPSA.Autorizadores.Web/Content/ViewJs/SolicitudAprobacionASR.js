@@ -1,4 +1,6 @@
-﻿var urlListarLocalesAsociados = baseUrl + 'SolicitudASR/Aprobacion/ListarLocalesAsociadasPorEmpresa';
+﻿var urlListarEmpresasAsociadas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
+var urlListarLocalesAsociados = baseUrl + 'SolicitudASR/Aprobacion/ListarLocalesAsociadasPorEmpresa';
+var urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadasPorEmpresa';
 const urlListarUsuarios = baseUrl + 'DataTables/Listas/ListarUsuario';
 const urlListarSolicitudes = baseUrl + 'SolicitudASR/Aprobacion/ListarSolicitudes';
 var urlListarUsuariosASR = baseUrl + 'SolicitudASR/Aprobacion/ListarUsuarios';
@@ -9,6 +11,12 @@ var dataTableSolicitud = null;
 
 var AprobacionASR = function () {
     const eventos = function () {
+
+        $("#cboEmpresaBuscar").on("change", async function () {
+            await cargarComboLocales();
+        });
+
+
         $(".filtro").on('change', function () {
             visualizarDataTableUsuario();
         });
@@ -54,6 +62,109 @@ var AprobacionASR = function () {
             });
         });
     };
+
+    const listarEmpresasAsociadas = function () {
+        return new Promise((resolve, reject) => {
+
+            const request = {
+                Busqueda: ''
+            };
+
+            $.ajax({
+                url: urlListarEmpresasAsociadas,
+                type: "post",
+                data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+    }
+
+    const listarLocalesAsociados = function () {
+        return new Promise((resolve, reject) => {
+            const codEmpresa = $('#cboEmpresaBuscar').val();
+            if (!codEmpresa) return resolve();
+
+            const query = {
+                CodEmpresa: codEmpresa
+            };
+
+            $.ajax({
+                url: urlListarLocalesAsociados,
+                type: "post",
+                data: { query },
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText);
+                }
+            });
+        });
+    };
+
+    const cargarComboEmpresa = async function () {
+        try {
+            const response = await listarEmpresasAsociadas();
+
+            if (response.Ok) {
+                //$('#cboEmpresaBuscar').empty().append('<option label="Todos"></option>');
+                $('#cboEmpresaBuscar').empty().append($('<option>', { value: '0', text: 'Todos' }));
+                $('#cboLocalBuscar').empty().append('<option label="Todos"></option>');
+                response.Data.map(empresa => {
+                    $('#cboEmpresaBuscar').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
+                });
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "error"
+                });
+                return;
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
+        }
+    }
+
+    const cargarComboLocales = async function (selectedLocal = null) {
+        try {
+            const response = await listarLocalesAsociados();
+
+            if (!response) return;
+
+            if (response.Ok) {
+
+                $('#cboLocalBuscar').empty().append($('<option>', { value: '0', text: 'Todos' }));
+
+                response.Data.map(local => {
+                    $('#cboLocalBuscar').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
+                });
+
+                // Si se pasó un valor seleccionado, lo asignamos
+                if (selectedLocal) {
+                    $('#cboEmpresaBuscar').val(selectedLocal);
+                }
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "warning"
+                });
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
+        }
+    };
+
 
     const listarLocales = function () {
 
@@ -267,7 +378,7 @@ var AprobacionASR = function () {
     };
 
     const cargarLocales = function (locales) {
-        $('#cboLocalBuscar').append($('<option>', { value: '0', text: 'TODOS' }));
+        $('#cboLocalBuscar').append($('<option>', { value: '0', text: 'Todos' }));
         locales.map(local => {
             $('#cboLocalBuscar').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
         });
@@ -277,7 +388,7 @@ var AprobacionASR = function () {
     }
 
     const cargarUsuarios = function (usuarios) {
-        $('#cboUsuarioBuscar').append($('<option>', { value: '0', text: 'TODOS' }));
+        $('#cboUsuarioBuscar').append($('<option>', { value: '0', text: 'Todos' }));
         usuarios.map(usuario => {
             $('#cboUsuarioBuscar').append($('<option>', { value: usuario.out_codigo, text: `${usuario.out_codigo} - ${usuario.out_nombre}` }));
         });
@@ -378,7 +489,8 @@ var AprobacionASR = function () {
                         //return "";
                     }
                 },
-                { title: "Documento", data: "NumDocumentoIdentidad" },
+                { title: "Tipo Doc.", data: "TipDocumentoIdentidad" },
+                { title: "Num. Doc.", data: "NumDocumentoIdentidad" },
                 { title: "Local", data: "NomLocal" }
             ],
             language: {
@@ -456,7 +568,9 @@ var AprobacionASR = function () {
                 NoApelPate: item.NoApelPate,
                 NoTrab: item.NoTrab,
                 NomLocal: item.NomLocal,
+                TipDocumentoIdentidad: item.TipDocumentoIdentidad,
                 NumDocumentoIdentidad: item.NumDocumentoIdentidad,
+                CodColaborador: item.CodColaborador,
                 TipUsuario: item.TipUsuario,
             });
         });
@@ -508,7 +622,9 @@ var AprobacionASR = function () {
         init: function () {
             checkSession(async function () {
                 eventos();
-                listarLocales();
+                await cargarComboEmpresa();
+                await cargarComboLocales();
+                //listarLocales();
                 listarUsuariosAprobador();
                 visualizarDataTableUsuario();
             });

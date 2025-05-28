@@ -32,59 +32,6 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> NuevoForm(MaeColaboradorExtDTO model)
-        //{
-        //    ListarEmpresasAsociadasQuery objListarEmpresas = new ListarEmpresasAsociadasQuery
-        //    {
-        //        CodUsuario = model.UsuAsociado,
-        //        Busqueda = string.Empty
-        //    };
-
-        //    var empresas = await _mediator.Send(objListarEmpresas);
-
-        //    ListarLocalesAsociadasPorEmpresaQuery objListarLocales = new ListarLocalesAsociadasPorEmpresaQuery
-        //    {
-        //        CodUsuario = model.UsuAsociado,
-        //        CodEmpresa = model.CodEmpresa
-        //    };
-
-
-        //    var viewModel = new MaeColaboradorExtViewModel
-        //    {
-        //        ColaboradorExt = model,
-        //        Empresas = empresas.Data
-        //    };
-
-        //    return PartialView("_NuevoForm", viewModel);
-        //}
-
-        //[HttpPost]
-        //public async Task<ActionResult> ModificarForm(MaeColaboradorExtDTO model)
-        //{
-        //    ListarEmpresasAsociadasQuery objListarEmpresas = new ListarEmpresasAsociadasQuery();
-        //    objListarEmpresas.CodUsuario = model.UsuAsociado;
-        //    objListarEmpresas.Busqueda = string.Empty;
-
-        //    var empresas = await _mediator.Send(objListarEmpresas);
-
-        //    var viewModel = new MaeColaboradorExtViewModel
-        //    {
-        //        ColaboradorExt = model,
-        //        Empresas = empresas.Data
-        //    };
-
-        //    return PartialView("_ModificarForm", viewModel);
-        //}
-
-
-        //[HttpPost]
-        //public async Task<JsonResult> Obtener(ObtenerMaePuestoQuery request)
-        //{
-        //    var respuesta = await _mediator.Send(request);
-        //    return Json(respuesta);
-        //}
-
         [HttpGet]
         public async Task<JsonResult> ListarPaginado(ListarMaePuestoQuery request)
         {
@@ -93,20 +40,12 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
-        //public async Task<JsonResult> CrearColaborador(CrearMaePuestoCommand command)
-        //{
-        //    var respuesta = await _mediator.Send(command);
-        //    return Json(respuesta);
-        //}
-
         [HttpPost]
         public async Task<JsonResult> ModificarPuesto(ActualizarMaePuestoCommand command)
         {
             var respuesta = await _mediator.Send(command);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpPost]
         public async Task<JsonResult> Importar()

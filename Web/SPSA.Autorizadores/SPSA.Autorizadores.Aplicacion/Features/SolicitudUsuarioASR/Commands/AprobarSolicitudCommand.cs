@@ -37,7 +37,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
             {
                 using (ISGPContexto contexto = new SGPContexto())
                 {
-                    // 1. Aprobar solicitudes e insertar en CajeroPaso
+                     // 1. Aprobar solicitudes e insertar en CajeroPaso
                     foreach (var solicitud in request.Solicitudes)
                     {
                         // Aprobar la solicitud
@@ -54,7 +54,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                             FecElimina = request.FecElimina
                         };
                         await contexto.RepositorioSolicitudUsuarioASR.AprobarSolicitud(usuario);
-                        respuesta.Mensaje += $"Solicitud Nro {solicitud.NumSolicitud} aprobado | ";
+                        //respuesta.Mensaje += $"Solicitud Nro {solicitud.NumSolicitud} aprobado | ";
 
                         if (request.TipoUsuario == "C")
                         {
@@ -62,20 +62,31 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                             var cajeroPaso = new ASR_CajeroPaso
                             {
                                 LocNumero = Convert.ToInt16(solicitud.CodLocal),
-                                CajNombre = $"{solicitud.NoTrab} {solicitud.NoApelPate} {solicitud.NoApelMate}",
-                                CajNom = solicitud.NoTrab,
+                                //CajNombre = $"{solicitud.NoTrab} {solicitud.NoApelPate} {solicitud.NoApelMate}",
+                                CajNombre = solicitud.NoTrab,
+                                //CajNom = solicitud.NoTrab,
                                 CajApellidos = $"{solicitud.NoApelPate} {solicitud.NoApelMate}",
                                 CajRut = solicitud.NumDocumentoIdentidad,
                                 CajTipo = "01",
                                 CajTipoContrato = "1",
-                                CajTipoDocId = solicitud.TipDocumentoIdentidad,
+                                //CajTipoDocId = solicitud.TipDocumentoIdentidad,
+                                CajTipoDocId = solicitud.TipDocumentoIdentidad == "DNI" ? "1" : "2",
                                 CajCodigoEmp = solicitud.CodColaborador,
                                 CajUsuarioCrea = request.UsuCreacion,
                                 CajFcreacion = DateTime.Now,
                                 CodPais = solicitud.CodPais,
                                 CodComercio = solicitud.CodComercio
                             };
-                            //await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsync(cajeroPaso);
+                            var (resultado, mensaje ) = await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsyncOracleSpsa(cajeroPaso);
+
+                            if (resultado != 0)
+                            {
+                                respuesta.Ok = false;
+                                respuesta.Mensaje = mensaje;
+                                return respuesta;
+                            }
+
+                            respuesta.Mensaje += $"Cajero {cajeroPaso.CajRut} creado| ";
                         }
                     }
 
@@ -96,7 +107,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                     }
                     else
                     {
-                        await GenerarArchivoCajeroAsync(contexto, parametro.ValParametro, respuesta);
+                        await GenerarArchivoCajeroAsyncOracleSpsa(contexto, parametro.ValParametro, respuesta, 10);
                     }
 
                     // 4. Guardar cambios finales (flags de envío/procesado)
@@ -165,6 +176,41 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                 }
                 respuesta.Mensaje += $"Archivo cajero {nombreArchivo} generado | ";
             }
+        }
+
+        private async Task GenerarArchivoCajeroAsyncOracleSpsa(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta, int numeroLocal)
+        {
+            // 1. Traes todos los locales pendientes
+            //var locales = await contexto.RepositorioSolicitudUsuarioASR.ObtenerLocalesPorProcesarAsyncOracleSpsa();
+
+            //foreach (int numeroLocal in locales)
+            //{
+                var nombreArchivo = $"US-{DateTime.Now:yyyyMMdd-HHmmss}-{numeroLocal}.local";
+                var ruta = Path.Combine(rutaBase, nombreArchivo);
+
+                // 2. Obtienes los cajeros sin procesar
+                var cajeros = await contexto.RepositorioSolicitudUsuarioASR.ObtenerCajerosPorProcesarAsyncOracleSpsa(numeroLocal);
+
+                // 3. Generas el archivo
+                using (var writer = new StreamWriter(ruta, false, Encoding.Default))
+                {
+                    foreach (var cajero in cajeros)
+                    {
+                        // Formato de contenido
+                        var estado = cajero.CajEstado == "1" ? "3" : cajero.CajEstado;
+                        var tipoDoc = cajero.CajTipoDocId == "1" ? "DNI" : "CEX";
+                        var corrExt = string.IsNullOrEmpty(cajero.CajCorrExtranjero) ? "000000000000" : cajero.CajCorrExtranjero;
+                        var codigoLocal = cajero.CajCodigo.Length > 8
+                            ? cajero.CajCodigo.Substring(cajero.CajCodigo.Length - 8)
+                            : cajero.CajCodigo;
+
+                        var contenido = $"{estado},{codigoLocal},CAJERO,{cajero.CajNom},{cajero.CajApellidos},{estado},{tipoDoc},{corrExt}";
+                        writer.WriteLine(contenido);
+                        await contexto.RepositorioSolicitudUsuarioASR.ActualizarFlagProcesadoAsyncOracleSpsa(cajero.LocNumero, cajero.CajCodigo, "S");
+                    }
+                }
+                respuesta.Mensaje += $"Archivo cajero {nombreArchivo} generado | ";
+           // }
         }
     }
 }
