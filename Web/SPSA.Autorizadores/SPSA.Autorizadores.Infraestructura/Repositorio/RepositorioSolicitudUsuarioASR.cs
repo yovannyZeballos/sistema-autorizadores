@@ -1,5 +1,7 @@
 ﻿using Npgsql;
 using NpgsqlTypes;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Contexto;
@@ -101,6 +103,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                                     DePuesTrab = dr["DE_PUES_TRAB"] != DBNull.Value ? dr["DE_PUES_TRAB"].ToString() : string.Empty,
                                     IndAprobado = dr["IND_APROBADO"] != DBNull.Value ? dr["IND_APROBADO"].ToString() : string.Empty,
                                     FecSolicita = dr["FEC_SOLICITA"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["FEC_SOLICITA"]) : null,
+                                    TipDocumentoIdentidad = dr["TI_DOCU_IDEN"] != DBNull.Value ? dr["TI_DOCU_IDEN"].ToString() : string.Empty,
                                     NumDocumentoIdentidad = dr["NU_DOCU_IDEN"] != DBNull.Value ? dr["NU_DOCU_IDEN"].ToString() : string.Empty,
                                     TotalRegistros = dr["TOTAL_REGISTROS"] != DBNull.Value ? Convert.ToInt32(dr["TOTAL_REGISTROS"]) : 0
                                 });
@@ -234,6 +237,257 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 }
             }
         }
+
+        // Oracle
+
+        public async Task<List<int>> ObtenerLocalesPorProcesarAsyncOracleSpsa()
+        {
+            List<int> locales = new List<int>();
+
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                string query = @"
+                                SELECT DISTINCT
+	                                LOC_NUMERO 
+                                FROM
+	                                ""ECT2SP"".""CAJEROS_INTERFACE""  
+                                WHERE
+	                                CAJ_PROCESADO = 'N' 
+                                ORDER BY
+	                                LOC_NUMERO";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    using (var dr = await command.ExecuteReaderAsync())
+                    {
+                        if (dr != null && dr.HasRows)
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                locales.Add(dr["LOC_NUMERO"] != DBNull.Value ? Convert.ToInt32(dr["LOC_NUMERO"]) : 0);
+                            }
+                        }
+                        return locales;
+                    }
+                }
+            }
+        }
+
+        public async Task<List<ASR_CajeroPaso>> ObtenerCajerosPorProcesarAsyncOracleSpsa(int codLocal)
+        {
+            List<ASR_CajeroPaso> cajeros = new List<ASR_CajeroPaso>();
+
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                string query = @"
+                                SELECT
+	                                * 
+                                FROM
+	                                ""ECT2SP"".""CAJEROS_INTERFACE"" 
+                                WHERE
+	                                LOC_NUMERO = :P_LOC_NUMERO 
+	                                AND CAJ_PROCESADO = 'N'";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.Parameters.Add(new OracleParameter("P_LOC_NUMERO", OracleDbType.Int32) { Value = codLocal });
+
+                    using (var dr = await command.ExecuteReaderAsync())
+                    {
+                        if (dr != null && dr.HasRows)
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                cajeros.Add(new ASR_CajeroPaso
+                                {
+                                    CajCodigo = dr["CAJ_CODIGO"] as string ?? null,
+                                    LocNumero = dr["LOC_NUMERO"] != DBNull.Value ? Convert.ToInt32(dr["LOC_NUMERO"]) : 0,
+                                    CajNombre = dr["CAJ_NOMBRE"] as string ?? null,
+                                    CajRut = dr["CAJ_RUT"] as string ?? null,
+                                    CajTipo = dr["CAJ_TIPO"] as string ?? null,
+                                    CajActivo = dr["CAJ_ACTIVO"] as string ?? null,
+                                    CajCodigoEmp = dr["CAJ_CODIGO_EMP"] as string ?? null,
+                                    CajEstado = dr["CAJ_ESTADO"] as string ?? null,
+                                    CajNom = dr["CAJ_NOM"] as string ?? null,
+                                    CajApellidos = dr["CAJ_APELLIDOS"] as string ?? null,
+                                    CajTipoDocId = dr["CAJ_TIPO_DOCID"] as string ?? null,
+                                    CajFcreacion = dr["CAJ_FCREACION"] != DBNull.Value ? (DateTime?)dr["CAJ_FCREACION"] : null,
+                                    CajFbaja = dr["CAJ_FBAJA"] != DBNull.Value ? (DateTime?)dr["CAJ_FBAJA"] : null,
+                                    Cajfactualiza = dr["CAJ_FACTUALIZA"] != DBNull.Value ? (DateTime?)dr["CAJ_FACTUALIZA"] : null,
+                                    CajTipoContrato = dr["CAJ_TIPO_CONTRATO"] as string ?? null,
+                                    CajCorrExtranjero = dr["CAJ_CORR_EXTRANJERO"] as string ?? null
+                                    //CodPais = dr["cod_pais"] != DBNull.Value ? Convert.ToInt32(dr["cod_pais"]) : 0,
+                                    //CodComercio = dr["cod_comercio"] != DBNull.Value ? Convert.ToInt32(dr["cod_comercio"]) : 0
+                                });
+                            }
+                        }
+                        return cajeros;
+                    }
+                }
+            }
+        }
+
+        public async Task ActualizarFlagProcesadoAsyncOracleSpsa(int codLocal, string codCajero, string flagProcesado)
+        {
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                string query = @"
+            UPDATE ""ECT2SP"".""CAJEROS_INTERFACE"" 
+               SET ""CAJ_PROCESADO"" = :P_CAJ_PROCESADO
+             WHERE ""LOC_NUMERO"" = :P_LOC_NUMERO
+               AND ""CAJ_CODIGO"" = :P_CAJ_CODIGO";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.Parameters.Add(new OracleParameter(":P_LOC_NUMERO", OracleDbType.Int32) { Value = codLocal });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_CODIGO", OracleDbType.Varchar2) { Value = codCajero });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_PROCESADO", OracleDbType.Varchar2) { Value = flagProcesado });
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+
+        public async Task<(int, string)> NuevoCajeroAsyncOracleSpsa(ASR_CajeroPaso cajero)
+        {
+            try
+            {
+                var usuario = ConstruirUsuario(cajero.CajUsuarioCrea);
+
+                // 1. Elimina paso previo
+                await EliminarCajeroPasoOracleSpsa(cajero.CajRut);
+
+                // 2. Inserta paso
+                await InsertarCajeroPasoOracleSpsa(cajero);
+
+                // 3. Importa cajeros
+                var (resultado, mensaje) = await EjecutarImportarCajerosAsync(cajero.LocNumero, usuario);
+
+                return (resultado, mensaje);
+            }
+            catch (Exception ex)
+            {
+                return (-20020, $"Creacion cajeros falló: {ex.Message}");
+            }
+        }
+
+        public async Task EliminarCajeroPasoOracleSpsa(string rut)
+        {
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                string query = @"DELETE FROM ""ECT2SP"".""IRS_CAJEROS_PASO"" WHERE CAJ_RUT = :P_CAJ_RUT";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_RUT", OracleDbType.Varchar2)
+                    {
+                        Value = rut ?? (object)DBNull.Value
+                    });
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        public async Task InsertarCajeroPasoOracleSpsa(ASR_CajeroPaso cajero)
+        {
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                string query = @"INSERT
+	                                    INTO
+	                                    ""ECT2SP"".""IRS_CAJEROS_PASO"" (
+                                        ""CAJ_CODIGO"",
+	                                    ""LOC_NUMERO"",
+	                                    ""CAJ_NOMBRE"",
+	                                    ""CAJ_NOM"",
+	                                    ""CAJ_APELLIDOS"",
+	                                    ""CAJ_RUT"",
+	                                    ""CAJ_TIPO"",
+	                                    ""CAJ_TIPO_CONTRATO"",
+	                                    ""CAJ_TIPO_DOCID"",
+	                                    ""CAJ_CODIGO_EMP"",
+	                                    ""CAJ_FCREACION"",
+	                                    ""CAJ_USUARIO_CREA"")
+                                    VALUES (
+                                    :P_CAJ_CODIGO,
+                                    :P_LOC_NUMERO,
+                                    :p_CAJ_NOMBRE,
+                                    :p_CAJ_NOM,
+                                    :p_CAJ_APELLIDOS,
+                                    :P_CAJ_RUT,
+                                    :P_CAJ_TIPO,
+                                    :P_CAJ_TIPO_CONTRATO,
+                                    :P_CAJ_TIPO_DOCID,
+                                    :P_CAJ_CODIGO_EMP,
+                                    :P_CAJ_FCREACION,
+                                    :P_CAJ_USUARIO_CREA)";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_CODIGO", OracleDbType.Varchar2) { Value = cajero.CajCodigo });
+                    command.Parameters.Add(new OracleParameter(":P_LOC_NUMERO", OracleDbType.Int32) { Value = cajero.LocNumero });
+                    command.Parameters.Add(new OracleParameter(":p_CAJ_NOMBRE", OracleDbType.Varchar2) { Value = cajero.CajNombre ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":p_CAJ_NOM", OracleDbType.Varchar2) { Value = cajero.CajNom ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":p_CAJ_APELLIDOS", OracleDbType.Varchar2) { Value = cajero.CajApellidos ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_RUT", OracleDbType.Varchar2) { Value = cajero.CajRut ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_TIPO", OracleDbType.Varchar2) { Value = cajero.CajTipo ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_TIPO_CONTRATO", OracleDbType.Varchar2) { Value = cajero.CajTipoContrato ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_TIPO_DOCID", OracleDbType.Varchar2) { Value = cajero.CajTipoDocId ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_CODIGO_EMP", OracleDbType.Varchar2) { Value = cajero.CajCodigoEmp ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_FCREACION", OracleDbType.TimeStamp) { Value = cajero.CajFcreacion ?? (object)DBNull.Value });
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_USUARIO_CREA", OracleDbType.Varchar2) { Value = cajero.CajUsuarioCrea ?? (object)DBNull.Value });
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        public async Task<(int Resultado, string Mensaje)> EjecutarImportarCajerosAsync(int codLocal, string login)
+        {
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new OracleCommand(@"""EAUTORIZADOR"".""PKG_SGC_MANT_CAJEROS"".""IMPORTAR_CAJEROS""", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Parámetros de entrada
+                    command.Parameters.Add("pLOCAL", OracleDbType.Int32).Value = codLocal;
+                    command.Parameters.Add("pLOGIN", OracleDbType.Varchar2, 50).Value = login;
+
+                    // Parámetros de salida
+                    command.Parameters.Add("outRESULTADO", OracleDbType.Int32).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("outMENSAJE", OracleDbType.Varchar2, 4000).Direction = ParameterDirection.Output;
+
+                    await command.ExecuteNonQueryAsync();
+
+
+                    // Solución al error: conversión explícita desde OracleDecimal
+                    var oracleDecimal = (OracleDecimal)command.Parameters["outRESULTADO"].Value;
+                    int resultado = oracleDecimal.ToInt32();
+                    string mensaje = command.Parameters["outMENSAJE"].Value?.ToString();
+
+                    return (resultado, mensaje);
+                }
+            }
+        }
+
+
+
+
+        // Postgress
 
         public async Task<List<int>> ObtenerLocalesPorProcesarAsync(int codPais, int codComercio)
         {
@@ -374,7 +628,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 throw new ApplicationException($"Importar cajeros falló: {ex.Message}");
             }
-            
+
         }
 
         private string ConstruirUsuario(string codUsuario)
@@ -394,8 +648,6 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 using (var command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.Add(new NpgsqlParameter(":caj_rut", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = rut ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":cod_pais", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodPais });
-                    //command.Parameters.Add(new NpgsqlParameter(":cod_comercio", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodComercio });
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -477,7 +729,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
-        public async Task<(int retorno, string errm)> CallImportarCajerosAsync(int locNumero,  string usuario)
+        public async Task<(int retorno, string errm)> CallImportarCajerosAsync(int locNumero, string usuario)
         {
             using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
             {

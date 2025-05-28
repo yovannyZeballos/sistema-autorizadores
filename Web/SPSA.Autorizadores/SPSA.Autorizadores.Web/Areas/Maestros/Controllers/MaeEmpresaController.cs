@@ -3,6 +3,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Cadenas.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
+using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         [HttpPost]
         public async Task<JsonResult> ListarEmpresasAsociadas(ListarEmpresasAsociadasQuery request)
         {
+            request.CodUsuario = WebSession.Login;
             var respose = await _mediator.Send(request);
             return Json(respose);
         }

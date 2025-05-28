@@ -102,7 +102,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
             if (comercio == null)
             {
                 respuesta.Ok = false;
-                respuesta.Mensaje = "El código comercio no fue encontrado.";
+                respuesta.Mensaje = "Código comercio no encontrado.";
                 return false;
             }
 

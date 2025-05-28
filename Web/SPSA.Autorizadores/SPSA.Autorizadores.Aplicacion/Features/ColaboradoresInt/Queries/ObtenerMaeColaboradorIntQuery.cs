@@ -46,7 +46,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.Queries
                 if (maeColaboradorInt is null)
                 {
                     response.Ok = false;
-                    response.Mensaje = "Colaborador externo no existe";
+                    response.Mensaje = "Colaborador interno no existe";
                     return response;
                 }
 

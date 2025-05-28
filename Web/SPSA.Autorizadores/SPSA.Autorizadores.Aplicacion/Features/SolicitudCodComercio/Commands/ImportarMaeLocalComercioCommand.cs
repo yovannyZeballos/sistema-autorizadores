@@ -74,16 +74,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                             var codLocalToken = nombreComercial.Split(' ')[0];
                             var codLocal = codLocalToken.TrimStart('0');
 
-                            string codLocalAlternoStr = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == codEmpresa && x.CodLocal == codLocal)
-                                                                                        .Select(x => x.CodLocalAlterno)
-                                                                                        .FirstOrDefaultAsync();
+                            var maeLocal = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == codEmpresa && x.CodLocal == codLocal).FirstOrDefaultAsync();
+
+                            string codLocalAlternoStr = maeLocal?.CodLocalAlterno;
 
                             if (!int.TryParse(codLocalAlternoStr, out int codLocalAlterno))
                             {
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = i + 1,
-                                    Mensaje = $"Código alterno inválido o no encontrado para el local {codLocal}"
+                                    Mensaje = $"Código alterno inválido o no encontrado para {codLocal}"
                                 });
                                 continue;
                             }
@@ -94,7 +94,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = i + 1,
-                                    Mensaje = $"El local con CodLocalAlterno {codLocalAlterno} no está en la solicitud seleccionada."
+                                    Mensaje = $"Local {maeLocal.NomLocal} no está en la solicitud seleccionada."
                                 });
                                 continue;
                             }
@@ -110,7 +110,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = i + 1,
-                                    Mensaje = $"El código comercio {codComercio} ya se encuentra en uso."
+                                    Mensaje = $"Código comercio {codComercio} ya se encuentra en uso."
                                 });
                                 continue;
                             }
@@ -120,7 +120,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                                 respuesta.Errores.Add(new ErroresExcelDTO
                                 {
                                     Fila = i + 1,
-                                    Mensaje = $"El código comercio {codComercio} existe en local {codLocal}."
+                                    Mensaje = $"El código comercio {codComercio} existe en {maeLocal.NomLocal}."
                                 });
                                 continue;
                             }
