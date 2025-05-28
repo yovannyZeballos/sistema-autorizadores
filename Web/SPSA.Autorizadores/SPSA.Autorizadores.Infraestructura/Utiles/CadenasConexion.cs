@@ -36,7 +36,7 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 			}
 		}
 
-		public string CadenaConexionCT2
+		public static string CadenaConexionCT2
 		{
 			get
 			{

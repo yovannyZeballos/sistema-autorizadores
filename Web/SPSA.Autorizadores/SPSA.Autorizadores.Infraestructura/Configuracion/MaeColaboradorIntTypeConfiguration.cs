@@ -20,13 +20,10 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             ToTable("MAE_COLABORADOR", "SGP");
 
             // Configura la clave primaria de la entidad Mae_ColaboradorInt.
-            HasKey(mc => new { mc.CodEmpresa, mc.CodCadena, mc.CodRegion, mc.CodZona, mc.CodLocal, mc.CodigoOfisis });
+            HasKey(mc => new { mc.CodEmpresa, mc.CodLocal, mc.CodigoOfisis });
 
             // Configura las propiedades de la entidad Mae_ColaboradorInt.
             Property(mc => mc.CodEmpresa).HasColumnName("COD_EMPRESA");
-            Property(mc => mc.CodCadena).HasColumnName("COD_CADENA");
-            Property(mc => mc.CodRegion).HasColumnName("COD_REGION");
-            Property(mc => mc.CodZona).HasColumnName("COD_ZONA");
             Property(mc => mc.CodLocal).HasColumnName("COD_LOCAL");
             Property(mc => mc.CodigoOfisis).HasColumnName("CODIGO_OFISIS");
             Property(mc => mc.ApePaterno).HasColumnName("NO_APEL_PATE");

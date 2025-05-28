@@ -122,13 +122,15 @@
                         <div class="main-menu">
                             <div class="app-sidebar__user">
                                 <div class="dropdown user-pro-body text-center">
+                                    <div class="user-info">
+                                        @Html.Raw($"<h6 class='mb-2 text-muted'>{SPSA.Autorizadores.Web.Utiles.WebSession.NombreLocal}</h6>")
+                                    </div>
                                     <div class="user-pic">
                                         <img src="~/Content/images/users/user-icon.png" alt="user-img" class="avatar-xl mb-1">
                                     </div>
                                     <div class="user-info">
                                         @Html.Raw($"<h6 class='mb-2'>{SPSA.Autorizadores.Web.Utiles.WebSession.UserName}</h6>")
                                         @Html.Raw($"<span class='text-muted app-sidebar__user-name text-sm'>{SPSA.Autorizadores.Web.Utiles.WebSession.Login}</span>")
-
                                     </div>
                                 </div>
                             </div>
