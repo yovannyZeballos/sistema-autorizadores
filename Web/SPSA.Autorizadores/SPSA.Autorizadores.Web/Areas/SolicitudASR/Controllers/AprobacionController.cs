@@ -54,7 +54,7 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> Aprobar(AprobarSolicitudCommand request)
+		public async Task<JsonResult> AprobarSolicitudCrear(AprobarSolicitudCrearCommand request)
 		{
 			request.UsuAutoriza = WebSession.Login;
 			request.UsuCreacion = WebSession.Login;
@@ -64,7 +64,18 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
 			return Json(response);
 		}
 
-		[HttpPost]
+        public async Task<JsonResult> AprobarSolicitudEliminar(AprobarSolicitudEliminarCommand request)
+        {
+            request.UsuAutoriza = WebSession.Login;
+            request.UsuCreacion = WebSession.Login;
+            request.IndActivo = "S";
+            request.FlgEnvio = "N";
+            var response = await _mediator.Send(request);
+            return Json(response);
+        }
+
+
+        [HttpPost]
 		public async Task<JsonResult> ListarLocalesAsociadasPorEmpresa(ListarLocalesAsociadasPorEmpresaQuery query)
 		{
             query.CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa;

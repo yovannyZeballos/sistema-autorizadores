@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries;
+using SPSA.Autorizadores.Web.Utiles;
+using Stimulsoft.Report.Events;
 
 namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
 {
@@ -24,7 +26,6 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
         [HttpGet]
         public async Task<JsonResult> ListarPaginado(ListarSolicitudUsuarioQuery request)
         {
-
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
@@ -32,6 +33,7 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
         [HttpPost]
         public async Task<JsonResult> CrearSolicitud(CrearSolicitudUsuarioCommand command)
         {
+            command.UsuSolicita = WebSession.Login;
             var respuesta = await _mediator.Send(command);
 
             if (respuesta.Ok)
@@ -57,6 +59,7 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudASR.Controllers
         [HttpPost]
         public async Task<JsonResult> EliminarSolicitud(EliminarSolicitudUsuarioCommand command)
         {
+            command.UsuElimina = WebSession.Login;
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }

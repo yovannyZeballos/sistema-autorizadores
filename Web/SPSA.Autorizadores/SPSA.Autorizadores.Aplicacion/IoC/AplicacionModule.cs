@@ -385,7 +385,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarUsuariosHandler>().As<IRequestHandler<ListarUsuariosQuery, GenericResponseDTO<PagedResult<ASR_UsuarioListado>>>>();
 			builder.RegisterType<ListarSolicitudesSolicitadasHandler>().As<IRequestHandler<ListarSolicitudesSolicitadasQuery, GenericResponseDTO<PagedResult<ASR_UsuarioListado>>>>();
 			builder.RegisterType<ActualizarMotivoRechazoHandler>().As<IRequestHandler<ActualizarMotivoRechazoCommand, RespuestaComunDTO>>();
-			builder.RegisterType<AprobarSolicitudHandler>().As<IRequestHandler<AprobarSolicitudCommand, RespuestaComunDTO>>();
+			builder.RegisterType<AprobarSolicitudCrearHandler>().As<IRequestHandler<AprobarSolicitudCrearCommand, RespuestaComunDTO>>();
+			builder.RegisterType<AprobarSolicitudEliminarHandler>().As<IRequestHandler<AprobarSolicitudEliminarCommand, RespuestaComunDTO>>();
 
             #endregion
 

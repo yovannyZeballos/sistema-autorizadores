@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 {
-    public class AprobarSolicitudCommand : IRequest<RespuestaComunDTO>
+    public class AprobarSolicitudCrearCommand : IRequest<RespuestaComunDTO>
     {
         public List<ASR_UsuarioListado> Solicitudes { get; set; } = new List<ASR_UsuarioListado>();
         public string CodUsuarioAsr { get; set; }
@@ -25,22 +25,24 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
         public string UsuCreacion { get; set; }
         public string UsuElimina { get; set; }
         public DateTime? FecElimina { get; set; }
-        public string TipoUsuario { get; set; }
     }
 
-    public class AprobarSolicitudHandler : IRequestHandler<AprobarSolicitudCommand, RespuestaComunDTO>
+    public class AprobarSolicitudCrearHandler : IRequestHandler<AprobarSolicitudCrearCommand, RespuestaComunDTO>
     {
-        public async Task<RespuestaComunDTO> Handle(AprobarSolicitudCommand request, CancellationToken cancellationToken)
+        public async Task<RespuestaComunDTO> Handle(AprobarSolicitudCrearCommand request, CancellationToken cancellationToken)
         {
-            var respuesta = new RespuestaComunDTO { Ok = true, Mensaje = "| " };
+            var respuesta = new RespuestaComunDTO { Ok = true, Mensaje = string.Empty };
+
+            int cantCajeros = 0;
+            int cantAutorizadores = 0;
             try
             {
                 using (ISGPContexto contexto = new SGPContexto())
                 {
-                     // 1. Aprobar solicitudes e insertar en CajeroPaso
+                    // 1. Aprobar solicitudes e insertar en CajeroPaso
                     foreach (var solicitud in request.Solicitudes)
                     {
-                        // Aprobar la solicitud
+                        // Aprobar la solicitud de creación
                         var usuario = new ASR_Usuario
                         {
                             NumSolicitud = solicitud.NumSolicitud,
@@ -54,22 +56,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                             FecElimina = request.FecElimina
                         };
                         await contexto.RepositorioSolicitudUsuarioASR.AprobarSolicitud(usuario);
-                        //respuesta.Mensaje += $"Solicitud Nro {solicitud.NumSolicitud} aprobado | ";
 
-                        if (request.TipoUsuario == "C")
+                        if (solicitud.TipUsuario == "C")
                         {
-                            // Insertar registro en CajeroPaso
                             var cajeroPaso = new ASR_CajeroPaso
                             {
                                 LocNumero = Convert.ToInt16(solicitud.CodLocal),
-                                //CajNombre = $"{solicitud.NoTrab} {solicitud.NoApelPate} {solicitud.NoApelMate}",
                                 CajNombre = solicitud.NoTrab,
-                                //CajNom = solicitud.NoTrab,
                                 CajApellidos = $"{solicitud.NoApelPate} {solicitud.NoApelMate}",
                                 CajRut = solicitud.NumDocumentoIdentidad,
                                 CajTipo = "01",
                                 CajTipoContrato = "1",
-                                //CajTipoDocId = solicitud.TipDocumentoIdentidad,
                                 CajTipoDocId = solicitud.TipDocumentoIdentidad == "DNI" ? "1" : "2",
                                 CajCodigoEmp = solicitud.CodColaborador,
                                 CajUsuarioCrea = request.UsuCreacion,
@@ -77,7 +74,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                                 CodPais = solicitud.CodPais,
                                 CodComercio = solicitud.CodComercio
                             };
-                            var (resultado, mensaje ) = await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsyncOracleSpsa(cajeroPaso);
+                            var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsyncOracleSpsa(cajeroPaso);
 
                             if (resultado != 0)
                             {
@@ -86,7 +83,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                                 return respuesta;
                             }
 
-                            respuesta.Mensaje += $"Cajero {cajeroPaso.CajRut} creado| ";
+                            respuesta.Mensaje += $"Cajero {cajeroPaso.CajRut} creado.\n";
+                            cantCajeros++;
+                        }
+                        else
+                        {
+                            cantAutorizadores++;
                         }
                     }
 
@@ -101,18 +103,18 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                     }
 
                     // 3. Generar archivos según tipo de usuario
-                    if (request.TipoUsuario == "A")
+                    if (cantAutorizadores > 0)
                     {
                         await GenerarArchivoAutorizadorAsync(contexto, parametro.ValParametro, respuesta);
                     }
-                    else
+
+                    if (cantCajeros > 0)
                     {
                         await GenerarArchivoCajeroAsyncOracleSpsa(contexto, parametro.ValParametro, respuesta, 10);
                     }
 
                     // 4. Guardar cambios finales (flags de envío/procesado)
                     await contexto.GuardarCambiosAsync();
-
                 }
             }
             catch (Exception ex)
@@ -209,7 +211,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                         await contexto.RepositorioSolicitudUsuarioASR.ActualizarFlagProcesadoAsyncOracleSpsa(cajero.LocNumero, cajero.CajCodigo, "S");
                     }
                 }
-                respuesta.Mensaje += $"Archivo cajero {nombreArchivo} generado | ";
+                respuesta.Mensaje += $"Archivo cajero {nombreArchivo} generado.\n";
            // }
         }
     }

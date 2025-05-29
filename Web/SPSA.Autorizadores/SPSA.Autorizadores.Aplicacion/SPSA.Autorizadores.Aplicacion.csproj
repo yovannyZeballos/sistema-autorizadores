@@ -582,10 +582,11 @@
     <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioDetDTO.cs" />
     <Compile Include="Features\SolicitudCodComercio\Queries\ListarSolicitudCComercioCabQuery.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\ActualizarMotivoRechazoCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudEliminarCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\CrearSolicitudUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\DescargarSolicitudesUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\EliminarSolicitudUsuarioCommand.cs" />
-    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudCrearCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\ObtenerSolicitudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\SolicitudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\ListarSolictudUsuarioDTO.cs" />
