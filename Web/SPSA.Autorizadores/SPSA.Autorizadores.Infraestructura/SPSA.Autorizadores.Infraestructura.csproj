@@ -147,6 +147,12 @@
     <Compile Include="Configuracion\MaeColaboradorIntTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeHorarioTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaePuestoTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrBinesIzipayTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrClasificacionPorNombreTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrClasificacionPorOperadorTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrFactorIzipayTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrOperadorTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrTmpBinesIzipayTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
@@ -189,6 +195,10 @@
     <Compile Include="Repositorio\RepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\RepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\RepositorioMaePuesto.cs" />
+    <Compile Include="Repositorio\RepositorioMdrBinesIzipay.cs" />
+    <Compile Include="Repositorio\RepositorioMdrClasificacion.cs" />
+    <Compile Include="Repositorio\RepositorioMdrFactorIzipay.cs" />
+    <Compile Include="Repositorio\RepositorioMdrOperador.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\RepositorioSolicitudUsuarioASR.cs" />

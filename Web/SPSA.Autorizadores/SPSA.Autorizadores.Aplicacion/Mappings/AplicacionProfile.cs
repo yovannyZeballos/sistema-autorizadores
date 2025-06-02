@@ -17,6 +17,10 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.Bines;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
@@ -251,6 +255,13 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearEditarMaeCodComercioCommand, Mae_CodComercio>().ReverseMap();
             //CreateMap<ActualizarMaeCodComercioCommand, Mae_CodComercio>().ReverseMap();
 
+            #endregion
+
+            #region <--MDR_BINES_IZIPAY->
+            CreateMap<CrearMdrBinesIzipayCommand, Mdr_BinesIzipay>();
+            CreateMap<CrearMdrFactorIzipayCommand, Mdr_FactorIzipay>();
+            CreateMap<Mdr_BinesIzipay, ListarMdrBinesDto>();
+            CreateMap<Mdr_FactorIzipay, ListarMdrFactorDto>();
             #endregion
 
             CreateMap<MonCierreEOD, MonCierreEODHist>();

@@ -59,6 +59,10 @@
     <Compile Include="Repositorio\IRepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
     <Compile Include="Repositorio\IRepositorioMaePuesto.cs" />
+    <Compile Include="Repositorio\IRepositorioMdrBinesIzipay.cs" />
+    <Compile Include="Repositorio\IRepositorioMdrClasificacion.cs" />
+    <Compile Include="Repositorio\IRepositorioMdrFactorIzipay.cs" />
+    <Compile Include="Repositorio\IRepositorioMdrOperador.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />

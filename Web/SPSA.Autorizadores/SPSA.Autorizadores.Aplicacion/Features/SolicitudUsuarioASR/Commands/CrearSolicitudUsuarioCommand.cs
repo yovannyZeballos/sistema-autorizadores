@@ -49,7 +49,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                 if (existe)
                 {
                     respuesta.Ok = false;
-                    respuesta.Mensaje = "Ya existe una solicitud abierta de este usuario.";
+                    respuesta.Mensaje = $"Ya existe una solicitud abierta para colaborador {request.CodColaborador}.";
                     return respuesta;
                 }
 
@@ -71,8 +71,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                 //{
                 //    respuesta.Mensaje = "Ocurrió un error al crear colaborador externo.";
                 //}
-                respuesta.Mensaje = "Ocurrió un error al crear solicitud de usuario.";
-                _logger.Error(ex, "Ocurrió un error al crear solicitud de usuario");
+                respuesta.Mensaje = "Ocurrió un error al crear solicitud de colaborador.";
+                _logger.Error(ex, "Ocurrió un error al crear solicitud de colaborador");
             }
             return respuesta;
         }

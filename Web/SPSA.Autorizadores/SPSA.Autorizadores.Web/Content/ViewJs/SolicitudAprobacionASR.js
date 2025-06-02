@@ -5,7 +5,8 @@ const urlListarUsuarios = baseUrl + 'DataTables/Listas/ListarUsuario';
 const urlListarSolicitudes = baseUrl + 'SolicitudASR/Aprobacion/ListarSolicitudes';
 var urlListarUsuariosASR = baseUrl + 'SolicitudASR/Aprobacion/ListarUsuarios';
 var urlRechazar = baseUrl + 'SolicitudASR/Aprobacion/Rechazar';
-var urlAprobar = baseUrl + 'SolicitudASR/Aprobacion/Aprobar';
+var urlAprobarCrear = baseUrl + 'SolicitudASR/Aprobacion/AprobarSolicitudCrear';
+var urlAprobarEliminar = baseUrl + 'SolicitudASR/Aprobacion/AprobarSolicitudEliminar';
 var dataTableUsuario = null;
 var dataTableSolicitud = null;
 
@@ -22,6 +23,10 @@ var AprobacionASR = function () {
         });
 
         $("#btnModalSolicitud").on('click', function () {
+            if (dataTableSolicitud != null) {
+                dataTableSolicitud.columns.adjust().draw();
+            }
+            
             $('#solicitudesModal').modal('show');
             visualizarDataTableSolicitud();
         });
@@ -295,7 +300,7 @@ var AprobacionASR = function () {
                 });
             },
             columns: [
-                { title: "Nro. Solicitud", data: "NumSolicitud" },
+                { title: "Nro", data: "NumSolicitud" },
                 { title: "Local", data: "NomLocal" },
                 { title: "Codigo", data: "CodColaborador" }, 
                 {
@@ -399,11 +404,12 @@ var AprobacionASR = function () {
 
     const visualizarDataTableSolicitud = function () {
 
-        if (dataTableSolicitud != null) {
-            dataTableSolicitud.destroy();
-        }
+        //if (dataTableSolicitud != null) {
+        //    dataTableSolicitud.destroy();
+        //}
 
         dataTableSolicitud = $('#tableSolicitudes').DataTable({
+            destroy: true,
             searching: false,
             processing: true,
             serverSide: true,
@@ -462,7 +468,7 @@ var AprobacionASR = function () {
                 });
             },
             columns: [
-                { title: "Nro. Solicitud", data: "NumSolicitud" },
+                { title: "Nro.", data: "NumSolicitud" },
                 { title: "Codigo", data: "CodColaborador" },
                 {
                     title: "Nombre y apellido",
@@ -472,7 +478,8 @@ var AprobacionASR = function () {
                     }
                 },
                 { title: "Puesto", data: "DePuesTrab" },
-                { title: "Estado", data: "IndAprobado" },
+                /*{ title: "Estado", data: "IndAprobado" },*/
+                { title: "Accion", data: "TipAccion" },
                 {
                     data: "FecSolicita",
                     title: "Fec. Solicitud",
@@ -508,6 +515,9 @@ var AprobacionASR = function () {
             paging: true,
             lengthMenu: [10, 25, 50, 100],
         });
+
+        //dataTableSolicitud.ajax.reload(null, false);
+        /*dataTableSolicitud.columns.adjust().draw();*/
     };
 
     const rechazar = function () {
@@ -548,62 +558,91 @@ var AprobacionASR = function () {
     };
 
     const aprobar = function () {
-        const registrosSeleccionados = dataTableSolicitud.rows('.selected').data().toArray();
-        if (!validarSelecion(registrosSeleccionados.length)) {
-            return;
+        // 1. Obtenemos todos los registros seleccionados
+        const filas = dataTableSolicitud.rows('.selected').data().toArray();
+        if (!validarSelecion(filas.length)) return;
+
+        // 2. Mapeamos cada fila a nuestro modelo, incluyendo TipAccion
+        const modelos = filas.map(item => ({
+            NumSolicitud:           item.NumSolicitud,
+            CodLocal:               item.CodLocal,
+            CodLocalAlterno:        item.CodLocalAlterno,
+            CodPais:                item.CodPais,
+            CodComercio:            item.CodComercio,
+            DePuesTrab:             item.DePuesTrab,
+            IndAprobado:            item.IndAprobado,
+            NoApelMate:             item.NoApelMate,
+            NoApelPate:             item.NoApelPate,
+            NoTrab:                 item.NoTrab,
+            NomLocal:               item.NomLocal,
+            TipDocumentoIdentidad:  item.TipDocumentoIdentidad,
+            NumDocumentoIdentidad:  item.NumDocumentoIdentidad,
+            CodColaborador:         item.CodColaborador,
+            TipUsuario:             item.TipUsuario,
+            TipAccion:              item.TipAccion
+        }));
+
+        // 3. Separamos las solicitudes por acción
+        const solicitudesCrear = modelos.filter(m => m.TipAccion === 'CREAR');
+        const solicitudesEliminar = modelos.filter(m => m.TipAccion === 'ELIMINAR');
+
+        // 4. Generamos las llamadas AJAX
+        const llamadas = [];
+
+        if (solicitudesCrear.length) {
+            llamadas.push(
+                $.ajax({
+                    url: urlAprobarCrear,      // tu controller de “crear”
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { request: { Solicitudes: solicitudesCrear } }
+                })
+            );
         }
 
-        let solicitudes = [];
-
-        registrosSeleccionados.map((item) => {
-            solicitudes.push({
-                NumSolicitud: item.NumSolicitud,
-                CodLocal: item.CodLocal,
-                CodLocalAlterno: item.CodLocalAlterno,
-                CodPais: item.CodPais,
-                CodComercio: item.CodComercio,
-                DePuesTrab: item.DePuesTrab,
-                IndAprobado: item.IndAprobado,
-                NoApelMate: item.NoApelMate,
-                NoApelPate: item.NoApelPate,
-                NoTrab: item.NoTrab,
-                NomLocal: item.NomLocal,
-                TipDocumentoIdentidad: item.TipDocumentoIdentidad,
-                NumDocumentoIdentidad: item.NumDocumentoIdentidad,
-                CodColaborador: item.CodColaborador,
-                TipUsuario: item.TipUsuario,
-            });
-        });
-
-        const request = {
-            Solicitudes: solicitudes,
-            TipoUsuario: $('input[name="tipoUsuario"]:checked').val(),
+        if (solicitudesEliminar.length) {
+            llamadas.push(
+                $.ajax({
+                    url: urlAprobarEliminar,   // tu controller de “eliminar”
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { request: { Solicitudes: solicitudesEliminar } }
+                })
+            );
         }
 
-        $.ajax({
-            url: urlAprobar,
-            type: "post",
-            dataType: "json",
-            data: { request },
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: function (response) {
-                let icon = response.Ok ? "success" : "error";
-                swal({ text: response.Mensaje, icon: icon });
-                $('#solicitudesModal').modal('hide');
-                visualizarDataTableUsuario();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
+        // 5. Ejecutamos todas las llamadas
+        showLoading();
+        Promise.all(llamadas)
+            .then(responses => {
+                // responses es un array de objetos JSON { Ok, Mensaje, ... }
+                const mensajes = responses.map(r => r.Mensaje);
+                const todasOk = responses.every(r => r.Ok === true);
+
+                // 6. Un solo swal con todos los mensajes concatenados
                 swal({
-                    text: jqXHR.responseText,
-                    icon: "error",
+                    text: mensajes.join('\n'),
+                    icon: todasOk ? 'success' : 'warning'
                 });
-            }
-        });
+
+                // 7. Cerrar modal sólo si todasOk
+                if (todasOk) {
+                    $('#solicitudesModal').modal('hide');
+                }
+
+                // 8. Recargar la tabla siempre
+                visualizarDataTableUsuario();
+            })
+            .catch(err => {
+                console.error('Error inesperado:', err);
+                swal({
+                    text: 'Ocurrió un error inesperado al aprobar las solicitudes.',
+                    icon: 'error'
+                });
+            })
+            .finally(() => {
+                closeLoading();
+            });
     };
 
     const validarSelecion = function (count) {

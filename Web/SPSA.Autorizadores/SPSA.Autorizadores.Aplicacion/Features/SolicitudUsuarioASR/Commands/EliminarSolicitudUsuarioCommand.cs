@@ -15,13 +15,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
     public class EliminarSolicitudUsuarioCommand : IRequest<RespuestaComunDTO>
     {
         public int NumSolicitud { get; set; }
-        //public string CodLocalAlterno { get; set; }
-        //public string CodColaborador { get; set; }
-        //public string TipUsuario { get; set; }
-        //public string TipColaborador { get; set; }
-        //public string TipAccion { get; set; }
-        //public string UsuAprobacion { get; set; }
-        //public DateTime? FecAprobacion { get; set; }
         public string IndAprobado { get; set; } = "N";
         public string Motivo { get; set; } = "Anulado por el usuario";
         public string UsuElimina { get; set; }

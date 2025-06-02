@@ -39,12 +39,6 @@
                     <div class="row mb-0">
                         <div class="col-md-3 d-none">
                             <div class="form-group">
-                                <label for="txtUsuario" class="form-label">Usuario</label>
-                                <input type="text" class="form-control form-control-sm" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
-                            </div>
-                        </div>
-                        <div class="col-md-3 d-none">
-                            <div class="form-group">
                                 <label for="txtCodEmpresaxx" class="form-label">CodigoEmpresa</label>
                                 <input type="text" class="form-control form-control-sm" id="txtCodEmpresaxx" value="@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa" disabled>
                             </div>
@@ -153,8 +147,12 @@
             <div class="modal-body">
                 <div class="col-xl-12 d-flex justify-content-between align-items-center mb-4 ">
                     <div class="d-flex align-items-center">
-                        <button id="btnSolicitarColabInt" class="btn btn-sm btn-primary ms-1 me-8">
-                            <i class="fe fe-plus-circle me-1"></i>Solicitar
+                        <button id="btnSolicitarCrearColabInt" class="btn btn-sm btn-primary ms-1 me-2">
+                            <i class="fe fe-plus-circle me-1"></i>Solicitar Crear
+                        </button>
+
+                        <button id="btnSolicitarEliminarColabInt" class="btn btn-sm btn-primary ms-1 me-4">
+                            <i class="fe fe-plus-circle me-1"></i>Solicitar Eliminar
                         </button>
 
                         <div class="form-check form-check-inline d-flex align-items-center">
@@ -167,7 +165,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
-                        <input type="text" class="form-control form-control-sm border-secondary" id="txtFiltroVariosInt" placeholder="Buscar..." />
+                        <input type="text" class="form-control" id="txtFiltroVariosInt" placeholder="Buscar..." />
                     </div>
                 </div>
                 <div class="col-xl-12">
@@ -251,8 +249,12 @@
 
                 <div class="col-xl-12 d-flex justify-content-between align-items-center mb-4 ">
                     <div class="d-flex align-items-center">
-                        <button id="btnSolicitarColabExt" class="btn btn-sm btn-primary ms-1 me-8">
-                            <i class="fe fe-plus-circle me-1"></i>Solicitar
+                        <button id="btnSolicitarCrearColabExt" class="btn btn-sm btn-primary ms-1 me-2">
+                            <i class="fe fe-plus-circle me-1"></i>Solicitar Crear
+                        </button>
+
+                        <button id="btnSolicitarEliminarColabExt" class="btn btn-sm btn-primary ms-1 me-4">
+                            <i class="fe fe-plus-circle me-1"></i>Solicitar Eliminar
                         </button>
 
                         <div class="form-check form-check-inline d-flex align-items-center">

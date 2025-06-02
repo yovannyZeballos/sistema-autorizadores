@@ -1,10 +1,8 @@
 ﻿var urlListarEmpresasAsociadas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadasPorEmpresa';
-
 var urlListarSolicitudesASR = baseUrl + 'SolicitudASR/SolicitudUsuario/ListarPaginado';
 var urlListarColaboradoresExt = baseUrl + 'Maestros/MaeColaboradorExt/ListarPaginado';
 var urlListarColaboradoresInt = baseUrl + 'Maestros/MaeColaboradorInt/ListarPaginado';
-
 
 var urlObtenerLocal = baseUrl + 'Maestros/MaeLocal/ObtenerLocal';
 
@@ -100,78 +98,22 @@ var SolicitudUsuarioASR = function () {
             $('#tableColaboradoresInt').DataTable().ajax.reload();
         });
 
-        // Evento para crear solicitudes
-        $("#btnSolicitarColabInt").on("click", function () {
-            var filasSeleccionadas = document.querySelectorAll("#tableColaboradoresInt tbody tr.selected");
+        $("#btnSolicitarCrearColabInt").on("click", () =>
+            procesarSolicitudes("#tableColaboradoresInt", "#modalColabInt", 'I', 'C')
+        );
 
-            if (!validarSelecion(filasSeleccionadas.length)) {
-                closeLoading();
-                return;
-            }
+        $("#btnSolicitarEliminarColabInt").on("click", () =>
+            procesarSolicitudes("#tableColaboradoresInt", "#modalColabInt", 'I', 'E')
+        );
 
-            var table = $('#tableColaboradoresInt').DataTable();
-            var solicitudesCrear = [];
+        $("#btnSolicitarCrearColabExt").on("click", () =>
+            procesarSolicitudes("#tableColaboradoresExt", "#modalColabExt", 'E', 'C')
+        );
 
-            filasSeleccionadas.forEach(function (fila) {
-                var rowData = table.row(fila).data();
-                var model = {
-                    CodLocalAlterno: rowData.CodLocalAlterno,
-                    CodColaborador: rowData.CodigoOfisis,
-                    TipUsuario: rowData.TipUsuario,
-                    TipColaborador: 'I',
-                    UsuSolicita: $("#txtUsuario").val(),
-                    Motivo: ''
-                };
-                console.log(rowData);
-                solicitudesCrear.push(crearSolicitud(model));
-            });
+        $("#btnSolicitarEliminarColabExt").on("click", () =>
+            procesarSolicitudes("#tableColaboradoresExt", "#modalColabExt", 'E', 'E')
+        );
 
-            Promise.all(solicitudesCrear)
-                .then(function () {
-                    $("#modalColabInt").modal('hide');
-                    $('#tableSolicitudes').DataTable().ajax.reload(null, false);
-                })
-                .catch(function (error) {
-                    console.error("Error al crear las solicitudes:", error);
-                });
-        });
-
-        $("#btnSolicitarColabExt").on("click", function () {
-            var filasSeleccionadas = document.querySelectorAll("#tableColaboradoresExt tbody tr.selected");
-
-            if (!validarSelecion(filasSeleccionadas.length)) {
-                closeLoading();
-                return;
-            }
-
-            var table = $('#tableColaboradoresExt').DataTable();
-            var solicitudesCrear = [];
-
-            filasSeleccionadas.forEach(function (fila) {
-                var rowData = table.row(fila).data();
-                var model = {
-                    CodLocalAlterno: rowData.CodLocalAlterno,
-                    CodColaborador: rowData.CodigoOfisis,
-                    TipUsuario: rowData.TipoUsuario,
-                    TipColaborador: 'E',
-                    UsuSolicita: $("#txtUsuario").val(),
-                    Motivo: ''
-                };
-                console.log(rowData);
-                solicitudesCrear.push(crearSolicitud(model));
-            });
-
-            Promise.all(solicitudesCrear)
-                .then(function () {
-                    $("#modalColabExt").modal('hide');
-                    $('#tableSolicitudes').DataTable().ajax.reload(null, false);
-                })
-                .catch(function (error) {
-                    console.error("Error al crear las solicitudes:", error);
-                });
-        });
-
-        // Evento para eliminar solicitudes
         $("#btnEliminarSolicitud").on("click", function () {
             var filasSeleccionadas = document.querySelectorAll("#tableSolicitudes tbody tr.selected");
 
@@ -185,8 +127,7 @@ var SolicitudUsuarioASR = function () {
             filasSeleccionadas.forEach(function (fila) {
                 var rowData = table.row(fila).data();
                 var model = {
-                    NumSolicitud: rowData.NumSolicitud,
-                    UsuElimina: $("#txtUsuario").val()
+                    NumSolicitud: rowData.NumSolicitud
                 };
 
                 solicitudesEliminar.push(eliminarSolicitud(model));
@@ -806,7 +747,6 @@ var SolicitudUsuarioASR = function () {
         });
     }
 
-
     const validarSelecion = function (count) {
         if (count === 0) {
             swal({
@@ -852,6 +792,47 @@ var SolicitudUsuarioASR = function () {
 
         return "";
     };
+
+    function procesarSolicitudes(tableSelector, modalSelector, tipColaborador, tipAccion) {
+        const filas = document.querySelectorAll(`${tableSelector} tbody tr.selected`);
+        if (!validarSelecion(filas.length)) {
+            closeLoading();
+            return;
+        }
+
+        const table = $(tableSelector).DataTable();
+
+        const promesas = Array.from(filas, fila => {
+            const rowData = table.row(fila).data();
+            const model = {
+                CodLocalAlterno: rowData.CodLocalAlterno,
+                CodColaborador: rowData.CodigoOfisis,
+                TipUsuario: rowData.TipUsuario,
+                TipColaborador: tipColaborador,
+                TipAccion: tipAccion,
+                Motivo: ''
+            };
+            console.log(rowData);
+            return crearSolicitud(model);
+        });
+
+        Promise.all(promesas)
+            .then(responses => {
+                $('#tableSolicitudes').DataTable().ajax.reload(null, false);
+
+                const algunaFallo = responses.some(r => r && r.Ok === false);
+                if (!algunaFallo) {
+                    $(modalSelector).modal('hide');
+                }
+            })
+            .catch(err => {
+                console.error("Error inesperado:", err);
+                swal({
+                    text: "Ocurrió un error inesperado al procesar las solicitudes.",
+                    icon: "error"
+                });
+            });
+    }
 
     return {
         init: function () {

@@ -55,5 +55,10 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioCComSolicitudCab RepositorioCComSolicitudCab { get; }
         IRepositorioCComSolicitudDet RepositorioCComSolicitudDet { get; }
         IRepositorioMaeCodComercio RepositorioMaeCodComercio { get; }
-	}
+
+        IRepositorioMdrBinesIzipay RepositorioMdrBinesIzipay { get; }
+        IRepositorioMdrClasificacion RepositorioMdrClasificacion { get; }
+        IRepositorioMdrOperador RepositorioMdrOperador { get; }
+        IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; }
+    }
 }
