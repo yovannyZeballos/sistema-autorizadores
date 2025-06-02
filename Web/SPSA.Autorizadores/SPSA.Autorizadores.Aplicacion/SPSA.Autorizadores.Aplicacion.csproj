@@ -449,6 +449,12 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Commands\CrearCajeroVolanteCommand.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Commands\Bines\CrearMdrBinesIzipayCommand.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Commands\FactoresMdr\CrearMdrFactorIzipayCommand.cs" />
+    <Compile Include="Features\MdrBinesIzipay\DTOs\Bines\ListarMdrBinesDto.cs" />
+    <Compile Include="Features\MdrBinesIzipay\DTOs\FactoresMdr\ListarMdrFactorDto.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Queries\Bines\ListarMdrBinesIzipayQuery.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Queries\FactoresMdr\ListarMdrFactorIzipayQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTSpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTHpsaCommand.cs" />
@@ -582,10 +588,11 @@
     <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioDetDTO.cs" />
     <Compile Include="Features\SolicitudCodComercio\Queries\ListarSolicitudCComercioCabQuery.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\ActualizarMotivoRechazoCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudEliminarCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\CrearSolicitudUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\DescargarSolicitudesUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\EliminarSolicitudUsuarioCommand.cs" />
-    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudCommand.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudCrearCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\ObtenerSolicitudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\SolicitudUsuarioDTO.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\DTOs\ListarSolictudUsuarioDTO.cs" />

@@ -29,7 +29,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands
 
 		public async Task<RespuestaComunDTO> Handle(EliminarCajeroCommand request, CancellationToken cancellationToken)
 		{
-			var respuesta = new RespuestaComunDTO { Ok = true };
+            // 1. Normalizar el valor de Usuario: si comienza con "SGP_", convertirlo a "SP" + resto
+            var usuarioFormateado = request.Usuario;
+            if (!string.IsNullOrEmpty(usuarioFormateado) && usuarioFormateado.StartsWith("SGP_"))
+            {
+                // "SGP_" tiene 4 caracteres; substring a partir de la posición 4
+                var parteNumerica = usuarioFormateado.Substring(4);
+                usuarioFormateado = "SP" + parteNumerica;
+            }
+
+            var respuesta = new RespuestaComunDTO { Ok = true };
 			var mensajes = new StringBuilder();
 
 			foreach (var item in request.NroDocumentos)
@@ -37,7 +46,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Cajeros.Commands
 
 				try
 				{
-					await _repositorioCajero.Eliminar(item, request.Usuario);
+					await _repositorioCajero.Eliminar(item, usuarioFormateado);
 					mensajes.AppendLine($"Cajero {item} eliminado");
 				}
 				catch (Exception ex)

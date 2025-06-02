@@ -299,6 +299,9 @@
     <Compile Include="Areas\Maestros\Controllers\MaeCadenaController.cs" />
     <Compile Include="Areas\Maestros\Controllers\MaeTablasController.cs" />
     <Compile Include="Areas\Maestros\MaestrosAreaRegistration.cs" />
+    <Compile Include="Areas\MdrBinesIzipay\Controllers\BinesController.cs" />
+    <Compile Include="Areas\MdrBinesIzipay\Controllers\FactoresMdrController.cs" />
+    <Compile Include="Areas\MdrBinesIzipay\MdrBinesIzipayAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\DiferenciaTransaccionesController.cs" />
     <Compile Include="Areas\Monitor\Controllers\BCTController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CajaDefectuosaController.cs" />
@@ -2381,6 +2384,7 @@
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
     <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
+    <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
@@ -2929,6 +2933,10 @@
     <Content Include="Areas\SolicitudCodComercio\Views\_ViewStart.cshtml" />
     <Content Include="Areas\SolicitudCodComercio\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\SolicitudCodComercio\Views\AdministrarSolicitudComercio\Index.cshtml" />
+    <Content Include="Areas\MdrBinesIzipay\Views\web.config" />
+    <Content Include="Areas\MdrBinesIzipay\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\MdrBinesIzipay\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\MdrBinesIzipay\Views\FactoresMdr\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2980,6 +2988,8 @@
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />
     <Folder Include="Areas\Maestros\Views\MaeRegion\" />
     <Folder Include="Areas\Maestros\Views\MaeZona\" />
+    <Folder Include="Areas\MdrBinesIzipay\Data\" />
+    <Folder Include="Areas\MdrBinesIzipay\Views\Bines\" />
     <Folder Include="Areas\Reportes\Data\" />
     <Folder Include="Areas\SolicitudASR\Data\" />
     <Folder Include="Areas\SolicitudCodComercio\Data\" />

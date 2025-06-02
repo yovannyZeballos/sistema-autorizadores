@@ -376,16 +376,14 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
             #region ASR_SOLICITUD_USUARIO
             builder.RegisterType<ListarSolicitudUsuarioHandler>().As<IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>>();
-            //builder.RegisterType<ObtenerMaeColaboradorExtHandler>().As<IRequestHandler<ObtenerMaeColaboradorExtQuery, GenericResponseDTO<ObtenerMaeColaboradorExtDTO>>>();
             builder.RegisterType<CrearSolicitudUsuarioHandler>().As<IRequestHandler<CrearSolicitudUsuarioCommand, RespuestaComunDTO>>();
-            //builder.RegisterType<ActualizarMaeColaboradorExtHandler>().As<IRequestHandler<ActualizarMaeColaboradorExtCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarSolicitudUsuarioHandler>().As<IRequestHandler<EliminarSolicitudUsuarioCommand, RespuestaComunDTO>>();
             builder.RegisterType<DescargarSolicitudesUsuarioHandler>().As<IRequestHandler<DescargarSolicitudesUsuarioCommand, DescargarMaestroDTO>>();
-			//builder.RegisterType<ImportarMaeColaboradorExtHandler>().As<IRequestHandler<ImportarMaeColaboradorExtCommand, RespuestaComunExcelDTO>>();
 			builder.RegisterType<ListarUsuariosHandler>().As<IRequestHandler<ListarUsuariosQuery, GenericResponseDTO<PagedResult<ASR_UsuarioListado>>>>();
 			builder.RegisterType<ListarSolicitudesSolicitadasHandler>().As<IRequestHandler<ListarSolicitudesSolicitadasQuery, GenericResponseDTO<PagedResult<ASR_UsuarioListado>>>>();
 			builder.RegisterType<ActualizarMotivoRechazoHandler>().As<IRequestHandler<ActualizarMotivoRechazoCommand, RespuestaComunDTO>>();
-			builder.RegisterType<AprobarSolicitudHandler>().As<IRequestHandler<AprobarSolicitudCommand, RespuestaComunDTO>>();
+			builder.RegisterType<AprobarSolicitudCrearHandler>().As<IRequestHandler<AprobarSolicitudCrearCommand, RespuestaComunDTO>>();
+			builder.RegisterType<AprobarSolicitudEliminarHandler>().As<IRequestHandler<AprobarSolicitudEliminarCommand, RespuestaComunDTO>>();
 
             #endregion
 
@@ -396,7 +394,9 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearEditarMaeCodComercioHandler>().As<IRequestHandler<CrearEditarMaeCodComercioCommand, RespuestaComunDTO>>();
             #endregion
 
+            #region MDR_BINES_IZIPAY
 
+            #endregion
 
 
             base.Load(builder);

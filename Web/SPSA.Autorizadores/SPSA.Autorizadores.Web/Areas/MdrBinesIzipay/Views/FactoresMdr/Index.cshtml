@@ -1,0 +1,99 @@
+﻿
+@model string
+@{
+    ViewBag.Title = "Administrar Factores MDR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Factores MDR</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Factores MDR</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @Html.Partial("_CardHeader", "????????????")
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboEmpresaBuscar">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="cboLocalBuscar" class="form-label">Local</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboLocalBuscar">
+                        </select>
+                    </div>
+                </div>
+                @*<div class="col-md-3">
+                        <div class="form-group">
+                            <label for="cboEstadoBuscar" class="form-label">Estado</label>
+                            <select class="form-control select2-show-search custom-select filtro" id="cboEstadoBuscar">
+                                <option value="0">Todos</option>
+                                <option value="S">Solicitado</option>
+                                <option value="A">Aprobado</option>
+                                <option value="R">Rechazado</option>
+                                <option value="N">Anulado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="cboTipoSolicitudBuscar" class="form-label">Tipo Acción</label>
+                            <select class="form-control select2-show-search custom-select filtro" id="cboTipoSolicitudBuscar">
+                                <option value="0">Todos</option>
+                                <option value="C">Crear</option>
+                                <option value="E">Eliminar</option>
+                            </select>
+                        </div>
+                    </div>*@
+                <div class="col-xl-12 d-flex justify-content-end">
+                    <input type="text" style="width:200px;" class="form-control" id="txtFiltroUsuario" placeholder="Buscar..." />
+                </div>
+                <div class="col-xl-12">
+                    <table id="tableUsuario" class="table text-nowrap border-bottom">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarFactorMdr.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AprobacionFactorMdr.init();
+        });
+    </script>
+}

@@ -9,7 +9,6 @@ using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
@@ -101,7 +100,9 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                                     NoApelMate = dr["NO_APEL_MATE"] != DBNull.Value ? dr["NO_APEL_MATE"].ToString() : string.Empty,
                                     NoTrab = dr["NO_TRAB"] != DBNull.Value ? dr["NO_TRAB"].ToString() : string.Empty,
                                     DePuesTrab = dr["DE_PUES_TRAB"] != DBNull.Value ? dr["DE_PUES_TRAB"].ToString() : string.Empty,
-                                    IndAprobado = dr["IND_APROBADO"] != DBNull.Value ? dr["IND_APROBADO"].ToString() : string.Empty,
+                                    //IndAprobado = dr["IND_APROBADO"] != DBNull.Value ? dr["IND_APROBADO"].ToString() : string.Empty,
+                                    TipAccion = dr["TIP_ACCION"] != DBNull.Value ? dr["TIP_ACCION"].ToString() : string.Empty,
+                                    TipUsuario = dr["TIP_USUARIO"] != DBNull.Value ? dr["TIP_USUARIO"].ToString() : string.Empty,
                                     FecSolicita = dr["FEC_SOLICITA"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["FEC_SOLICITA"]) : null,
                                     TipDocumentoIdentidad = dr["TI_DOCU_IDEN"] != DBNull.Value ? dr["TI_DOCU_IDEN"].ToString() : string.Empty,
                                     NumDocumentoIdentidad = dr["NU_DOCU_IDEN"] != DBNull.Value ? dr["NU_DOCU_IDEN"].ToString() : string.Empty,
@@ -283,14 +284,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                string query = @"
-                                SELECT
-	                                * 
-                                FROM
-	                                ""ECT2SP"".""CAJEROS_INTERFACE"" 
-                                WHERE
-	                                LOC_NUMERO = :P_LOC_NUMERO 
-	                                AND CAJ_PROCESADO = 'N'";
+                string query = @"SELECT * FROM""ECT2SP"".""CAJEROS_INTERFACE"" WHERE LOC_NUMERO = :P_LOC_NUMERO AND CAJ_PROCESADO = 'N'";
 
                 using (var command = new OracleCommand(query, connection))
                 {
@@ -331,29 +325,28 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
+
         public async Task ActualizarFlagProcesadoAsyncOracleSpsa(int codLocal, string codCajero, string flagProcesado)
         {
             using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
             {
                 await connection.OpenAsync();
 
-                string query = @"
-            UPDATE ""ECT2SP"".""CAJEROS_INTERFACE"" 
-               SET ""CAJ_PROCESADO"" = :P_CAJ_PROCESADO
-             WHERE ""LOC_NUMERO"" = :P_LOC_NUMERO
-               AND ""CAJ_CODIGO"" = :P_CAJ_CODIGO";
+                string query = @" UPDATE ""ECT2SP"".""CAJEROS_INTERFACE"" 
+                                   SET ""CAJ_PROCESADO"" = :P_CAJ_PROCESADO
+                                 WHERE ""LOC_NUMERO"" = :P_LOC_NUMERO
+                                   AND ""CAJ_CODIGO"" = :P_CAJ_CODIGO";
 
                 using (var command = new OracleCommand(query, connection))
                 {
+                    command.Parameters.Add(new OracleParameter(":P_CAJ_PROCESADO", OracleDbType.Varchar2) { Value = flagProcesado });
                     command.Parameters.Add(new OracleParameter(":P_LOC_NUMERO", OracleDbType.Int32) { Value = codLocal });
                     command.Parameters.Add(new OracleParameter(":P_CAJ_CODIGO", OracleDbType.Varchar2) { Value = codCajero });
-                    command.Parameters.Add(new OracleParameter(":P_CAJ_PROCESADO", OracleDbType.Varchar2) { Value = flagProcesado });
-
+                    
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
-
 
         public async Task<(int, string)> NuevoCajeroAsyncOracleSpsa(ASR_CajeroPaso cajero)
         {
@@ -374,7 +367,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
             catch (Exception ex)
             {
-                return (-20020, $"Creacion cajeros falló: {ex.Message}");
+                return (-20020, $"Creación cajeros falló: {ex.Message}");
             }
         }
 
@@ -484,8 +477,47 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
+        public async Task<(int, string)> EliminarCajeroaAsyncOracleSpsa(ASR_CajeroPaso cajero)
+        {
+            try
+            {
+                var usuario = ConstruirUsuario(cajero.CajUsuarioCrea);
 
+                await DarBajaCajeroOracleSpsa(cajero.CajRut, usuario);
+                
+                return(0,  $"Cajero {cajero.CajRut} eliminado.");
 
+            }
+            catch (Exception ex)
+            {
+                return (-20020, $"Eliminación cajeros falló: {ex.Message}");
+            }
+        }
+
+        public async Task DarBajaCajeroOracleSpsa(string rut, string usuario)
+        {
+            using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
+            {
+                await connection.OpenAsync();
+
+                string query = @"UPDATE ""ECT2SP"".""IRS_CAJEROS""
+                                   SET CAJ_FBAJA        = TRUNC(SYSDATE),
+                                       CAJ_ACTIVO       = 'N',
+                                       CAJ_USUARIO_BAJA = :P_CAJ_USUARIO_BAJA,
+                                       CAJ_ESTADO       = 2,
+                                       CAJ_LOGIN        = NULL
+                                 WHERE CAJ_ACTIVO = 'S'
+                                   AND CAJ_RUT = :P_CAJ_RUT";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.Parameters.Add(":P_CAJ_USUARIO_BAJA", OracleDbType.Varchar2, usuario ?? (object)DBNull.Value, System.Data.ParameterDirection.Input);
+                    command.Parameters.Add(":P_CAJ_RUT", OracleDbType.Varchar2, rut ?? (object)DBNull.Value, System.Data.ParameterDirection.Input);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
 
         // Postgress
 

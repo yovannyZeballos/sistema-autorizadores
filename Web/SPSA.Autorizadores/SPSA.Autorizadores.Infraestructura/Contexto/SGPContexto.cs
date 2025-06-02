@@ -67,6 +67,11 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioCComSolicitudDet = new RepositorioCComSolicitudDet(this);
             RepositorioMaeCodComercio = new RepositorioMaeCodComercio(this);
 
+            RepositorioMdrBinesIzipay = new RepositorioMdrBinesIzipay(this);
+            RepositorioMdrClasificacion = new RepositorioMdrClasificacion(this);
+            RepositorioMdrOperador = new RepositorioMdrOperador(this);
+            RepositorioMdrFactorIzipay = new RepositorioMdrFactorIzipay(this);
+
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
@@ -120,9 +125,15 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioCComSolicitudDet RepositorioCComSolicitudDet { get; private set; }
 		public IRepositorioMaeCodComercio RepositorioMaeCodComercio { get; private set; }
 
+		public IRepositorioMdrBinesIzipay RepositorioMdrBinesIzipay { get; private set; }
+		public IRepositorioMdrClasificacion RepositorioMdrClasificacion { get; private set; }
+		public IRepositorioMdrOperador RepositorioMdrOperador { get; private set; }
+		public IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; private set; }
 
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Configurations.Add(new ProcesoParametroTypeConfiguration());
 			modelBuilder.Configurations.Add(new ProcesoParametroEmpresaTypeConfiguration());
@@ -176,6 +187,13 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new CcomSolicitudCabTypeConfiguration());
 			modelBuilder.Configurations.Add(new CcomSolicitudDetTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeCodComercioTypeConfiguration());
+
+			//modelBuilder.Configurations.Add(new MdrTmpBinesIzipayTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrBinesIzipayTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrClasificacionPorNombreTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrClasificacionPorOperadorTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrFactorIzipayTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrOperadorTypeConfiguration());
 
 		}
 
