@@ -87,6 +87,12 @@
     <Compile Include="Entidades\Mae_Puesto.cs" />
     <Compile Include="Entidades\Mae_Region.cs" />
     <Compile Include="Entidades\Mae_Zona.cs" />
+    <Compile Include="Entidades\Mdr_BinesIzipay.cs" />
+    <Compile Include="Entidades\Mdr_ClasificacionPorNombre.cs" />
+    <Compile Include="Entidades\Mdr_ClasificacionPorOperador.cs" />
+    <Compile Include="Entidades\Mdr_FactorIzipay.cs" />
+    <Compile Include="Entidades\Mdr_Operador.cs" />
+    <Compile Include="Entidades\Mdr_TmpBinesIzipay.cs" />
     <Compile Include="Entidades\MonCierreEOD.cs" />
     <Compile Include="Entidades\MonCierreEODHist.cs" />
     <Compile Include="Entidades\TmpMonCierreLocal.cs" />

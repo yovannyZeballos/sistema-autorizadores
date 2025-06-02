@@ -449,6 +449,12 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Commands\CrearCajeroVolanteCommand.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Commands\Bines\CrearMdrBinesIzipayCommand.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Commands\FactoresMdr\CrearMdrFactorIzipayCommand.cs" />
+    <Compile Include="Features\MdrBinesIzipay\DTOs\Bines\ListarMdrBinesDto.cs" />
+    <Compile Include="Features\MdrBinesIzipay\DTOs\FactoresMdr\ListarMdrFactorDto.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Queries\Bines\ListarMdrBinesIzipayQuery.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Queries\FactoresMdr\ListarMdrFactorIzipayQuery.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarActualizacionEstadoCierreCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTSpsaCommand.cs" />
     <Compile Include="Features\Monitor\Commands\ProcesarControlBCTHpsaCommand.cs" />
