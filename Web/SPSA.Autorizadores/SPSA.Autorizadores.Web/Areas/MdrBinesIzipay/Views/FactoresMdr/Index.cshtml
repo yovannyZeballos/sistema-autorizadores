@@ -5,6 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .select2-container--default .select2-selection--single {
+        font-size: 0.745rem;
+    }
+
+    .select2-results__option {
+        font-size: 0.745rem;
+    }
+</style>
+
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
@@ -21,60 +31,146 @@
 
 <div class="col-xl-12">
     <div class="card overflow-hidden">
-        @Html.Partial("_CardHeader", "????????????")
+        @Html.Partial("_CardHeader", "Factores MDR")
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
-                        <select class="form-control select2-show-search custom-select filtro" id="cboEmpresaBuscar">
+                        <label for="cboEmpresa" class="form-label">Empresa</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboEmpresa">
+                            <option value="0">Todos</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label for="cboLocalBuscar" class="form-label">Local</label>
-                        <select class="form-control select2-show-search custom-select filtro" id="cboLocalBuscar">
+                        <label for="cboNumAno" class="form-label">Año</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboNumAno">
                         </select>
                     </div>
                 </div>
-                @*<div class="col-md-3">
-                        <div class="form-group">
-                            <label for="cboEstadoBuscar" class="form-label">Estado</label>
-                            <select class="form-control select2-show-search custom-select filtro" id="cboEstadoBuscar">
-                                <option value="0">Todos</option>
-                                <option value="S">Solicitado</option>
-                                <option value="A">Aprobado</option>
-                                <option value="R">Rechazado</option>
-                                <option value="N">Anulado</option>
-                            </select>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="cboOperador" class="form-label">Operador</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboOperador">
+                            <option value="0">Todos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="cboClasificacion" class="form-label">Clasificación</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboClasificacion">
+                            <option value="0">Todos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <button id="btnCargarBines" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-upload-cloud"></i> Cargar Bines
+                    </button>
+                    <button id="btnDescargarMaestro" class="btn btn-sm btn-primary mb-2">
+                        <i class="fe fe-download-cloud"></i> Descargar Maestro
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <table id="tableFactores" class="table table-bordered text-nowrap border-bottom">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th style="width: 30px; text-align: center;">
+                                            <input type="checkbox" id="checkAllRows" />
+                                        </th>
+                                        <th>Empresa</th>
+                                        <th>Operador</th>
+                                        <th>Clasificacion</th>
+                                        <th>Factor</th>
+                                        <th>IndActivo</th>
+                                        <th>UsuCreacion</th>
+                                        <th>FecCreacion</th>
+                                        <th>UsuModifica</th>
+                                        <th>FecModifica</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-1 d-flex justify-content-start align-items-center">
+                            <div class="d-flex flex-column">
+                                <button id="btnNuevoFactor" class="btn btn-sm btn-primary mb-2">
+                                    <i class="fe fe-plus"></i> Nuevo
+                                </button>
+                                <button id="btnEliminarFactor" class="btn btn-sm btn-primary mb-2">
+                                    <i class="fe fe-trash"></i> Eliminar
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="cboTipoSolicitudBuscar" class="form-label">Tipo Acción</label>
-                            <select class="form-control select2-show-search custom-select filtro" id="cboTipoSolicitudBuscar">
-                                <option value="0">Todos</option>
-                                <option value="C">Crear</option>
-                                <option value="E">Eliminar</option>
-                            </select>
-                        </div>
-                    </div>*@
-                <div class="col-xl-12 d-flex justify-content-end">
-                    <input type="text" style="width:200px;" class="form-control" id="txtFiltroUsuario" placeholder="Buscar..." />
-                </div>
-                <div class="col-xl-12">
-                    <table id="tableUsuario" class="table text-nowrap border-bottom">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal para “Nuevo Factor” -->
+<div class="modal fade" id="modalNuevoFactor" tabindex="-1" aria-labelledby="modalNuevoFactorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNuevoFactorLabel">Nuevo Factor MDR</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoFactor">
+                    <div class="mb-3">
+                        <label for="modalCboEmpresa" class="form-label">Empresa</label>
+                        <select id="modalCboEmpresa" class="form-control select2-show-search">
+                            <option value="0">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalCboNumAno" class="form-label">Año</label>
+                        <select id="modalCboNumAno" class="form-control select2-show-search">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalCboOperador" class="form-label">Operador</label>
+                        <select id="modalCboOperador" class="form-control select2-show-search">
+                            <option value="0">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalCboClasificacion" class="form-label">Clasificación</label>
+                        <select id="modalCboClasificacion" class="form-control select2-show-search">
+                            <option value="0">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputFactor" class="form-label">Factor</label>
+                        <input type="number" step="0.0001" id="modalInputFactor" class="form-control" value="0.00" />
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnGuardarModal" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section scripts{
@@ -93,7 +189,7 @@
     <script src="~/Content/ViewJs/AdministrarFactorMdr.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            AprobacionFactorMdr.init();
+            AdministrarFactorMdr.init();
         });
     </script>
 }

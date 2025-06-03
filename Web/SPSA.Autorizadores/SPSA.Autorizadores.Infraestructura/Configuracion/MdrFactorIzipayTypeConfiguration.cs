@@ -12,7 +12,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             ToTable("MDR_FACTOR_IZIPAY", "SGP");
 
             // Configura la clave primaria de la entidad.
-            HasKey(x => new { x.CodEmpresa, x.NumAno });
+            HasKey(x => new { x.CodEmpresa, x.NumAno, x.CodOperador, x.CodClasificacion });
 
             // Configura las propiedades de la entidad.
             Property(x => x.CodEmpresa).HasColumnName("COD_EMPRESA");
