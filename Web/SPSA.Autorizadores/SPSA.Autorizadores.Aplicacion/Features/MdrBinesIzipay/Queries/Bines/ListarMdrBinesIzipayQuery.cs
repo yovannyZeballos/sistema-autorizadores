@@ -48,7 +48,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Bines
                         x.CodEmpresa == request.CodEmpresa &&
                         x.NumAno == request.NumAno)
                     .OrderBy(x => x.NumBin6)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 
                 response.Data = _mapper.Map<List<ListarMdrBinesDto>>(listaEntidades);
                 response.Ok = true;

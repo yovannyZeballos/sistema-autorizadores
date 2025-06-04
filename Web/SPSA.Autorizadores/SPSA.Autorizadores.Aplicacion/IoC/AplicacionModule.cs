@@ -41,6 +41,7 @@ using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Commands
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.ClasificacionMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
@@ -408,6 +409,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
             builder.RegisterType<CrearMdrFactorIzipayHandler>().As<IRequestHandler<CrearMdrFactorIzipayCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarMdrFactorIzipayHandler>().As<IRequestHandler<EliminarMdrFactorIzipayCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMdrTmpBinesIzipayHandler>().As<IRequestHandler<ImportarMdrTmpBinesIzipayCommand, RespuestaComunExcelDTO>>();
             #endregion
 
 

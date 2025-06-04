@@ -1,10 +1,11 @@
-﻿var urlListarEmpresasAsociadas      = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
-var urlListarFactoresMdr            = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarPaginado';
-var urlListarOperadoresMdr          = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarOperador';
-var urlListarClasificacionesMdr     = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarClasificacion';
+﻿var urlListarEmpresasAsociadas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
+var urlListarFactoresMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarPaginado';
+var urlListarOperadoresMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarOperador';
+var urlListarClasificacionesMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarClasificacion';
 
-var urlCrearFactorMdr               = baseUrl + 'MdrBinesIzipay/FactoresMdr/CrearFactorMdr';
-var urlEliminarFactorMdr            = baseUrl + 'MdrBinesIzipay/FactoresMdr/EliminarFactorMdr';
+var urlCrearFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/CrearFactorMdr';
+var urlEliminarFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/EliminarFactorMdr';
+var urlImportarExcel = baseUrl + 'MdrBinesIzipay/Bines/DesdeExcel';
 
 
 var dataTableFactores = null;
@@ -12,15 +13,6 @@ var dataTableFactores = null;
 var AdministrarFactorMdr = function () {
 
     const eventos = function () {
-
-        //$('#tableFactores tbody').on('click', 'tr', function () {
-        //    if ($(this).hasClass('selected')) {
-        //        $(this).removeClass('selected');
-        //    } else {
-        //        $('#tableFactores').DataTable().$('tr.selected').removeClass('selected');
-        //        $(this).addClass('selected');
-        //    }
-        //});
 
         $("#cboEmpresa, #cboNumAno, #cboClasificacion").on("change", function (e) {
             var table = $('#tableFactores').DataTable();
@@ -46,7 +38,6 @@ var AdministrarFactorMdr = function () {
         });
 
         $('#btnNuevoFactor').on('click', function () {
-            // Resetear formulario del modal
             $('#formNuevoFactor')[0].reset();
 
             $('#modalCboEmpresa').val('0');
@@ -58,10 +49,8 @@ var AdministrarFactorMdr = function () {
             $('#modalCboOperador').val('0');
             $('#modalCboOperador').trigger('change');
 
-            //$('#modalCboClasificacion').empty().append($('<option>', { value: '0', text: 'Seleccione clasificación' }));
             $('#modalInputFactor').val('0.00');
 
-            // Abrir el modal
             var modal = new bootstrap.Modal(document.getElementById('modalNuevoFactor'));
             modal.show();
         });
@@ -181,8 +170,167 @@ var AdministrarFactorMdr = function () {
             });
         });
 
-        
+        $('#btnDescargarMaestro').on('click', function () {
+            var empresa = $('#cboEmpresa').val();
+            var anio = $('#cboNumAno').val();
 
+            if (!empresa || empresa === '0' || !anio) {
+                swal({ text: "Debe seleccionar Empresa y Año.", icon: "warning" });
+                return;
+            }
+
+            swal({
+                text: "¿Deseas descargar el archivo CSV del consolidado?",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "No",
+                        value: false,
+                        visible: true,
+                        className: "btn btn-secondary",
+                        closeModal: true
+                    },
+                    confirm: {
+                        text: "Sí",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-primary",
+                        closeModal: true
+                    }
+                }
+            }).then((confirmar) => {
+                if (!confirmar) {
+                    return;
+                }
+
+                var url = baseUrl + 'MdrBinesIzipay/Bines/DescargarCsvStreaming'
+                    + '?codEmpresa=' + encodeURIComponent(empresa)
+                    + '&numAno=' + encodeURIComponent(anio);
+
+                showLoading();
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (data, textStatus, jqXHR) {
+
+                        closeLoading();
+
+                        var contentType = jqXHR.getResponseHeader('Content-Type') || '';
+
+                        if (contentType.indexOf('application/json') !== -1) {
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                try {
+                                    var obj = JSON.parse(reader.result);
+                                    if (obj.ok === false) {
+                                        swal({ text: obj.mensaje || 'Error desconocido.', icon: "error" });
+                                    } else {
+                                        swal({ text: 'Ocurrió un error inesperado.', icon: "error" });
+                                    }
+                                } catch (parseErr) {
+                                    swal({ text: "Error al procesar la respuesta del servidor.", icon: "error" });
+                                }
+                            };
+                            reader.readAsText(data);
+                            return;
+                        }
+
+                        var disposition = jqXHR.getResponseHeader('Content-Disposition');
+                        var fileName = "Consolidado.csv";
+                        if (disposition && disposition.indexOf('filename=') !== -1) {
+                            fileName = disposition
+                                .split('filename=')[1]
+                                .trim()
+                                .replace(/["']/g, '');
+                        }
+
+                        var blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+                        var urlBlob = URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = urlBlob;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(urlBlob);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        closeLoading();
+                        swal({
+                            text: "Error al descargar CSV: " + (errorThrown || jqXHR.statusText),
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+
+        $('#btnCargarBines').on('click', function () {
+            $('#excelBinesTmp').click();
+        });
+
+        $('#excelBinesTmp').on('change', function () {
+            var fileInput = this;
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            swal({
+                text: "Al importar, se limpiará la tabla temporal y se cargarán nuevos registros. ¿Deseas continuar?",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "No",
+                        value: false,
+                        visible: true,
+                        className: "btn btn-secondary",
+                        closeModal: true
+                    },
+                    confirm: {
+                        text: "Sí",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-primary",
+                        closeModal: true
+                    }
+                }
+            }).then(function (confirmar) {
+                if (!confirmar) {
+                    $(fileInput).val('');
+                    return;
+                }
+
+                showLoading();
+
+                var formData = new FormData();
+                formData.append('archivoExcel', fileInput.files[0]);
+
+                $.ajax({
+                    url: urlImportarExcel,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false
+                })
+                .done(function (response) {
+                    closeLoading();
+                    $(fileInput).val('');
+
+                    if (response.ok) {
+                        swal({ text: response.mensaje, icon: "success" });
+                    } else {
+                        swal({ text: response.mensaje, icon: "warning" });
+                    }
+                })
+                .fail(function (xhr) {
+                    closeLoading();
+                    $(fileInput).val('');
+                    swal({ text: "Error al subir el archivo: " + (xhr.responseText || xhr.statusText), icon: "error" });
+                });
+            });
+        });
     };
 
     const listarEmpresasAsociadas = function () {
@@ -276,7 +424,7 @@ var AdministrarFactorMdr = function () {
         const yearNow = (new Date()).getFullYear();
 
         for (let año = yearNow; año >= yearStart; año--) {
-            $sel.append($('<option>', {value: año.toString(),text: año.toString()}));
+            $sel.append($('<option>', { value: año.toString(), text: año.toString() }));
         }
 
         $sel.val(yearNow.toString());
@@ -432,7 +580,8 @@ var AdministrarFactorMdr = function () {
                     }
                 },
                 { title: "U. Creacion", data: "UsuCreacion" },
-                { title: "F. Creacion", data: "FecCreacion",
+                {
+                    title: "F. Creacion", data: "FecCreacion",
                     render: function (data, type, row) {
                         if (data) {
                             var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
@@ -443,7 +592,8 @@ var AdministrarFactorMdr = function () {
                     }
                 },
                 { title: "U. Modifica", data: "UsuModifica" },
-                { title: "F. Modifica", data: "FecModifica",
+                {
+                    title: "F. Modifica", data: "FecModifica",
                     render: function (data, type, row) {
                         if (data) {
                             var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
@@ -484,19 +634,6 @@ var AdministrarFactorMdr = function () {
         });
 
     };
-
-
-    const validarSelecion = function (count) {
-        if (count === 0) {
-            swal({
-                text: "Debe seleccionar como minimo un registro",
-                icon: "warning",
-            });
-            return false;
-        }
-
-        return true;
-    }
 
     return {
         init: function () {
