@@ -12,5 +12,9 @@
         public System.DateTime FecCreacion { get; set; }
         public string UsuModifica { get; set; }
         public System.DateTime? FecModifica { get; set; }
+
+        public string NomEmpresa { get; set; }
+        public string NomOperador { get; set; }
+        public string NomClasificacion { get; set; }
     }
 }

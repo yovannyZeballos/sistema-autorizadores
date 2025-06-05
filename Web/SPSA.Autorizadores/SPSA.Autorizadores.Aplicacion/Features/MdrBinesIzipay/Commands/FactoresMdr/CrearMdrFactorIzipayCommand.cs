@@ -19,9 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
         public string CodOperador { get; set; }
         public string CodClasificacion { get; set; }
         public decimal Factor { get; set; }
-        public string IndActivo { get; set; }
         public string UsuCreacion { get; set; }
-        // FecCreacion se asigna en el handler
     }
 
     public class CrearMdrFactorIzipayHandler : IRequestHandler<CrearMdrFactorIzipayCommand, RespuestaComunDTO>
@@ -57,14 +55,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
                     return respuesta;
                 }
 
-                // Mapear y asignar fecha de creación
                 var entidad = _mapper.Map<Mdr_FactorIzipay>(request);
                 entidad.FecCreacion = DateTime.Now;
+                entidad.IndActivo = "S";
 
                 _contexto.RepositorioMdrFactorIzipay.Agregar(entidad);
                 await _contexto.GuardarCambiosAsync();
 
-                respuesta.Mensaje = "Factor MDR creado exitosamente.";
+                respuesta.Mensaje = "Factor creado exitosamente.";
             }
             catch (Exception ex)
             {
