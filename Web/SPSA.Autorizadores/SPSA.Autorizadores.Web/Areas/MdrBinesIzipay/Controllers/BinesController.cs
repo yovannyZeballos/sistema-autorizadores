@@ -24,34 +24,14 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         // GET: MdrBinesIzipay/Bines
         public ActionResult Index()
         {
-            // Aquí deberías devolver la vista que contiene el DataTable o formulario
-            // para listar y crear Bines. Por ejemplo: Views/Bines/Index.cshtml
             return View();
         }
 
-        /// <summary>
-        /// Lista todos los Bines para una empresa y año dados.
-        /// Espera recibir por querystring: CodEmpresa y NumAno
-        /// Ejemplo de URL: /Bines/ListarBines?CodEmpresa=01&NumAno=2025
-        /// </summary>
         [HttpGet]
         public async Task<JsonResult> ListarBines(ListarMdrBinesIzipayQuery request)
         {
             var respuesta = await _mediator.Send(request);
-            // GenericResponseDTO&lt;List&lt;ListarMdrBinesDto&gt;&gt;
             return Json(respuesta, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// Crea un nuevo registro de BIN.
-        /// Se espera que el body del POST tenga todas las propiedades de CrearMdrBinesIzipayCommand en JSON.
-        /// </summary>
-        [HttpPost]
-        public async Task<JsonResult> CrearBine(CrearMdrBinesIzipayCommand command)
-        {
-            //command = WebSession.Login;
-            var respuesta = await _mediator.Send(command);
-            return Json(respuesta);
         }
 
         [HttpGet]

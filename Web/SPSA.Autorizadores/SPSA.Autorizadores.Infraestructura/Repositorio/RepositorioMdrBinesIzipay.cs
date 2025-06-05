@@ -17,9 +17,6 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             get { return _contexto; }
         }
 
-        /// <summary>
-        /// Llama a la función SF_MDR_CONSOLIDADO_BINES en PostgreSQL y mapea cada fila a Mdr_BinesIzipay.
-        /// </summary>
         public async Task<List<Mdr_BinesIzipay>> ObtenerConsolidadoBinesAsync(string codEmpresa, string numAno)
         {
             var lista = new List<Mdr_BinesIzipay>();

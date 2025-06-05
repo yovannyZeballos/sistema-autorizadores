@@ -152,7 +152,6 @@
     <Compile Include="Configuracion\MdrClasificacionPorOperadorTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrFactorIzipayTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrOperadorTypeConfiguration.cs" />
-    <Compile Include="Configuracion\MdrTmpBinesIzipayTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
