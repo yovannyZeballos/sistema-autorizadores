@@ -125,12 +125,20 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                         string tipo = Escapar(row[3]);
                         string categoria = Escapar(row[4]);
                         string categoriaIz = Escapar(row[5]);
-
                         string rawBanco = row[6]?.ToString().Trim();
+
                         if (string.IsNullOrEmpty(rawBanco))
                         {
-                            rawBanco = "SIN BANCO";
+                            if (tipo == "FORANEO")
+                            {
+                                rawBanco = "FORANEO";
+                            }
+                            else
+                            {
+                                rawBanco = "SIN BANCO";
+                            }
                         }
+
                         string bancoEmisor = Escapar(rawBanco);
                         string validacion = Escapar(row[7]);
 
@@ -201,6 +209,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                             }
                         }
                         importer.Close();
+                    }
+
+                    using (var cmdProc = new NpgsqlCommand(@"CALL ""SGP"".""sp_mdr_insertar_bines_desde_tmp""();", conn))
+                    {
+                        await cmdProc.ExecuteNonQueryAsync(cancellationToken);
                     }
                 }
 

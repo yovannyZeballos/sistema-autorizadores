@@ -5,7 +5,7 @@ var urlListarClasificacionesMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarCl
 
 var urlCrearFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/CrearFactorMdr';
 var urlEliminarFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/EliminarFactorMdr';
-var urlImportarExcel = baseUrl + 'MdrBinesIzipay/Bines/DesdeExcel';
+var urlImportarExcel = baseUrl + 'MdrBinesIzipay/Bines/ImportarDesdeExcel';
 
 
 var dataTableFactores = null;
