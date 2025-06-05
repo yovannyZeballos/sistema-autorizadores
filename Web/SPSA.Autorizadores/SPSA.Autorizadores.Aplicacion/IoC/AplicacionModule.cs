@@ -41,6 +41,14 @@ using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Commands
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.ClasificacionMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.OperadorMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.ClasificacionMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.OperadorMdr;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
@@ -395,7 +403,13 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             #endregion
 
             #region MDR_BINES_IZIPAY
+            builder.RegisterType<ListarMdrFactorIzipayHandler>().As<IRequestHandler<ListarMdrFactorIzipayQuery, GenericResponseDTO<PagedResult<ListarMdrFactorDto>>>>();
+            builder.RegisterType<ListarMdrOperadorHandler>().As<IRequestHandler<ListarMdrOperadorQuery, GenericResponseDTO<List<ListarMdrOperadorDto>>>>();
+            builder.RegisterType<ListarMdrClasificacionHandler>().As<IRequestHandler<ListarMdrClasificacionQuery, GenericResponseDTO<List<ListarMdrClasificacionDto>>>>();
 
+            builder.RegisterType<CrearMdrFactorIzipayHandler>().As<IRequestHandler<CrearMdrFactorIzipayCommand, RespuestaComunDTO>>();
+            builder.RegisterType<EliminarMdrFactorIzipayHandler>().As<IRequestHandler<EliminarMdrFactorIzipayCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ImportarMdrTmpBinesIzipayHandler>().As<IRequestHandler<ImportarMdrTmpBinesIzipayCommand, RespuestaComunExcelDTO>>();
             #endregion
 
 

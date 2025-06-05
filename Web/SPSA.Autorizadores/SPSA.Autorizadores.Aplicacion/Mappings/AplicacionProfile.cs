@@ -20,7 +20,9 @@ using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.Bines;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.ClasificacionMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.OperadorMdr;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
@@ -258,10 +260,18 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--MDR_BINES_IZIPAY->
-            CreateMap<CrearMdrBinesIzipayCommand, Mdr_BinesIzipay>();
-            CreateMap<CrearMdrFactorIzipayCommand, Mdr_FactorIzipay>();
-            CreateMap<Mdr_BinesIzipay, ListarMdrBinesDto>();
-            CreateMap<Mdr_FactorIzipay, ListarMdrFactorDto>();
+            CreateMap<CrearMdrBinesIzipayCommand, Mdr_BinesIzipay>().ReverseMap();
+            CreateMap<CrearMdrFactorIzipayCommand, Mdr_FactorIzipay>().ReverseMap();
+            CreateMap<ListarMdrBinesDto, Mdr_BinesIzipay>().ReverseMap();
+            CreateMap<ListarMdrFactorDto, Mdr_FactorIzipay>().ReverseMap();
+            CreateMap<ListarMdrOperadorDto, Mdr_Operador>().ReverseMap();
+            CreateMap<ListarMdrClasificacionDto, Mdr_ClasificacionPorOperador>().ReverseMap();
+
+            CreateMap<Mdr_FactorIzipay, ListarMdrFactorDto>()
+                .ForMember(dest => dest.NomEmpresa, opt => opt.MapFrom(src => src.Empresa.NomEmpresa))
+                .ForMember(dest => dest.NomOperador, opt => opt.MapFrom(src => src.Operador.NomOperador))
+                .ForMember(dest => dest.NomClasificacion, opt => opt.MapFrom(src => src.Clasificacion.NomClasificacion));
+
             #endregion
 
             CreateMap<MonCierreEOD, MonCierreEODHist>();
