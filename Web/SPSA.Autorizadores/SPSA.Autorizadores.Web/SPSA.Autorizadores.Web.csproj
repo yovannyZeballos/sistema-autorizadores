@@ -1270,6 +1270,7 @@
     <Content Include="Content\images\flags\zw.svg" />
     <Content Include="Content\images\fondo_inicio.jpg" />
     <Content Include="Content\images\logo_login.jpg" />
+    <Content Include="Content\images\logo_sgp.jpg" />
     <Content Include="Content\images\media\11.jpg" />
     <Content Include="Content\images\media\13.jpg" />
     <Content Include="Content\images\media\4.jpg" />
