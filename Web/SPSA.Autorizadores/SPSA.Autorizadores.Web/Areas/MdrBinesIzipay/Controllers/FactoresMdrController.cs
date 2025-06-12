@@ -40,6 +40,14 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> EditarFactorMdr(ActualizarMdrFactorIzipayCommand command)
+        {
+            command.UsuModifica = WebSession.Login;
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
         public async Task<JsonResult> EliminarFactorMdr(EliminarMdrFactorIzipayCommand command)
         {
             command.UsuElimina = WebSession.Login;

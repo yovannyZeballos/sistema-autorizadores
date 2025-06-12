@@ -5,8 +5,8 @@ var urlListarClasificacionesMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarCl
 
 var urlCrearFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/CrearFactorMdr';
 var urlEliminarFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/EliminarFactorMdr';
+var urlEditarFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/EditarFactorMdr';
 var urlImportarExcel = baseUrl + 'MdrBinesIzipay/Bines/ImportarDesdeExcel';
-
 
 var dataTableFactores = null;
 
@@ -33,87 +33,89 @@ var AdministrarFactorMdr = function () {
             const codOperador = $('#modalCboOperador').val();
             if (!codOperador) return resolve();
 
-            $('#modalCboClasificacion').val('0');
             await cargarComboClasificaciones('#modalCboClasificacion', codOperador);
         });
 
         $('#btnNuevoFactor').on('click', function () {
             $('#formNuevoFactor')[0].reset();
 
-            $('#modalCboEmpresa').val('0');
-            $('#modalCboEmpresa').trigger('change');
+            $('#btnGuardarNuevoModal').show();
+            $('#btnGuardarCambiosModal').hide();
+
+            $('#modalCboEmpresa').prop('disabled', false).trigger('change');
+            $('#modalCboNumAno').prop('disabled', false).trigger('change');
+            $('#modalCboOperador').prop('disabled', false).trigger('change');
+            $('#modalCboClasificacion').prop('disabled', false).trigger('change');
+
+            $('#modalCboEmpresa').val($('#cboEmpresa').val());
+            $('#modalCboEmpresa').prop('disabled', false).trigger('change');
 
             $('#modalCboNumAno').val((new Date()).getFullYear().toString());
-            $('#modalCboNumAno').trigger('change');
+            $('#modalCboNumAno').prop('disabled', false).trigger('change');
 
             $('#modalCboOperador').val('0');
-            $('#modalCboOperador').trigger('change');
+            $('#modalCboOperador').prop('disabled', false).trigger('change');
 
+            $('#modalCboClasificacion').prop('disabled', false).trigger('change');
             $('#modalInputFactor').val('0.00');
+            $('#modalChkActivo').prop('checked', true);
 
             var modal = new bootstrap.Modal(document.getElementById('modalNuevoFactor'));
             modal.show();
         });
 
-        $('#btnGuardarModal').on('click', async function () {
-            var codEmpresa = $('#modalCboEmpresa').val();
-            var numAno = $('#modalCboNumAno').val();
-            var codOperador = $('#modalCboOperador').val();
-            var codClas = $('#modalCboClasificacion').val();
-            var factor = $('#modalInputFactor').val();
+        $('#btnEditarFactor').on('click', async function () {
+            $('#formNuevoFactor')[0].reset();
 
-            if (!codEmpresa || codEmpresa === '0') {
-                swal({ text: "Seleccione una empresa.", icon: "warning" });
-                return;
-            }
-            if (!numAno || numAno === '0') {
-                swal({ text: "Seleccione un año.", icon: "warning" });
-                return;
-            }
-            if (!codOperador || codOperador === '0') {
-                swal({ text: "Seleccione un operador.", icon: "warning" });
-                return;
-            }
-            if (!codClas || codClas === '0') {
-                swal({ text: "Seleccione una clasificación.", icon: "warning" });
-                return;
-            }
-            if (!factor || isNaN(parseFloat(factor))) {
-                swal({ text: "Ingrese un valor numérico válido para Factor.", icon: "warning" });
-                return;
-            }
+            $('#btnGuardarNuevoModal').hide();
+            $('#btnGuardarCambiosModal').show();
 
-            var cmd = {
-                CodEmpresa: codEmpresa,
-                NumAno: numAno,
-                CodOperador: codOperador,
-                CodClasificacion: codClas,
-                Factor: parseFloat(factor)
-            };
-
-            try {
-                var response = await $.ajax({
-                    url: urlCrearFactorMdr,
-                    type: "POST",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(cmd),
-                    dataType: 'json'
+            var $checks = $('#tableFactores tbody .row-checkbox:checked');
+            if ($checks.length !== 1) {
+                return swal({
+                    text: $checks.length === 0
+                        ? "Seleccione un registro para modificar."
+                        : "Seleccione sólo un registro.",
+                    icon: "warning"
                 });
-
-                if (response.Ok) {
-                    swal({ text: response.Mensaje, icon: "success" });
-
-                    var modalEl = document.getElementById('modalNuevoFactor');
-                    var modalObj = bootstrap.Modal.getInstance(modalEl);
-                    modalObj.hide();
-
-                    $('#tableFactores').DataTable().ajax.reload(null, false);
-                } else {
-                    swal({ text: response.Mensaje, icon: "warning" });
-                }
-            } catch (err) {
-                swal({ text: err.responseText || err.statusText, icon: "error" });
             }
+
+            var $tr = $checks.closest('tr');
+            var data = $('#tableFactores').DataTable().row($tr).data();
+
+            $('#modalCboEmpresa').val(data.CodEmpresa).trigger('change');
+            $('#modalCboNumAno').val(data.NumAno).trigger('change');
+            $('#modalCboOperador').val(data.CodOperador).trigger('change');
+
+            //  Revisa cada 100 ms hasta que aparezca la opción
+            var intento = setInterval(function () {
+                var $opt = $('#modalCboClasificacion option[value="' + data.CodClasificacion + '"]');
+                if ($opt.length) {
+                    clearInterval(intento);
+                    $('#modalCboClasificacion')
+                        .val(data.CodClasificacion)
+                        .trigger('change');
+                }
+            }, 100);
+
+            $('#modalInputFactor').val(parseFloat(data.Factor).toFixed(4));
+            $('#modalChkActivo').prop('checked', data.IndActivo === 'S');
+
+            $('#modalCboEmpresa').prop('disabled', true);
+            $('#modalCboNumAno').prop('disabled', true);
+            $('#modalCboOperador').prop('disabled', true);
+            $('#modalCboClasificacion').prop('disabled', true);
+
+            var modal = new bootstrap.Modal(document.getElementById('modalNuevoFactor'));
+            modal.show();
+        });
+
+        $('#btnGuardarNuevoModal').on('click', async function () {
+            guardarFactor({ modo: 'crear' });
+        });
+
+        $('#btnGuardarCambiosModal').on('click', async function () {
+            guardarFactor({ modo: 'editar' });
         });
 
         $('#btnEliminarFactor').on('click', async function () {
@@ -332,6 +334,73 @@ var AdministrarFactorMdr = function () {
             });
         });
     };
+
+    async function guardarFactor({ modo }) {
+        var codEmpresa = $('#modalCboEmpresa').val();
+        var numAno = $('#modalCboNumAno').val();
+        var codOperador = $('#modalCboOperador').val();
+        var codClas = $('#modalCboClasificacion').val();
+        var factor = $('#modalInputFactor').val();
+        var activo = $('#modalChkActivo').is(':checked') ? 'S' : 'N';
+
+        if (!codEmpresa || codEmpresa === '0') {
+            swal({ text: "Seleccione una empresa.", icon: "warning" });
+            return;
+        }
+        if (!numAno || numAno === '0') {
+            swal({ text: "Seleccione un año.", icon: "warning" });
+            return;
+        }
+        if (!codOperador || codOperador === '0') {
+            swal({ text: "Seleccione un operador.", icon: "warning" });
+            return;
+        }
+        if (!codClas || codClas === '0') {
+            swal({ text: "Seleccione una clasificación.", icon: "warning" });
+            return;
+        }
+        if (!factor || isNaN(parseFloat(factor))) {
+            swal({ text: "Ingrese un valor numérico válido para Factor.", icon: "warning" });
+            return;
+        }
+
+        const urlEleccion = (modo === 'editar')
+            ? urlEditarFactorMdr
+            : urlCrearFactorMdr;
+
+        var cmd = {
+            CodEmpresa: codEmpresa,
+            NumAno: numAno,
+            CodOperador: codOperador,
+            CodClasificacion: codClas,
+            Factor: parseFloat(factor),
+            IndActivo: activo
+        };
+
+        try {
+            var response = await $.ajax({
+                url: urlEleccion,
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(cmd),
+                dataType: 'json'
+            });
+
+            if (response.Ok) {
+                swal({ text: response.Mensaje, icon: "success" });
+
+                var modalEl = document.getElementById('modalNuevoFactor');
+                var modalObj = bootstrap.Modal.getInstance(modalEl);
+                modalObj.hide();
+
+                $('#tableFactores').DataTable().ajax.reload(null, false);
+            } else {
+                swal({ text: response.Mensaje, icon: "warning" });
+            }
+        } catch (err) {
+            swal({ text: err.responseText || err.statusText, icon: "error" });
+        }
+    }
 
     const listarEmpresasAsociadas = function () {
         return new Promise((resolve, reject) => {
@@ -571,11 +640,9 @@ var AdministrarFactorMdr = function () {
                     className: 'text-center',
                     render: function (data, type, row) {
                         if (data === 'S') {
-                            return '<i class="fe fe-check text-success"></i>';
-                            //return '<span class="badge bg-success rounded-circle p-2"><i></i></span>';
+                            return '<i class="fe fe-check text-success fs-6"></i>';
                         } else {
-                            return '<i class="fe fe-x text-danger"></i>';
-                            //return '<span class="badge bg-danger rounded-circle p-2"><i></i></span>';
+                            return '<i class="fe fe-x text-danger fs-6"></i>';
                         }
                     }
                 },
@@ -613,7 +680,7 @@ var AdministrarFactorMdr = function () {
                 infoEmpty: "No hay registros disponibles",
                 infoFiltered: "(filtrado de _MAX_ registros totales)"
             },
-            scrollY: '450px',
+            scrollY: '500px',
             scrollX: true,
             scrollCollapse: true,
             paging: true,

@@ -108,6 +108,9 @@
                                 <button id="btnNuevoFactor" class="btn btn-sm btn-primary mb-2">
                                     <i class="fe fe-plus"></i> Nuevo
                                 </button>
+                                <button id="btnEditarFactor" class="btn btn-sm btn-primary mb-2">
+                                    <i class="fe fe-edit-2"></i> Modificar
+                                </button>
                                 <button id="btnEliminarFactor" class="btn btn-sm btn-primary mb-2">
                                     <i class="fe fe-trash"></i> Eliminar
                                 </button>
@@ -130,7 +133,7 @@
             </div>
             <div class="modal-body">
                 <form id="formNuevoFactor">
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="modalCboEmpresa" class="form-label">Empresa</label>
                         <select id="modalCboEmpresa" class="form-control select2-show-search">
                             <option value="0">Todos</option>
@@ -162,11 +165,17 @@
                         <input type="number" step="0.0001" id="modalInputFactor" class="form-control" value="0.00" />
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label" for="modalChkActivo">Activo</label>
+                        <input type="checkbox" class="form-check" id="modalChkActivo">
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnGuardarModal" class="btn btn-primary">Guardar</button>
+                <button type="button" id="btnGuardarNuevoModal" class="btn btn-primary">Guardar</button>
+                <button type="button" id="btnGuardarCambiosModal" class="btn btn-primary">Guardar</button>
             </div>
         </div>
     </div>
