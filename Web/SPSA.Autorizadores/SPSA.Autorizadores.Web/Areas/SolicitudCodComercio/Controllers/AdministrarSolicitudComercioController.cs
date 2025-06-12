@@ -36,13 +36,6 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudCodComercio.Controllers
             return Json(respuesta);
         }
 
-        //[HttpPost]
-        //public async Task<JsonResult> Obtener(ObtenerMaeColaboradorIntQuery request)
-        //{
-        //    var respuesta = await _mediator.Send(request);
-        //    return Json(respuesta);
-        //}
-
         [HttpGet]
         public async Task<JsonResult> ListarPaginado(ListarSolicitudCComercioCabQuery request)
         {
@@ -114,36 +107,6 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudCodComercio.Controllers
 
             return Json(respuesta);
 
-            //var respuesta = new RespuestaComunExcelDTO();
-            //foreach (var fileKey in Request.Files)
-            //{
-            //    HttpPostedFileBase archivo = Request.Files[fileKey.ToString()];
-            //    if (archivo is null)
-            //    {
-            //        respuesta = new RespuestaComunExcelDTO
-            //        {
-            //            Errores = new List<ErroresExcelDTO>(),
-            //            Ok = false,
-            //            Mensaje = "Se encontraron algunos errores en el archivo"
-            //        };
-            //        respuesta.Errores.Add(new ErroresExcelDTO
-            //        {
-            //            Fila = 1,
-            //            Mensaje = "No se ha seleccionado ningun archivo."
-            //        });
-            //        return Json(respuesta);
-            //    }
-            //    else
-            //    {
-            //        respuesta = await _mediator.Send(new ImportarMaeLocalComercioCommand
-            //        {
-            //            Archivo = archivo,
-            //            Usuario = WebSession.Login
-            //        });
-            //    }
-            //}
-
-            //return Json(respuesta);
         }
     }
 }

@@ -260,7 +260,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--MDR_BINES_IZIPAY->
-            CreateMap<CrearMdrBinesIzipayCommand, Mdr_BinesIzipay>().ReverseMap();
             CreateMap<CrearMdrFactorIzipayCommand, Mdr_FactorIzipay>().ReverseMap();
             CreateMap<ListarMdrBinesDto, Mdr_BinesIzipay>().ReverseMap();
             CreateMap<ListarMdrFactorDto, Mdr_FactorIzipay>().ReverseMap();

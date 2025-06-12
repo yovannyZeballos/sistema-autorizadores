@@ -15,6 +15,7 @@ using SPSA.Autorizadores.Aplicacion.Extensiones;
 using System.Linq;
 using System.Data.Entity;
 using SPSA.Autorizadores.Dominio.Entidades;
+using System.IO;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 {
@@ -44,6 +45,27 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 
             try
             {
+                if (request.Archivo == null || request.Archivo.ContentLength == 0)
+                {
+                    return new RespuestaComunExcelDTO
+                    {
+                        Ok = false,
+                        Mensaje = "No se encontró ningún archivo para procesar.",
+                        Errores = new List<ErroresExcelDTO>()
+                    };
+                }
+
+                string ext = Path.GetExtension(request.Archivo.FileName).ToLower();
+                if (ext != ".xlsx")
+                {
+                    return new RespuestaComunExcelDTO
+                    {
+                        Ok = false,
+                        Mensaje = "Sólo se permiten archivos con extensión .xlsx.",
+                        Errores = new List<ErroresExcelDTO>()
+                    };
+                }
+
                 using (var reader = ExcelReaderFactory.CreateReader(request.Archivo.InputStream))
                 {
                     var ds = reader.AsDataSet(new ExcelDataSetConfiguration()
@@ -72,6 +94,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                         string codEmpresa = razonSocial.Split(' ')[0];
 
                         for (int i = 6; i < dt.Rows.Count-18; i++)
+                        //for (int i = 6; i < dt.Rows.Count; i++)
                         {
                             try
                             {
@@ -132,7 +155,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                         await _contexto.GuardarCambiosAsync();
 
                         respuesta.Ok = respuesta.Errores.Count == 0;
-                        respuesta.Mensaje = respuesta.Ok ? "Archivo importado correctamente." : "Se importaron registros con errores.";
+                        respuesta.Mensaje = respuesta.Ok ? "Importación completada exitosamente." : "Se importaron filas, pero hubo errores en algunas filas.";
                     }
                 }
             }

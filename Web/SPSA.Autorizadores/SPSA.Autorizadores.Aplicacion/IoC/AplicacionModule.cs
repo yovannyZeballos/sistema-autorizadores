@@ -408,6 +408,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarMdrClasificacionHandler>().As<IRequestHandler<ListarMdrClasificacionQuery, GenericResponseDTO<List<ListarMdrClasificacionDto>>>>();
 
             builder.RegisterType<CrearMdrFactorIzipayHandler>().As<IRequestHandler<CrearMdrFactorIzipayCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarMdrFactorIzipayHandler>().As<IRequestHandler<ActualizarMdrFactorIzipayCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarMdrFactorIzipayHandler>().As<IRequestHandler<EliminarMdrFactorIzipayCommand, RespuestaComunDTO>>();
             builder.RegisterType<ImportarMdrTmpBinesIzipayHandler>().As<IRequestHandler<ImportarMdrTmpBinesIzipayCommand, RespuestaComunExcelDTO>>();
             #endregion

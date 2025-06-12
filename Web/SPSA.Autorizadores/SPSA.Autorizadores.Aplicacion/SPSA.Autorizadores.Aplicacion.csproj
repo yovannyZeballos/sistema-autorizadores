@@ -450,6 +450,7 @@
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteQuery.cs" />
     <Compile Include="Features\MantenimientoCajeroVolante\Queries\ListarCajeroVolanteOfiplanQuery.cs" />
     <Compile Include="Features\MdrBinesIzipay\Commands\Bines\ImportarMdrTmpBinesIzipayCommand.cs" />
+    <Compile Include="Features\MdrBinesIzipay\Commands\FactoresMdr\ActualizarMdrFactorIzipayCommand.cs" />
     <Compile Include="Features\MdrBinesIzipay\Commands\FactoresMdr\CrearMdrFactorIzipayCommand.cs" />
     <Compile Include="Features\MdrBinesIzipay\Commands\FactoresMdr\EliminarMdrFactorIzipayCommand.cs" />
     <Compile Include="Features\MdrBinesIzipay\DTOs\Bines\ListarMdrBinesDto.cs" />

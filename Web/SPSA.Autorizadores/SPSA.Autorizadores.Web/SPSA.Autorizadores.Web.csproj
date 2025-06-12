@@ -1270,6 +1270,7 @@
     <Content Include="Content\images\flags\zw.svg" />
     <Content Include="Content\images\fondo_inicio.jpg" />
     <Content Include="Content\images\logo_login.jpg" />
+    <Content Include="Content\images\logo_sgp.jpg" />
     <Content Include="Content\images\media\11.jpg" />
     <Content Include="Content\images\media\13.jpg" />
     <Content Include="Content\images\media\4.jpg" />
@@ -2937,6 +2938,9 @@
     <Content Include="Areas\MdrBinesIzipay\Views\_ViewStart.cshtml" />
     <Content Include="Areas\MdrBinesIzipay\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\MdrBinesIzipay\Views\FactoresMdr\Index.cshtml" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\FactorMdr.cshtml" />
+    <Content Include="Content\reportes\db_factor_mdr.mrt" />
+    <Content Include="Areas\Dashboards\Views\AdministrarDashboard\Viewer.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

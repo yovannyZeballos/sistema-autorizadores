@@ -1,0 +1,28 @@
+﻿@using Stimulsoft.Report.Web
+@using Stimulsoft.Report.Mvc
+@using System.Web.UI.WebControls;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var rpt = (string)ViewBag.ReportName;
+    ViewBag.Title = "Dashboard | " + rpt;
+}
+
+@Html.Stimulsoft().StiMvcViewer(new StiMvcViewerOptions()
+{
+    Actions =
+    {
+        GetReport   = "GetReport",
+        ViewerEvent = "ViewerEvent"
+    },
+    Appearance =
+    {
+        ScrollbarsMode = true
+    },
+    Toolbar =
+    {
+        DisplayMode      = StiToolbarDisplayMode.Separated,
+        ShowDesignButton = true
+    },
+    Theme = StiViewerTheme.Office2013VeryDarkGrayPurple
+})

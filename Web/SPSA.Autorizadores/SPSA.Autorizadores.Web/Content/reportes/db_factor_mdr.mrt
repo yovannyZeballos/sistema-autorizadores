@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <CalculationMode>Interpretation</CalculationMode>
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <PostgreSQL Ref="2" type="Stimulsoft.Report.Dictionary.StiPostgreSQLDatabase" isKey="true">
+        <Alias>PostgreSQL</Alias>
+        <ConnectionStringEncrypted>4wyZCUZd04XiX/mEz1zhbtU80SvGfHGk40+hvWpxpCPUeNkCzQXZ9cwIhMl3ELRr39r3a1UYqdlCd6g0ywQsKvQS9UliBUmB8xspvUkQbUbRxA==</ConnectionStringEncrypted>
+        <Name>PostgreSQL</Name>
+      </PostgreSQL>
+    </Databases>
+    <DataSources isList="true" count="1">
+      <FuenteDeDatos1 Ref="3" type="Stimulsoft.Report.Dictionary.StiPostgreSQLSource" isKey="true">
+        <Alias>FuenteDeDatos1</Alias>
+        <Columns isList="true" count="10">
+          <value>COD_EMPRESA,System.String</value>
+          <value>NUM_ANO,System.String</value>
+          <value>COD_OPERADOR,System.String</value>
+          <value>COD_CLASIFICACION,System.String</value>
+          <value>FACTOR,System.Decimal</value>
+          <value>IND_ACTIVO,System.String</value>
+          <value>NOM_EMPRESA,System.String</value>
+          <value>RUC,System.String</value>
+          <value>NOM_CLASIFICACION,System.String</value>
+          <value>NOM_OPERADOR,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>95ca1c2be3c54ac9a4892ff24bc4637b</Key>
+        <Name>FuenteDeDatos1</Name>
+        <NameInSource>PostgreSQL</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>SELECT 
+	F."COD_EMPRESA",
+	F."NUM_ANO",
+	F."COD_OPERADOR",
+	O."NOM_OPERADOR",  -- Nombre del operador desde MDR_OPERADOR
+	F."COD_CLASIFICACION",
+	F."FACTOR",
+	F."IND_ACTIVO",
+	E."NOM_EMPRESA",
+	E."RUC",
+	C."NOM_CLASIFICACION"
+	FROM 
+	"SGP"."MDR_FACTOR_IZIPAY" F
+INNER JOIN 
+    "SGP"."MAE_EMPRESA" E ON F."COD_EMPRESA" = E."COD_EMPRESA"
+INNER JOIN 
+    "SGP"."MDR_CLASIFICACION_XOPE" C 
+        ON F."COD_OPERADOR" = C."COD_OPERADOR"
+        AND F."COD_CLASIFICACION" = C."COD_CLASIFICACION"
+INNER JOIN 
+    "SGP"."MDR_OPERADOR" O ON F."COD_OPERADOR" = O."COD_OPERADOR"
+WHERE 
+    F."IND_ACTIVO" = 'S'
+ORDER BY 
+    F."COD_EMPRESA", F."NUM_ANO", F."COD_OPERADOR";</SqlCommand>
+      </FuenteDeDatos1>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Resources isList="true" count="0" />
+    <UserFunctions isList="true" count="0" />
+    <Variables isList="true" count="0" />
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <Key>062fae7b73e5434f9580e7113cfd8ad5</Key>
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Dashboard1 Ref="4" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
+      <BackColor>198, 217, 240</BackColor>
+      <Components isList="true" count="3">
+        <Panel1 Ref="5" type="Stimulsoft.Dashboard.Components.Panel.StiPanelElement" isKey="true">
+          <BackColor>31, 73, 125</BackColor>
+          <ClientRectangle>-7.96,37.96,1212.24,60.21</ClientRectangle>
+          <Components isList="true" count="6">
+            <Text4 Ref="6" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
+              <ClientRectangle>30.61,10.2,80.61,40</ClientRectangle>
+              <Expressions isList="true" count="0" />
+              <Guid>209b7a12fb5b4fc3972489252e50dc09</Guid>
+              <Measures isList="true" count="0" />
+              <Name>Text4</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <SizeMode>Fit</SizeMode>
+              <Text>&lt;font face="Microsoft Sans Serif" size="10"&gt;&lt;text-align="Left"&gt;&lt;b&gt;Año :&lt;/b&gt;&lt;/text-align&gt;&lt;/font&gt;</Text>
+              <Title Ref="7" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+                <Font>Arial,11</Font>
+                <Text>Texto</Text>
+                <Visible>False</Visible>
+              </Title>
+            </Text4>
+            <ComboBox2 Ref="8" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+              <ClientRectangle>106.13,10.2,200,40</ClientRectangle>
+              <DataFilters isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>a4eba2140a1e412b992183b5ab4feb0b</Guid>
+              <KeyMeter Ref="9" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+                <Expression>FuenteDeDatos1.NUM_ANO</Expression>
+                <Key>ebe42cefa3a14c7fb798d9166fa0b9da</Key>
+                <Label>NUM_ANO</Label>
+              </KeyMeter>
+              <Name>ComboBox2</Name>
+              <NameMeter Ref="10" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+                <Expression>FuenteDeDatos1.NUM_ANO</Expression>
+                <Key>86394968d6314989859f916cd4311f0c</Key>
+                <Label>NUM_ANO</Label>
+              </NameMeter>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ShowAllValue>True</ShowAllValue>
+              <TransformActions isList="true" count="0" />
+              <TransformFilters isList="true" count="0" />
+              <TransformSorts isList="true" count="0" />
+              <UserFilters isList="true" count="0" />
+            </ComboBox2>
+            <Text2 Ref="11" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
+              <ClientRectangle>378.57,10.2,80.61,40</ClientRectangle>
+              <Expressions isList="true" count="0" />
+              <Guid>8a35146f3a7645a4b79879c070c2626a</Guid>
+              <Measures isList="true" count="0" />
+              <Name>Text2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <SizeMode>Fit</SizeMode>
+              <Text>&lt;font face="Microsoft Sans Serif" size="10"&gt;&lt;text-align="Left"&gt;&lt;b&gt;Empresa :&lt;/b&gt;&lt;/text-align&gt;&lt;/font&gt;</Text>
+              <Title Ref="12" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+                <Font>Arial,11</Font>
+                <Text>Texto</Text>
+                <Visible>False</Visible>
+              </Title>
+            </Text2>
+            <ListBox1 Ref="13" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+              <ClientRectangle>454.08,10.2,200,40</ClientRectangle>
+              <DataFilters isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>f5bd974bdc964480b65cd8bbe0b2ebec</Guid>
+              <KeyMeter Ref="14" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+                <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+                <Key>5d4e59c03ada4c45821ed19b74b59c95</Key>
+                <Label>NOM_EMPRESA</Label>
+              </KeyMeter>
+              <Name>ListBox1</Name>
+              <NameMeter Ref="15" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+                <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+                <Key>5d4e59c03ada4c45821ed19b74b59c95</Key>
+                <Label>NOM_EMPRESA</Label>
+              </NameMeter>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ShowAllValue>True</ShowAllValue>
+              <TransformActions isList="true" count="0" />
+              <TransformFilters isList="true" count="0" />
+              <TransformSorts isList="true" count="0" />
+              <UserFilters isList="true" count="0" />
+            </ListBox1>
+            <Text3 Ref="16" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
+              <ClientRectangle>715.3,10.2,80.61,40</ClientRectangle>
+              <Expressions isList="true" count="0" />
+              <Guid>4939550089914a25979be3379b8992cc</Guid>
+              <Measures isList="true" count="0" />
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <SizeMode>Fit</SizeMode>
+              <Text>&lt;font face="Microsoft Sans Serif" size="10"&gt;&lt;text-align="Left"&gt;&lt;b&gt;Operador :&lt;/b&gt;&lt;/text-align&gt;&lt;/font&gt;</Text>
+              <Title Ref="17" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+                <Font>Arial,11</Font>
+                <Text>Texto</Text>
+                <Visible>False</Visible>
+              </Title>
+            </Text3>
+            <ComboBox1 Ref="18" type="Stimulsoft.Dashboard.Components.ComboBox.StiComboBoxElement" isKey="true">
+              <ClientRectangle>790.81,10.2,200,40</ClientRectangle>
+              <DataFilters isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>ddd6991aa5384b65b517acf5b374650a</Guid>
+              <KeyMeter Ref="19" type="Stimulsoft.Dashboard.Components.ComboBox.StiKeyComboBoxMeter" isKey="true">
+                <Expression>FuenteDeDatos1.NOM_OPERADOR</Expression>
+                <Key>73405fe80cc040379a12de2ed960e35a</Key>
+                <Label>NOM_OPERADOR</Label>
+              </KeyMeter>
+              <Name>ComboBox1</Name>
+              <NameMeter Ref="20" type="Stimulsoft.Dashboard.Components.ComboBox.StiNameComboBoxMeter" isKey="true">
+                <Expression>FuenteDeDatos1.NOM_OPERADOR</Expression>
+                <Key>17d64ee5ade94b7dac818e5e82341a85</Key>
+                <Label>NOM_OPERADOR</Label>
+              </NameMeter>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ShowAllValue>True</ShowAllValue>
+              <TransformActions isList="true" count="0" />
+              <TransformFilters isList="true" count="0" />
+              <TransformSorts isList="true" count="0" />
+              <UserFilters isList="true" count="0" />
+            </ComboBox1>
+          </Components>
+          <Expressions isList="true" count="0" />
+          <Guid>e8dcb0c6473844c4839eea6815c79e2e</Guid>
+          <Name>Panel1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </Panel1>
+        <Text1 Ref="21" type="Stimulsoft.Dashboard.Components.Text.StiTextElement" isKey="true">
+          <BackColor>31, 73, 125</BackColor>
+          <ClientRectangle>-8.98,-8.98,1214.29,50.2</ClientRectangle>
+          <Expressions isList="true" count="0" />
+          <Guid>ec92273a0f364f5f8606bd47f003a0f2</Guid>
+          <Measures isList="true" count="0" />
+          <Name>Text1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <SizeMode>Fit</SizeMode>
+          <Text>&lt;font face="Arial" size="12"&gt;&lt;text-align="Center"&gt;&lt;b&gt;&lt;font-color="White"&gt;FACTORES DE COMISION DE TARJETA MDR&lt;/font-color&gt;&lt;/b&gt;&lt;/text-align&gt;&lt;/font&gt;</Text>
+          <Title Ref="22" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Arial,11</Font>
+            <Text>Texto</Text>
+            <Visible>False</Visible>
+          </Title>
+        </Text1>
+        <PivotTable1 Ref="23" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotTableElement" isKey="true">
+          <Cells Ref="24" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotTableCells" isKey="true">
+            <Data Ref="25" type="Stimulsoft.Dashboard.Components.Table.StiTableSection" isKey="true">
+              <Font>Microsoft Sans Serif,9</Font>
+            </Data>
+          </Cells>
+          <ClientRectangle>-8.98,103.26,1207.55,466.73</ClientRectangle>
+          <Columns isList="true" count="1">
+            <Item13 Ref="26" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotColumn" isKey="true">
+              <ExpandExpression />
+              <Expression>FuenteDeDatos1.NOM_CLASIFICACION</Expression>
+              <HorAlignment>Left</HorAlignment>
+              <Key>1b2098fa872f495989b3eb1bc03558a0</Key>
+              <Label>CLASIFICACION</Label>
+              <ShowTotal>False</ShowTotal>
+            </Item13>
+          </Columns>
+          <DataFilters isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Guid>121ffb420a9b4106b1fe9d25626cd604</Guid>
+          <Name>PivotTable1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <PivotTableConditions isList="true" count="0" />
+          <Rows isList="true" count="2">
+            <Item14 Ref="27" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotRow" isKey="true">
+              <ExpandExpression />
+              <Expression>FuenteDeDatos1.NOM_EMPRESA</Expression>
+              <Key>b445825008ca4b4d9d754ea54a1e4a6b</Key>
+              <Label>NOM_EMPRESA</Label>
+            </Item14>
+            <Item15 Ref="28" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotRow" isKey="true">
+              <ExpandExpression />
+              <Expression>FuenteDeDatos1.NOM_OPERADOR</Expression>
+              <Key>0e1a10b5c8e24429a2d88507f9cc12cb</Key>
+              <Label>OPERADOR</Label>
+              <ShowTotal>False</ShowTotal>
+            </Item15>
+          </Rows>
+          <Style>Blue</Style>
+          <Summaries isList="true" count="1">
+            <Item16 Ref="29" type="Stimulsoft.Dashboard.Components.PivotTable.StiPivotSummary" isKey="true">
+              <Expression>Max(FuenteDeDatos1.FACTOR)</Expression>
+              <Key>91725d785ec649b48e2053c0d985046b</Key>
+              <Label>FACTOR</Label>
+            </Item16>
+          </Summaries>
+          <Title Ref="30" type="Stimulsoft.Dashboard.Components.StiTitle" isKey="true">
+            <Font>Arial,11</Font>
+            <Text>Tabla de pivote</Text>
+            <Visible>False</Visible>
+          </Title>
+          <TransformActions isList="true" count="0" />
+          <TransformFilters isList="true" count="0" />
+          <TransformSorts isList="true" count="0" />
+        </PivotTable1>
+      </Components>
+      <Expressions isList="true" count="0" />
+      <Guid>b36a7c3e66f540d1a439cf39c6709e64</Guid>
+      <Name>Dashboard1</Name>
+      <Report isRef="0" />
+    </Dashboard1>
+  </Pages>
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportAuthor>Magalli Vera Quispe</ReportAuthor>
+  <ReportChanged>6/9/2025 6:31:50 PM</ReportChanged>
+  <ReportCreated>6/9/2025 5:12:02 PM</ReportCreated>
+  <ReportFile>D:\disco d\Elvis Velasquez\7 dashBoard Stimulsoft\db_factor_mdr.mrt</ReportFile>
+  <ReportGuid>f899aa8a2f4c4840b532c243e36628aa</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2025.1.2.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

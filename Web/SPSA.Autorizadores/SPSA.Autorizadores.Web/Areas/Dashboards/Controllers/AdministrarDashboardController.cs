@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
@@ -10,6 +11,7 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
 {
     public class AdministrarDashboardController : Controller
     {
+        private readonly string _reportsFolder = "~/Content/reportes";
         private readonly IMediator _mediator;
         private readonly ISGPContexto _contexto;
 
@@ -31,65 +33,95 @@ namespace SPSA.Autorizadores.Web.Areas.Dashboards.Controllers
             return View();
         }
 
-        public ActionResult CierreTesoreria()
+        public ActionResult Viewer(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) return HttpNotFound();
+            var filePath = Server.MapPath(Path.Combine(_reportsFolder, name + ".mrt"));
+            if (!System.IO.File.Exists(filePath)) return HttpNotFound();
+            ViewBag.ReportName = name;
             return View();
         }
 
-        public ActionResult CierreTesoreriaSpsa()
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public ActionResult GetReport(string name)
         {
-            return View();
+            var rpt = StiReport.CreateNewDashboard();
+            rpt.Load(Server.MapPath($"{_reportsFolder}/{name}.mrt"));
+            return StiMvcViewer.GetReportResult(rpt);
         }
 
-        public ActionResult InventarioLocal()
-        {
-            return View();
-        }
-
-        public ActionResult BctVsCt()
-        {
-            return View();
-        }
-
-        public ActionResult GetReportCierreTesoreria()
-        {
-            var report = StiReport.CreateNewDashboard();
-            var path = Server.MapPath("~/Content/reportes/cierre-cuadratura.mrt");
-            report.Load(path);
-
-            return StiMvcViewer.GetReportResult(report);
-        }
-
-        public ActionResult GetReportCierreTesoreriaSpsa()
-        {
-            var report = StiReport.CreateNewDashboard();
-            var path = Server.MapPath("~/Content/reportes/cierre-cuadratura-spsa.mrt");
-            report.Load(path);
-
-            return StiMvcViewer.GetReportResult(report);
-        }
-
-        public ActionResult GetReportInvLocal()
-        {
-            var report = StiReport.CreateNewDashboard();
-            var path = Server.MapPath("~/Content/reportes/inventario-local.mrt");
-            report.Load(path);
-
-            return StiMvcViewer.GetReportResult(report);
-        }
-
-        public ActionResult GetReportBctCt()
-        {
-            var report = StiReport.CreateNewDashboard();
-            var path = Server.MapPath("~/Content/reportes/mon-bct-vs-ct.mrt");
-            report.Load(path);
-
-            return StiMvcViewer.GetReportResult(report);
-        }
-
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public ActionResult ViewerEvent()
-        {
-            return StiMvcViewer.ViewerEventResult();
-        }
+            => StiMvcViewer.ViewerEventResult();
+
+        //public ActionResult CierreTesoreria()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult CierreTesoreriaSpsa()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult InventarioLocal()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult BctVsCt()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult FactorMdr()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult GetReportCierreTesoreria()
+        //{
+        //    var report = StiReport.CreateNewDashboard();
+        //    var path = Server.MapPath("~/Content/reportes/cierre-cuadratura.mrt");
+        //    report.Load(path);
+
+        //    return StiMvcViewer.GetReportResult(report);
+        //}
+
+        //public ActionResult GetReportCierreTesoreriaSpsa()
+        //{
+        //    var report = StiReport.CreateNewDashboard();
+        //    var path = Server.MapPath("~/Content/reportes/cierre-cuadratura-spsa.mrt");
+        //    report.Load(path);
+
+        //    return StiMvcViewer.GetReportResult(report);
+        //}
+
+        //public ActionResult GetReportInvLocal()
+        //{
+        //    var report = StiReport.CreateNewDashboard();
+        //    var path = Server.MapPath("~/Content/reportes/inventario-local.mrt");
+        //    report.Load(path);
+
+        //    return StiMvcViewer.GetReportResult(report);
+        //}
+
+        //public ActionResult GetReportBctCt()
+        //{
+        //    var report = StiReport.CreateNewDashboard();
+        //    var path = Server.MapPath("~/Content/reportes/mon-bct-vs-ct.mrt");
+        //    report.Load(path);
+
+        //    return StiMvcViewer.GetReportResult(report);
+        //}
+
+        //public ActionResult GetReportFactorMdr()
+        //{
+        //    var report = StiReport.CreateNewDashboard();
+        //    var path = Server.MapPath("~/Content/reportes/db_factor_mdr.mrt");
+        //    report.Load(path);
+
+        //    return StiMvcViewer.GetReportResult(report);
+        //}
     }
 }
