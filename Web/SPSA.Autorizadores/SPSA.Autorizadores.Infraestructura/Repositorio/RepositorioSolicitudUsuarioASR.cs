@@ -9,6 +9,7 @@ using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
@@ -325,7 +326,6 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
-
         public async Task ActualizarFlagProcesadoAsyncOracleSpsa(int codLocal, string codCajero, string flagProcesado)
         {
             using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
@@ -361,7 +361,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 await InsertarCajeroPasoOracleSpsa(cajero);
 
                 // 3. Importa cajeros
-                var (resultado, mensaje) = await EjecutarImportarCajerosAsync(cajero.LocNumero, usuario);
+                var (resultado, mensaje) = await EjecutarImportarCajerosOracleAsync(cajero.LocNumero, usuario);
 
                 return (resultado, mensaje);
             }
@@ -446,7 +446,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
-        public async Task<(int Resultado, string Mensaje)> EjecutarImportarCajerosAsync(int codLocal, string login)
+        public async Task<(int Resultado, string Mensaje)> EjecutarImportarCajerosOracleAsync(int codLocal, string login)
         {
             using (var connection = new OracleConnection(CadenasConexion.CadenaConexionCT2))
             {
@@ -532,7 +532,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                 string query = @"SELECT DISTINCT
 	                                loc_numero 
                                 FROM
-	                                cajeros_interface 
+	                                ""ct3m"".""cajeros_interface"" 
                                 WHERE
 	                                cod_pais = :p_cod_pais 
 	                                AND cod_comercio = :p_cod_comercio 
@@ -568,9 +568,16 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                string query = @"SELECT *
-                                FROM ct3m.cajeros_interface
-                                WHERE cod_pais = :p_cod_pais AND cod_comercio = :p_cod_comercio AND loc_numero = :p_loc_numero AND caj_procesado = 'N'";
+                string query = @"
+                                SELECT
+	                                * 
+                                FROM
+	                                ""ct3m"".""cajeros_interface""
+                                WHERE 
+                                    cod_pais = :p_cod_pais 
+                                    AND cod_comercio = :p_cod_comercio 
+                                    AND loc_numero = :p_loc_numero 
+                                    AND caj_procesado = 'N'";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -619,12 +626,14 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                string query = @"UPDATE ""ct3m"".""cajeros_interface""
-                                    SET ""caj_procesado""  = :p_caj_procesado
-                                WHERE ""cod_pais"" = :p_cod_pais
-                                    AND ""cod_comercio"" = :p_cod_comercio
-                                    AND ""loc_numero"" = :p_loc_numero
-                                    AND ""caj_codigo"" = :p_caj_codigo";
+                string query = @"
+                                UPDATE ""ct3m"".""cajeros_interface""
+                                SET caj_procesado  = :p_caj_procesado
+                                WHERE 
+                                    cod_pais = :p_cod_pais
+                                    AND cod_comercio = :p_cod_comercio
+                                    AND loc_numero = :p_loc_numero
+                                    AND caj_codigo = :p_caj_codigo";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -645,14 +654,14 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 var usuario = ConstruirUsuario(cajero.CajUsuarioCrea);
 
-                // 1. Elimina paso previo
                 await EliminarCajeroPaso(cajero.CajRut);
 
-                // 2. Inserta paso
+                // vERIFICAR QUE NO EXISTA EL CAJERO EN LA TABLA CAJEROS_PASO, PARA EL MISMO LOCAL
+
                 await InsertarCajeroPaso(cajero);
 
                 // 3. Importa cajeros
-                var (ret, err) = await CallImportarCajerosAsync(cajero.LocNumero, usuario);
+                var (ret, err) = await EjecutarImportarCajerosAsync(cajero.LocNumero, usuario);
                 if (ret < 0)
                     throw new ApplicationException($"Importar cajeros falló: {err}");
             }
@@ -675,7 +684,12 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                string query = @"DELETE FROM ""ct3m"".""irs_cajeros_paso"" WHERE caj_rut = :caj_rut";
+                string query = @"
+                                DELETE 
+                                FROM 
+                                    ""ct3m"".""irs_cajeros_paso"" 
+                                WHERE
+                                    caj_rut = :caj_rut";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -692,24 +706,25 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             {
                 await connection.OpenAsync();
 
-                string query = @"INSERT
-	                                    INTO
-	                                    ""ct3m"".""irs_cajeros_paso"" (
-                                        ""caj_codigo"",
-	                                    ""loc_numero"",
-	                                    ""caj_nombre"",
-	                                    ""caj_nom"",
-	                                    ""caj_apellidos"",
-	                                    ""caj_rut"",
-	                                    ""caj_tipo"",
-	                                    ""caj_tipo_contrato"",
-	                                    ""caj_tipo_docid"",
-	                                    ""caj_codigo_emp"",
-	                                    ""caj_fcreacion"",
-	                                    ""caj_usuario_crea"",
-	                                    ""cod_pais"",
-	                                    ""cod_comercio"")
-                                    VALUES (
+                string query = @"
+                                INSERT INTO ""ct3m"".""irs_cajeros_paso"" (
+                                    caj_codigo,
+	                                loc_numero,
+	                                caj_nombre,
+	                                caj_nom,
+	                                caj_apellidos,
+	                                caj_rut,
+	                                caj_tipo,
+	                                caj_tipo_contrato,
+	                                caj_tipo_docid,
+	                                caj_codigo_emp,
+	                                caj_fcreacion,
+	                                caj_usuario_crea,
+	                                cod_pais,
+	                                cod_comercio
+                                )
+                                VALUES 
+                                (
                                     :caj_codigo,
                                     :loc_numero,
                                     :caj_nombre,
@@ -723,7 +738,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                                     :caj_fcreacion,
                                     :caj_usuario_crea,
                                     :cod_pais,
-                                    :cod_comercio)";
+                                    :cod_comercio
+                                )";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -737,22 +753,8 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                     command.Parameters.Add(new NpgsqlParameter(":caj_tipo_contrato", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipoContrato ?? (object)DBNull.Value });
                     command.Parameters.Add(new NpgsqlParameter(":caj_tipo_docid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajTipoDocId ?? (object)DBNull.Value });
                     command.Parameters.Add(new NpgsqlParameter(":caj_codigo_emp", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCodigoEmp ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_estado", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajEstado ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_activo", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajActivo ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_login", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajLogin ?? (object)DBNull.Value });
-
-                    // Manejo de fechas nulas
                     command.Parameters.Add(new NpgsqlParameter(":caj_fcreacion", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.CajFcreacion ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_fbaja", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.CajFbaja ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_factualiza", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = cajero.Cajfactualiza ?? (object)DBNull.Value });
-
-                    // Resto de campos
                     command.Parameters.Add(new NpgsqlParameter(":caj_usuario_crea", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioCrea ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_usuario_baja", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioBaja ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_usuario_actualiza", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajUsuarioActualiza ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_corr_extranjero", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCorrExtranjero ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_rendauto", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajRendAuto ?? (object)DBNull.Value });
-                    //command.Parameters.Add(new NpgsqlParameter(":caj_carga", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = cajero.CajCarga ?? (object)DBNull.Value });
                     command.Parameters.Add(new NpgsqlParameter(":cod_pais", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodPais });
                     command.Parameters.Add(new NpgsqlParameter(":cod_comercio", NpgsqlTypes.NpgsqlDbType.Integer) { Value = cajero.CodComercio });
 
@@ -761,7 +763,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
-        public async Task<(int retorno, string errm)> CallImportarCajerosAsync(int locNumero, string usuario)
+        public async Task<(int Resultado, string Mensaje)> EjecutarImportarCajerosAsync(int locNumero, string usuario)
         {
             using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
             {
