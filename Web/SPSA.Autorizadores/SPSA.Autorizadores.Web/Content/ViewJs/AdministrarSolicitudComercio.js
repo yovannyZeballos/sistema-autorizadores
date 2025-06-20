@@ -72,6 +72,9 @@ var AdministrarSolicitudComercio = function () {
             const firstRowData = tableDet.row(0).data();
             if (firstRowData) cargarComerciosLocalPorData(firstRowData);
         }
+        else {
+            $('#tableLocalComercio').DataTable().clear().draw();
+        }
     };
 
     const cargarComerciosLocal = function () {
@@ -227,14 +230,12 @@ var AdministrarSolicitudComercio = function () {
             searching: false,
             processing: true,
             serverSide: true,
+            ordering: false,
             ajax: function (data, callback, settings) {
                 var pageNumber = (data.start / data.length) + 1;
                 var pageSize = data.length;
 
                 var filtros = {
-                    //CodLocalAlterno: $("#cboLocalBuscar").val(),
-                    //CodigoOfisis: $("#txtCodOfisisBuscar").val(),
-                    //NroDocIdent: $("#txtNroDocBuscar").val()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -281,6 +282,7 @@ var AdministrarSolicitudComercio = function () {
             ],
             columns: [
                 { data: "NroSolicitud", title: "Nro Solicitud" },
+                { data: "RznSocial", title: "Razón Social" },
                 {
                     data: 'TipEstado',
                     title: 'Estado',
@@ -336,7 +338,7 @@ var AdministrarSolicitudComercio = function () {
                 infoEmpty: "No hay registros disponibles",
                 infoFiltered: "(filtrado de _MAX_ registros totales)"
             },
-            scrollY: '450px',
+            scrollY: '400px',
             scrollX: true,
             scrollCollapse: true,
             paging: true,
@@ -480,6 +482,7 @@ var AdministrarSolicitudComercio = function () {
             complete: function () {
                 closeLoading();
                 $("#excelImportarComercios").val(null);
+                recargarSolicitudesCabManteniendoSeleccion(solicitudCab.NroSolicitud);
             },
             success: function (response) {
 
@@ -503,10 +506,8 @@ var AdministrarSolicitudComercio = function () {
                         });
                     }
 
-                    return;
+                     return;
                 }
-
-                recargarSolicitudesCabManteniendoSeleccion(solicitudCab.NroSolicitud)
 
                 swal({ text: response.Mensaje, icon: "success", });
             },
@@ -516,21 +517,44 @@ var AdministrarSolicitudComercio = function () {
         });
     }
 
-    const recargarSolicitudesCabManteniendoSeleccion = function (nroSolicitudSeleccionado) {
-        var tableCab = $('#tableSolicitudesCab').DataTable();
+    const recargarSolicitudesCabManteniendoSeleccion = function (nroSolicitud) {
+        const tableCab = $('#tableSolicitudesCab').DataTable();
+        const tableDet = $('#tableSolicitudDet').DataTable();
+        const tableCom = $('#tableLocalComercio').DataTable();
 
-        tableCab.ajax.reload(function () {
-            var rows = tableCab.rows().data();
+        const info = tableCab.page.info();
+        if (info.page !== 0) {
+            // No estaba en la pág.1: voy a la 1 y redibujo
+            tableCab.page(0).draw(false);
+        } else {
+            // Ya estaba en la pág.1: recargo directamente
+            tableCab.ajax.reload(null, false);
+        }
 
-            for (var i = 0; i < rows.length; i++) {
-                if (rows[i].NroSolicitud === nroSolicitudSeleccionado) {
-                    $('#tableSolicitudesCab tbody tr').eq(i).addClass('selected');
-                    $('#tableSolicitudesCab tbody tr').eq(i).trigger('click');
-                    break;
-                }
+        // Una sola vez, tras el próximo draw, pinto detalle → comercio
+        tableCab.one('draw', () => {
+            const data = tableCab.rows({ page: 'current' }).data().toArray();
+            const idx = data.findIndex(d => d.NroSolicitud === nroSolicitud);
+            if (idx < 0) return;
+
+            const rowNode = tableCab.row(idx).node();
+            $('#tableSolicitudesCab tbody tr').removeClass('selected');
+            $(rowNode).addClass('selected');
+
+            const detalles = data[idx].Detalles || [];
+            tableDet.clear().rows.add(detalles).draw(false);
+
+            if (detalles.length) {
+                $('#tableSolicitudDet tbody tr').removeClass('selected');
+                $('#tableSolicitudDet tbody tr:eq(0)').addClass('selected');
+                const comercios = detalles[0].Comercios || [];
+                tableCom.clear().rows.add(comercios).draw(false);
+            } else {
+                tableCom.clear().draw(false);
             }
-        }, false); // false = no cambiará de página en la paginación
+        });
     };
+
 
     return {
         init: function () {

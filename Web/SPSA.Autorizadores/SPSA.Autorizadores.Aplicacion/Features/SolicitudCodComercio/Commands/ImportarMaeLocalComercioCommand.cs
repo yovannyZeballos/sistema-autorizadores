@@ -80,23 +80,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 
                             if (!int.TryParse(codLocalAlternoStr, out int codLocalAlterno))
                             {
-                                respuesta.Errores.Add(new ErroresExcelDTO
-                                {
-                                    Fila = i + 1,
-                                    Mensaje = $"Código alterno inválido o no encontrado para {codLocal}"
-                                });
-                                continue;
+                                throw new InvalidOperationException($"Código alterno inválido o no encontrado para {codLocal}");
                             }
 
                             var existe = request.Locales.Any(l => l.CodLocalAlterno == codLocalAlterno);
                             if (!existe)
                             {
-                                respuesta.Errores.Add(new ErroresExcelDTO
-                                {
-                                    Fila = i + 1,
-                                    Mensaje = $"Local {maeLocal.NomLocal} no está en la solicitud seleccionada."
-                                });
-                                continue;
+                                throw new InvalidOperationException($"Local {maeLocal.NomLocal} no está en la solicitud seleccionada.");
                             }
 
                             var nroSolicitud = request.NroSolicitud;
@@ -105,24 +95,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                             var fecComercio = string.IsNullOrWhiteSpace(row[3]?.ToString()) ? (DateTime?)null : DateTime.Parse(row[3].ToString());
                             var desOperador = row[4]?.ToString();
 
-                            if (await ExisteComercioActivoEnOtroLocal(codComercio, nroSolicitud, codLocalAlterno))
-                            {
-                                respuesta.Errores.Add(new ErroresExcelDTO
-                                {
-                                    Fila = i + 1,
-                                    Mensaje = $"Código comercio {codComercio} ya se encuentra en uso."
-                                });
-                                continue;
-                            }
 
-                            if (await ExisteComercioEnLocal(codComercio, nroSolicitud, codLocalAlterno))
+                            if (await ExisteComercio(codComercio))
                             {
-                                respuesta.Errores.Add(new ErroresExcelDTO
-                                {
-                                    Fila = i + 1,
-                                    Mensaje = $"El código comercio {codComercio} existe en {maeLocal.NomLocal}."
-                                });
-                                continue;
+                                throw new InvalidOperationException($"El código comercio {codComercio} existe en {maeLocal.NomLocal}.");
                             }
 
                             listaComercios.Add(new Mae_CodComercio
@@ -148,35 +124,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                                 Mensaje = exFila.Message
                             });
                         }
-                    }
-
-                    if (respuesta.Errores.Any())
-                    {
-                        respuesta.Ok = false;
-                        return respuesta;
-                    }
-
-                    var codsLocalesSolicitud = request.Locales.Select(l => l.CodLocalAlterno).Distinct().ToList();
-                    var codsLocalesExcel = listaComercios.Select(c => c.CodLocalAlterno).Distinct().ToList();
-
-                    var codsFaltantes = codsLocalesSolicitud
-                                        .Where(cod => !codsLocalesExcel.Contains(cod))
-                                        .ToList();
-
-                    if (codsFaltantes.Any())
-                    {
-                        foreach (var codFaltante in codsFaltantes)
-                        {
-                            respuesta.Errores.Add(new ErroresExcelDTO
-                            {
-                                Fila = 0,
-                                Mensaje = $"El local con CodLocalAlterno {codFaltante} no está en la solicitud seleccionada."
-                            });
-                        }
-
-                        respuesta.Ok = false;
-
-                        return respuesta;
                     }
 
                     foreach (var entidad in listaComercios)
@@ -210,43 +157,32 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 
                     await _contexto.GuardarCambiosAsync();
 
-                    respuesta.Ok = true;
-                    respuesta.Mensaje = "Archivo importado correctamente.";
-
+                    respuesta.Ok = respuesta.Errores.Count == 0;
+                    respuesta.Mensaje = respuesta.Ok
+                        ? "Importación completada exitosamente."
+                        : "Se importaron filas, pero hubo errores en algunas filas.";
                 }
+                return respuesta;
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error al importar codigos de comercio");
                 var mensaje = ContainsConstraintViolation(ex, "pk_mae_local_comercio")
                 ? "El código comercio ya se encuentra en uso."
                 : "Ocurrió un error.";
 
-
-                respuesta.Ok = false;
-                //respuesta.Mensaje = "Error al procesar el archivo: " + ex.Message;
-                respuesta.Mensaje = mensaje;
-                _logger.Error(ex, "Error al importar MAE_LOCAL_COMERCIO");
+                return new RespuestaComunExcelDTO
+                {
+                    Ok = false,
+                    Mensaje = mensaje,
+                    Errores = respuesta.Errores
+                };
             }
-
-            return respuesta;
         }
 
-        private async Task<bool> ExisteComercioActivoEnOtroLocal(string codComercio, decimal nroSolicitud, int codLocalAlterno)
+        private async Task<bool> ExisteComercio(string codComercio)
         {
-            return await _contexto.RepositorioMaeCodComercio.Existe(x =>
-                x.CodComercio == codComercio &&
-                x.IndActiva == "S" &&
-                !(x.NroSolicitud == nroSolicitud && x.CodLocalAlterno == codLocalAlterno)
-            );
-        }
-
-        private async Task<bool> ExisteComercioEnLocal(string codComercio, decimal nroSolicitud, int codLocalAlterno)
-        {
-            return await _contexto.RepositorioMaeCodComercio.Existe(x =>
-                x.NroSolicitud == nroSolicitud && 
-                x.CodLocalAlterno == codLocalAlterno &&
-                x.CodComercio == codComercio
-            );
+            return await _contexto.RepositorioMaeCodComercio.Existe(x => x.CodComercio == codComercio );
         }
 
         private bool ContainsConstraintViolation(Exception ex, string constraintName)

@@ -76,7 +76,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                                 CodPais = solicitud.CodPais,
                                 CodComercio = solicitud.CodComercio
                             };
-                            var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.EliminarCajeroaAsyncOracleSpsa(cajeroPaso);
+                            //var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.EliminarCajeroaAsyncOracleSpsa(cajeroPaso);
+                            var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.EliminarCajeroSpsaAsync(cajeroPaso);
 
                             if (resultado != 0)
                             {
@@ -112,7 +113,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
 
                     if (cantCajeros > 0)
                     {
-                        await GenerarArchivoCajeroAsyncOracleSpsa(contexto, parametro.ValParametro, respuesta, 10);
+                        await GenerarArchivoCajeroSpsaAsync(contexto, parametro.ValParametro, respuesta);
                     }
 
                     // 4. Guardar cambios finales (flags de envío/procesado)
@@ -149,7 +150,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
             }
         }
 
-        private async Task GenerarArchivoCajeroAsync(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta)
+        private async Task GenerarArchivoCajeroSpsaAsync(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta)
         {
             // 1. Traes todos los locales pendientes
             var locales = await contexto.RepositorioSolicitudUsuarioASR.ObtenerLocalesPorProcesarAsync(10, 30);

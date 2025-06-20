@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries;

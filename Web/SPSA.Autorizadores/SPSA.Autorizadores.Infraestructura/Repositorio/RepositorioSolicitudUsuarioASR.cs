@@ -648,7 +648,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
-        public async Task NuevoCajeroAsync(ASR_CajeroPaso cajero)
+        public async Task<(int, string)> NuevoCajeroAsync(ASR_CajeroPaso cajero)
         {
             try
             {
@@ -656,18 +656,13 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 
                 await EliminarCajeroPaso(cajero.CajRut);
 
-                // vERIFICAR QUE NO EXISTA EL CAJERO EN LA TABLA CAJEROS_PASO, PARA EL MISMO LOCAL
-
                 await InsertarCajeroPaso(cajero);
 
-                // 3. Importa cajeros
-                var (ret, err) = await EjecutarImportarCajerosAsync(cajero.LocNumero, usuario);
-                if (ret < 0)
-                    throw new ApplicationException($"Importar cajeros falló: {err}");
+                return (0, "OK");
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Importar cajeros falló: {ex.Message}");
+                return (-20020, $"Creación cajero falló: {ex.Message}");
             }
 
         }
@@ -763,35 +758,44 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
         }
 
-        public async Task<(int Resultado, string Mensaje)> EjecutarImportarCajerosAsync(int locNumero, string usuario)
+        public async Task<(int, string)> EliminarCajeroSpsaAsync(ASR_CajeroPaso cajero)
         {
-            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT3_SPSA))
+            try
+            {
+                var usuario = ConstruirUsuario(cajero.CajUsuarioCrea);
+
+                await DarBajaCajero(cajero.CajRut, usuario);
+
+                return (0, $"Cajero {cajero.CajRut} eliminado.");
+
+            }
+            catch (Exception ex)
+            {
+                return (-20020, $"Eliminación cajeros falló: {ex.Message}");
+            }
+        }
+
+        public async Task DarBajaCajero(string rut, string usuario)
+        {
+            using (var connection = new NpgsqlConnection(CadenasConexion.CadenaConexionCT2))
             {
                 await connection.OpenAsync();
 
-                const string query = @"
-                CALL ""ct3m"".""pkg_mant_cajeros_importar_cajeros""(
-                    @loc_numero,
-                    @usuario,
-                    @p_retorno,
-                    @p_errm
-                );
-            ";
+                string query = @"UPDATE ""ct3m"".""irs_cajeros""
+                                   SET caj_fbaja        = CURRENT_DATE,
+                                       caj_activo       = 'N',
+                                       caj_usuario_baja = :p_caj_usuario_baja,
+                                       caj_estado       = 2,
+                                       caj_login        = NULL
+                                 WHERE caj_activo = 'S'
+                                   AND caj_rut = :p_caj_rut";
 
-                using (var cmd = new NpgsqlCommand(query, connection))
+                using (var command = new NpgsqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("loc_numero", locNumero);
-                    cmd.Parameters.AddWithValue("usuario", usuario);
+                    command.Parameters.Add(new NpgsqlParameter(":p_caj_usuario_baja", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = usuario ?? (object)DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter(":p_caj_rut", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = rut ?? (object)DBNull.Value });
 
-                    var pRet = cmd.Parameters.Add("@p_retorno", NpgsqlTypes.NpgsqlDbType.Integer);
-                    pRet.Direction = ParameterDirection.Output;
-
-                    var pErr = cmd.Parameters.Add("@p_errm", NpgsqlTypes.NpgsqlDbType.Varchar, 4000);
-                    pErr.Direction = ParameterDirection.Output;
-
-                    await cmd.ExecuteNonQueryAsync();
-
-                    return ((int)pRet.Value, pErr.Value as string);
+                    await command.ExecuteNonQueryAsync();
                 }
             }
         }

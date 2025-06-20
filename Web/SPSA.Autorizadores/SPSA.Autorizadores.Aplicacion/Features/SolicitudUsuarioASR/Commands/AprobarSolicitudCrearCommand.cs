@@ -74,7 +74,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                                 CodPais = solicitud.CodPais,
                                 CodComercio = solicitud.CodComercio
                             };
-                            var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsyncOracleSpsa(cajeroPaso);
+                            //var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsyncOracleSpsa(cajeroPaso);
+                            var (resultado, mensaje) = await contexto.RepositorioSolicitudUsuarioASR.NuevoCajeroAsync(cajeroPaso);
 
                             if (resultado != 0)
                             {
@@ -105,12 +106,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
                     // 3. Generar archivos según tipo de usuario
                     if (cantAutorizadores > 0)
                     {
-                        await GenerarArchivoAutorizadorAsync(contexto, parametro.ValParametro, respuesta);
+                        await GenerarArchivoAutorizadorSpsaAsync(contexto, parametro.ValParametro, respuesta);
                     }
 
                     if (cantCajeros > 0)
                     {
-                        await GenerarArchivoCajeroAsyncOracleSpsa(contexto, parametro.ValParametro, respuesta, 10);
+                        //await GenerarArchivoCajeroAsyncOracleSpsa(contexto, parametro.ValParametro, respuesta, 10);
+                        await GenerarArchivoCajeroSpsaAsync(contexto, parametro.ValParametro, respuesta);
                     }
 
                     // 4. Guardar cambios finales (flags de envío/procesado)
@@ -125,7 +127,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
             return respuesta;
         }
 
-        private async Task GenerarArchivoAutorizadorAsync(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta)
+        private async Task GenerarArchivoAutorizadorSpsaAsync(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta)
         {
             var archivos = await contexto.RepositorioSolicitudUsuarioASR.ListarArchivos("A");
             var nombresArchivos = archivos.Select(x => x.NombreArchivo).Distinct().ToList();
@@ -145,7 +147,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
             }
         }
 
-        private async Task GenerarArchivoCajeroAsync(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta)
+        private async Task GenerarArchivoCajeroSpsaAsync(ISGPContexto contexto, string rutaBase, RespuestaComunDTO respuesta)
         {
             // 1. Traes todos los locales pendientes
             var locales = await contexto.RepositorioSolicitudUsuarioASR.ObtenerLocalesPorProcesarAsync(10, 30);

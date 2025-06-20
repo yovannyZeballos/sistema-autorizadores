@@ -128,8 +128,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                             tmpBin8 = "00000000";
                         }
 
-                        //string numBin8 = string.IsNullOrWhiteSpace(tmpBin8) ? "00000000" : tmpBin8;
-                        //string numBin8 = Escapar(row[0]);
                         string numBin8 = Escapar(tmpBin8);
                         string numBin6 = Escapar(row[1]);
                         string marca = Escapar(row[2]);

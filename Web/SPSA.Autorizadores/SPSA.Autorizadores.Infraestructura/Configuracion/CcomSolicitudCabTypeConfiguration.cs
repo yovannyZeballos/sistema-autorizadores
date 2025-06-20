@@ -17,6 +17,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             Property(cab => cab.TipEstado).HasColumnName("TIP_ESTADO");
+            Property(cab => cab.RznSocial).HasColumnName("RZN_SOCIAL");
             Property(cab => cab.FecSolicitud).HasColumnName("FEC_SOLICITUD");
             Property(cab => cab.UsuSolicitud).HasColumnName("USU_SOLICITUD");
             Property(cab => cab.FecRecepcion).HasColumnName("FEC_RECEPCION");
