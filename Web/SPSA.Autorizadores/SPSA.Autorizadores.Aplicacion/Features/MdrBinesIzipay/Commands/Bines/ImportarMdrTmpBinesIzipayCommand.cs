@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -80,7 +81,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                         };
                     }
 
-                    dt = ds.Tables[0];
+                    dt = ds.Tables[1];
                 }
 
                 // Recorrer las filas del DataTable y construir un CSV en memoria
@@ -111,6 +112,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                             string s = valor.ToString().Trim();
                             if (string.IsNullOrEmpty(s)) return "";
 
+                            s = QuitarDiacriticos(s).ToUpperInvariant();
+
                             if (s.Contains(",") || s.Contains("\"") || s.Contains("\r") || s.Contains("\n"))
                             {
                                 var tmp = s.Replace("\"", "\"\"");
@@ -119,7 +122,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                             return s;
                         }
 
-                        string numBin8 = Escapar(row[0]);
+                        var tmpBin8 = row[0]?.ToString().Trim();
+                        if (string.IsNullOrWhiteSpace(tmpBin8))
+                        {
+                            tmpBin8 = "00000000";
+                        }
+
+                        string numBin8 = Escapar(tmpBin8);
                         string numBin6 = Escapar(row[1]);
                         string marca = Escapar(row[2]);
                         string tipo = Escapar(row[3]);
@@ -211,6 +220,19 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                         importer.Close();
                     }
 
+                    const string eliminarDuplicadoSql = @"
+                        WITH to_delete AS ( SELECT ctid, ROW_NUMBER ( ) OVER ( PARTITION BY ""NUM_BIN_6"", ""NUM_BIN_8"" ORDER BY ctid ) AS rn FROM ""SGP"".""MDR_TMP_BINES_IZIPAY"" ) DELETE 
+                        FROM
+	                        ""SGP"".""MDR_TMP_BINES_IZIPAY"" T USING to_delete d 
+                        WHERE
+	                        T.ctid = d.ctid 
+	                        AND d.rn = 2;";
+
+                    using (var cmdDelete = new NpgsqlCommand(eliminarDuplicadoSql, conn))
+                    {
+                        await cmdDelete.ExecuteNonQueryAsync(cancellationToken);
+                    }
+
                     using (var cmdProc = new NpgsqlCommand(@"CALL ""SGP"".""sp_mdr_insertar_bines_desde_tmp""();", conn))
                     {
                         await cmdProc.ExecuteNonQueryAsync(cancellationToken);
@@ -240,6 +262,25 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                 };
             }
 
+        }
+
+        /// <summary>
+        /// Elimina tildes y otros diacríticos de una cadena.
+        /// </summary>
+        string QuitarDiacriticos(string texto)
+        {
+            // Forma de descomposición: separa letra + marca diacrítica
+            var normalized = texto.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+            foreach (var c in normalized)
+            {
+                var uc = CharUnicodeInfo.GetUnicodeCategory(c);
+                // Sólo agregamos caracteres que no sean marcas de acento
+                if (uc != UnicodeCategory.NonSpacingMark)
+                    sb.Append(c);
+            }
+            // Volvemos a la forma compuesta
+            return sb.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

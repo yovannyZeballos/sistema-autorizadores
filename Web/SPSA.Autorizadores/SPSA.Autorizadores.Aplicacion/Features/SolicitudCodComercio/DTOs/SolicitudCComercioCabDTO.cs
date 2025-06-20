@@ -6,6 +6,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs
     public class SolicitudCComercioCabDTO
     {
         public decimal NroSolicitud { get; set; }
+        public string RznSocial { get; set; }
         public string TipEstado { get; set; }
         public DateTime? FecSolicitud { get; set; }
         public string UsuSolicitud { get; set; }

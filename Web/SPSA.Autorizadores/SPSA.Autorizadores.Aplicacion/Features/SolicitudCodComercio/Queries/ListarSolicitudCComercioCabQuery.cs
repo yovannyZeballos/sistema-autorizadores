@@ -22,10 +22,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-
         public string NroSolicitud { get; set; }
         public string TipEstado { get; set; }
-        //public DateTime? FecSolicitud { get; set; }
     }
 
     public class ListarSolicitudCComercioCabHandler : IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>>

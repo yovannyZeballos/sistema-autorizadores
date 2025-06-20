@@ -27,8 +27,8 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task<List<int>> ObtenerLocalesPorProcesarAsync(int codPais, int codComercio);
         Task<List<ASR_CajeroPaso>> ObtenerCajerosPorProcesarAsync(int codPais, int codComercio, int codLocal);
         Task ActualizarFlagProcesadoAsync(int codPais, int codComercio, int codLocal, string codCajero, string flagProcesado);
-
-        Task NuevoCajeroAsync(ASR_CajeroPaso cajero);
+        Task<(int, string)> NuevoCajeroAsync(ASR_CajeroPaso cajero);
+        Task<(int, string)> EliminarCajeroSpsaAsync(ASR_CajeroPaso cajero);
 
     }
 }

@@ -11,7 +11,5 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs
         public decimal NroSolicitud { get; set; }
         public long? TipEstado { get; set; }
         public DateTime? FecSolicitud { get; set; }
-
-        //public List<SolicitudDetDto> Detalles { get; set; }
     }
 }
