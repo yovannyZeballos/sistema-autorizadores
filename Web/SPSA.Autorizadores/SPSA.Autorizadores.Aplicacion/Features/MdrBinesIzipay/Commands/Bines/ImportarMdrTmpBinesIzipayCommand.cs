@@ -11,6 +11,7 @@ using System.Web;
 using ExcelDataReader;
 using MediatR;
 using Npgsql;
+using NpgsqlTypes;
 using SPSA.Autorizadores.Aplicacion.DTO;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
@@ -18,6 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
     public class ImportarMdrTmpBinesIzipayCommand : IRequest<RespuestaComunExcelDTO>
     {
         public HttpPostedFileBase Archivo { get; set; }
+        public long CodPeriodo { get; set; }
     }
 
     public class ImportarMdrTmpBinesIzipayHandler : IRequestHandler<ImportarMdrTmpBinesIzipayCommand, RespuestaComunExcelDTO>
@@ -35,6 +37,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
 
             try
             {
+                if (request.CodPeriodo <= 0)
+                {
+                    return new RespuestaComunExcelDTO
+                    {
+                        Ok = false,
+                        Mensaje = "El período seleccionado es inválido.",
+                        Errores = new List<ErroresExcelDTO>()
+                    };
+                }
+                   
+
                 if (request.Archivo == null || request.Archivo.ContentLength == 0)
                 {
                     return new RespuestaComunExcelDTO
@@ -203,7 +216,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
 
                     const string copySql = @"
                         COPY ""SGP"".""MDR_TMP_BINES_IZIPAY""
-                          (""NUM_BIN_8"", ""NUM_BIN_6"", ""MARCA"", ""TIPO"", ""CATEGORIA"", ""CATEGORIA_IZIPAY"", ""BANCO_EMISOR"", ""VALIDACION"")
+                          (""NUM_BIN_8"", ""NUM_BIN_6"", ""MARCA"", ""TIPO"", ""CATEGORIA"", 
+                           ""CATEGORIA_IZIPAY"", ""BANCO_EMISOR"", ""VALIDACION"")
                         FROM STDIN WITH (FORMAT csv);";
 
                     using (var importer = conn.BeginTextImport(copySql))
@@ -233,8 +247,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
                         await cmdDelete.ExecuteNonQueryAsync(cancellationToken);
                     }
 
-                    using (var cmdProc = new NpgsqlCommand(@"CALL ""SGP"".""sp_mdr_insertar_bines_desde_tmp""();", conn))
+                    using (var cmdProc = new NpgsqlCommand(@"CALL ""SGP"".""sp_mdr_insertar_bines_desde_tmp""(@p_cod_periodo);", conn))
                     {
+                        cmdProc.Parameters.AddWithValue("p_cod_periodo", NpgsqlDbType.Bigint, request.CodPeriodo);
                         await cmdProc.ExecuteNonQueryAsync(cancellationToken);
                     }
                 }

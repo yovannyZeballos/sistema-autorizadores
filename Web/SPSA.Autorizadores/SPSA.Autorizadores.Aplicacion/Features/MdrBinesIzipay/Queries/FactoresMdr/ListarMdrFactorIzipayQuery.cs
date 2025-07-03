@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DocumentFormat.OpenXml.Vml;
 using MediatR;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
@@ -22,7 +23,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Factores
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string CodEmpresa { get; set; }
-        public string NumAno { get; set; }
+        public int CodPeriodo { get; set; }
         public string CodOperador { get; set; }
         public string CodClasificacion { get; set; }
     }
@@ -61,10 +62,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Factores
                     combined = Expression.AndAlso(combined, Expression.Equal(prop, val));
                 }
 
-                if (!string.IsNullOrEmpty(request.NumAno) && request.NumAno != "0")
+                if (request.CodPeriodo != 0)
                 {
-                    Expression prop = Expression.Property(param, nameof(Mdr_FactorIzipay.NumAno));
-                    Expression val  = Expression.Constant(request.NumAno);
+                    Expression prop = Expression.Property(param, nameof(Mdr_FactorIzipay.CodPeriodo));
+                    Expression val  = Expression.Constant(request.CodPeriodo);
 
                     combined = Expression.AndAlso(combined, Expression.Equal(prop, val));
                 }

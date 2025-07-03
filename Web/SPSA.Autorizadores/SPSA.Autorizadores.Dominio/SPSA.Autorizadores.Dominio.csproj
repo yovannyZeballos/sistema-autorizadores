@@ -92,6 +92,7 @@
     <Compile Include="Entidades\Mdr_ClasificacionPorOperador.cs" />
     <Compile Include="Entidades\Mdr_FactorIzipay.cs" />
     <Compile Include="Entidades\Mdr_Operador.cs" />
+    <Compile Include="Entidades\Mdr_Periodo.cs" />
     <Compile Include="Entidades\Mdr_TmpBinesIzipay.cs" />
     <Compile Include="Entidades\MonCierreEOD.cs" />
     <Compile Include="Entidades\MonCierreEODHist.cs" />

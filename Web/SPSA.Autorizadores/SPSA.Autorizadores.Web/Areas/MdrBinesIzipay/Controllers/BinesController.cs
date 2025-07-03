@@ -35,11 +35,11 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DescargarCsvStreaming(string codEmpresa, string numAno)
+        public async Task<ActionResult> DescargarCsvStreaming(string codEmpresa, long codPeriodo)
         {
-            if (string.IsNullOrWhiteSpace(codEmpresa) || string.IsNullOrWhiteSpace(numAno))
+            if (string.IsNullOrWhiteSpace(codEmpresa))
             {
-                return Json(new { ok = false, mensaje = "codEmpresa y numAno son obligatorios." }, JsonRequestBehavior.AllowGet);
+                return Json(new { ok = false, mensaje = "Seleccionar empresa es obligatorios." }, JsonRequestBehavior.AllowGet);
             }
 
             string connectionString = ConfigurationManager.ConnectionStrings["SGP"].ConnectionString;
@@ -48,7 +48,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
             {
                 Response.Clear();
                 Response.ContentType = "text/csv; charset=utf-8";
-                string fileName = $"ConsolidadoBines_{codEmpresa}_{numAno}.csv";
+                string fileName = $"ConsolidadoBines_{codEmpresa}_{codPeriodo}.csv";
                 Response.AddHeader("Content-Disposition", $"attachment; filename=\"{fileName}\"");
 
                 byte[] bom = Encoding.UTF8.GetPreamble();
@@ -62,12 +62,12 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                 {
                     await conn.OpenAsync();
 
-                    const string sql = @"SELECT * FROM ""SGP"".sf_mdr_consolidado_bines(@p_cod_empresa, @p_num_ano);";
+                    const string sql = @"SELECT * FROM ""SGP"".sf_mdr_consolidado_bines(@p_cod_empresa, @p_cod_periodo);";
 
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.Add(new NpgsqlParameter("@p_cod_empresa", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = codEmpresa });
-                        cmd.Parameters.Add(new NpgsqlParameter("@p_num_ano", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = numAno });
+                        cmd.Parameters.Add(new NpgsqlParameter("@p_cod_periodo", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = codPeriodo });
                         cmd.CommandTimeout = 0;
 
                         using (var reader = await cmd.ExecuteReaderAsync())
@@ -88,7 +88,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                                 }
 
                                 string nomEmpr = reader["NOM_EMPRESA"] != DBNull.Value ? reader["NOM_EMPRESA"].ToString() : "";
-                                string numAnoR = reader["NUM_ANO"] != DBNull.Value ? reader["NUM_ANO"].ToString() : "";
+                                string numAnoR = reader["DES_PERIODO"] != DBNull.Value ? reader["DES_PERIODO"].ToString() : "";
                                 string nomTarj = reader["NOM_TARJETA"] != DBNull.Value ? reader["NOM_TARJETA"].ToString() : "";
                                 string nomOper = reader["NOM_OPERADOR"] != DBNull.Value ? reader["NOM_OPERADOR"].ToString() : "";
                                 string numBin6 = reader["NUM_BIN_6"] != DBNull.Value ? reader["NUM_BIN_6"].ToString() : "";
@@ -129,7 +129,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportarDesdeExcel(HttpPostedFileBase archivoExcel)
+        public async Task<JsonResult> ImportarDesdeExcel(HttpPostedFileBase archivoExcel, int codPeriodo)
         {
             if (archivoExcel == null || archivoExcel.ContentLength == 0)
             {
@@ -138,7 +138,8 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
 
             var command = new ImportarMdrTmpBinesIzipayCommand
             {
-                Archivo = archivoExcel
+                Archivo = archivoExcel,
+                CodPeriodo = codPeriodo,
             };
 
             RespuestaComunExcelDTO resultado = await _mediator.Send(command);

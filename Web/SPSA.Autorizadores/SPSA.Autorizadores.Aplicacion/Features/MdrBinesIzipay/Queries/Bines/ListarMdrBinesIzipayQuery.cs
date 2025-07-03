@@ -17,7 +17,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Bines
     public class ListarMdrBinesIzipayQuery : IRequest<GenericResponseDTO<List<ListarMdrBinesDto>>>
     {
         public string CodEmpresa { get; set; }
-        public string NumAno { get; set; }
+        public int CodPeriodo { get; set; }
     }
 
     public class ListarMdrBinesIzipayHandler : IRequestHandler<ListarMdrBinesIzipayQuery, GenericResponseDTO<List<ListarMdrBinesDto>>>
@@ -46,7 +46,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Bines
                 var listaEntidades = await _contexto.RepositorioMdrBinesIzipay
                     .Obtener(x =>
                         x.CodEmpresa == request.CodEmpresa &&
-                        x.NumAno == request.NumAno)
+                        x.CodPeriodo == request.CodPeriodo)
                     .OrderBy(x => x.NumBin6)
                     .ToListAsync(cancellationToken);
 

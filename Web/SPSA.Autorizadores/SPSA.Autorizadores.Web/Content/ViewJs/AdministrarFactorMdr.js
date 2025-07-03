@@ -2,6 +2,7 @@
 var urlListarFactoresMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarPaginado';
 var urlListarOperadoresMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarOperador';
 var urlListarClasificacionesMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/ListarClasificacion';
+var urlListarPeriodosMdr = baseUrl + 'MdrBinesIzipay/PeriodosMdr/Listar';
 
 var urlCrearFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/CrearFactorMdr';
 var urlEliminarFactorMdr = baseUrl + 'MdrBinesIzipay/FactoresMdr/EliminarFactorMdr';
@@ -14,7 +15,7 @@ var AdministrarFactorMdr = function () {
 
     const eventos = function () {
 
-        $("#cboEmpresa, #cboNumAno, #cboClasificacion").on("change", function (e) {
+        $("#cboEmpresa, #cboPeriodo, #cboClasificacion").on("change", function (e) {
             var table = $('#tableFactores').DataTable();
             e.preventDefault();
             table.ajax.reload();
@@ -43,15 +44,15 @@ var AdministrarFactorMdr = function () {
             $('#btnGuardarCambiosModal').hide();
 
             $('#modalCboEmpresa').prop('disabled', false).trigger('change');
-            $('#modalCboNumAno').prop('disabled', false).trigger('change');
+            $('#modalCboPeriodo').prop('disabled', false).trigger('change');
             $('#modalCboOperador').prop('disabled', false).trigger('change');
             $('#modalCboClasificacion').prop('disabled', false).trigger('change');
 
             $('#modalCboEmpresa').val($('#cboEmpresa').val());
             $('#modalCboEmpresa').prop('disabled', false).trigger('change');
 
-            $('#modalCboNumAno').val((new Date()).getFullYear().toString());
-            $('#modalCboNumAno').prop('disabled', false).trigger('change');
+            $('#modalCboPeriodo').val($('#cboPeriodo').val());
+            $('#modalCboPeriodo').prop('disabled', false).trigger('change');
 
             $('#modalCboOperador').val('0');
             $('#modalCboOperador').prop('disabled', false).trigger('change');
@@ -84,7 +85,7 @@ var AdministrarFactorMdr = function () {
             var data = $('#tableFactores').DataTable().row($tr).data();
 
             $('#modalCboEmpresa').val(data.CodEmpresa).trigger('change');
-            $('#modalCboNumAno').val(data.NumAno).trigger('change');
+            $('#modalCboPeriodo').val(data.CodPeriodo).trigger('change');
             $('#modalCboOperador').val(data.CodOperador).trigger('change');
 
             //  Revisa cada 100 ms hasta que aparezca la opción
@@ -102,7 +103,7 @@ var AdministrarFactorMdr = function () {
             $('#modalChkActivo').prop('checked', data.IndActivo === 'S');
 
             $('#modalCboEmpresa').prop('disabled', true);
-            $('#modalCboNumAno').prop('disabled', true);
+            $('#modalCboPeriodo').prop('disabled', true);
             $('#modalCboOperador').prop('disabled', true);
             $('#modalCboClasificacion').prop('disabled', true);
 
@@ -130,7 +131,7 @@ var AdministrarFactorMdr = function () {
                 var $ch = $(this);
                 arrAEliminar.push({
                     CodEmpresa: $ch.data('empresa'),
-                    NumAno: $ch.data('ano'),
+                    CodPeriodo: $ch.data('periodo'),
                     CodOperador: $ch.data('operador'),
                     CodClasificacion: $ch.data('clasificacion')
                 });
@@ -174,10 +175,10 @@ var AdministrarFactorMdr = function () {
 
         $('#btnDescargarMaestro').on('click', function () {
             var empresa = $('#cboEmpresa').val();
-            var anio = $('#cboNumAno').val();
+            var periodo = $('#cboPeriodo').val();
 
-            if (!empresa || empresa === '0' || !anio) {
-                swal({ text: "Debe seleccionar Empresa y Año.", icon: "warning" });
+            if (!empresa || empresa === '0' || !periodo || periodo === '0') {
+                swal({ text: "Debe seleccionar empresa y periodo.", icon: "warning" });
                 return;
             }
 
@@ -207,7 +208,7 @@ var AdministrarFactorMdr = function () {
 
                 var url = baseUrl + 'MdrBinesIzipay/Bines/DescargarCsvStreaming'
                     + '?codEmpresa=' + encodeURIComponent(empresa)
-                    + '&numAno=' + encodeURIComponent(anio);
+                    + '&codPeriodo=' + encodeURIComponent(periodo);
 
                 showLoading();
 
@@ -276,6 +277,13 @@ var AdministrarFactorMdr = function () {
         });
 
         $('#excelBinesTmp').on('change', function () {
+
+            var codPeriodo = $('#cboPeriodo').val();
+            if (!codPeriodo || codPeriodo === '0') {
+                swal({ text: "Seleccione un periodo.", icon: "warning" });
+                return;
+            }
+
             var fileInput = this;
             if (!fileInput.files || fileInput.files.length === 0) return;
 
@@ -308,6 +316,7 @@ var AdministrarFactorMdr = function () {
 
                 var formData = new FormData();
                 formData.append('archivoExcel', fileInput.files[0]);
+                formData.append('codPeriodo', codPeriodo);
 
                 $.ajax({
                     url: urlImportarExcel,
@@ -337,7 +346,7 @@ var AdministrarFactorMdr = function () {
 
     async function guardarFactor({ modo }) {
         var codEmpresa = $('#modalCboEmpresa').val();
-        var numAno = $('#modalCboNumAno').val();
+        var codPeriodo = $('#modalCboPeriodo').val();
         var codOperador = $('#modalCboOperador').val();
         var codClas = $('#modalCboClasificacion').val();
         var factor = $('#modalInputFactor').val();
@@ -347,8 +356,8 @@ var AdministrarFactorMdr = function () {
             swal({ text: "Seleccione una empresa.", icon: "warning" });
             return;
         }
-        if (!numAno || numAno === '0') {
-            swal({ text: "Seleccione un año.", icon: "warning" });
+        if (!codPeriodo || codPeriodo === '0') {
+            swal({ text: "Seleccione un periodo.", icon: "warning" });
             return;
         }
         if (!codOperador || codOperador === '0') {
@@ -370,7 +379,7 @@ var AdministrarFactorMdr = function () {
 
         var cmd = {
             CodEmpresa: codEmpresa,
-            NumAno: numAno,
+            CodPeriodo: codPeriodo,
             CodOperador: codOperador,
             CodClasificacion: codClas,
             Factor: parseFloat(factor),
@@ -413,6 +422,22 @@ var AdministrarFactorMdr = function () {
                 url: urlListarEmpresasAsociadas,
                 type: "post",
                 data: { request },
+                success: function (response) {
+                    resolve(response)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(jqXHR.responseText)
+                }
+            });
+        });
+    }
+
+    const listarPeriodos = function () {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: urlListarPeriodosMdr,
+                type: "post",
+                data: JSON.stringify({}),
                 success: function (response) {
                     resolve(response)
                 },
@@ -485,19 +510,31 @@ var AdministrarFactorMdr = function () {
         }
     }
 
-    const cargarComboAnios = async function (selector) {
-        const $sel = $(selector);
-        $sel.empty();
+    const cargarComboPeriodo = async function () {
+        try {
+            const response = await listarPeriodos();
 
-        const yearStart = 2025;
-        const yearNow = (new Date()).getFullYear();
-
-        for (let año = yearNow; año >= yearStart; año--) {
-            $sel.append($('<option>', { value: año.toString(), text: año.toString() }));
+            if (response.Ok) {
+                $('#cboPeriodo').empty().append($('<option>', { value: '0', text: 'Todos' }));
+                $('#modalCboPeriodo').empty().append($('<option>', { value: '0', text: 'Todos' }));
+                response.Data.map(periodo => {
+                    $('#cboPeriodo').append($('<option>', { value: periodo.CodPeriodo, text: periodo.DesPeriodo }));
+                    $('#modalCboPeriodo').append($('<option>', { value: periodo.CodPeriodo, text: periodo.DesPeriodo }));
+                });
+            } else {
+                swal({
+                    text: response.Mensaje,
+                    icon: "error"
+                });
+                return;
+            }
+        } catch (error) {
+            swal({
+                text: error,
+                icon: "error"
+            });
         }
-
-        $sel.val(yearNow.toString());
-    };
+    }
 
     const cargarComboOperadores = async function () {
         try {
@@ -562,7 +599,7 @@ var AdministrarFactorMdr = function () {
 
                 var filtros = {
                     CodEmpresa: $("#cboEmpresa").val(),
-                    NumAno: $("#cboNumAno").val(),
+                    CodPeriodo: $("#cboPeriodo").val(),
                     CodOperador: $("#cboOperador").val(),
                     CodClasificacion: $("#cboClasificacion").val()
                 };
@@ -615,7 +652,7 @@ var AdministrarFactorMdr = function () {
                         return ''
                             + '<input type="checkbox" class="row-checkbox" '
                             + 'data-empresa="' + row.CodEmpresa + '" '
-                            + 'data-ano="' + row.NumAno + '" '
+                            + 'data-periodo="' + row.CodPeriodo + '" '
                             + 'data-operador="' + row.CodOperador + '" '
                             + 'data-clasificacion="' + row.CodClasificacion + '" '
                             + '/>';
@@ -707,8 +744,7 @@ var AdministrarFactorMdr = function () {
             checkSession(async function () {
                 eventos();
                 await cargarComboEmpresa();
-                await cargarComboAnios('#cboNumAno');
-                await cargarComboAnios('#modalCboNumAno');
+                await cargarComboPeriodo();
                 await cargarComboOperadores();
                 visualizarDataTableFactores();
             });

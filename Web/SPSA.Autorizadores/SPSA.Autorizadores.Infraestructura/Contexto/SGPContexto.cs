@@ -71,6 +71,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMdrClasificacion = new RepositorioMdrClasificacion(this);
             RepositorioMdrOperador = new RepositorioMdrOperador(this);
             RepositorioMdrFactorIzipay = new RepositorioMdrFactorIzipay(this);
+            RepositorioMdrPeriodo = new RepositorioMdrPeriodo(this);
 
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
@@ -129,9 +130,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMdrClasificacion RepositorioMdrClasificacion { get; private set; }
 		public IRepositorioMdrOperador RepositorioMdrOperador { get; private set; }
 		public IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; private set; }
-
-
-
+		public IRepositorioMdrPeriodo RepositorioMdrPeriodo { get; private set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -193,6 +192,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MdrClasificacionPorOperadorTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrFactorIzipayTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrOperadorTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrPeriodoTypeConfiguration());
 
 		}
 

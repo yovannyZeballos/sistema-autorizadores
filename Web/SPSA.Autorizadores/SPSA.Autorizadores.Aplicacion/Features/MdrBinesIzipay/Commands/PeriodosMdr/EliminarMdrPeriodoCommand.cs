@@ -8,33 +8,33 @@ using AutoMapper;
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.PeriodosMdr;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr
+namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.PeriodosMdr
 {
-    public class EliminarMdrFactorIzipayCommand : IRequest<RespuestaComunDTO>
+    public class EliminarMdrPeriodoCommand : IRequest<RespuestaComunDTO>
     {
-        public List<MdrFactorDto> Factores { get; set; }
+        public List<MdrPeriodoDto> Periodos { get; set; }
         public string UsuElimina { get; set; }
     }
 
-    public class EliminarMdrFactorIzipayHandler : IRequestHandler<EliminarMdrFactorIzipayCommand, RespuestaComunDTO>
+    public class EliminarMdrPeriodoHandler : IRequestHandler<EliminarMdrPeriodoCommand, RespuestaComunDTO>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public EliminarMdrFactorIzipayHandler(IMapper mapper)
+        public EliminarMdrPeriodoHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<RespuestaComunDTO> Handle(EliminarMdrFactorIzipayCommand request, CancellationToken cancellationToken)
+        public async Task<RespuestaComunDTO> Handle(EliminarMdrPeriodoCommand request, CancellationToken cancellationToken)
         {
             var respuesta = new RespuestaComunDTO { Ok = true };
             var mensajesError = new List<string>();
@@ -42,7 +42,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
 
             try
             {
-                if (request.Factores == null || !request.Factores.Any())
+                if (request.Periodos == null || !request.Periodos.Any())
                 {
                     return new RespuestaComunDTO
                     {
@@ -52,30 +52,27 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
                 }
 
 
-                foreach (var factorEliminar in request.Factores)
+                foreach (var periodoEliminar in request.Periodos)
                 {
-                    var factor = await _contexto.RepositorioMdrFactorIzipay.Obtener(x => x.CodEmpresa == factorEliminar.CodEmpresa
-                                                                                    && x.CodPeriodo == factorEliminar.CodPeriodo
-                                                                                    && x.CodOperador == factorEliminar.CodOperador
-                                                                                    && x.CodClasificacion == factorEliminar.CodClasificacion)
+                    var periodo = await _contexto.RepositorioMdrPeriodo.Obtener(x => x.CodPeriodo == periodoEliminar.CodPeriodo)
                                                                         .FirstOrDefaultAsync();
-                    if (factor is null)
+                    if (periodo is null)
                     {
-                        mensajesError.Add($"No existe Factor.");
+                        mensajesError.Add($"No existe periodo.");
                         continue;
                     }
 
-                    if (string.Equals(factor.IndActivo, "N", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(periodo.IndActivo, "N", StringComparison.OrdinalIgnoreCase))
                     {
-                        mensajesError.Add($"El factor ya está inactivo: {factor.Operador.NomOperador}  - {factor.Clasificacion.NomClasificacion}");
+                        mensajesError.Add($"Periodo {periodo.DesPeriodo} ya está inactivo");
                         continue;
                     }
 
-                    factor.IndActivo = "N";
-                    factor.UsuModifica = request.UsuElimina;
-                    factor.FecModifica = DateTime.Now;
+                    periodo.IndActivo = "N";
+                    periodo.UsuElimina = request.UsuElimina;
+                    periodo.FecElimina = DateTime.Now;
 
-                    _contexto.RepositorioMdrFactorIzipay.Actualizar(factor);
+                    _contexto.RepositorioMdrPeriodo.Actualizar(periodo);
                     contadorEliminados++;
                 }
                 await _contexto.GuardarCambiosAsync();
@@ -86,7 +83,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
                 }
                 else
                 {
-                    respuesta.Mensaje = "No se desactivó ningún factor.";
+                    respuesta.Mensaje = "No se desactivó ningún periodo.";
                 }
 
                 if (mensajesError.Any())

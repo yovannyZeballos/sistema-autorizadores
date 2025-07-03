@@ -63,6 +63,7 @@
     <Compile Include="Repositorio\IRepositorioMdrClasificacion.cs" />
     <Compile Include="Repositorio\IRepositorioMdrFactorIzipay.cs" />
     <Compile Include="Repositorio\IRepositorioMdrOperador.cs" />
+    <Compile Include="Repositorio\IRepositorioMdrPeriodo.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />

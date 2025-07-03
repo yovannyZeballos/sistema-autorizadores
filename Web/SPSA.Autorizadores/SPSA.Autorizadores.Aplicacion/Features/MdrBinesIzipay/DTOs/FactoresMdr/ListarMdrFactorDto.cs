@@ -3,7 +3,7 @@
     public class ListarMdrFactorDto
     {
         public string CodEmpresa { get; set; }
-        public string NumAno { get; set; }
+        public int CodPeriodo { get; set; }
         public string CodOperador { get; set; }
         public string CodClasificacion { get; set; }
         public decimal Factor { get; set; }

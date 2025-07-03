@@ -152,6 +152,7 @@
     <Compile Include="Configuracion\MdrClasificacionPorOperadorTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrFactorIzipayTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrOperadorTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrPeriodoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Repositorio\RepositorioMdrClasificacion.cs" />
     <Compile Include="Repositorio\RepositorioMdrFactorIzipay.cs" />
     <Compile Include="Repositorio\RepositorioMdrOperador.cs" />
+    <Compile Include="Repositorio\RepositorioMdrPeriodo.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\RepositorioSolicitudUsuarioASR.cs" />

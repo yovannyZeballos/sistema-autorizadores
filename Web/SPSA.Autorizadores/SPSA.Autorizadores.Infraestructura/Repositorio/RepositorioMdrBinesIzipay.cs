@@ -41,7 +41,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
                                 lista.Add(new Mdr_BinesIzipay
                                 {
                                     CodEmpresa = reader["COD_EMPRESA"] != DBNull.Value ? reader["COD_EMPRESA"].ToString() : string.Empty,
-                                    NumAno = reader["NUM_ANO"] != DBNull.Value ? reader["NUM_ANO"].ToString() : string.Empty,
+                                    CodPeriodo = reader["COD_PERIODO"] != DBNull.Value ? Convert.ToInt32(reader["COD_PERIODO"]) : 0,
                                     NumBin6 = reader["NUM_BIN_6"] != DBNull.Value ? reader["NUM_BIN_6"].ToString() : string.Empty,
                                     NumBin8 = reader["NUM_BIN_8"] != DBNull.Value ? reader["NUM_BIN_8"].ToString() : string.Empty,
                                     NomTarjeta = reader["CLASIFICACION_NOMBRE"] != DBNull.Value ? reader["CLASIFICACION_NOMBRE"].ToString() : string.Empty,

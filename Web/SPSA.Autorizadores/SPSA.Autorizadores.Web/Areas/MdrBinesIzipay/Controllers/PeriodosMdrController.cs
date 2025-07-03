@@ -1,39 +1,29 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
-using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
-using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.ClasificacionMdr;
-using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.FactoresMdr;
-using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.OperadorMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.PeriodosMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.PeriodosMdr;
 using SPSA.Autorizadores.Web.Utiles;
 
 namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
 {
-    public class FactoresMdrController : Controller
+    public class PeriodosMdrController : Controller
     {
         private readonly IMediator _mediator;
 
-        public FactoresMdrController(IMediator mediator)
+        public PeriodosMdrController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        // GET: MdrBinesIzipay/FactoresMdr
+        // GET: MdrBinesIzipay/PeriodosMdr
         public ActionResult Index()
         {
             return View();
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> ListarPaginado(ListarMdrFactorIzipayQuery request)
-        {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta, JsonRequestBehavior.AllowGet);
-        }
+        }      
 
         [HttpPost]
-        public async Task<JsonResult> CrearFactorMdr(CrearMdrFactorIzipayCommand command)
+        public async Task<JsonResult> Crear(CrearMdrPeriodoCommand command)
         {
             command.UsuCreacion = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -41,7 +31,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> EditarFactorMdr(ActualizarMdrFactorIzipayCommand command)
+        public async Task<JsonResult> Editar(ActualizarMdrPeriodoCommand command)
         {
             command.UsuModifica = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -49,7 +39,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> EliminarFactorMdr(EliminarMdrFactorIzipayCommand command)
+        public async Task<JsonResult> Eliminar(EliminarMdrPeriodoCommand command)
         {
             command.UsuElimina = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -57,14 +47,14 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ListarOperador(ListarMdrOperadorQuery request)
+        public async Task<JsonResult> Listar(ListarMdrPeriodoQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public async Task<JsonResult> ListarClasificacion(ListarMdrClasificacionQuery request)
+        [HttpGet]
+        public async Task<JsonResult> ListarPaginado(ListarPaginadoMdrPeriodoQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
