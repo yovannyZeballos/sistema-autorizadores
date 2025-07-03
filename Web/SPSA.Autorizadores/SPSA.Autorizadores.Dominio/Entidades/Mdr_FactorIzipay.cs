@@ -1,12 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
     public class Mdr_FactorIzipay
     {
         public string CodEmpresa { get; set; }
-        public string NumAno { get; set; }
+        public int CodPeriodo { get; set; }
         public string CodOperador { get; set; }
         public string CodClasificacion { get; set; }
         public decimal Factor { get; set; }

@@ -19,10 +19,12 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.PeriodosMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.Bines;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.ClasificacionMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.FactoresMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.OperadorMdr;
+using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.PeriodosMdr;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Regiones.Commands;
@@ -261,10 +263,12 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 
             #region <--MDR_BINES_IZIPAY->
             CreateMap<CrearMdrFactorIzipayCommand, Mdr_FactorIzipay>().ReverseMap();
+            CreateMap<CrearMdrPeriodoCommand, Mdr_Periodo>().ReverseMap();
             CreateMap<ListarMdrBinesDto, Mdr_BinesIzipay>().ReverseMap();
             CreateMap<ListarMdrFactorDto, Mdr_FactorIzipay>().ReverseMap();
             CreateMap<ListarMdrOperadorDto, Mdr_Operador>().ReverseMap();
             CreateMap<ListarMdrClasificacionDto, Mdr_ClasificacionPorOperador>().ReverseMap();
+            CreateMap<ListarMdrPeriodoDto, Mdr_Periodo>().ReverseMap();
 
             CreateMap<Mdr_FactorIzipay, ListarMdrFactorDto>()
                 .ForMember(dest => dest.NomEmpresa, opt => opt.MapFrom(src => src.Empresa.NomEmpresa))

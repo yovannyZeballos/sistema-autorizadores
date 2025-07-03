@@ -18,7 +18,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
     public class ActualizarMdrFactorIzipayCommand : IRequest<RespuestaComunDTO>
     {
         public string CodEmpresa { get; set; }
-        public string NumAno { get; set; }
+        public int CodPeriodo { get; set; }
         public string CodOperador { get; set; }
         public string CodClasificacion { get; set; }
         public decimal Factor { get; set; }
@@ -48,7 +48,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Factore
                 var factor = await _contexto.RepositorioMdrFactorIzipay
                     .Obtener(x =>
                         x.CodEmpresa == request.CodEmpresa &&
-                        x.NumAno == request.NumAno &&
+                        x.CodPeriodo == request.CodPeriodo &&
                         x.CodOperador == request.CodOperador &&
                         x.CodClasificacion == request.CodClasificacion)
                     .FirstOrDefaultAsync(); ;

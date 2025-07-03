@@ -60,5 +60,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMdrClasificacion RepositorioMdrClasificacion { get; }
         IRepositorioMdrOperador RepositorioMdrOperador { get; }
         IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; }
+        IRepositorioMdrPeriodo RepositorioMdrPeriodo { get; }
     }
 }
