@@ -64,7 +64,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, codEmpresaEqual);
                 }
 
-                if (!string.IsNullOrEmpty(request.IndAutAut))
+                //if (!string.IsNullOrEmpty(request.IndAutAut))
+                if (request.IndAutAut == "S")
                 {
                     Expression indAutAutProperty = Expression.Property(param, nameof(Mae_Puesto.IndAutAut));
                     Expression indAutAutValue = Expression.Constant(request.IndAutAut);
@@ -73,7 +74,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, indAutAutEqual);
                 }
 
-                if (!string.IsNullOrEmpty(request.IndAutOpe))
+                //if (!string.IsNullOrEmpty(request.IndAutOpe))
+                if (request.IndAutOpe == "S")
                 {
                     Expression indAutOpeProperty = Expression.Property(param, nameof(Mae_Puesto.IndAutOpe));
                     Expression indAutOpeValue = Expression.Constant(request.IndAutOpe);
@@ -82,7 +84,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, indAutOpeEqual);
                 }
 
-                if (!string.IsNullOrEmpty(request.IndManAut))
+                //if (!string.IsNullOrEmpty(request.IndManAut))
+                if (request.IndManAut == "S")
                 {
                     Expression indManAutProperty = Expression.Property(param, nameof(Mae_Puesto.IndManAut));
                     Expression indManAutValue = Expression.Constant(request.IndManAut);
@@ -91,7 +94,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, indManAutEqual);
                 }
 
-                if (!string.IsNullOrEmpty(request.IndManOpe))
+                //if (!string.IsNullOrEmpty(request.IndManOpe))
+                if (request.IndManOpe == "S")
                 {
                     Expression indAutOpeProperty = Expression.Property(param, nameof(Mae_Puesto.IndManOpe));
                     Expression indAutOpeValue = Expression.Constant(request.IndManOpe);
@@ -110,8 +114,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
                     combined = Expression.AndAlso(combined, desPuestoContains);
                 }
 
-
-
                 Expression<Func<Mae_Puesto, bool>> predicate = Expression.Lambda<Func<Mae_Puesto, bool>>(combined, param);
 
                 var pagedPuestos = await _contexto.RepositorioMaePuesto.ObtenerPaginado(
@@ -126,7 +128,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs
 
                 foreach (var item in mappedItems)
                 {
-                    Mae_Empresa maeEmpresa = await _contexto.RepositorioMaeEmpresa.Obtener(s => s.CodEmpresa == item.CodEmpresa || s.CodEmpresaOfi == item.CodEmpresa).FirstOrDefaultAsync();
+                    //Mae_Empresa maeEmpresa = await _contexto.RepositorioMaeEmpresa.Obtener(s => s.CodEmpresa == item.CodEmpresa || s.CodEmpresaOfi == item.CodEmpresa).FirstOrDefaultAsync();
+                    Mae_Empresa maeEmpresa = await _contexto.RepositorioMaeEmpresa.Obtener(s => s.CodEmpresa == item.CodEmpresa).FirstOrDefaultAsync();
 
                     if (maeEmpresa != null)
                         item.NomEmpresa = maeEmpresa.NomEmpresa;

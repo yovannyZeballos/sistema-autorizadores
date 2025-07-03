@@ -12,10 +12,10 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             ToTable("MDR_BINES_IZIPAY", "SGP");
 
             // Configura la clave primaria de la entidad.
-            HasKey(x => new { x.NumAno, x.CodEmpresa, x.NumBin6 });
+            HasKey(x => new { x.CodPeriodo, x.CodEmpresa, x.NumBin6 });
 
             // Configura las propiedades de la entidad.
-            Property(x => x.NumAno).HasColumnName("NUM_ANO");
+            Property(x => x.CodPeriodo).HasColumnName("COD_PERIODO");
             Property(x => x.CodEmpresa).HasColumnName("COD_EMPRESA");
             Property(x => x.NumBin6).HasColumnName("NUM_BIN_6");
             Property(x => x.NomTarjeta).HasColumnName("NOM_TARJETA");

@@ -3,7 +3,7 @@
     public class Mdr_BinesIzipay
     {
         public string CodEmpresa { get; set; }
-        public string NumAno { get; set; }
+        public int CodPeriodo { get; set; }
         public string NumBin6 { get; set; }
         public string NumBin8 { get; set; }
         public string NomTarjeta { get; set; }

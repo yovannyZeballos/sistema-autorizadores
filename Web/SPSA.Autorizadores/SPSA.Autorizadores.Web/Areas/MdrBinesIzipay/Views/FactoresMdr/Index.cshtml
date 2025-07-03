@@ -44,8 +44,8 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label for="cboNumAno" class="form-label">Año</label>
-                        <select class="form-control select2-show-search custom-select filtro" id="cboNumAno">
+                        <label for="cboPeriodo" class="form-label">Periodo</label>
+                        <select class="form-control select2-show-search custom-select filtro" id="cboPeriodo">
                         </select>
                     </div>
                 </div>
@@ -66,14 +66,18 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div>
                     <button id="btnCargarBines" class="btn btn-sm btn-primary me-2 mb-2">
                         <i class="fe fe-upload-cloud"></i> Cargar Bines
                     </button>
                     <input type="file" id="excelBinesTmp" style="display: none;">
-                    <button id="btnDescargarMaestro" class="btn btn-sm btn-primary mb-2">
+                    <button id="btnDescargarMaestro" class="btn btn-sm btn-primary me-2 mb-2">
                         <i class="fe fe-download-cloud"></i> Descargar Maestro
+                    </button>
+                    <button id="btnPeriodos" class="btn btn-sm btn-default me-2 mb-2">
+                        <i class="fe fe-calendar"></i> Adm. Periodos
                     </button>
                 </div>
             </div>
@@ -141,8 +145,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalCboNumAno" class="form-label">Año</label>
-                        <select id="modalCboNumAno" class="form-control select2-show-search">
+                        <label for="modalCboPeriodo" class="form-label">Periodo</label>
+                        <select id="modalCboPeriodo" class="form-control select2-show-search">
                         </select>
                     </div>
 

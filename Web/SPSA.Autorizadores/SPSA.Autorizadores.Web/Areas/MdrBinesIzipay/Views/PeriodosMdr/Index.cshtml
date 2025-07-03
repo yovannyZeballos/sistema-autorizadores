@@ -1,0 +1,126 @@
+﻿
+@model string
+@{
+    ViewBag.Title = "Administrar Periiodos MDR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Periodos MDR</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Periodos MDR</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @Html.Partial("_CardHeader", "Periodos MDR")
+        <div class="card-body">
+            <div class="row">
+                <div>
+                    <button id="btnNuevoFactor" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-plus"></i> Nuevo
+                    </button>
+                    <button id="btnEditarFactor" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-edit-2"></i> Modificar
+                    </button>
+                    <button id="btnEliminarFactor" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="tablePeriodos" class="table table-bordered text-nowrap border-bottom">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th style="width: 30px; text-align: center;">
+                                            <input type="checkbox" id="checkAllRows" />
+                                        </th>
+                                        <th>Código</th>
+                                        <th>Descripción</th>
+                                        <th>Activo</th>
+                                        <th>U. Creacion</th>
+                                        <th>F. Creacion</th>
+                                        <th>U. Modifica</th>
+                                        <th>F. Modifica</th>
+                                        <th>U. Elimina</th>
+                                        <th>F. Elimina</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para “Nuevo Periodo” -->
+<div class="modal fade" id="modalNuevoPeriodo" tabindex="-1" aria-labelledby="modalNuevoPeriodoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNuevoPeriodoLabel">Nuevo Periodo MDR</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoPeriodo">
+                    <div class="mb-3">
+                        <label for="modalInputCodPeriodo" class="form-label">Código</label>
+                        <input type="text" id="modalInputCodPeriodo" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputDesPeriodo" class="form-label">Descripción</label>
+                        <input type="text" id="modalInputDesPeriodo" class="form-control text-uppercase" oninput="this.value = this.value.toUpperCase();" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="modalChkActivo">Activo</label>
+                        <input type="checkbox" class="form-check" id="modalChkActivo">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnGuardarNuevoModal" class="btn btn-primary">Guardar</button>
+                <button type="button" id="btnGuardarCambiosModal" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarPeriodoMdr.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarPeriodoMdr.init();
+        });
+    </script>
+}
