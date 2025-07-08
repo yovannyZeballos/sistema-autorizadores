@@ -54,7 +54,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 
 		public async Task<RespuestaComunDTO> Handle(ProcesarMonitorCommand request, CancellationToken cancellationToken)
 		{
-			var fechaProceso = DateTime.Now;
+			var fechaProceso = DateTime.Now; // Corregir
 			var fechaCierre = fechaProceso.AddDays(-1).Date;
 			var tareasCalculo = new List<Task<ProcesoMonitorDTO>>();
 			var resultadosProceso = new List<ProcesoMonitorDTO>();

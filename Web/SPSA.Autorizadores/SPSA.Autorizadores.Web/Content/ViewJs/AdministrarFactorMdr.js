@@ -175,7 +175,9 @@ var AdministrarFactorMdr = function () {
 
         $('#btnDescargarMaestro').on('click', function () {
             var empresa = $('#cboEmpresa').val();
+            var empresaTexto = $('#cboEmpresa option:selected').text();
             var periodo = $('#cboPeriodo').val();
+            var periodoTexto = $('#cboPeriodo option:selected').text();
 
             if (!empresa || empresa === '0' || !periodo || periodo === '0') {
                 swal({ text: "Debe seleccionar empresa y periodo.", icon: "warning" });
@@ -207,7 +209,9 @@ var AdministrarFactorMdr = function () {
                 }
 
                 var url = baseUrl + 'MdrBinesIzipay/Bines/DescargarCsvStreaming'
-                    + '?codEmpresa=' + encodeURIComponent(empresa)
+                    + '?nomEmpresa=' + encodeURIComponent(empresaTexto)
+                    + '&codEmpresa=' + encodeURIComponent(empresa)
+                    + '&nomPeriodo=' + encodeURIComponent(periodoTexto)
                     + '&codPeriodo=' + encodeURIComponent(periodo);
 
                 showLoading();

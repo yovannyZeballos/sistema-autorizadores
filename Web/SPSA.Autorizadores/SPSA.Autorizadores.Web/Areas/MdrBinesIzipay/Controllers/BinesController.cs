@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DescargarCsvStreaming(string codEmpresa, long codPeriodo)
+        public async Task<ActionResult> DescargarCsvStreaming(string nomEmpresa, string codEmpresa, string nomPeriodo, long codPeriodo)
         {
             if (string.IsNullOrWhiteSpace(codEmpresa))
             {
@@ -48,7 +48,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
             {
                 Response.Clear();
                 Response.ContentType = "text/csv; charset=utf-8";
-                string fileName = $"ConsolidadoBines_{codEmpresa}_{codPeriodo}.csv";
+                string fileName = $"ConsolidadoBines_{nomEmpresa}_{nomPeriodo}.csv";
                 Response.AddHeader("Content-Disposition", $"attachment; filename=\"{fileName}\"");
 
                 byte[] bom = Encoding.UTF8.GetPreamble();
