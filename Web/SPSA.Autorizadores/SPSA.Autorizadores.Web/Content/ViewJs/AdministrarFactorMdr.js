@@ -179,8 +179,13 @@ var AdministrarFactorMdr = function () {
             var periodo = $('#cboPeriodo').val();
             var periodoTexto = $('#cboPeriodo option:selected').text();
 
-            if (!empresa || empresa === '0' || !periodo || periodo === '0') {
-                swal({ text: "Debe seleccionar empresa y periodo.", icon: "warning" });
+            //if (!empresa || empresa === '0' || !periodo || periodo === '0') {
+            //    swal({ text: "Debe seleccionar empresa y periodo.", icon: "warning" });
+            //    return;
+            //}
+
+            if (!periodo || periodo === '0') {
+                swal({ text: "Debe seleccionar un periodo.", icon: "warning" });
                 return;
             }
 
