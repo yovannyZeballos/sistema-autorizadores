@@ -240,7 +240,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines
 	                        ""SGP"".""MDR_TMP_BINES_IZIPAY"" T USING to_delete d 
                         WHERE
 	                        T.ctid = d.ctid 
-	                        AND d.rn = 2;";
+	                        AND d.rn > 1;";
 
                     using (var cmdDelete = new NpgsqlCommand(eliminarDuplicadoSql, conn))
                     {

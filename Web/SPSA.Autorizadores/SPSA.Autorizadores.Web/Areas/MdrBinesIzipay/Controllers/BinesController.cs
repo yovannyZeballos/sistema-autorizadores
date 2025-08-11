@@ -35,7 +35,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DescargarCsvStreaming(string codEmpresa, long codPeriodo)
+        public async Task<ActionResult> DescargarCsvStreaming(string nomEmpresa, string codEmpresa, string nomPeriodo, long codPeriodo)
         {
             if (string.IsNullOrWhiteSpace(codEmpresa))
             {
@@ -48,13 +48,13 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
             {
                 Response.Clear();
                 Response.ContentType = "text/csv; charset=utf-8";
-                string fileName = $"ConsolidadoBines_{codEmpresa}_{codPeriodo}.csv";
+                string fileName = $"ConsolidadoBines_{nomPeriodo}.csv";
                 Response.AddHeader("Content-Disposition", $"attachment; filename=\"{fileName}\"");
 
                 byte[] bom = Encoding.UTF8.GetPreamble();
                 await Response.OutputStream.WriteAsync(bom, 0, bom.Length);
 
-                string headerLine = "Empresa,Periodo,NomTarjeta,Marca,NumBin6,NumBin8,BancoEmisor,Tipo,Clasificacion,Mdr\r\n";
+                string headerLine = "un,nombre_tarjeta,marca,bin6,bin8,emisor,tipo_tarjeta,Clasificacion,mdr\r\n";
                 byte[] headerBytes = Encoding.UTF8.GetBytes(headerLine);
                 await Response.OutputStream.WriteAsync(headerBytes, 0, headerBytes.Length);
 
@@ -88,7 +88,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                                 }
 
                                 string nomEmpr = reader["NOM_EMPRESA"] != DBNull.Value ? reader["NOM_EMPRESA"].ToString() : "";
-                                string numAnoR = reader["DES_PERIODO"] != DBNull.Value ? reader["DES_PERIODO"].ToString() : "";
+                                //string numAnoR = reader["DES_PERIODO"] != DBNull.Value ? reader["DES_PERIODO"].ToString() : "";
                                 string nomTarj = reader["NOM_TARJETA"] != DBNull.Value ? reader["NOM_TARJETA"].ToString() : "";
                                 string nomOper = reader["NOM_OPERADOR"] != DBNull.Value ? reader["NOM_OPERADOR"].ToString() : "";
                                 string numBin6 = reader["NUM_BIN_6"] != DBNull.Value ? reader["NUM_BIN_6"].ToString() : "";
@@ -100,7 +100,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
 
                                 sb.Clear();
                                 sb.Append(Esc(nomEmpr)).Append(",");
-                                sb.Append(Esc(numAnoR)).Append(",");
+                                //sb.Append(Esc(numAnoR)).Append(",");
                                 sb.Append(Esc(nomTarj)).Append(",");
                                 sb.Append(Esc(nomOper)).Append(",");
                                 sb.Append(Esc(numBin6)).Append(",");
