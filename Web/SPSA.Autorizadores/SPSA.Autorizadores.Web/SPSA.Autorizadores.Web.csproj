@@ -278,11 +278,17 @@
     <Compile Include="Areas\Dashboards\DashboardsAreaRegistration.cs" />
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
+    <Compile Include="Areas\Inventario\Controllers\AreasGestionController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioKardexActivoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioKardexController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioKardexLocalController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\KardexController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\MarcasController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\ProductosController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\ProveedoresController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\SeriesProductoController.cs" />
     <Compile Include="Areas\Inventario\InventarioAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioActivoController.cs" />
     <Compile Include="Areas\Locales\Controllers\AdministrarLocalController.cs" />
@@ -2385,6 +2391,10 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarKardex.js" />
+    <Content Include="Content\ViewJs\AdministrarProveedor.js" />
+    <Content Include="Content\ViewJs\AdministrarProducto.js" />
+    <Content Include="Content\ViewJs\AdministrarMarca.js" />
     <Content Include="Content\ViewJs\AdministrarPeriodoMdr.js" />
     <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
     <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
@@ -2944,6 +2954,11 @@
     <Content Include="Content\reportes\db_factor_mdr.mrt" />
     <Content Include="Areas\Dashboards\Views\AdministrarDashboard\Viewer.cshtml" />
     <Content Include="Areas\MdrBinesIzipay\Views\PeriodosMdr\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Proveedores\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Marcas\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Productos\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\AreasGestion\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Kardex\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2990,6 +3005,7 @@
     <Folder Include="Areas\DataTables\Views\Shared\" />
     <Folder Include="Areas\Inventario\Data\" />
     <Folder Include="Areas\Inventario\Views\InventarioTipoActivo\" />
+    <Folder Include="Areas\Inventario\Views\SerieProducto\" />
     <Folder Include="Areas\Maestros\Views\Cadena\" />
     <Folder Include="Areas\Maestros\Views\MaeColaboradorInt\" />
     <Folder Include="Areas\Maestros\Views\MaeEmpresa\" />

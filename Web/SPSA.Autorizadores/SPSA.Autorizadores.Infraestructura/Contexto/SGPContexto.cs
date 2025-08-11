@@ -73,6 +73,13 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMdrFactorIzipay = new RepositorioMdrFactorIzipay(this);
             RepositorioMdrPeriodo = new RepositorioMdrPeriodo(this);
 
+            RepositorioMaeMarca = new RepositorioMaeMarca(this);
+            RepositorioMaeAreaGestion = new RepositorioMaeAreaGestion(this);
+            RepositorioMaeProducto = new RepositorioMaeProducto(this);
+            RepositorioMaeSerieProducto = new RepositorioMaeSerieProducto(this);
+            RepositorioMaeProveedor = new RepositorioMaeProveedor(this);
+            RepositorioMovKardex = new RepositorioMovKardex(this);
+
 			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
 		}
 
@@ -131,6 +138,12 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMdrOperador RepositorioMdrOperador { get; private set; }
 		public IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; private set; }
 		public IRepositorioMdrPeriodo RepositorioMdrPeriodo { get; private set; }
+		public IRepositorioMaeMarca RepositorioMaeMarca { get; private set; }
+		public IRepositorioMaeAreaGestion RepositorioMaeAreaGestion { get; private set; }
+		public IRepositorioMaeProducto RepositorioMaeProducto { get; private set; }
+		public IRepositorioMaeSerieProducto RepositorioMaeSerieProducto { get; private set; }
+		public IRepositorioMaeProveedor RepositorioMaeProveedor { get; private set; }
+		public IRepositorioMovKardex RepositorioMovKardex { get; private set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -193,6 +206,13 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MdrFactorIzipayTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrOperadorTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrPeriodoTypeConfiguration());
+
+			modelBuilder.Configurations.Add(new MaeMarcaTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeAreaGestionTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeProductoTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeSerieProductoTypeConfiguration());
+			modelBuilder.Configurations.Add(new MaeProveedorTypeConfiguration());
+			modelBuilder.Configurations.Add(new MovKardexTypeConfiguration());
 
 		}
 

@@ -54,11 +54,16 @@
     <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeAreaGestion.cs" />
     <Compile Include="Repositorio\IRepositorioMaeCodComercio.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorExt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeMarca.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeProducto.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeProveedor.cs" />
     <Compile Include="Repositorio\IRepositorioMaePuesto.cs" />
+    <Compile Include="Repositorio\IRepositorioMaeSerieProducto.cs" />
     <Compile Include="Repositorio\IRepositorioMdrBinesIzipay.cs" />
     <Compile Include="Repositorio\IRepositorioMdrClasificacion.cs" />
     <Compile Include="Repositorio\IRepositorioMdrFactorIzipay.cs" />
@@ -66,6 +71,7 @@
     <Compile Include="Repositorio\IRepositorioMdrPeriodo.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEOD.cs" />
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
+    <Compile Include="Repositorio\IRepositorioMovKardex.cs" />
     <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />

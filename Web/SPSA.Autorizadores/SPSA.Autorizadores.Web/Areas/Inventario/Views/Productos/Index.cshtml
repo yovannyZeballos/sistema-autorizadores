@@ -1,0 +1,375 @@
+﻿
+@model string
+@{
+    ViewBag.Title = "Administrar Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Productos</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Productos</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Columna izquierda: Productos (tu card actual) -->
+    <div class="col-xl-6">
+        <div class="card overflow-hidden">
+            @Html.Partial("_CardHeader", "Productos")
+            <div class="card-body">
+                <div class="row mb-0">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="txtFiltroVariosBuscar" class="form-label">Descripción:</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" id="txtFiltroVariosBuscar" oninput="this.value = this.value.toUpperCase();" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="cboCodMarcaBuscar" class="form-label">Marca:</label>
+                            <select class="form-control form-control-sm form-select form-select-sm" id="cboCodMarcaBuscar">
+                                <option value="0">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="cboTipProductoBuscar" class="form-label">Tipo:</label>
+                            <select class="form-control form-control-sm form-select form-select-sm" id="cboTipProductoBuscar">
+                                <option value="0">Todos</option>
+                                <option value="A">ACTIVO</option>
+                                <option value="R">REPUESTO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="cboCodAreaGestionBuscar" class="form-label">Área:</label>
+                            <select class="form-control form-control-sm form-select form-select-sm" id="cboCodAreaGestionBuscar">
+                                <option value="0">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="cboIndActivoBuscar" class="form-label">Estado:</label>
+                            <select class="form-control form-control-sm form-select form-select-sm" id="cboIndActivoBuscar">
+                                <option value="0">Todos</option>
+                                <option value="S">Activo</option>
+                                <option value="N">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="txtzzzzz" class="form-label"></label>
+                            <button id="btnBuscar" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <button id="btnNuevoProducto" class="btn btn-sm btn-primary me-2 mb-2">
+                            <i class="fe fe-plus"></i> Nuevo
+                        </button>
+                        <button id="btnEditarProducto" class="btn btn-sm btn-primary me-2 mb-2">
+                            <i class="fe fe-edit-2"></i> Editar
+                        </button>
+                        <button id="btnEliminarProducto" class="btn btn-sm btn-primary me-2 mb-2">
+                            <i class="fe fe-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="tableProductos" class="table table-bordered text-nowrap border-bottom">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width: 30px; text-align: center;">
+                                        <input type="checkbox" id="checkAllRows" />
+                                    </th>
+                                    <th>Código</th>
+                                    <th>Descripción</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Tipo</th>
+                                    <th>Área</th>
+                                    <th>Activo</th>
+                                    <th>Stock Min.</th>
+                                    <th>Stock Max.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna derecha: Detalle (Series/Kardex) -->
+    <div class="col-xl-6">
+        <div class="card overflow-hidden" id="cardSeries" style="display:none;">
+            @Html.Partial("_CardHeader", "Series")
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <h6 class="fw-bold">Producto: <span id="lblCodProducto"></span> <span class="text-muted" id="lblDesProducto"></span></h6>
+                    </div>
+                    <div>
+                        <button id="btnNuevaSerie" class="btn btn-sm btn-primary me-2">
+                            <i class="fe fe-plus me-1"></i>Nueva serie
+                        </button>
+                        @*<button id="btnMovimiento" class="btn btn-sm btn-outline-primary">
+                                <i class="fe fe-trending-up me-1"></i>Movimiento
+                            </button>*@
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs" id="tabsDetalle" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#tabSeries" role="tab">Series</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tabKardex" role="tab">Kardex</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content pt-3">
+                    <div class="tab-pane fade show active" id="tabSeries" role="tabpanel">
+                        <table id="tableSeries" class="table table-bordered text-nowrap border-bottom">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>N° Serie</th>
+                                    <th>Stok Actual</th>
+                                    <th>Ubicación Actual</th>
+                                    <th>Último Ingreso</th>
+                                    <th>Última Salida</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabKardex" role="tabpanel">
+                        <table id="tableKardex" class="table table-bordered text-nowrap border-bottom">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Kardex</th>
+                                    <th>Área Gestión</th>
+                                    <th>Producto</th>
+                                    <th>N° Serie</th>
+                                    <th>Guía</th>
+                                    <th>Origen</th>
+                                    <th>Destino</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para “Nueva Producto” -->
+<div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTituloProductoLabel">Nueva Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoProducto">
+                    <div class="mb-3">
+                        <label for="modalInputCodProducto" class="form-label">Código</label>
+                        <input type="text" id="modalInputCodProducto" class="form-control form-control-sm" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputDesProducto" class="form-label">Descripción</label>
+                        <input type="text" id="modalInputDesProducto" class="form-control form-control-sm text-uppercase" oninput="this.value = this.value.toUpperCase();" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputNomModelo" class="form-label">Modelo</label>
+                        <input type="text" id="modalInputNomModelo" class="form-control form-control-sm text-uppercase" oninput="this.value = this.value.toUpperCase();" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputCboMarca" class="form-label">Marca</label>
+                        <select class="form-control form-control-sm form-select" id="modalInputCboMarca">
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputCboTipProducto" class="form-label">Tipo</label>
+                        <select class="form-control form-control-sm form-select" id="modalInputCboTipProducto">
+                            <option value="">Seleccionar</option>
+                            <option value="A">ACTIVO</option>
+                            <option value="R">REPUESTO</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputCboAreaGestion" class="form-label">Área</label>
+                        <select class="form-control form-control-sm form-select" id="modalInputCboAreaGestion">
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputStkMinimo" class="form-label">Stock Minimo</label>
+                        <input type="number" id="modalInputStkMinimo" class="form-control form-control-sm" value="0" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputStkMaximo" class="form-label">Stock Maximo</label>
+                        <input type="number" id="modalInputStkMaximo" class="form-control form-control-sm" value="0" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="modalChkActivo">¿Activo?</label>
+                        <input type="checkbox" class="form-check" id="modalChkActivo">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCerrarModal" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                    <i class="fe fe-arrow-left-circle"></i> Cerrar
+                </button>
+                <button type="button" id="btnGuardarNuevoModal" class="btn btn-sm btn-primary">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button type="button" id="btnGuardarCambiosModal" class="btn btn-sm btn-primary">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Serie -->
+<div class="modal fade" id="modalNuevaSerie" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Serie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">N° Serie <span class="text-danger">*</span></label>
+                            <input type="text" id="serieNumSerie" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="serieCodEmpresa" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="serieCodLocal" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGuardarSerie" class="btn btn-sm btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarProducto.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarProducto.init();
+        });
+        $('#tabsDetalle a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        });
+    </script>
+    <script>
+        $(function () {
+            var $modal = $('#modalNuevaSerie');
+
+            function initSelect2EnModal() {
+                ['#serieCodEmpresa', '#serieCodLocal'].forEach(function (sel) {
+                    var $s = $(sel);
+                    if (!$s.length) return;
+
+                    var $opt0 = $s.find('option').first();
+                    var placeholder = $opt0.attr('label') || $opt0.text() || 'Seleccionar…';
+                    if (!$opt0.attr('value')) { $opt0.attr('value', ''); } 
+
+                    if ($s.hasClass('select2-hidden-accessible')) { $s.select2('destroy'); }
+                    $s.select2({
+                        dropdownParent: $modal,
+                        width: '100%',
+                        placeholder: placeholder,
+                        allowClear: true,
+                        minimumResultsForSearch: 0
+                    });
+                });
+            }
+
+            $modal.on('shown.bs.modal', function () {
+                initSelect2EnModal();
+            });
+
+            $(document).on('select2:open', function () {
+                setTimeout(function () {
+                    var el = document.querySelector('.select2-container--open .select2-search__field');
+                    if (el) el.focus();
+                }, 0);
+            });
+
+            // (Opcional) helper por si quieres refrescar tras cargar opciones vía AJAX
+            window.kardexReinitSelect2 = function (id) {
+                var $s = $(id);
+                if ($s.length) { if ($s.hasClass('select2-hidden-accessible')) $s.select2('destroy'); initSelect2EnModal(); }
+            };
+        });
+    </script>
+}

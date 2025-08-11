@@ -48,7 +48,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Periodos
 
                 response.Data = _mapper.Map<List<ListarMdrPeriodoDto>>(listaEntidades);
                 response.Ok = true;
-                response.Mensaje = "Lista de operadores obtenida correctamente.";
+                response.Mensaje = "Lista de registros obtenido correctamente.";
             }
             catch (System.Exception ex)
             {
