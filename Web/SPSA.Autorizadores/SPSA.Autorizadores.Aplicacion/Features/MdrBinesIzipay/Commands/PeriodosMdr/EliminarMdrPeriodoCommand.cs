@@ -95,7 +95,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Periodo
             catch (Exception ex)
             {
                 respuesta.Ok = false;
-                respuesta.Mensaje = "Ocurrió un error inesperado al eliminar los factores.";
+                respuesta.Mensaje = "Ocurrió un error inesperado al eliminar los regisros.";
                 _logger.Error(ex, "Error en EliminarMdrFactorIzipayHandler");
             }
             return respuesta;

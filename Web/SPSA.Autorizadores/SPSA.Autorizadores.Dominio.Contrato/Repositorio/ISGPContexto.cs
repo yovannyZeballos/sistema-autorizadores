@@ -61,5 +61,12 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMdrOperador RepositorioMdrOperador { get; }
         IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; }
         IRepositorioMdrPeriodo RepositorioMdrPeriodo { get; }
+
+        IRepositorioMaeProveedor RepositorioMaeProveedor { get; }
+        IRepositorioMaeProducto RepositorioMaeProducto { get; }
+        IRepositorioMaeSerieProducto RepositorioMaeSerieProducto { get; }
+        IRepositorioMaeMarca RepositorioMaeMarca { get; }
+        IRepositorioMaeAreaGestion RepositorioMaeAreaGestion { get; }
+        IRepositorioMovKardex RepositorioMovKardex { get; }
     }
 }

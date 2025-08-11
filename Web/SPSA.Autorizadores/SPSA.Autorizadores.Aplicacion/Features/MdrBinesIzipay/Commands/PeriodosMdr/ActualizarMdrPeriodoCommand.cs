@@ -47,7 +47,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Periodo
                 if (periodo is null)
                 {
                     respuesta.Ok = false;
-                    respuesta.Mensaje = "No se encuentra periodo con este ID.";
+                    respuesta.Mensaje = "No se encuentra periodo con este código.";
                     return respuesta;
                 }
 

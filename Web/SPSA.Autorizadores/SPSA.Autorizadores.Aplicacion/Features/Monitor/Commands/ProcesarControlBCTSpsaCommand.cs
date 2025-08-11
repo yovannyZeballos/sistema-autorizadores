@@ -72,8 +72,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 		{
 			using(ISGPContexto contexto = new SGPContexto())
 			{
-				var localesActivos = await contexto.RepositorioMaeLocal
-					.Obtener(x => x.TipEstado == "A")
+                var codEmpresas = new[] { "01", "02", "03", "04", "05", "06", "07" };
+
+                var localesActivos = await contexto.RepositorioMaeLocal
+					.Obtener(x => x.TipEstado == "A" && codEmpresas.Contains(x.CodEmpresa))
 					.Select(x => x.CodLocal)
 					.ToListAsync();
 

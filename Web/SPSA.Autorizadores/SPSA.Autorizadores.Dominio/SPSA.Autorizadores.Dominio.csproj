@@ -60,6 +60,10 @@
     <Compile Include="Entidades\CCom_SolicitudDet.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
+    <Compile Include="Entidades\Mae_AreaGestion.cs" />
+    <Compile Include="Entidades\Mae_SerieProducto.cs" />
+    <Compile Include="Entidades\Mov_Kardex.cs" />
+    <Compile Include="Entidades\ProductoSerieDetalle.cs" />
     <Compile Include="Entidades\ElectronicJournal.cs" />
     <Compile Include="Entidades\Empresa.cs" />
     <Compile Include="Entidades\EstadoCierre.cs" />
@@ -84,6 +88,9 @@
     <Compile Include="Entidades\Mae_Empresa.cs" />
     <Compile Include="Entidades\Mae_Horario.cs" />
     <Compile Include="Entidades\Mae_Local.cs" />
+    <Compile Include="Entidades\Mae_Marca.cs" />
+    <Compile Include="Entidades\Mae_Producto.cs" />
+    <Compile Include="Entidades\Mae_Proveedor.cs" />
     <Compile Include="Entidades\Mae_Puesto.cs" />
     <Compile Include="Entidades\Mae_Region.cs" />
     <Compile Include="Entidades\Mae_Zona.cs" />

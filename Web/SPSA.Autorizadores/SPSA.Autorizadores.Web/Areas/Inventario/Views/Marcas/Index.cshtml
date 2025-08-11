@@ -1,0 +1,152 @@
+﻿
+@model string
+@{
+    ViewBag.Title = "Administrar Marcas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Marcas</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Marcas</li>
+            <li class="breadcrumb-item1 active">Administrar</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @Html.Partial("_CardHeader", "Marcas")
+        <div class="card-body">
+            <div class="row mb-0">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtNomMarcaBuscar" class="form-label">Descripción</label>
+                        <input type="text" class="form-control form-control-sm text-uppercase" id="txtNomMarcaBuscar" oninput="this.value = this.value.toUpperCase();" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="cboIndActivoBuscar" class="form-label">Estado</label>
+                        <select class="form-control form-control-sm form-select" id="cboIndActivoBuscar">
+                            <option value="0">Todos</option>
+                            <option value="S">Activo</option>
+                            <option value="N">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="btnBuscar" class="form-label"></label>
+                        <button id="btnBuscar" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <button id="btnNuevoMarca" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-plus"></i> Nuevo
+                    </button>
+                    <button id="btnEditarMarca" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-edit-2"></i> Modificar
+                    </button>
+                    <button id="btnEliminarMarca" class="btn btn-sm btn-primary me-2 mb-2">
+                        <i class="fe fe-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table id="tableMarcas" class="table table-bordered text-nowrap border-bottom">
+                        <thead class="thead-light">
+                            <tr>
+                                <th style="width: 30px; text-align: center;">
+                                    <input type="checkbox" id="checkAllRows" />
+                                </th>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Activo</th>
+                                <th>U. Creacion</th>
+                                <th>F. Creacion</th>
+                                <th>U. Modifica</th>
+                                <th>F. Modifica</th>
+                                <th>U. Elimina</th>
+                                <th>F. Elimina</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para “Nueva Marca” -->
+<div class="modal fade" id="modalNuevoMarca" tabindex="-1" aria-labelledby="modalNuevoMarcaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTituloMarcaLabel">Nueva Marca</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoMarca">
+                    <div class="mb-3">
+                        <label for="modalInputCodMarca" class="form-label">Código</label>
+                        <input type="text" id="modalInputCodMarca" class="form-control form-control-sm" maxlength="2" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalInputNomMarca" class="form-label">Descripción</label>
+                        <input type="text" id="modalInputNomMarca" class="form-control form-control-sm text-uppercase" oninput="this.value = this.value.toUpperCase();" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="modalChkActivo">Activo</label>
+                        <input type="checkbox" class="form-check" id="modalChkActivo">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCerrarModal" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                    <i class="fe fe-arrow-left-circle"></i> Cerrar
+                </button>
+                <button type="button" id="btnGuardarNuevoModal" class="btn btn-sm btn-primary">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+                <button type="button" id="btnGuardarCambiosModal" class="btn btn-sm btn-primary">
+                    <i class="fe fe-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/AdministrarMarca.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarMarca.init();
+        });
+    </script>
+}

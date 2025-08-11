@@ -1,0 +1,307 @@
+﻿
+@{
+    ViewBag.Title = "Administrar Kardex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        /* Evita clipping del texto en inputs de fecha pequeños */
+        .form-control-sm.date-sm-fix {
+            height: auto; /* que no fuerce alto fijo */
+            min-height: calc(1.5em + .5rem + 2px); /* alto mínimo equivalente a -sm */
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            line-height: 1.5;
+        }
+
+            /* WebKit (Chrome/Safari): render del texto interno del date */
+            .form-control-sm.date-sm-fix::-webkit-datetime-edit {
+                line-height: 1.5;
+                color: inherit;
+                opacity: 1;
+            }
+
+            /* Asegura que el icono del calendario no tape el texto */
+            .form-control-sm.date-sm-fix::-webkit-calendar-picker-indicator {
+                opacity: 1;
+            }
+    </style>
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Administrar Kardex</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href="@Url.Action("Index","Home")">Inicio</a></li>
+            <li class="breadcrumb-item1 active">Kardex</li>
+        </ol>
+    </div>
+</div>
+
+<div class="card overflow-hidden">
+    @Html.Partial("_CardHeader", "Filtros")
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <label class="form-label">Fecha desde</label>
+                <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Fecha hasta</label>
+                <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Tipo</label>
+                <select id="cboTipo" class="form-select form-select-sm">
+                    <option value="0">Todos</option>
+                    <option value="INGRESO">Ingreso</option>
+                    <option value="SALIDA">Salida</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">Guía / OC</label>
+                <input type="text" id="txtGuiaOc" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+            </div>
+            <div class="col-sm-2 d-flex align-items-end">
+                <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
+                    <i class="fe fe-search me-1"></i>Buscar
+                </button>
+            </div>
+        </div>
+
+        <div class="my-3">
+            <button id="btnNuevoMov" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-plus me-1"></i>Nuevo movimiento
+            </button>
+            @*<button id="btnExportar" class="btn btn-sm btn-outline-primary">
+                <i class="fe fe-file me-1"></i>Exportar Excel
+            </button>*@
+        </div>
+
+        <table id="tableKardex" class="table table-bordered text-nowrap border-bottom">
+            <thead class="thead-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Kardex</th>
+                    <th>Área Gestión</th>
+                    <th>Producto</th>
+                    <th>N° Serie</th>
+                    <th>Guía</th>
+                    <th>Origen</th>
+                    <th>Destino</th>
+                    <th>Cód. Activo</th>
+                    <th>Obs.</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Movimiento -->
+<div class="modal fade" id="modalMovimiento" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar Movimiento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Kardex <span class="text-danger">*</span></label>
+                            <select id="movTipo" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="INGRESO">INGRESO</option>
+                                <option value="SALIDA">SALIDA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">Fecha <span class="text-danger">*</span></label>
+                            <input type="date" id="movFecha" class="form-control form-control-sm date-sm-fix">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Área Gestión <span class="text-danger">*</span></label>
+                            <select id="movAreaGestion" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="GESTION ACTIVOS">GESTION ACTIVOS</option>
+                                <option value="GESTION PROYECTOS">GESTION PROYECTOS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Clase Stock <span class="text-danger">*</span></label>
+                            <select id="movClaseStock" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="PROYECTO">PROYECTO</option>
+                                <option value="RENOVACIÓN X INCIDENTES">RENOVACIÓN X INCIDENTES</option>
+                                <option value="STOCK">STOCK</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Estado Stock <span class="text-danger">*</span></label>
+                            <select id="movEstadoStock" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="NUEVO">NUEVO</option>
+                                <option value="USADO">USADO</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Producto <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="movCodProducto" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">N° Serie <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="movNumSerie" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">Cod. Activo <span class="text-danger">*</span></label>
+                            <input type="text" id="movCodActivoo" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">Cantidad <span class="text-danger">*</span></label>
+                            <input type="number" id="movCantidad" class="form-control form-control-sm" min="1" step="1" value="1" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa Destino <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="movEmpDest" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local Destino <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="movLocDest" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Guía</label>
+                            <input type="text" id="movGuia" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Orden Compra</label>
+                            <input type="text" id="movOrdenCompra" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Ticket</label>
+                            <input type="text" id="movTicket" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Observaciones</label>
+                            <input type="text" id="movObs" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGuardarMov" class="btn btn-sm btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    @*<script src="~/Content/plugins/select2/select2.full.min.js"></script>*@
+    <script src="~/Content/ViewJs/AdministrarKardex.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AdministrarKardex.init();
+        });
+    </script>
+    <script>
+        $(function () {
+            var $modal = $('#modalMovimiento');
+
+            function initSelect2EnModal() {
+                ['#movLocDest', '#movEmpDest', '#movCodProducto', '#movNumSerie'].forEach(function (sel) {
+                    var $s = $(sel);
+                    if (!$s.length) return;
+
+                    var $opt0 = $s.find('option').first();
+                    var placeholder = $opt0.attr('label') || $opt0.text() || 'Seleccionar…';
+                    if (!$opt0.attr('value')) { $opt0.attr('value', ''); }
+
+                    if ($s.hasClass('select2-hidden-accessible')) { $s.select2('destroy'); }
+                    $s.select2({
+                        dropdownParent: $modal,
+                        width: '100%',
+                        placeholder: placeholder,
+                        allowClear: true,
+                        minimumResultsForSearch: 0
+                    });
+                });
+            }
+
+            $modal.on('shown.bs.modal', function () {
+                initSelect2EnModal();
+            });
+
+            $(document).on('select2:open', function () {
+                setTimeout(function () {
+                    var el = document.querySelector('.select2-container--open .select2-search__field');
+                    if (el) el.focus();
+                }, 0);
+            });
+
+            // (Opcional) helper por si quieres refrescar tras cargar opciones vía AJAX
+            window.kardexReinitSelect2 = function (id) {
+                var $s = $(id);
+                if ($s.length) { if ($s.hasClass('select2-hidden-accessible')) $s.select2('destroy'); initSelect2EnModal(); }
+            };
+        });
+    </script>
+}
+
