@@ -229,7 +229,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ObtenerMenuHandler>().As<IRequestHandler<ObtenerMenuQuery, GenericResponseDTO<ListarMenuDTO>>>();
 			builder.RegisterType<ObtenerMenusUsuarioHandler>().As<IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
 			builder.RegisterType<ImportarExcelInventarioCajaHandler>().As<IRequestHandler<ImportarExcelInventarioCajaCommand, RespuestaComunExcelDTO>>();
-			builder.RegisterType<ImportarExcelInvCajaHandler>().As<IRequestHandler<ImportarExcelInvCajaCommand, RespuestaComunExcelDTO>>();//POR EL MOMENTO
+			builder.RegisterType<ImportarExcelInvCajaHandler>().As<IRequestHandler<ImportarExcelInvCajaCommand, RespuestaComunExcelDTO>>();//POR EL MOMENT
 			builder.RegisterType<DtUsuariosHandler>().As<IRequestHandler<DtUsuariosQuery, DataTable>>();
 
 			#region <--TABLA MAESTROS SGP-->
