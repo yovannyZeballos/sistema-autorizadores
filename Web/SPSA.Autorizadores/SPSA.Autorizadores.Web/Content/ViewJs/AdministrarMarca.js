@@ -52,7 +52,7 @@ var AdministrarMarca = function () {
             var data = $('#tableMarcas').DataTable().row($tr).data();
 
 
-            $('#modalInputCodMarca').val(data.CodMarca);
+            $('#modalInputCodMarca').val(data.Id);
             $('#modalInputNomMarca').val(data.NomMarca);
             $('#modalChkActivo').prop('checked', data.IndActivo === 'S');
 
@@ -138,7 +138,7 @@ var AdministrarMarca = function () {
                                                 : urlCrearMarca;
 
         var payload = {
-            CodMarca: codMarca,
+            Id: codMarca,
             NomMarca: nomMarca,
             IndActivo: activo
         };
@@ -235,7 +235,7 @@ var AdministrarMarca = function () {
                             + '/>';
                     }
                 },
-                { title: "Código", data: "CodMarca" },
+                { title: "Código", data: "Id" },
                 { title: "Descripción", data: "NomMarca" },
                 {
                     title: "Activo",
