@@ -6,7 +6,12 @@ namespace SPSA.Autorizadores.Dominio.Entidades
     {
         public string Ruc { get; set; }
         public string RazonSocial { get; set; }
+        public string NomComercial { get; set; }
         public string IndActivo { get; set; }
+        public string DirFiscal { get; set; }
+        public string Contacto { get; set; }
+        public string Telefono { get; set; }
+        public string Email { get; set; }
         public string UsuCreacion { get; set; }
         public DateTime FecCreacion { get; set; }
         public string UsuModifica { get; set; }

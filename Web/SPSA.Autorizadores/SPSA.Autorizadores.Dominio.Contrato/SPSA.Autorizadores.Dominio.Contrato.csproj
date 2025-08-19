@@ -51,6 +51,10 @@
     <Compile Include="Repositorio\IContexto.cs" />
     <Compile Include="Repositorio\IRepositorioCComSolicitudCab.cs" />
     <Compile Include="Repositorio\IRepositorioCComSolicitudDet.cs" />
+    <Compile Include="Repositorio\IRepositorioGuiaDespachoCabecera.cs" />
+    <Compile Include="Repositorio\IRepositorioGuiaDespachoDetalle.cs" />
+    <Compile Include="Repositorio\IRepositorioGuiaRecepcionCabecera.cs" />
+    <Compile Include="Repositorio\IRepositorioGuiaRecepcionDetalle.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
@@ -73,6 +77,7 @@
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\IRepositorioMovKardex.cs" />
     <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />
+    <Compile Include="Repositorio\IRepositorioStockProducto.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />
     <Compile Include="Repositorio\IRepositorioApertura.cs" />

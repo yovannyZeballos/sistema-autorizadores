@@ -422,6 +422,7 @@
     <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexActivoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\EliminarInvKardexLocalCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\GuiaRecepcion\RegistrarGuiaRecepcionCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\ImportarInvKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Kardex\RegistrarMovKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Marca\ActualizarMaeMarcaCommand.cs" />
@@ -438,6 +439,9 @@
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\EliminarMaeSerieProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\ListarMaeAreaGestionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\MaeAreaGestionDto.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionCabeceraDto.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionDetalleDto.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\ListarGuiaRecepcionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexActivoDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexDTO.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\InvKardexLocalDTO.cs" />
@@ -456,6 +460,7 @@
     <Compile Include="Features\InventarioKardex\DTOs\SerieProducto\MaeSerieProductoDto.cs" />
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarMaeAreaGestionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarPaginadoMaeAreaGestionQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ListarPaginadoGuiaRecepcionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\ListarInvKardexActivoQuery.cs" />

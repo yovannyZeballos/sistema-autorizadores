@@ -9,7 +9,6 @@ using AutoMapper;
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.SerieProducto;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Auxiliar;

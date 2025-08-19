@@ -53,6 +53,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                        NomMarca = p.Marca.NomMarca,   // ← aquí se llena
                        TipProducto = p.TipProducto,
                        AreaGestionId = p.AreaGestionId,
+                       IndSerializable = p.IndSerializable,
                        IndActivo = p.IndActivo,
                        StkMinimo = p.StkMinimo,
                        StkMaximo = p.StkMaximo,
@@ -67,13 +68,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                    .ToListAsync(cancellationToken);
                 response.Data = productos;
 
-                //var listaEntidades = await _contexto.RepositorioMaeProducto
-                //    .Obtener(x => x.IndActivo == "S")
-                //    .Include(x => x.Marca)
-                //    .OrderBy(x => x.DesProducto)
-                //    .ToListAsync();
-
-                //response.Data = _mapper.Map<List<ListarMaeProductoDto>>(listaEntidades);
                 response.Ok = true;
                 response.Mensaje = "Lista de registros obtenido correctamente.";
             }

@@ -134,6 +134,10 @@
     <Compile Include="Configuracion\AutImpresionTypeConfiguracion.cs" />
     <Compile Include="Configuracion\CcomSolicitudCabTypeConfiguration.cs" />
     <Compile Include="Configuracion\CcomSolicitudDetTypeConfiguration.cs" />
+    <Compile Include="Configuracion\GuiaDespachoCabeceraTypeConfiguration.cs" />
+    <Compile Include="Configuracion\GuiaDespachoDetalleTypeConfiguration.cs" />
+    <Compile Include="Configuracion\GuiaRecepcionCabeceraTypeConfiguration.cs" />
+    <Compile Include="Configuracion\GuiaRecepcionDetalleTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvCajasTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvKardexActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvKardexLocalTypeConfiguration.cs" />
@@ -160,8 +164,8 @@
     <Compile Include="Configuracion\MdrPeriodoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
-    <Compile Include="Configuracion\MovKardexTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
+    <Compile Include="Configuracion\StockProductoTypeConfiguration.cs" />
     <Compile Include="Configuracion\TmpMonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeLocalAlternoTypeConfiguration.cs" />
@@ -193,6 +197,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\RepositorioCComSolicitudCab.cs" />
     <Compile Include="Repositorio\RepositorioCComSolicitudDet.cs" />
+    <Compile Include="Repositorio\RepositorioGuiaDespachoCabecera.cs" />
+    <Compile Include="Repositorio\RepositorioGuiaDespachoDetalle.cs" />
+    <Compile Include="Repositorio\RepositorioGuiaRecepcionCabecera.cs" />
+    <Compile Include="Repositorio\RepositorioGuiaRecepcionDetalle.cs" />
     <Compile Include="Repositorio\RepositorioInvKardex.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexActivo.cs" />
     <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
@@ -215,6 +223,7 @@
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\RepositorioMovKardex.cs" />
     <Compile Include="Repositorio\RepositorioSolicitudUsuarioASR.cs" />
+    <Compile Include="Repositorio\RepositorioStockProducto.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
     <Compile Include="Repositorio\RepositorioAutImpresion.cs" />
