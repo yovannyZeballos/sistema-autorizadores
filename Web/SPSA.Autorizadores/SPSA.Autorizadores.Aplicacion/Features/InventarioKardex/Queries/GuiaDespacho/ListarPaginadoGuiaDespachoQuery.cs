@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,11 +25,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
         public DateTime? FechaHasta { get; set; }
         public string IndTransferencia { get; set; }
         public string IndEstado { get; set; }
-        public string CodEmpresaOrigen{ get; set; }
-        public string CodLocalOrigen{ get; set; }
+        public string CodEmpresaOrigen { get; set; }
+        public string CodLocalOrigen { get; set; }
         public string CodEmpresaDestino { get; set; }
         public string CodLocalDestino { get; set; }
-        public string FiltroVarios { get; set; }     }
+        public string FiltroVarios { get; set; }
+    }
 
     public class ListarPaginadoGuiaDespachoHandler : IRequestHandler<ListarPaginadoGuiaDespachoQuery, GenericResponseDTO<PagedResult<GuiaDespachoCabeceraDto>>>
     {
@@ -136,26 +138,36 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                     pageNumber: request.PageNumber,
                     pageSize: request.PageSize,
                     orderBy: x => new { x.Id },
-                    ascending: false
+                    ascending: false,
+                    includes: c => c.Detalles
                 );
 
                 // Mapear DTOs
                 var dtoItems = new List<GuiaDespachoCabeceraDto>(pagedRegistros.Items.Count);
                 foreach (var g in pagedRegistros.Items)
                 {
-                    //var razonSocial = await _contexto.RepositorioMaeProveedor.Obtener(p => p.Ruc == g.ProveedorRuc)
-                    //                                                        .Select(p => p.RazonSocial)
-                    //                                                        .FirstOrDefaultAsync() ?? string.Empty;
+                    var detalleDtos = (g.Detalles ?? Enumerable.Empty<GuiaDespachoDetalle>())
+                        .Select(d => new GuiaDespachoDetalle
+                        {
+                            Id = d.Id,
+                            GuiaDespachoId = d.GuiaDespachoId,
+                            CodProducto = d.CodProducto,
+                            SerieProductoId = d.SerieProductoId,
+                            Cantidad = d.Cantidad,
+                            CodActivo = d.CodActivo,
+                            Observaciones = d.Observaciones,
+                        })
+                        .ToList();
 
                     dtoItems.Add(new GuiaDespachoCabeceraDto
                     {
                         Id = g.Id,
                         Fecha = g.Fecha,
                         NumGuia = g.NumGuia,
-                        //Proveedor = razonSocial ?? string.Empty,
                         CodEmpresaDestino = g.CodEmpresaDestino,
                         CodLocalDestino = g.CodLocalDestino,
                         //Items = lineas,
+                        Detalles = detalleDtos,
                         IndEstado = g.IndEstado,
                         UsuCreacion = g.UsuCreacion
                     });

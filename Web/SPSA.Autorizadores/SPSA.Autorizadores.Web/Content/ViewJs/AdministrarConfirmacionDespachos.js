@@ -1,6 +1,6 @@
 var urlListarDespachosPendientes = baseUrl + 'Inventario/GuiaDespacho/ListarPaginadoConfirmacion';
 var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener';           // { id }
-var urlConfirmarDespacho = baseUrl + 'Inventario/GuiaDespacho/ConfirmarEnDestino';// POST
+var urlConfirmarDespacho = baseUrl + 'Inventario/GuiaDespacho/ConfirmarEnDestino';
 
 var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
@@ -44,6 +44,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
         if (!codEmpresa) return Promise.resolve({ Ok: true, Data: [] });
         return $.ajax({ url: urlListarLocalesPorEmpresa, type: 'POST', data: { request: { CodEmpresa: codEmpresa } } });
     }
+
     async function cargarComboEmpresas(selector) {
         try {
             const resp = await listarEmpresas();
@@ -53,6 +54,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
             else swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
         } catch (err) { swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' }); }
     }
+
     async function cargarComboLocales(selEmpresa, selLocal) {
         try {
             const codEmpresa = $(selEmpresa).val();
