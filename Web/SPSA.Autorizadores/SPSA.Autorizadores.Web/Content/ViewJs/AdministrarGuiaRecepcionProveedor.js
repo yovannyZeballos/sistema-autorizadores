@@ -251,17 +251,6 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             $selProd.append(opt);
         });
 
-        // Activar búsqueda de select2 dentro del modal (sin clases extra ni CSS nuevo)
-        //if ($.fn.select2) {
-        //    $selProd.select2({
-        //        dropdownParent: $('#modalRecepcion'),
-        //        width: '100%',
-        //        placeholder: 'Seleccionar...',
-        //        allowClear: true,
-        //        minimumResultsForSearch: 0 // fuerza a mostrar el buscador siempre
-        //    });
-        //}
-
         // eventos de fila
         $selProd.on('change', async function () {
             await onProductoChange(tr);
@@ -307,20 +296,15 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             OrdenCompra:        ($('#recOrdenCompra').val() || '').trim(),
             Fecha:              $('#recFecha').val(),
             ProveedorRuc:       $('#recProveedor').val() || null,
-            //AreaGestion:      ($('#recAreaGestion').val() || '').trim(),
-            //ClaseStock:       ($('#recClaseStock').val() || '').trim(),
-            //EstadoStock:      ($('#recEstadoStock').val() || '').trim(),
+            AreaGestion:        ($('#recAreaGestion').val() || '').trim(),
+            ClaseStock:         ($('#recClaseStock').val() || '').trim(),
+            EstadoStock:        ($('#recEstadoStock').val() || '').trim(),
             IndTransferencia:   'N',
             Observaciones:      ($('#recObs').val() || '').trim()
         };
 
         // validaciones mínimas
-        //if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha || !header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
-        //    swal({ text: "Complete los campos obligatorios (*) de la cabecera.", icon: "warning" });
-        //    return;
-        //}
-
-        if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha) {
+        if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha || !header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
             swal({ text: "Complete los campos obligatorios (*) de la cabecera.", icon: "warning" });
             return;
         }
@@ -347,9 +331,15 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
 
             if (!codProd) {
                 errores.push(`Fila ${fila}: producto es obligatorio.`);
-            } else if (ind === 'S') {
+                return; // ⬅️ no empujar item inválido
+            }
+
+            if (ind === 'S') {
                 if (!numSerie) errores.push(`Fila ${fila}: N° serie es obligatorio para producto serializable.`);
                 if (cant !== 1) errores.push(`Fila ${fila}: cantidad debe ser 1 para producto serializable.`);
+                const key = codProd + '|' + numSerie;
+                if (seriesKeys.has(key)) errores.push(`Fila ${fila}: la serie '${numSerie}' del producto ${codProd} está repetida.`);
+                else seriesKeys.add(key);
             } else {
                 if (!cant || cant <= 0) errores.push(`Fila ${fila}: cantidad debe ser mayor a 0.`);
             }

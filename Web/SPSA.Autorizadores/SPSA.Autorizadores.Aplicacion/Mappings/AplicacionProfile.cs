@@ -16,6 +16,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.AreaGestion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Marca;
@@ -299,9 +300,11 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<RegistrarMovKardexCommand, Mov_Kardex>().ReverseMap();
 
             CreateMap<RegistrarGuiaRecepcionCommand, GuiaRecepcionCabecera>().ReverseMap();
+            CreateMap<RegistrarGuiaDespachoCommand, GuiaDespachoCabecera>().ReverseMap();
+            CreateMap<ConfirmarDespachoEnDestinoCommand, GuiaDespachoCabecera>().ReverseMap();
 
-            CreateMap<GuiaRecepcionCabeceraDto, GuiaRecepcionCabecera>().ReverseMap();
-            CreateMap<GuiaRecepcionDetalleDto, GuiaRecepcionDetalle>().ReverseMap();
+            //CreateMap<GuiaRecepcionCabeceraDto, GuiaRecepcionCabecera>().ReverseMap();
+            //CreateMap<GuiaRecepcionDetalleDto, GuiaRecepcionDetalle>().ReverseMap();
 
             CreateMap<ListarMaeMarcaDto, Mae_Marca>().ReverseMap();
             CreateMap<ListarMaeAreaGestionDto, Mae_AreaGestion>().ReverseMap();

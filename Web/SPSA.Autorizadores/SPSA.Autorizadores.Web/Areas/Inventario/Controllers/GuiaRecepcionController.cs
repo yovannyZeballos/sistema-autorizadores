@@ -30,11 +30,28 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         [HttpPost]
         public async Task<JsonResult> Registrar(RegistrarGuiaRecepcionCommand command)
         {
+            // Evita NullReference si el binder no pobló algo:
+            if (command == null)
+                command = new RegistrarGuiaRecepcionCommand();
+
+            if (command.Cabecera == null)
+                command.Cabecera = new GuiaRecepcionCabeceraCommand();
+
             command.UsuCreacion = WebSession.Login;
             command.Cabecera.CodEmpresaDestino = WebSession.JerarquiaOrganizacional.CodEmpresa;
             command.Cabecera.CodLocalDestino = WebSession.JerarquiaOrganizacional.CodLocal;
+
+            // (Opcional) Si quieres detectar problemas de binding:
+            //if (!ModelState.IsValid) return Json(new RespuestaComunDTO { Ok = false, Mensaje = "Datos inválidos." });
+
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
+
+            //command.UsuCreacion = WebSession.Login;
+            //command.Cabecera.CodEmpresaDestino = WebSession.JerarquiaOrganizacional.CodEmpresa;
+            //command.Cabecera.CodLocalDestino = WebSession.JerarquiaOrganizacional.CodLocal;
+            //var respuesta = await _mediator.Send(command);
+            //return Json(respuesta);
         }
 
         //[HttpPost]

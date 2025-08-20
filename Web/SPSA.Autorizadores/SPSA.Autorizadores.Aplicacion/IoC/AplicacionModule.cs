@@ -32,6 +32,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.AreaGestion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Marca;
@@ -40,6 +41,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Proveedor
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.SerieProducto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.AreaGestion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Marca;
@@ -48,6 +50,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Proveedor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.SerieProducto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.AreaGestion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Marca;
@@ -452,6 +455,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearMaeSerieProductoHandler>().As<IRequestHandler<CrearMaeSerieProductoCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<RegistrarGuiaRecepcionHandler>().As<IRequestHandler<RegistrarGuiaRecepcionCommand, RespuestaComunDTO>>();
+            builder.RegisterType<RegistrarGuiaDespachoHandler>().As<IRequestHandler<RegistrarGuiaDespachoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ConfirmarDespachoEnDestinoHandler>().As<IRequestHandler<ConfirmarDespachoEnDestinoCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<RegistrarMovKardexHandler>().As<IRequestHandler<RegistrarMovKardexCommand, RespuestaComunDTO>>();
 
@@ -478,6 +483,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarPaginadoMaeProductoHandler>().As<IRequestHandler<ListarPaginadoMaeProductoQuery, GenericResponseDTO<PagedResult<ListarMaeProductoDto>>>>();
             builder.RegisterType<ListarPaginadoMaeSerieProductoHandler>().As<IRequestHandler<ListarPaginadoMaeSerieProductoQuery, GenericResponseDTO<PagedResult<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaRecepcionHandler>().As<IRequestHandler<ListarPaginadoGuiaRecepcionQuery, GenericResponseDTO<PagedResult<GuiaRecepcionCabeceraDto>>>>();
+            builder.RegisterType<ListarPaginadoGuiaDespachoHandler>().As<IRequestHandler<ListarPaginadoGuiaDespachoQuery, GenericResponseDTO<PagedResult<GuiaDespachoCabeceraDto>>>>();
             
 
 

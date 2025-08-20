@@ -279,6 +279,7 @@
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\AreasGestionController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\GuiaDespachoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\GuiaRecepcionController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioKardexActivoController.cs" />
@@ -2392,6 +2393,8 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarConfirmacionDespachos.js" />
+    <Content Include="Content\ViewJs\AdministrarGuiaDespacho.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcionProveedor.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcion.js" />
     <Content Include="Content\ViewJs\AdministrarKardex.js" />
@@ -2964,6 +2967,8 @@
     <Content Include="Areas\Inventario\Views\Kardex\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaRecepcion\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaRecepcion\Proveedor.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaDespacho\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaDespacho\ConfirmacionDespacho.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
