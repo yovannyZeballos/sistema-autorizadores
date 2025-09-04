@@ -15,24 +15,23 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 		public AutImpresionTypeConfiguracion()
 		{
 			// Configura la tabla a la que se mapea la entidad AutImpresion.
-			ToTable("AUT_IMPRESION", "SGP");
+			ToTable("aut_impresion", "SGP");
 
 			// Configura la clave primaria de la entidad AutImpresion.
 			HasKey(x => new { x.Id });
 
 			// Configura las propiedades de la entidad AutImpresion.
-			Property(x => x.Id).HasColumnName("ID")
-				.HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-			Property(x => x.CodColaborador).HasColumnName("COD_COLABORADOR");
-			Property(x => x.CodLocal).HasColumnName("COD_LOCAL");
-			Property(x => x.CodAutorizador).HasColumnName("COD_AUTORIZADOR");
-			Property(x => x.CodBarra).HasColumnName("COD_BARRA");
-			Property(x => x.UsuImpresion).HasColumnName("USU_IMPRESION");
-			Property(x => x.FecImpresion).HasColumnName("FEC_IMPRESION");
-			Property(x => x.Correlativo).HasColumnName("CORRELATIVO");
-			Property(x => x.MotivoReimpresion).HasColumnName("MOTIVO_REIMPRESION");
-			Property(x => x.UsuReimpresion).HasColumnName("USU_REIMPRESION");
-			Property(x => x.FecReimpresion).HasColumnName("FEC_REIMPRESION");
+			Property(x => x.Id).HasColumnName("id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+			Property(x => x.CodColaborador).HasColumnName("cod_colaborador");
+			Property(x => x.CodLocal).HasColumnName("cod_local");
+			Property(x => x.CodAutorizador).HasColumnName("cod_autorizador");
+			Property(x => x.CodBarra).HasColumnName("cod_barra");
+			Property(x => x.UsuImpresion).HasColumnName("usu_impresion");
+			Property(x => x.FecImpresion).HasColumnName("fec_impresion");
+			Property(x => x.Correlativo).HasColumnName("correlativo");
+			Property(x => x.MotivoReimpresion).HasColumnName("motivo_reimpresion");
+			Property(x => x.UsuReimpresion).HasColumnName("usu_reimpresion");
+			Property(x => x.FecReimpresion).HasColumnName("fec_reimpresion");
 		}
 	}
 }

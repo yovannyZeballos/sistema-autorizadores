@@ -379,7 +379,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             #endregion
 
             #region MAE_COLABORADOR_EXT
-            builder.RegisterType<ListarMaeColaboradorExtHandler>().As<IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDTO>>>>();
+            builder.RegisterType<ListarMaeColaboradorExtHandler>().As<IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDto>>>>();
             builder.RegisterType<ObtenerMaeColaboradorExtHandler>().As<IRequestHandler<ObtenerMaeColaboradorExtQuery, GenericResponseDTO<ObtenerMaeColaboradorExtDTO>>>();
             builder.RegisterType<CrearMaeColaboradorExtHandler>().As<IRequestHandler<CrearMaeColaboradorExtCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeColaboradorExtHandler>().As<IRequestHandler<ActualizarMaeColaboradorExtCommand, RespuestaComunDTO>>();
@@ -410,7 +410,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<EnviarCorreoHandler>().As<IRequestHandler<EnviarCorreoCommand, RespuestaComunDTO>>();
 
             #region ASR_SOLICITUD_USUARIO
-            builder.RegisterType<ListarSolicitudUsuarioHandler>().As<IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>>();
+            builder.RegisterType<ListarSolicitudUsuarioHandler>().As<IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDto>>>>();
             builder.RegisterType<CrearSolicitudUsuarioHandler>().As<IRequestHandler<CrearSolicitudUsuarioCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarSolicitudUsuarioHandler>().As<IRequestHandler<EliminarSolicitudUsuarioCommand, RespuestaComunDTO>>();
             builder.RegisterType<DescargarSolicitudesUsuarioHandler>().As<IRequestHandler<DescargarSolicitudesUsuarioCommand, DescargarMaestroDTO>>();

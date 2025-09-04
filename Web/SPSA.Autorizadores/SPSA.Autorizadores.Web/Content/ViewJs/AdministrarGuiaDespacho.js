@@ -346,7 +346,9 @@ var AdministrarGuiaDespacho = (function ($) {
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(payload),
-                dataType: 'json'
+                dataType: 'json',
+                beforeSend: showLoading,
+                complete: closeLoading
             });
 
             if (resp.Ok) {

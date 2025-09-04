@@ -7,7 +7,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int NumSolicitud { get; set; }
-        public string CodLocalAlterno { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
         public string CodColaborador { get; set; }
         public string TipUsuario { get; set; }
         public string TipColaborador { get; set; }

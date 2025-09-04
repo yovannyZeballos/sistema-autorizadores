@@ -346,7 +346,7 @@
     <Compile Include="Features\ColaboradoresExt\Commands\CrearMaeColaboradorExtCommand.cs" />
     <Compile Include="Features\ColaboradoresExt\Commands\EliminarMaeColaboradorExtCommand.cs" />
     <Compile Include="Features\ColaboradoresExt\Commands\ImportarMaeColaboradorExtCommand.cs" />
-    <Compile Include="Features\ColaboradoresExt\DTOs\ListarMaeColaboradorExtDTO.cs" />
+    <Compile Include="Features\ColaboradoresExt\DTOs\ListarMaeColaboradorExtDto.cs" />
     <Compile Include="Features\ColaboradoresExt\DTOs\MaeColaboradorExtDTO.cs" />
     <Compile Include="Features\ColaboradoresExt\DTOs\ObtenerMaeColaboradorExtDTO.cs" />
     <Compile Include="Features\ColaboradoresExt\Queries\ListarMaeColaboradorExtQuery.cs" />
@@ -658,9 +658,9 @@
     <Compile Include="Features\SolicitudUsuarioASR\Commands\DescargarSolicitudesUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\EliminarSolicitudUsuarioCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudCrearCommand.cs" />
-    <Compile Include="Features\SolicitudUsuarioASR\DTOs\ObtenerSolicitudUsuarioDTO.cs" />
-    <Compile Include="Features\SolicitudUsuarioASR\DTOs\SolicitudUsuarioDTO.cs" />
-    <Compile Include="Features\SolicitudUsuarioASR\DTOs\ListarSolictudUsuarioDTO.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\DTOs\ObtenerSolicitudUsuarioDto.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\DTOs\SolicitudUsuarioDto.cs" />
+    <Compile Include="Features\SolicitudUsuarioASR\DTOs\ListarSolictudUsuarioDto.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarSolicitudUsuarioQuery.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarSolicitudesSolicitadas.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Queries\ListarUsuariosQuery.cs" />

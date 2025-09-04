@@ -214,7 +214,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--COLABORADOR_EXTERNO-->
-            CreateMap<ListarMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
+            CreateMap<ListarMaeColaboradorExtDto, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<ObtenerMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<MaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<CrearMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
@@ -239,7 +239,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             //CreateMap<EnviarCorreoCommand, ASR_SolicitudUsuario>().ReverseMap();
 
             #region <--ASR_SOLICITUD_USUARIO-->
-            CreateMap<ListarSolictudUsuarioDTO, ASR_SolicitudUsuario>().ReverseMap();
+            CreateMap<ListarSolictudUsuarioDto, ASR_SolicitudUsuario>().ReverseMap();
             CreateMap<CrearSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
             CreateMap<EliminarSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
             #endregion

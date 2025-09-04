@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
         <div class="page-title">Mantenimiento de Puestos</div>
@@ -17,13 +16,12 @@
         </ol>
     </div>
 </div>
-<div class="col-xl-12">
 
+<div class="col-xl-12">
     <div class="card overflow-hidden">
         @Html.Partial("_CardHeader", "Filtros")
         <div class="card-body pb-0">
             <div class="row">
-
                 <div class="col-xl-12">
                     <div class="col-md-3 d-none">
                         <div class="form-group">
@@ -36,74 +34,72 @@
                 <div class="col-xl-12">
                     <div class="row mb-0">
                         <div class="col-md-3">
-                            <div class="form-group">
+                            <div class="form-group select2-sm">
                                 <label for="cboEmpresaBuscar" class="form-label">Empresa</label>
-                                <select class="form-control form-control-sm form-select" id="cboEmpresaBuscar">
+                                <select class="form-control form-control-sm select2-show-search" id="cboEmpresaBuscar">
                                     <option value="">Todos</option>
                                 </select>
                             </div>
                         </div>
-                        @*<div class="col-md-2">
-                            <div class="form-group">
-                                <label for="txtCodPuestoBuscar" class="form-label">Código Puesto</label>
-                                <input type="text" class="form-control form-control-sm" id="txtCodPuestoBuscar" placeholder="Ingrese un código del puesto" />
-                            </div>
-                        </div>*@
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtDesPuestoBuscar" class="form-label">Descripción</label>
                                 <input type="text" class="form-control form-control-sm" id="txtDesPuestoBuscar" placeholder="Ingrese un puesto" />
                             </div>
                         </div>
-                        <div class="col-md-2">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkAutorizadorAutomatico">
-                                    <label class="form-check-label" for="checkAutorizadorAutomatico">Autorizador Automático</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkOperadorAutomatico">
-                                    <label class="form-check-label" for="checkOperadorAutomatico">Operador  Automático</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkAutorizadorManual">
-                                    <label class="form-check-label" for="checkAutorizadorManual">Autorizador Manual</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkOperadorManual">
-                                    <label class="form-check-label" for="checkOperadorManual">Operador  Manual</label>
-                                </div>
-                            </div>
 
                         <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="txtBuscar" class="form-label"></label>
-                                <button id="btnBuscarPuesto" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar Puesto</button>
+                            @*<label class="form-label d-block">Indicadores (filtra por S)</label>*@
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="checkAutorizadorAutomatico">
+                                <label class="form-check-label" for="checkAutorizadorAutomatico">Autorizador Automático</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="checkOperadorAutomatico">
+                                <label class="form-check-label" for="checkOperadorAutomatico">Operador Automático</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="checkAutorizadorManual">
+                                <label class="form-check-label" for="checkAutorizadorManual">Autorizador Manual</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="checkOperadorManual">
+                                <label class="form-check-label" for="checkOperadorManual">Operador Manual</label>
+                            </div>
+                            @*<small class="text-muted">Si no marcas, no se aplica filtro en ese indicador.</small>*@
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-end">
+                            <div class="form-group w-100">
+                                <button id="btnBuscarPuesto" class="btn btn-sm btn-primary w-100">
+                                    <i class="fe fe-search me-1"></i>Buscar
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                </div> <!-- /col-xl-12 -->
             </div>
         </div>
+
         @Html.Partial("_CardHeader", "Listado de Puestos")
         <div class="card-body">
             <div class="col-xl-12">
                 <div class="row">
-                    <table id="tablePuestos" class="table text-nowrap border-bottom">
+                    <table id="tablePuestos" class="table table-bordered text-nowrap border-bottom w-100">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0" style="font-size: 11px;">COD. EMPRESA</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">NOM. EMPRESA</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">COD. PUESTO</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">DES. PUESTO</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">A. AUTOMATICO</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">O. AUTOMATICO</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">A. MANUAL</th>
-                                <th class="border-bottom-0" style="font-size: 11px;">O. MANUAL</th>
+                                <th style="font-size: 11px;">COD. EMPRESA</th>
+                                <th style="font-size: 11px;">NOM. EMPRESA</th>
+                                <th style="font-size: 11px;">COD. PUESTO</th>
+                                <th style="font-size: 11px;">DES. PUESTO</th>
+                                <th style="font-size: 11px;">A. AUTOMÁTICO</th>
+                                <th style="font-size: 11px;">O. AUTOMÁTICO</th>
+                                <th style="font-size: 11px;">A. MANUAL</th>
+                                <th style="font-size: 11px;">O. MANUAL</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
 
@@ -111,52 +107,6 @@
         </div>
     </div>
 </div>
-
-<!-- MODAL COLABORADOR EXTERNO -->
-<div class="modal fade" id="modalColabExt" data-bs-backdrop="static">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content modal-content-demo">
-            <div class="modal-header">
-                <h6 class="modal-title" id="tituloModalColabExt"></h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button id="btnGrabarModifica" class="btn btn-primary">Grabar</button>
-                <button id="btnGrabarNuevo" class="btn btn-primary">Grabar</button>
-                <button class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ERRORES IMPORTAR EXCEL-->
-<div class="modal fade" id="modalErroresImportacionExcel" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tituloModalImportarEmpresa">Errores encontrados</h5>
-                <button aria-label="Close" class="btn-close text-end" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fila</th>
-                            <th>Mensaje</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyErrores">
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 @section scripts{
     <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
@@ -170,12 +120,10 @@
     <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
-    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/plugins/select2/select2.full.min.js"></script> @* si no está ya cargado *@
+    <link href="~/Content/plugins/select2/select2.min.css" rel="stylesheet" />
     <script src="~/Content/ViewJs/AdministrarPuesto.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            AdministrarPuesto.init();
-        });
+    <script>
+        $(function () { AdministrarPuesto.init(); });
     </script>
 }
-

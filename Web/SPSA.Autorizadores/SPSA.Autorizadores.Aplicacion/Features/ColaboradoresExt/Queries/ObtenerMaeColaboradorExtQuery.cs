@@ -16,7 +16,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
 {
     public class ObtenerMaeColaboradorExtQuery : IRequest<GenericResponseDTO<ObtenerMaeColaboradorExtDTO>>
     {
-        public string CodLocalAlterno { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
         public string CodigoOfisis { get; set; }
     }
 
@@ -40,7 +41,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
             {
                 Mae_ColaboradorExt maeColaboradorExt = new Mae_ColaboradorExt();
 
-                maeColaboradorExt = await _contexto.RepositorioMaeColaboradorExt.Obtener(s => s.CodLocalAlterno == request.CodLocalAlterno && s.CodigoOfisis == request.CodigoOfisis).FirstOrDefaultAsync();
+                maeColaboradorExt = await _contexto.RepositorioMaeColaboradorExt.Obtener(s => s.CodEmpresa== request.CodEmpresa && s.CodLocal == request.CodLocal && s.CodigoOfisis == request.CodigoOfisis).FirstOrDefaultAsync();
 
                 if (maeColaboradorExt is null)
                 {
@@ -51,9 +52,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Queries
 
                 var maeColaboradorExtDto = _mapper.Map<ObtenerMaeColaboradorExtDTO>(maeColaboradorExt);
 
-                Mae_Local maeLocal = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodLocalAlterno == request.CodLocalAlterno).FirstOrDefaultAsync();
+                Mae_Local maeLocal = await _contexto.RepositorioMaeLocal.Obtener(s => s.CodEmpresa == request.CodEmpresa && s.CodLocal == request.CodLocal).FirstOrDefaultAsync();
                 maeColaboradorExtDto.CodEmpresa = maeLocal.CodEmpresa;
-                maeColaboradorExtDto.CodLocalAlterno = maeLocal.CodLocalAlterno;
+                maeColaboradorExtDto.CodLocal = maeLocal.CodLocal;
 
                 response.Data = maeColaboradorExtDto;
             }

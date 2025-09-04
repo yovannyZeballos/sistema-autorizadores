@@ -40,8 +40,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Commands
             try
             {
                 var lista = await _contexto.RepositorioSolicitudUsuarioASR
-                    .Obtener(x => x.CodLocalAlterno == request.CodLocalAlterno)
-                    .OrderBy(x => x.CodLocalAlterno)
+                    .Obtener(x => x.CodLocal == request.CodLocalAlterno)
+                    .OrderBy(x => x.CodLocal)
                     .ToListAsync(cancellationToken);
 
                 if (lista == null || !lista.Any())
