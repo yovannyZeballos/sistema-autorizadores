@@ -14,7 +14,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands
 {
     public class EliminarMaeColaboradorExtCommand : IRequest<RespuestaComunDTO>
     {
-        public string CodLocalAlterno { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
         public string CodigoOfisis { get; set; }
         public string TipoDocIdent { get; set; }
         public string NumDocIndent { get; set; }
@@ -38,7 +39,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands
 
             try
             {
-                var existeColaboradorExt = await _contexto.RepositorioMaeColaboradorExt.Existe(x => x.CodLocalAlterno == request.CodLocalAlterno && x.CodigoOfisis == request.CodigoOfisis);
+                var existeColaboradorExt = await _contexto.RepositorioMaeColaboradorExt.Existe(x => x.CodEmpresa == request.CodEmpresa && x.CodLocal == request.CodLocal && x.CodigoOfisis == request.CodigoOfisis);
                 if (!existeColaboradorExt)
                 {
                     respuesta.Ok = false;
@@ -46,7 +47,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands
                     return respuesta;
                 }
 
-                var invColaboradorTemp = await _contexto.RepositorioMaeColaboradorExt.Obtener(x => x.CodLocalAlterno == request.CodLocalAlterno && x.CodigoOfisis == request.CodigoOfisis).FirstOrDefaultAsync();
+                var invColaboradorTemp = await _contexto.RepositorioMaeColaboradorExt.Obtener(x => x.CodEmpresa == request.CodEmpresa && x.CodLocal == request.CodLocal && x.CodigoOfisis == request.CodigoOfisis).FirstOrDefaultAsync();
                 _contexto.RepositorioMaeColaboradorExt.Eliminar(invColaboradorTemp);
                 await _contexto.GuardarCambiosAsync();
                 respuesta.Mensaje = "Colaborador externo elimindo exitosamente.";

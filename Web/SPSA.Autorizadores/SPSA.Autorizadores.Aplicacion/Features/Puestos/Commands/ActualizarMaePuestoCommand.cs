@@ -17,7 +17,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands
     {
         public string CodEmpresa { get; set; }
         public string CodPuesto { get; set; }
-        //public string DesPuesto { get; set; }
         public string IndAutAut { get; set; }
         public string IndAutOpe { get; set; }
         public string IndManAut { get; set; }
@@ -64,8 +63,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands
                     if (valorAnterior != valorNuevo)
                     {
                         var auditSql = @"
-                        INSERT INTO ""SGP"".""MAE_PUESTO_HIST""
-                            (""CO_EMPR"", ""CO_PUES_TRAB"", ""CAMPO_MODIFICADO"", ""VALOR_ANTERIOR"", ""VALOR_NUEVO"", ""USU_MODIFICA"", ""FEC_MODIFICA"")
+                        INSERT INTO ""SGP"".mae_puesto_hist
+                            (co_empr, co_pues_trab, campo_modificado, valor_anterior, valor_nuevo, usu_modifica, fec_modifica)
                         VALUES (@codEmpresa, @codPuesto, @campo, @valorAnterior, @valorNuevo, @usuModifica, CURRENT_TIMESTAMP);";
 
                         var auditParams = new NpgsqlParameter[]
@@ -81,13 +80,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands
                         auditCommands.Add((auditSql, auditParams));
                     }
                 }
-
-                // Actualizar la descripción del puesto si cambia
-                //if (oldRecord.DesPuesto != request.DesPuesto)
-                //{
-                //    AgregarAuditoria("DE_PUES_TRAB", oldRecord.DesPuesto, request.DesPuesto);
-                //    oldRecord.DesPuesto = request.DesPuesto;
-                //}
 
                 // IND_AUT_AUT
                 if (oldRecord.IndAutAut != request.IndAutAut)

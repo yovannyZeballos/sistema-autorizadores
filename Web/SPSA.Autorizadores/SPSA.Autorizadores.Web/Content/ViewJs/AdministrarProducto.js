@@ -53,6 +53,7 @@ var AdministrarProducto = function () {
             $('#modalInputStkMinimo').val('0');
             $('#modalInputStkMaximo').val('0');
             $('#modalChkActivo').prop('checked', true);
+            $('#modalChkSerializable').prop('checked', true);
 
             $('#modalInputCodProducto').prop('disabled', false);
 
@@ -88,6 +89,7 @@ var AdministrarProducto = function () {
             $('#modalInputStkMinimo').val(data.StkMinimo);
             $('#modalInputStkMaximo').val(data.StkMaximo);
             $('#modalChkActivo').prop('checked', data.IndActivo === 'S');
+            $('#modalChkSerializable').prop('checked', data.IndSerializable === 'S');
 
             $('#modalInputCodProducto').prop('disabled', true);
 
@@ -298,6 +300,7 @@ var AdministrarProducto = function () {
         var stkMinimo = $('#modalInputStkMinimo').val().trim();
         var stkMaximo = $('#modalInputStkMaximo').val().trim();
         var activo = $('#modalChkActivo').is(':checked') ? 'S' : 'N';
+        var serializable = $('#modalChkSerializable').is(':checked') ? 'S' : 'N';
 
         if (desProducto === '') {
             swal({ text: "La descripción es obligatoria.", icon: "warning" });
@@ -331,7 +334,8 @@ var AdministrarProducto = function () {
             NomModelo: nomModelo,
             StkMinimo: stkMinimo,
             StkMaximo: stkMaximo,
-            IndActivo: activo
+            IndActivo: activo,
+            IndSerializable: serializable,
         };
 
         try {

@@ -4,6 +4,14 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 {
     public abstract class CadenasConexion
     {
+        public string CadenaConexionSGP
+        {
+            get
+            {
+                return ConfigurationManager.ConnectionStrings["SGP"].ConnectionString;
+            }
+        }
+
         public string CadenaConexionSeguridad
         {
             get

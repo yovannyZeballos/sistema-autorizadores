@@ -25,12 +25,12 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
             return View();
         }
 
-		[HttpPost]
-		public async Task<JsonResult> AsignarAutorizador(GenerarArchivoPorLocalCommand request)
-        {
-			var respuesta = await _mediator.Send(request);
-			return Json(respuesta);
-		}
+		//[HttpPost]
+		//public async Task<JsonResult> AsignarAutorizador(GenerarArchivoPorLocalCommand request)
+		//{
+		//	var respuesta = await _mediator.Send(request);
+		//	return Json(respuesta);
+		//}
 
 	}
 }

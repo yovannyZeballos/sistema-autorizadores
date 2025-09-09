@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Guía de Recepción";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        /* Fix de inputs date con .form-control-sm */
+        .form-control-sm.date-sm-fix {
+            height: auto;
+            min-height: calc(1.5em + .5rem + 2px);
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            line-height: 1.5;
+        }
+
+            .form-control-sm.date-sm-fix::-webkit-datetime-edit {
+                line-height: 1.5;
+                color: inherit;
+                opacity: 1;
+            }
+
+            .form-control-sm.date-sm-fix::-webkit-calendar-picker-indicator {
+                opacity: 1;
+            }
+
+        /* Tabla de detalle en modal */
+        #tblDetalleRecepcion th, #tblDetalleRecepcion td {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Guía de Recepción</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href="@Url.Action("Index","Home")">Inicio</a></li>
+            <li class="breadcrumb-item1 active">Inventario</li>
+            <li class="breadcrumb-item1 active">Guía de Recepción</li>
+        </ol>
+    </div>
+</div>
+
+<div class="card overflow-hidden">
+    @Html.Partial("_CardHeader", "Filtros")
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Fecha desde</label>
+                    <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Fecha hasta</label>
+                    <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Proveedor:</label>
+                    <select id="cboProveedor" class="form-control select2-show-search">
+                        @*<option value="0">Todos</option>*@
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label">N° Guía / Observ.</label>
+                    <input type="text" id="txtFiltro" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="form-group">
+                    <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
+                        <i class="fe fe-search me-1"></i>Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-3">
+            <button id="btnNuevaGuia" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-plus me-1"></i>Nueva guía
+            </button>
+            <button id="btnExportar" class="btn btn-sm btn-outline-primary">
+                <i class="fe fe-file me-1"></i>Exportar Excel
+            </button>
+        </div>
+
+        <table id="tableRecepciones" class="table table-bordered text-nowrap border-bottom w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>N° Guía</th>
+                    <th>Proveedor</th>
+                    <th>Destino</th>
+                    <th>Ítems</th>
+                    <th>Estado</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Nueva Guía de Recepción -->
+<div class="modal fade" id="modalRecepcion" tabindex="-1" aria-hidden="true">
+    @*<div class="modal-dialog modal-dialog-centered modal-xl">*@
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar guía de recepción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-2">
+                        <label class="form-label">Fecha <span class="text-danger">*</span></label>
+                        <input type="date" id="recFecha" class="form-control form-control-sm date-sm-fix" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">N° Guía <span class="text-danger">*</span></label>
+                        <input type="text" id="recNumGuia" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Orden Compra</label>
+                        <input type="text" id="recOrdenCompra" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-3">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Área Gestión <span class="text-danger">*</span></label>
+                                <select id="recAreaGestion" class="form-control select2-show-search">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="GESTION ACTIVOS">GESTION ACTIVOS</option>
+                                    <option value="GESTION PROYECTOS">GESTION PROYECTOS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Clase Stock <span class="text-danger">*</span></label>
+                                <select id="recClaseStock" class="form-control select2-show-search">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="PROYECTO">PROYECTO</option>
+                                    <option value="RENOVACIÓN X INCIDENTES">RENOVACIÓN X INCIDENTES</option>
+                                    <option value="STOCK">STOCK</option>
+                                </select>
+                            </div>
+                        </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Proveedor <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="recProveedor" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                            <div class="form-group select2-sm">
+                                <label class="form-label">Estado Stock <span class="text-danger">*</span></label>
+                                <select id="recEstadoStock" class="form-control select2-show-search">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="NUEVO">NUEVO</option>
+                                    <option value="USADO">USADO</option>
+                                </select>
+                            </div>
+                        </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Observaciones</label>
+                        <input type="text" id="recObs" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Detalle de ítems</h6>
+                    <button id="btnAddItem" class="btn btn-sm btn-outline-primary">
+                        <i class="fe fe-plus"></i> Agregar ítem
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="tblDetalleRecepcion" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th style="width:38%">Producto <span class="text-danger">*</span></th>
+                                <th style="width:24%">N° Serie</th>
+                                <th style="width:12%">Cantidad <span class="text-danger">*</span></th>
+                                <th style="width:16%">Cód. Activo</th>
+                                <th style="width:10%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+                <small class="text-muted d-block">
+                    * Si el producto es <b>serializable</b>, la cantidad será 1 y deberá seleccionar la <b>serie</b>. Para no serializables, deje <b>serie vacía</b> y registre la <b>cantidad</b>.
+                </small>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGuardarRecepcion" class="btn btn-sm btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/AdministrarGuiaRecepcionProveedor.js"></script>
+    <script>
+        $(function () { AdministrarGuiaRecepcionProveedor.init(); });
+    </script>
+}

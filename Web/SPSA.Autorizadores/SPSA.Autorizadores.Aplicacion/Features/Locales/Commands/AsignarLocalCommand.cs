@@ -14,8 +14,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
 {
     public class AsignarLocalCommand : IRequest<RespuestaComunDTO>
     {
-        public string CodLocal { get; set; }
-        public string CodCadena { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocalCt2 { get; set; }
+        public string CodLocalOfi { get; set; }
+        public string NomLocalOfi{ get; set; }
     }
 
     public class AsignarLocalHandler : IRequestHandler<AsignarLocalCommand, RespuestaComunDTO>
@@ -32,12 +34,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Locales.Commands
             var respuesta = new RespuestaComunDTO();
             try
             {
-                await _repositorioLocal.AsignarLocal(request.CodLocal, request.CodCadena);
+                await _repositorioLocal.AsignarLocal(request.CodEmpresa, request.CodLocalCt2, request.CodLocalOfi, request.NomLocalOfi);
                 respuesta.Ok = true;
             }
             catch (Exception ex)
             {
-                respuesta.Mensaje = $"Error al asignar local: {request.CodLocal}, cadena: {request.CodCadena} | {ex.Message}";
+                respuesta.Mensaje = $"Error al asignar local: {request.CodLocalCt2}, empresa: {request.CodEmpresa} | {ex.Message}";
                 respuesta.Ok = false;
             }
 

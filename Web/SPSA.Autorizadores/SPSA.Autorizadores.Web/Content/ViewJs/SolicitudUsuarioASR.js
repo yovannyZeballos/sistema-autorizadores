@@ -62,9 +62,7 @@ var SolicitudUsuarioASR = function () {
         });
 
         $("#btnModalColabExt").on("click", async function () {
-            const responseObtenerLocal = await obtenerLocal();
-            const objLocal = responseObtenerLocal.Data;
-            visualizarDataTableColaboradoresExt(objLocal.CodLocalAlterno);
+            visualizarDataTableColaboradoresExt();
             $("#modalColabExt").modal('show');
         });
 
@@ -99,19 +97,19 @@ var SolicitudUsuarioASR = function () {
         });
 
         $("#btnSolicitarCrearColabInt").on("click", () =>
-            procesarSolicitudes("#tableColaboradoresInt", "#modalColabInt", 'I', 'C')
+            procesarSolicitudes("#tableColaboradoresInt", "#modalColabInt", 'I', 'CREAR')
         );
 
         $("#btnSolicitarEliminarColabInt").on("click", () =>
-            procesarSolicitudes("#tableColaboradoresInt", "#modalColabInt", 'I', 'E')
+            procesarSolicitudes("#tableColaboradoresInt", "#modalColabInt", 'I', 'ELIMINAR')
         );
 
         $("#btnSolicitarCrearColabExt").on("click", () =>
-            procesarSolicitudes("#tableColaboradoresExt", "#modalColabExt", 'E', 'C')
+            procesarSolicitudes("#tableColaboradoresExt", "#modalColabExt", 'E', 'CREAR')
         );
 
         $("#btnSolicitarEliminarColabExt").on("click", () =>
-            procesarSolicitudes("#tableColaboradoresExt", "#modalColabExt", 'E', 'E')
+            procesarSolicitudes("#tableColaboradoresExt", "#modalColabExt", 'E', 'ELIMINAR')
         );
 
         $("#btnEliminarSolicitud").on("click", function () {
@@ -209,7 +207,8 @@ var SolicitudUsuarioASR = function () {
             ],
             columns: [
                 { data: "NumSolicitud", title: "Nro. Solicitud" },
-                { data: "CodLocalAlterno", title: "CodLocalAlterno" },
+                { data: "CodEmpresa", title: "CodEmpresa" },
+                { data: "CodLocal", title: "CodLocal" },
                 { data: "CodColaborador", title: "Código" },
                 { data: "NomColaborador", title: "Nombre y Apellido" },
                 {
@@ -250,18 +249,7 @@ var SolicitudUsuarioASR = function () {
                     }
                 },
                 { data: "UsuSolicita", title: "Solicitante" },
-                {
-                    data: "TipAccion",
-                    title: "Acción",
-                    render: function (data, type, row) {
-                        if (data === 'C') {
-                            return 'Crear';
-                        } else if (data === 'E') {
-                            return 'Eliminar';
-                        }
-                        return data;
-                    }
-                },
+                { data: "TipAccion", title: "Acción" },
                 {
                     data: "FecSolicita",
                     title: "Fec. Solicitud",
@@ -321,7 +309,7 @@ var SolicitudUsuarioASR = function () {
         });
     };
 
-    const visualizarDataTableColaboradoresExt = function (codLocalAlterno) {
+    const visualizarDataTableColaboradoresExt = function () {
 
         if ($.fn.DataTable.isDataTable('#tableColaboradoresExt')) {
             $('#tableColaboradoresExt').DataTable().clear().destroy();
@@ -336,7 +324,8 @@ var SolicitudUsuarioASR = function () {
                 var pageSize = data.length;
 
                 var filtros = {
-                    CodLocalAlterno: codLocalAlterno,
+                    CodEmpresa: $("#txtCodEmpresaxx").val(),
+                    CodLocal: $("#txtCodLocalxx").val(),
                     TipoUsuario: $('input[name="tipoUsuarioExt"]:checked').val(),
                     FiltroVarios: $("#txtFiltroVariosExt").val()
                 };
@@ -805,7 +794,8 @@ var SolicitudUsuarioASR = function () {
         const promesas = Array.from(filas, fila => {
             const rowData = table.row(fila).data();
             const model = {
-                CodLocalAlterno: rowData.CodLocalAlterno,
+                CodEmpresa: rowData.CodEmpresa,
+                CodLocal: rowData.CodLocal,
                 CodColaborador: rowData.CodigoOfisis,
                 TipUsuario: rowData.TipUsuario,
                 TipColaborador: tipColaborador,

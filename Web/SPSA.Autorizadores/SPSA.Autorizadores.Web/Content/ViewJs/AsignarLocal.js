@@ -76,8 +76,8 @@ var AsignarLocal = function () {
             var local = {
                 CodCadenaCt2: $("#txtCadenaPMM").val(),
                 CodLocalCt2: $("#txtLocalPMM").val(),
-                CodEmpresa: localSeleccionado.COD_EMPRESA,
-                CodSede: localSeleccionado.COD_LOC_OFI
+                CodEmpresa: localSeleccionado.cod_empresa,
+                CodSede: localSeleccionado.cod_loc_ofi
             };
 
             if (validarLocalPMM(local))
@@ -192,8 +192,10 @@ var AsignarLocal = function () {
 
         let data = registrosSeleccionados.map(x => {
             return {
-                CodCadena: x.Cadena,
-                CodLocal: x.Local,
+                CodEmpresa: x.cod_empresa_int,
+                CodLocalCt2: x.loc_numero,
+                CodLocalOfi: x.cod_loc_ofi,
+                NomLocalOfi: x["Local(Ofiplan)"],
             }
         });
 
@@ -256,8 +258,8 @@ var AsignarLocal = function () {
     const abrirModalAsignarLocalPMM = function (registro) {
 
         const request = {
-            CodEmpresa: registro.COD_EMPRESA,
-            CodSede: registro.COD_LOC_OFI
+            CodEmpresa: registro.cod_empresa,
+            CodSede: registro.cod_loc_ofi
         };
 
         $.ajax({

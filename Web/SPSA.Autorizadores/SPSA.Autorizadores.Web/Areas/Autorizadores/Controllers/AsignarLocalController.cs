@@ -58,8 +58,10 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
                 {
                     var rpta = await _mediator.Send(new AsignarLocalCommand
                     {
-                        CodCadena = item.CodCadena,
-                        CodLocal = item.CodLocal
+                        CodEmpresa = item.CodEmpresa,
+                        CodLocalCt2 = item.CodLocalCt2,
+                        CodLocalOfi = item.CodLocalOfi,
+                        NomLocalOfi = item.NomLocalOfi
                     });
 
                     if (!rpta.Ok)

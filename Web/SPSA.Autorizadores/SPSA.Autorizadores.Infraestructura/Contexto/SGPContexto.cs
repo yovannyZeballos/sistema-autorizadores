@@ -52,9 +52,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioAutImpresion = new RepositorioAutImpresion(this);
 			RepositorioProcesoParametro = new RepositorioProcesoParametro(this);
 
-            RepositorioInvKardex = new RepositorioInvKardex(this);
-            RepositorioInvKardexActivo = new RepositorioInvKardexActivo(this);
-            RepositorioInvKardexLocal = new RepositorioInvKardexLocal(this);
 			RepositorioMonCierreEOD = new RepositorioMonCierreEOD(this);
 			RepositorioMonCierreEODHist = new RepositorioMonCierreEODHist(this);
 
@@ -78,10 +75,17 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMaeProducto = new RepositorioMaeProducto(this);
             RepositorioMaeSerieProducto = new RepositorioMaeSerieProducto(this);
             RepositorioMaeProveedor = new RepositorioMaeProveedor(this);
-            RepositorioMovKardex = new RepositorioMovKardex(this);
+            RepositorioMovKardex = new RepositorioMovKardex(this); //QUITAR
 
-			//this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
-		}
+            RepositorioStockProducto = new RepositorioStockProducto(this);
+            RepositorioGuiaRecepcionCabecera = new RepositorioGuiaRecepcionCabecera(this);
+            RepositorioGuiaRecepcionDetalle= new RepositorioGuiaRecepcionDetalle(this);
+            RepositorioGuiaDespachoCabecera = new RepositorioGuiaDespachoCabecera(this);
+            RepositorioGuiaDespachoDetalle = new RepositorioGuiaDespachoDetalle(this);
+
+
+            //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
+        }
 
 		public IRepositorioSegSistema RepositorioSegSistema { get; private set; }
 		public IRepositorioProcesoParametroEmpresa RepositorioProcesoParametroEmpresa { get; private set; }
@@ -120,9 +124,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
 		public IRepositorioProcesoParametro RepositorioProcesoParametro { get; private set; }
 
-		public IRepositorioInvKardex RepositorioInvKardex { get; private set; }
-		public IRepositorioInvKardexActivo RepositorioInvKardexActivo { get; private set; }
-		public IRepositorioInvKardexLocal RepositorioInvKardexLocal { get; private set; }
 		public IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; private set; }
 		public IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; private set; }
 		public IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; private set; }
@@ -143,7 +144,14 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMaeProducto RepositorioMaeProducto { get; private set; }
 		public IRepositorioMaeSerieProducto RepositorioMaeSerieProducto { get; private set; }
 		public IRepositorioMaeProveedor RepositorioMaeProveedor { get; private set; }
-		public IRepositorioMovKardex RepositorioMovKardex { get; private set; }
+		public IRepositorioMovKardex RepositorioMovKardex { get; private set; }  //QUITAR
+        public IRepositorioStockProducto RepositorioStockProducto { get; private set; }
+        public IRepositorioGuiaRecepcionCabecera RepositorioGuiaRecepcionCabecera { get; private set; }
+		public IRepositorioGuiaRecepcionDetalle RepositorioGuiaRecepcionDetalle { get; private set; }
+        public IRepositorioGuiaDespachoCabecera RepositorioGuiaDespachoCabecera { get; private set; }
+        public IRepositorioGuiaDespachoDetalle RepositorioGuiaDespachoDetalle { get; private set; }
+
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -184,10 +192,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new TmpMonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new AutImpresionTypeConfiguracion());
 
-            modelBuilder.Configurations.Add(new InvKardexTypeConfiguration());
-            modelBuilder.Configurations.Add(new InvKardexActivoTypeConfiguration());
-			modelBuilder.Configurations.Add(new InvKardexLocalTypeConfiguration());
-
 			modelBuilder.Configurations.Add(new MonCierreEODTypeConfiguration());
 			modelBuilder.Configurations.Add(new MonCierreEODHistTypeConfiguration());
 
@@ -209,12 +213,16 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
 			modelBuilder.Configurations.Add(new MaeMarcaTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeAreaGestionTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeProductoTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeProveedorTypeConfiguration());
+            modelBuilder.Configurations.Add(new MaeProductoTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeSerieProductoTypeConfiguration());
-			modelBuilder.Configurations.Add(new MaeProveedorTypeConfiguration());
-			modelBuilder.Configurations.Add(new MovKardexTypeConfiguration());
+			modelBuilder.Configurations.Add(new StockProductoTypeConfiguration());
+			modelBuilder.Configurations.Add(new GuiaRecepcionCabeceraTypeConfiguration());
+			modelBuilder.Configurations.Add(new GuiaRecepcionDetalleTypeConfiguration());
+            modelBuilder.Configurations.Add(new GuiaDespachoCabeceraTypeConfiguration());
+            modelBuilder.Configurations.Add(new GuiaDespachoDetalleTypeConfiguration());
 
-		}
+        }
 
 		public bool GuardarCambios()
 		{

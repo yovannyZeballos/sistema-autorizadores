@@ -1,161 +1,166 @@
-﻿var urlListarEmpresasAsociadas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
+﻿// ===================== Endpoints =====================
+var urlListarEmpresasAsociadas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarPuestos = baseUrl + 'Maestros/MaePuesto/ListarPaginado';
-
-var urlModalNuevoPuesto = baseUrl + 'Maestros/MaePuesto/NuevoForm';
-var urlModalModificarPuesto = baseUrl + 'Maestros/MaePuesto/ModificarForm';
-
-var urlObtenerPuesto = baseUrl + 'Maestros/MaePuesto/Obtener';
-var urlCrearPuesto = baseUrl + 'Maestros/MaePuesto/CrearPuesto';
 var urlModificarPuesto = baseUrl + 'Maestros/MaePuesto/ModificarPuesto';
 var urlImportarPuesto = baseUrl + 'Maestros/MaePuesto/Importar';
 
-
 var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
-var codLocalAlternoAnterior = "";
-var dataTablePuestos = null;
+// ===================== Utiles / helpers =====================
+function swalText(err, fallback) {
+    if (!err) return fallback || '';
+    if (typeof err === 'string') return err;
+    if (err.responseText) return err.responseText;
+    if (err.statusText) return err.statusText;
+    if (err.Mensaje) return err.Mensaje;
+    try { return JSON.stringify(err); } catch { return fallback || ''; }
+}
 
-var AdministrarPuesto = function () {
-    const eventos = function () {
+function debounce(fn, ms) {
+    let t;
+    return function () { clearTimeout(t); t = setTimeout(() => fn.apply(this, arguments), ms); };
+}
 
-        $('#tablePuestos').on('change', '.chk-indicador', function () {
-            var indicador = $(this).data("indicador");
-            var coEmpr = $(this).data("co-empr");
-            var codPuesto = $(this).data("co-pues-trab");
-            var nuevoValor = $(this).is(":checked") ? "S" : "N";
+// ===================== Módulo =====================
+var AdministrarPuesto = (function ($) {
 
-            var table = $('#tablePuestos').DataTable();
-            var row = $(this).closest('tr');
-            var rowData = table.row(row).data();
+    // ==== AJAX base =====
+    function listarEmpresasAsociadas() {
+        const request = { CodUsuario: $("#txtUsuario").val() || '', Busqueda: '' };
+        return $.ajax({ url: urlListarEmpresasAsociadas, type: 'POST', data: { request } });
+    }
 
-            var command = {
-                CodEmpresa: coEmpr,
-                CodPuesto: codPuesto,
-                DesPuesto: rowData.DesPuesto,
-                IndAutAut: rowData.IndAutAut,
-                IndAutOpe: rowData.IndAutOpe,
-                IndManAut: rowData.IndManAut,
-                IndManOpe: rowData.IndManOpe,
-                FecAsigna: null,
-                UsuAsigna: $("#txtUsuario").val(),
-                FecElimina: null,
-                UsuElimina: $("#txtUsuario").val()
-            };
-
-            // Según el indicador, asigna el nuevo valor en la propiedad correspondiente.
-            switch (indicador) {
-                case "IndAutAut":
-                    command.IndAutAut = nuevoValor;
-                    break;
-                case "IndAutOpe":
-                    command.IndAutOpe = nuevoValor;
-                    break;
-                case "IndManAut":
-                    command.IndManAut = nuevoValor;
-                    break;
-                case "IndManOpe":
-                    command.IndManOpe = nuevoValor;
-                    break;
-            }
-
-            $.ajax({
-                url: urlModificarPuesto,
-                type: "POST",
-                data: command,
-                dataType: "json",
-                success: function (response) {
-                    if (response.Ok) {
-                        //swal("Actualizado", "El puesto se actualizó correctamente.", "success");
-                        $('#tablePuestos').DataTable().ajax.reload(null, false);
-                    } else {
-                        swal("Error", response.Mensaje, "error");
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Error", jqXHR.responseText, "error");
-                }
-            });
-        });
-
-        $("#btnBuscarPuesto").on("click", function (e) {
-            var table = $('#tablePuestos').DataTable();
-            e.preventDefault();
-            table.ajax.reload();
+    // ==== UI init ====
+    function initSelect2(target) {
+        const $el = (target && target.jquery) ? target : $(target);
+        if (!$el.length) return;
+        // asegure placeholder desde la 1ra opción
+        const $opt0 = $el.find('option').first();
+        if ($opt0.length && !$opt0.attr('value')) $opt0.attr('value', '');
+        $el.select2({
+            width: '100%',
+            placeholder: $opt0.text() || 'Todos',
+            allowClear: true,
+            minimumResultsForSearch: 0
         });
     }
 
-    const listarEmpresasAsociadas = function () {
-        return new Promise((resolve, reject) => {
-
-            const codUsuario = $("#txtUsuario").val();
-
-            const request = {
-                CodUsuario: codUsuario,
-                Busqueda: ''
-            };
-
-            $.ajax({
-                url: urlListarEmpresasAsociadas,
-                type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
-            });
-        });
-    }
-
-    const cargarComboEmpresa = async function () {
+    async function cargarComboEmpresa() {
         try {
-            const response = await listarEmpresasAsociadas();
-
-            if (response.Ok) {
-                $('#cboEmpresaBuscar').empty().append('<option label="Todos"></option>');
-                //$('#cboLocalBuscar').empty().append('<option label="Todos"></option>');
-                response.Data.map(empresa => {
-                    $('#cboEmpresaBuscar').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
-                });
+            const resp = await listarEmpresasAsociadas();
+            const $cbo = $('#cboEmpresaBuscar');
+            $cbo.empty().append('<option value="">Todos</option>');
+            if (resp.Ok) {
+                resp.Data.forEach(e => $cbo.append(new Option(e.NomEmpresa, e.CodEmpresa)));
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
             }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+            initSelect2($cbo);
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' });
         }
     }
 
+    // ==== Eventos ====
+    function eventos() {
+        // Buscar
+        $("#btnBuscarPuesto").off('click.pue').on('click.pue', function (e) {
+            e.preventDefault();
+            if ($.fn.DataTable.isDataTable('#tablePuestos')) $('#tablePuestos').DataTable().ajax.reload();
+        });
 
-    const visualizarDataTablePuestos = function () {
+        // Buscar cuando se presione Enter en la descripción
+        $("#txtDesPuestoBuscar").off('keyup.pue').on('keyup.pue', debounce(function (e) {
+            if (e.key === 'Enter') $("#btnBuscarPuesto").trigger('click');
+        }, 250));
+
+        // Toggle de indicadores (delegado, robusto ante redraw)
+        $(document).off('change.pue', '#tablePuestos .chk-indicador')
+            .on('change.pue', '#tablePuestos .chk-indicador', async function () {
+                const $chk = $(this);
+                const indicador = $chk.data("indicador");
+                const codEmpresa = $chk.data("co-empr");
+                const codPuesto = $chk.data("co-pues-trab");
+                const nuevoValor = $chk.is(":checked") ? "S" : "N";
+
+                const dt = $('#tablePuestos').DataTable();
+                const row = $chk.closest('tr');
+                const data = dt.row(row).data();
+                if (!data) return;
+
+                // Evitar clicks repetidos mientras actualiza
+                $chk.prop('disabled', true);
+
+                // payload (mantén campos que espera tu backend)
+                const command = {
+                    CodEmpresa: codEmpresa,
+                    CodPuesto: codPuesto,
+                    DesPuesto: data.DesPuesto,
+                    IndAutAut: data.IndAutAut,
+                    IndAutOpe: data.IndAutOpe,
+                    IndManAut: data.IndManAut,
+                    IndManOpe: data.IndManOpe,
+                    FecAsigna: null,
+                    UsuAsigna: $("#txtUsuario").val() || '',
+                    FecElimina: null,
+                    UsuElimina: $("#txtUsuario").val() || ''
+                };
+
+                // Aplica el cambio al campo correcto
+                command[indicador] = nuevoValor;
+
+                try {
+                    const resp = await $.ajax({
+                        url: urlModificarPuesto,
+                        type: 'POST',
+                        data: command,
+                        dataType: 'json'
+                    });
+
+                    if (!resp || !resp.Ok) {
+                        // revertir estado visual si falla
+                        $chk.prop('checked', !$chk.is(':checked'));
+                        swal({ text: swalText(resp, 'No se pudo actualizar el puesto.'), icon: 'warning' });
+                    } else {
+                        // Actualiza el dato en la fila sin recargar toda la tabla
+                        // (evita flicker; si necesitas recálculo del backend, descomenta reload)
+                        data[indicador] = nuevoValor;
+                        dt.row(row).data(data).invalidate();
+                        // dt.ajax.reload(null, false);
+                    }
+                } catch (err) {
+                    // revertir estado visual si falla
+                    $chk.prop('checked', !$chk.is(':checked'));
+                    swal({ text: swalText(err, 'Error al actualizar el puesto'), icon: 'error' });
+                } finally {
+                    $chk.prop('disabled', false);
+                }
+            });
+    }
+
+    // ==== DataTable ====
+    function visualizarDataTablePuestos() {
         $('#tablePuestos').DataTable({
             searching: false,
             processing: true,
             serverSide: true,
-            ajax: function (data, callback, settings) {
+            ajax: function (data, callback) {
                 var pageNumber = (data.start / data.length) + 1;
                 var pageSize = data.length;
 
+                // Mejora: si el checkbox no está marcado => no filtra (usa null)
+                const valOrNull = (sel) => $(sel).is(':checked') ? 'S' : null;
+
                 var filtros = {
-                    CodEmpresa: $("#cboEmpresaBuscar").val(),
-                    //CodPuesto: $("#txtCodPuestoBuscar").val(),
-                    DesPuesto: $("#txtDesPuestoBuscar").val(),
-                    IndAutAut: $("#checkAutorizadorAutomatico").is(":checked") ? "S" : "N",
-                    IndAutOpe: $("#checkOperadorAutomatico").is(":checked") ? "S" : "N",
-                    IndManAut: $("#checkAutorizadorManual").is(":checked") ? "S" : "N",
-                    IndManOpe: $("#checkOperadorManual").is(":checked") ? "S" : "N"
+                    CodEmpresa: $("#cboEmpresaBuscar").val() || null,
+                    DesPuesto: ($("#txtDesPuestoBuscar").val() || '').trim(),
+                    IndAutAut: valOrNull("#checkAutorizadorAutomatico"),
+                    IndAutOpe: valOrNull("#checkOperadorAutomatico"),
+                    IndManAut: valOrNull("#checkAutorizadorManual"),
+                    IndManOpe: valOrNull("#checkOperadorManual")
                 };
 
-                // Combinar los parámetros de paginación con los filtros
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
-
 
                 $.ajax({
                     url: urlListarPuestos,
@@ -164,83 +169,62 @@ var AdministrarPuesto = function () {
                     dataType: "json",
                     success: function (response) {
                         if (response.Ok) {
-                            var pagedData = response.Data;
+                            var p = response.Data;
                             callback({
                                 draw: data.draw,
-                                recordsTotal: pagedData.TotalRecords,
-                                recordsFiltered: pagedData.TotalRecords,
-                                data: pagedData.Items
+                                recordsTotal: p.TotalRecords,
+                                recordsFiltered: p.TotalRecords,
+                                data: p.Items
                             });
                         } else {
-                            callback({
-                                draw: data.draw,
-                                recordsTotal: 0,
-                                recordsFiltered: 0,
-                                data: []
-                            });
+                            callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
                         }
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        swal({
-                            text: jqXHR.responseText,
-                            icon: "error",
-                        });
-                        callback({
-                            draw: data.draw,
-                            recordsTotal: 0,
-                            recordsFiltered: 0,
-                            data: []
-                        });
+                    error: function (jqXHR) {
+                        swal({ text: swalText(jqXHR, 'Error al listar puestos'), icon: "error" });
+                        callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
                     }
                 });
             },
             columnDefs: [
-                { targets: 0, visible: false }  // Oculta la primera columna "COD. EMPRESA"
+                { targets: 0, visible: false } // oculta CodEmpresa si no necesitas verla
             ],
             columns: [
-                { data: "CodEmpresa", title: "Empresa" },
-                { data: "NomEmpresa", title: "Empresa" },
-                { data: "CodPuesto", title: "Código Puesto" },
-                { data: "DesPuesto", title: "Descripción Puesto" },
+                { data: "CodEmpresa", title: "COD. EMPRESA" },
+                { data: "NomEmpresa", title: "NOM. EMPRESA", defaultContent: '' },
+                { data: "CodPuesto", title: "COD. PUESTO", defaultContent: '' },
+                { data: "DesPuesto", title: "DES. PUESTO", defaultContent: '' },
                 {
-                    data: "IndAutAut",
-                    title: "Autorizador Automático",
+                    data: "IndAutAut", title: "A. AUTOMÁTICO",
                     render: function (data, type, row) {
-                        var checked = data === "S" ? "checked" : "";
-                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndAutAut" data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
-                    },
-                    orderable: false,
-                    searchable: false
+                        var checked = (data === "S") ? "checked" : "";
+                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndAutAut" ' +
+                            'data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
+                    }, orderable: false, searchable: false
                 },
                 {
-                    data: "IndAutOpe",
-                    title: "Operador Automático",
+                    data: "IndAutOpe", title: "O. AUTOMÁTICO",
                     render: function (data, type, row) {
-                        var checked = data === "S" ? "checked" : "";
-                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndAutOpe" data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
-                    },
-                    orderable: false,
-                    searchable: false
+                        var checked = (data === "S") ? "checked" : "";
+                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndAutOpe" ' +
+                            'data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
+                    }, orderable: false, searchable: false
                 },
                 {
-                    data: "IndManAut",
-                    title: "Autorizador Manual",
+                    data: "IndManAut", title: "A. MANUAL",
                     render: function (data, type, row) {
-                        var checked = data === "S" ? "checked" : "";
-                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndManAut" data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
-                    },
-                    orderable: false,
-                    searchable: false
+                        var checked = (data === "S") ? "checked" : "";
+                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndManAut" ' +
+                            'data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
+                    }, orderable: false, searchable: false
                 },
                 {
-                    data: "IndManOpe",
-                    title: "Operador Manual",
+                    data: "IndManOpe", title: "O. MANUAL",
                     render: function (data, type, row) {
-                        var checked = data === "S" ? "checked" : "";
-                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndManOpe" data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
-                    },
-                    orderable: false,
-                    searchable: false
+                        var checked = (data === "S") ? "checked" : "";
+                        return '<input type="checkbox" class="chk-indicador" data-indicador="IndManOpe" ' +
+                            'data-co-empr="' + row.CodEmpresa + '" data-co-pues-trab="' + row.CodPuesto + '" ' + checked + ' />';
+                    }, orderable: false, searchable: false
                 }
             ],
             language: {
@@ -256,10 +240,14 @@ var AdministrarPuesto = function () {
             scrollX: true,
             scrollCollapse: true,
             paging: true,
-            lengthMenu: [10, 25, 50, 100],
+            lengthMenu: [10, 25, 50, 100]
         });
-    };
+    }
 
+    // ==== Importar / Plantilla (si en el futuro lo agregas a puestos) ====
+    // (los dejé listos por si más adelante extiendes el módulo con importación)
+
+    // ==== API público ====
     return {
         init: function () {
             checkSession(async function () {
@@ -268,5 +256,6 @@ var AdministrarPuesto = function () {
                 visualizarDataTablePuestos();
             });
         }
-    }
-}(jQuery);
+    };
+
+})(jQuery);

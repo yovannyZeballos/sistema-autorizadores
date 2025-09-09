@@ -60,6 +60,10 @@
     <Compile Include="Entidades\CCom_SolicitudDet.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
+    <Compile Include="Entidades\GuiaDespachoCabecera.cs" />
+    <Compile Include="Entidades\GuiaDespachoDetalle.cs" />
+    <Compile Include="Entidades\GuiaRecepcionCabecera.cs" />
+    <Compile Include="Entidades\GuiaRecepcionDetalle.cs" />
     <Compile Include="Entidades\Mae_AreaGestion.cs" />
     <Compile Include="Entidades\Mae_SerieProducto.cs" />
     <Compile Include="Entidades\Mov_Kardex.cs" />
@@ -71,9 +75,6 @@
     <Compile Include="Entidades\InventarioServidor.cs" />
     <Compile Include="Entidades\InventarioServidorVirtual.cs" />
     <Compile Include="Entidades\InventarioTipo.cs" />
-    <Compile Include="Entidades\InvKardex.cs" />
-    <Compile Include="Entidades\InvKardexActivo.cs" />
-    <Compile Include="Entidades\InvKardexLocal.cs" />
     <Compile Include="Entidades\InvTipoActivo.cs" />
     <Compile Include="Entidades\Inv_Activo.cs" />
     <Compile Include="Entidades\ListBox.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Entidades\Mdr_TmpBinesIzipay.cs" />
     <Compile Include="Entidades\MonCierreEOD.cs" />
     <Compile Include="Entidades\MonCierreEODHist.cs" />
+    <Compile Include="Entidades\StockProducto.cs" />
     <Compile Include="Entidades\TmpMonCierreLocal.cs" />
     <Compile Include="Entidades\MonCierreLocal.cs" />
     <Compile Include="Entidades\MonitorComando.cs" />

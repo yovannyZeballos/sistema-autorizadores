@@ -5,7 +5,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 {
     public class Mae_ColaboradorExt
     {     
-        public string CodLocalAlterno { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string CodigoOfisis { get; set; }
@@ -16,7 +17,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string NumDocIndent { get; set; }
         public DateTime FechaIngresoEmpresa { get; set; }
         public DateTime? FechaCeseTrabajador { get; set; }
-        public string TiSitu { get; set; }
+        public string IndActivo { get; set; }
         public string PuestoTrabajo { get; set; }
         public string MotiSepa { get; set; }
         public string IndPersonal { get; set; }

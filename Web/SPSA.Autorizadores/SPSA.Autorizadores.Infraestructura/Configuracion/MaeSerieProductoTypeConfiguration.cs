@@ -15,27 +15,15 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.CodProducto).HasColumnName("cod_producto");
             Property(x => x.NumSerie).HasColumnName("num_serie");
             Property(x => x.IndEstado).HasColumnName("ind_estado");
-
             Property(x => x.CodEmpresa).HasColumnName("cod_empresa");
             Property(x => x.CodLocal).HasColumnName("cod_local");
-            Property(x => x.StkActual).HasColumnName("stk_actual");
-
             Property(x => x.FecIngreso).HasColumnName("fec_ingreso");
             Property(x => x.FecSalida).HasColumnName("fec_salida");
-
+            Property(x => x.StkActual).HasColumnName("stk_actual");
             Property(x => x.FecCreacion).HasColumnName("fec_creacion");
             Property(x => x.UsuCreacion).HasColumnName("usu_creacion");
             Property(x => x.FecModifica).HasColumnName("fec_modifica");
             Property(x => x.UsuModifica).HasColumnName("usu_modifica");
-
-            // Relaciones
-            //HasRequired(x => x.Producto)
-            //    .WithMany()
-            //    .HasForeignKey(x => x.CodProducto);
-
-            //HasOptional(x => x.LocalActual)
-            //    .WithMany()
-            //    .HasForeignKey(x => new { x.CodEmpresa, x.CodLocal });
         }
     }
 }

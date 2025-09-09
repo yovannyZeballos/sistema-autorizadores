@@ -39,7 +39,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands
                 respuesta.Mensaje = $"Autorizador con DNI {request.NumeroDocumento} creado";
                 respuesta.Ok = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 respuesta.Mensaje = $"Error al crear el autorizador con DNI {request.Codigo}";
             }
