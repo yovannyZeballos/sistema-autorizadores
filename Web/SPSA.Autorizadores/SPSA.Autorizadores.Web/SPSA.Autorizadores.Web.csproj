@@ -282,9 +282,6 @@
     <Compile Include="Areas\Inventario\Controllers\GuiaDespachoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\GuiaRecepcionController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\InventarioKardexActivoController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\InventarioKardexController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\InventarioKardexLocalController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\KardexController.cs" />
     <Compile Include="Areas\Inventario\Controllers\MarcasController.cs" />
@@ -2407,7 +2404,6 @@
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
-    <Content Include="Content\ViewJs\AdministrarInvKardexLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexActivo.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardex.js" />
     <Content Include="Content\ViewJs\AdministrarInvCaja.js" />
@@ -2908,17 +2904,8 @@
     <Content Include="Areas\Monitor\Views\Proceso\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearInvActivo.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioActivo\_EditarInvActivo.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardex\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardex\_CrearInvKardex.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardex\_EditarInvKardex.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\_CrearInvkardexActivo.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\_EditarInvkardexActivo.cshtml" />
     <Content Include="Areas\Monitor\Views\MonitorArchivos\Index.cshtml" />
     <Content Include="Plantillas_Tablas\Plantilla_InvKardex\InvKardexEjemplo.xlsx" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexLocal\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_CrearInvKardexLocal.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_EditarInvKardexLocal.cshtml" />
     <Content Include="Areas\Reportes\Views\ValesRedimidos\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeHorario\_CrearMaeHorario.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeHorario\_EditarMaeHorario.cshtml" />

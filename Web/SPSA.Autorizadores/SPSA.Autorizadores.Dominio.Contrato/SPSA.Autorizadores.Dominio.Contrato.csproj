@@ -55,9 +55,6 @@
     <Compile Include="Repositorio\IRepositorioGuiaDespachoDetalle.cs" />
     <Compile Include="Repositorio\IRepositorioGuiaRecepcionCabecera.cs" />
     <Compile Include="Repositorio\IRepositorioGuiaRecepcionDetalle.cs" />
-    <Compile Include="Repositorio\IRepositorioInvKardex.cs" />
-    <Compile Include="Repositorio\IRepositorioInvKardexActivo.cs" />
-    <Compile Include="Repositorio\IRepositorioInvKardexLocal.cs" />
     <Compile Include="Repositorio\IRepositorioMaeAreaGestion.cs" />
     <Compile Include="Repositorio\IRepositorioMaeCodComercio.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorExt.cs" />

@@ -131,13 +131,13 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ActualizarEstadoArchivoHandler>().As<IRequestHandler<ActualizarEstadoArchivoCommand, RespuestaComunDTO>>();
 			builder.RegisterType<EliminarAutorizadorHandler>().As<IRequestHandler<EliminarAutorizadorCommand, RespuestaComunDTO>>();
 			builder.RegisterType<Features.Locales.Queries.ObtenerLocalHandler>().As<IRequestHandler<Features.Locales.Queries.ObtenerLocalQuery, LocalDTO>>();
-			builder.RegisterType<ListarColaboradoresCesadosHandler>().As<IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>>();
+			//builder.RegisterType<ListarColaboradoresCesadosHandler>().As<IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>>();
 			builder.RegisterType<ListarLocalesAsignarHandler>().As<IRequestHandler<ListarLocalesAsignarQuery, LocalesAsignadosDTO>>();
 			builder.RegisterType<AsignarLocalHandler>().As<IRequestHandler<AsignarLocalCommand, RespuestaComunDTO>>();
 			builder.RegisterType<ListarPuestosHandler>().As<IRequestHandler<ListarPuestosQuery, PuestoDTO>>();
 			builder.RegisterType<ListarEmpresasOfiplanHandler>().As<IRequestHandler<ListarEmpresasOfiplanQuery, ListarEmpresaResponseDTO>>();
 			builder.RegisterType<ActualizarPuestoHandler>().As<IRequestHandler<ActualizarPuestoCommand, RespuestaComunDTO>>();
-			builder.RegisterType<ListarColaboradoresMassHandler>().As<IRequestHandler<ListarColaboradoresMassQuery, DataTable>>();
+			//builder.RegisterType<ListarColaboradoresMassHandler>().As<IRequestHandler<ListarColaboradoresMassQuery, DataTable>>();
 			builder.RegisterType<ListarLocalMonitorHandler>().As<IRequestHandler<ListarLocalMonitorQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<ListarEmpresasMonitorHandler>().As<IRequestHandler<ListarEmpresasMonitorQuery, List<EmpresaDTO>>>();
 			builder.RegisterType<ProcesarMonitorHandler>().As<IRequestHandler<ProcesarMonitorCommand, RespuestaComunDTO>>();
@@ -169,7 +169,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<EliminarInventarioServidorVirtualHandler>().As<IRequestHandler<EliminarInventarioServidorVirtualCommand, RespuestaComunDTO>>();
 			builder.RegisterType<Features.InventarioServidor.Commands.DescargarMaestroHandler>().As<IRequestHandler<Features.InventarioServidor.Commands.DescargarMaestroCommand, DescargarMaestroDTO>>();
 			builder.RegisterType<ImportarInventarioServidorHandler>().As<IRequestHandler<ImportarInventarioServidorCommand, RespuestaComunExcelDTO>>();
-			builder.RegisterType<GenerarArchivoPorLocalHandler>().As<IRequestHandler<GenerarArchivoPorLocalCommand, DescargarPlantillasDTO>>();
+			//builder.RegisterType<GenerarArchivoPorLocalHandler>().As<IRequestHandler<GenerarArchivoPorLocalCommand, DescargarPlantillasDTO>>();
 			builder.RegisterType<ListarCajerosHandler>().As<IRequestHandler<ListarCajerosQuery, ListarCajerosDTO>>();
 			builder.RegisterType<Features.Cajeros.Queries.ListarColaboradoresHandler>().As<IRequestHandler<Features.Cajeros.Queries.ListarColaboradoresQuery, ListarComunDTO<Dictionary<string, object>>>>();
 			builder.RegisterType<AsignarCajeroHandler>().As<IRequestHandler<AsignarCajeroCommand, RespuestaComunDTO>>();
@@ -351,32 +351,6 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ProcesarControlBCTSpsaHandler>().As<IRequestHandler<ProcesarControlBCTSpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
             builder.RegisterType<ProcesarControlBCTTpsaHandler>().As<IRequestHandler<ProcesarControlBCTTpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
 			builder.RegisterType<ProcesarControlBCTHpsaHandler>().As<IRequestHandler<ProcesarControlBCTHpsaCommand, GenericResponseDTO<List<MonitorControlBCTDTO>>>>();
-
-
-			#region INV_KARDEX
-
-			builder.RegisterType<ListarInvKardexActivoHandler>().As<IRequestHandler<ListarInvKardexActivoQuery, GenericResponseDTO<List<InvKardexActivoDTO>>>>();
-            builder.RegisterType<ObtenerInvKardexActivoHandler>().As<IRequestHandler<ObtenerInvKardexActivoQuery, GenericResponseDTO<InvKardexActivoDTO>>>();
-            builder.RegisterType<CrearInvKardexActivoHandler>().As<IRequestHandler<CrearInvKardexActivoCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ActualizarInvKardexActivoHandler>().As<IRequestHandler<ActualizarInvKardexActivoCommand, RespuestaComunDTO>>();
-            builder.RegisterType<EliminarInvKardexActivoHandler>().As<IRequestHandler<EliminarInvKardexActivoCommand, RespuestaComunDTO>>();
-            builder.RegisterType<DescargarInvKardexActivoHandler>().As<IRequestHandler<DescargarInvKardexActivoCommand, DescargarMaestroDTO>>();
-
-            builder.RegisterType<ListarInvKardexLocalHandler>().As<IRequestHandler<ListarInvKardexLocalQuery, GenericResponseDTO<List<InvKardexLocalDTO>>>>();
-            builder.RegisterType<ObtenerInvKardexLocalHandler>().As<IRequestHandler<ObtenerInvKardexLocalQuery, GenericResponseDTO<InvKardexLocalDTO>>>();
-            builder.RegisterType<CrearInvKardexLocalHandler>().As<IRequestHandler<CrearInvKardexLocalCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ActualizarInvKardexLocalHandler>().As<IRequestHandler<ActualizarInvKardexLocalCommand, RespuestaComunDTO>>();
-            builder.RegisterType<EliminarInvKardexLocalHandler>().As<IRequestHandler<EliminarInvKardexLocalCommand, RespuestaComunDTO>>();
-            builder.RegisterType<DescargarInvKardexLocalHandler>().As<IRequestHandler<DescargarInvKardexLocalCommand, DescargarMaestroDTO>>();
-
-            builder.RegisterType<ListarInvKardexHandler>().As<IRequestHandler<ListarInvKardexQuery, GenericResponseDTO<List<ListarInvKardexDTO>>>>();
-            builder.RegisterType<ObtenerInvKardexHandler>().As<IRequestHandler<ObtenerInvKardexQuery, GenericResponseDTO<InvKardexDTO>>>();
-            builder.RegisterType<CrearInvKardexHandler>().As<IRequestHandler<CrearInvKardexCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ActualizarInvKardexHandler>().As<IRequestHandler<ActualizarInvKardexCommand, RespuestaComunDTO>>();
-            builder.RegisterType<EliminarInvKardexHandler>().As<IRequestHandler<EliminarInvKardexCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ImportarInvKardexHandler>().As<IRequestHandler<ImportarInvKardexCommand, RespuestaComunExcelDTO>>();
-
-            #endregion
 
             #region MAE_COLABORADOR_EXT
             builder.RegisterType<ListarMaeColaboradorExtHandler>().As<IRequestHandler<ListarMaeColaboradorExtQuery, GenericResponseDTO<PagedResult<ListarMaeColaboradorExtDto>>>>();

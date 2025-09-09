@@ -535,129 +535,129 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
         //    }
         //}
 
-        public async Task<DataTable> ListarColaboradoresCesados()
-        {
-            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
-            {
-                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_G3_LISTA_ELIMINADOS", connection)
-                {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = _commandTimeout
-                };
+        //public async Task<DataTable> ListarColaboradoresCesados()
+        //{
+        //    using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+        //    {
+        //        var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_G3_LISTA_ELIMINADOS", connection)
+        //        {
+        //            CommandType = CommandType.StoredProcedure,
+        //            CommandTimeout = _commandTimeout
+        //        };
 
-                await command.Connection.OpenAsync();
-                command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
+        //        await command.Connection.OpenAsync();
+        //        command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
 
-                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                var datatable = new DataTable();
-                datatable.Load(dr);
-
-
-                connection.Close();
-                connection.Dispose();
-
-                return datatable;
-            }
-        }
-
-        public async Task<DataTable> ListarColaboradoresMass(string codEmpresa)
-        {
-            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
-            {
-                var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_G6_LISTA_COLAB_MASS_SIN_AUT", connection)
-                {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = _commandTimeout
-                };
-
-                await command.Connection.OpenAsync();
-                command.Parameters.Add("VCOD_EMPRESA", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
-                command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
-
-                var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                var datatable = new DataTable();
-                datatable.Load(dr);
+        //        var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+        //        var datatable = new DataTable();
+        //        datatable.Load(dr);
 
 
-                connection.Close();
-                connection.Dispose();
+        //        connection.Close();
+        //        connection.Dispose();
 
-                return datatable;
-            }
-        }
+        //        return datatable;
+        //    }
+        //}
 
-        public async Task ActualizarEstadoArchivoPorLocal(string locales)
-        {
-            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
-            {
-                var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_CAMBIO_ESTADO_AUT_LOCAL", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = _commandTimeout;
+        //public async Task<DataTable> ListarColaboradoresMass(string codEmpresa)
+        //{
+        //    using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+        //    {
+        //        var command = new OracleCommand("PKG_ICT2_AUT_PROCESOS.SP_G6_LISTA_COLAB_MASS_SIN_AUT", connection)
+        //        {
+        //            CommandType = CommandType.StoredProcedure,
+        //            CommandTimeout = _commandTimeout
+        //        };
 
-                await command.Connection.OpenAsync();
-                command.Parameters.Add("PINNU_LOCALES", OracleDbType.Varchar2, locales, ParameterDirection.Input);
-                command.Parameters.Add("PINNU_ERROR", OracleDbType.Decimal, 1, ParameterDirection.Output);
-                command.Parameters.Add("PINVC_MSGERR", OracleDbType.Varchar2, 250, "", ParameterDirection.Output);
+        //        await command.Connection.OpenAsync();
+        //        command.Parameters.Add("VCOD_EMPRESA", OracleDbType.Varchar2, codEmpresa, ParameterDirection.Input);
+        //        command.Parameters.Add("p_RECORDSET", OracleDbType.RefCursor, 1, ParameterDirection.Output);
 
-                await command.ExecuteNonQueryAsync();
+        //        var dr = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+        //        var datatable = new DataTable();
+        //        datatable.Load(dr);
 
-                var error = Convert.ToDecimal(command.Parameters["PINNU_ERROR"].Value.ToString());
-                var mensjaeError = command.Parameters["PINVC_MSGERR"].Value.ToString();
 
-                if (error == -1)
-                    throw new Exception(mensjaeError);
+        //        connection.Close();
+        //        connection.Dispose();
 
-                connection.Close();
-                connection.Dispose();
-            }
-        }
+        //        return datatable;
+        //    }
+        //}
 
-        public async Task<string> GenerarArchivoLocal(decimal codLocal, string tipoSO)
-        {
-            using (var connection = new OracleConnection(CadenaConexionAutorizadores))
-            {
-                try
-                {
-                    using (var command = new OracleCommand("PKG_SGC_CAJERO.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
-                    {
-                        CommandType = CommandType.StoredProcedure,
-                        CommandTimeout = _commandTimeout
-                    })
-                    {
-                        await connection.OpenAsync();
+        //public async Task ActualizarEstadoArchivoPorLocal(string locales)
+        //{
+        //    using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+        //    {
+        //        var command = new OracleCommand("PKG_ICT2_AUTORIZADOR.SP_CAMBIO_ESTADO_AUT_LOCAL", connection);
+        //        command.CommandType = CommandType.StoredProcedure;
+        //        command.CommandTimeout = _commandTimeout;
 
-                        command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
-                        command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
-                        command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+        //        await command.Connection.OpenAsync();
+        //        command.Parameters.Add("PINNU_LOCALES", OracleDbType.Varchar2, locales, ParameterDirection.Input);
+        //        command.Parameters.Add("PINNU_ERROR", OracleDbType.Decimal, 1, ParameterDirection.Output);
+        //        command.Parameters.Add("PINVC_MSGERR", OracleDbType.Varchar2, 250, "", ParameterDirection.Output);
 
-                        await command.ExecuteNonQueryAsync();
+        //        await command.ExecuteNonQueryAsync();
 
-                        var value = command.Parameters["resultado"].Value;
+        //        var error = Convert.ToDecimal(command.Parameters["PINNU_ERROR"].Value.ToString());
+        //        var mensjaeError = command.Parameters["PINVC_MSGERR"].Value.ToString();
 
-                        if (value != DBNull.Value && value is OracleClob clob)
-                        {
-                            using (clob) // <-- Esto llama Dispose automáticamente
-                            {
-                                return clob.IsNull ? string.Empty : clob.Value;
-                            }
-                        }
+        //        if (error == -1)
+        //            throw new Exception(mensjaeError);
 
-                        return string.Empty;
-                    }
-                }
-                catch (OracleException ex) when (ex.Number == 29283)
-                {
-                    OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
-                    EventLog.WriteEntry("SGP_Autorizadores", $"[ORA-29283], Error: {ex}", EventLogEntryType.Error);
-                    return string.Empty;
-                }
-                catch (Exception ex)
-                {
-                    EventLog.WriteEntry("SGP_Autorizadores", $"[ERROR GenerarArchivo], Error: {ex}", EventLogEntryType.Error);
-                    return string.Empty;
-                }
-            }
-        }
+        //        connection.Close();
+        //        connection.Dispose();
+        //    }
+        //}
+
+        //public async Task<string> GenerarArchivoLocal(decimal codLocal, string tipoSO)
+        //{
+        //    using (var connection = new OracleConnection(CadenaConexionAutorizadores))
+        //    {
+        //        try
+        //        {
+        //            using (var command = new OracleCommand("PKG_SGC_CAJERO.SP_GENERA_ARCHIVO_TIPO_LOCAL", connection)
+        //            {
+        //                CommandType = CommandType.StoredProcedure,
+        //                CommandTimeout = _commandTimeout
+        //            })
+        //            {
+        //                await connection.OpenAsync();
+
+        //                command.Parameters.Add("vTIPO_SO", OracleDbType.Varchar2, tipoSO, ParameterDirection.Input);
+        //                command.Parameters.Add("PINNU_LOCAL", OracleDbType.Decimal, codLocal, ParameterDirection.Input);
+        //                command.Parameters.Add("resultado", OracleDbType.Varchar2, 500, "", ParameterDirection.Output);
+
+        //                await command.ExecuteNonQueryAsync();
+
+        //                var value = command.Parameters["resultado"].Value;
+
+        //                if (value != DBNull.Value && value is OracleClob clob)
+        //                {
+        //                    using (clob) // <-- Esto llama Dispose automáticamente
+        //                    {
+        //                        return clob.IsNull ? string.Empty : clob.Value;
+        //                    }
+        //                }
+
+        //                return string.Empty;
+        //            }
+        //        }
+        //        catch (OracleException ex) when (ex.Number == 29283)
+        //        {
+        //            OracleConnection.ClearPool(connection); // <== La magia que evita reiniciar IIS
+        //            EventLog.WriteEntry("SGP_Autorizadores", $"[ORA-29283], Error: {ex}", EventLogEntryType.Error);
+        //            return string.Empty;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            EventLog.WriteEntry("SGP_Autorizadores", $"[ERROR GenerarArchivo], Error: {ex}", EventLogEntryType.Error);
+        //            return string.Empty;
+        //        }
+        //    }
+        //}
 
     }
 }

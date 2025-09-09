@@ -15,35 +15,35 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
     {
     }
 
-    public class ListarColaboradoresCesadosHandler : IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>
-    {
-        private readonly IRepositorioAutorizadores _repositorioAutorizadores;
+    //public class ListarColaboradoresCesadosHandler : IRequestHandler<ListarColaboradoresCesadosQuery, ColaboradoresCesadosDTO>
+    //{
+    //    private readonly IRepositorioAutorizadores _repositorioAutorizadores;
 
-        public ListarColaboradoresCesadosHandler(IRepositorioAutorizadores repositorioAutorizadores)
-        {
-            _repositorioAutorizadores = repositorioAutorizadores;
-        }
+    //    public ListarColaboradoresCesadosHandler(IRepositorioAutorizadores repositorioAutorizadores)
+    //    {
+    //        _repositorioAutorizadores = repositorioAutorizadores;
+    //    }
 
-        public async Task<ColaboradoresCesadosDTO> Handle(ListarColaboradoresCesadosQuery request, CancellationToken cancellationToken)
-        {
-            var autorizadorEliminadoDTO = new ColaboradoresCesadosDTO();
-            var autorizadoresDataTable = await _repositorioAutorizadores.ListarColaboradoresCesados();
+    //    public async Task<ColaboradoresCesadosDTO> Handle(ListarColaboradoresCesadosQuery request, CancellationToken cancellationToken)
+    //    {
+    //        var autorizadorEliminadoDTO = new ColaboradoresCesadosDTO();
+    //        var autorizadoresDataTable = await _repositorioAutorizadores.ListarColaboradoresCesados();
 
-            autorizadorEliminadoDTO.Columnas = new List<string>();
-            foreach (DataColumn colum in autorizadoresDataTable.Columns)
-            {
-                autorizadorEliminadoDTO.Columnas.Add(colum.ColumnName);
-            }
+    //        autorizadorEliminadoDTO.Columnas = new List<string>();
+    //        foreach (DataColumn colum in autorizadoresDataTable.Columns)
+    //        {
+    //            autorizadorEliminadoDTO.Columnas.Add(colum.ColumnName);
+    //        }
 
-            autorizadorEliminadoDTO.Colaboradores = autorizadoresDataTable.AsEnumerable()
-                     .Select(r => r.Table.Columns.Cast<DataColumn>()
-                     .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
-                  ).ToDictionary(z => z.Key.Replace(" ", "").Replace(".", ""), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
-               ).ToList();
+    //        autorizadorEliminadoDTO.Colaboradores = autorizadoresDataTable.AsEnumerable()
+    //                 .Select(r => r.Table.Columns.Cast<DataColumn>()
+    //                 .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
+    //              ).ToDictionary(z => z.Key.Replace(" ", "").Replace(".", ""), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
+    //           ).ToList();
 
 
 
-            return autorizadorEliminadoDTO;
-        }
-    }
+    //        return autorizadorEliminadoDTO;
+    //    }
+    //}
 }

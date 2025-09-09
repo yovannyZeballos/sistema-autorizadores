@@ -43,9 +43,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		IRepositorioAutImpresion RepositorioAutImpresion { get; }
 		IRepositorioProcesoParametro RepositorioProcesoParametro { get; }
 
-        IRepositorioInvKardex RepositorioInvKardex { get; }
-        IRepositorioInvKardexActivo RepositorioInvKardexActivo { get; }
-        IRepositorioInvKardexLocal RepositorioInvKardexLocal { get; }
 		IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; }
 		IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; }
         IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; }

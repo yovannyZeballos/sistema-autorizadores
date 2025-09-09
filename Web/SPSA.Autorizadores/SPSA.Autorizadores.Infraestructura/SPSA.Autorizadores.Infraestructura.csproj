@@ -139,9 +139,6 @@
     <Compile Include="Configuracion\GuiaRecepcionCabeceraTypeConfiguration.cs" />
     <Compile Include="Configuracion\GuiaRecepcionDetalleTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvCajasTypeConfiguration.cs" />
-    <Compile Include="Configuracion\InvKardexActivoTypeConfiguration.cs" />
-    <Compile Include="Configuracion\InvKardexLocalTypeConfiguration.cs" />
-    <Compile Include="Configuracion\InvKardexTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvTipoActivoTypeConfiguration.cs" />
     <Compile Include="Configuracion\AperturaTypeConfiguration.cs" />
     <Compile Include="Configuracion\InvActivoTypeConfiguration.cs" />
@@ -201,9 +198,6 @@
     <Compile Include="Repositorio\RepositorioGuiaDespachoDetalle.cs" />
     <Compile Include="Repositorio\RepositorioGuiaRecepcionCabecera.cs" />
     <Compile Include="Repositorio\RepositorioGuiaRecepcionDetalle.cs" />
-    <Compile Include="Repositorio\RepositorioInvKardex.cs" />
-    <Compile Include="Repositorio\RepositorioInvKardexActivo.cs" />
-    <Compile Include="Repositorio\RepositorioInvKardexLocal.cs" />
     <Compile Include="Repositorio\RepositorioMaeAreaGestion.cs" />
     <Compile Include="Repositorio\RepositorioMaeCodComercio.cs" />
     <Compile Include="Repositorio\RepositorioMaeColaboradorExt.cs" />

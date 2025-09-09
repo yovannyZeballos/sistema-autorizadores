@@ -52,9 +52,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			RepositorioAutImpresion = new RepositorioAutImpresion(this);
 			RepositorioProcesoParametro = new RepositorioProcesoParametro(this);
 
-            RepositorioInvKardex = new RepositorioInvKardex(this);
-            RepositorioInvKardexActivo = new RepositorioInvKardexActivo(this);
-            RepositorioInvKardexLocal = new RepositorioInvKardexLocal(this);
 			RepositorioMonCierreEOD = new RepositorioMonCierreEOD(this);
 			RepositorioMonCierreEODHist = new RepositorioMonCierreEODHist(this);
 
@@ -127,9 +124,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioAutImpresion RepositorioAutImpresion { get; private set; }
 		public IRepositorioProcesoParametro RepositorioProcesoParametro { get; private set; }
 
-		public IRepositorioInvKardex RepositorioInvKardex { get; private set; }
-		public IRepositorioInvKardexActivo RepositorioInvKardexActivo { get; private set; }
-		public IRepositorioInvKardexLocal RepositorioInvKardexLocal { get; private set; }
 		public IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; private set; }
 		public IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; private set; }
 		public IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; private set; }
@@ -197,10 +191,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new TmpMonCierreLocalTypeConfiguration());
 			modelBuilder.Configurations.Add(new AutImpresionTypeConfiguracion());
-
-            modelBuilder.Configurations.Add(new InvKardexTypeConfiguration());
-            modelBuilder.Configurations.Add(new InvKardexActivoTypeConfiguration());
-			modelBuilder.Configurations.Add(new InvKardexLocalTypeConfiguration());
 
 			modelBuilder.Configurations.Add(new MonCierreEODTypeConfiguration());
 			modelBuilder.Configurations.Add(new MonCierreEODHistTypeConfiguration());

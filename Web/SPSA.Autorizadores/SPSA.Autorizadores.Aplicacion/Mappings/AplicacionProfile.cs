@@ -273,25 +273,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 
             #endregion
 
-            #region <--INV_KARDEX_OLD-->
-
-            CreateMap<ListarInvKardexActivoDTO, InvKardexActivo>().ReverseMap();
-            CreateMap<InvKardexActivoDTO, InvKardexActivo>().ReverseMap();
-            CreateMap<CrearInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
-            CreateMap<ActualizarInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
-
-            CreateMap<ListarInvKardexDTO, InvKardex>().ReverseMap();
-            CreateMap<InvKardexDTO, InvKardex>().ReverseMap();
-            CreateMap<CrearInvKardexCommand, InvKardex>().ReverseMap();
-            CreateMap<ActualizarInvKardexCommand, InvKardex>().ReverseMap();
-
-            CreateMap<ListarInvKardexLocalDTO, InvKardexLocal>().ReverseMap();
-            CreateMap<InvKardexLocalDTO, InvKardexLocal>().ReverseMap();
-            CreateMap<CrearInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
-            CreateMap<ActualizarInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
-
-            #endregion
-
             #region <--INV_KARDEX->
             CreateMap<CrearMaeMarcaCommand, Mae_Marca>().ReverseMap();
             CreateMap<CrearMaeAreaGestionCommand, Mae_AreaGestion>().ReverseMap();
