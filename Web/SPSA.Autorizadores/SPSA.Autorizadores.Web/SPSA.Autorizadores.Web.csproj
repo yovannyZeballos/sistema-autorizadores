@@ -377,6 +377,7 @@
     <Content Include="Content\css\boxed.css" />
     <Content Include="Content\css\dark.css" />
     <Content Include="Content\css\icons.css" />
+    <Content Include="Content\css\menu-lateral.css" />
     <Content Include="Content\css\plugins.css" />
     <Content Include="Content\css\plugins\accept-cookies.css" />
     <Content Include="Content\css\plugins\bootstrap-timepicker.css" />
@@ -1634,6 +1635,7 @@
     <Content Include="Content\js\livechat.js" />
     <Content Include="Content\js\map-leafleft.js" />
     <Content Include="Content\js\mapelmaps.js" />
+    <Content Include="Content\js\menu-lateral.js" />
     <Content Include="Content\js\morris.js" />
     <Content Include="Content\js\newsticker.js" />
     <Content Include="Content\js\owl-carousel.js" />
