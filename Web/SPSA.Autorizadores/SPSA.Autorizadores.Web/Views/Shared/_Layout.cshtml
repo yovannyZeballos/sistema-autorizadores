@@ -20,8 +20,10 @@
 
     <!---Icons css-->
     <link href="~/Content/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/css/menu-lateral.css" rel="stylesheet" />
 
     @RenderSection("css", false)
+
 </head>
 <body class="app sidebar-mini ltr color-menu color-header">
 
@@ -136,31 +138,45 @@
                             </div>
                             <div class="slide-left disabled" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" /></svg></div>
                             <ul class="side-menu">
-
                                 @if (SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados != null)
                                 {
                                     foreach (var menuPadre in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => string.IsNullOrEmpty(x.CodMenuPadre) || x.CodMenuPadre == "#"))
                                     {
                                         <li class="slide">
-                                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                                            <a class="side-menu__item" href="javascript:void(0);">
                                                 <i class="@menuPadre.IconoMenu sidemenu_icon"></i>
-                                                <span class="side-menu__label">
-                                                    @menuPadre.NomMenu
-                                                </span><i class="angle fa fa-angle-right"></i>
+                                                <span class="side-menu__label">@menuPadre.NomMenu</span>
+                                                <i class="angle fa fa-angle-right"></i>
                                             </a>
                                             <ul class="slide-menu">
-                                                <li class="side-menu-label1">
-                                                    <a href="javascript:void(0);"> @menuPadre.NomMenu</a>
-                                                </li>
-                                                @ObtenerSubMenus(menuPadre);
+                                                @foreach (var menuHijo in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuPadre.CodMenu))
+                                                {
+                                                    var tieneNietos = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Any(x => x.CodMenuPadre == menuHijo.CodMenu);
+                                                    <li class="sub-slide">
+                                                        <a href="@menuHijo.UrlMenu" class="sub-side-menu__link">
+                                                            <span class="sub-side-menu__label">@menuHijo.NomMenu</span>
+                                                            @if (tieneNietos)
+                                                            {
+                                                                <i class="angle fa fa-angle-right"></i>
+                                                            }
+                                                        </a>
+                                                        @if (tieneNietos)
+                                                        {
+                                                            <ul class="sub-sub-slide-menu">
+                                                                @foreach (var menuNieto in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuHijo.CodMenu))
+                                                                {
+                                                                    <li>
+                                                                        <a href="@menuNieto.UrlMenu" class="sub-sub-slide-item">@menuNieto.NomMenu</a>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+                                                    </li>
+                                                }
                                             </ul>
                                         </li>
-
                                     }
-
-
                                 }
-
                             </ul>
                             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z" /></svg></div>
                             <div class="Annoucement_card">
@@ -173,6 +189,7 @@
                         </div>
                     </div>
                 </aside>
+
             </div>
             <!--app-sidebar closed-->
 
@@ -224,26 +241,6 @@
                 </div>
             </div>
         </div>
-
-        @*<div style="display:none">
-                <div class="dimmer active" id="loader">
-                    <div class="sk-circle">
-                        <div class="sk-circle1 sk-child"></div>
-                        <div class="sk-circle2 sk-child"></div>
-                        <div class="sk-circle3 sk-child"></div>
-                        <div class="sk-circle4 sk-child"></div>
-                        <div class="sk-circle5 sk-child"></div>
-                        <div class="sk-circle6 sk-child"></div>
-                        <div class="sk-circle7 sk-child"></div>
-                        <div class="sk-circle8 sk-child"></div>
-                        <div class="sk-circle9 sk-child"></div>
-                        <div class="sk-circle10 sk-child"></div>
-                        <div class="sk-circle11 sk-child"></div>
-                        <div class="sk-circle12 sk-child"></div>
-                    </div>
-                </div>
-            </div>*@
-
     </div>
 
     <script>
@@ -263,9 +260,8 @@
         var dataTableColaboradorMass = null;
         var dataTableAutorizadorMass = null;
 
+
     </script>
-
-
 
     <!-- Jquery js-->
     <script src="~/Content/plugins/jquery/jquery.min.js"></script>
@@ -313,49 +309,63 @@
     <script src="~/Content/js/CheckSession.js"></script>
     <script src="~/Content/js/xlsx.full.min.js"></script>
     <script src="~/Content/ViewJs/Home.js"></script>
-
+    <script src="~/Content/js/menu-lateral.js"></script>
     <script>
         const date = new Date();
         $("#anio").append(date.getFullYear());
     </script>
 
     @RenderSection("scripts", false)
+
 </body>
 </html>
 
-
-@helper ObtenerSubMenus(SPSA.Autorizadores.Aplicacion.DTO.ListarMenuDTO menuPadre)
+@helper ObtenerSubMenus(SPSA.Autorizadores.Aplicacion.DTO.ListarMenuDTO menuPadre, int nivel = 1)
 {
-    var subMenus = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuPadre.CodMenu).OrderBy(x => x.NomMenu).ToList();
+    var subMenus = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados
+        .Where(x => x.CodMenuPadre == menuPadre.CodMenu)
+        .OrderBy(x => x.NomMenu)
+        .ToList();
 
     foreach (var menu in subMenus)
     {
-        if (SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menu.CodMenu).ToList().Count > 0)
+        var tieneHijos = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados
+            .Any(x => x.CodMenuPadre == menu.CodMenu);
+
+        var claseNivel = nivel == 1 ? "sub-slide" :
+                         nivel == 2 ? "sub-sub-slide" :
+                         "sub-sub-sub-slide";
+
+        var claseMenu = nivel == 1 ? "sub-side-menu__item" :
+                        nivel == 2 ? "sub-sub-side-menu__item" :
+                        "sub-sub-sub-side-menu__item";
+
+        var claseLista = nivel == 1 ? "sub-slide-menu2" :
+                         nivel == 2 ? "sub-sub-slide-menu2" :
+                         "sub-sub-sub-slide-menu2";
+
+        if (tieneHijos)
         {
-            <li class="sub-slide">
-                <a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="javascript:void(0);">
+            <li class="@claseNivel">
+                <a class="@claseMenu" href="javascript:void(0);">
                     <span class="sub-side-menu__label">@menu.NomMenu</span>
-                    <i class="sub-angle fa @menu.UrlMenu"></i>
+                    <i class="fa fa-angle-right"></i>
                 </a>
-                <ul class="sub-slide-menu2">
-                    <li>
-                        @ObtenerSubMenus(menu);
-                    </li>
+                <ul class="@claseLista">
+                    @ObtenerSubMenus(menu, nivel + 1)
                 </ul>
             </li>
         }
         else
         {
-            <li class="sub-slide">
-                <a class="sub-side-menu__item lh-1" data-bs-toggle="sub-slide"
-                   href="@menu.UrlMenu">
-                    <span class="sub-side-menu__label">
-                        @menu.NomMenu
-                    </span>
+            <li class="@claseNivel">
+                <a class="@claseMenu" href="@menu.UrlMenu">
+                    <span class="sub-side-menu__label">@menu.NomMenu</span>
                 </a>
             </li>
         }
     }
-
-
 }
+
+
+

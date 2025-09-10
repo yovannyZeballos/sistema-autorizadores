@@ -1,0 +1,42 @@
+﻿/* TAMAÑO Y FORMATO UNIFORME DE TEXTO */
+.side-menu__item,
+.sub-side-menu__link,
+.sub-sub-slide-menu a {
+    font-size: 12px;
+    display: block;
+    line-height: 1.4;
+    color: #333;
+    text-decoration: none;
+    padding: 4px 10px;
+}
+
+/* SANGRÍAS POR NIVEL */
+.slide-menu {
+    padding-left: 16px; /* Nivel 2 */
+}
+
+.sub-sub-slide-menu {
+    padding-left: 32px; /* Nivel 3 */
+}
+
+    /* REDUCCIÓN DE ESPACIADO ENTRE LÍNEAS */
+    .slide-menu > li,
+    .sub-sub-slide-menu > li {
+        margin-bottom: 2px;
+    }
+
+/* OCULTAR SUBMENÚS INICIALMENTE */
+.slide-menu,
+.sub-sub-slide-menu {
+    display: none;
+}
+
+/* FLECHAS ROTATIVAS AL ABRIR */
+.angle {
+    float: right;
+    transition: transform 0.2s ease;
+}
+
+    .angle.rotate {
+        transform: rotate(90deg);
+    }

@@ -4,7 +4,7 @@ var urlRegistrarDespacho = baseUrl + 'Inventario/GuiaDespacho/Registrar';
 var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
 var urlListarProductos = baseUrl + 'Inventario/Productos/Listar';
-var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProducto'; // Filtrar en backend por ORIGEN si es posible
+var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProductoDisponibles';
 
 var AdministrarGuiaDespacho = (function ($) {
 
@@ -59,7 +59,7 @@ var AdministrarGuiaDespacho = (function ($) {
         });
 
         // Dependientes: Origen y Destino
-        $('#desEmpOrig').on('change', function () { cargarComboLocales('#desEmpOrig', '#desLocOrig'); });
+        //$('#desEmpOrig').on('change', function () { cargarComboLocales('#desEmpOrig', '#desLocOrig'); });
         $('#desEmpDest').on('change', function () { cargarComboLocales('#desEmpDest', '#desLocDest'); });
 
         // Tipo movimiento
@@ -74,7 +74,7 @@ var AdministrarGuiaDespacho = (function ($) {
         // Cuando se muestre el modal, asegurar select2
         $('#modalDespacho').on('shown.bs.modal', function () {
             initSelect2EnModal('#desTipoMov');
-            initSelect2EnModal('#desEmpOrig'); initSelect2EnModal('#desLocOrig');
+            //initSelect2EnModal('#desEmpOrig'); initSelect2EnModal('#desLocOrig');
             initSelect2EnModal('#desEmpDest'); initSelect2EnModal('#desLocDest');
             // Para series y productos ya agregados
             $('#tblDetalleDespacho tbody select.selProducto').each(function () { initSelect2EnModal(this); });
@@ -82,12 +82,12 @@ var AdministrarGuiaDespacho = (function ($) {
         });
 
         // Filtros combos en index
-        initSelect2EnModal('#fEmpOrig'); initSelect2EnModal('#fLocOrig');
+        //initSelect2EnModal('#fEmpOrig'); initSelect2EnModal('#fLocOrig');
         initSelect2EnModal('#fEmpDest'); initSelect2EnModal('#fLocDest');
         initSelect2EnModal('#fTipoMov');
 
         // Cargar combos de filtros base
-        cargarComboEmpresas('#fEmpOrig').then(() => cargarComboLocales('#fEmpOrig', '#fLocOrig'));
+        //cargarComboEmpresas('#fEmpOrig').then(() => cargarComboLocales('#fEmpOrig', '#fLocOrig'));
         cargarComboEmpresas('#fEmpDest').then(() => cargarComboLocales('#fEmpDest', '#fLocDest'));
     };
 
@@ -102,13 +102,13 @@ var AdministrarGuiaDespacho = (function ($) {
     function listarProductos() {
         return $.ajax({ url: urlListarProductos, type: 'POST', data: { request: {} } });
     }
-    function listarSeriesPorProducto(codProducto, codEmpOrig, codLocOrig) {
+    function listarSeriesPorProducto(codProducto) {
         if (!codProducto) return Promise.resolve({ Ok: true, Data: [] });
         // Si tu endpoint soporta filtros de origen, envíalos; si no, los ignorará.
         return $.ajax({
             url: urlListarSeriesDisponibles,
             type: 'POST',
-            data: { request: { CodProducto: codProducto, CodEmpresa: codEmpOrig || '', CodLocal: codLocOrig || '' } }
+            data: { request: { CodProducto: codProducto } }
         });
     }
 
@@ -203,8 +203,6 @@ var AdministrarGuiaDespacho = (function ($) {
 
         const cod = $selProd.val();
         const ind = ($selProd.find(':selected').data('serializable') || 'S'); // 'S'|'N'
-        const empOrig = $('#desEmpOrig').val();
-        const locOrig = $('#desLocOrig').val();
 
         // reset
         $selSerie.empty().append('<option value=""></option>').prop('disabled', true).trigger('change');
@@ -213,15 +211,10 @@ var AdministrarGuiaDespacho = (function ($) {
         if (!cod) return;
 
         if (ind === 'S') {
-            // requiere origen seleccionado para listar series
-            if (!empOrig || !locOrig) {
-                swal({ text: "Seleccione Empresa y Local de Origen antes de elegir una serie.", icon: "warning" });
-                $selProd.val(null).trigger('change');
-                return;
-            }
+
             // cargar series disponibles en origen
             try {
-                const resp = await listarSeriesPorProducto(cod, empOrig, locOrig);
+                const resp = await listarSeriesPorProducto(cod);
                 $selSerie.empty().append('<option value=""></option>');
                 if (resp.Ok) {
                     (resp.Data || []).forEach(s => {
@@ -256,10 +249,8 @@ var AdministrarGuiaDespacho = (function ($) {
         const header = {
             NumGuia: ($('#desNumGuia').val() || '').trim(),
             Fecha: $('#desFecha').val(),
-            CodEmpresaOrigen: $('#desEmpOrig').val() || '',
-            CodLocalOrigen: $('#desLocOrig').val() || '',
-            //CodEmpresaDestino: $('#desEmpDest').val() || null,
-            //CodLocalDestino: $('#desLocDest').val() || null,
+            CodEmpresaDestino: $('#desEmpDest').val() || null,
+            CodLocalDestino: $('#desLocDest').val() || null,
             CodEmpresaDestino: requiereDestino ? ($('#desEmpDest').val() || null) : null,
             CodLocalDestino: requiereDestino ? ($('#desLocDest').val() || null) : null,
             TipoMovimiento: tipoMov,
@@ -272,8 +263,8 @@ var AdministrarGuiaDespacho = (function ($) {
         };
 
         // Validaciones cabecera mínimas
-        if (!header.NumGuia || !header.Fecha || !header.CodEmpresaOrigen || !header.CodLocalOrigen) {
-            swal({ text: "Complete los campos obligatorios de la cabecera (Fecha, N° Guía, Origen).", icon: "warning" });
+        if (!header.NumGuia || !header.Fecha) {
+            swal({ text: "Complete los campos obligatorios de la cabecera (Fecha, N° Guía).", icon: "warning" });
             return;
         }
 
@@ -377,8 +368,8 @@ var AdministrarGuiaDespacho = (function ($) {
                 var filtros = {
                     FechaDesde: $('#fDesde').val() || null,
                     FechaHasta: $('#fHasta').val() || null,
-                    CodEmpresaOrigen: $('#fEmpOrig').val() || null,
-                    CodLocalOrigen: $('#fLocOrig').val() || null,
+                    //CodEmpresaOrigen: $('#fEmpOrig').val() || null,
+                    //CodLocalOrigen: $('#fLocOrig').val() || null,
                     CodEmpresaDestino: $('#fEmpDest').val() || null,
                     CodLocalDestino: $('#fLocDest').val() || null,
                     TipoMovimiento: $('#fTipoMov').val() || null,
@@ -483,8 +474,8 @@ var AdministrarGuiaDespacho = (function ($) {
         $('#desUsarTransito').prop('checked', true).prop('disabled', false);
 
         // Origen/Destino
-        $('#desEmpOrig').val(null).trigger('change');
-        $('#desLocOrig').empty().append('<option></option>').val(null).trigger('change');
+        //$('#desEmpOrig').val(null).trigger('change');
+        //$('#desLocOrig').empty().append('<option></option>').val(null).trigger('change');
 
         $('#desEmpDest').val(null).trigger('change');
         $('#desLocDest').empty().append('<option></option>').val(null).trigger('change');
@@ -494,7 +485,7 @@ var AdministrarGuiaDespacho = (function ($) {
 
         // preparar Select2 cabecera
         initSelect2EnModal('#desTipoMov');
-        initSelect2EnModal('#desEmpOrig'); initSelect2EnModal('#desLocOrig');
+        //initSelect2EnModal('#desEmpOrig'); initSelect2EnModal('#desLocOrig');
         initSelect2EnModal('#desEmpDest'); initSelect2EnModal('#desLocDest');
     }
 

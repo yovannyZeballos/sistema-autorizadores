@@ -23,14 +23,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
 
     public class LoginHandler : IRequestHandler<LoginCommand, UsuarioDTO>
     {
-        private readonly ISGPContexto _bCTContexto;
+        private readonly ISGPContexto _sgpContexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public LoginHandler(IMapper mapper)
         {
             _mapper = mapper;
-            _bCTContexto = new SGPContexto();
+            _sgpContexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
@@ -96,17 +96,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
             var response = new List<ListarMenuDTO>();
             try
             {
-                var sistema = await _bCTContexto.RepositorioSegSistema
+                var sistema = await _sgpContexto.RepositorioSegSistema
                     .Obtener(x => x.Sigla == siglaSistema)
                     .AsNoTracking()
                     .FirstOrDefaultAsync();
 
-                var perfiles = await _bCTContexto.RepositorioSegPerfilUsuario
+                var perfiles = await _sgpContexto.RepositorioSegPerfilUsuario
                     .Obtener(x => x.CodUsuario == codUsuario)
                     .AsNoTracking()
                     .Select(x => x.CodPerfil).ToListAsync();
 
-                var menus = await _bCTContexto.RepositorioSegPerfilMenu
+                var menus = await _sgpContexto.RepositorioSegPerfilMenu
                     .Obtener(x => x.CodSistema == sistema.CodSistema && perfiles.Contains(x.CodPerfil))
                     .AsNoTracking()
                     .Include(x => x.Menu)
@@ -126,11 +126,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
 
         private async Task RegistrarFechaHoraIngreso(string codUsuario)
         {
-            var usuario = await _bCTContexto.RepositorioSegUsuario.Obtener(x => x.CodUsuario == codUsuario).AsNoTracking().FirstOrDefaultAsync();
+            var usuario = await _sgpContexto.RepositorioSegUsuario.Obtener(x => x.CodUsuario == codUsuario).AsNoTracking().FirstOrDefaultAsync();
             usuario.FecIngreso = DateTime.Now;
             usuario.HoraIngreso = DateTime.Now.TimeOfDay;
-            _bCTContexto.RepositorioSegUsuario.Actualizar(usuario);
-            await _bCTContexto.GuardarCambiosAsync();
+            _sgpContexto.RepositorioSegUsuario.Actualizar(usuario);
+            await _sgpContexto.GuardarCambiosAsync();
         }
     }
 }

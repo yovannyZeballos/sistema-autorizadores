@@ -457,6 +457,7 @@
     <Compile Include="Features\InventarioKardex\Queries\Proveedor\ListarMaeProveedorQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Proveedor\ListarPaginadoMaeProveedorQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSerieProductoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoDisponiblesQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarPaginadoMaeSerieProductoQuery.cs" />
     <Compile Include="Features\Locales\Commands\ActualizarMaeLocalCommand.cs" />
