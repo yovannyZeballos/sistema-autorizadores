@@ -61,6 +61,16 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> ListarPorProductoDisponibles(ListarMaeSeriesPorProductoDisponiblesQuery request)
+        {
+            request.CodEmpresaOrigen = WebSession.JerarquiaOrganizacional.CodEmpresa;
+            request.CodLocalOrigen = WebSession.JerarquiaOrganizacional.CodLocal;
+
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public async Task<JsonResult> ListarPaginado(ListarPaginadoMaeSerieProductoQuery request)
         {
