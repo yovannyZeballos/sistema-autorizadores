@@ -30,6 +30,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06. Servicio Windows", "06.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPSA.Autorizadores.ServicioWindowsStatusSGP", "SPSA.Autorizadores.ServicioWindowsStatusSGP\SPSA.Autorizadores.ServicioWindowsStatusSGP.csproj", "{1FB6B40A-56C5-4C72-8C5D-DB142D67D649}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviciosSpsa.Web", "..\..\..\..\Spsa\MicroserviciosSpsa\MicroserviciosSpsa.Web\MicroserviciosSpsa.Web.csproj", "{41F89E77-B255-6C2C-938C-05E312BF28A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "07. Api", "07. Api", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +64,10 @@ Global
 		{1FB6B40A-56C5-4C72-8C5D-DB142D67D649}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FB6B40A-56C5-4C72-8C5D-DB142D67D649}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FB6B40A-56C5-4C72-8C5D-DB142D67D649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41F89E77-B255-6C2C-938C-05E312BF28A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41F89E77-B255-6C2C-938C-05E312BF28A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41F89E77-B255-6C2C-938C-05E312BF28A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41F89E77-B255-6C2C-938C-05E312BF28A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +79,7 @@ Global
 		{D1160E08-EA74-48B6-AE35-CE97EC0EB2AC} = {B0C5186F-6D00-4739-A30F-D7C14E321E91}
 		{DE177FE3-7042-48D3-A5A4-B31CB97218E0} = {0B4ED0AC-154F-4E6F-AFBE-DEAB6FF981C5}
 		{1FB6B40A-56C5-4C72-8C5D-DB142D67D649} = {80C304AB-6F57-462E-85CF-29100A121A6E}
+		{41F89E77-B255-6C2C-938C-05E312BF28A5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E60688E-11D4-4075-A6A3-96953B3467FE}
