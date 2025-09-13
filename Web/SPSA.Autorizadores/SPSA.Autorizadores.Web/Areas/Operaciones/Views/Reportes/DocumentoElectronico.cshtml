@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Operaciones | Reportes | Doc. Electronico";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Documentos electrónicos</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Operaciones</li>
+            <li class="breadcrumb-item1 active">Reportes</li>
+            <li class="breadcrumb-item1 active">Doc. Electronico</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @Html.Partial("_CardHeader", "Consulta de DOCUMENTOS ELECTRÓNICOS")
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group select2-sm">
+                        <label for="cboLocalBuscar" class="form-label">Local</label>
+                        <select class="form-control select2-show-search custom-select" id="cboLocal">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Fecha Inicio</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="feather feather-calendar"></span>
+                                </div>
+                            </div><input id="txtFechaInicio" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Fecha Fin</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="feather feather-calendar"></span>
+                                </div>
+                            </div><input id="txtFechaFin" class="form-control form-control-sm fc-datepicker" placeholder="dd/mm/aaaa" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group select2-sm">
+                        <label class="form-label">Tipo Doc. Cliente</label>
+                        <select class="form-control select2-show-search custom-select" id="cboTipoDocCliente">
+                            <option value="0">TODOS</option>
+                            <option value="1">DNI</option>
+                            <option value="2">RUC</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="txtNroDocCliente" class="form-label">Nro. Doc. Cliente</label>
+                        <input type="text" class="form-control form-control-sm" id="txtNroDocCliente">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="txtCajero" class="form-label">Cajero</label>
+                        <input type="text" class="form-control form-control-sm" id="txtCajero">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="txtCajero" class="form-label">Caja</label>
+                        <input type="text" class="form-control form-control-sm" id="txtCaja">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="txtCajero" class="form-label">Nro. Transacción</label>
+                        <input type="text" class="form-control form-control-sm" id="txtNroTransaccion">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-xl-12">
+                        <table id="tableDocumentosElectronicos" class="table text-nowrap border-bottom">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/DocumentoElectronico.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            DocumentoElectronico.init();
+        });
+    </script>
+}

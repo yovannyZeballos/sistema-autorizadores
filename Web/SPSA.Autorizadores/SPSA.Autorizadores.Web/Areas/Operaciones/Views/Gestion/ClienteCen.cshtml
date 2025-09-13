@@ -1,0 +1,211 @@
+﻿@{
+    ViewBag.Title = "Operaciones | Gestión | Cliente CEN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        .form-text {
+            margin-top: 0.7rem !important;
+            font-size: 1.175em !important;
+        }
+
+        .alert-custom {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background-color: rgba(254, 127, 0, .1);
+            color: rgb(254, 127, 0) !important;
+            border-color: rgb(149 98 47 / 10%);
+        }
+    </style>
+}
+
+
+<!--Page header-->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">MANTENIMIENTO CLIENTE - CEN</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1 active">Operaciones</li>
+            <li class="breadcrumb-item1 active">Gestión</li>
+            <li class="breadcrumb-item1 active">Cliente CEN</li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card overflow-hidden">
+        @Html.Partial("_CardHeader", "Buscar cliente en CEN")
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group select2-sm">
+                        <label class="form-label">Tipo de documento</label>
+                        <select class="form-control select2-show-search custom-select" id="cboTipoDocumento">
+                            <option value="">Seleccione...</option>
+                            <option value="DNI">DNI</option>
+                            <option value="RUC">RUC</option>
+                        </select>
+                        <div class="form-text text-danger d-none" id="lblErrorTipoDocumento"></div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="txtNroDocumento" class="form-label">Número de Documento</label>
+                        <input type="text" class="form-control form-control-sm" id="txtNroDocumento">
+                        <div class="form-text text-danger d-none" id="lblErrorNumeroDocumento"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="button" class="btn btn-sm btn-primary btn-block" id="btnBuscar">
+                            <i class="fa fa-search "></i> Buscar
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-block" onclick="resetForm()">
+                            <i class="fa fa-eraser"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mensaje de error si no se encuentra -->
+            <div id="mensajeBusqueda" class="alert alert-secondary alert-custom d-none" role="alert"></div>
+
+            <!-- Tabla de resultados -->
+            <div id="contenedorTablaCliente" class="d-none">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h4 class="card-title">Resultado de búsqueda</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="tablaCliente">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Tipo Doc.</th>
+                                        <th>Nro. Doc.</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>Razón Social</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaClienteBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de registro de cliente -->
+            <div id="contenedorFormularioRegistro" class="d-none">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h4 class="card-title">Registrar nuevo cliente</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="formRegistroCliente">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group select2-sm">
+                                        <label class="form-label">Tipo de documento</label>
+                                        <select class="form-control select2-show-search custom-select" id="cboTipoDocumentoRegistro">
+                                            <option value="">Seleccione...</option>
+                                            <option value="DNI">DNI</option>
+                                            <option value="RUC">RUC</option>
+                                        </select>
+                                        <div class="form-text text-danger d-none" id="lblErrorTipoDocumentoRegistro"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="txtNroDocumentoRegistro" class="form-label">Número de Documento</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtNroDocumentoRegistro">
+                                        <div class="form-text text-danger d-none" id="lblErrorNumeroDocumentoRegistro"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Campos para persona natural (DNI) -->
+                            <div class="row" id="camposPersonaNatural">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtNombresRegistro" class="form-label">Nombres</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtNombresRegistro">
+                                        <div class="form-text text-danger d-none" id="lblErrorNombresRegistro"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtApellidosRegistro" class="form-label">Apellidos</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtApellidosRegistro">
+                                        <div class="form-text text-danger d-none" id="lblErrorApellidosRegistro"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Campo para persona jurídica (RUC) -->
+                            <div class="row d-none" id="camposPersonaJuridica">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="txtRazonSocialRegistro" class="form-label">Razón Social</label>
+                                        <input type="text" class="form-control form-control-sm" id="txtRazonSocialRegistro">
+                                        <div class="form-text text-danger d-none" id="lblErrorRazonSocialRegistro"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnGuardarCliente">
+                                        <i class="fa fa-save"></i> Guardar Cliente
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm ms-2" id="btnCancelarRegistro">
+                                        <i class="fa fa-times"></i> Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/ClienteCen.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ClienteCen.init();
+        });
+    </script>
+}
+

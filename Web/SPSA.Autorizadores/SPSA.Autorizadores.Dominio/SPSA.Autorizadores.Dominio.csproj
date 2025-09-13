@@ -60,6 +60,7 @@
     <Compile Include="Entidades\CCom_SolicitudDet.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
+    <Compile Include="Entidades\DocumentoElectronico.cs" />
     <Compile Include="Entidades\GuiaDespachoCabecera.cs" />
     <Compile Include="Entidades\GuiaDespachoDetalle.cs" />
     <Compile Include="Entidades\GuiaRecepcionCabecera.cs" />

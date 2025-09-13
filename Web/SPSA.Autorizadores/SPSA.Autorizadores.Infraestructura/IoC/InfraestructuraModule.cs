@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Infraestructura.Agente.AgenteCen;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using SPSA.Autorizadores.Infraestructura.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Utiles;
@@ -37,6 +38,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<RepositorioMonitorProcesoCierre>().As<IRepositorioMonitorProcesoCierre>().InstancePerLifetimeScope();
 			builder.RegisterType<RepositorioElectronicJournal>().As<IRepositorioElectronicJournal>().InstancePerLifetimeScope();
 			builder.RegisterType<RepositorioTrxHeader>().As<IRepositorioTrxHeader>().InstancePerLifetimeScope();
+			builder.RegisterType<AgenteCen>().As<IAgenteCen>().InstancePerRequest();
 
 			base.Load(builder);
 		}

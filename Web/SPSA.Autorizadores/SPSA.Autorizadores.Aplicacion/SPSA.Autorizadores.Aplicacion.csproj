@@ -506,6 +506,9 @@
     <Compile Include="Features\Monitor\Queries\ListarProcesosQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ListarParametrosMonitorArchivoQuery.cs" />
+    <Compile Include="Features\Operaciones\Commands\InsertarClienteCenCommand.cs" />
+    <Compile Include="Features\Operaciones\Queries\ConsultarClienteCenQuery.cs" />
+    <Compile Include="Features\Operaciones\Queries\ListarDocumentosElectronicosQuery.cs" />
     <Compile Include="Features\Puestos\Commands\ActualizarMaePuestoCommand.cs" />
     <Compile Include="Features\Puestos\DTOs\ListarMaePuestoDTO.cs" />
     <Compile Include="Features\Puestos\DTOs\MaePuestoDTO.cs" />
@@ -688,6 +691,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\ColaboradoresInt\Commands\" />
+    <Folder Include="Features\Operaciones\DTOs\" />
     <Folder Include="Features\Reportes\DTOs\" />
     <Folder Include="Features\TablasMae\Queries\" />
   </ItemGroup>
