@@ -1,4 +1,5 @@
 ﻿var urlListarDocumentosElectronicos = baseUrl + 'Operaciones/Reportes/ListarDocumentos';
+var urlListarLocalesAsociados = baseUrl + 'Operaciones/Reportes/ListarLocalesAsociadasPorEmpresa';
 
 var dataTableDocumentosElectronicos = null;
 
@@ -155,9 +156,48 @@ var DocumentoElectronico = function () {
         });
     };
 
+    const listarLocales = function () {
+
+        $.ajax({
+            url: urlListarLocalesAsociados,
+            type: "post",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+                if (response.Ok === true) {
+                    cargarLocales(response.Data);
+                } else {
+                    swal({
+                        text: response.Mensaje,
+                        icon: "error"
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    text: jqXHR.responseText,
+                    icon: "error"
+                });
+            }
+        });
+    }
+
+    const cargarLocales = function (locales) {
+        $('#cboLocal').append($('<option>', { value: '0', text: 'Todos' }));
+        locales.map(local => {
+            $('#cboLocal').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
+        });
+        $('#cboLocal').val('0');
+    }
+
     return {
         init: function () {
             eventos();
+            listarLocales();
             visualizarDataTableDocumentos();
         }
     }
