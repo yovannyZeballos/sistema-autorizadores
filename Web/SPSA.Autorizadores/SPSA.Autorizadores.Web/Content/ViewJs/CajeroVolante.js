@@ -616,84 +616,6 @@ const CajeroVolante = function () {
         });
     };
 
-
-    //const visualizarDataTableCajeroVolante = function () {
-
-    //    $.ajax({
-    //        url: urlListarCajerosAsginados,
-    //        type: "post",
-    //        dataType: "json",
-    //        beforeSend: function () {
-    //            showLoading();
-    //        },
-    //        complete: function () {
-    //            closeLoading();
-    //        },
-    //        success: function (response) {
-
-    //            var columnas = [];
-
-    //            response.Columnas.forEach((x) => {
-    //                columnas.push({
-    //                    title: x.replace("_", " "),
-    //                    data: quitarTildes(x).replace(/ /g, "").replace(".", ""),
-    //                    className: "pointer",
-    //                });
-    //            });
-
-    //            if (!response.Ok) {
-    //                swal({ text: response.Mensaje, icon: "warning" });
-    //                return;
-    //            }
-
-    //            if (dataTableCajeroVolante != null) {
-    //                dataTableCajeroVolante.clear();
-    //                dataTableCajeroVolante.destroy();
-    //                dataTableCajeroVolante = null;
-    //            }
-
-    //            var tableId = "#tableCajeroVolante";
-    //            $(tableId + " tbody").empty();
-    //            $(tableId + " thead").empty();
-
-
-
-    //            dataTableCajeroVolante = $('#tableCajeroVolante').DataTable({
-    //                language: {
-    //                    searchPlaceholder: 'Buscar...',
-    //                    sSearch: '',
-    //                },
-    //                searching: true,
-    //                scrollY: '660px',
-    //                scrollX: true,
-    //                scrollCollapse: true,
-    //                paging: false,
-    //                data: response.Data,
-    //                columns: columnas,
-    //                bAutoWidth: false,
-    //                rowCallback: function (row, data, index) {
-    //                    if (data.ACT == "N") {
-    //                        $("td", row).addClass("text-danger");
-    //                    }
-    //                },
-    //                language: {
-    //                    searchPlaceholder: "Buscar Volante",
-    //                    sSearch: ''
-    //                }
-    //            });
-
-    //            $('input[type="search"]').addClass("form-control-sm");
-    //        },
-    //        error: function (jqXHR, textStatus, errorThrown) {
-    //            swal({
-    //                text: jqXHR.responseText,
-    //                icon: "error",
-    //            });
-    //        }
-    //    });
-
-    //}
-
     var visualizarDataTableLocales = function () {
 
         if (dataTableLocal != null) {
@@ -701,9 +623,6 @@ const CajeroVolante = function () {
             dataTableLocal.destroy();
             dataTableLocal = null;
         }
-
-        //var tableId = "#tableLocal";
-        //$(tableId + " tbody").empty();
 
         dataTableLocal = $('#tableLocal').DataTable({
             language: {
