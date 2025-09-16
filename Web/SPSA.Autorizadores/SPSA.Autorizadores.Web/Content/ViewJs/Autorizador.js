@@ -35,14 +35,14 @@ var Autorizador = function () {
         });
 
         $("#btnBuscarColaborador").on('click', function () {
-            
+
             cargarTodosColaboradores();
             $('#modalBusqueda').modal('show');
         });
 
 
         $("#bntColaboradoresActivos").on('click', function () {
-            
+
             cargarColaboradores();
             $('#modalColaboradoresActivos').modal('show');
         });
@@ -174,9 +174,15 @@ var Autorizador = function () {
 
                 response.Columnas.forEach((x) => {
 
+                    //columnas.push({
+                    //    title: x,
+                    //    data: x.replace(" ", "").replace(".", ""),
+                    //    defaultContent: "",
+                    //});
+                    const key = x.replace(/\s+/g, '').replace(/\./g, ''); // quita TODOS los espacios y puntos
                     columnas.push({
                         title: x,
-                        data: x.replace(" ", "").replace(".", ""),
+                        data: key,
                         defaultContent: "",
                     });
                 });
@@ -852,7 +858,7 @@ var Autorizador = function () {
             return {
                 CodColaborador: x.Codigo,
                 CodAutorizador: x.Autorizador,
-                CodLocal: x.LOCAL,
+                CodLocal: x.local_,
                 NomAutorizador: x.Nombre,
                 Cargo: x.Puesto
             }
@@ -914,7 +920,7 @@ var Autorizador = function () {
             return {
                 CodColaborador: x.Codigo,
                 CodAutorizador: x.Autorizador,
-                CodLocal: x.LOCAL,
+                CodLocal: x.local_,
                 NomAutorizador: x.Nombre,
                 Cargo: x.Puesto
             }

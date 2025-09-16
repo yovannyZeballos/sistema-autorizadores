@@ -12,8 +12,13 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             HasKey(x => new { x.Ruc});
 
             Property(x => x.Ruc).HasColumnName("ruc");
-            Property(x => x.RazonSocial).HasColumnName("des_rzn_social");
+            Property(x => x.RazonSocial).HasColumnName("razon_social");
+            Property(x => x.NomComercial).HasColumnName("nom_comercial");
             Property(x => x.IndActivo).HasColumnName("ind_activo");
+            Property(x => x.DirFiscal).HasColumnName("dir_fiscal");
+            Property(x => x.Contacto).HasColumnName("contacto");
+            Property(x => x.Telefono).HasColumnName("telefono");
+            Property(x => x.Email).HasColumnName("email");
             Property(x => x.UsuCreacion).HasColumnName("usu_creacion");
             Property(x => x.FecCreacion).HasColumnName("fec_creacion");
             Property(x => x.UsuElimina).HasColumnName("usu_elimina");

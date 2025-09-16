@@ -550,81 +550,149 @@ const CajeroVolante = function () {
     }
 
     const visualizarDataTableCajeroVolante = function () {
+        if (dataTableCajeroVolante != null) {
+            dataTableCajeroVolante.clear();
+            dataTableCajeroVolante.destroy();
+            dataTableCajeroVolante = null;
+        }
 
+        // Paso 1: llamar una vez para traer columnas
         $.ajax({
             url: urlListarCajerosAsginados,
-            type: "post",
-            dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: function (response) {
-
-                var columnas = [];
-
-                response.Columnas.forEach((x) => {
-                    columnas.push({
-                        title: x.replace("_", " "),
-                        data: quitarTildes(x).replace(/ /g, "").replace(".", ""),
-                        className: "pointer",
-                    });
-                });
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning" });
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ draw: 1, start: 0, length: 1 }), // solo 1 registro
+            success: function (json) {
+                if (!json || !json.columns) {
+                    swal({ text: "No se recibieron columnas", icon: "error" });
                     return;
                 }
 
-                if (dataTableCajeroVolante != null) {
-                    dataTableCajeroVolante.clear();
-                    dataTableCajeroVolante.destroy();
-                    dataTableCajeroVolante = null;
-                }
+                // Armar cabecera
+                var thead = $('#tableCajeroVolante thead');
+                thead.empty();
+                var tr = $('<tr/>');
+                json.columns.forEach(c => tr.append('<th>' + c + '</th>'));
+                thead.append(tr);
 
-                var tableId = "#tableCajeroVolante";
-                $(tableId + " tbody").empty();
-                $(tableId + " thead").empty();
+                // Definir columnas dinámicas
+                var cols = json.columns.map(c => ({ data: c, title: c }));
 
-
-
+                // Paso 2: inicializar DataTable ya con columnas listas
                 dataTableCajeroVolante = $('#tableCajeroVolante').DataTable({
-                    language: {
-                        searchPlaceholder: 'Buscar...',
-                        sSearch: '',
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: urlListarCajerosAsginados,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: function (d) {
+                            return JSON.stringify(d);
+                        }
                     },
-                    searching: true,
-                    scrollY: '660px',
+                    columns: cols, // 🔹 columnas definidas al inicio
                     scrollX: true,
+                    scrollY: "660px",
                     scrollCollapse: true,
-                    paging: false,
-                    data: response.Data,
-                    columns: columnas,
                     bAutoWidth: false,
-                    rowCallback: function (row, data, index) {
-                        if (data.ACT == "N") {
+                    rowCallback: function (row, data) {
+                        if (data.ACT === "N") {
                             $("td", row).addClass("text-danger");
                         }
                     },
                     language: {
                         searchPlaceholder: "Buscar Volante",
                         sSearch: ''
-                    }
+                    },
+                    pageLength: 20,
+                    lengthMenu: [20, 50, 100],
                 });
 
                 $('input[type="search"]').addClass("form-control-sm");
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                swal({
-                    text: jqXHR.responseText,
-                    icon: "error",
-                });
+                swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
+    };
 
-    }
+
+    //const visualizarDataTableCajeroVolante = function () {
+
+    //    $.ajax({
+    //        url: urlListarCajerosAsginados,
+    //        type: "post",
+    //        dataType: "json",
+    //        beforeSend: function () {
+    //            showLoading();
+    //        },
+    //        complete: function () {
+    //            closeLoading();
+    //        },
+    //        success: function (response) {
+
+    //            var columnas = [];
+
+    //            response.Columnas.forEach((x) => {
+    //                columnas.push({
+    //                    title: x.replace("_", " "),
+    //                    data: quitarTildes(x).replace(/ /g, "").replace(".", ""),
+    //                    className: "pointer",
+    //                });
+    //            });
+
+    //            if (!response.Ok) {
+    //                swal({ text: response.Mensaje, icon: "warning" });
+    //                return;
+    //            }
+
+    //            if (dataTableCajeroVolante != null) {
+    //                dataTableCajeroVolante.clear();
+    //                dataTableCajeroVolante.destroy();
+    //                dataTableCajeroVolante = null;
+    //            }
+
+    //            var tableId = "#tableCajeroVolante";
+    //            $(tableId + " tbody").empty();
+    //            $(tableId + " thead").empty();
+
+
+
+    //            dataTableCajeroVolante = $('#tableCajeroVolante').DataTable({
+    //                language: {
+    //                    searchPlaceholder: 'Buscar...',
+    //                    sSearch: '',
+    //                },
+    //                searching: true,
+    //                scrollY: '660px',
+    //                scrollX: true,
+    //                scrollCollapse: true,
+    //                paging: false,
+    //                data: response.Data,
+    //                columns: columnas,
+    //                bAutoWidth: false,
+    //                rowCallback: function (row, data, index) {
+    //                    if (data.ACT == "N") {
+    //                        $("td", row).addClass("text-danger");
+    //                    }
+    //                },
+    //                language: {
+    //                    searchPlaceholder: "Buscar Volante",
+    //                    sSearch: ''
+    //                }
+    //            });
+
+    //            $('input[type="search"]').addClass("form-control-sm");
+    //        },
+    //        error: function (jqXHR, textStatus, errorThrown) {
+    //            swal({
+    //                text: jqXHR.responseText,
+    //                icon: "error",
+    //            });
+    //        }
+    //    });
+
+    //}
 
     var visualizarDataTableLocales = function () {
 

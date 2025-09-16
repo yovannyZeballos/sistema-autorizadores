@@ -17,6 +17,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.NomModelo).HasColumnName("nom_modelo");
             Property(x => x.TipProducto).HasColumnName("tip_producto");
             Property(x => x.AreaGestionId).HasColumnName("area_gestion_id");
+            Property(x => x.IndSerializable).HasColumnName("ind_serializable");
             Property(x => x.IndActivo).HasColumnName("ind_activo");
             Property(x => x.StkMinimo).HasColumnName("stk_min");
             Property(x => x.StkMaximo).HasColumnName("stk_max");

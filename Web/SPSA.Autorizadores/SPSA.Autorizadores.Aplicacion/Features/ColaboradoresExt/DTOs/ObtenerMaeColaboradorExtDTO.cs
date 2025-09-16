@@ -5,7 +5,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs
     public class ObtenerMaeColaboradorExtDTO
     {
         public string CodEmpresa { get; set; }
-        public string CodLocalAlterno { get; set; }
+        public string CodLocal { get; set; }
         public string CodigoOfisis { get; set; }
         public string ApelPaterno { get; set; }
         public string ApelMaterno { get; set; }

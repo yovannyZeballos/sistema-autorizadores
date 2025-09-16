@@ -3,6 +3,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Cajeros.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Queries;
+using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
@@ -29,14 +30,40 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 			return View();
 		}
 
-		[HttpPost]
-		public async Task<JsonResult> ListarCajerosVolante()
-		{
-			var response = await _mediator.Send(new ListarCajeroVolanteQuery { CodEmpresa = WebSession.CodigoEmpresa, CodCoordinador = WebSession.Login });
-			return Json(response);
-		}
+		//[HttpPost]
+		//public async Task<JsonResult> ListarCajerosVolante()
+		//{
+		//	var response = await _mediator.Send(new ListarCajeroVolanteQuery { CodEmpresa = WebSession.CodigoEmpresa, CodCoordinador = WebSession.Login });
+		//	return Json(response);
+		//}
 
-		[HttpPost]
+        [HttpPost]
+        public async Task<JsonResult> ListarCajerosVolante(DataTableRequest request)
+        {
+            var pageNumber = (request.start / request.length) + 1;
+            var pageSize = request.length;
+            var searchValue = request.search?.value;
+
+            var response = await _mediator.Send(new ListarCajeroVolanteQuery
+            {
+                CodEmpresa = WebSession.CodigoEmpresa,
+                CodCoordinador = WebSession.Login,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Search = searchValue
+            });
+
+            return Json(new
+            {
+                draw = request.draw,
+                recordsTotal = response.TotalRegistros,
+                recordsFiltered = response.TotalFiltrados,
+                columns = response.Columnas,   // 🔹 columnas dinámicas
+                data = response.Data           // 🔹 filas dinámicas
+            });
+        }
+
+        [HttpPost]
 		public async Task<JsonResult> ListarCajerosVolanteOfiplan()
 		{
 			var response = await _mediator.Send(new ListarCajeroVolanteOfiplanQuery { CodEmpresa = WebSession.CodigoEmpresa, CodLocal = Convert.ToDecimal(WebSession.Local) });

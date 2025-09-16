@@ -12,6 +12,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         Task<Local> Obtener(int codigo);
         Task<DataTable> ListaLocalesAsignar();
         Task AsignarLocal(string codLocal, string codCadena);
+        //Task AsignarLocal(string codEmpresa, string codLocalCt2, string codLocalOfi, string nomLocalOfi);
 
     }
 }

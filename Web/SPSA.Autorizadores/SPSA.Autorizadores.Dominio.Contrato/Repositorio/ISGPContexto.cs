@@ -43,9 +43,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		IRepositorioAutImpresion RepositorioAutImpresion { get; }
 		IRepositorioProcesoParametro RepositorioProcesoParametro { get; }
 
-        IRepositorioInvKardex RepositorioInvKardex { get; }
-        IRepositorioInvKardexActivo RepositorioInvKardexActivo { get; }
-        IRepositorioInvKardexLocal RepositorioInvKardexLocal { get; }
 		IRepositorioMonCierreEOD RepositorioMonCierreEOD { get; }
 		IRepositorioMonCierreEODHist RepositorioMonCierreEODHist { get; }
         IRepositorioMaeColaboradorExt RepositorioMaeColaboradorExt { get; }
@@ -67,6 +64,13 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMaeSerieProducto RepositorioMaeSerieProducto { get; }
         IRepositorioMaeMarca RepositorioMaeMarca { get; }
         IRepositorioMaeAreaGestion RepositorioMaeAreaGestion { get; }
-        IRepositorioMovKardex RepositorioMovKardex { get; }
+        IRepositorioMovKardex RepositorioMovKardex { get; } //QUITAR
+
+        IRepositorioStockProducto RepositorioStockProducto { get; }
+        IRepositorioGuiaRecepcionCabecera RepositorioGuiaRecepcionCabecera { get; }
+        IRepositorioGuiaRecepcionDetalle RepositorioGuiaRecepcionDetalle { get; }
+        IRepositorioGuiaDespachoCabecera RepositorioGuiaDespachoCabecera { get; }
+        IRepositorioGuiaDespachoDetalle RepositorioGuiaDespachoDetalle { get; }
+
     }
 }

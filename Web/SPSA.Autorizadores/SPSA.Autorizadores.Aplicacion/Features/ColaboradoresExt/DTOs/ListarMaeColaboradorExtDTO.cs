@@ -2,9 +2,10 @@
 
 namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs
 {
-    public class ListarMaeColaboradorExtDTO
+    public class ListarMaeColaboradorExtDto
     {
-        public string CodLocalAlterno { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
         public string CodigoOfisis { get; set; }
         public string ApelPaterno { get; set; }
         public string ApelMaterno { get; set; }
@@ -13,7 +14,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs
         public string NumDocIndent { get; set; }
         public DateTime? FechaIngresoEmpresa { get; set; }
         public DateTime? FechaCeseTrabajador { get; set; }
-        public string TiSitu { get; set; }
+        public string IndActivo { get; set; }
         public string PuestoTrabajo { get; set; }
         public string MotiSepa { get; set; }
         public string IndPersonal { get; set; }

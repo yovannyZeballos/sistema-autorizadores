@@ -279,10 +279,9 @@
     <Compile Include="Areas\DataTables\Controllers\ListasController.cs" />
     <Compile Include="Areas\DataTables\DataTablesAreaRegistration.cs" />
     <Compile Include="Areas\Inventario\Controllers\AreasGestionController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\GuiaDespachoController.cs" />
+    <Compile Include="Areas\Inventario\Controllers\GuiaRecepcionController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\InventarioKardexActivoController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\InventarioKardexController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\InventarioKardexLocalController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\KardexController.cs" />
     <Compile Include="Areas\Inventario\Controllers\MarcasController.cs" />
@@ -356,6 +355,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Intercambio\AsignarLocalRequest.cs" />
+    <Compile Include="Models\Intercambio\DataTableRequest.cs" />
     <Compile Include="Models\Intercambio\ListarFormatoResponse.cs" />
     <Compile Include="Models\Intercambio\ListarMonitorRequest.cs" />
     <Compile Include="Models\Intercambio\ListarMonitorResponse.cs" />
@@ -378,6 +378,7 @@
     <Content Include="Content\css\boxed.css" />
     <Content Include="Content\css\dark.css" />
     <Content Include="Content\css\icons.css" />
+    <Content Include="Content\css\menu-lateral.css" />
     <Content Include="Content\css\plugins.css" />
     <Content Include="Content\css\plugins\accept-cookies.css" />
     <Content Include="Content\css\plugins\bootstrap-timepicker.css" />
@@ -1635,6 +1636,7 @@
     <Content Include="Content\js\livechat.js" />
     <Content Include="Content\js\map-leafleft.js" />
     <Content Include="Content\js\mapelmaps.js" />
+    <Content Include="Content\js\menu-lateral.js" />
     <Content Include="Content\js\morris.js" />
     <Content Include="Content\js\newsticker.js" />
     <Content Include="Content\js\owl-carousel.js" />
@@ -2391,6 +2393,10 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
+    <Content Include="Content\ViewJs\AdministrarConfirmacionDespachos.js" />
+    <Content Include="Content\ViewJs\AdministrarGuiaDespacho.js" />
+    <Content Include="Content\ViewJs\AdministrarGuiaRecepcionProveedor.js" />
+    <Content Include="Content\ViewJs\AdministrarGuiaRecepcion.js" />
     <Content Include="Content\ViewJs\AdministrarKardex.js" />
     <Content Include="Content\ViewJs\AdministrarProveedor.js" />
     <Content Include="Content\ViewJs\AdministrarProducto.js" />
@@ -2398,10 +2404,10 @@
     <Content Include="Content\ViewJs\AdministrarPeriodoMdr.js" />
     <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
     <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
+    <Content Include="Content\ViewJs\AsignarLocal_Ct3.js" />
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
-    <Content Include="Content\ViewJs\AdministrarInvKardexLocal.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardexActivo.js" />
     <Content Include="Content\ViewJs\AdministrarInvKardex.js" />
     <Content Include="Content\ViewJs\AdministrarInvCaja.js" />
@@ -2902,17 +2908,8 @@
     <Content Include="Areas\Monitor\Views\Proceso\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearInvActivo.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioActivo\_EditarInvActivo.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardex\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardex\_CrearInvKardex.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardex\_EditarInvKardex.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\_CrearInvkardexActivo.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexActivo\_EditarInvkardexActivo.cshtml" />
     <Content Include="Areas\Monitor\Views\MonitorArchivos\Index.cshtml" />
     <Content Include="Plantillas_Tablas\Plantilla_InvKardex\InvKardexEjemplo.xlsx" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexLocal\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_CrearInvKardexLocal.cshtml" />
-    <Content Include="Areas\Inventario\Views\InventarioKardexLocal\_EditarInvKardexLocal.cshtml" />
     <Content Include="Areas\Reportes\Views\ValesRedimidos\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeHorario\_CrearMaeHorario.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeHorario\_EditarMaeHorario.cshtml" />
@@ -2959,6 +2956,10 @@
     <Content Include="Areas\Inventario\Views\Productos\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\AreasGestion\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Kardex\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaRecepcion\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaRecepcion\Proveedor.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaDespacho\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaDespacho\ConfirmacionDespacho.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

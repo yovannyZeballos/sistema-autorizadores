@@ -16,6 +16,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.AreaGestion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaDespacho;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Producto;
@@ -23,6 +25,8 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Proveedor
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.SerieProducto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.AreaGestion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Producto;
@@ -210,7 +214,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--COLABORADOR_EXTERNO-->
-            CreateMap<ListarMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
+            CreateMap<ListarMaeColaboradorExtDto, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<ObtenerMaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<MaeColaboradorExtDTO, Mae_ColaboradorExt>().ReverseMap();
             CreateMap<CrearMaeColaboradorExtCommand, Mae_ColaboradorExt>().ReverseMap();
@@ -235,7 +239,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             //CreateMap<EnviarCorreoCommand, ASR_SolicitudUsuario>().ReverseMap();
 
             #region <--ASR_SOLICITUD_USUARIO-->
-            CreateMap<ListarSolictudUsuarioDTO, ASR_SolicitudUsuario>().ReverseMap();
+            CreateMap<ListarSolictudUsuarioDto, ASR_SolicitudUsuario>().ReverseMap();
             CreateMap<CrearSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
             CreateMap<EliminarSolicitudUsuarioCommand, ASR_SolicitudUsuario>().ReverseMap();
             #endregion
@@ -269,25 +273,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
 
             #endregion
 
-            #region <--INV_KARDEX_OLD-->
-
-            CreateMap<ListarInvKardexActivoDTO, InvKardexActivo>().ReverseMap();
-            CreateMap<InvKardexActivoDTO, InvKardexActivo>().ReverseMap();
-            CreateMap<CrearInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
-            CreateMap<ActualizarInvKardexActivoCommand, InvKardexActivo>().ReverseMap();
-
-            CreateMap<ListarInvKardexDTO, InvKardex>().ReverseMap();
-            CreateMap<InvKardexDTO, InvKardex>().ReverseMap();
-            CreateMap<CrearInvKardexCommand, InvKardex>().ReverseMap();
-            CreateMap<ActualizarInvKardexCommand, InvKardex>().ReverseMap();
-
-            CreateMap<ListarInvKardexLocalDTO, InvKardexLocal>().ReverseMap();
-            CreateMap<InvKardexLocalDTO, InvKardexLocal>().ReverseMap();
-            CreateMap<CrearInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
-            CreateMap<ActualizarInvKardexLocalCommand, InvKardexLocal>().ReverseMap();
-
-            #endregion
-
             #region <--INV_KARDEX->
             CreateMap<CrearMaeMarcaCommand, Mae_Marca>().ReverseMap();
             CreateMap<CrearMaeAreaGestionCommand, Mae_AreaGestion>().ReverseMap();
@@ -295,6 +280,15 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearMaeSerieProductoCommand, Mae_SerieProducto>().ReverseMap();
             CreateMap<CrearMaeProveedorCommand, Mae_Proveedor>().ReverseMap();
             CreateMap<RegistrarMovKardexCommand, Mov_Kardex>().ReverseMap();
+
+            CreateMap<RegistrarGuiaRecepcionCommand, GuiaRecepcionCabecera>().ReverseMap();
+            CreateMap<RegistrarGuiaDespachoCommand, GuiaDespachoCabecera>().ReverseMap();
+            CreateMap<ConfirmarDespachoEnDestinoCommand, GuiaDespachoCabecera>().ReverseMap();
+
+            //CreateMap<GuiaRecepcionCabeceraDto, GuiaRecepcionCabecera>().ReverseMap();
+            //CreateMap<GuiaRecepcionDetalleDto, GuiaRecepcionDetalle>().ReverseMap();
+            //CreateMap<GuiaDespachoCabeceraDto, GuiaDespachoCabecera>().ReverseMap();
+            //CreateMap<GuiaDespachoDetalleDto, GuiaDespachoDetalle>().ReverseMap();
 
             CreateMap<ListarMaeMarcaDto, Mae_Marca>().ReverseMap();
             CreateMap<ListarMaeAreaGestionDto, Mae_AreaGestion>().ReverseMap();

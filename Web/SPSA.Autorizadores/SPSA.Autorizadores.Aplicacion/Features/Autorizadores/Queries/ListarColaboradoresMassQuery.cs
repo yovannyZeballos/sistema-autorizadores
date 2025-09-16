@@ -12,19 +12,19 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries
         public string CodigoEmpresa { get; set; }
     }
 
-    public class ListarColaboradoresMassHandler : IRequestHandler<ListarColaboradoresMassQuery, DataTable>
-    {
-        private readonly IRepositorioAutorizadores _repositorioAutorizadores;
+    //public class ListarColaboradoresMassHandler : IRequestHandler<ListarColaboradoresMassQuery, DataTable>
+    //{
+    //    private readonly IRepositorioAutorizadores _repositorioAutorizadores;
 
-        public ListarColaboradoresMassHandler(IRepositorioAutorizadores repositorioAutorizadores)
-        {
-            _repositorioAutorizadores = repositorioAutorizadores;
-        }
+    //    public ListarColaboradoresMassHandler(IRepositorioAutorizadores repositorioAutorizadores)
+    //    {
+    //        _repositorioAutorizadores = repositorioAutorizadores;
+    //    }
 
-        public async Task<DataTable> Handle(ListarColaboradoresMassQuery request, CancellationToken cancellationToken)
-        {
-            var autorizadoresDataTable = await _repositorioAutorizadores.ListarColaboradoresMass(request.CodigoEmpresa);
-            return autorizadoresDataTable;
-        }
-    }
+    //    public async Task<DataTable> Handle(ListarColaboradoresMassQuery request, CancellationToken cancellationToken)
+    //    {
+    //        var autorizadoresDataTable = await _repositorioAutorizadores.ListarColaboradoresMass(request.CodigoEmpresa);
+    //        return autorizadoresDataTable;
+    //    }
+    //}
 }

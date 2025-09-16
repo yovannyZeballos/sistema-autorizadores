@@ -71,7 +71,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands
                                 var row = ds.Tables[0].Rows[i];
                                 var colaborador = new Mae_ColaboradorExt
                                 {
-                                    CodLocalAlterno = row["COD_LOCAL_ALTERNO"].ToString(),
+                                    //CodLocalAlterno = row["COD_LOCAL_ALTERNO"].ToString(),
                                     //CodigoOfisis = row["CODIGO_OFISIS"].ToString(),
                                     CodigoOfisis = "0",
                                     //FechaIngresoEmpresa = DateTime.ParseExact(row["FechaIngresoEmpresa"].ToString(), formatStrings, formatProvider),
@@ -81,7 +81,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands
                                     NombreTrabajador = row["NO_TRAB"].ToString(),
                                     TipoDocIdent = row["TI_DOCU_IDEN"].ToString(),
                                     NumDocIndent = row["NU_DOCU_IDEN"].ToString(),
-                                    TiSitu = row["TI_SITU"].ToString(),
+                                    IndActivo = row["TI_SITU"].ToString(),
                                     PuestoTrabajo = row["NO_PUES_TRAB"].ToString(),
                                     MotiSepa = row["NO_MOTI_SEPA"].ToString(),
                                     IndPersonal = row["IND_PERSONAL"].ToString(),

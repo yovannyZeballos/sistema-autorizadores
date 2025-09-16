@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewBag.Title = "Confirmación de Despachos en Destino";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        .form-control-sm.date-sm-fix {
+            height: auto;
+            min-height: calc(1.5em + .5rem + 2px);
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            line-height: 1.5;
+        }
+
+            .form-control-sm.date-sm-fix::-webkit-datetime-edit {
+                line-height: 1.5;
+                color: inherit;
+                opacity: 1;
+            }
+
+            .form-control-sm.date-sm-fix::-webkit-calendar-picker-indicator {
+                opacity: 1;
+            }
+
+        .dt-center {
+            text-align: center;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        table.dataTable td.details-control {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M8 10l4 4 4-4z"/></svg>') no-repeat center center;
+            cursor: pointer;
+            width: 28px;
+        }
+
+        table.dataTable tr.shown td.details-control {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M8 14l4-4 4 4z"/></svg>') no-repeat center center;
+        }
+    </style>
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Confirmación de Despachos en Destino</div>
+        <small class="text-blue h6">Verifica y confirma los despachos (Transferencias y Asignaciones) que llegaron a tu local.</small>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href="@Url.Action("Index","Home")">Inicio</a></li>
+            <li class="breadcrumb-item1 active">Inventario</li>
+            <li class="breadcrumb-item1 active">Confirmación de Despachos</li>
+        </ol>
+    </div>
+</div>
+
+<div class="card overflow-hidden">
+    @Html.Partial("_CardHeader", "Filtros")
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-md-2">
+                <label class="form-label">Fecha desde</label>
+                <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Fecha hasta</label>
+                <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Empresa Destino</label>
+                <select id="fEmpDest" class="form-control select2-show-search"></select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Local Destino</label>
+                <select id="fLocDest" class="form-control select2-show-search"></select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Tipo Mov.</label>
+                <select id="fTipoMov" class="form-control select2-show-search">
+                    <option value="">Todos</option>
+                    <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                    <option value="ASIGNACION_ACTIVO">ASIGNACION_ACTIVO</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
+                    <i class="fe fe-search me-1"></i>Buscar
+                </button>
+            </div>
+        </div>
+
+        <div class="my-3 d-flex gap-2">
+            <button id="btnConfirmarSeleccion" class="btn btn-sm btn-success">
+                <i class="fe fe-check me-1"></i>Confirmar selección
+            </button>
+            <button id="btnExportar" class="btn btn-sm btn-outline-primary">
+                <i class="fe fe-file me-1"></i>Exportar Excel
+            </button>
+            <div class="ms-auto text-muted small align-self-center">
+                <span id="lblSel">0 seleccionados</span>
+            </div>
+        </div>
+
+        <table id="tablePendientes" class="table table-bordered text-nowrap border-bottom w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th class="dt-center"><input type="checkbox" id="chkAll" /></th>
+                    <th></th>
+                    <th>Fecha</th>
+                    <th>N° Guía</th>
+                    <th>Origen</th>
+                    <th>Destino</th>
+                    <th>Tipo</th>
+                    <th>Ítems</th>
+                    <th>Estado</th>
+                    <th class="dt-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Confirmar recepción -->
+<div class="modal fade" id="modalConfirmar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Confirmar en destino</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="hidGuiaId" />
+                <div class="row g-2">
+                    <div class="col-md-5">
+                        <label class="form-label">Fecha recepción <span class="text-danger">*</span></label>
+                        <input type="date" id="mFecha" class="form-control form-control-sm date-sm-fix" />
+                    </div>
+                    <div class="col-md-7">
+                        <label class="form-label">N° Guía de Recepción</label>
+                        <input type="text" id="mNumGR" class="form-control form-control-sm text-uppercase" placeholder="Si se deja vacío: REC-{N° guía despacho}" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Observaciones</label>
+                        <input type="text" id="mObs" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="mGenerarGR" checked />
+                            <label class="form-check-label" for="mGenerarGR">
+                                Generar Guía de Recepción en destino
+                            </label>
+                        </div>
+                        <small class="text-muted d-block">
+                            • TRANSFERENCIA: quedará <b>DISPONIBLE</b> en destino.<br />
+                            • ASIGNACION_ACTIVO: quedará <b>EN_USO</b> en destino.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnConfirmarModal" class="btn btn-sm btn-success">
+                    <i class="fe fe-check me-1"></i>Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+
+    <script src="~/Content/ViewJs/AdministrarConfirmacionDespachos.js"></script>
+    <script>
+        $(function () { AdministrarConfirmacionDespachos.init(); });
+    </script>
+}
+
+

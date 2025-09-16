@@ -17,7 +17,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
 {
-    public class ListarSolicitudUsuarioQuery : IRequest<GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>
+    public class ListarSolicitudUsuarioQuery : IRequest<GenericResponseDTO<PagedResult<ListarSolictudUsuarioDto>>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -29,7 +29,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
         public string FiltroVarios { get; set; }
     }
 
-    public class ListarSolicitudUsuarioHandler : IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>>
+    public class ListarSolicitudUsuarioHandler : IRequestHandler<ListarSolicitudUsuarioQuery, GenericResponseDTO<PagedResult<ListarSolictudUsuarioDto>>>
     {
         private readonly IMapper _mapper;
         private readonly ISGPContexto _contexto;
@@ -42,12 +42,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
             _logger = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>> Handle(ListarSolicitudUsuarioQuery request, CancellationToken cancellationToken)
+        public async Task<GenericResponseDTO<PagedResult<ListarSolictudUsuarioDto>>> Handle(ListarSolicitudUsuarioQuery request, CancellationToken cancellationToken)
         {
-            var response = new GenericResponseDTO<PagedResult<ListarSolictudUsuarioDTO>>
+            var response = new GenericResponseDTO<PagedResult<ListarSolictudUsuarioDto>>
             {
                 Ok = true,
-                Data = new PagedResult<ListarSolictudUsuarioDTO>()
+                Data = new PagedResult<ListarSolictudUsuarioDto>()
             };
 
             try
@@ -58,40 +58,39 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
                 ParameterExpression param = Expression.Parameter(typeof(ASR_SolicitudUsuario), "x");
                 Expression combined = Expression.Constant(true);
 
-                if (!string.IsNullOrEmpty(objLocal.CodLocalAlterno))
+                if (!string.IsNullOrWhiteSpace(request.CodEmpresa))
                 {
-                    Expression codLocalProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.CodLocalAlterno));
-                    Expression codLocalValue = Expression.Constant(objLocal.CodLocalAlterno);
-                    Expression codLocalEqual = Expression.Equal(codLocalProperty, codLocalValue);
+                    var prop = Expression.Property(param, nameof(ASR_SolicitudUsuario.CodEmpresa));
+                    var cte = Expression.Constant(request.CodEmpresa);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
+                }
 
-                    combined = Expression.AndAlso(combined, codLocalEqual);
+                if (!string.IsNullOrWhiteSpace(request.CodLocal))
+                {
+                    var prop = Expression.Property(param, nameof(ASR_SolicitudUsuario.CodLocal));
+                    var cte = Expression.Constant(request.CodLocal);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
                 }
 
                 if (!string.IsNullOrEmpty(request.TipUsuario))
                 {
-                    Expression tipUsuarioProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.TipUsuario));
-                    Expression tipUsuarioValue = Expression.Constant(request.TipUsuario);
-                    Expression tipUsuarioEqual = Expression.Equal(tipUsuarioProperty, tipUsuarioValue);
-
-                    combined = Expression.AndAlso(combined, tipUsuarioEqual);
+                    var prop = Expression.Property(param, nameof(ASR_SolicitudUsuario.TipUsuario));
+                    var cte = Expression.Constant(request.TipUsuario);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
                 }
 
                 if (!string.IsNullOrEmpty(request.TipColaborador))
                 {
-                    Expression tipColaboradorProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.TipColaborador));
-                    Expression tipColaboradorValue = Expression.Constant(request.TipColaborador);
-                    Expression tipColaboradorEqual = Expression.Equal(tipColaboradorProperty, tipColaboradorValue);
-
-                    combined = Expression.AndAlso(combined, tipColaboradorEqual);
+                    var prop = Expression.Property(param, nameof(ASR_SolicitudUsuario.TipColaborador));
+                    var cte = Expression.Constant(request.TipColaborador);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
                 }
 
                 if (!string.IsNullOrEmpty(request.IndAprobado))
                 {
-                    Expression indAprobadoProperty = Expression.Property(param, nameof(ASR_SolicitudUsuario.IndAprobado));
-                    Expression indAprobadoValue = Expression.Constant(request.IndAprobado);
-                    Expression indAprobadoEqual = Expression.Equal(indAprobadoProperty, indAprobadoValue);
-
-                    combined = Expression.AndAlso(combined, indAprobadoEqual);
+                    var prop = Expression.Property(param, nameof(ASR_SolicitudUsuario.IndAprobado));
+                    var cte = Expression.Constant(request.IndAprobado);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
                 }
 
                 if (!string.IsNullOrEmpty(request.FiltroVarios))
@@ -118,7 +117,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
 
                 Expression<Func<ASR_SolicitudUsuario, bool>> predicate = Expression.Lambda<Func<ASR_SolicitudUsuario, bool>>(combined, param);
 
-                var pagedColaboradores = await _contexto.RepositorioSolicitudUsuarioASR.ObtenerPaginado(
+                var pagedRegistros = await _contexto.RepositorioSolicitudUsuarioASR.ObtenerPaginado(
                     predicado: predicate,
                     pageNumber: request.PageNumber,
                     pageSize: request.PageSize,
@@ -126,32 +125,66 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudUsuarioASR.Queries
                     ascending: false
                 );
 
-                var mappedItems = _mapper.Map<List<ListarSolictudUsuarioDTO>>(pagedColaboradores.Items);
+                var dtoItems = new List<ListarSolictudUsuarioDto>(pagedRegistros.Items.Count);
 
-                foreach (var item in mappedItems)
+                foreach (var item in pagedRegistros.Items)
                 {
+                    var nomColaborador = string.Empty;
+
                     if (item.TipColaborador == "I")
                     {
-                        Mae_ColaboradorInt maeColab = await _contexto.RepositorioMaeColaboradorInt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
-                        if (maeColab != null)
+                        var colaboradorInt = await _contexto.RepositorioMaeColaboradorInt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
+
+                        if (colaboradorInt != null)
                         {
-                            item.NomColaborador = $"{maeColab.NomTrabajador} {maeColab.ApePaterno} {maeColab.ApeMaterno}";
+                            nomColaborador = $"{colaboradorInt.NomTrabajador} {colaboradorInt.ApePaterno} {colaboradorInt.ApeMaterno}";
+                        }
+                        else
+                        {
+                            nomColaborador = string.Empty;
                         }
                     }
                     else
                     {
-                        Mae_ColaboradorExt maeColab = await _contexto.RepositorioMaeColaboradorExt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
-                        item.NomColaborador = $"{maeColab.NombreTrabajador} {maeColab.ApelPaterno} {maeColab.ApelMaterno}";
+                        var colaboradorExt = await _contexto.RepositorioMaeColaboradorExt.Obtener(s => s.CodigoOfisis == item.CodColaborador).FirstOrDefaultAsync();
+
+                        if (colaboradorExt != null)
+                        {
+                            nomColaborador = $"{colaboradorExt.NombreTrabajador} {colaboradorExt.ApelPaterno} {colaboradorExt.ApelMaterno}";
+                        }
+                        else
+                        {
+                            nomColaborador = string.Empty;
+                        }
                     }
+
+                    dtoItems.Add(new ListarSolictudUsuarioDto
+                    {
+                        NumSolicitud = item.NumSolicitud,
+                        CodEmpresa = item.CodEmpresa,
+                        CodLocal = item.CodLocal,
+                        NomColaborador = nomColaborador,
+                        CodColaborador = item.CodColaborador,
+                        TipUsuario = item.TipUsuario,
+                        TipColaborador = item.TipColaborador,
+                        UsuSolicita = item.UsuSolicita,
+                        FecSolicita = item.FecSolicita,
+                        TipAccion = item.TipAccion,
+                        UsuAprobacion = item.UsuAprobacion,
+                        FecAprobacion = item.FecAprobacion,
+                        IndAprobado = item.Motivo,
+                        UsuElimina = item.UsuElimina,
+                        FecElimina = item.FecElimina
+                    });
                 }
 
-                var pagedResult = new PagedResult<ListarSolictudUsuarioDTO>
+                var pagedResult = new PagedResult<ListarSolictudUsuarioDto>
                 {
-                    PageNumber = pagedColaboradores.PageNumber,
-                    PageSize = pagedColaboradores.PageSize,
-                    TotalRecords = pagedColaboradores.TotalRecords,
-                    TotalPages = pagedColaboradores.TotalPages,
-                    Items = mappedItems
+                    PageNumber = pagedRegistros.PageNumber,
+                    PageSize = pagedRegistros.PageSize,
+                    TotalRecords = pagedRegistros.TotalRecords,
+                    TotalPages = pagedRegistros.TotalPages,
+                    Items = dtoItems
                 };
 
                 response.Data = pagedResult;

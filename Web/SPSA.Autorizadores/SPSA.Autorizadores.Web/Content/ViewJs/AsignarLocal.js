@@ -242,7 +242,7 @@ var AsignarLocal = function () {
             return false;
         }
 
-        if (unRegistro && count > 1 ) {
+        if (unRegistro && count > 1) {
             swal({
                 text: "Debe seleccionar solo un registro",
                 icon: "warning",
@@ -284,7 +284,7 @@ var AsignarLocal = function () {
     const validarLocalPMM = function (local) {
         let validate = true;
 
-        if (local.CodCadenaCt2 === '' || local.CodLocalCt2 === '' ) {
+        if (local.CodCadenaCt2 === '' || local.CodLocalCt2 === '') {
             validate = false;
             $("#formLocalPMM").addClass("was-validated");
             swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning", });

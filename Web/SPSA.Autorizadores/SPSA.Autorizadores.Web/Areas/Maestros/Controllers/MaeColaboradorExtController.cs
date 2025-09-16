@@ -93,21 +93,28 @@ namespace SPSA.Autorizadores.Web.Areas.Maestros.Controllers
         [HttpGet]
         public async Task<JsonResult> ListarPaginado(ListarMaeColaboradorExtQuery request)
         {
-
+            request.CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa;
+            request.CodLocal = WebSession.JerarquiaOrganizacional.CodLocal;
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<JsonResult> CrearColaborador(CrearMaeColaboradorExtCommand command)
+        public async Task<JsonResult> Crear(CrearMaeColaboradorExtCommand command)
         {
+            command.CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa;
+            command.CodLocal = WebSession.JerarquiaOrganizacional.CodLocal;
+            command.UsuCreacion = WebSession.Login;
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
 
         [HttpPost]
-        public async Task<JsonResult> ModificarColaborador(ActualizarMaeColaboradorExtCommand command)
+        public async Task<JsonResult> Editar(ActualizarMaeColaboradorExtCommand command)
         {
+            command.CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa;
+            command.CodLocal = WebSession.JerarquiaOrganizacional.CodLocal;
+            command.UsuModifica = WebSession.Login;
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }

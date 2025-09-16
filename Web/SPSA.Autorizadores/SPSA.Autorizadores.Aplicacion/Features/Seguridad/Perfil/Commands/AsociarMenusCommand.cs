@@ -42,39 +42,81 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Perfil.Commands
 					.ToListAsync();
 				if (menusEliminar.Count > 0)
 					_contexto.RepositorioSegPerfilMenu.EliminarRango(menusEliminar);
-				if (request.Menus != null)
-				{
-					var menushijos = request.Menus.Where(x => x.CodMenuPadre != "#" &&
-													   x.CodMenuPadre != "" &&
-													   x.CodMenuPadre != "0" &&
-													   x.CodMenuPadre != null).ToList();
-					var menusPadres = menushijos.Select(x => x.CodMenuPadre)
-						.Distinct()
-						.ToList();
-					foreach (var menu in menusPadres)
-					{
-						_contexto.RepositorioSegPerfilMenu.Agregar(new Seg_PerfilMenu
-						{
-							CodPerfil = request.CodPerfil,
-							CodMenu = menu,
-							CodSistema = request.CodSistema,
-							FecCreacion = DateTime.Now,
-							UsuCreacion = request.UsuCreacion
-						});
-					}
-					foreach (var menu in menushijos)
-					{
-						_contexto.RepositorioSegPerfilMenu.Agregar(new Seg_PerfilMenu
-						{
-							CodPerfil = request.CodPerfil,
-							CodMenu = menu.CodMenu,
-							CodSistema = request.CodSistema,
-							FecCreacion = DateTime.Now,
-							UsuCreacion = request.UsuCreacion
-						});
-					}
-				}
-				await _contexto.GuardarCambiosAsync();
+
+                if (request.Menus != null && request.Menus.Any())
+                {
+                    var menusAInsertar = new HashSet<(string CodMenu, string CodSistema)>();
+
+                    // Recorrer todos los menús seleccionados
+                    foreach (var menu in request.Menus)
+                    {
+                        // Agrega el menú seleccionado
+                        menusAInsertar.Add((menu.CodMenu, request.CodSistema));
+
+                        string codPadre = menu.CodMenuPadre;
+
+                        // Subir la jerarquía hasta llegar al root
+                        while (!string.IsNullOrEmpty(codPadre) && codPadre != "0" && codPadre != "#" && !menusAInsertar.Any(x => x.CodMenu == codPadre))
+                        {
+                            menusAInsertar.Add((codPadre, request.CodSistema));
+
+                            // Buscar el padre dentro de la lista enviada
+                            var menuPadre = request.Menus.FirstOrDefault(x => x.CodMenu == codPadre);
+                            if (menuPadre != null)
+                                codPadre = menuPadre.CodMenuPadre;
+                            else
+                                break;
+                        }
+                    }
+
+                    foreach (var (codMenu, codSistema) in menusAInsertar)
+                    {
+                        var entidad = new Seg_PerfilMenu
+                        {
+                            CodPerfil = request.CodPerfil,
+                            CodSistema = codSistema,
+                            CodMenu = codMenu,
+                            FecCreacion = DateTime.Now,
+                            UsuCreacion = request.UsuCreacion
+                        };
+
+                        _contexto.RepositorioSegPerfilMenu.Agregar(entidad);
+                    }
+                }
+
+                //if (request.Menus != null)
+                //{
+                //	var menushijos = request.Menus.Where(x => x.CodMenuPadre != "#" &&
+                //									   x.CodMenuPadre != "" &&
+                //									   x.CodMenuPadre != "0" &&
+                //									   x.CodMenuPadre != null).ToList();
+                //	var menusPadres = menushijos.Select(x => x.CodMenuPadre)
+                //		.Distinct()
+                //		.ToList();
+                //	foreach (var menu in menusPadres)
+                //	{
+                //		_contexto.RepositorioSegPerfilMenu.Agregar(new Seg_PerfilMenu
+                //		{
+                //			CodPerfil = request.CodPerfil,
+                //			CodMenu = menu,
+                //			CodSistema = request.CodSistema,
+                //			FecCreacion = DateTime.Now,
+                //			UsuCreacion = request.UsuCreacion
+                //		});
+                //	}
+                //	foreach (var menu in menushijos)
+                //	{
+                //		_contexto.RepositorioSegPerfilMenu.Agregar(new Seg_PerfilMenu
+                //		{
+                //			CodPerfil = request.CodPerfil,
+                //			CodMenu = menu.CodMenu,
+                //			CodSistema = request.CodSistema,
+                //			FecCreacion = DateTime.Now,
+                //			UsuCreacion = request.UsuCreacion
+                //		});
+                //	}
+                //}
+                await _contexto.GuardarCambiosAsync();
 			}
 			catch (Exception ex)
 			{

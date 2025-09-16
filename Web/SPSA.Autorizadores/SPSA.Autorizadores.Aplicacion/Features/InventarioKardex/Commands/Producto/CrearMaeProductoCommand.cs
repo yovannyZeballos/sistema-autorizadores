@@ -20,6 +20,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Produ
         public string TipProducto { get; set; }
         public int AreaGestionId { get; set; }
         public string IndActivo { get; set; }
+        public string IndSerializable { get; set; }
         public decimal StkMinimo { get; set; }
         public decimal StkMaximo { get; set; }
         public string NomModelo { get; set; }

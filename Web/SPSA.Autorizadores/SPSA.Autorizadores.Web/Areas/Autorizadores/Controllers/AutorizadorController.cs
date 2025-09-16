@@ -2,18 +2,14 @@
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Autorizadores.Queries;
-using SPSA.Autorizadores.Aplicacion.Features.Empresas.Queries;
-using SPSA.Autorizadores.Web.Extensiones;
 using SPSA.Autorizadores.Web.Models.Intercambio;
 using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 

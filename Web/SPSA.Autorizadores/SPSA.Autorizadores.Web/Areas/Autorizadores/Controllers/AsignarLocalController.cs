@@ -67,7 +67,7 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
                         respuesta.Ok = false;
                         respuesta.Mensaje += $" | {rpta.Mensaje}";
                     }
-                        
+
                 }
             }
             catch (System.Exception ex)
@@ -78,6 +78,40 @@ namespace SPSA.Autorizadores.Web.Areas.Autorizadores.Controllers
 
             return Json(respuesta);
         }
+
+        //[HttpPost]
+        //public async Task<JsonResult> Asignar(List<AsignarLocalRequest> request)
+        //{
+        //    var respuesta = new RespuestaComunDTO();
+        //    respuesta.Ok = true;
+        //    try
+        //    {
+        //        foreach (var item in request)
+        //        {
+        //            var rpta = await _mediator.Send(new AsignarLocalCommand
+        //            {
+        //                CodEmpresa = item.CodEmpresa,
+        //                CodLocalCt2 = item.CodLocalCt2,
+        //                CodLocalOfi = item.CodLocalOfi,
+        //                NomLocalOfi = item.NomLocalOfi
+        //            });
+
+        //            if (!rpta.Ok)
+        //            {
+        //                respuesta.Ok = false;
+        //                respuesta.Mensaje += $" | {rpta.Mensaje}";
+        //            }
+
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        respuesta.Ok = false;
+        //        respuesta.Mensaje = ex.Message;
+        //    }
+
+        //    return Json(respuesta);
+        //}
 
         [HttpPost]
         public async Task<ActionResult> FormAsociarLocalPMM(ObtenerLocalOfiplanQuery request)

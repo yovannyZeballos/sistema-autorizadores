@@ -10,26 +10,24 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 		/// </summary>
 		public MaePuestoTypeConfiguration()
         {
-            // Configura la tabla a la que se mapea la entidad Mae_Puesto.
-            ToTable("MAE_PUESTO", "SGP");
+            ToTable("mae_puesto", "SGP");
 
-            // Configura la clave primaria de la entidad Mae_Puesto.
             HasKey(mp => new { mp.CodEmpresa, mp.CodPuesto });
 
             // Configura las propiedades de la entidad Mae_Puesto.
-            Property(mp => mp.CodEmpresa).HasColumnName("CO_EMPR");
-            Property(mp => mp.CodPuesto).HasColumnName("CO_PUES_TRAB");
-            Property(mp => mp.DesPuesto).HasColumnName("DE_PUES_TRAB");
-            Property(mp => mp.IndAutAut).HasColumnName("IND_AUT_AUT");
-            Property(mp => mp.IndAutOpe).HasColumnName("IND_AUT_OPE");
-            Property(mp => mp.IndManAut).HasColumnName("IND_MAN_AUT");
-            Property(mp => mp.IndManOpe).HasColumnName("IND_MAN_OPE");
-            Property(mp => mp.FecAsigna).HasColumnName("FEC_ASIGNA");
-            Property(mp => mp.UsuAsigna).HasColumnName("USU_ASIGNA");
-            Property(mp => mp.FecCreacion).HasColumnName("FEC_CREACION");
-            Property(mp => mp.UsuCreacion).HasColumnName("USU_CREACION");
-            Property(mp => mp.FecElimina).HasColumnName("FEC_ELIMINA");
-            Property(mp => mp.UsuElimina).HasColumnName("USU_ELIMINA");
+            Property(mp => mp.CodEmpresa).HasColumnName("co_empr");
+            Property(mp => mp.CodPuesto).HasColumnName("co_pues_trab");
+            Property(mp => mp.DesPuesto).HasColumnName("de_pues_trab");
+            Property(mp => mp.IndAutAut).HasColumnName("ind_aut_autorizador");
+            Property(mp => mp.IndAutOpe).HasColumnName("ind_aut_operador");
+            Property(mp => mp.IndManAut).HasColumnName("ind_man_autizador");
+            Property(mp => mp.IndManOpe).HasColumnName("ind_man_operador");
+            Property(mp => mp.FecAsigna).HasColumnName("fec_asigna");
+            Property(mp => mp.UsuAsigna).HasColumnName("usu_asigna");
+            Property(mp => mp.FecCreacion).HasColumnName("fec_creacion");
+            Property(mp => mp.UsuCreacion).HasColumnName("usu_creacion");
+            Property(mp => mp.FecElimina).HasColumnName("fec_elimina");
+            Property(mp => mp.UsuElimina).HasColumnName("usu_elimina");
         }
     }
 }

@@ -1,277 +1,118 @@
-﻿var urlListarEmpresasAsociadas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
-var urlListarLocalesAsociados = baseUrl + 'Local/ListarLocalesAsociadasPorEmpresa';
-
+﻿// ===================== Endpoints =====================
 var urlListarColaboradoresExt = baseUrl + 'Maestros/MaeColaboradorExt/ListarPaginado';
-
-var urlModalNuevoColabExt = baseUrl + 'Maestros/MaeColaboradorExt/NuevoForm';
-var urlModalModificarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/ModificarForm';
-
 var urlObtenerColabExt = baseUrl + 'Maestros/MaeColaboradorExt/Obtener';
-var urlCrearColabExt = baseUrl + 'Maestros/MaeColaboradorExt/CrearColaborador';
-var urlModificarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/ModificarColaborador';
+var urlCrearColabExt = baseUrl + 'Maestros/MaeColaboradorExt/Crear';
+var urlModificarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/Editar';
 var urlImportarColabExt = baseUrl + 'Maestros/MaeColaboradorExt/Importar';
-
-
 var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
-var codLocalAlternoAnterior = "";
-var dataTableColaboradoresExt = null;
+// ===================== Estado local =====================
+var _modoColabExt = 'crear';          // 'crear' | 'editar'
+var _usuarioActual = null;
 
-var AdministrarColaboradorExt = function () {
-    const eventos = function () {
+// ===================== Módulo =====================
+var AdministrarColaboradorExt = (function ($) {
 
-        $(document).on('input', '.uppercase', function () {
-            $(this).val($(this).val().toUpperCase());
-        });
+    function initSelect2(target, opts) {
+        var $els = (target && target.jquery) ? target : $(target);
+        if (!$els.length || !$.fn.select2) return;
 
-        $("#cboEmpresaBuscar").on("change", async function () {
-            await cargarComboLocales('#cboLocalBuscar');
-        });
+        $els.each(function () {
+            var $s = $(this);
 
-        $("#cboLocalBuscar").on("change", async function () {
-            let valueLocalBuscar = $("#cboLocalBuscar").val();
-            if (valueLocalBuscar == null || valueLocalBuscar.trim() === "") {
-                $('#cboEmpresaBuscar').val('');
-                $('#cboLocalBuscar').empty().append('<option label="Todos"></option>');
-            } else {
-                console.log("El valor es:", valueLocalBuscar);
+            // usar la primera opción como placeholder si existe
+            var $opt0 = $s.find('option').first();
+            var placeholder = $opt0.attr('label') || $opt0.text() || 'Seleccionar…';
+            if ($opt0.length && !$opt0.attr('value')) $opt0.attr('value', '');
+
+            // si ya está inicializado, reiniciar
+            if ($s.hasClass('select2-hidden-accessible')) {
+                $s.select2('destroy');
             }
+
+            $s.select2($.extend(true, {
+                width: '100%',
+                placeholder: placeholder,
+                allowClear: true,
+                minimumResultsForSearch: 0
+            }, (opts || {})));
         });
+    }
 
-        $(document).on('change', '#cboEmpresa', async function () {
-            await cargarComboLocales('#cboLocal');
-        });
-
-        //$(document).on('change', '#cboLocal', async function () {
-        //    console.log("Cambió el valor de cboLocal");
-        //});
-
+    function eventos() {
+        // Buscar
         $("#btnBuscarColabExt").on("click", function (e) {
-            var table = $('#tableColaboradoresExt').DataTable();
             e.preventDefault();
-            table.ajax.reload();
+            $('#tableColaboradoresExt').DataTable().ajax.reload();
         });
 
+        // Selección de fila
         $('#tableColaboradoresExt tbody').on('click', 'tr', function () {
             $('#tableColaboradoresExt tbody tr').removeClass('selected');
             $(this).addClass('selected');
         });
 
-        $("#btnModalNuevoColabExt").on("click", function () {
-            codLocalAlternoAnterior = "";
-            abrirModalNuevoColabExt();
+        // Nuevo
+        $("#btnModalNuevoColabExt").on("click", async function () {
+            await abrirModalColabExtNuevo();
         });
 
-        $("#btnModalModificarColabExt").on("click", function () {
-            var filasSeleccionada = document.querySelectorAll("#tableColaboradoresExt tbody tr.selected");
+        // Editar
+        $("#btnModalEditar").on("click", async function () {
+            const filas = document.querySelectorAll("#tableColaboradoresExt tbody tr.selected");
+            if (!validarSelecion(filas.length)) return;
 
-            if (!validarSelecion(filasSeleccionada.length)) {
+            const table = $('#tableColaboradoresExt').DataTable();
+            const row = table.row(filas[0]).data();
+
+            // No permitir edición si está INACTIVO
+            if ((row.IndActivo || '').toUpperCase() === 'N') {
+                swal({ text: "El colaborador está INACTIVO y no puede editarse.", icon: "warning" });
                 return;
             }
-            var table = $('#tableColaboradoresExt').DataTable();
-            var rowData = table.row(filasSeleccionada[0]).data();
 
-            var codLocalAlterno = rowData.CodLocalAlterno;
-            var codigoOfisis = rowData.CodigoOfisis;
-
-            codLocalAlternoAnterior = codLocalAlterno;
-            abrirModalModificarColabExt(codLocalAlterno, codigoOfisis);
+            await abrirModalColabExtEditar(row);
         });
 
-        $("#btnGrabarNuevo").on("click", async function () {
-            var model = {
-                IndPersonal: $('input[name="IndicadorPersonal"]:checked').val(),
-                TipoUsuario: $('input[name="TipoColaborador"]:checked').val(),
-                CodEmpresa: $("#cboEmpresa").val(),
-                CodLocalAlterno: $("#cboLocal").val(),
-                CodigoOfisis: "0",
-                TiSitu: $("#cboTiSitu").val(),
-                ApelPaterno: $("#txtApPaterno").val(),
-                ApelMaterno: $("#txtApMaterno").val(),
-                NombreTrabajador: $("#txtNomTrabajador").val(),
-                TipoDocIdent: $("#cboTipoDoc").val(),
-                NumDocIndent: $("#txtNroDoc").val(),
-                PuestoTrabajo: $("#txtPuesto").val(),
-                FechaIngresoEmpresa: $("#txtFecIngreso").val(),
-                FechaCeseTrabajador: $("#txtFecCese").val(),
-                UsuCreacion: $("#txtUsuario").val()
-            };
+        // Guardar
+        $(document).on("click", "#btnGuardarColabExt", async function () {
+            const model = colectarModeloColabExtDesdeModal();
+            if (!validarFormularioColabExt(model)) return;
 
-            if (validarFormularioColabExt(model))
-                await guardarColabExt(model, urlCrearColabExt);
+            const url = (_modoColabExt === 'editar') ? urlModificarColabExt : urlCrearColabExt;
+
+            await guardarColabExt(model, url);
         });
 
-        $("#btnGrabarModifica").on("click", async function () {
-            var model = {
-                IndPersonal: $('input[name="IndicadorPersonal"]:checked').val(),
-                TipoUsuario: $('input[name="TipoColaborador"]:checked').val(),
-                CodEmpresa: $("#cboEmpresa").val(),
-                CodLocalAlterno: $("#cboLocal").val(),
-                CodigoOfisis: $("#txtCodOfisis").val(),
-                TiSitu: $("#cboTiSitu").val(),
-                ApelPaterno: $("#txtApPaterno").val(),
-                ApelMaterno: $("#txtApMaterno").val(),
-                NombreTrabajador: $("#txtNomTrabajador").val(),
-                TipoDocIdent: $("#cboTipoDoc").val(),
-                NumDocIndent: $("#txtNroDoc").val(),
-                PuestoTrabajo: $("#txtPuesto").val(),
-                FechaIngresoEmpresa: $("#txtFecIngreso").val(),
-                FechaCeseTrabajador: $("#txtFecCese").val(),
-                UsuModifica: $("#txtUsuario").val(),
-                CodLocalAlternoAnterior: codLocalAlternoAnterior
-            };
-
-            if (validarFormularioColabExt(model))
-                await guardarColabExt(model, urlModificarColabExt);
-        });
-
+        // Importar
         $("#btnImportarColabExt").on("click", function () {
             $("#excelImportar").trigger("click");
         });
-
         $("#excelImportar").on("change", function () {
             importarExcelMaeColabExt();
         });
 
+        // Descargar plantilla
         $("#btnDescargarPlantilla").click(function () {
             descargarPlantilla("Plantilla_ColaboradorExt");
         });
-    };
 
-    const listarEmpresasAsociadas = function () {
-        return new Promise((resolve, reject) => {
-
-            const codUsuario = $("#txtUsuario").val();
-
-            const request = {
-                CodUsuario: codUsuario,
-                Busqueda: ''
-            };
-
-            $.ajax({
-                url: urlListarEmpresasAsociadas,
-                type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
-            });
-        });
     }
 
-    const listarLocalesAsociados = function (selectorEmpresa) {
-        return new Promise((resolve, reject) => {
-            //const codEmpresa = $("#cboEmpresa").val();
-            const codEmpresa = $(selectorEmpresa).val();
-            const codUsuario = $(document).find("#txtUsuario").val();
-
-            if (!codEmpresa) return resolve();
-            if (!codUsuario) return resolve();
-
-            const query = {
-                CodUsuario: codUsuario,
-                CodEmpresa: codEmpresa
-            };
-
-            $.ajax({
-                url: urlListarLocalesAsociados,
-                type: "post",
-                data: { query },
-                success: function (response) {
-                    resolve(response);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText);
-                }
-            });
-        });
-    };
-
-    const cargarComboEmpresa = async function () {
-        try {
-            const response = await listarEmpresasAsociadas();
-
-            if (response.Ok) {
-                $('#cboEmpresaBuscar').empty().append('<option label="Todos"></option>');
-                $('#cboLocalBuscar').empty().append('<option label="Todos"></option>');
-                response.Data.map(empresa => {
-                    $('#cboEmpresaBuscar').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
-                });
-            } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
-            }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
-        }
-    }
-
-    const cargarComboLocales = async function (selectorLocal, selectedLocal = null) {
-        try {
-            let response = null;
-
-            if (selectorLocal === '#cboLocalBuscar') {
-                response = await listarLocalesAsociados('#cboEmpresaBuscar');
-            } else {
-                response = await listarLocalesAsociados('#cboEmpresa');
-            }
-
-            if (!response) return;
-
-            if (response.Ok) {
-
-                if (selectorLocal === '#cboLocalBuscar') {
-                    $(selectorLocal).empty().append('<option label="Todos"></option>');
-                } else {
-                    $(selectorLocal).empty().append('<option label="Seleccionar"></option>');
-                }
-
-                //$(selectorLocal).empty().append('<option label="Seleccionar"></option>');
-
-                response.Data.map(local => {
-                    $(selectorLocal).append($('<option>', { value: local.CodLocalAlterno, text: local.NomLocal }));
-                });
-
-                // Si se pasó un valor seleccionado, lo asignamos
-                if (selectedLocal) {
-                    $(selectorLocal).val(selectedLocal);
-                }
-            } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-            }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
-        }
-    };
-
-    const visualizarDataTableColaboradores = function () {
+    // ===== DataTable =====
+    function visualizarDataTableColaboradores() {
         $('#tableColaboradoresExt').DataTable({
             searching: false,
             processing: true,
             serverSide: true,
-            ajax: function (data, callback, settings) {
+            ajax: function (data, callback) {
                 var pageNumber = (data.start / data.length) + 1;
                 var pageSize = data.length;
 
                 var filtros = {
-                    CodLocalAlterno: $("#cboLocalBuscar").val(),
-                    CodigoOfisis: $("#txtCodOfisisBuscar").val(),
-                    NroDocIdent: $("#txtNroDocBuscar").val()
+                    TipoUsuario: $("#cboTipoUsuarioBuscar").val(),
+                    IndActivo: $("#cboIndActivoBuscar").val(),
+                    FiltroVarios: $("#txtFiltroBuscar").val()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -281,43 +122,26 @@ var AdministrarColaboradorExt = function () {
                     type: "GET",
                     data: params,
                     dataType: "json",
-                    success: function (response) {
-                        if (response.Ok) {
-                            var pagedData = response.Data;
+                    success: function (resp) {
+                        if (resp.Ok) {
+                            var p = resp.Data;
                             callback({
                                 draw: data.draw,
-                                recordsTotal: pagedData.TotalRecords,
-                                recordsFiltered: pagedData.TotalRecords,
-                                data: pagedData.Items
+                                recordsTotal: p.TotalRecords,
+                                recordsFiltered: p.TotalRecords,
+                                data: p.Items
                             });
                         } else {
-                            callback({
-                                draw: data.draw,
-                                recordsTotal: 0,
-                                recordsFiltered: 0,
-                                data: []
-                            });
+                            callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
                         }
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        swal({
-                            text: jqXHR.responseText,
-                            icon: "error",
-                        });
-                        callback({
-                            draw: data.draw,
-                            recordsTotal: 0,
-                            recordsFiltered: 0,
-                            data: []
-                        });
+                    error: function (jqXHR) {
+                        swal({ text: jqXHR.responseText, icon: "error" });
+                        callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
                     }
                 });
             },
-            columnDefs: [
-                { targets: 0, visible: false }
-            ],
             columns: [
-                { data: "CodLocalAlterno", title: "Código Local" },
                 { data: "NomLocal", title: "Local" },
                 { data: "CodigoOfisis", title: "Código" },
                 { data: "ApelPaterno", title: "Ape. Paterno" },
@@ -329,29 +153,44 @@ var AdministrarColaboradorExt = function () {
                 {
                     data: "FechaIngresoEmpresa",
                     title: "Fec. Ingreso",
-                    render: function (data, type, row) {
-                        if (data) {
-                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
-                            var date = new Date(timestamp);
-                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
+                    render: function (data) {
+                        if (!data) return "";
+                        var m = /\/Date\((\d+)\)\//.exec(data + '');
+                        if (m) {
+                            var d = new Date(parseInt(m[1], 10));
+                            return isNaN(d.getTime()) ? "" : d.toLocaleDateString('es-PE');
                         }
-                        return "";
+                        return (data + '').substring(0, 10);
                     }
                 },
                 {
                     data: "FechaCeseTrabajador",
                     title: "Fec. Cese",
-                    render: function (data, type, row) {
-                        if (data) {
-                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
-                            var date = new Date(timestamp);
-                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
+                    render: function (data) {
+                        if (!data) return "";
+                        var m = /\/Date\((\d+)\)\//.exec(data + '');
+                        if (m) {
+                            var d = new Date(parseInt(m[1], 10));
+                            return isNaN(d.getTime()) ? "" : d.toLocaleDateString('es-PE');
                         }
-                        return "";
+                        return (data + '').substring(0, 10);
                     }
                 },
-                { data: "TiSitu", title: "Estado" }
+                {
+                    data: "IndActivo",
+                    title: "Estado",
+                    render: function (data) {
+                        return (data === 'S') ? 'ACTIVO' : 'INACTIVO';
+                    }
+                }
             ],
+            rowCallback: function (row, data) {
+                if ((data.IndActivo || '').toUpperCase() === 'N') {
+                    $(row).addClass('row-inactivo');
+                } else {
+                    $(row).removeClass('row-inactivo');
+                }
+            },
             language: {
                 searchPlaceholder: 'Buscar...',
                 sSearch: '',
@@ -367,312 +206,254 @@ var AdministrarColaboradorExt = function () {
             paging: true,
             lengthMenu: [10, 25, 50, 100],
         });
-    };
-
-    const abrirModalNuevoColabExt = async function () {
-        $("#tituloModalColabExt").html("Nuevo Colaborador Externo");
-        $("#btnGrabarModifica").hide();
-        $("#btnGrabarNuevo").show();
-
-        const model = {};
-        model.UsuAsociado = $("#txtUsuario").val();
-        model.IndPersonal = "S";
-        model.CodigoOfisis = "9000000000";
-
-        await cargarFormNuevoColabExt(model);
     }
 
-    const abrirModalModificarColabExt = async function (codLocalAlterno, codigoOfisis) {
-        $("#tituloModalColabExt").html("Modificar Colaborador Externo");
-        $("#btnGrabarModifica").show();
-        $("#btnGrabarNuevo").hide();
-
-        const response = await obtenerColabExt(codLocalAlterno, codigoOfisis);
-        const model = response.Data;
-
-        codLocalAlternoAnterior = model.CodLocalAlterno;
-
-        model.UsuAsociado = $("#txtUsuario").val();
-
-        model.FecCreacion = convertToISODate(model.FecCreacion);
-        model.FechaIngresoEmpresa = convertToISODate(model.FechaIngresoEmpresa);
-        model.FechaCeseTrabajador = convertToISODate(model.FechaCeseTrabajador);
-
-        await cargarFormModificarColabExt(model);
+    function setCamposIdentificacionBloqueados(bloquear) {
+        $('#cboTipoDoc, #txtNroDoc, #txtFecIngreso')
+            .prop('disabled', bloquear);
     }
 
-    const cargarFormNuevoColabExt = async function (model) {
-        $.ajax({
-            url: urlModalNuevoColabExt,
-            type: "post",
-            data: { model },
-            dataType: "html",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: async function (response) {
-                $("#modalColabExt").find(".modal-body").html(response);
-                $("#modalColabExt").modal('show');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
+    async function abrirModalColabExtNuevo() {
+        _modoColabExt = 'crear';
+        _usuarioActual = $("#txtUsuario").val() || '';
+        limpiarFormColabExt();
+
+        setCamposIdentificacionBloqueados(false);
+
+        $('#txtUsuCreacion').val(_usuarioActual);
+        $('#txtFecCreacion').val(new Date().toISOString().slice(0, 10));
+        $('#txtCodOfisis').val('9000000000');
+        $('input[name="IndicadorPersonal"][value="S"]').prop('checked', true);
+        $('input[name="TipoColaborador"][value="C"]').prop('checked', true);
+
+        $("#tituloModalColabExt").text("Nuevo Colaborador Externo");
+        $("#modalColabExt").modal('show');
     }
 
-    const cargarFormModificarColabExt = async function (model) {
-        $.ajax({
-            url: urlModalModificarColabExt,
-            type: "post",
-            data: { model },
-            dataType: "html",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: async function (response) {
-                $("#modalColabExt").find(".modal-body").html(response);
+    async function abrirModalColabExtEditar(m) {
+        // validacion extra
+        if ((m.IndActivo || '').toUpperCase() === 'N') {
+            swal({ text: "El colaborador está INACTIVO y no puede editarse.", icon: "warning" });
+            return;
+        }
 
-                await cargarComboLocales('#cboLocal', model.CodLocalAlterno);
+        _modoColabExt = 'editar';
+        _usuarioActual = $("#txtUsuario").val() || '';
 
-                $("#modalColabExt").modal('show');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
-        });
+        limpiarFormColabExt();
+
+        try {
+            // Bloquear campos solicitados en modo editar
+            setCamposIdentificacionBloqueados(true);
+
+            $('input[name="IndicadorPersonal"][value="' + (m.IndPersonal || 'S') + '"]').prop('checked', true);
+            $('input[name="TipoColaborador"][value="' + (m.TipoUsuario || 'C') + '"]').prop('checked', true);
+            $('#txtUsuCreacion').val(m.UsuCreacion || '');
+            $('#txtFecCreacion').val(convertToISODate(m.FecCreacion));
+            $('#txtCodOfisis').val(m.CodigoOfisis || '');
+            $('#txtApPaterno').val(m.ApelPaterno || '');
+            $('#txtApMaterno').val(m.ApelMaterno || '');
+            $('#txtNomTrabajador').val(m.NombreTrabajador || '');
+            $('#cboTipoDoc').val(m.TipoDocIdent || 'DNI');
+            $('#txtNroDoc').val(m.NumDocIndent || '');
+            $('#txtPuesto').val(m.PuestoTrabajo || '');
+            $('#txtFecIngreso').val(convertToISODate(m.FechaIngresoEmpresa));
+            $('#txtFecCese').val(convertToISODate(m.FechaCeseTrabajador));
+            $("#tituloModalColabExt").text("Editar Colaborador Externo");
+            $("#modalColabExt").modal('show');
+        } catch (err) {
+            swal({ text: (err && err.responseText) || err, icon: 'error' });
+        }
     }
 
-    const obtenerColabExt = function (codLocalAlterno, codigoOfisis) {
-        return new Promise((resolve, reject) => {
-            if (!codLocalAlterno) return resolve();
-            if (!codigoOfisis) return resolve();
+    function limpiarFormColabExt() {
+        const form = $('#formColabExt')[0];
+        if (form) form.reset();
+        $('#formColabExt').removeClass('was-validated');
+    }
 
-            const request = {
-                CodLocalAlterno: codLocalAlterno,
-                CodigoOfisis: codigoOfisis
-            };
-
-            $.ajax({
-                url: urlObtenerColabExt,
-                type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
+    // Guardar
+    async function guardarColabExt(model, url) {
+        try {
+            const resp = await $.ajax({
+                url: url,
+                type: "POST",
+                data: { command: model },
+                dataType: "json",
+                beforeSend: showLoading,
+                complete: closeLoading
             });
-        });
-    }
 
-    const guardarColabExt = function (model, url) {
-        $.ajax({
-            url: url,
-            type: "post",
-            data: { command: model },
-            dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
-            success: async function (response) {
+            $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
 
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-                $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
-
-                swal({ text: response.Mensaje, icon: "success", });
-
-                $("#modalColabExt").modal('hide');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
+            if (!resp || !resp.Ok) {
+                swal({ text: (resp && resp.Mensaje) || 'No se pudo guardar.', icon: "warning" });
+                return;
             }
-        });
+
+            swal({ text: resp.Mensaje || 'Guardado correctamente.', icon: "success" });
+            $("#modalColabExt").modal('hide');
+
+        } catch (jqXHR) {
+            $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
+            swal({ text: jqXHR.responseText || 'Error al guardar.', icon: "error" });
+        }
     }
 
-    const importarExcelMaeColabExt = function () {
+    // Importar / Plantilla
+    function importarExcelMaeColabExt() {
         var formData = new FormData();
         var uploadFiles = $('#excelImportar').prop('files');
         formData.append("excelImportar", uploadFiles[0]);
 
         $.ajax({
             url: urlImportarColabExt,
-            type: "post",
+            type: "POST",
             data: formData,
             dataType: "json",
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                showLoading();
-            },
+            beforeSend: showLoading,
             complete: function () {
                 closeLoading();
                 $("#excelImportar").val(null);
             },
             success: function (response) {
+                $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
 
                 if (!response.Ok) {
-
-                    // Actualiza (refresca) el DataTable para mostrar los datos actualizados
-                    $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
-
-                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
-
-                        if (response.Errores.length > 0) {
-                            let html = "";
-                            response.Errores.map((error) => {
-                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
-                            });
+                    swal({ text: response.Mensaje, icon: "warning" }).then(() => {
+                        if (response.Errores && response.Errores.length > 0) {
+                            let html = response.Errores.map(e => `<tr><td>${e.Fila}</td><td>${e.Mensaje}</td></tr>`).join('');
                             $('#tbodyErrores').html(html);
                             $('#modalErroresImportacionExcel').modal("show");
                         }
                     });
-
                     return;
                 }
 
-                // Actualiza (refresca) el DataTable para mostrar los datos actualizados
-                $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
-
-                swal({ text: response.Mensaje, icon: "success", });
+                swal({ text: response.Mensaje, icon: "success" });
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR) {
+                $('#tableColaboradoresExt').DataTable().ajax.reload(null, false);
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
     }
 
-    const descargarPlantilla = function (nombreCarpeta) {
+    function descargarPlantilla(nombreCarpeta) {
         $.ajax({
             url: urlDescargarPlantilla,
-            type: "post",
-            data: { nombreCarpeta: nombreCarpeta },
+            type: "POST",
+            data: { nombreCarpeta },
             dataType: "json",
             success: function (response) {
-
                 if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
+                    swal({ text: response.Mensaje, icon: "warning" });
                     return;
                 }
-
                 const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
                 const downloadLink = document.createElement("a");
-                const fileName = response.NombreArchivo;
                 downloadLink.href = linkSource;
-                downloadLink.download = fileName;
+                downloadLink.download = response.NombreArchivo;
                 downloadLink.click();
-
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR) {
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
     }
 
-    const validarSelecion = function (count) {
+    // ===== Validaciones =====
+    function validarSelecion(count) {
         if (count === 0) {
-            swal({
-                text: "Debe seleccionar como minimo un registro",
-                icon: "warning",
-            });
+            swal({ text: "Debe seleccionar como mínimo un registro", icon: "warning" });
             return false;
         }
-
         return true;
     }
 
-    const validarFormularioColabExt = function (model) {
-        let validate = true;
+    function colectarModeloColabExtDesdeModal() {
+        const esEditar = (_modoColabExt === 'editar');
 
-        if (
-            model.CodLocalAlterno === '' ||
-            model.CodigoOfisis === '' ||
-            model.ApelPaterno === '' ||
-            model.ApelMaterno === '' ||
-            model.NombreTrabajador === '' ||
-            model.TipoDocIdent === '' ||
-            model.NumDocIndent === '' ||
-            model.TiSitu === '' ||
-            model.PuestoTrabajo === '' ||
-            model.FechaIngresoEmpresa === ''
-        ) {
-            validate = false;
-            $("#formColabExt").addClass("was-validated");
-            swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning" });
-        }
-
-        if (model.TipoDocIdent === "DNI") {
-            // Para DNI, el número debe tener exactamente 8 dígitos y ser numérico
-            if (!/^\d{8}$/.test(model.NumDocIndent)) {
-                validate = false;
-                $("#txtNroDoc").addClass("error-input");
-                swal({ text: 'Para DNI, el número de documento debe tener exactamente 8 dígitos y ser numérico', icon: "warning" });
-            }
-        } else if (model.TipoDocIdent === "CEX") {
-            // Para CEX, el número puede ser alfanumérico pero debe tener al menos 9 caracteres
-            if (model.NumDocIndent.length < 9) {
-                validate = false;
-                $("#txtNroDoc").addClass("error-input");
-                swal({ text: 'Para CEX, el número de documento debe tener al menos 9 caracteres.', icon: "warning" });
-            }
-        }
-
-        return validate;
+        return {
+            IndPersonal: $('input[name="IndicadorPersonal"]:checked').val(),
+            TipoUsuario: $('input[name="TipoColaborador"]:checked').val(),
+            CodigoOfisis: esEditar ? ($("#txtCodOfisis").val() || '') : "0",
+            ApelPaterno: $("#txtApPaterno").val(),
+            ApelMaterno: $("#txtApMaterno").val(),
+            NombreTrabajador: $("#txtNomTrabajador").val(),
+            TipoDocIdent: $("#cboTipoDoc").val(),
+            NumDocIndent: $("#txtNroDoc").val(),
+            PuestoTrabajo: $("#txtPuesto").val(),
+            FechaIngresoEmpresa: $("#txtFecIngreso").val(),
+            FechaCeseTrabajador: $("#txtFecCese").val(),
+            UsuCreacion: esEditar ? null : ($("#txtUsuario").val() || ''),
+            UsuModifica: esEditar ? ($("#txtUsuario").val() || '') : null
+        };
     }
 
-    const convertToISODate = (dateStr) => {
+    function validarFormularioColabExt(model) {
+        let ok = true;
+
+        // Requeridos
+        const req = [
+            model.ApelPaterno, model.ApelMaterno, model.NombreTrabajador,
+            model.TipoDocIdent, model.NumDocIndent, model.PuestoTrabajo,
+            model.FechaIngresoEmpresa
+        ];
+        if (req.some(v => !v || (v + '').trim() === '')) ok = false;
+
+        // Reglas por tipo de doc
+        if (model.TipoDocIdent === "DNI") {
+            if (!/^\d{8}$/.test(model.NumDocIndent || '')) ok = false;
+        } else if (model.TipoDocIdent === "CEX") {
+            if ((model.NumDocIndent || '').length < 9) ok = false;
+        }
+
+        // Si es personal 'S', el documento no puede ser '00000000'
+        if ((model.IndPersonal || '').toUpperCase() === 'S' && (model.NumDocIndent || '') === '00000000') {
+            ok = false;
+        }
+
+        if (!ok) {
+            $("#formColabExt").addClass("was-validated");
+            let msg = 'Faltan campos obligatorios o hay datos con formato inválido.';
+            if ((model.IndPersonal || '').toUpperCase() === 'S' && (model.NumDocIndent || '') === '00000000') {
+                msg = "Para personal 'S', el número de documento no puede ser 00000000.";
+            }
+            swal({ text: msg, icon: "warning" });
+        }
+        return ok;
+    }
+
+    // Utilidad fecha
+    function convertToISODate(dateStr, preserveUTC = false) {
         if (!dateStr) return "";
 
-        // Si ya está en formato ISO (yyyy-MM-dd), retorna tal cual
-        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-            return dateStr;
-        }
+        // ya ISO
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
 
-        // Si viene en formato /Date(...)/, extrae el timestamp y lo convierte
-        let match = dateStr.match(/\/Date\((-?\d+)\)\//);
-        if (match) {
-            let timestamp = parseInt(match[1], 10);
-            let date = new Date(timestamp);
-            return date.toISOString().split('T')[0];
-        }
+        const m = /\/Date\((-?\d+)\)\//.exec(String(dateStr));
+        let d = m ? new Date(parseInt(m[1], 10)) : new Date(String(dateStr));
+        if (isNaN(d)) return "";
 
-        // Si viene en formato "dd/mm/yyyy HH:mm:ss" (por ejemplo "10/03/2023 00:00:00")
-        let datePart = dateStr.split(' ')[0]; // Extrae "10/03/2023"
-        let parts = datePart.split('/');
-        if (parts.length === 3) {
-            let day = parts[0].padStart(2, '0');
-            let month = parts[1].padStart(2, '0');
-            let year = parts[2];
-            return `${year}-${month}-${day}`;
-        }
+        // Si el backend guarda el "día" en UTC, usa getters UTC
+        const y = preserveUTC ? d.getUTCFullYear() : d.getFullYear();
+        const mo = String((preserveUTC ? d.getUTCMonth() : d.getMonth()) + 1).padStart(2, '0');
+        const da = String(preserveUTC ? d.getUTCDate() : d.getDate()).padStart(2, '0');
+        return `${y}-${mo}-${da}`;
+    }
 
-        let date = new Date(dateStr);
-        if (!isNaN(date.getTime())) {
-            return date.toISOString().split('T')[0];
-        }
-
-        return "";
-    };
-
+    // Init
     return {
         init: function () {
             checkSession(async function () {
                 eventos();
-                await cargarComboEmpresa();
+                initSelect2('#cboTipoUsuarioBuscar, #cboIndActivoBuscar');
                 visualizarDataTableColaboradores();
             });
         }
-    }
-}(jQuery);
+    };
+
+})(jQuery);

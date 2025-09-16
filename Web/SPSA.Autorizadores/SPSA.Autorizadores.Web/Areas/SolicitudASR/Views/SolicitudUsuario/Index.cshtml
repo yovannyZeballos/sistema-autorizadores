@@ -30,112 +30,123 @@
     </div>
 </div>
 
-<div class="col-xl-12">
-    <div class="card overflow-hidden">
-
-        <div class="card-body pb-0 d-none">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="row mb-0">
-                        <div class="col-md-3 d-none">
-                            <div class="form-group">
-                                <label for="txtCodEmpresaxx" class="form-label">CodigoEmpresa</label>
-                                <input type="text" class="form-control form-control-sm" id="txtCodEmpresaxx" value="@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa" disabled>
-                            </div>
-                        </div>
-                        <div class="col-md-3 d-none">
-                            <div class="form-group">
-                                <label for="txtCodLocalxx" class="form-label">Local</label>
-                                <input type="text" class="form-control form-control-sm" id="txtCodLocalxx" value="@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodLocal" disabled>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @Html.Partial("_CardHeader", "Listado de Solicitudes")
+<div class="card overflow-hidden">
+    @Html.Partial("_CardHeader", "Filtros")
     <div class="card-body">
-        <div class="col-xl-12 mb-4">
-            <button id="btnModalColabInt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-users me-1"></i>Colaborador Interno</button>
-            <button id="btnModalColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-users me-1"></i>Colaborador Externo</button>
-            <button id="btnEliminarSolicitud" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-x-circle me-1"></i>Eliminar Sol.</button>
-            <button id="btnModalColabInt2" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe feather-search me-1"></i>Buscar</button>
-            <button id="btnDescargarSolicitudes" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar</button>
-        </div>
-
-        <div class="col-xl-12 d-flex justify-content-between align-items-center mb-4">
-            <div class="d-flex align-items-center w-75">
-                <div class="row g-3 w-100">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="cboEstadoBuscar" class="form-label">Estado</label>
-                            <select class="form-control form-control-sm form-select" id="cboEstadoBuscar">
-                                <option value="">Todos</option>
-                                <option value="S">Solicitado</option>
-                                <option value="A">Aprobado</option>
-                                <option value="R">Rechazado</option>
-                                <option value="N">Anulado</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="cboTipUsuarioBuscar" class="form-label">Tipo Usuario</label>
-                            <select class="form-control form-control-sm form-select" id="cboTipUsuarioBuscar">
-                                <option value="">Todos</option>
-                                <option value="A">Autorizador</option>
-                                <option value="C">Cajero</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="cboTipColaboradorBuscar" class="form-label">Tipo Colaborador</label>
-                            <select class="form-control form-control-sm form-select" id="cboTipColaboradorBuscar">
-                                <option value="">Todos</option>
-                                <option value="I">Interno</option>
-                                <option value="E">Externo</option>
-                            </select>
-                        </div>
-                    </div>
+        <div class="row g-2">
+            <div class="col-md-3 d-none">
+                <div class="form-group">
+                    <label class="form-label">Usuario</label>
+                    <input type="text" class="form-control form-control-sm" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
                 </div>
             </div>
-            <div class="d-flex align-items-center">
-                <input type="text" class="form-control form-control-sm" id="txtFiltroVariosSolicitudes" placeholder="Buscar..." />
+            <div class="col-md-3 d-none">
+                <div class="form-group">
+                    <label for="txtCodEmpresaxx" class="form-label">CodigoEmpresa</label>
+                    <input type="text" class="form-control form-control-sm" id="txtCodEmpresaxx" value="@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa" disabled>
+                </div>
             </div>
+            <div class="col-md-3 d-none">
+                <div class="form-group">
+                    <label for="txtCodLocalxx" class="form-label">Local</label>
+                    <input type="text" class="form-control form-control-sm" id="txtCodLocalxx" value="@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodLocal" disabled>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label for="cboEstadoBuscar" class="form-label">Estado</label>
+                    <select class="form-control form-control-sm form-select" id="cboEstadoBuscar">
+                        <option value="">Todos</option>
+                        <option value="S">Solicitado</option>
+                        <option value="A">Aprobado</option>
+                        <option value="R">Rechazado</option>
+                        <option value="N">Anulado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cboTipUsuarioBuscar" class="form-label">Tipo Usuario</label>
+                    <select class="form-control form-control-sm form-select" id="cboTipUsuarioBuscar">
+                        <option value="">Todos</option>
+                        <option value="A">Autorizador</option>
+                        <option value="C">Cajero</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cboTipColaboradorBuscar" class="form-label">Tipo Colaborador</label>
+                    <select class="form-control form-control-sm form-select" id="cboTipColaboradorBuscar">
+                        <option value="">Todos</option>
+                        <option value="I">Interno</option>
+                        <option value="E">Externo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label"> Texto:</label>
+                    <input type="text" class="form-control form-control-sm" id="txtFiltroBuscar" placeholder="Ingrese texto a filtrar" oninput="this.value=this.value.toUpperCase();" />
+                    @*<input type="text" class="form-control form-control-sm" id="txtFiltroVariosSolicitudes" placeholder="Buscar..." />*@
+                </div>
+        </div>
+        @*<div class="col-md-2 d-flex align-items-end">
+            <div class="form-group">
+                <button id="btnBuscarColabExt" class="btn btn-sm btn-primary w-100">
+                    <i class="fe fe-search me-1"></i>Buscar
+                </button>
+            </div>
+        </div>*@
         </div>
 
-        <div class="col-xl-12">
-            <div class="row">
-                <table id="tableSolicitudes" class="table text-nowrap border-bottom">
-                    <thead>
-                        <tr>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                            <th class="border-bottom-0" style="font-size: 11px;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+        <div class="my-3">
+            <button id="btnModalColabInt" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-users me-1"></i>Colaborador Interno
+            </button>
+            <button id="btnModalColabExt" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-users me-1"></i>Colaborador Externo
+            </button>
+            <button id="btnEliminarSolicitud" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-x-circle me-1"></i>Eliminar Sol.
+            </button>
+            <button id="btnModalColabInt2" class="btn btn-sm btn-primary me-2">
+                <i class="fe feather-search me-1"></i>Buscar
+            </button>
+            <button id="btnDescargarSolicitudes" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-download me-1"></i>Descargar
+            </button>
+
         </div>
-    </div>
+
+        <table id="tableSolicitudes" class="table table-bordered text-nowrap border-bottom w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th style="font-size:11px;">Nro. Solicitud</th>
+                    <th style="font-size:11px;">CodEmpresa</th>
+                    <th style="font-size:11px;">CodLocal</th>
+                    <th style="font-size:11px;">Código</th>
+                    <th style="font-size:11px;">Nombre y Apellido</th>
+                    <th style="font-size:11px;">Tipo Usuario</th>
+                    <th style="font-size:11px;">Tipo Colaborador</th>
+                    <th style="font-size:11px;">Estado</th>
+                    <th style="font-size:11px;">Solicitante</th>
+                    <th style="font-size:11px;">Acción</th>
+                    <th style="font-size:11px;">Fec. Solicitud</th>
+                    <th style="font-size:11px;">Aprobador</th>
+                    <th style="font-size:11px;">Fec. Aprobación</th>
+                    <th style="font-size:11px;">Motivo</th>
+                    <th style="font-size:11px;">Eliminador</th>
+                    <th style="font-size:11px;">Fec. Eliminación</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
+
 
 <!-- MODAL COLABORADOR INTERNO -->
 <div class="modal fade" id="modalColabInt" data-bs-backdrop="static">
@@ -273,7 +284,7 @@
 
                 <div class="col-xl-12">
                     <div class="row">
-                        <table id="tableColaboradoresExt" class="table text-nowrap border-bottom">
+                        <table id="tableSolicitudes" class="table text-nowrap border-bottom">
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0" style="font-size: 11px;"></th>
