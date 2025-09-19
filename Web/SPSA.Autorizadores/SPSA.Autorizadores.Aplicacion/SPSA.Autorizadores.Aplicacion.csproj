@@ -431,6 +431,7 @@
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\MaeAreaGestionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaDespacho\GuiaDespachoCabeceraDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaDespacho\GuiaDespachoDetalleDto.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\GuiaDespacho\LineaConfirmacionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionCabeceraDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionDetalleDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\ListarGuiaRecepcionDto.cs" />

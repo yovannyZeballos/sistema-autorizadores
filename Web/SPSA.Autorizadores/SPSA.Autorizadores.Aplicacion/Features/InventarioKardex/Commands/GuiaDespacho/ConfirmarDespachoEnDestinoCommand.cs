@@ -10,6 +10,7 @@ using MediatR;
 using Npgsql;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
@@ -30,6 +31,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
         public DateTime Fecha { get; set; }
         public string Observaciones { get; set; }
         public bool GenerarGuiaRecepcion { get; set; } = true; // crea GR en destino como evidencia
+        public List<LineaConfirmacionDto> Lineas { get; set; } = new List<LineaConfirmacionDto>(); // NUEVO
         public string UsuCreacion { get; set; }
     }
 
@@ -52,8 +54,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
 
             try
             {
-                if (request.GuiaDespachoId <= 0)
-                    throw new InvalidOperationException("Guía de despacho no válida.");
+                if (request.GuiaDespachoId <= 0) throw new InvalidOperationException("Guía de despacho no válida.");
+
+                if (request.Lineas == null || request.Lineas.Count == 0) throw new InvalidOperationException("No hay ítems a confirmar.");
+
 
                 // === Cargar GUIA DESPACHO con detalles y series ===
                 var gd = await _contexto.RepositorioGuiaDespachoCabecera
