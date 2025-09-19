@@ -506,6 +506,7 @@
     <Compile Include="Features\Monitor\Queries\ListarProcesosQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ObtenerFechaNegocioQuery.cs" />
     <Compile Include="Features\Monitor\Queries\ListarParametrosMonitorArchivoQuery.cs" />
+    <Compile Include="Features\Operaciones\Commands\DescargarDocumentoElectronicoCommand.cs" />
     <Compile Include="Features\Operaciones\Commands\InsertarClienteCenCommand.cs" />
     <Compile Include="Features\Operaciones\Queries\ConsultarClienteCenQuery.cs" />
     <Compile Include="Features\Operaciones\Queries\ListarDocumentosElectronicosQuery.cs" />

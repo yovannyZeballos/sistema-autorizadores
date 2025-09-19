@@ -6,7 +6,7 @@
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">Documentos electrónicos</div>
+        @Html.Raw($"<div class=\"page-title\">Documentos electrónicos ({SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional?.NomEmpresa})</div>")
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
@@ -55,40 +55,63 @@
                     </div>
                 </div>
                 <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="txtCajero" class="form-label">Cajero</label>
+                        <input type="number" value="0" min="0" step="1" maxlength="8" class="form-control form-control-sm" id="txtCajero">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="txtCaja" class="form-label">Caja</label>
+                        <input type="number" value="0" min="0" step="1" class="form-control form-control-sm" id="txtCaja">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtNroTransaccion" class="form-label">Nro. Transacción</label>
+                        <input type="number" value="0" min="0" step="1" class="form-control form-control-sm" id="txtNroTransaccion">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group select2-sm">
+                        <label class="form-label">Tipo Documento</label>
+                        <select class="form-control select2-show-search custom-select" id="cboTipoDocumento">
+                            <option value="0">TODOS</option>
+                            <option value="BLT">BOLETA</option>
+                            <option value="TFC">FACTURA</option>
+                            <option value="NCR">NOTA DE CREDITO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="form-group select2-sm">
                         <label class="form-label">Tipo Doc. Cliente</label>
                         <select class="form-control select2-show-search custom-select" id="cboTipoDocCliente">
                             <option value="0">TODOS</option>
-                            <option value="1">DNI</option>
-                            <option value="2">RUC</option>
+                            <option value="DNI">DNI</option>
+                            <option value="RUC">RUC</option>
+                            <option value="PASAPORTE">PASAPORTE</option>
+                            <option value="C.E.">C.E.</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="txtNroDocCliente" class="form-label">Nro. Doc. Cliente</label>
                         <input type="text" class="form-control form-control-sm" id="txtNroDocCliente">
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="txtCajero" class="form-label">Cajero</label>
-                        <input type="text" class="form-control form-control-sm" id="txtCajero">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="txtCajero" class="form-label">Caja</label>
-                        <input type="text" class="form-control form-control-sm" id="txtCaja">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="txtCajero" class="form-label">Nro. Transacción</label>
-                        <input type="text" class="form-control form-control-sm" id="txtNroTransaccion">
-                    </div>
+            <div class="row mb-3">
+                <div class="col-12 d-flex justify-content-end">
+                    <button id="btnBuscar" type="button" class="btn btn-sm btn-primary me-2">
+                        <span class="feather feather-search"></span> Buscar
+                    </button>
+                    <button id="btnLimpiar" type="button" class="btn btn-sm btn-outline-secondary">
+                        <span class="feather feather-x-circle"></span> Limpiar
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -120,7 +143,10 @@
     <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Content/ViewJs/DocumentoElectronico.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {

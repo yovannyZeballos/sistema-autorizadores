@@ -1,8 +1,12 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿using Npgsql;
+using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
+using SPSA.Autorizadores.Dominio.Contrato.Dto;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Dominio.Entidades;
 using SPSA.Autorizadores.Infraestructura.Utiles;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Threading.Tasks;
@@ -18,10 +22,60 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			_commandTimeout = Convert.ToInt32(ConfigurationManager.AppSettings["CommandTimeout"]);
 		}
 
+		public async Task<List<DocumentoElectronico>> ListarDocumentosElectronicos(ListarDocumentoElectronicoDto documentoElectronico)
+		{
+			List<DocumentoElectronico> documentos = new List<DocumentoElectronico>();
+
+			string query = @"
+                    SELECT * FROM sgp.fn_Consulta_Head_trx(@p_local, @p_fecha_inicio, @p_fecha_fin, @p_tipoDoc, @p_rutdoc, @p_tipodoc_cli, @p_cajero, @p_caja, @p_numtrx, @p_numero_pag, @p_tamano_pag)";
+
+			using (var connection = new NpgsqlConnection(CadenaConexionCT3_SPSA_SGP))
+			using (var command = new NpgsqlCommand(query, connection))
+			{
+				command.Parameters.Add(new NpgsqlParameter("@p_local", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = documentoElectronico.Codlocal });
+				command.Parameters.Add(new NpgsqlParameter("@p_fecha_inicio", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = documentoElectronico.FechaInicio });
+				command.Parameters.Add(new NpgsqlParameter("@p_fecha_fin", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = documentoElectronico.FechaFin });
+				command.Parameters.Add(new NpgsqlParameter("@p_tipoDoc", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.TipoDocumento });
+				command.Parameters.Add(new NpgsqlParameter("@p_rutdoc", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.NroDocCliente });
+				command.Parameters.Add(new NpgsqlParameter("@p_tipodoc_cli", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.TipoDocCliente });
+				command.Parameters.Add(new NpgsqlParameter("@p_cajero", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.Cajero });
+				command.Parameters.Add(new NpgsqlParameter("@p_caja", NpgsqlTypes.NpgsqlDbType.Smallint) { Value = documentoElectronico.Caja });
+				command.Parameters.Add(new NpgsqlParameter("@p_numtrx", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = documentoElectronico.NroTransaccion });
+				command.Parameters.Add(new NpgsqlParameter("@p_numero_pag", NpgsqlTypes.NpgsqlDbType.Integer) { Value = documentoElectronico.NumeroPagina });
+				command.Parameters.Add(new NpgsqlParameter("@p_tamano_pag", NpgsqlTypes.NpgsqlDbType.Integer) { Value = documentoElectronico.TamañoPagina });
+
+				await connection.OpenAsync();
+				using (var dr = await command.ExecuteReaderAsync())
+				{
+					if (dr != null && dr.HasRows)
+					{
+						while (await dr.ReadAsync())
+						{
+							documentos.Add(new DocumentoElectronico
+							{
+								Local = dr["local"] != DBNull.Value ? dr["local"].ToString() : "",
+								Caja = dr["caja"] != DBNull.Value ? dr["caja"].ToString() : "",
+								NroTransaccion = dr["numero_transaccion"] != DBNull.Value ? dr["numero_transaccion"].ToString() : null,
+								Fecha = dr["fecha"] != DBNull.Value ? dr["fecha"].ToString() : "",
+								Importe = dr["importe"] != DBNull.Value ? Convert.ToDecimal(dr["importe"]) : 0,
+								TipoDocElectronico = dr["tipo_documento_Electronico"] != DBNull.Value ? dr["tipo_documento_Electronico"].ToString() : "",
+								DocElectronico = dr["nro_documento_Electronico"] != DBNull.Value ? dr["nro_documento_Electronico"].ToString() : "",
+								MedioPago = dr["medio_pago"] != DBNull.Value ? dr["medio_pago"].ToString() : "",
+								Cajero = dr["cajero"] != DBNull.Value ? dr["cajero"].ToString() : "",
+								TipoDocumento = dr["tipo_doc_cliente"] != DBNull.Value ? dr["tipo_doc_cliente"].ToString() : "",
+								NroDocumento = dr["nro_doc_cliente"] != DBNull.Value ? dr["nro_doc_cliente"].ToString() : "",
+								TotalRegistros = dr["total_registros"] != DBNull.Value ? Convert.ToInt32(dr["total_registros"]) : 0
+							});
+						}
+					}
+					return documentos;
+				}
+			}
+		}
+
 		public async Task<(int cantidadTransacciones, decimal montoFinal)> ObtenerCantidadTransacciones(int local, string fecha)
 		{
             using (var connection = new OracleConnection(CadenaConexionBCT))
-
             using (var command = new OracleCommand("ADM_SPSA.SF_MONITOR_BCT_TRXS_XLOCFCH", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;

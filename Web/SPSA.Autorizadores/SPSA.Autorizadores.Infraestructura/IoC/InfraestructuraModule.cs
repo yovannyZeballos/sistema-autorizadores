@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid;
 using SPSA.Autorizadores.Infraestructura.Agente.AgenteCen;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 using SPSA.Autorizadores.Infraestructura.Repositorio;
@@ -39,6 +40,7 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<RepositorioElectronicJournal>().As<IRepositorioElectronicJournal>().InstancePerLifetimeScope();
 			builder.RegisterType<RepositorioTrxHeader>().As<IRepositorioTrxHeader>().InstancePerLifetimeScope();
 			builder.RegisterType<AgenteCen>().As<IAgenteCen>().InstancePerRequest();
+			builder.RegisterType<AgenteAxteroid>().As<IAgenteAxteroid>().InstancePerRequest();
 
 			base.Load(builder);
 		}

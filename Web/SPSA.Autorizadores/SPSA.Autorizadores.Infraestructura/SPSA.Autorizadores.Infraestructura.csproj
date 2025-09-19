@@ -136,10 +136,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agente\AgenteAxteroid\AgenteAxteroid.cs" />
     <Compile Include="Agente\AgenteCen\AgenteCen.cs" />
     <Compile Include="Agente\AgenteCen\Dto\ConsultaClienteRecurso.cs" />
     <Compile Include="Agente\AgenteCen\Dto\ConsultaClienteRespuesta.cs" />
+    <Compile Include="Agente\AgenteAxteroid\Dto\ConsultaDocumentoElectronicoRecurso.cs" />
+    <Compile Include="Agente\AgenteAxteroid\Dto\ConsultaDocumentoElectronicoRespuesta.cs" />
     <Compile Include="Agente\AgenteCen\Dto\InsertarClienteRecurso.cs" />
+    <Compile Include="Agente\AgenteAxteroid\IAgenteAxteroid.cs" />
     <Compile Include="Agente\AgenteCen\IAgenteCen.cs" />
     <Compile Include="Configuracion\AsrSolicitudUsuarioTypeConfiguration.cs" />
     <Compile Include="Configuracion\AutImpresionTypeConfiguracion.cs" />

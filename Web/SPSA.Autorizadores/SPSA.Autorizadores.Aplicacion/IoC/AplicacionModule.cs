@@ -475,6 +475,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ListarDocumentosElectronicosHandler>().As<IRequestHandler<ListarDocumentosElectronicosQuery, GenericResponseDTO<PagedResult<DocumentoElectronico>>>>();
 			builder.RegisterType<ConsultarClienteCenQueryHandler>().As<IRequestHandler<ConsultarClienteCenQuery, GenericResponseDTO<ConsultaClienteRespuesta>>>();
 			builder.RegisterType<InsertarClienteCenHandler>().As<IRequestHandler<InsertarClienteCenCommand, RespuestaComunDTO>>();
+			builder.RegisterType<DescargarDocumentoElectronicoHandler>().As<IRequestHandler<DescargarDocumentoElectronicoCommand, GenericResponseDTO<byte[]>>>();
 			#endregion
 
 
