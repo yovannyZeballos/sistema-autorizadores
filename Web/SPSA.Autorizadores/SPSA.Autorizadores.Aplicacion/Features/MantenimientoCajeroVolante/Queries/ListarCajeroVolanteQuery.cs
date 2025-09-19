@@ -87,31 +87,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Quer
                     ))
                     .ToList();
 
-                //var dt = await _repositorioCajero.ListarCajeroVolante(request.CodEmpresa, request.CodCoordinador);
-
-                //foreach (DataColumn colum in dt.Columns)
-                //{
-                //	response.Columnas.Add(colum.ColumnName.Replace(" ", "")
-                //								  .Replace(".", "")
-                //								  .Replace("á", "a")
-                //								  .Replace("é", "e")
-                //								  .Replace("í", "i")
-                //								  .Replace("ó", "o")
-                //								  .Replace("ú", "u"));
-
-                //}
-
-                //response.Data = dt.AsEnumerable()
-                //			 .Select(r => r.Table.Columns.Cast<DataColumn>()
-                //			 .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
-                //		  ).ToDictionary(z => z.Key.Replace(" ", "")
-                //								  .Replace(".", "")
-                //								  .Replace("á", "a")
-                //								  .Replace("é", "e")
-                //								  .Replace("í", "i")
-                //								  .Replace("ó", "o")
-                //								  .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
-                //	   ).ToList();
             }
 			catch (Exception ex)
 			{

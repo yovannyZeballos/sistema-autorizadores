@@ -8,5 +8,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 		Task<TransactionXmlCT2> ObtenerSpsa();
 		Task<TransactionXmlCT2> ObtenerTpsa();
 		Task<TransactionXmlCT2> ObtenerHpsa();
-	}
+		Task<TransactionXmlCT2> ObtenerSpsaCt3();
+
+    }
 }

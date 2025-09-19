@@ -141,6 +141,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                                                                             .Select(p => p.RazonSocial)
                                                                             .FirstOrDefaultAsync() ?? string.Empty;
 
+                    var localOrigen= await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == g.CodEmpresaOrigen && p.CodLocal == g.CodLocalOrigen)
+                                                                            .Select(p => p.NomLocal)
+                                                                            .FirstOrDefaultAsync() ?? string.Empty;
+                    var localDestino = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == g.CodEmpresaDestino && p.CodLocal == g.CodLocalDestino)
+                                                                            .Select(p => p.NomLocal)
+                                                                            .FirstOrDefaultAsync() ?? string.Empty;
+
                     dtoItems.Add(new GuiaRecepcionCabeceraDto
                     {
                         Id = g.Id,
@@ -149,7 +156,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                         Proveedor = razonSocial ?? string.Empty,
                         CodEmpresaDestino = g.CodEmpresaDestino,
                         CodLocalDestino = g.CodLocalDestino,
-                        //Items = lineas,
+                        NomLocalOrigen = localOrigen,
+                        NomLocalDestino = localDestino,
+                        Items = g.Detalles.Count,
                         IndEstado = g.IndEstado,
                         UsuCreacion = g.UsuCreacion
                     });

@@ -268,5 +268,60 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
 
         }
+
+        public async Task<TransactionXmlCT2> ObtenerSpsaCt3()
+        {
+            using (var connection = new OracleConnection(CadenaConexionBCT))
+            {
+                string query = @"
+            SELECT TRUNC(insertdate) AS DO_FECHA_TRX,
+                   COUNT(*) AS NO_CANT_TRX
+            FROM ADM_SPSA.TransactionXmlCT3
+            WHERE TRUNC(insertdate) = TRUNC(SYSDATE)
+            GROUP BY TRUNC(insertdate)";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.CommandTimeout = _commandTimeout;
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            DateTime fechaTrx = reader.IsDBNull(0)
+                                ? DateTime.Today
+                                : reader.GetDateTime(0);
+
+                            int noCantTrx = reader.IsDBNull(1)
+                                ? 0
+                                : reader.GetInt32(1);
+
+                            return new TransactionXmlCT2
+                            {
+                                Fecha = fechaTrx,
+                                FechaFormato = fechaTrx.ToString("dd MMM yyyy"),
+                                FechaStr = fechaTrx.ToString(),
+                                Cantidad = noCantTrx
+                            };
+                        }
+                        else
+                        {
+                            // No hay registros hoy
+                            return new TransactionXmlCT2
+                            {
+                                Fecha = DateTime.Today,
+                                FechaFormato = DateTime.Today.ToString("dd MMM yyyy"),
+                                FechaStr = DateTime.Today.ToString(),
+                                Cantidad = 0
+                            };
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

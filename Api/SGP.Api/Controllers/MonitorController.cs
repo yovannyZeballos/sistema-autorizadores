@@ -3,13 +3,14 @@ using SGP.Api.Models;
 using SGP.Api.Services.BctService;
 using SGP.Api.Services.SgpService;
 using SGP.Api.Services;
+using SGP.Api.Services.Ct3Service;
 
 namespace SGP.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class MonitorController(SgpService sgpService, SPT03Service spt03Service, HPCT02Service hpct02Service, TPCT02Service tpct02Service,
-        BctSpsaService bctSpsaService, BctTpsaService bctTpsaService, BctHpsaService bctHpsaService) : ControllerBase
+        BctSpsaService bctSpsaService, BctTpsaService bctTpsaService, BctHpsaService bctHpsaService, Ct3SpsaService ct3SpsaService) : ControllerBase
     {
         private readonly SgpService _sgpService = sgpService;
         private readonly SPT03Service _SPT03Service = spt03Service;
@@ -19,12 +20,15 @@ namespace SGP.Api.Controllers
         private readonly BctTpsaService _bctTpsaService = bctTpsaService;
         private readonly BctHpsaService _bctHpsaService = bctHpsaService;
 
+        private readonly Ct3SpsaService _ct3SpsaService = ct3SpsaService;
+
         [HttpGet("actualizar-fecha-negocio")]
         public async Task<IActionResult> ActualizarFechaNegocio()
         {
             try
             {
-                string fechaSP = await _SPT03Service.ObtenerFechaNegocio();
+                //string fechaSP = await _SPT03Service.ObtenerFechaNegocio();
+                string fechaSP = await _ct3SpsaService.ObtenerFechaNegocio();
                 string respuestaSP = _sgpService.AcualizarParametroFechaNegocio(fechaSP, "02");
                 string fechaTP = await _TPCT02Service.ObtenerFechaNegocio();
                 string respuestaTP = _sgpService.AcualizarParametroFechaNegocio(fechaTP, "09");
@@ -53,7 +57,7 @@ namespace SGP.Api.Controllers
         {
             try
             {
-                string estadoConnSP = await _SPT03Service.ObtenerEstadoConexion();
+                string estadoConnSP = await _ct3SpsaService.ObtenerEstadoConexion();
                 string estadoConnTP = await _TPCT02Service.ObtenerEstadoConexion();
                 string estadoConnHP = await _HPCT02Service.ObtenerEstadoConexion();
 

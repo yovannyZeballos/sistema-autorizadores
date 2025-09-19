@@ -61,7 +61,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries
                         response.Data = await _repositorioTransactionXmlCT2.ObtenerHpsa();
                         break;
                     default:
-                        //response.Data = await _repositorioTransactionXmlCT2.ObtenerSpsa();
+                        response.Data = await _repositorioTransactionXmlCT2.ObtenerSpsaCt3();
                         break;
                 }
 			}
