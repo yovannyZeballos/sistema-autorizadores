@@ -32,19 +32,19 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			using (var connection = new NpgsqlConnection(CadenaConexionCT3_SPSA_SGP))
 			using (var command = new NpgsqlCommand(query, connection))
 			{
-				command.Parameters.Add(new NpgsqlParameter("@p_local", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = documentoElectronico.Codlocal });
-				command.Parameters.Add(new NpgsqlParameter("@p_fecha_inicio", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = documentoElectronico.FechaInicio });
-				command.Parameters.Add(new NpgsqlParameter("@p_fecha_fin", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = documentoElectronico.FechaFin });
-				command.Parameters.Add(new NpgsqlParameter("@p_tipoDoc", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.TipoDocumento });
-				command.Parameters.Add(new NpgsqlParameter("@p_rutdoc", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.NroDocCliente });
-				command.Parameters.Add(new NpgsqlParameter("@p_tipodoc_cli", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.TipoDocCliente });
-				command.Parameters.Add(new NpgsqlParameter("@p_cajero", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.Cajero });
-				command.Parameters.Add(new NpgsqlParameter("@p_caja", NpgsqlTypes.NpgsqlDbType.Smallint) { Value = documentoElectronico.Caja });
-				command.Parameters.Add(new NpgsqlParameter("@p_numtrx", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = documentoElectronico.NroTransaccion });
-				command.Parameters.Add(new NpgsqlParameter("@p_numero_pag", NpgsqlTypes.NpgsqlDbType.Integer) { Value = documentoElectronico.NumeroPagina });
-				command.Parameters.Add(new NpgsqlParameter("@p_tamano_pag", NpgsqlTypes.NpgsqlDbType.Integer) { Value = documentoElectronico.TamañoPagina });
+                command.Parameters.Add(new NpgsqlParameter("@p_local", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = string.IsNullOrWhiteSpace(documentoElectronico.Codlocal) ? 0 : Convert.ToDecimal(documentoElectronico.Codlocal) });
+                command.Parameters.Add(new NpgsqlParameter("@p_fecha_inicio", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = documentoElectronico.FechaInicio });
+                command.Parameters.Add(new NpgsqlParameter("@p_fecha_fin", NpgsqlTypes.NpgsqlDbType.Timestamp) { Value = documentoElectronico.FechaFin });
+                command.Parameters.Add(new NpgsqlParameter("@p_tipoDoc", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.TipoDocumento });
+                command.Parameters.Add(new NpgsqlParameter("@p_rutdoc", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.NroDocCliente ?? "" });
+                command.Parameters.Add(new NpgsqlParameter("@p_tipodoc_cli", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = documentoElectronico.TipoDocCliente });
+                command.Parameters.Add(new NpgsqlParameter("@p_cajero", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = string.IsNullOrWhiteSpace(documentoElectronico.Cajero) ? "0" : documentoElectronico.Cajero });
+                command.Parameters.Add(new NpgsqlParameter("@p_caja", NpgsqlTypes.NpgsqlDbType.Smallint) { Value = string.IsNullOrWhiteSpace(documentoElectronico.Caja) ? 0 : Convert.ToInt16(documentoElectronico.Caja) });
+                command.Parameters.Add(new NpgsqlParameter("@p_numtrx", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = string.IsNullOrWhiteSpace(documentoElectronico.NroTransaccion) ? 0 : Convert.ToInt64(documentoElectronico.NroTransaccion) });
+                command.Parameters.Add(new NpgsqlParameter("@p_numero_pag", NpgsqlTypes.NpgsqlDbType.Integer) { Value = documentoElectronico.NumeroPagina });
+                command.Parameters.Add(new NpgsqlParameter("@p_tamano_pag", NpgsqlTypes.NpgsqlDbType.Integer) { Value = documentoElectronico.TamañoPagina });
 
-				await connection.OpenAsync();
+                await connection.OpenAsync();
 				using (var dr = await command.ExecuteReaderAsync())
 				{
 					if (dr != null && dr.HasRows)

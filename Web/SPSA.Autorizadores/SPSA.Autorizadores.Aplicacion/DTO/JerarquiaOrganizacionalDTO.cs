@@ -14,6 +14,7 @@ namespace SPSA.Autorizadores.Aplicacion.DTO
 		public string NomRegion { get; set; }
 		public string NomZona { get; set; }
 		public string NomLocal { get; set; }
+        public string Ruc { get; set; }
 
         public List<EmpresaAsociadaDTO> EmpresasAsociadas { get; set; }
         public List<CadenaAsociadaDTO> CadenasAsociadas { get; set; }
