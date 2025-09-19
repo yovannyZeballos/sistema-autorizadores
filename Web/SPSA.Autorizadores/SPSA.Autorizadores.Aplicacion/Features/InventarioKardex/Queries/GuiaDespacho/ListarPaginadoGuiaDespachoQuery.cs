@@ -147,8 +147,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                 var dtoItems = new List<GuiaDespachoCabeceraDto>(pagedRegistros.Items.Count);
                 foreach (var g in pagedRegistros.Items)
                 {
-                    var detalleDtos = (g.Detalles ?? Enumerable.Empty<GuiaDespachoDetalle>())
-                        .Select(d => new GuiaDespachoDetalle
+                    var detalleDtos = (g.Detalles != null ? g.Detalles : Enumerable.Empty<GuiaDespachoDetalle>())
+                   // var detalleDtos = (g.Detalles ?? Enumerable.Empty<GuiaDespachoDetalleDto>())
+                        .Select(d => new GuiaDespachoDetalleDto
                         {
                             Id = d.Id,
                             GuiaDespachoId = d.GuiaDespachoId,

@@ -75,35 +75,54 @@ var AdministrarConfirmacionDespachos = (function ($) {
             const obs = ($('#mObs').val() || '').trim();
             const genGR = $('#mGenerarGR').is(':checked');
 
-            // Recolectar líneas seleccionadas
             const lines = [];
-            $('#mDetalle .chkConf:checked').each(function () {
-                const detId = parseInt($(this).data('id'), 10);
-                // si no serializable, mirar input
-                const $row = $(this).closest('tr');
-                const cantInput = $row.find('.inpCant').val();
-                const cant = cantInput ? parseInt(cantInput, 10) : 1;
+            const errores = [];
 
-                // Si quisieras NumSerie desde la fila (para serializable), puedes incluirlo si tu backend lo necesita:
-                const numSerie = $row.find('td:eq(2)').text().trim() || null;
-                const codProd = $row.find('td:eq(1)').text().trim();
+            $('#mDetalle tbody tr').each(function () {
+                const $tr = $(this);
+                const $chk = $tr.find('.chkConf');
+                if (!$chk.is(':checked')) return;
 
-                lines.push({
-                    DespachoDetalleId: detId,
-                    CodProducto: codProd,
-                    NumSerie: numSerie,
-                    Cantidad: cant
-                });
+                const detId = parseInt($chk.data('id'), 10);
+                const codProd = ($tr.data('producto') || '').toString();
+                const esSer = ('' + $tr.data('serializable')).toLowerCase() === 'true';
+                const pend = parseInt($tr.data('pend') || '0', 10);
+
+                let cant = 1;
+                let numSerie = null;
+
+                if (esSer) {
+                    numSerie = ($tr.find('.cel-serie').text() || '').trim() || null;
+                    if (pend <= 0) errores.push(`Línea ${detId}: no hay pendiente por confirmar.`);
+                } else {
+                    cant = parseInt($tr.find('.inpCant').val() || '0', 10);
+                    if (!Number.isInteger(cant) || cant <= 0) {
+                        errores.push(`Línea ${detId}: cantidad inválida.`);
+                    } else if (cant > pend) {
+                        errores.push(`Línea ${detId}: la cantidad (${cant}) no puede exceder el pendiente (${pend}).`);
+                    }
+                }
+
+                if (!codProd) errores.push(`Línea ${detId}: producto vacío.`);
+                lines.push({ DespachoDetalleId: detId, CodProducto: codProd, NumSerie: numSerie, Cantidad: cant });
             });
+
+            if (!lines.length) { swal({ text: "Selecciona al menos una línea a confirmar.", icon: "warning" }); return; }
+            if (errores.length) { swal({ text: errores.join('\n'), icon: "warning" }); return; }
 
             const payload = {
                 GuiaDespachoId: id,
-                NumGuiaRecepcion: (numGR || null),
+                NumGuiaRecepcion: numGR || null,
                 Fecha: fecha,
-                Observaciones: (obs || null),
+                Observaciones: obs || null,
                 GenerarGuiaRecepcion: !!genGR,
                 Lineas: lines
             };
+
+            // anti doble clic
+            const $btn = $(this);
+            const oldHtml = $btn.html();
+            $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Confirmando…');
 
             try {
                 const resp = await $.ajax({
@@ -114,17 +133,20 @@ var AdministrarConfirmacionDespachos = (function ($) {
                     dataType: 'json'
                 });
 
-                if (resp.Ok) {
+                if (resp && resp.Ok) {
                     swal({ text: resp.Mensaje || 'Confirmado correctamente.', icon: 'success' });
                     bootstrap.Modal.getInstance(document.getElementById('modalConfirmar')).hide();
-                    dt.ajax.reload(null, false);
+                    $('#tablePendientes').DataTable().ajax.reload(null, false);
                 } else {
-                    swal({ text: swalText(resp, 'No se pudo confirmar.'), icon: 'warning' });
+                    swal({ text: (resp && (resp.Mensaje || resp.message)) || 'No se pudo confirmar.', icon: 'warning' });
                 }
             } catch (err) {
-                swal({ text: swalText(err, 'Error al confirmar.'), icon: 'error' });
+                swal({ text: (err && (err.responseText || err.statusText)) || 'Error al confirmar.', icon: 'error' });
+            } finally {
+                $btn.prop('disabled', false).html(oldHtml);
             }
         });
+
 
 
 
@@ -388,39 +410,50 @@ var AdministrarConfirmacionDespachos = (function ($) {
 
         // Cargar detalle
         try {
-            const data = await $.getJSON(urlObtenerDespacho, { id: id });
+            const resp = await $.getJSON(urlObtenerDespacho, { id: id });
+            if (!resp || !resp.Ok || !resp.Data) {
+                swal({ text: (resp && resp.Mensaje) || 'No se pudo cargar la guía.', icon: 'warning' });
+                return;
+            }
+
             // Renderiza tabla dentro del modal (agrega un contenedor en tu modal: <div id="mDetalle"></div>)
-            renderDetalleConfirmacion(data);
+            renderDetalleConfirmacion(resp.Data);
             new bootstrap.Modal(document.getElementById('modalConfirmar')).show();
         } catch (err) {
             swal({ text: swalText(err, 'Error al obtener la guía.'), icon: 'error' });
         }
     }
 
-    //function abrirModalConfirmacion(id) {
-    //    $('#hidGuiaId').val(id);
-    //    $('#mFecha').val(new Date().toISOString().slice(0, 10));
-    //    $('#mNumGR').val('');
-    //    $('#mObs').val('');
-    //    $('#mGenerarGR').prop('checked', true);
-    //    new bootstrap.Modal(document.getElementById('modalConfirmar')).show();
-    //}
-
     function renderDetalleConfirmacion(gd) {
-        // gd.Detalles: [{Id, CodProducto, EsSerializable, NumSerie, Cantidad, CantidadConfirmada}]
+        // Por si por error nos pasan el envoltorio {Ok, Data}
+        if (gd && gd.Data) gd = gd.Data;
+
+        const detalles = (gd && gd.Detalles) || [];
         var html = [];
-        html.push('<div class="table-responsive"><table class="table table-sm table-bordered w-100"><thead><tr>',
-            '<th class="text-center">Sel.</th><th>Producto</th><th>Serie</th><th class="text-end">Desp.</th>',
-            '<th class="text-end">Conf.</th><th class="text-end">Pend.</th><th class="text-end">Confirmar ahora</th>',
-            '</tr></thead><tbody>');
+        html.push(
+            '<div class="table-responsive"><table class="table table-sm table-bordered w-100">',
+            '<thead><tr>',
+            '<th class="text-center">Sel.</th>',
+            '<th>Producto</th>',
+            '<th>Serie</th>',
+            '<th class="text-end">Desp.</th>',
+            '<th class="text-end">Conf.</th>',
+            '<th class="text-end">Pend.</th>',
+            '<th class="text-end">Confirmar ahora</th>',
+            '</tr></thead><tbody>'
+        );
 
-        (gd.Detalles || []).forEach(d => {
+        detalles.forEach(d => {
+            // Fallbacks seguros
             var conf = d.CantidadConfirmada || 0;
-            var pend = (d.Cantidad || 0) - conf;
-            var sel = '';
-            var input = '';
+            var cant = d.Cantidad || 0;
+            var pend = Math.max(0, cant - conf);
 
-            if (d.EsSerializable) {
+            // Si backend no manda EsSerializable, infiérelo por NumSerie presente
+            var esSer = (typeof d.EsSerializable === 'boolean') ? d.EsSerializable : !!(d.NumSerie && (d.NumSerie + '').trim());
+
+            var sel, input;
+            if (esSer) {
                 sel = '<input type="checkbox" class="chkConf" data-id="' + d.Id + '" ' + (pend > 0 ? '' : 'disabled') + ' />';
                 input = '<span class="text-muted">1</span>';
             } else {
@@ -428,15 +461,19 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 input = '<input type="number" min="1" max="' + pend + '" value="' + Math.min(1, pend) + '" class="form-control form-control-sm inpCant" data-id="' + d.Id + '" ' + (pend > 0 ? '' : 'disabled') + ' />';
             }
 
-            html.push('<tr>',
+            html.push(
+                '<tr data-producto="', (d.CodProducto || ''),
+                '" data-serializable="', (esSer ? 'true' : 'false'),
+                '" data-pend="', pend, '">',
                 '<td class="text-center">', sel, '</td>',
                 '<td>', (d.CodProducto || ''), '</td>',
-                '<td>', (d.EsSerializable ? (d.NumSerie || '') : ''), '</td>',
-                '<td class="text-end">', (d.Cantidad || 0), '</td>',
+                '<td class="cel-serie">', (esSer ? (d.NumSerie || '') : ''), '</td>',
+                '<td class="text-end">', cant, '</td>',
                 '<td class="text-end">', conf, '</td>',
                 '<td class="text-end">', pend, '</td>',
                 '<td class="text-end">', input, '</td>',
-                '</tr>');
+                '</tr>'
+            );
         });
 
         html.push('</tbody></table></div>');
@@ -445,6 +482,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
         $('#modalConfirmar .modal-body').append('<div id="mDetalle" class="mt-3"></div>');
         $('#mDetalle').html(html.join(''));
     }
+
 
     async function confirmarUno(id, fecha, numGR, obs, generarGR) {
         // si numGR vacío, backend generará "REC-{NumGuia}"

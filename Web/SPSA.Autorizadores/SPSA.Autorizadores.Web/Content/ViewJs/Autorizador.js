@@ -174,17 +174,17 @@ var Autorizador = function () {
 
                 response.Columnas.forEach((x) => {
 
-                    //columnas.push({
-                    //    title: x,
-                    //    data: x.replace(" ", "").replace(".", ""),
-                    //    defaultContent: "",
-                    //});
-                    const key = x.replace(/\s+/g, '').replace(/\./g, ''); // quita TODOS los espacios y puntos
                     columnas.push({
                         title: x,
-                        data: key,
+                        data: x.replace(" ", "").replace(".", ""),
                         defaultContent: "",
                     });
+                    //const key = x.replace(/\s+/g, '').replace(/\./g, ''); // quita TODOS los espacios y puntos
+                    //columnas.push({
+                    //    title: x,
+                    //    data: key,
+                    //    defaultContent: "",
+                    //});
                 });
 
                 dataTableAutorizador = $('#tableAutorizador').DataTable({
@@ -858,7 +858,8 @@ var Autorizador = function () {
             return {
                 CodColaborador: x.Codigo,
                 CodAutorizador: x.Autorizador,
-                CodLocal: x.local_,
+                //CodLocal: x.local_,
+                CodLocal: x.LOCAL,
                 NomAutorizador: x.Nombre,
                 Cargo: x.Puesto
             }
@@ -920,7 +921,8 @@ var Autorizador = function () {
             return {
                 CodColaborador: x.Codigo,
                 CodAutorizador: x.Autorizador,
-                CodLocal: x.local_,
+                //CodLocal: x.local_,
+                CodLocal: x.LOCAL,
                 NomAutorizador: x.Nombre,
                 Cargo: x.Puesto
             }

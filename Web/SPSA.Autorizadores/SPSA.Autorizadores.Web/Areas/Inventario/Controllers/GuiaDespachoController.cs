@@ -34,7 +34,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             //command.Cabecera.CodEmpresaOrigen = WebSession.JerarquiaOrganizacional.CodEmpresa;
             //command.Cabecera.CodLocalOrigen = WebSession.JerarquiaOrganizacional.CodLocal;
             var respuesta = await _mediator.Send(command);
-            return Json(respuesta);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
