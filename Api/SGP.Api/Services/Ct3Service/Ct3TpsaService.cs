@@ -1,4 +1,6 @@
-﻿namespace SGP.Api.Services.Ct3Service
+﻿using Npgsql;
+
+namespace SGP.Api.Services.Ct3Service
 {
     public class Ct3TpsaService
     {
@@ -7,5 +9,7 @@
         {
             _conexionBCT = configuration.GetConnectionString("BCT_TP") ?? throw new ArgumentNullException(nameof(configuration), "Connection string 'BCT_TP' not found.");
         }
+
+        
     }
 }

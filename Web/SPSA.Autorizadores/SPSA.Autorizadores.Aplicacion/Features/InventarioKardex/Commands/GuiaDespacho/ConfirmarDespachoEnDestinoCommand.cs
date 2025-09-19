@@ -90,6 +90,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         NumGuia = string.IsNullOrWhiteSpace(request.NumGuiaRecepcion) ? $"REC-{gd.NumGuia}" : request.NumGuiaRecepcion.Trim(),
                         Fecha = request.Fecha.Date,
                         ProveedorRuc = null,
+                        CodEmpresaOrigen = gd.CodEmpresaOrigen,
+                        CodLocalOrigen = gd.CodLocalOrigen,
                         CodEmpresaDestino = gd.CodEmpresaDestino,
                         CodLocalDestino = gd.CodLocalDestino,
                         AreaGestion = gd.AreaGestion,

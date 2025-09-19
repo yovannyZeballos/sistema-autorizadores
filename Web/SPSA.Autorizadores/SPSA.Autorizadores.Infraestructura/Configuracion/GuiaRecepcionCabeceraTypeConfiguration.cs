@@ -16,6 +16,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.OrdenCompra).HasColumnName("orden_compra");
             Property(x => x.Fecha).HasColumnName("fecha");
             Property(x => x.ProveedorRuc).HasColumnName("proveedor_ruc");
+            Property(x => x.CodEmpresaOrigen).HasColumnName("cod_empresa_origen");
+            Property(x => x.CodLocalOrigen).HasColumnName("cod_local_origen");
             Property(x => x.CodEmpresaDestino).HasColumnName("cod_empresa_destino");
             Property(x => x.CodLocalDestino).HasColumnName("cod_local_destino");
             Property(x => x.AreaGestion).HasColumnName("area_gestion");

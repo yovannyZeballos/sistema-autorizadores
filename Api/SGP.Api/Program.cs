@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using SGP.Api.Services.BctService;
 using SGP.Api.Services.SgpService;
 using SGP.Api.Services;
+using SGP.Api.Services.Ct3Service;
 
 namespace SGP.Api
 {
@@ -22,6 +23,8 @@ namespace SGP.Api
             builder.Services.AddSingleton<BctSpsaService>();
             builder.Services.AddSingleton<BctTpsaService>();
             builder.Services.AddSingleton<BctHpsaService>();
+
+            builder.Services.AddSingleton<Ct3SpsaService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>

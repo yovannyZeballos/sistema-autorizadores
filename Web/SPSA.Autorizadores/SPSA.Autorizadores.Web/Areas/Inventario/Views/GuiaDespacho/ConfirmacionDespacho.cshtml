@@ -47,7 +47,7 @@
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
         <div class="page-title">Confirmación de Despachos en Destino</div>
-        <small class="text-blue h6">Verifica y confirma los despachos (Transferencias y Asignaciones) que llegaron a tu local.</small>
+        <small class="text-blue h6">Verifica y confirma los despachos que llegaron a tu local.</small>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
@@ -63,36 +63,45 @@
     <div class="card-body">
         <div class="row g-2">
             <div class="col-md-2">
-                <label class="form-label">Fecha desde</label>
-                <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+                <div class="form-group">
+                    <label class="form-label">Fecha desde</label>
+                    <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+                </div>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Fecha hasta</label>
-                <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label">Empresa Destino</label>
-                <select id="fEmpDest" class="form-control select2-show-search"></select>
+                <div class="form-group">
+                    <label class="form-label">Fecha hasta</label>
+                    <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+                </div>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Local Destino</label>
-                <select id="fLocDest" class="form-control select2-show-search"></select>
+                <div class="form-group select2-sm">
+                    <label class="form-label">Empresa Origen</label>
+                    <select id="fEmpOrigen" class="form-control select2-show-search"></select>
+                </div>
             </div>
-
             <div class="col-md-2">
-                <label class="form-label">Tipo Mov.</label>
-                <select id="fTipoMov" class="form-control select2-show-search">
-                    <option value="">Todos</option>
-                    <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                    <option value="ASIGNACION_ACTIVO">ASIGNACION_ACTIVO</option>
-                </select>
+                <div class="form-group select2-sm">
+                    <label class="form-label">Local Origen</label>
+                    <select id="fLocOrigen" class="form-control select2-show-search"></select>
+                </div>
             </div>
-
+            <div class="col-md-2">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Tipo Mov.</label>
+                    <select id="fTipoMov" class="form-control select2-show-search">
+                        <option value="">Todos</option>
+                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                        <option value="ASIGNACION_ACTIVO">ASIGNACION_ACTIVO</option>
+                    </select>
+                </div>
+            </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
-                    <i class="fe fe-search me-1"></i>Buscar
-                </button>
+                <div class="form-group">
+                    <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
+                        <i class="fe fe-search me-1"></i>Buscar
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -166,6 +175,13 @@
                     </div>
                 </div>
             </div>
+            <!-- Contenedor donde el JS pintará las líneas a confirmar -->
+            <div id="mDetalle" class="mt-3">
+                <div class="text-muted small">
+                    Selecciona las líneas a confirmar (puede ser parcial). Para productos serializables se confirma 1 por serie.
+                </div>
+            </div>
+
 
             <div class="modal-footer">
                 <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>

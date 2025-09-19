@@ -447,6 +447,7 @@
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarMaeAreaGestionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarPaginadoMaeAreaGestionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ListarPaginadoGuiaDespachoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ObtenerGuiaDespachoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ListarPaginadoGuiaRecepcionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexQuery.cs" />

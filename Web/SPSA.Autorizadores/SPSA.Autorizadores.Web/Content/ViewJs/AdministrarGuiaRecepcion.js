@@ -426,11 +426,13 @@ var AdministrarGuiaRecepcion = (function ($) {
                 },
                 { data: 'NumGuia' },
                 { data: 'Proveedor', defaultContent: '' },
-                {
-                    data: null, render: function (r) {
-                        return (r.CodEmpresaDestino || '') + '-' + (r.CodLocalDestino || '');
-                    }
-                },
+                { data: 'NomLocalOrigen', defaultContent: '' },
+                { data: 'NomLocalDestino', defaultContent: '' },
+                //{
+                //    data: null, render: function (r) {
+                //        return (r.CodEmpresaDestino || '') + '-' + (r.CodLocalDestino || '');
+                //    }
+                //},
                 { data: 'Items', defaultContent: '' },
                 { data: 'IndEstado', defaultContent: 'REGISTRADA' },
                 { data: 'UsuCreacion', defaultContent: '' }
