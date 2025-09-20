@@ -134,7 +134,7 @@ var ClienteCen = function () {
                         icon: "success"
                     }).then(() => {
                         ocultarFormularioRegistro();
-                        //consultaCliente();
+                        consultaCliente();
                     });
                 } else {
                     swal({
