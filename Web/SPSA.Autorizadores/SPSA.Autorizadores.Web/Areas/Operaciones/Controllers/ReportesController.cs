@@ -46,7 +46,7 @@ namespace SPSA.Autorizadores.Web.Areas.Operaciones.Controllers
 			{
 				NumeroDocumento = numero,
 				TipoDocumento = tipo,
-				RucEmpresa = WebSession.Ruc
+				RucEmpresa = WebSession.JerarquiaOrganizacional.Ruc
 			};
 
 			var resultado = await _mediator.Send(request);

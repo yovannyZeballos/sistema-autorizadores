@@ -97,9 +97,8 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
 		{
 			get
 			{
-				var ambiente = ConfigurationManager.AppSettings["SistemaAmbiente"];
-				return CadenaConexionDesdeVariableEntorno($"CadenaConexionCT3_SPSA_SGP_{ambiente}");
-			}
+                return ConfigurationManager.ConnectionStrings["CT3_SP_SGP"].ConnectionString;
+            }
 		}
 
 		private static string CadenaConexionDesdeVariableEntorno(string nombreVariable)

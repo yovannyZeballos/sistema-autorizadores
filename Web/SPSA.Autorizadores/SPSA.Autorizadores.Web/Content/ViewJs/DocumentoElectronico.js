@@ -76,6 +76,7 @@ var DocumentoElectronico = function () {
                     CodLocal: $("#cboLocal").val(),
                     FechaInicio: $("#txtFechaInicio").val(),
                     FechaFin: $("#txtFechaFin").val(),
+                    TipoDocumento: $("#cboTipoDocumento").val(),
                     TipoDocCliente: $("#cboTipoDocCliente").val(),
                     NroDocCliente: $("#txtNroDocCliente").val(),
                     Cajero: $("#txtCajero").val(),
@@ -85,6 +86,7 @@ var DocumentoElectronico = function () {
                     TamañoPagina: data.length,
                     Busqueda: $("#txtFiltro").val(),
                 };
+
 
                 $.ajax({
                     url: urlListarDocumentosElectronicos,
@@ -132,18 +134,7 @@ var DocumentoElectronico = function () {
                 });
             },
             columns: [
-                {
-                    data: "Fecha",
-                    title: "Fecha",
-                    render: function (data, type, row) {
-                        if (data) {
-                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
-                            var date = new Date(timestamp);
-                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
-                        }
-                        return "";
-                    }
-                },
+                { title: "Fecha", data: "Fecha" },
                 { title: "Caja", data: "Caja" },
                 { title: "Importe", data: "Importe" },
                 { title: "Doc. Electrónico", data: "DocElectronico" },
@@ -303,10 +294,9 @@ var DocumentoElectronico = function () {
 
     return {
         init: function () {
-            eventos();
-            inicializarDatePicker();
-
             checkSession(function () {
+                eventos();
+                inicializarDatePicker();
                 listarLocales();
             });
         }
