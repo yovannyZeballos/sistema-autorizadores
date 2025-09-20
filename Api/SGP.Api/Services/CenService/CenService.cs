@@ -1,72 +1,74 @@
 ﻿using SGP.Api.Controllers.Request;
 using SGP.Api.Controllers.Response;
+using Microsoft.Data.SqlClient;
 
 namespace SGP.Api.Services.CenService
 {
 	public class CenService
 	{
-		public Task<ConsultaClienteCenResponse?> ObtenreCliente(ConsultaClienteCenRequest request)
+		private readonly string _conexion;
+		public CenService(IConfiguration configuration)
 		{
-			var listaClientes = ObtenerListaClientesMockeada();
-
-			// Buscar cliente por tipo y número de documento
-			var cliente = listaClientes.FirstOrDefault(c =>
-				c.TipoDocumento == request.TipoDocumento &&
-				c.NumeroDocumento == request.NumeroDocumento);
-
-			return Task.FromResult(cliente);
+			_conexion = configuration.GetConnectionString("CEM") ?? throw new ArgumentNullException(nameof(configuration), "Connection string 'CEM' not found.");
 		}
 
-		public async Task InsertarCliente(InsertarClienteCenRequest recurso)
+		public async Task<ConsultaClienteCenResponse?> ObtenreCliente(ConsultaClienteCenRequest request)
 		{
-			await Task.CompletedTask;
+			using var connection = new SqlConnection(_conexion);
+			using var command = new SqlCommand("SP_Obtener_Datos_Cliente", connection)
+			{
+				CommandType = System.Data.CommandType.StoredProcedure
+			};
+
+			command.Parameters.AddWithValue("@TipoDoc", request.TipoDocumento ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@NumeroDoc", request.NumeroDocumento ?? (object)DBNull.Value);
+
+			await connection.OpenAsync();
+
+			using var reader = await command.ExecuteReaderAsync();
+			if (await reader.ReadAsync())
+			{
+				return new ConsultaClienteCenResponse
+				{
+					TipoDocumento = reader["identificationType"] as string,
+					NumeroDocumento = reader["identificationNumber"] as string,
+					Nombres = reader["name"] as string,
+					Apellidos = reader["surname"] as string,
+					RazonSocial = reader["tradeName"] as string
+				};
+			}
+			return null;
 		}
 
-		private List<ConsultaClienteCenResponse> ObtenerListaClientesMockeada()
+		public async Task<int> InsertarCliente(InsertarClienteCenRequest recurso)
 		{
-			return new List<ConsultaClienteCenResponse>
-							{
-								new ConsultaClienteCenResponse
-								{
-									TipoDocumento = "DNI",
-									NumeroDocumento = "12345678",
-									Nombres = "Juan Carlos",
-									Apellidos = "Pérez García",
-									RazonSocial = null
-								},
-								new ConsultaClienteCenResponse
-								{
-									TipoDocumento = "DNI",
-									NumeroDocumento = "87654321",
-									Nombres = "María Elena",
-									Apellidos = "Rodríguez López",
-									RazonSocial = null
-								},
-								new ConsultaClienteCenResponse
-								{
-									TipoDocumento = "RUC",
-									NumeroDocumento = "20123456789",
-									Nombres = null,
-									Apellidos = null,
-									RazonSocial = "Empresa Comercial SAC"
-								},
-								new ConsultaClienteCenResponse
-								{
-									TipoDocumento = "RUC",
-									NumeroDocumento = "20987654321",
-									Nombres = null,
-									Apellidos = null,
-									RazonSocial = "Distribuidora del Norte EIRL"
-								},
-								new ConsultaClienteCenResponse
-								{
-									TipoDocumento = "CE",
-									NumeroDocumento = "001234567",
-									Nombres = "Roberto",
-									Apellidos = "Silva Montenegro",
-									RazonSocial = null
-								}
-							};
+			using var connection = new SqlConnection(_conexion);
+			using var command = new SqlCommand("SP_REG_CLIENTE_SP", connection)
+			{
+				CommandType = System.Data.CommandType.StoredProcedure
+			};
+
+			// Parámetros de entrada
+			command.Parameters.AddWithValue("@Tipo_documento", recurso.TipoDocumento ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Nro_documento", recurso.NumeroDocumento ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Razon_social", recurso.RazonSocial ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Nombres", recurso.Nombres ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Apellidos", recurso.Apellidos ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Sistema", recurso.Sistema ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Usuario", recurso.UsuarioCreacion ?? (object)DBNull.Value);
+
+			// Parámetro de salida
+			var codigoRespuestaParam = new SqlParameter("@Codigo_respuesta", System.Data.SqlDbType.Int)
+			{
+				Direction = System.Data.ParameterDirection.Output
+			};
+			command.Parameters.Add(codigoRespuestaParam);
+
+			await connection.OpenAsync();
+			await command.ExecuteNonQueryAsync();
+
+			// Retornar el valor del parámetro de salida
+			return (int)(codigoRespuestaParam.Value ?? 0);  //3 error
 		}
 	}
 }

@@ -21,6 +21,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 		public string Nombres { get; set; }
 		public string Apellidos { get; set; }
 		public string RazonSocial { get; set; }
+		public string Usuario { get; set; }
 	}
 
 	public class InsertarClienteCenHandler : IRequestHandler<InsertarClienteCenCommand, RespuestaComunDTO>
@@ -44,7 +45,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 					NumeroDocumento = request.NumeroDocumento,
 					Nombres = request.Nombres,
 					Apellidos = request.Apellidos,
-					RazonSocial = request.RazonSocial
+					RazonSocial = request.RazonSocial,
+					UsuarioCreacion = request.Usuario,
+					Sistema = "SGP"
 				};
 				await _agenteCen.InsertarCliente(recurso);
 			}

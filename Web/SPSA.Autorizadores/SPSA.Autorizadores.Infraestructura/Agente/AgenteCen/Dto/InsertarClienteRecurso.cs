@@ -14,5 +14,9 @@ namespace SPSA.Autorizadores.Infraestructura.Agente.AgenteCen.Dto
 		public string Apellidos { get; set; }
 		[JsonProperty("razonSocial")]
 		public string RazonSocial { get; set; }
+		[JsonProperty("usuarioCreacion")]
+		public string UsuarioCreacion { get; set; }
+		[JsonProperty("sistema")]
+		public string Sistema { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Operaciones.Queries;
+using SPSA.Autorizadores.Web.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace SPSA.Autorizadores.Web.Areas.Operaciones.Controllers
 		[HttpPost]
 		public async Task<JsonResult> InsertarClienteCen(InsertarClienteCenCommand request)
 		{
+			request.Usuario = WebSession.Login;
 			var response = await _mediator.Send(request);
 			return Json(response);
 		}

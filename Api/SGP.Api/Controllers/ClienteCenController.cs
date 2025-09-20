@@ -34,7 +34,13 @@ namespace SGP.Api.Controllers
 		{
 			try
 			{
-				await _cenService.InsertarCliente(request);
+				int respuesta = await _cenService.InsertarCliente(request);
+
+				if (respuesta == 3)
+				{
+					return StatusCode(500, new ErrorRequest { Mensaje = "No se pudo crear el cliente en CEN" });
+				}
+
 				return Created();
 			}
 			catch (Exception ex)

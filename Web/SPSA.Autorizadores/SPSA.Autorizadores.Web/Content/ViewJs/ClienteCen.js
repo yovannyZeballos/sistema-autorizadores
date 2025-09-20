@@ -111,9 +111,9 @@ var ClienteCen = function () {
         const request = {
             TipoDocumento: tipoDocumento,
             NumeroDocumento: $('#txtNroDocumentoRegistro').val(),
-            Nombres: tipoDocumento === 'DNI' ? $('#txtNombresRegistro').val() : '',
-            Apellidos: tipoDocumento === 'DNI' ? $('#txtApellidosRegistro').val() : '',
-            RazonSocial: tipoDocumento === 'RUC' ? $('#txtRazonSocialRegistro').val() : ''
+            Nombres: tipoDocumento === '1' ? $('#txtNombresRegistro').val() : '',
+            Apellidos: tipoDocumento === '1' ? $('#txtApellidosRegistro').val() : '',
+            RazonSocial: tipoDocumento === '4' ? $('#txtRazonSocialRegistro').val() : ''
         };
 
         $.ajax({
@@ -173,12 +173,12 @@ var ClienteCen = function () {
     const mostrarCamposSegunTipoDocumento = function () {
         const tipoDocumento = $('#cboTipoDocumentoRegistro').val();
 
-        if (tipoDocumento === 'DNI') {
+        if (tipoDocumento === '1') {
             $('#camposPersonaNatural').removeClass('d-none');
             $('#camposPersonaJuridica').addClass('d-none');
             // Limpiar campos de persona jurídica
             $('#txtRazonSocialRegistro').val('');
-        } else if (tipoDocumento === 'RUC') {
+        } else if (tipoDocumento === '4') {
             $('#camposPersonaNatural').addClass('d-none');
             $('#camposPersonaJuridica').removeClass('d-none');
             // Limpiar campos de persona natural
@@ -215,7 +215,7 @@ var ClienteCen = function () {
         }
 
         // Validar campos específicos según tipo de documento
-        if (tipoDocumento === 'DNI') {
+        if (tipoDocumento === '1') {
             const nombres = $('#txtNombresRegistro').val().trim();
             const apellidos = $('#txtApellidosRegistro').val().trim();
 
@@ -232,7 +232,7 @@ var ClienteCen = function () {
             } else {
                 $('#lblErrorApellidosRegistro').addClass('d-none');
             }
-        } else if (tipoDocumento === 'RUC') {
+        } else if (tipoDocumento === '4') {
             const razonSocial = $('#txtRazonSocialRegistro').val().trim();
 
             if (razonSocial === '') {
@@ -280,7 +280,7 @@ var ClienteCen = function () {
         // Crear fila con los datos del cliente
         const fila = `
             <tr>
-                <td>${cliente.TipoDocumento || ''}</td>
+                <td>${(cliente.TipoDocumento === '1' || '') ? 'DNI' : 'RUC' }</td>
                 <td>${cliente.NumeroDocumento || ''}</td>
                 <td>${cliente.Nombres || ''}</td>
                 <td>${cliente.Apellidos || ''}</td>
@@ -298,8 +298,8 @@ var ClienteCen = function () {
         const tipoDocumento = $('#cboTipoDocumento').val().trim();
         const numeroDocumento = $('#txtNroDocumento').val().trim();
 
-        const esValido = (tipoDocumento === 'DNI' && /^\d{8}$/.test(numeroDocumento)) ||
-            (tipoDocumento === 'RUC' && /^\d{11}$/.test(numeroDocumento));
+        const esValido = (tipoDocumento === '1' && /^\d{8}$/.test(numeroDocumento)) ||
+            (tipoDocumento === '4' && /^\d{11}$/.test(numeroDocumento));
 
         if (numeroDocumento && !esValido) {
             $('#lblErrorNumeroDocumento').removeClass('d-none').text('Verifique longitud: DNI=8, RUC=11.');
@@ -313,8 +313,8 @@ var ClienteCen = function () {
         const tipoDocumento = $('#cboTipoDocumentoRegistro').val().trim();
         const numeroDocumento = $('#txtNroDocumentoRegistro').val().trim();
 
-        const esValido = (tipoDocumento === 'DNI' && /^\d{8}$/.test(numeroDocumento)) ||
-            (tipoDocumento === 'RUC' && /^\d{11}$/.test(numeroDocumento));
+        const esValido = (tipoDocumento === '1' && /^\d{8}$/.test(numeroDocumento)) ||
+            (tipoDocumento === '4' && /^\d{11}$/.test(numeroDocumento));
 
         if (numeroDocumento && !esValido) {
             $('#lblErrorNumeroDocumentoRegistro').removeClass('d-none').text('Verifique longitud: DNI=8, RUC=11.');
@@ -364,7 +364,9 @@ var ClienteCen = function () {
 
     return {
         init: function () {
-            eventos();
+            checkSession(function () {
+                eventos();
+            });
         }
     }
 }(jQuery);
