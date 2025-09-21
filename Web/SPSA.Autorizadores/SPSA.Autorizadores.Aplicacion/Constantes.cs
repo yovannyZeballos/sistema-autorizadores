@@ -13,6 +13,7 @@
 		public const decimal CodigoProcesoMonitorArchivos = 33;
 		public const decimal CodigoProcesoMonitorCierreEOD = 34;
 		public const decimal CodigoProcesoMonitorCajaDefectuosa = 35;
+		public const decimal CodigoProcesoConsultaDocumentoElectronico = 39;
 
 		public const string CodigoParametroToleranciaSegundos = "01";
 		public const string CodigoParametroToleranciaCantidad = "02";
@@ -44,6 +45,10 @@
 		public const string CodigoComandoObtenerArchivo_ProcesoMonitorCierreEOD = "02";
 		public const string CodigoComandoHoraInicioArchivo_ProcesoMonitorCierreEOD = "03";
 		public const string CodigoComandoHoraFinArchivo_ProcesoMonitorCierreEOD = "04";
+
+		public const string CodigoParametroUsuarioServicio_DocumentoElectronico = "01";
+		public const string CodigoParametroClaveServicio_DocumentoElectronico = "02";
+
 
 	}
 }

@@ -318,6 +318,9 @@
     <Compile Include="Areas\Locales\LocalesAreaRegistration.cs" />
     <Compile Include="Areas\Monitor\Controllers\ReporteTesoreriaController.cs" />
     <Compile Include="Areas\Monitor\MonitorAreaRegistration.cs" />
+    <Compile Include="Areas\Operaciones\Controllers\GestionController.cs" />
+    <Compile Include="Areas\Operaciones\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\Operaciones\OperacionesAreaRegistration.cs" />
     <Compile Include="Areas\Reportes\Controllers\AdministrarReportesController.cs" />
     <Compile Include="Areas\Reportes\Controllers\MaestroAutorizadoresController.cs" />
     <Compile Include="Areas\Reportes\Controllers\MaestroCajerosController.cs" />
@@ -2404,6 +2407,8 @@
     <Content Include="Content\ViewJs\AdministrarPeriodoMdr.js" />
     <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
     <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
+    <Content Include="Content\ViewJs\ClienteCen.js" />
+    <Content Include="Content\ViewJs\DocumentoElectronico.js" />
     <Content Include="Content\ViewJs\AsignarLocal_Ct3.js" />
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
@@ -2960,6 +2965,11 @@
     <Content Include="Areas\Inventario\Views\GuiaRecepcion\Proveedor.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaDespacho\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaDespacho\ConfirmacionDespacho.cshtml" />
+    <Content Include="Areas\Operaciones\Views\Gestion\ClienteCen.cshtml" />
+    <Content Include="Areas\Operaciones\Views\Reportes\DocumentoElectronico.cshtml" />
+    <Content Include="Areas\Operaciones\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Operaciones\Views\web.config" />
+    <Content Include="Areas\Operaciones\Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

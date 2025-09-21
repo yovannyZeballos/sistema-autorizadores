@@ -79,6 +79,8 @@ using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.PeriodosMdr;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Monitor.Queries;
+using SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands;
+using SPSA.Autorizadores.Aplicacion.Features.Operaciones.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.Puestos.Queries;
@@ -110,6 +112,7 @@ using SPSA.Autorizadores.Aplicacion.Features.Zona.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Zona.Queries;
 using SPSA.Autorizadores.Dominio.Contrato.Auxiliar;
 using SPSA.Autorizadores.Dominio.Entidades;
+using SPSA.Autorizadores.Infraestructura.Agente.AgenteCen.Dto;
 using System.Collections.Generic;
 using System.Data;
 
@@ -468,10 +471,17 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarPaginadoMovKardexPorProductoHandler>().As<IRequestHandler<ListarPaginadoMovKardexPorProductoQuery, GenericResponseDTO<PagedResult<ListarMovKardexDto>>>>();
 
 
-            #endregion
+			#endregion
+
+			#region OPERACIONES
+			builder.RegisterType<ListarDocumentosElectronicosHandler>().As<IRequestHandler<ListarDocumentosElectronicosQuery, GenericResponseDTO<PagedResult<DocumentoElectronico>>>>();
+			builder.RegisterType<ConsultarClienteCenQueryHandler>().As<IRequestHandler<ConsultarClienteCenQuery, GenericResponseDTO<ConsultaClienteRespuesta>>>();
+			builder.RegisterType<InsertarClienteCenHandler>().As<IRequestHandler<InsertarClienteCenCommand, RespuestaComunDTO>>();
+			builder.RegisterType<DescargarDocumentoElectronicoHandler>().As<IRequestHandler<DescargarDocumentoElectronicoCommand, GenericResponseDTO<byte[]>>>();
+			#endregion
 
 
-            base.Load(builder);
+			base.Load(builder);
 		}
 	}
 }
