@@ -33,7 +33,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespa
         public string UsuModifica { get; set; }
         public DateTime? FecModifica { get; set; }
 
-        public List<GuiaDespachoDetalle> Detalles { get; set; }
+        public List<GuiaDespachoDetalleDto> Detalles { get; set; }
         public int Items { get; set; }
     }
 }

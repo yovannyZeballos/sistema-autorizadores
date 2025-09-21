@@ -50,12 +50,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Menu.Commands
 					codMenu = (int.Parse(codMenu) + 1).ToString("000");
 				}
 
-				var menu = _mapper.Map<Seg_Menu>(request);
+                var menu = _mapper.Map<Seg_Menu>(request);
 				menu.CodMenu = codMenu;
 				menu.FecCreacion = DateTime.Now;
 				menu.IndActivo = "A";
+                menu.CodMenuPadre = request.CodMenuPadre == "0" ? null : request.CodMenuPadre;
 
-				_contexto.RepositorioSegMenu.Agregar(menu);
+                _contexto.RepositorioSegMenu.Agregar(menu);
 				await _contexto.GuardarCambiosAsync();
 			}
 			catch (Exception ex)

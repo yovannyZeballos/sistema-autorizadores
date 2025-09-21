@@ -431,6 +431,7 @@
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\MaeAreaGestionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaDespacho\GuiaDespachoCabeceraDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaDespacho\GuiaDespachoDetalleDto.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\GuiaDespacho\LineaConfirmacionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionCabeceraDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionDetalleDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\ListarGuiaRecepcionDto.cs" />
@@ -447,6 +448,7 @@
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarMaeAreaGestionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarPaginadoMaeAreaGestionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ListarPaginadoGuiaDespachoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ObtenerGuiaDespachoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ListarPaginadoGuiaRecepcionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexQuery.cs" />

@@ -33,6 +33,13 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             command.UsuCreacion = WebSession.Login;
             command.Cabecera.CodEmpresaDestino = WebSession.JerarquiaOrganizacional.CodEmpresa;
             command.Cabecera.CodLocalDestino = WebSession.JerarquiaOrganizacional.CodLocal;
+
+            if (!string.IsNullOrEmpty(command.Cabecera.ProveedorRuc)) 
+            {
+                command.Cabecera.CodEmpresaOrigen = WebSession.JerarquiaOrganizacional.CodEmpresa;
+                command.Cabecera.CodLocalOrigen = WebSession.JerarquiaOrganizacional.CodLocal;
+            }
+
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }

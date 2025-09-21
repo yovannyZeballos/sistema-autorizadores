@@ -37,6 +37,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 			var luzRoja = false;
 			var envioNotificacion = 0;
 
+			if (request.CodEmpresa == "12")
+			{
+				request.CodEmpresa = "02";
+
+            }
+
 			var response = new ObtenerComunDTO<(bool, bool, bool, int)> { Ok = true };
 			try
 			{
@@ -47,35 +53,35 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Monitor.Commands
 				var toleranciaAlerta = parametros.Where(x => x.CodParametro == Constantes.CodigoParametroToleranciaAlerta).Select(x => x.ValParametro).FirstOrDefault();
 				var toleranciaCantidad = parametros.Where(x => x.CodParametro == Constantes.CodigoParametroToleranciaCantidad).Select(x => x.ValParametro).FirstOrDefault();
 
-				if (request.RegistroTotal == null)
-					return response;
+                if (request.RegistroTotal == null)
+                    return response;
 
-				if (request.RegistroTotal.Cantidad >= Convert.ToInt32(toleranciaCantidad) && semaforoColor != ColorSemaforo.ROJO)
-				{
-					luzNaranja = true;
-					luzVerde = false;
-				}
+                if (request.RegistroTotal.Cantidad >= Convert.ToInt32(toleranciaCantidad) && semaforoColor != ColorSemaforo.ROJO)
+                {
+                    luzNaranja = true;
+                    luzVerde = false;
+                }
 
-				if (semaforoColor == ColorSemaforo.ROJO)
-				{
-					var diferencia = request.CantidadAnterior * 0.8;
+                if (semaforoColor == ColorSemaforo.ROJO)
+                {
+                    var diferencia = request.CantidadAnterior * 0.8;
 
-					if (request.RegistroTotal.Cantidad <= diferencia)
-					{
-						luzNaranja = true;
-						luzVerde = false;
-						luzRoja = false;
-						request.FechaAlerta = "";
-					}
-					else
-					{
-						luzNaranja = false;
-						luzVerde = false;
-						luzRoja = true;
-					}
-				}
+                    if (request.RegistroTotal.Cantidad <= diferencia)
+                    {
+                        luzNaranja = true;
+                        luzVerde = false;
+                        luzRoja = false;
+                        request.FechaAlerta = "";
+                    }
+                    else
+                    {
+                        luzNaranja = false;
+                        luzVerde = false;
+                        luzRoja = true;
+                    }
+                }
 
-				if (!string.IsNullOrEmpty(request.FechaAlerta) && !luzVerde)
+                if (!string.IsNullOrEmpty(request.FechaAlerta) && !luzVerde)
 				{
 					var fechaAlerta = DateTime.ParseExact(request.FechaAlerta, "d/M/yyyy H:m:s", CultureInfo.InvariantCulture);
 					var fechaActual = DateTime.Now;

@@ -13,9 +13,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecep
         public string ProveedorRuc { get; set; }
         public string Proveedor { get; set; }
 
+        public string CodEmpresaOrigen { get; set; }
+        public string CodLocalOrigen { get; set; }
+        public string NomEmpresaOrigen { get; set; }
+        public string NomLocalOrigen { get; set; }
+
         public string CodEmpresaDestino { get; set; }
         public string CodLocalDestino { get; set; }
-        public string NomEmpresaDestino { get; set; }     // (JOIN)
+        public string NomEmpresaDestino { get; set; }
         public string NomLocalDestino { get; set; }
 
         public string AreaGestion { get; set; }

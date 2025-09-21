@@ -14,7 +14,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Quer
 	{
 		public string CodEmpresa { get; set; }
 		public string CodCoordinador { get; set; }
-	}
+
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public string Search { get; set; }
+    }
 
 	public class ListarCajeroVolanteHandler : IRequestHandler<ListarCajeroVolanteQuery, ListarComunDTO<Dictionary<string, object>>>
 	{
@@ -36,32 +40,54 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MantenimientoCajeroVolante.Quer
 
 			try
 			{
-				var dt = await _repositorioCajero.ListarCajeroVolante(request.CodEmpresa, request.CodCoordinador);
+                var dt = await _repositorioCajero.ListarCajeroVolante(request.CodEmpresa, request.CodCoordinador);
 
-				foreach (DataColumn colum in dt.Columns)
-				{
-					response.Columnas.Add(colum.ColumnName.Replace(" ", "")
-												  .Replace(".", "")
-												  .Replace("á", "a")
-												  .Replace("é", "e")
-												  .Replace("í", "i")
-												  .Replace("ó", "o")
-												  .Replace("ú", "u"));
+                // columnas dinámicas
+                foreach (DataColumn col in dt.Columns)
+                {
+                    response.Columnas.Add(col.ColumnName.Replace(" ", "")
+                                                        .Replace(".", "")
+                                                        .Replace("á", "a")
+                                                        .Replace("é", "e")
+                                                        .Replace("í", "i")
+                                                        .Replace("ó", "o")
+                                                        .Replace("ú", "u"));
+                }
 
-				}
+                // total sin filtros
+                response.TotalRegistros = dt.Rows.Count;
 
-				response.Data = dt.AsEnumerable()
-							 .Select(r => r.Table.Columns.Cast<DataColumn>()
-							 .Select(c => new KeyValuePair<string, object>(c.ColumnName, r[c.Ordinal])
-						  ).ToDictionary(z => z.Key.Replace(" ", "")
-												  .Replace(".", "")
-												  .Replace("á", "a")
-												  .Replace("é", "e")
-												  .Replace("í", "i")
-												  .Replace("ó", "o")
-												  .Replace("ú", "u"), z => z.Value.GetType() == typeof(DateTime) ? Convert.ToDateTime(z.Value).ToString("dd/MM/yyyy") : z.Value)
-					   ).ToList();
-			}
+                IEnumerable<DataRow> query = dt.AsEnumerable();
+
+                // búsqueda
+                if (!string.IsNullOrEmpty(request.Search))
+                {
+                    query = query.Where(r => r.ItemArray.Any(c => c.ToString().Contains(request.Search)));
+                }
+
+                response.TotalFiltrados = query.Count();
+
+                // paginación
+                query = query.Skip((request.PageNumber - 1) * request.PageSize)
+                             .Take(request.PageSize);
+
+
+                // filas dinámicas
+                response.Data = query
+                    .Select(r => r.Table.Columns.Cast<DataColumn>()
+                    .ToDictionary(
+                        c => c.ColumnName.Replace(" ", "")
+                                         .Replace(".", "")
+                                         .Replace("á", "a")
+                                         .Replace("é", "e")
+                                         .Replace("í", "i")
+                                         .Replace("ó", "o")
+                                         .Replace("ú", "u"),
+                        c => r[c.Ordinal] is DateTime d ? d.ToString("dd/MM/yyyy") : r[c.Ordinal]
+                    ))
+                    .ToList();
+
+            }
 			catch (Exception ex)
 			{
 				response.Ok = false;

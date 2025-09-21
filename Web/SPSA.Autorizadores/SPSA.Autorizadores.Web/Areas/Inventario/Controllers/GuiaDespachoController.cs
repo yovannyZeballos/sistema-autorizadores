@@ -27,6 +27,16 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<JsonResult> Obtener(ObtenerGuiaDespachoQuery command)
+        {
+            //command.UsuCreacion = WebSession.Login;
+            //command.Cabecera.CodEmpresaOrigen = WebSession.JerarquiaOrganizacional.CodEmpresa;
+            //command.Cabecera.CodLocalOrigen = WebSession.JerarquiaOrganizacional.CodLocal;
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public async Task<JsonResult> Registrar(RegistrarGuiaDespachoCommand command)
         {
@@ -57,8 +67,6 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         [HttpGet]
         public async Task<JsonResult> ListarPaginadoConfirmacion(ListarPaginadoGuiaDespachoQuery request)
         {
-            request.CodEmpresaOrigen = null;
-            request.CodLocalOrigen = null;
             request.CodEmpresaDestino = WebSession.JerarquiaOrganizacional.CodEmpresa;
             request.CodLocalDestino= WebSession.JerarquiaOrganizacional.CodLocal;
             var respuesta = await _mediator.Send(request);

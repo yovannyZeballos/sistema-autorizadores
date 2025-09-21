@@ -10,6 +10,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string OrdenCompra { get; set; }
         public DateTime Fecha { get; set; }
         public string ProveedorRuc { get; set; }
+        public string CodEmpresaOrigen { get; set; }
+        public string CodLocalOrigen { get; set; }
         public string CodEmpresaDestino { get; set; }
         public string CodLocalDestino { get; set; }
         public string AreaGestion { get; set; }

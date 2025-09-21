@@ -358,6 +358,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Intercambio\AsignarLocalRequest.cs" />
+    <Compile Include="Models\Intercambio\DataTableRequest.cs" />
     <Compile Include="Models\Intercambio\ListarFormatoResponse.cs" />
     <Compile Include="Models\Intercambio\ListarMonitorRequest.cs" />
     <Compile Include="Models\Intercambio\ListarMonitorResponse.cs" />
@@ -2408,6 +2409,7 @@
     <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
     <Content Include="Content\ViewJs\ClienteCen.js" />
     <Content Include="Content\ViewJs\DocumentoElectronico.js" />
+    <Content Include="Content\ViewJs\AsignarLocal_Ct3.js" />
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
