@@ -30,7 +30,7 @@ namespace SGP.Api.Services.CenService
 			{
 				return new ConsultaClienteCenResponse
 				{
-					TipoDocumento = reader["identificationType"] as string,
+					TipoDocumento = Convert.ToString(reader["identificationType"]),
 					NumeroDocumento = reader["identificationNumber"] as string,
 					Nombres = reader["name"] as string,
 					Apellidos = reader["surname"] as string,
