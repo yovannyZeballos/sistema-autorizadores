@@ -14,7 +14,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.AreaG
 {
     public class ActualizarMaeAreaGestionCommand : IRequest<RespuestaComunDTO>
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string NomAreaGestion { get; set; }
         public string IndActivo { get; set; }
         public string UsuModifica { get; set; }

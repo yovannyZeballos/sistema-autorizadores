@@ -4,7 +4,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 {
     public class Mae_AreaGestion
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string NomAreaGestion { get; set; }
         public string IndActivo { get; set; }
         public string UsuCreacion { get; set; }

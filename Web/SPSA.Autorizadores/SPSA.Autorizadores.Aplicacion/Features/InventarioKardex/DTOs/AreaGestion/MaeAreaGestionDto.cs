@@ -4,7 +4,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.AreaGesti
 {
     public class MaeAreaGestionDto
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string NomAreaGestion { get; set; }
         public string IndActivo { get; set; }
         public string UsuCreacion { get; set; }

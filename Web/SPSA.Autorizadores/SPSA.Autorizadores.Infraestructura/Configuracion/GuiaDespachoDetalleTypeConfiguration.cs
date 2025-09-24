@@ -16,6 +16,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.CodProducto).HasColumnName("cod_producto");
             Property(x => x.SerieProductoId).HasColumnName("serie_producto_id");
             Property(x => x.Cantidad).HasColumnName("cantidad");
+            Property(x => x.CantidadConfirmada).HasColumnName("cantidad_confirmada");
             Property(x => x.CodActivo).HasColumnName("cod_activo");
             Property(x => x.Observaciones).HasColumnName("observaciones");
         }

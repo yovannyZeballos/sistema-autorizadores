@@ -24,7 +24,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
         public int PageSize { get; set; } = 10;
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
-        public string IndTransferencia { get; set; }
+        //public string IndTransferencia { get; set; }
         public string IndEstado { get; set; }
         public string CodEmpresaOrigen { get; set; }
         public string CodLocalOrigen { get; set; }
@@ -148,7 +148,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                 foreach (var g in pagedRegistros.Items)
                 {
                     var detalleDtos = (g.Detalles != null ? g.Detalles : Enumerable.Empty<GuiaDespachoDetalle>())
-                   // var detalleDtos = (g.Detalles ?? Enumerable.Empty<GuiaDespachoDetalleDto>())
                         .Select(d => new GuiaDespachoDetalleDto
                         {
                             Id = d.Id,
@@ -179,7 +178,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                         CodLocalDestino = g.CodLocalDestino,
                         NomLocalOrigen = localOrigen,
                         NomLocalDestino = localDestino,
-                        //Items = lineas,
+                        TipoMovimiento = g.TipoMovimiento,
+                        Items = detalleDtos.Count,
                         Detalles = detalleDtos,
                         IndEstado = g.IndEstado,
                         UsuCreacion = g.UsuCreacion

@@ -122,6 +122,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     includes: p => p.Marca
                 );
 
+                // Buscar las áreas de gestión asociadas a la página actual
+                var areaGestionIds = pagedRegistros.Items
+                    .Select(p => p.AreaGestionId)
+                    .Distinct()
+                    .ToList();
+
+                var areas = _contexto.RepositorioMaeAreaGestion
+                    .Obtener(a => areaGestionIds.Contains(a.Id))
+                    .ToDictionary(a => a.Id, a => a.NomAreaGestion);
+
+
                 var dtoItems = pagedRegistros.Items.Select(p => new ListarMaeProductoDto
                 {
                     CodProducto = p.CodProducto,
@@ -129,7 +140,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     MarcaId = p.MarcaId,
                     NomMarca = p.Marca?.NomMarca,
                     TipProducto = p.TipProducto,
+                    NomTipProducto = p.TipProducto == "A" ? "ACTIVO" : p.TipProducto == "R" ? "REPUESTO" : "",
                     AreaGestionId = p.AreaGestionId,
+                    NomAreaGestion = areas.ContainsKey(p.AreaGestionId)? areas[p.AreaGestionId] : string.Empty,
                     IndSerializable = p.IndSerializable,
                     IndActivo = p.IndActivo,
                     StkMinimo = p.StkMinimo,

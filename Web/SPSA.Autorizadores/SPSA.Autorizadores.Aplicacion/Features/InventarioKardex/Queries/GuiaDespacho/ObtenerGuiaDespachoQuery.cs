@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -56,13 +54,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                     Id = item.Id,
                     CodProducto = item.CodProducto,
                     Cantidad = item.Cantidad,
+                    CantidadConfirmada = item.CantidadConfirmada,
                     CodActivo = item.CodActivo,
                     Observaciones = item.Observaciones,
                     NumSerie = item.SerieProducto?.NumSerie,
-                    // Nuevo: lo exponemos explícito
                     EsSerializable = item.SerieProductoId.HasValue,
-                    // Si aún no llevas parciales en BD, deja 0 y el front lo interpreta como todo pendiente
-                    CantidadConfirmada = 0
                 }).ToList();
 
 
@@ -73,7 +69,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                     NumGuia = gd.NumGuia,
                     CodEmpresaOrigen = gd.CodEmpresaOrigen,
                     CodLocalOrigen = gd.CodLocalOrigen,
-                    // FIX: aquí estaba el error
                     CodEmpresaDestino = gd.CodEmpresaDestino,
                     CodLocalDestino = gd.CodLocalDestino,
                     TipoMovimiento = gd.TipoMovimiento,

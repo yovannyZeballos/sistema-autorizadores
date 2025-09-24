@@ -25,6 +25,8 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.UsarTransitoDestino).HasColumnName("usar_transito_destino");
             Property(x => x.Observaciones).HasColumnName("observaciones");
             Property(x => x.IndEstado).HasColumnName("ind_estado");
+            Property(x => x.IndConfirmacion).HasColumnName("ind_confirmacion");
+            Property(x => x.FecConfirmacion).HasColumnName("fec_confirmacion");
             Property(x => x.UsuCreacion).HasColumnName("usu_creacion");
             Property(x => x.FecCreacion).HasColumnName("fec_creacion");
             Property(x => x.UsuModifica).HasColumnName("usu_modifica");

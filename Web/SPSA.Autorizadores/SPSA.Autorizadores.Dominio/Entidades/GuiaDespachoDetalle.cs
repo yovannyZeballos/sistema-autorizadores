@@ -7,6 +7,7 @@
         public string CodProducto { get; set; }
         public long? SerieProductoId { get; set; }
         public decimal Cantidad { get; set; }
+        public decimal? CantidadConfirmada { get; set; }
         public string CodActivo { get; set; }
         public string Observaciones { get; set; }
 

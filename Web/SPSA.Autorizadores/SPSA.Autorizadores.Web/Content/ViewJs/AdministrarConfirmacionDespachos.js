@@ -1,31 +1,12 @@
-var urlListarDespachosPendientes = baseUrl + 'Inventario/GuiaDespacho/ListarPaginadoConfirmacion';
-var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener';           // { id }
+ï»¿var urlListarDespachosPendientes = baseUrl + 'Inventario/GuiaDespacho/ListarPaginadoConfirmacion';
+var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener'; 
 var urlConfirmarDespacho = baseUrl + 'Inventario/GuiaDespacho/ConfirmarEnDestino';
-
 var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
 
 var AdministrarConfirmacionDespachos = (function ($) {
 
-    function initSelect2EnModal(target, opts) {
-        var $els = (target && target.jquery) ? target : $(target);
-        if (!$els.length) return;
-        var $modal = $els.closest('.modal');
-        if (!$modal.length) $modal = $('#modalConfirmar');
-        $els.each(function () {
-            var $s = $(this);
-            if ($s.hasClass('select2-hidden-accessible')) $s.select2('destroy');
-            var $opt0 = $s.find('option').first();
-            var placeholder = ($opt0.attr('label') || $opt0.text() || 'Seleccionar…');
-            $s.select2($.extend(true, {
-                dropdownParent: $modal,
-                width: '100%',
-                placeholder: placeholder,
-                allowClear: true,
-                minimumResultsForSearch: 0
-            }, opts || {}));
-        });
-    }
+    let dt = null; // DataTable reutilizable
 
     function swalText(err, fallback) {
         if (!err) return fallback || '';
@@ -38,150 +19,113 @@ var AdministrarConfirmacionDespachos = (function ($) {
 
     // ========= Eventos =========
     function eventos() {
-        $('#btnBuscar').on('click', function (e) {
+        // Buscar con anti doble clic
+        $('#btnBuscar').on('click', async function (e) {
             e.preventDefault();
-            dt.ajax.reload();
-        });
-
-        $('#fEmpOrigen').on('change', function () { cargarComboLocales('#fEmpOrigen', '#fLocOrigen'); });
-
-        // Confirmación desde modal (1 guía)
-        //$('#btnConfirmarModal').on('click', async function () {
-        //    const id = parseInt($('#hidGuiaId').val() || '0', 10);
-        //    const fecha = $('#mFecha').val();
-        //    if (!id || !fecha) {
-        //        swal({ text: "Complete la fecha de recepción.", icon: "warning" }); return;
-        //    }
-        //    const numGR = ($('#mNumGR').val() || '').trim();
-        //    const obs = ($('#mObs').val() || '').trim();
-        //    const genGR = $('#mGenerarGR').is(':checked');
-
-        //    const r = await confirmarUno(id, fecha, numGR, obs, genGR);
-        //    if (r && r.Ok) {
-        //        swal({ text: r.Mensaje || 'Confirmado correctamente.', icon: 'success' });
-        //        bootstrap.Modal.getInstance(document.getElementById('modalConfirmar')).hide();
-        //        dt.ajax.reload(null, false);
-        //    } else {
-        //        swal({ text: swalText(r, 'No se pudo confirmar.'), icon: 'warning' });
-        //    }
-        //});
-
-        $('#btnConfirmarModal').off('click').on('click', async function () {
-            const id = parseInt($('#hidGuiaId').val() || '0', 10);
-            const fecha = $('#mFecha').val();
-            if (!id || !fecha) { swal({ text: "Complete la fecha de recepción.", icon: "warning" }); return; }
-
-            const numGR = ($('#mNumGR').val() || '').trim();
-            const obs = ($('#mObs').val() || '').trim();
-            const genGR = $('#mGenerarGR').is(':checked');
-
-            const lines = [];
-            const errores = [];
-
-            $('#mDetalle tbody tr').each(function () {
-                const $tr = $(this);
-                const $chk = $tr.find('.chkConf');
-                if (!$chk.is(':checked')) return;
-
-                const detId = parseInt($chk.data('id'), 10);
-                const codProd = ($tr.data('producto') || '').toString();
-                const esSer = ('' + $tr.data('serializable')).toLowerCase() === 'true';
-                const pend = parseInt($tr.data('pend') || '0', 10);
-
-                let cant = 1;
-                let numSerie = null;
-
-                if (esSer) {
-                    numSerie = ($tr.find('.cel-serie').text() || '').trim() || null;
-                    if (pend <= 0) errores.push(`Línea ${detId}: no hay pendiente por confirmar.`);
-                } else {
-                    cant = parseInt($tr.find('.inpCant').val() || '0', 10);
-                    if (!Number.isInteger(cant) || cant <= 0) {
-                        errores.push(`Línea ${detId}: cantidad inválida.`);
-                    } else if (cant > pend) {
-                        errores.push(`Línea ${detId}: la cantidad (${cant}) no puede exceder el pendiente (${pend}).`);
-                    }
-                }
-
-                if (!codProd) errores.push(`Línea ${detId}: producto vacío.`);
-                lines.push({ DespachoDetalleId: detId, CodProducto: codProd, NumSerie: numSerie, Cantidad: cant });
-            });
-
-            if (!lines.length) { swal({ text: "Selecciona al menos una línea a confirmar.", icon: "warning" }); return; }
-            if (errores.length) { swal({ text: errores.join('\n'), icon: "warning" }); return; }
-
-            const payload = {
-                GuiaDespachoId: id,
-                NumGuiaRecepcion: numGR || null,
-                Fecha: fecha,
-                Observaciones: obs || null,
-                GenerarGuiaRecepcion: !!genGR,
-                Lineas: lines
-            };
-
-            // anti doble clic
             const $btn = $(this);
-            const oldHtml = $btn.html();
-            $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Confirmando…');
-
+            const old = $btn.html();
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Buscandoâ€¦');
             try {
-                const resp = await $.ajax({
-                    url: urlConfirmarDespacho,
-                    type: 'POST',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(payload),
-                    dataType: 'json'
-                });
-
-                if (resp && resp.Ok) {
-                    swal({ text: resp.Mensaje || 'Confirmado correctamente.', icon: 'success' });
-                    bootstrap.Modal.getInstance(document.getElementById('modalConfirmar')).hide();
-                    $('#tablePendientes').DataTable().ajax.reload(null, false);
-                } else {
-                    swal({ text: (resp && (resp.Mensaje || resp.message)) || 'No se pudo confirmar.', icon: 'warning' });
-                }
-            } catch (err) {
-                swal({ text: (err && (err.responseText || err.statusText)) || 'Error al confirmar.', icon: 'error' });
+                if (dt) dt.ajax.reload();
             } finally {
-                $btn.prop('disabled', false).html(oldHtml);
+                $btn.prop('disabled', false).html(old);
             }
         });
 
-
-
-
-        // Confirmación MASIVA (guías seleccionadas)
-        $('#btnConfirmarSeleccion').on('click', async function () {
-            if (seleccionados.size === 0) {
-                swal({ text: "Seleccione al menos una guía para confirmar.", icon: "warning" });
-                return;
-            }
-
-            // Parámetros comunes (puedes abrir un modal masivo si prefieres)
-            const fecha = new Date().toISOString().slice(0, 10);
-            const obs = '';
-            const genGR = true;
-
-            const ids = Array.from(seleccionados);
-            let okCount = 0, failCount = 0, msgs = [];
-
-            for (let i = 0; i < ids.length; i++) {
-                // numGR vacío => backend genera REC-{NumGuia}
-                const r = await confirmarUno(ids[i], fecha, '', obs, genGR);
-                if (r && r.Ok) okCount++; else { failCount++; msgs.push((r && r.Mensaje) || ('Id ' + ids[i] + ' falló')); }
-            }
-
-            seleccionados.clear();
-            $('#chkAll').prop('checked', false);
-            dt.ajax.reload(null, false);
-
-            const msg = `Confirmaciones OK: ${okCount}. Errores: ${failCount}.` + (msgs.length ? '\n' + msgs.join('\n') : '');
-            swal({ text: msg, icon: (failCount ? 'warning' : 'success') });
+        // Empresa Origen â†’ carga locales y habilita el combo de local
+        $('#fEmpOrigen').on('change', function () {
+            cargarComboLocales('#fEmpOrigen', '#fLocOrigen'); // habilita al finalizar
         });
+
+        // Guardar confirmaciÃ³n (anti doble clic robusto)
+        $('#btnConfirmarModal').off('click').on('click', onConfirmarModalClick);
+
     }
 
+    // ================== Handlers ==================
+    async function onConfirmarModalClick() {
+        const id = parseInt($('#hidGuiaId').val() || '0', 10);
+        const fecha = $('#mFecha').val();
+        if (!id || !fecha) { swal({ text: "Complete la fecha de recepciÃ³n.", icon: "warning" }); return; }
 
-    // ========= Combos de filtros =========
+        const numGR = ($('#mNumGR').val() || '').trim();
+        const obs = ($('#mObs').val() || '').trim();
+        const genGR = $('#mGenerarGR').is(':checked');
+
+        const lines = [];
+        const errores = [];
+
+        $('#mDetalle tbody tr').each(function () {
+            const $tr = $(this);
+            const $chk = $tr.find('.chkConf');
+            if (!$chk.is(':checked')) return;
+
+            const detId = parseInt($chk.data('id'), 10);
+            const codProd = ($tr.data('producto') || '').toString();
+            const esSer = ('' + $tr.data('serializable')).toLowerCase() === 'true';
+            const pend = parseInt($tr.data('pend') || '0', 10);
+
+            let cant = 1;
+            let numSerie = null;
+
+            if (esSer) {
+                numSerie = ($tr.find('.cel-serie').text() || '').trim() || null;
+                if (pend <= 0) errores.push(`LÃ­nea ${detId}: no hay pendiente por confirmar.`);
+            } else {
+                cant = parseInt($tr.find('.inpCant').val() || '0', 10);
+                if (!Number.isInteger(cant) || cant <= 0) {
+                    errores.push(`LÃ­nea ${detId}: cantidad invÃ¡lida.`);
+                } else if (cant > pend) {
+                    errores.push(`LÃ­nea ${detId}: la cantidad (${cant}) no puede exceder el pendiente (${pend}).`);
+                }
+            }
+
+            if (!codProd) errores.push(`LÃ­nea ${detId}: producto vacÃ­o.`);
+            lines.push({ DespachoDetalleId: detId, CodProducto: codProd, NumSerie: numSerie, Cantidad: cant });
+        });
+
+        if (!lines.length) { swal({ text: "Selecciona al menos una lÃ­nea a confirmar.", icon: "warning" }); return; }
+        if (errores.length) { swal({ text: errores.join('\n'), icon: "warning" }); return; }
+
+        const payload = {
+            GuiaDespachoId: id,
+            NumGuiaRecepcion: numGR || null,
+            Fecha: fecha,
+            Observaciones: obs || null,
+            GenerarGuiaRecepcion: !!genGR,
+            Lineas: lines
+        };
+
+        // Anti doble clic
+        const $btn = $('#btnConfirmarModal');
+        const oldHtml = $btn.html();
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Confirmandoâ€¦');
+
+        try {
+            const resp = await $.ajax({
+                url: urlConfirmarDespacho,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(payload),
+                dataType: 'json'
+            });
+
+            if (resp && resp.Ok) {
+                swal({ text: resp.Mensaje || 'Confirmado correctamente.', icon: 'success' });
+                bootstrap.Modal.getInstance(document.getElementById('modalConfirmar')).hide();
+                if (dt) dt.ajax.reload(null, false);
+            } else {
+                swal({ text: (resp && (resp.Mensaje || resp.message)) || 'No se pudo confirmar.', icon: 'warning' });
+            }
+        } catch (err) {
+            swal({ text: (err && (err.responseText || err.statusText)) || 'Error al confirmar.', icon: 'error' });
+        } finally {
+            $btn.prop('disabled', false).html(oldHtml);
+        }
+    }
+
+    // ========= Combos =========
     function listarEmpresas() {
         return $.ajax({ url: urlListarEmpresas, type: 'POST', data: { request: { CodUsuario: '', Busqueda: '' } } });
     }
@@ -190,70 +134,50 @@ var AdministrarConfirmacionDespachos = (function ($) {
         return $.ajax({ url: urlListarLocalesPorEmpresa, type: 'POST', data: { request: { CodEmpresa: codEmpresa } } });
     }
 
-    async function cargarComboEmpresas(selector) {
+    const cargarComboEmpresas = async function () {
         try {
-            const resp = await listarEmpresas();
-            const $sel = $(selector);
-            $sel.empty().append('<option value="">Todos</option>');
-
-            if (resp.Ok) resp.Data.forEach(e => $sel.append(new Option(e.NomEmpresa, e.CodEmpresa)));
-            else swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
-
-            if ($.fn.select2) {
-                $sel.select2({
-                    width: '100%',
-                    placeholder: 'Todos',
-                    allowClear: true,
-                    minimumResultsForSearch: 0
-                });
+            const response = await listarEmpresas();
+            if (response.Ok) {
+                await cargarCombo($('#fEmpOrigen'),
+                    response.Data.map(e => ({ text: e.NomEmpresa, value: e.CodEmpresa })),
+                    { placeholder: 'Todos' }
+                );
+                // Local deshabilitado hasta elegir empresa
+                await cargarCombo($('#fLocOrigen'), [], { placeholder: 'Todos', disabled: true });
+            } else {
+                swal({ text: String((response && response.Mensaje) || 'Error al listar empresas'), icon: "error" });
             }
-
-        } catch (err) { swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' }); }
-    }
+        } catch (error) {
+            swal({ text: String((error && (error.Mensaje || error.message || error.responseText || error.statusText)) || 'Error al listar empresas'), icon: "error" });
+        }
+    };
 
     async function cargarComboLocales(selEmpresa, selLocal) {
+        // mientras carga: deshabilitar y mostrar placeholder
+        await cargarCombo($(selLocal), [], { placeholder: 'Cargandoâ€¦', disabled: true });
+
+        const codEmpresa = $(selEmpresa).val();
+        if (!codEmpresa) {
+            // si limpian empresa, mantener local vacÃ­o y deshabilitado
+            await cargarCombo($(selLocal), [], { placeholder: 'Todos', disabled: true });
+            return;
+        }
+
         try {
-            const codEmpresa = $(selEmpresa).val();
             const resp = await listarLocales(codEmpresa);
-            const $loc = $(selLocal);
-            $loc.empty().append('<option value="">Todos</option>');
-
-            if (resp.Ok) resp.Data.forEach(l => $loc.append(new Option(l.NomLocal, l.CodLocal)));
-            else swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
-
-            if ($.fn.select2) {
-                $loc.select2({
-                    width: '100%',
-                    placeholder: 'Todos',
-                    allowClear: true,
-                    minimumResultsForSearch: 0
-                });
+            if (resp.Ok) {
+                await cargarCombo($(selLocal),
+                    resp.Data.map(l => ({ text: l.NomLocal, value: l.CodLocal })),
+                    { placeholder: 'Todos', disabled: false }
+                );
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
+                await cargarCombo($(selLocal), [], { placeholder: 'Todos', disabled: true });
             }
-
-            $loc.val(null).trigger('change');
-        } catch (err) { swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' }); }
-    }
-
-    // ========= DataTable =========
-    var dt, seleccionados = new Set();
-
-    function detalleTemplate(row) {
-        // Render detalle (se asume que backend devuelve campos: Detalles: [{CodProducto, NumSerie, Cantidad, CodActivo}])
-        if (!row || !row.Detalles || !row.Detalles.length) return '<div class="p-2 text-muted">Sin detalle.</div>';
-        var html = ['<div class="p-2">'];
-        html.push('<table class="table table-sm table-bordered mb-0 w-100"><thead><tr>',
-            '<th>Producto</th><th>Serie</th><th class="text-end">Cant.</th><th>Cód. Activo</th>',
-            '</tr></thead><tbody>');
-        row.Detalles.forEach(d => {
-            html.push('<tr>',
-                '<td>', (d.CodProducto || ''), '</td>',
-                '<td>', (d.NumSerie || ''), '</td>',
-                '<td class="text-end">', (d.Cantidad || 0), '</td>',
-                '<td>', (d.CodActivo || ''), '</td>',
-                '</tr>');
-        });
-        html.push('</tbody></table></div>');
-        return html.join('');
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
+            await cargarCombo($(selLocal), [], { placeholder: 'Todos', disabled: true });
+        }
     }
 
     function visualizarDataTable() {
@@ -272,7 +196,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
                     CodEmpresaOrigen: $('#fEmpOrigen').val() || null,
                     CodLocalOrigen: $('#fLocOrigen').val() || null,
                     TipoMovimiento: $('#fTipoMov').val() || null,
-                    IndEstado: 'PENDIENTE_CONFIRMACION' // o EN_TRANSITO / PENDIENTE_CONFIRMACION según tu backend
+                    IndEstado: 'PENDIENTE_CONFIRMACION' // o EN_TRANSITO / PENDIENTE_CONFIRMACION segÃºn tu backend
                 };
 
                 var params = $.extend({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -285,8 +209,6 @@ var AdministrarConfirmacionDespachos = (function ($) {
                     success: function (resp) {
                         if (resp.Ok) {
                             var p = resp.Data;
-                            // Esperamos Items con: Id, Fecha, NumGuia, CodEmpresaOrigen, CodLocalOrigen,
-                            // CodEmpresaDestino, CodLocalDestino, TipoMovimiento, Items, IndEstado, Detalles[]
                             callback({
                                 draw: data.draw,
                                 recordsTotal: p.TotalRecords,
@@ -304,15 +226,6 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 });
             },
             columns: [
-                {
-                    data: 'Id', className: 'dt-center', render: function (id, t, r) {
-                        var checked = seleccionados.has(id) ? 'checked' : '';
-                        return '<input type="checkbox" class="chkRow" data-id="' + id + '" ' + checked + ' />';
-                    }, orderable: false
-                },
-                {
-                    data: null, className: 'details-control', defaultContent: ''
-                },
                 {
                     data: 'Fecha', render: function (data) {
                         if (!data) return '';
@@ -333,15 +246,16 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 {
                     data: null, className: 'dt-center nowrap', render: function (r) {
                         return '' +
-                            '<button type="button" class="btn btn-sm btn-success btnConfirmarUno" data-id="' + r.Id + '">' +
+                            '<button type="button" class="btn btn-sm btn-success btnConfirmarUno" ' +
+                            'data-id="' + r.Id + '" data-tipo="' + ((r.TipoMovimiento || '').toUpperCase()) + '">' +
                             '<i class="fe fe-check me-1"></i>Confirmar</button>';
                     }
                 }
             ],
             language: {
-                lengthMenu: "Mostrar _MENU_ registros por página",
+                lengthMenu: "Mostrar _MENU_ registros por pÃ¡gina",
                 zeroRecords: "No se encontraron resultados",
-                info: "Mostrando página _PAGE_ de _PAGES_",
+                info: "Mostrando pÃ¡gina _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
                 infoFiltered: "(filtrado de _MAX_ registros totales)"
             },
@@ -351,68 +265,41 @@ var AdministrarConfirmacionDespachos = (function ($) {
             paging: true,
             lengthMenu: [10, 25, 50, 100],
             drawCallback: function () {
-                actualizarSeleccionContador();
             }
         });
 
-        // Toggle detalle
-        $('#tablePendientes tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = dt.row(tr);
-
-            if (row.child.isShown()) {
-                row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                var data = row.data();
-                row.child(detalleTemplate(data)).show();
-                tr.addClass('shown');
-            }
-        });
-
-        // Selección por fila
-        $('#tablePendientes tbody').on('change', '.chkRow', function () {
-            var id = parseInt($(this).data('id'), 10);
-            if ($(this).is(':checked')) seleccionados.add(id);
-            else seleccionados.delete(id);
-            actualizarSeleccionContador();
-        });
-
-        // Seleccionar todo
-        $('#chkAll').on('change', function () {
-            var check = $(this).is(':checked');
-            $('#tablePendientes tbody .chkRow').each(function () {
-                var id = parseInt($(this).data('id'), 10);
-                $(this).prop('checked', check);
-                if (check) seleccionados.add(id); else seleccionados.delete(id);
-            });
-            actualizarSeleccionContador();
-        });
-
-        // Confirmar una guía (botón por fila)
+        // Confirmar una guÃ­a (botÃ³n por fila)
         $('#tablePendientes tbody').on('click', '.btnConfirmarUno', function () {
             var id = $(this).data('id');
-            abrirModalConfirmacion(id);
+            var tipo = (($(this).data('tipo') || '') + '').toUpperCase();
+            abrirModalConfirmacion(id, tipo);
         });
     }
 
-    function actualizarSeleccionContador() {
-        $('#lblSel').text(seleccionados.size + ' seleccionados');
-    }
-
-    // ========= Modal Confirmación =========
-    async function abrirModalConfirmacion(id) {
+    // ========= Modal ConfirmaciÃ³n =========
+    async function abrirModalConfirmacion(id, tipoMov) {
         $('#hidGuiaId').val(id);
+        $('#hidTipoMov').val(tipoMov || '');
         $('#mFecha').val(new Date().toISOString().slice(0, 10));
         $('#mNumGR').val('');
         $('#mObs').val('');
-        $('#mGenerarGR').prop('checked', true);
+
+        // Si es BAJA, no corresponde GR: deshabilitar checkbox e input de nÃºmero GR
+        if ((tipoMov || '').toUpperCase() === 'BAJA') {
+            $('#mGenerarGR').prop('checked', false).prop('disabled', true);
+            $('#mNumGR').val('').prop('disabled', true)
+                .attr('placeholder', 'No aplica para BAJA');
+        } else {
+            $('#mGenerarGR').prop('disabled', false).prop('checked', true);
+            $('#mNumGR').prop('disabled', false)
+                .attr('placeholder', 'Si se deja vacio: REC-{Num guia despacho}');
+        }
 
         // Cargar detalle
         try {
             const resp = await $.getJSON(urlObtenerDespacho, { id: id });
             if (!resp || !resp.Ok || !resp.Data) {
-                swal({ text: (resp && resp.Mensaje) || 'No se pudo cargar la guía.', icon: 'warning' });
+                swal({ text: (resp && resp.Mensaje) || 'No se pudo cargar la guÃ­a.', icon: 'warning' });
                 return;
             }
 
@@ -420,7 +307,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
             renderDetalleConfirmacion(resp.Data);
             new bootstrap.Modal(document.getElementById('modalConfirmar')).show();
         } catch (err) {
-            swal({ text: swalText(err, 'Error al obtener la guía.'), icon: 'error' });
+            swal({ text: swalText(err, 'Error al obtener la guÃ­a.'), icon: 'error' });
         }
     }
 
@@ -444,12 +331,9 @@ var AdministrarConfirmacionDespachos = (function ($) {
         );
 
         detalles.forEach(d => {
-            // Fallbacks seguros
             var conf = d.CantidadConfirmada || 0;
             var cant = d.Cantidad || 0;
             var pend = Math.max(0, cant - conf);
-
-            // Si backend no manda EsSerializable, infiérelo por NumSerie presente
             var esSer = (typeof d.EsSerializable === 'boolean') ? d.EsSerializable : !!(d.NumSerie && (d.NumSerie + '').trim());
 
             var sel, input;
@@ -484,35 +368,59 @@ var AdministrarConfirmacionDespachos = (function ($) {
     }
 
 
-    async function confirmarUno(id, fecha, numGR, obs, generarGR) {
-        // si numGR vacío, backend generará "REC-{NumGuia}"
-        try {
-            const payload = {
-                GuiaDespachoId: id,
-                NumGuiaRecepcion: (numGR || null),
-                Fecha: fecha,
-                Observaciones: (obs || null),
-                GenerarGuiaRecepcion: !!generarGR
-            };
-            const resp = await $.ajax({
-                url: urlConfirmarDespacho,
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(payload),
-                dataType: 'json'
-            });
-            return resp;
-        } catch (err) {
-            return { Ok: false, Mensaje: swalText(err, 'Error al confirmar.') };
+    async function cargarCombo($select, data, { placeholder = 'Seleccionarâ€¦', todos = false, disabled = false, dropdownParent = null } = {}) {
+        // Destruye select2 previo si existe
+        if ($.fn.select2 && $select.hasClass('select2-hidden-accessible')) {
+            $select.select2('destroy');
         }
+
+        $select.empty();
+
+        // OpciÃ³n inicial
+        if (todos) $select.append(new Option('Todos', ''));
+        else $select.append(new Option('', ''));
+
+        // Poblar opciones
+        if (Array.isArray(data) && data.length) {
+            data.forEach(d => $select.append(new Option(d.text, d.value)));
+        }
+
+        // Padre correcto del dropdown (modal si existe)
+        const parentEl = dropdownParent
+            ? $(dropdownParent)
+            : ($select.closest('.modal').length ? $select.closest('.modal') : $(document.body));
+
+        // Inicializa select2
+        if ($.fn.select2) {
+            $select.select2({
+                width: '100%',
+                placeholder,
+                allowClear: true,
+                minimumResultsForSearch: 0,
+                dropdownParent: parentEl
+            });
+        }
+
+        $select.prop('disabled', !!disabled);
+        $select.val('').trigger('change');
+    }
+
+    function initCombosFijos() {
+
+        $('#fTipoMov').select2({
+            width: '100%',
+            placeholder: 'Todos',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
     }
     
     return {
         init: function () {
             checkSession(async function () {
                 eventos();
-                await cargarComboEmpresas('#fEmpOrigen');
-                await cargarComboLocales('#fEmpOrigen', '#fLocOrigen');
+                initCombosFijos();
+                await cargarComboEmpresas();
                 visualizarDataTable();             
             });
         }

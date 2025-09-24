@@ -1,40 +1,18 @@
 ﻿var urlListarDespachos = baseUrl + 'Inventario/GuiaDespacho/ListarPaginado';
 var urlRegistrarDespacho = baseUrl + 'Inventario/GuiaDespacho/Registrar';
-
 var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
 var urlListarProductos = baseUrl + 'Inventario/Productos/Listar';
 var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProductoDisponibles';
+var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener'; 
 
 var AdministrarGuiaDespacho = (function ($) {
 
-    // cache de productos para conocer IndSerializable
-    var _productosCache = []; // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable}
+    // ======================== Estado ========================
+    var _productosCache = [];   // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable('S'|'N')}
+    var dt = null;              // DataTable cache
 
-    function initSelect2EnModal(target, opts) {
-        var $els = (target && target.jquery) ? target : $(target);
-        if (!$els.length) return;
-
-        var $modal = $els.closest('.modal');
-        if (!$modal.length) $modal = $('#modalDespacho');
-
-        $els.each(function () {
-            var $s = $(this);
-            if ($s.hasClass('select2-hidden-accessible')) $s.select2('destroy');
-
-            var $opt0 = $s.find('option').first();
-            var placeholder = ($opt0.attr('label') || $opt0.text() || 'Seleccionar…');
-
-            $s.select2($.extend(true, {
-                dropdownParent: $modal,
-                width: '100%',
-                placeholder: placeholder,
-                allowClear: true,
-                minimumResultsForSearch: 0
-            }, opts || {}));
-        });
-    }
-
+    // ======================== Utils ========================
     function swalText(err, fallback) {
         if (!err) return fallback || '';
         if (typeof err === 'string') return err;
@@ -44,23 +22,65 @@ var AdministrarGuiaDespacho = (function ($) {
         try { return JSON.stringify(err); } catch { return fallback || ''; }
     }
 
+    async function cargarCombo($select, data, { placeholder = 'Seleccionar', todos = false, dropdownParent = null } = {}) {
+        // Destruye select2 previo si existe
+        if ($.fn.select2 && $select.hasClass('select2-hidden-accessible')) {
+            $select.select2('destroy');
+        }
+
+        $select.empty();
+
+        // Opción inicial
+        if (todos) $select.append(new Option('Todos', ''));
+        else $select.append(new Option('', ''));
+
+        // Poblar opciones
+        if (Array.isArray(data) && data.length) {
+            data.forEach(d => {
+                var opt = new Option(d.text, d.value, false, false);
+                if (d.attrs) { Object.entries(d.attrs).forEach(([k, v]) => $(opt).attr(k, v)); }
+                $select.append(opt);
+            });
+        }
+
+        // Padre correcto del dropdown (modal si existe)
+        var parentEl = dropdownParent
+            ? $(dropdownParent)
+            : ($select.closest('.modal').length ? $select.closest('.modal') : $(document.body));
+
+        // Inicializa select2
+        if ($.fn.select2) {
+            $select.select2({
+                width: '100%',
+                placeholder: placeholder,
+                allowClear: true,
+                minimumResultsForSearch: 0,
+                dropdownParent: parentEl
+            });
+        }
+
+        $select.val('').trigger('change');
+    }
+
+
     // ================== Eventos ==================
     const eventos = function () {
-
+        // Buscar
         $('#btnBuscar').on('click', function (e) {
             e.preventDefault();
-            $('#tableDespachos').DataTable().ajax.reload();
+            if (dt) dt.ajax.reload();
         });
 
+        // Nueva guía
         $('#btnNuevaGuia').on('click', async function () {
             limpiarModal();
-            await Promise.all([cargarComboEmpresas('#desEmpOrig'), cargarComboEmpresas('#desEmpDest'), ensureProductos()]);
+            await Promise.all([cargarComboEmpresasModal(), ensureProductos()]);
             new bootstrap.Modal(document.getElementById('modalDespacho')).show();
         });
 
-        // Dependientes: Origen y Destino
-        //$('#desEmpOrig').on('change', function () { cargarComboLocales('#desEmpOrig', '#desLocOrig'); });
-        $('#desEmpDest').on('change', function () { cargarComboLocales('#desEmpDest', '#desLocDest'); });
+        // Dependientes (empresa → locales)
+        $('#desEmpDest').on('change', function () { cargarComboLocalesModal('#desEmpDest', '#desLocDest'); });
+        $('#fEmpDest').on('change', function () { cargarComboLocales('#fEmpDest', '#fLocDest'); });
 
         // Tipo movimiento
         $('#desTipoMov').on('change', onTipoMovimientoChange);
@@ -71,24 +91,11 @@ var AdministrarGuiaDespacho = (function ($) {
         // Agregar fila detalle
         $('#btnAddItem').on('click', function (e) { e.preventDefault(); addDetalleRow(); });
 
-        // Cuando se muestre el modal, asegurar select2
-        $('#modalDespacho').on('shown.bs.modal', function () {
-            initSelect2EnModal('#desTipoMov');
-            //initSelect2EnModal('#desEmpOrig'); initSelect2EnModal('#desLocOrig');
-            initSelect2EnModal('#desEmpDest'); initSelect2EnModal('#desLocDest');
-            // Para series y productos ya agregados
-            $('#tblDetalleDespacho tbody select.selProducto').each(function () { initSelect2EnModal(this); });
-            $('#tblDetalleDespacho tbody select.selSerie').each(function () { initSelect2EnModal(this); });
+        // Ver detalle de una guía
+        $('#tableDespachos tbody').on('click', '.btnVer', function () {
+            var id = $(this).data('id');
+            abrirModalDetalleDespacho(id);
         });
-
-        // Filtros combos en index
-        //initSelect2EnModal('#fEmpOrig'); initSelect2EnModal('#fLocOrig');
-        initSelect2EnModal('#fEmpDest'); initSelect2EnModal('#fLocDest');
-        initSelect2EnModal('#fTipoMov');
-
-        // Cargar combos de filtros base
-        //cargarComboEmpresas('#fEmpOrig').then(() => cargarComboLocales('#fEmpOrig', '#fLocOrig'));
-        cargarComboEmpresas('#fEmpDest').then(() => cargarComboLocales('#fEmpDest', '#fLocDest'));
     };
 
     // ================== AJAX helpers ==================
@@ -112,32 +119,94 @@ var AdministrarGuiaDespacho = (function ($) {
         });
     }
 
-    // ================== Combos base ==================
-    async function cargarComboEmpresas(selector) {
+
+    // ======================== Cargas de combos (pantalla) ========================
+    const cargarComboEmpresas = async function () {
         try {
-            const resp = await listarEmpresas();
-            const $sel = $(selector);
-            $sel.empty().append('<option></option>');
-            if (resp.Ok) resp.Data.forEach(e => $sel.append(new Option(e.NomEmpresa, e.CodEmpresa)));
-            else swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
-        } catch (err) { swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' }); }
-        initSelect2EnModal(selector);
-    }
+            const response = await listarEmpresas();
+            if (response.Ok) {
+                var empresas = response.Data.map(e => ({ text: e.NomEmpresa, value: e.CodEmpresa }));
+                await cargarCombo($('#fEmpDest'), empresas, { placeholder: 'Todos', todos: true });
+                await cargarCombo($('#fLocDest'), [], { placeholder: 'Todos', todos: true });
+                $('#fLocDest').prop('disabled', true).trigger('change.select2');
+            } else {
+                swal({ text: String((response && response.Mensaje) || 'Error al listar empresas'), icon: "error" });
+            }
+        } catch (error) {
+            swal({ text: String((error && (error.Mensaje || error.message || error.responseText || error.statusText)) || 'Error al listar empresas'), icon: "error" });
+        }
+    };
 
     async function cargarComboLocales(selEmpresa, selLocal) {
         try {
-            const codEmpresa = $(selEmpresa).val();
-            const resp = await listarLocales(codEmpresa);
             const $loc = $(selLocal);
-            $loc.empty().append('<option></option>');
-            if (resp.Ok) resp.Data.forEach(l => $loc.append(new Option(l.NomLocal, l.CodLocal)));
-            else swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
-            $loc.val(null).trigger('change');
-        } catch (err) { swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' }); }
-        initSelect2EnModal(selLocal);
+            const codEmpresa = $(selEmpresa).val();
+
+            if (!codEmpresa) {
+                await cargarCombo($loc, [], { placeholder: 'Todos', todos: true });
+                $loc.prop('disabled', true).trigger('change.select2');
+                return;
+            }
+
+            const resp = await listarLocales(codEmpresa);
+            if (resp.Ok) {
+                await cargarCombo($loc,
+                    resp.Data.map(l => ({ text: l.NomLocal, value: l.CodLocal })),
+                    { placeholder: 'Todos', todos: true }
+                );
+                $loc.prop('disabled', false).trigger('change.select2');
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
+            }
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
+        }
     }
 
-    // Cache de productos
+    // ======================== Cargas de combos (modal) ========================
+    const cargarComboEmpresasModal = async function () {
+        try {
+            const response = await listarEmpresas();
+            if (response.Ok) {
+                var empresas = response.Data.map(e => ({ text: e.NomEmpresa, value: e.CodEmpresa }));
+                await cargarCombo($('#desEmpDest'), empresas, { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+                await cargarCombo($('#desLocDest'), [], { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+                $('#desLocDest').prop('disabled', true).trigger('change.select2');
+            } else {
+                swal({ text: String((response && response.Mensaje) || 'Error al listar empresas'), icon: "error" });
+            }
+        } catch (error) {
+            swal({ text: String((error && (error.Mensaje || error.message || error.responseText || error.statusText)) || 'Error al listar empresas'), icon: "error" });
+        }
+    };
+
+    async function cargarComboLocalesModal(selEmpresa, selLocal) {
+        try {
+            const $loc = $(selLocal);
+            const codEmpresa = $(selEmpresa).val();
+
+            if (!codEmpresa) {
+                await cargarCombo($loc, [], { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+                $loc.prop('disabled', true).trigger('change.select2');
+                return;
+            }
+
+            const resp = await listarLocales(codEmpresa);
+            if (resp.Ok) {
+                await cargarCombo($loc,
+                    resp.Data.map(l => ({ text: l.NomLocal, value: l.CodLocal })),
+                    { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' }
+                );
+                $loc.prop('disabled', false).trigger('change.select2');
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
+            }
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
+        }
+    }
+
+    // ======================== Cache de productos ========================
     async function ensureProductos() {
         if (_productosCache.length) return;
         try {
@@ -148,21 +217,25 @@ var AdministrarGuiaDespacho = (function ($) {
                     DesProducto: p.DesProducto,
                     NomMarca: p.NomMarca,
                     NomModelo: p.NomModelo,
-                    IndSerializable: (p.IndSerializable || 'S') // 'S' | 'N'
+                    IndSerializable: (p.IndSerializable || 'N') // ← default seguro: no serializable
                 }));
-            } else swal({ text: swalText(resp, 'No fue posible listar productos'), icon: 'error' });
-        } catch (err) { swal({ text: swalText(err, 'Error al listar productos'), icon: 'error' }); }
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar productos'), icon: 'error' });
+            }
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar productos'), icon: 'error' });
+        }
     }
 
-    // ================== Detalle ==================
+    // ======================== Detalle (filas) ========================
     function addDetalleRow() {
         const $tb = $('#tblDetalleDespacho tbody');
         const rowId = 'r' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
         const tr = $(
             '<tr data-row="' + rowId + '">' +
-            '<td><select class="form-select form-select-sm selProducto select2-show-search" style="width:100%"></select></td>' +
-            '<td><select class="form-select form-select-sm selSerie select2-show-search" style="width:100%" disabled><option value=""></option></select></td>' +
+            '<td class="select2-sm"><select class="form-select form-select-sm selProducto select2-show-search" style="width:100%"></select></td>' +
+            '<td class="select2-sm"><select class="form-select form-select-sm selSerie select2-show-search" style="width:100%" disabled><option value=""></option></select></td>' +
             '<td><input type="number" class="form-control form-control-sm inpCantidad" min="1" step="1" value="1" /></td>' +
             '<td><input type="text" class="form-control form-control-sm inpCodActivo text-uppercase" /></td>' +
             '<td class="text-center"><button type="button" class="btn btn-sm btn-link text-danger btnDelRow" title="Quitar"><i class="fe fe-trash-2"></i></button></td>' +
@@ -174,26 +247,29 @@ var AdministrarGuiaDespacho = (function ($) {
         const $selProd = tr.find('select.selProducto');
         const $selSerie = tr.find('select.selSerie');
 
-        // init select2
-        initSelect2EnModal($selProd);
-        initSelect2EnModal($selSerie);
-
-        // cargar productos
-        $selProd.append(new Option('', '', false, false));
-        _productosCache.forEach(p => {
+        // productos con data-serializable como atributo (no .data() por cache)
+        const prodOptions = _productosCache.map(p => {
             var texto = (p.DesProducto || '');
             if (p.NomMarca) texto += ' - ' + p.NomMarca;
             if (p.NomModelo) texto += ' - ' + p.NomModelo;
-            texto = texto.trim();
-            var opt = new Option(texto, p.CodProducto, false, false);
-            $(opt).attr('data-serializable', p.IndSerializable);
-            $selProd.append(opt);
+            return { text: texto.trim(), value: p.CodProducto, attrs: { 'data-serializable': p.IndSerializable } };
         });
+
+        cargarCombo($selProd, prodOptions, { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+        cargarCombo($selSerie, [], { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+        $selSerie.prop('disabled', true);
 
         // eventos
         $selProd.on('change', function () { onProductoChange(tr); });
-        $selSerie.on('change', function () { /* opcional: validar selección */ });
-        tr.find('.btnDelRow').on('click', function () { tr.remove(); });
+        tr.find('.btnDelRow').on('click', function () {
+            // destruye select2 para evitar fugas de memoria
+            tr.find('select').each(function () {
+                if ($.fn.select2 && $(this).hasClass('select2-hidden-accessible')) {
+                    $(this).select2('destroy');
+                }
+            });
+            tr.remove();
+        });
     }
 
     async function onProductoChange(tr) {
@@ -202,32 +278,26 @@ var AdministrarGuiaDespacho = (function ($) {
         const $cant = tr.find('.inpCantidad');
 
         const cod = $selProd.val();
-        const ind = ($selProd.find(':selected').data('serializable') || 'S'); // 'S'|'N'
+        const ind = ($selProd.find(':selected').attr('data-serializable') || 'N');
 
         // reset
-        $selSerie.empty().append('<option value=""></option>').prop('disabled', true).trigger('change');
+        await cargarCombo($selSerie, [], { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+        $selSerie.prop('disabled', true);
         $cant.prop('disabled', false).val('1');
 
         if (!cod) return;
 
         if (ind === 'S') {
-
-            // cargar series disponibles en origen
+            // serializable → listar series y fijar cantidad=1
             try {
                 const resp = await listarSeriesPorProducto(cod);
-                $selSerie.empty().append('<option value=""></option>');
                 if (resp.Ok) {
-                    (resp.Data || []).forEach(s => {
-                        // Asumimos que el servicio devuelve s.NumSerie y (opcional) s.Id
-                        var opt = new Option(s.NumSerie, s.NumSerie, false, false);
-                        $selSerie.append(opt);
-                    });
+                    const series = (resp.Data || []).map(s => ({ text: s.NumSerie, value: s.NumSerie }));
+                    await cargarCombo($selSerie, series, { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+                    $selSerie.prop('disabled', false);
                 } else {
                     swal({ text: swalText(resp, 'No fue posible listar series disponibles.'), icon: 'warning' });
                 }
-                initSelect2EnModal($selSerie);
-                $selSerie.prop('disabled', false);
-                // Cantidad fija 1 en serializables
                 $cant.val('1').prop('disabled', true);
             } catch (err) {
                 swal({ text: swalText(err, 'Error al listar series'), icon: 'error' });
@@ -241,122 +311,155 @@ var AdministrarGuiaDespacho = (function ($) {
 
     // ================== Guardar ==================
     async function guardarDespacho() {
-        const tipoMov = ($('#desTipoMov').val() || 'TRANSFERENCIA').toUpperCase();
 
-        const requiereDestino = (tipoMov === 'TRANSFERENCIA' || tipoMov === 'ASIGNACION_ACTIVO');
+        // -------- Anti-doble clic (flag + deshabilitar botón) --------
+        if (guardarDespacho._busy) return;
+        guardarDespacho._busy = true;
 
+        const $btn = $('#btnGuardarDespacho');
+        const oldHtml = $btn.html();
+        $btn.prop('disabled', true)
+            .html('<span class="spinner-border spinner-border-sm me-1"></span>Guardando…');
 
-        const header = {
-            NumGuia: ($('#desNumGuia').val() || '').trim(),
-            Fecha: $('#desFecha').val(),
-            CodEmpresaDestino: $('#desEmpDest').val() || null,
-            CodLocalDestino: $('#desLocDest').val() || null,
-            CodEmpresaDestino: requiereDestino ? ($('#desEmpDest').val() || null) : null,
-            CodLocalDestino: requiereDestino ? ($('#desLocDest').val() || null) : null,
-            TipoMovimiento: tipoMov,
-            // Política: verificación en destino ⇒ usar tránsito en TRANSFERENCIA y ASIGNACION
-            UsarTransitoDestino: $('#desUsarTransito').is(':checked'),
-            AreaGestion: ($('#desAreaGestion').val() || '').trim(),
-            ClaseStock: ($('#desClaseStock').val() || '').trim(),
-            EstadoStock: ($('#desEstadoStock').val() || '').trim(),
-            Observaciones: ($('#desObs').val() || '').trim()
+        // Helper para cortar el flujo mostrando alerta y lanzando excepción controlada
+        const fail = (text, icon = 'warning') => {
+            swal({ text, icon });
+            const e = new Error(text);
+            e._swalShown = true;
+            throw e;
         };
+        try {
+            // -------- Cabecera --------
+            const tipoMov = ($('#desTipoMov').val() || 'TRANSFERENCIA').toUpperCase();
+            const isTransf = (tipoMov === 'TRANSFERENCIA');
+            const isBaja = (tipoMov === 'BAJA');
 
-        // Validaciones cabecera mínimas
-        if (!header.NumGuia || !header.Fecha) {
-            swal({ text: "Complete los campos obligatorios de la cabecera (Fecha, N° Guía).", icon: "warning" });
-            return;
-        }
+            if (!isTransf && !isBaja) fail('Tipo de movimiento inválido. Solo TRANSFERENCIA o BAJA.');
 
-        if (!header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
-            swal({ text: "Complete Área Gestión, Clase Stock y Estado Stock.", icon: "warning" });
-            return;
-        }
 
-        if (requiereDestino && (!header.CodEmpresaDestino || !header.CodLocalDestino)) {
-            swal({ text: "Destino (Empresa y Local) es obligatorio para TRANSFERENCIA y ASIGNACION_ACTIVO.", icon: "warning" });
-            return;
-        }
+            const header = {
+                NumGuia: ($('#desNumGuia').val() || '').trim(),
+                Fecha: $('#desFecha').val(),
+                CodEmpresaDestino: isTransf ? ($('#desEmpDest').val() || null) : null,
+                CodLocalDestino: isTransf ? ($('#desLocDest').val() || null) : null,
+                TipoMovimiento: tipoMov,
+                UsarTransitoDestino: isTransf,   // true solo en TRANSFERENCIA
+                AreaGestion: ($('#desAreaGestion').val() || '').trim(),
+                ClaseStock: ($('#desClaseStock').val() || '').trim(),
+                EstadoStock: ($('#desEstadoStock').val() || '').trim(),
+                Observaciones: ($('#desObs').val() || '').trim()
+            };
 
-        const items = [];
-        const errores = [];
-        let fila = 0;
-
-        // evitar series duplicadas (mismo producto) en el mismo payload
-        const seriesKeys = new Set();
-
-        $('#tblDetalleDespacho tbody tr').each(function () {
-            fila++;
-            const $tr = $(this);
-            const $optSel = $tr.find('.selProducto option:selected');
-
-            const codProd = $optSel.val();
-            const ind = ($optSel.data('serializable') || 'S');
-            const numSerie = ($tr.find('.selSerie').val() || '').trim();
-            const cant = parseInt($tr.find('.inpCantidad').val() || '0', 10);
-            const codAct = ($tr.find('.inpCodActivo').val() || '').trim();
-
-            if (!codProd) {
-                errores.push(`Fila ${fila}: producto es obligatorio.`);
-            } else if (ind === 'S') {
-                if (!numSerie) errores.push(`Fila ${fila}: debe seleccionar una serie disponible para producto serializable.`);
-                if (cant !== 1) errores.push(`Fila ${fila}: cantidad debe ser 1 para producto serializable.`);
-                // duplicidad de serie
-                var key = codProd + '|' + numSerie;
-                if (seriesKeys.has(key)) errores.push(`Fila ${fila}: la serie '${numSerie}' del producto ${codProd} está repetida.`);
-                else seriesKeys.add(key);
-            } else {
-                if (!cant || cant <= 0) errores.push(`Fila ${fila}: cantidad debe ser mayor a 0.`);
+            // Validaciones cabecera mínimas
+            if (!header.NumGuia || !header.Fecha) {
+                swal({ text: "Complete Fecha y N° Guía", icon: "warning" });
+                return;
             }
 
-            if (!codProd) return;
+            if (!header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
+                swal({ text: "Complete Área Gestión, Clase Stock y Estado Stock.", icon: "warning" });
+                return;
+            }
 
-            items.push({
-                CodProducto: codProd,
-                NumSerie: (ind === 'S') ? numSerie : null,
-                Cantidad: cant,
-                CodActivo: codAct,
-                Observaciones: null
+            if (isTransf && (!header.CodEmpresaDestino || !header.CodLocalDestino)) {
+                swal({ text: "Destino (Empresa y Local) es obligatorio para TRANSFERENCIA.", icon: "warning" });
+                return;
+            }
+
+            const items = [];
+            const errores = [];
+            let fila = 0;
+            // evitar series duplicadas (mismo producto) en el mismo payload
+            const seriesKeys = new Set();
+
+            $('#tblDetalleDespacho tbody tr').each(function () {
+                fila++;
+                const $tr = $(this);
+                const $optSel = $tr.find('.selProducto option:selected');
+                const codProd = $optSel.val();
+                const ind = ($optSel.data('serializable') || 'S');
+                const numSerie = ($tr.find('.selSerie').val() || '').trim();
+                const cant = parseInt($tr.find('.inpCantidad').val() || '0', 10);
+                const codAct = ($tr.find('.inpCodActivo').val() || '').trim();
+
+                if (!codProd) {
+                    errores.push(`Fila ${fila}: producto es obligatorio.`);
+                } else if (ind === 'S') {
+                    if (!numSerie) errores.push(`Fila ${fila}: debe seleccionar una serie disponible para producto serializable.`);
+                    if (cant !== 1) errores.push(`Fila ${fila}: cantidad debe ser 1 para producto serializable.`);
+                    // duplicidad de serie
+                    var key = codProd + '|' + numSerie;
+                    if (seriesKeys.has(key)) errores.push(`Fila ${fila}: la serie '${numSerie}' del producto ${codProd} está repetida.`);
+                    else seriesKeys.add(key);
+                } else {
+                    if (!cant || cant <= 0) errores.push(`Fila ${fila}: cantidad debe ser mayor a 0.`);
+                }
+
+                if (!codProd) return;
+
+                items.push({
+                    CodProducto: codProd,
+                    NumSerie: (ind === 'S') ? numSerie : null,
+                    Cantidad: cant,
+                    CodActivo: codAct,
+                    Observaciones: null
+                });
             });
-        });
 
-        if (items.length === 0) {
-            swal({ text: "Agregue al menos un ítem en el detalle.", icon: "warning" });
-            return;
-        }
-        if (errores.length) {
-            swal({ text: errores.join('\n'), icon: "warning" });
-            return;
-        }
+            if (items.length === 0) {
+                swal({ text: "Agregue al menos un ítem en el detalle.", icon: "warning" });
+                return;
+            }
+            if (errores.length) {
+                swal({ text: errores.join('\n'), icon: "warning" });
+                return;
+            }
 
-        const payload = { Cabecera: header, Detalle: items };
+            const payload = { Cabecera: header, Detalle: items };
 
-        try {
+            // -------- POST --------
+            if (typeof showLoading === 'function') try { showLoading(); } catch { }
+
             const resp = await $.ajax({
                 url: urlRegistrarDespacho,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(payload),
-                dataType: 'json',
-                beforeSend: showLoading,
-                complete: closeLoading
+                dataType: 'json'
             });
 
             if (resp.Ok) {
                 swal({ text: resp.Mensaje || 'Guía de despacho registrada correctamente.', icon: 'success' });
-                bootstrap.Modal.getInstance(document.getElementById('modalDespacho')).hide();
-                $('#tableDespachos').DataTable().ajax.reload(null, false);
+                // cerrar modal
+                const modalEl = document.getElementById('modalDespacho');
+                if (modalEl) {
+                    const inst = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                    inst.hide();
+                }
+                // recargar DT usando la variable global dt si existe, si no, fallback
+                if (typeof dt !== 'undefined' && dt && typeof dt.ajax === 'object' && typeof dt.ajax.reload === 'function') {
+                    dt.ajax.reload(null, false);
+                } else {
+                    const dtLocal = $('#tableDespachos').data('DataTable') || $('#tableDespachos').DataTable();
+                    if (dtLocal) dtLocal.ajax.reload(null, false);
+                }
             } else {
                 swal({ text: swalText(resp, 'No se pudo registrar.'), icon: 'warning' });
             }
         } catch (err) {
-            swal({ text: swalText(err, 'Error al registrar'), icon: 'error' });
+            if (!err || err._swalShown !== true) {
+                swal({ text: swalText(err, 'Error al registrar'), icon: 'error' });
+            }
+        } finally {
+            if (typeof closeLoading === 'function') try { closeLoading(); } catch { }
+            guardarDespacho._busy = false;
+            $btn.prop('disabled', false).html(oldHtml);
         }
     }
 
     // ================== DataTable ==================
     function visualizarDataTable() {
-        $('#tableDespachos').DataTable({
+        dt = $('#tableDespachos').DataTable({
             serverSide: true,
             processing: true,
             searching: false,
@@ -368,8 +471,6 @@ var AdministrarGuiaDespacho = (function ($) {
                 var filtros = {
                     FechaDesde: $('#fDesde').val() || null,
                     FechaHasta: $('#fHasta').val() || null,
-                    //CodEmpresaOrigen: $('#fEmpOrig').val() || null,
-                    //CodLocalOrigen: $('#fLocOrig').val() || null,
                     CodEmpresaDestino: $('#fEmpDest').val() || null,
                     CodLocalDestino: $('#fLocDest').val() || null,
                     TipoMovimiento: $('#fTipoMov').val() || null,
@@ -415,23 +516,21 @@ var AdministrarGuiaDespacho = (function ($) {
                     }
                 },
                 { data: 'NumGuia' },
-                {
-                    data: null, render: function (r) {
-                        return (r.CodEmpresaOrigen || '') + '-' + (r.CodLocalOrigen || '');
-                    }
-                },
-                {
-                    data: null, render: function (r) {
-                        var d = '';
-                        if (r.CodEmpresaDestino) d = r.CodEmpresaDestino;
-                        if (r.CodLocalDestino) d += (d ? '-' : '') + r.CodLocalDestino;
-                        return d;
-                    }
-                },
+                { data: 'NomLocalOrigen' },
+                { data: 'NomLocalDestino' },
                 { data: 'TipoMovimiento', defaultContent: '' },
                 { data: 'Items', defaultContent: '' },
                 { data: 'IndEstado', defaultContent: 'REGISTRADA' },
-                { data: 'UsuCreacion', defaultContent: '' }
+                { data: 'UsuCreacion', defaultContent: '' },
+                {
+                    data: null,
+                    className: 'dt-center nowrap',
+                    render: function (r) {
+                        return '' +
+                            '<button type="button" class="btn btn-sm btn-outline-primary btnVer" data-id="' + r.Id + '">' +
+                            '<i class="fe fe-eye me-1"></i>Ver</button>';
+                    }
+                }
             ],
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
@@ -448,51 +547,181 @@ var AdministrarGuiaDespacho = (function ($) {
         });
     }
 
-    // ================== Auxiliares ==================
+    // ======================== Auxiliares UI ========================
     function onTipoMovimientoChange() {
         var tipo = ($('#desTipoMov').val() || 'TRANSFERENCIA').toUpperCase();
         var isTransf = (tipo === 'TRANSFERENCIA');
-        var isAsign = (tipo === 'ASIGNACION_ACTIVO');
-        var enableDestino = (isTransf || isAsign);
 
-        // Destino requerido para TRANSFERENCIA y ASIGNACION_ACTIVO
-        $('#desEmpDest').prop('disabled', !enableDestino).val(null).trigger('change');
-        $('#desLocDest').prop('disabled', !enableDestino).val(null).trigger('change');
-
-        //$('#desEmpDest').prop('disabled', !isTransf).val(null).trigger('change');
-        //$('#desLocDest').prop('disabled', !isTransf).val(null).trigger('change');
-
-        $('#desUsarTransito').prop('disabled', !isTransf).prop('checked', isTransf);
-        initSelect2EnModal('#desEmpDest');
-        initSelect2EnModal('#desLocDest');
+        // Solo TRANSFERENCIA usa destino
+        $('#desEmpDest').prop('disabled', !isTransf).val(null).trigger('change');
+        $('#desLocDest').prop('disabled', !isTransf).val(null).trigger('change');
     }
 
     function limpiarModal() {
         $('#desFecha').val(new Date().toISOString().slice(0, 10));
         $('#desNumGuia').val('');
         $('#desTipoMov').val('TRANSFERENCIA').trigger('change');
-        $('#desUsarTransito').prop('checked', true).prop('disabled', false);
-
-        // Origen/Destino
-        //$('#desEmpOrig').val(null).trigger('change');
-        //$('#desLocOrig').empty().append('<option></option>').val(null).trigger('change');
 
         $('#desEmpDest').val(null).trigger('change');
         $('#desLocDest').empty().append('<option></option>').val(null).trigger('change');
+        $('#desLocDest').prop('disabled', true).trigger('change.select2');
 
         $('#desObs').val('');
         $('#tblDetalleDespacho tbody').empty();
-
-        // preparar Select2 cabecera
-        initSelect2EnModal('#desTipoMov');
-        //initSelect2EnModal('#desEmpOrig'); initSelect2EnModal('#desLocOrig');
-        initSelect2EnModal('#desEmpDest'); initSelect2EnModal('#desLocDest');
     }
+
+    function initCombosFijos() {
+        // Selects fijos del modal (no dependientes)
+        $('#desTipoMov').select2({
+            dropdownParent: $('#modalDespacho'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#desAreaGestion').select2({
+            dropdownParent: $('#modalDespacho'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#desClaseStock').select2({
+            dropdownParent: $('#modalDespacho'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#desEstadoStock').select2({
+            dropdownParent: $('#modalDespacho'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        // Filtro "Tipo" en pantalla
+        $('#fTipoMov').select2({
+            width: '100%',
+            placeholder: 'Todos',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        // Atajos: Enter para buscar
+        $('#txtFiltro, #fDesde, #fHasta').on('keyup', function (e) {
+            if (e.key === 'Enter') $('#btnBuscar').click();
+        });
+    }
+
+    function parseDotNetDate(value) {
+        if (!value) return '';
+        var m = /\/Date\((\d+)\)\//.exec(value + '');
+        if (m) {
+            var d = new Date(parseInt(m[1], 10));
+            return d.toLocaleDateString('es-PE');
+        }
+        return (value + '').substring(0, 10);
+    }
+
+    async function abrirModalDetalleDespacho(id) {
+        // limpia/placeholder
+        $('#detalleDespachoBody').html('<div class="text-muted">Cargando detalle…</div>');
+        const $modalEl = document.getElementById('modalDetalleDespacho');
+        const modal = bootstrap.Modal.getInstance($modalEl) || new bootstrap.Modal($modalEl);
+        modal.show();
+
+        try {
+            const resp = await $.getJSON(urlObtenerDespacho, { id: id });
+            if (!resp || !resp.Ok || !resp.Data) {
+                $('#detalleDespachoBody').html('<div class="text-danger">No se pudo cargar el detalle.</div>');
+                return;
+            }
+            const html = detalleDespachoTemplate(resp.Data);
+            $('#detalleDespachoBody').html(html);
+        } catch (err) {
+            $('#detalleDespachoBody').html('<div class="text-danger">' + (swalText(err, 'Error al obtener el detalle.') || 'Error') + '</div>');
+        }
+    }
+
+    function safe(v) { return (v == null ? '' : (v + '')); }
+
+    function detalleDespachoTemplate(gd) {
+        // por si viniera envuelto
+        if (gd && gd.Data) gd = gd.Data;
+
+        const fecha = parseDotNetDate(gd.Fecha);
+        const origen = (safe(gd.CodEmpresaOrigen) && safe(gd.CodLocalOrigen))
+            ? `${safe(gd.CodEmpresaOrigen)} - ${safe(gd.CodLocalOrigen)}`
+            : `${safe(gd.CodEmpresaOrigen)}${gd.CodLocalOrigen ? ' - ' + gd.CodLocalOrigen : ''}`;
+
+        const destino = (safe(gd.CodEmpresaDestino) && safe(gd.CodLocalDestino))
+            ? `${safe(gd.CodEmpresaDestino)} - ${safe(gd.CodLocalDestino)}`
+            : `${safe(gd.CodEmpresaDestino)}${gd.CodLocalDestino ? ' - ' + gd.CodLocalDestino : ''}`;
+
+        const detalles = Array.isArray(gd.Detalles) ? gd.Detalles : [];
+
+        const rows = detalles.map(d => {
+            return `
+      <tr>
+        <td>${safe(d.CodProducto)}</td>
+        <td>${safe(d.NumSerie)}</td>
+        <td class="text-end">${safe(d.Cantidad)}</td>
+        <td>${safe(d.CodActivo)}</td>
+        <td>${safe(d.Observaciones)}</td>
+      </tr>`;
+        }).join('');
+
+        return `
+    <div class="mb-3">
+      <div class="row g-2">
+        <div class="col-md-3"><b>N° Guía:</b> ${safe(gd.NumGuia)}</div>
+        <div class="col-md-3"><b>Fecha:</b> ${fecha}</div>
+        <div class="col-md-3"><b>Tipo:</b> ${safe(gd.TipoMovimiento)}</div>
+        <div class="col-md-3"><b>Estado:</b> ${safe(gd.IndEstado || 'REGISTRADA')}</div>
+
+        <div class="col-md-6"><b>Origen:</b> ${origen}</div>
+        <div class="col-md-6"><b>Destino:</b> ${destino}</div>
+
+        <div class="col-md-4"><b>Área Gestión:</b> ${safe(gd.AreaGestion)}</div>
+        <div class="col-md-4"><b>Clase Stock:</b> ${safe(gd.ClaseStock)}</div>
+        <div class="col-md-4"><b>Estado Stock:</b> ${safe(gd.EstadoStock)}</div>
+
+        <div class="col-12"><b>Observaciones:</b> ${safe(gd.Observaciones)}</div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered w-100">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Serie</th>
+            <th class="text-end">Cantidad</th>
+            <th>Cód. Activo</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows || '<tr><td colspan="5" class="text-muted">Sin detalle.</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+  `;
+    }
+
 
     return {
         init: function () {
             checkSession(async function () {
                 eventos();
+                initCombosFijos();
+                await cargarComboEmpresas();
+                await cargarComboEmpresasModal();
                 visualizarDataTable();
             });
         }

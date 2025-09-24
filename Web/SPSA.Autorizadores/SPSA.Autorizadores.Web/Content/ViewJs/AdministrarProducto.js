@@ -266,27 +266,6 @@ var AdministrarProducto = function () {
         }
     }
 
-    //async function cargarComboEmpresa() {
-    //    try {
-    //        const resp = await listarEmpresasAsociadas();
-
-    //        if (resp.Ok) {
-    //            // Para modal Nueva Serie
-    //            await cargarCombo($('#serieCodEmpresa'), resp.Data.map(e => ({
-    //                text: e.NomEmpresa,
-    //                value: e.CodEmpresa
-    //            })), { placeholder: 'Seleccionar' });
-
-    //            // Limpio locales también
-    //            await cargarCombo($('#serieCodLocal'), [], { placeholder: 'Seleccionar' });
-    //        } else {
-    //            swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
-    //        }
-    //    } catch (err) {
-    //        swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' });
-    //    }
-    //}
-
     async function cargarComboLocales(selEmpresa, selLocal) {
         try {
             const codEmpresa = $(selEmpresa).val();
@@ -522,8 +501,8 @@ var AdministrarProducto = function () {
                 { title: "Descripción", data: "DesProducto" },
                 { title: "Marca", data: "NomMarca" },
                 { title: "Modelo", data: "NomModelo" },
-                { title: "Tipo", data: "TipProducto" },
-                { title: "Área", data: "AreaGestionId" },
+                { title: "Tipo", data: "NomTipProducto" },
+                { title: "Área", data: "NomAreaGestion" },
                 {
                     title: "¿Activo?",
                     data: "IndActivo",
@@ -536,8 +515,8 @@ var AdministrarProducto = function () {
                         }
                     }
                 },
-                { title: "Stock Min.", data: "StkMinimo" },
-                { title: "Stock Max.", data: "StkMaximo" },
+                //{ title: "Stock Min.", data: "StkMinimo" },
+                //{ title: "Stock Max.", data: "StkMaximo" },
                 //{ title: "U. Creacion", data: "UsuCreacion" },
                 //{
                 //    title: "F. Creacion", data: "FecCreacion",
