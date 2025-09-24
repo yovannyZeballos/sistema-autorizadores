@@ -21,48 +21,49 @@
 
 <div class="row">
     <!-- Columna izquierda: Productos (tu card actual) -->
-    <div class="col-xl-6">
+    <div class="col-xl-7">
         <div class="card overflow-hidden">
             @Html.Partial("_CardHeader", "Productos")
             <div class="card-body">
                 <div class="row mb-0">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="txtFiltroVariosBuscar" class="form-label">Descripción:</label>
                             <input type="text" class="form-control form-control-sm text-uppercase" id="txtFiltroVariosBuscar" oninput="this.value = this.value.toUpperCase();" />
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboCodMarcaBuscar" class="form-label">Marca:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboCodMarcaBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboCodMarcaBuscar">
+                                <option value="">Todos</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboTipProductoBuscar" class="form-label">Tipo:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboTipProductoBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboTipProductoBuscar">
+                                <option value="">Todos</option>
                                 <option value="A">ACTIVO</option>
                                 <option value="R">REPUESTO</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboCodAreaGestionBuscar" class="form-label">Área:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboCodAreaGestionBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboCodAreaGestionBuscar">
+                                <option value="">Todos</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <div class="form-group">
+                        <div class="form-group select2-sm">
                             <label for="cboIndActivoBuscar" class="form-label">Estado:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboIndActivoBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboIndActivoBuscar">
+                                <option value="">Todos</option>
                                 <option value="S">Activo</option>
                                 <option value="N">Inactivo</option>
                             </select>
@@ -118,8 +119,8 @@
         </div>
     </div>
 
-    <!-- Columna derecha: Detalle (Series/Kardex) -->
-    <div class="col-xl-6">
+    <!-- Columna derecha: Detalle (Series) -->
+    <div class="col-xl-5">
         <div class="card overflow-hidden" id="cardSeries" style="display:none;">
             @Html.Partial("_CardHeader", "Series")
             <div class="card-body">
@@ -131,55 +132,21 @@
                         <button id="btnNuevaSerie" class="btn btn-sm btn-primary me-2">
                             <i class="fe fe-plus me-1"></i>Nueva serie
                         </button>
-                        @*<button id="btnMovimiento" class="btn btn-sm btn-outline-primary">
-                                <i class="fe fe-trending-up me-1"></i>Movimiento
-                            </button>*@
                     </div>
                 </div>
 
-                <ul class="nav nav-tabs" id="tabsDetalle" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#tabSeries" role="tab">Series</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tabKardex" role="tab">Kardex</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content pt-3">
-                    <div class="tab-pane fade show active" id="tabSeries" role="tabpanel">
-                        <table id="tableSeries" class="table table-bordered text-nowrap border-bottom">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>N° Serie</th>
-                                    <th>Stok Actual</th>
-                                    <th>Ubicación Actual</th>
-                                    <th>Último Ingreso</th>
-                                    <th>Última Salida</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-
-                    <div class="tab-pane fade" id="tabKardex" role="tabpanel">
-                        <table id="tableKardex" class="table table-bordered text-nowrap border-bottom">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Kardex</th>
-                                    <th>Área Gestión</th>
-                                    <th>Producto</th>
-                                    <th>N° Serie</th>
-                                    <th>Guía</th>
-                                    <th>Origen</th>
-                                    <th>Destino</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
+                <table id="tableSeries" class="table table-bordered text-nowrap border-bottom">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>N° Serie</th>
+                            <th>Stock Actual</th>
+                            <th>Ubicación Actual</th>
+                            <th>Último Ingreso</th>
+                            <th>Última Salida</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
 
             </div>
         </div>
@@ -198,7 +165,7 @@
                 <form id="formNuevoProducto">
                     <div class="mb-3">
                         <label for="modalInputCodProducto" class="form-label">Código</label>
-                        <input type="text" id="modalInputCodProducto" class="form-control form-control-sm" />
+                        <input type="text" id="modalInputCodProducto" class="form-control form-control-sm text-uppercase" oninput="this.value = this.value.toUpperCase();"/>
                     </div>
 
                     <div class="mb-3">
@@ -212,26 +179,32 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalInputCboMarca" class="form-label">Marca</label>
-                        <select class="form-control form-control-sm form-select" id="modalInputCboMarca">
-                            <option value="">Seleccionar</option>
-                        </select>
+                        <div class="form-group select2-sm">
+                            <label for="modalInputCboMarca" class="form-label">Marca</label>
+                            <select class="form-control select2-show-search" id="modalInputCboMarca">
+                                <option value="">Seleccionar</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalInputCboTipProducto" class="form-label">Tipo</label>
-                        <select class="form-control form-control-sm form-select" id="modalInputCboTipProducto">
-                            <option value="">Seleccionar</option>
-                            <option value="A">ACTIVO</option>
-                            <option value="R">REPUESTO</option>
-                        </select>
+                        <div class="form-group select2-sm">
+                            <label for="modalInputCboTipProducto" class="form-label">Tipo</label>
+                            <select class="form-control select2-show-search" id="modalInputCboTipProducto">
+                                <option value="">Seleccionar</option>
+                                <option value="A">ACTIVO</option>
+                                <option value="R">REPUESTO</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalInputCboAreaGestion" class="form-label">Área</label>
-                        <select class="form-control form-control-sm form-select" id="modalInputCboAreaGestion">
-                            <option value="">Seleccionar</option>
-                        </select>
+                        <div class="form-group select2-sm">
+                            <label for="modalInputCboAreaGestion" class="form-label">Área</label>
+                            <select class="form-control select2-show-search" id="modalInputCboAreaGestion">
+                                <option value="">Seleccionar</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">

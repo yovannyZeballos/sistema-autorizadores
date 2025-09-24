@@ -83,7 +83,7 @@ var AdministrarProducto = function () {
             $('#modalInputCodProducto').val(data.CodProducto);
             $('#modalInputDesProducto').val(data.DesProducto);
             $('#modalInputCboMarca').val(data.MarcaId).trigger('change');
-            $('#modalInputCboTipProducto').val(data.TipProducto);
+            $('#modalInputCboTipProducto').val(data.TipProducto).trigger('change');
             $('#modalInputCboAreaGestion').val(data.AreaGestionId).trigger('change');
             $('#modalInputNomModelo').val(data.NomModelo);
             $('#modalInputStkMinimo').val(data.StkMinimo);
@@ -266,28 +266,43 @@ var AdministrarProducto = function () {
         }
     }
 
-    const cargarComboLocales = async function () {
+    //async function cargarComboEmpresa() {
+    //    try {
+    //        const resp = await listarEmpresasAsociadas();
 
+    //        if (resp.Ok) {
+    //            // Para modal Nueva Serie
+    //            await cargarCombo($('#serieCodEmpresa'), resp.Data.map(e => ({
+    //                text: e.NomEmpresa,
+    //                value: e.CodEmpresa
+    //            })), { placeholder: 'Seleccionar' });
+
+    //            // Limpio locales también
+    //            await cargarCombo($('#serieCodLocal'), [], { placeholder: 'Seleccionar' });
+    //        } else {
+    //            swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
+    //        }
+    //    } catch (err) {
+    //        swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' });
+    //    }
+    //}
+
+    async function cargarComboLocales(selEmpresa, selLocal) {
         try {
-            $('#serieCodLocal').empty().append('<option value=""></option>').val('').trigger('change');
-
-            const response = await listarLocales();
-
-            if (response === undefined) return;
-
-            if (response.Ok) {
-                response.Data.map(local => {
-                    $('#serieCodLocal').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
-                });
+            const codEmpresa = $(selEmpresa).val();
+            const resp = await listarLocales(codEmpresa);
+            if (resp.Ok) {
+                await cargarCombo($(selLocal), resp.Data.map(l => ({
+                    text: l.NomLocal,
+                    value: l.CodLocal
+                })), { placeholder: 'Todos', todos: true });
             } else {
-                swal({ text: String(response && response.Mensaje || 'Error al listar locales'), icon: "error" });
-                return;
+                swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
             }
-        } catch (error) {
-            swal({ text: String(error && (error.Mensaje || error.message || error.responseText || error.statusText) || 'Error al listar locales'), icon: "error" });
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
         }
     }
-
 
     async function guardarProducto({ modo }) {
         var codProducto = $('#modalInputCodProducto').val().trim();
@@ -405,55 +420,31 @@ var AdministrarProducto = function () {
         });
     }
 
-    const cargarComboMarcas = async function () {
+    async function cargarComboMarcas() {
         try {
-            const response = await listarMarcas();
-
-            if (response.Ok) {
-                $('#cboCodMarcaBuscar').empty().append($('<option>', { value: '0', text: 'Todos' }));
-                $('#modalInputCboMarca').empty().append($('<option>', { value: '', text: 'Seleccionar' }));
-                response.Data.map(marca => {
-                    $('#cboCodMarcaBuscar').append($('<option>', { value: marca.Id, text: marca.NomMarca }));
-                    $('#modalInputCboMarca').append($('<option>', { value: marca.Id, text: marca.NomMarca }));
-                });
+            const resp = await listarMarcas();
+            if (resp.Ok) {
+                await cargarCombo($('#cboCodMarcaBuscar'), resp.Data.map(m => ({ text: m.NomMarca, value: m.Id })), { placeholder: 'Todos', todos: true });
+                await cargarCombo($('#modalInputCboMarca'), resp.Data.map(m => ({ text: m.NomMarca, value: m.Id })), { placeholder: 'Seleccionar' });
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: resp.Mensaje, icon: 'error' });
             }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+        } catch (err) {
+            swal({ text: err, icon: 'error' });
         }
     }
 
-    const cargarComboAreasGestion = async function () {
+    async function cargarComboAreasGestion() {
         try {
-            const response = await listarAreasGestion();
-
-            if (response.Ok) {
-                $('#cboCodAreaGestionBuscar').empty().append($('<option>', { value: '0', text: 'Todos' }));
-                $('#modalInputCboAreaGestion').empty().append($('<option>', { value: '', text: 'Seleccionar' }));
-                response.Data.map(area => {
-                    $('#cboCodAreaGestionBuscar').append($('<option>', { value: area.Id, text: area.NomAreaGestion }));
-                    $('#modalInputCboAreaGestion').append($('<option>', { value: area.Id, text: area.NomAreaGestion }));
-                });
+            const resp = await listarAreasGestion();
+            if (resp.Ok) {
+                await cargarCombo($('#cboCodAreaGestionBuscar'), resp.Data.map(a => ({ text: a.NomAreaGestion, value: a.Id })), { placeholder: 'Todos', todos: true });
+                await cargarCombo($('#modalInputCboAreaGestion'), resp.Data.map(a => ({ text: a.NomAreaGestion, value: a.Id })), { placeholder: 'Seleccionar' });
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: resp.Mensaje, icon: 'error' });
             }
-        } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+        } catch (err) {
+            swal({ text: err, icon: 'error' });
         }
     }
 
@@ -621,7 +612,6 @@ var AdministrarProducto = function () {
         $('#cardSeries').show();
 
         cargarSeries(prod.CodProducto);
-        cargarKardex(prod.CodProducto);
     }
 
     var dtSeries = null;
@@ -696,68 +686,61 @@ var AdministrarProducto = function () {
         });
     }
 
-    var dtKardex = null;
-    function cargarKardex(codProducto) {
-        if (dtKardex) { dtKardex.destroy(); $('#tableKardex tbody').empty(); }
-        dtKardex = $('#tableKardex').DataTable({
-            searching: false,
-            processing: true,
-            serverSide: true,
-            ordering: false,
-            ajax: function (data, callback) {
-                var pageNumber = (data.start / data.length) + 1;
-                var params = { codProducto: codProducto, PageNumber: pageNumber, PageSize: data.length };
-                $.getJSON(urlListarKardex, params, function (response) {
-                    if (response.Ok) {
-                        callback({
-                            draw: data.draw,
-                            recordsTotal: response.Data.TotalRecords,
-                            recordsFiltered: response.Data.TotalRecords,
-                            data: response.Data.Items
-                        });
-                    } else {
-                        callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
-                    }
-                }).fail(function (jq) {
-                    swal({ text: jq.responseText || jq.statusText, icon: "error" });
-                    callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
-                });
-            },
-            columns: [
-                {
-                    title: "Fecha", data: "Fecha",
-                    render: function (data, type, row) {
-                        if (data) {
-                            var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
-                            var date = new Date(timestamp);
-                            return isNaN(date.getTime()) ? "" : date.toLocaleDateString('es-PE');
-                        }
-                        return "";
-                    }
-                },
-                { data: "TipoMovimiento" },
-                { data: "DesAreaGestion" },
-                { data: "DesProducto" },
-                { data: "NumSerie" },
-                { data: "NumGuia" },
-                { data: "LocalOrigen" },      // "01-0001 ALM"
-                { data: "LocalDestino" },     // "01-0031 PVEA"
-            ],
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-                lengthMenu: "Mostrar _MENU_ registros por página",
-                zeroRecords: "No se encontraron resultados",
-                info: "Mostrando página _PAGE_ de _PAGES_",
-                infoEmpty: "No hay registros disponibles",
-                infoFiltered: "(filtrado de _MAX_ registros totales)"
-            },
-            scrollY: '500px',
-            scrollX: true,
-            autoWidth: false,
-            scrollCollapse: true,
-            paging: true,
-            lengthMenu: [10, 25, 50, 100],
+
+    async function cargarCombo($select, data, { placeholder = 'Seleccionar…', todos = false } = {}) {
+        $select.empty();
+
+        // Opción inicial
+        if (todos) {
+            $select.append(new Option('Todos', ''));
+        } else {
+            $select.append(new Option('', '')); // vacío para allowClear
+        }
+
+        // Poblar opciones
+        if (data && data.length) {
+            data.forEach(d => {
+                $select.append(new Option(d.text, d.value));
+            });
+        }
+
+        // Inicializar con select2
+        if ($.fn.select2) {
+            $select.select2({
+                width: '100%',
+                placeholder: placeholder,
+                allowClear: true,
+                minimumResultsForSearch: 0,
+                dropdownParent: $select.closest('.modal').length ? $select.closest('.modal') : $(document.body)
+            });
+        }
+
+        $select.val('').trigger('change');
+    }
+
+    function initCombosFijos() {
+        // Filtro en la pantalla principal
+        $('#cboIndActivoBuscar').select2({
+            width: '100%',
+            placeholder: 'Todos',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#cboTipProductoBuscar').select2({
+            width: '100%',
+            placeholder: 'Todos',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        // Tipo en el modal de producto
+        $('#modalInputCboTipProducto').select2({
+            dropdownParent: $('#modalNuevoProducto'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
         });
     }
 
@@ -768,6 +751,7 @@ var AdministrarProducto = function () {
                 await cargarComboEmpresa();
                 await cargarComboMarcas();
                 await cargarComboAreasGestion();
+                initCombosFijos();   // <- inicializa combos fijos
                 visualizarDataTableProductos();
             });
         }

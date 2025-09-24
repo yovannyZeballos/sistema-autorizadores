@@ -53,7 +53,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                 ParameterExpression param = Expression.Parameter(typeof(Mae_Producto), "x");
                 Expression combined = Expression.Constant(true);
 
-                if (request.IndActivo != "0")
+                if (!string.IsNullOrEmpty(request.IndActivo))
                 {
                     Expression property = Expression.Property(param, nameof(Mae_Producto.IndActivo));
                     Expression value = Expression.Constant(request.IndActivo);
@@ -71,7 +71,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     combined = Expression.AndAlso(combined, equal);
                 }
 
-                if (request.TipProducto != "0")
+                if (!string.IsNullOrEmpty(request.TipProducto))
                 {
                     Expression property = Expression.Property(param, nameof(Mae_Producto.TipProducto));
                     Expression value = Expression.Constant(request.TipProducto);
@@ -127,9 +127,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     CodProducto = p.CodProducto,
                     DesProducto = p.DesProducto,
                     MarcaId = p.MarcaId,
-                    NomMarca = p.Marca?.NomMarca,    //  ←  ya llega lleno
+                    NomMarca = p.Marca?.NomMarca,
                     TipProducto = p.TipProducto,
                     AreaGestionId = p.AreaGestionId,
+                    IndSerializable = p.IndSerializable,
                     IndActivo = p.IndActivo,
                     StkMinimo = p.StkMinimo,
                     StkMaximo = p.StkMaximo,
