@@ -75,6 +75,9 @@
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\IRepositorioMovKardex.cs" />
     <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />
+    <Compile Include="Repositorio\IRepositorioSrvServidor.cs" />
+    <Compile Include="Repositorio\IRepositorioSrvSistemaOperativo.cs" />
+    <Compile Include="Repositorio\IRepositorioSrvTipoServidor.cs" />
     <Compile Include="Repositorio\IRepositorioStockProducto.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />
