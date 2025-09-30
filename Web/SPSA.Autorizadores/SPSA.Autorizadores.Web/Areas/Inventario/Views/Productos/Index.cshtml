@@ -5,6 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .alert-list-fix {
+        margin: 0 !important;
+        padding-left: 1.25rem !important;
+        list-style: disc outside !important;
+    }
+
+        .alert-list-fix li {
+            display: list-item !important;
+            position: static !important;
+            float: none !important;
+            white-space: normal !important;
+            line-height: 1.4 !important;
+            text-decoration: none !important;
+            border: 0 !important;
+            margin: .25rem 0 !important;
+        }
+</style>
+
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
@@ -26,53 +45,41 @@
             @Html.Partial("_CardHeader", "Productos")
             <div class="card-body">
                 <div class="row mb-0">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="txtFiltroVariosBuscar" class="form-label">Descripción:</label>
-                            <input type="text" class="form-control form-control-sm text-uppercase" id="txtFiltroVariosBuscar" oninput="this.value = this.value.toUpperCase();" />
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboCodMarcaBuscar" class="form-label">Marca:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboCodMarcaBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboCodMarcaBuscar">
+                                <option value="">Todos</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboTipProductoBuscar" class="form-label">Tipo:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboTipProductoBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboTipProductoBuscar">
+                                <option value="">Todos</option>
                                 <option value="A">ACTIVO</option>
                                 <option value="R">REPUESTO</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboCodAreaGestionBuscar" class="form-label">Área:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboCodAreaGestionBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboCodAreaGestionBuscar">
+                                <option value="">Todos</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
                             <label for="cboIndActivoBuscar" class="form-label">Estado:</label>
-                            <select class="form-control form-control-sm form-select form-select-sm" id="cboIndActivoBuscar">
-                                <option value="0">Todos</option>
+                            <select class="form-control select2-show-search" id="cboIndActivoBuscar">
+                                <option value="">Todos</option>
                                 <option value="S">Activo</option>
                                 <option value="N">Inactivo</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="txtzzzzz" class="form-label"></label>
-                            <button id="btnBuscar" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-search me-1"></i>Buscar</button>
                         </div>
                     </div>
                 </div>
@@ -84,18 +91,18 @@
                         <button id="btnEditarProducto" class="btn btn-sm btn-primary me-2 mb-2">
                             <i class="fe fe-edit-2"></i> Editar
                         </button>
-                        <button id="btnEliminarProducto" class="btn btn-sm btn-primary me-2 mb-2">
-                            <i class="fe fe-trash"></i> Eliminar
-                        </button>
+                        @*<button id="btnEliminarProducto" class="btn btn-sm btn-primary me-2 mb-2">
+                                <i class="fe fe-trash"></i> Eliminar
+                            </button>*@
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <table id="tableProductos" class="table table-bordered text-nowrap border-bottom">
+                        <table id="tableProductos" class="table table-sm table-bordered text-nowrap border-bottom">
                             <thead class="thead-light">
                                 <tr>
                                     <th style="width: 30px; text-align: center;">
-                                        <input type="checkbox" id="checkAllRows" />
+                                        @*<input type="checkbox" id="checkAllRows" />*@
                                     </th>
                                     <th>Código</th>
                                     <th>Descripción</th>
@@ -104,8 +111,6 @@
                                     <th>Tipo</th>
                                     <th>Área</th>
                                     <th>Activo</th>
-                                    <th>Stock Min.</th>
-                                    <th>Stock Max.</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -118,7 +123,7 @@
         </div>
     </div>
 
-    <!-- Columna derecha: Detalle (Series/Kardex) -->
+    <!-- Columna derecha: Detalle (Series) -->
     <div class="col-xl-6">
         <div class="card overflow-hidden" id="cardSeries" style="display:none;">
             @Html.Partial("_CardHeader", "Series")
@@ -127,59 +132,21 @@
                     <div>
                         <h6 class="fw-bold">Producto: <span id="lblCodProducto"></span> <span class="text-muted" id="lblDesProducto"></span></h6>
                     </div>
-                    <div>
-                        <button id="btnNuevaSerie" class="btn btn-sm btn-primary me-2">
-                            <i class="fe fe-plus me-1"></i>Nueva serie
-                        </button>
-                        @*<button id="btnMovimiento" class="btn btn-sm btn-outline-primary">
-                                <i class="fe fe-trending-up me-1"></i>Movimiento
-                            </button>*@
-                    </div>
                 </div>
-
-                <ul class="nav nav-tabs" id="tabsDetalle" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#tabSeries" role="tab">Series</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tabKardex" role="tab">Kardex</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content pt-3">
-                    <div class="tab-pane fade show active" id="tabSeries" role="tabpanel">
-                        <table id="tableSeries" class="table table-bordered text-nowrap border-bottom">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>N° Serie</th>
-                                    <th>Stok Actual</th>
-                                    <th>Ubicación Actual</th>
-                                    <th>Último Ingreso</th>
-                                    <th>Última Salida</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-
-                    <div class="tab-pane fade" id="tabKardex" role="tabpanel">
-                        <table id="tableKardex" class="table table-bordered text-nowrap border-bottom">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Kardex</th>
-                                    <th>Área Gestión</th>
-                                    <th>Producto</th>
-                                    <th>N° Serie</th>
-                                    <th>Guía</th>
-                                    <th>Origen</th>
-                                    <th>Destino</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
+                <table id="tableSeries" class="table table-sm table-bordered text-nowrap border-bottom">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width:30px;"></th>
+                            <th>N° Serie</th>
+                            <th>Estado</th>
+                            <th>Stock Actual</th>
+                            <th>Ubicación Actual</th>
+                            <th>Último Ingreso</th>
+                            <th>Última Salida</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
 
             </div>
         </div>
@@ -192,13 +159,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTituloProductoLabel">Nueva Producto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <form id="formNuevoProducto">
                     <div class="mb-3">
                         <label for="modalInputCodProducto" class="form-label">Código</label>
-                        <input type="text" id="modalInputCodProducto" class="form-control form-control-sm" />
+                        <input type="text" id="modalInputCodProducto" class="form-control form-control-sm text-uppercase" oninput="this.value = this.value.toUpperCase();" />
                     </div>
 
                     <div class="mb-3">
@@ -212,26 +179,32 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalInputCboMarca" class="form-label">Marca</label>
-                        <select class="form-control form-control-sm form-select" id="modalInputCboMarca">
-                            <option value="">Seleccionar</option>
-                        </select>
+                        <div class="form-group select2-sm">
+                            <label for="modalInputCboMarca" class="form-label">Marca</label>
+                            <select class="form-control select2-show-search" id="modalInputCboMarca">
+                                <option value="">Seleccionar</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalInputCboTipProducto" class="form-label">Tipo</label>
-                        <select class="form-control form-control-sm form-select" id="modalInputCboTipProducto">
-                            <option value="">Seleccionar</option>
-                            <option value="A">ACTIVO</option>
-                            <option value="R">REPUESTO</option>
-                        </select>
+                        <div class="form-group select2-sm">
+                            <label for="modalInputCboTipProducto" class="form-label">Tipo</label>
+                            <select class="form-control select2-show-search" id="modalInputCboTipProducto">
+                                <option value="">Seleccionar</option>
+                                <option value="A">ACTIVO</option>
+                                <option value="R">REPUESTO</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="modalInputCboAreaGestion" class="form-label">Área</label>
-                        <select class="form-control form-control-sm form-select" id="modalInputCboAreaGestion">
-                            <option value="">Seleccionar</option>
-                        </select>
+                        <div class="form-group select2-sm">
+                            <label for="modalInputCboAreaGestion" class="form-label">Área</label>
+                            <select class="form-control select2-show-search" id="modalInputCboAreaGestion">
+                                <option value="">Seleccionar</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -275,7 +248,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nueva Serie</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -311,6 +284,57 @@
     </div>
 </div>
 
+<!-- Modal: Dar de Baja Serie -->
+<div class="modal fade" id="modalBajaSerie" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Dar de baja serie
+                    <small class="text-muted d-block fs-12">
+                        <span id="bajaLabelProducto"></span> — <span id="bajaLabelSerie"></span>
+                    </small>
+                </h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="bajaSerieId" />
+                <input type="hidden" id="bajaCodProducto" />
+                <input type="hidden" id="bajaNumSerie" />
+
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Fecha de baja <span class="text-danger">*</span></label>
+                        <input type="date" id="bajaFecha" class="form-control" />
+                    </div>
+                    @*<div class="col-md-8">
+                            <label class="form-label">Observaciones</label>
+                            <input type="text" id="bajaObs" class="form-control form-control-sm" />
+                        </div>*@
+                </div>
+                <div class="alert alert-warning mt-3 mb-0">
+                    <strong class="d-block mb-2">Al dar de baja:</strong>
+                    <ul class="mb-0 ps-3 alert-list-fix">
+                        <li>Si la serie está <b>DISPONIBLE</b>, se descontará 1 del stock disponible del local actual.</li>
+                        <li>No se permite baja si la serie está <b>EN_TRANSITO</b>.</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button id="btnConfirmarBajaSerie" class="btn btn-sm btn-danger">
+                    <i class="fe fe-trash-2 me-1"></i>Dar de baja
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section scripts{
     <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
     <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
@@ -324,55 +348,9 @@
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
     <script src="~/Content/ViewJs/AdministrarProducto.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            AdministrarProducto.init();
-        });
-        $('#tabsDetalle a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-        });
-    </script>
-    <script>
-        $(function () {
-            var $modal = $('#modalNuevaSerie');
-
-            function initSelect2EnModal() {
-                ['#serieCodEmpresa', '#serieCodLocal'].forEach(function (sel) {
-                    var $s = $(sel);
-                    if (!$s.length) return;
-
-                    var $opt0 = $s.find('option').first();
-                    var placeholder = $opt0.attr('label') || $opt0.text() || 'Seleccionar…';
-                    if (!$opt0.attr('value')) { $opt0.attr('value', ''); } 
-
-                    if ($s.hasClass('select2-hidden-accessible')) { $s.select2('destroy'); }
-                    $s.select2({
-                        dropdownParent: $modal,
-                        width: '100%',
-                        placeholder: placeholder,
-                        allowClear: true,
-                        minimumResultsForSearch: 0
-                    });
-                });
-            }
-
-            $modal.on('shown.bs.modal', function () {
-                initSelect2EnModal();
-            });
-
-            $(document).on('select2:open', function () {
-                setTimeout(function () {
-                    var el = document.querySelector('.select2-container--open .select2-search__field');
-                    if (el) el.focus();
-                }, 0);
-            });
-
-            // (Opcional) helper por si quieres refrescar tras cargar opciones vía AJAX
-            window.kardexReinitSelect2 = function (id) {
-                var $s = $(id);
-                if ($s.length) { if ($s.hasClass('select2-hidden-accessible')) $s.select2('destroy'); initSelect2EnModal(); }
-            };
-        });
+        $(function () { AdministrarProducto.init(); });
     </script>
 }

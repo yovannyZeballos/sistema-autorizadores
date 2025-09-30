@@ -5,64 +5,45 @@ var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpr
 var urlListarProveedores = baseUrl + 'Inventario/Proveedores/Listar';
 var urlListarProductos = baseUrl + 'Inventario/Productos/Listar';
 var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProducto';
+var urlObtenerGuiaRecepcion = baseUrl + 'Inventario/GuiaRecepcion/Obtener';
 
 var AdministrarGuiaRecepcionProveedor = (function ($) {
 
-    // cache de productos para saber si es serializable
-    var _productosCache = []; // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable}
+    // ======================== Estado ========================
+    var _productosCache = [];   // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable('S'|'N')}
+    var dt = null;              // DataTable cache
 
-    function initSelect2EnModal(target, opts) {
-        // Acepta string selector o jQuery object
-        var $els = (target && target.jquery) ? target : $(target);
-        if (!$els.length) return;
-
-        // Detecta el modal más cercano; fallback a #modalRecepcion o #modalMovimiento
-        var $modal = $els.closest('.modal');
-        if (!$modal.length) {
-            $modal = $('#modalRecepcion');
-            if (!$modal.length) $modal = $('#modalMovimiento');
+    // Select2: render y búsqueda para Productos (Des — Marca — Modelo)
+    function s2ProductoOptions() {
+        function tpl(item) {
+            if (!item.id) return item.text;
+            const $el = $(item.element);
+            const des = $el.data('des') || '';
+            const marca = $el.data('marca') || '';
+            const modelo = $el.data('modelo') || '';
+            const linea = [des, marca, modelo].filter(Boolean).join(' — ');
+            return `<div><div>${linea}</div>${(marca || modelo) ? `<small class="text-muted">${[marca, modelo].filter(Boolean).join(' · ')}</small>` : ''}</div>`;
         }
-
-        $els.each(function () {
-            var $s = $(this);
-
-            // Asegurar placeholder desde la 1ª opción
-            var $opt0 = $s.find('option').first();
-            var placeholder = $opt0.attr('label') || $opt0.text() || 'Seleccionar…';
-            if ($opt0.length && !$opt0.attr('value')) $opt0.attr('value', '');
-
-            // Si ya está inicializado, destruir antes de reinit
-            if ($s.hasClass('select2-hidden-accessible')) {
-                $s.select2('destroy');
-            }
-
-            // Inicializar Select2 dentro del modal
-            $s.select2($.extend(true, {
-                dropdownParent: $modal,
-                width: '100%',
-                placeholder: placeholder,
-                allowClear: true,
-                minimumResultsForSearch: 0 // <-- fuerza ver el buscador
-            }, opts || {}));
-        });
-    }
-
-    function swalText(err, fallback) {
-        if (!err) return fallback || '';
-        if (typeof err === 'string') return err;
-        if (err.responseText) return err.responseText;
-        if (err.statusText) return err.statusText;
-        if (err.Mensaje) return err.Mensaje;
-        try { return JSON.stringify(err); } catch { return fallback || ''; }
+        function matcher(params, data) {
+            if ($.trim(params.term) === '') return data;
+            if (typeof data.text !== 'string') return null;
+            const term = params.term.toLowerCase();
+            const $el = $(data.element);
+            const hay = s => (s || '').toString().toLowerCase().includes(term);
+            return (hay(data.text) || hay($el.data('des')) || hay($el.data('marca')) || hay($el.data('modelo'))) ? data : null;
+        }
+        return {
+            escapeMarkup: m => m,
+            templateResult: tpl,
+            templateSelection: tpl,
+            matcher,
+            minimumInputLength: 1
+        };
     }
 
     const eventos = function () {
 
-        $('#btnBuscar').on('click', function (e) {
-            e.preventDefault();
-            $('#tableRecepciones').DataTable().ajax.reload();
-        });
-
+        // Nueva guía
         $('#btnNuevaGuia').on('click', async function () {
             limpiarModal();
             await Promise.all([cargarComboEmpresas(), cargarComboProveedores(), ensureProductos()]);
@@ -70,33 +51,53 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             new bootstrap.Modal(document.getElementById('modalRecepcion')).show();
         });
 
-        $('#recEmpDest').on('change', async function () {
-            await cargarComboLocales();
+        // Empresa -> Local (deshabilitado hasta elegir empresa)
+        $('#fEmpOri').on('change', function () {
+            cargarComboLocales('#fEmpOri', '#fLocOri');
         });
 
-        // guardar
+        $('#recEmpDest').on('change', function () {
+            cargarComboLocales('#recEmpDest', '#recLocDest');
+        });
+
+        // Guardar (con anti doble clic)
         $('#btnGuardarRecepcion').on('click', guardarRecepcion);
 
-        // agregar fila detalle
-        $('#btnAddItem').on('click', function (e) {
-            e.preventDefault();
-            addDetalleRow();
+        // Agregar fila detalle
+        $('#btnAddItem').on('click', function (e) { e.preventDefault(); addDetalleRow(); });
+
+        // Al abrir modal, inicializar selects fijos del modal (si existen)
+        $('#modalRecepcion').on('shown.bs.modal', function () {
+            const fixed = ['#recAreaGestion', '#recClaseStock', '#recEstadoStock', '#recProveedor', '#recEmpDest', '#recLocDest'];
+            fixed.forEach(sel => {
+                if ($(sel).length && $.fn.select2 && !$(sel).hasClass('select2-hidden-accessible')) {
+                    $(sel).select2({
+                        width: '100%',
+                        placeholder: $(sel).find('option').first().text() || 'Seleccionar…',
+                        allowClear: true,
+                        minimumResultsForSearch: 0,
+                        dropdownParent: $('#modalRecepcion')
+                    });
+                }
+            });
         });
 
-        // cuando se muestre el modal, asegurar select2 en cabecera
-        $('#modalRecepcion').on('shown.bs.modal', function () {
-            initSelect2EnModal('#recAreaGestion');
-            initSelect2EnModal('#recClaseStock');
-            initSelect2EnModal('#recProveedor');
-            initSelect2EnModal('#recEmpDest');
-            initSelect2EnModal('#recLocDest');
-            initSelect2EnModal('#recEstadoStock');
-            // también los selects de detalle existentes
-            $('#tblDetalleRecepcion tbody select.selProducto').each(function () { initSelect2EnModal(this); });
+        // Ver detalle de una guía
+        $('#tableRecepciones tbody').on('click', '.btnVer', function () {
+            var id = $(this).data('id');
+            abrirModalDetalleRecepcion(id);
         });
+
+        $('#fEmpOri, #fLocOri, #fProveedor, #fDesde, #fHasta')
+            .off('change._rec')
+            .on('change._rec', function () {
+                if (dt) {
+                    dt.ajax.reload();
+                }
+            });
     };
 
-    // ==== AJAX helpers ====
+    // ================== AJAX helpers ==================
     function listarEmpresas() {
         return $.ajax({ url: urlListarEmpresas, type: 'POST', data: { request: { CodUsuario: '', Busqueda: '' } } });
     }
@@ -115,44 +116,125 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         return $.ajax({ url: urlListarSeriesDisponibles, type: 'POST', data: { request: { CodProducto: codProducto } } });
     }
 
-    // ==== Cargar combos base ====
+    // ======================== Cargas de combos (pantalla) ========================
     async function cargarComboEmpresas() {
+        const $emp = $('#fEmpOri');
+        const $loc = $('#fLocOri');
+        if (!$emp.length || !$loc.length) return; // por si no existen en esta vista
+
         try {
             const resp = await listarEmpresas();
-            $('#recEmpDest').empty().append('<option></option>');
-            $('#recLocDest').empty().append('<option></option>');
             if (resp.Ok) {
-                resp.Data.forEach(e => {
-                    $('#recEmpDest').append(new Option(e.NomEmpresa, e.CodEmpresa));
-                });
+                const empresas = resp.Data.map(e => ({ text: e.NomEmpresa, value: e.CodEmpresa }));
+                await cargarCombo($emp, empresas, { placeholder: 'Todos', todos: true });
+                await cargarCombo($loc, [], { placeholder: 'Todos', todos: true });
+                $loc.prop('disabled', true).trigger('change.select2');
             } else {
                 swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
             }
-        } catch (err) { swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' }); }
-        initSelect2EnModal('#recEmpDest');
-        initSelect2EnModal('#recLocDest');
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' });
+        }
     }
 
-    async function cargarComboLocales() {
+    async function cargarComboLocales(selEmpresa, selLocal) {
+        const $emp = $(selEmpresa), $loc = $(selLocal);
+        if (!$emp.length || !$loc.length) return;
+
         try {
-            const codEmpresa = $('#recEmpDest').val();
+            const codEmpresa = $emp.val();
+            if (!codEmpresa) {
+                await cargarCombo($loc, [], { placeholder: 'Todos', todos: true });
+                $loc.prop('disabled', true).trigger('change.select2');
+                return;
+            }
             const resp = await listarLocales(codEmpresa);
-            $('#recLocDest').empty().append('<option></option>');
             if (resp.Ok) {
-                resp.Data.forEach(l => {
-                    $('#recLocDest').append(new Option(l.NomLocal, l.CodLocal));
-                });
+                await cargarCombo($loc,
+                    resp.Data.map(l => ({ text: l.NomLocal, value: l.CodLocal })),
+                    { placeholder: 'Todos', todos: true }
+                );
+                $loc.prop('disabled', false).trigger('change.select2');
             } else {
                 swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
             }
-        } catch (err) { swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' }); }
-        $('#recLocDest').val(null).trigger('change');
+
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
+        }
+    }
+
+    async function cargarComboEmpresasModal() {
+        const $emp = $('#fEmpOri');
+        const $loc = $('#fLocOri');
+        if (!$emp.length || !$loc.length) return; // por si no existen en esta vista
+
+        try {
+            const resp = await listarEmpresas();
+            if (resp.Ok) {
+                const empresas = resp.Data.map(e => ({ text: e.NomEmpresa, value: e.CodEmpresa }));
+                await cargarCombo($emp, empresas, { placeholder: 'Todos', todos: false, dropdownParent: '#modalRecepcion' });
+                await cargarCombo($loc, [], { placeholder: 'Todos', todos: false, dropdownParent: '#modalRecepcion' });
+                $loc.prop('disabled', true).trigger('change.select2');
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar empresas'), icon: 'error' });
+            }
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar empresas'), icon: 'error' });
+        }
+    }
+
+    async function cargarComboLocalesModal(selEmpresa, selLocal) {
+        const $emp = $(selEmpresa), $loc = $(selLocal);
+        if (!$emp.length || !$loc.length) return;
+
+        try {
+            const codEmpresa = $emp.val();
+            if (!codEmpresa) {
+                await cargarCombo($loc, [], { placeholder: 'Seleccionar…', todos: false, dropdownParent: '#modalRecepcion' });
+                $loc.prop('disabled', true).trigger('change.select2');
+                return;
+            }
+            const resp = await listarLocales(codEmpresa);
+            if (resp.Ok) {
+                await cargarCombo($loc,
+                    resp.Data.map(l => ({ text: l.NomLocal, value: l.CodLocal })),
+                    { placeholder: 'Seleccionar…', todos: false, dropdownParent: '#modalRecepcion' }
+                );
+                $loc.prop('disabled', false).trigger('change.select2');
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
+            }
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
+        }
+    }
+
+    async function cargarComboProveedores() {
+        const $prove = $('#recProveedor');
+        if (!$prove.length) return;
+
+        try {
+            const resp = await listarProveedores();
+            if (resp.Ok) {
+                await cargarCombo($prove,
+                    resp.Data.map(p => ({
+                        text: p.RazonSocial,
+                        value: p.Ruc,
+                        attrs: { 'data-ruc': p.Ruc, 'data-raz': p.RazonSocial }
+                    })),
+                    { placeholder: 'Seleccionar…', todos: false, dropdownParent: '#modalRecepcion' }
+                );
+            } else {
+                swal({ text: swalText(resp, 'No fue posible listar proveedores'), icon: 'error' });
+            }
+        } catch (err) { swal({ text: swalText(err, 'Error al listar proveedores'), icon: 'error' }); }
     }
 
     async function cargarFiltroProveedores() {
         try {
             const resp = await listarProveedores();
-            const $cbo = $('#cboProveedor');        // <-- FALTABA
+            const $cbo = $('#fProveedor');        // <-- FALTABA
             $cbo.empty().append('<option value="">Todos</option>');
 
             if (resp.Ok) {
@@ -172,34 +254,13 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                 });
             }
 
-            // recargar tabla al cambiar filtro
-            $cbo.off('change._rec').on('change._rec', function () {
-                if ($.fn.DataTable.isDataTable('#tableRecepciones')) {
-                    $('#tableRecepciones').DataTable().ajax.reload();
-                }
-            });
-
         } catch (err) {
             swal({ text: swalText(err, 'Error al listar proveedores'), icon: 'error' });
         }
     }
 
-    async function cargarComboProveedores() {
-        try {
-            const resp = await listarProveedores();
-            $('#recProveedor').empty().append('<option></option>');
-            if (resp.Ok) {
-                resp.Data.forEach(p => {
-                    $('#recProveedor').append(new Option(p.RazonSocial, p.Ruc));
-                });
-            } else {
-                swal({ text: swalText(resp, 'No fue posible listar proveedores'), icon: 'error' });
-            }
-        } catch (err) { swal({ text: swalText(err, 'Error al listar proveedores'), icon: 'error' }); }
-        initSelect2EnModal('#recProveedor');
-    }
 
-    // cache productos
+    // ======================== Cache de productos ========================
     async function ensureProductos() {
         if (_productosCache.length) return;
         try {
@@ -210,55 +271,56 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                     DesProducto: p.DesProducto,
                     NomMarca: p.NomMarca,
                     NomModelo: p.NomModelo,
-                    IndSerializable: (p.IndSerializable || 'S') // 'S' | 'N'
+                    IndSerializable: (p.IndSerializable || 'N') // ← default seguro: no serializable
                 }));
             } else {
                 swal({ text: swalText(resp, 'No fue posible listar productos'), icon: 'error' });
             }
-        } catch (err) { swal({ text: swalText(err, 'Error al listar productos'), icon: 'error' }); }
+        } catch (err) {
+            swal({ text: swalText(err, 'Error al listar productos'), icon: 'error' });
+        }
     }
 
-    // ==== Detalle (filas) ====
+
+    // ================== Detalle (filas) ==================
     function addDetalleRow() {
         const $tb = $('#tblDetalleRecepcion tbody');
         const rowId = 'r' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
         const tr = $(
             '<tr data-row="' + rowId + '">' +
-            '<td><select class="form-select form-select-sm selProducto select2-show-search" style="width:100%"></select></td>' +
-            '<td><input type="text" class="form-control form-control-sm inpSerie text-uppercase" placeholder="N° serie (si aplica)" /></td>' +
-            '<td><input type="number" class="form-control form-control-sm inpCantidad" min="1" step="1" value="1" /></td>' +
-            '<td><input type="text" class="form-control form-control-sm inpCodActivo text-uppercase" /></td>' +
-            '<td class="text-center"><button type="button" class="btn btn-sm btn-link text-danger btnDelRow" title="Quitar"><i class="fe fe-trash-2"></i></button></td>' +
+            '  <td class="select2-sm"><select class="form-select form-select-sm selProducto select2-show-search" style="width:100%"></select></td>' +
+            '  <td><input type="text" class="form-control form-control-sm inpSerie text-uppercase" placeholder="N° serie (si aplica)" /></td>' +
+            '  <td><input type="number" class="form-control form-control-sm inpCantidad" min="1" step="1" value="1" /></td>' +
+            '  <td><input type="text" class="form-control form-control-sm inpCodActivo text-uppercase" /></td>' +
+            '  <td class="text-center"><button type="button" class="btn btn-sm btn-link text-danger btnDelRow" title="Quitar"><i class="fe fe-trash-2"></i></button></td>' +
             '</tr>'
         );
-
         $tb.append(tr);
 
-        // init select2 en la fila
         const $selProd = tr.find('select.selProducto');
-        initSelect2EnModal($selProd);
 
-        // cargar productos en combo
-        $selProd.append(new Option('', '', false, false)); // placeholder
-        _productosCache.forEach(p => {
-            var texto = (p.DesProducto || '');
-            if (p.NomMarca) texto += ' - ' + p.NomMarca;
-            if (p.NomModelo) texto += ' - ' + p.NomModelo;
-            texto = texto.trim();
-            var opt = new Option(texto, p.CodProducto, false, false);
-            $(opt).attr('data-serializable', p.IndSerializable);
-            $selProd.append(opt);
+        // Opciones de producto con data-* para mejor búsqueda
+        const prodOptions = _productosCache.map(p => ({
+            value: p.CodProducto,
+            text: [p.DesProducto, p.NomMarca, p.NomModelo].filter(Boolean).join(' — '), // fallback
+            attrs: {
+                'data-des': (p.DesProducto || ''),
+                'data-marca': (p.NomMarca || ''),
+                'data-modelo': (p.NomModelo || ''),
+                'data-serializable': (p.IndSerializable || 'S')
+            }
+        }));
+
+        cargarCombo($selProd, prodOptions, {
+            placeholder: 'Buscar producto…',
+            dropdownParent: '#modalRecepcion',
+            select2Options: s2ProductoOptions()
         });
 
         // eventos de fila
-        $selProd.on('change', async function () {
-            await onProductoChange(tr);
-        });
-
-        tr.find('.btnDelRow').on('click', function () {
-            tr.remove();
-        });
+        $selProd.on('change', function () { onProductoChange(tr); });
+        tr.find('.btnDelRow').on('click', function () { tr.remove(); });
     }
 
     async function onProductoChange(tr) {
@@ -269,7 +331,6 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         const cod = $selProd.val();
         const ind = ($selProd.find(':selected').data('serializable') || 'S'); // 'S'|'N'
 
-        // reset serie
         $serie.val('');
         if (!cod) {
             $serie.prop('disabled', true).attr('placeholder', 'N° serie (si aplica)');
@@ -278,95 +339,86 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         }
 
         if (ind === 'S') {
-            // Serializable: requerimos N° serie, cantidad fija 1
             $serie.prop('disabled', false).attr('placeholder', 'Ingrese N° de serie');
             $cant.val('1').prop('disabled', true);
         } else {
-            // No serializable: sin serie, cantidad libre
             $serie.val('').prop('disabled', true).attr('placeholder', '(no serie)');
             $cant.prop('disabled', false);
         }
     }
 
-    // ==== Guardar ====
+
+    // ================== Guardar (anti doble clic) ==================
     async function guardarRecepcion() {
-        // cabecera
-        const header = {
-            NumGuia:            ($('#recNumGuia').val() || '').trim(),
-            OrdenCompra:        ($('#recOrdenCompra').val() || '').trim(),
-            Fecha:              $('#recFecha').val(),
-            ProveedorRuc:       $('#recProveedor').val() || null,
-            AreaGestion:        ($('#recAreaGestion').val() || '').trim(),
-            ClaseStock:         ($('#recClaseStock').val() || '').trim(),
-            EstadoStock:        ($('#recEstadoStock').val() || '').trim(),
-            IndTransferencia:   'N',
-            Observaciones:      ($('#recObs').val() || '').trim()
-        };
-
-        // validaciones mínimas
-        if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha || !header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
-            swal({ text: "Complete los campos obligatorios (*) de la cabecera.", icon: "warning" });
-            return;
-        }
-
-        // detalle
-        const items = [];
-        const errores = [];
-        let fila = 0;
-
-        // para evitar series duplicadas en la misma guía (mismo producto)
-        const seriesKeys = new Set();
-
-        $('#tblDetalleRecepcion tbody tr').each(function () {
-            fila++;
-            const $tr = $(this);
-            const $optSel = $tr.find('.selProducto option:selected');
-
-            const codProd = $optSel.val();
-            const ind = ($optSel.data('serializable') || 'S');
-            const numSerie = ($tr.find('.inpSerie').val() || '').trim();
-            const cant = parseInt($tr.find('.inpCantidad').val() || '0', 10);
-            const codAct = ($tr.find('.inpCodActivo').val() || '').trim();
-            //const obs = ($tr.find('.inpObs').val() || '').trim();
-
-            if (!codProd) {
-                errores.push(`Fila ${fila}: producto es obligatorio.`);
-                return; // ⬅️ no empujar item inválido
-            }
-
-            if (ind === 'S') {
-                if (!numSerie) errores.push(`Fila ${fila}: N° serie es obligatorio para producto serializable.`);
-                if (cant !== 1) errores.push(`Fila ${fila}: cantidad debe ser 1 para producto serializable.`);
-                const key = codProd + '|' + numSerie;
-                if (seriesKeys.has(key)) errores.push(`Fila ${fila}: la serie '${numSerie}' del producto ${codProd} está repetida.`);
-                else seriesKeys.add(key);
-            } else {
-                if (!cant || cant <= 0) errores.push(`Fila ${fila}: cantidad debe ser mayor a 0.`);
-            }
-
-            items.push({
-                CodProducto: codProd,
-                // siempre enviaremos SerieProductoId = null al crear; el backend creará la serie si corresponde
-                SerieProductoId: null,   // null si nueva o no serializable
-                NumSerie: (ind === 'S') ? numSerie : null,
-                Cantidad: cant,
-                CodActivo: codAct,
-                //Observaciones: obs
-            });
-        });
-
-        if (items.length === 0) {
-            swal({ text: "Agregue al menos un ítem en el detalle.", icon: "warning" });
-            return;
-        }
-        if (errores.length) {
-            swal({ text: errores.join('\n'), icon: "warning" });
-            return;
-        }
-
-        const payload = { Cabecera: header, Detalle: items };
+        const $btn = $('#btnGuardarRecepcion');
+        const oldHtml = $btn.html();
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Guardando…');
 
         try {
+            // cabecera
+            const header = {
+                NumGuia: ($('#recNumGuia').val() || '').trim(),
+                OrdenCompra: ($('#recOrdenCompra').val() || '').trim(),
+                Fecha: $('#recFecha').val(),
+                ProveedorRuc: $('#recProveedor').val() || null,
+                AreaGestion: ($('#recAreaGestion').val() || '').trim(),
+                ClaseStock: ($('#recClaseStock').val() || '').trim(),
+                EstadoStock: ($('#recEstadoStock').val() || '').trim(),
+                IndTransferencia: 'N',
+                Observaciones: ($('#recObs').val() || '').trim()
+            };
+
+            if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha || !header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
+                swal({ text: "Complete los campos obligatorios (*) de la cabecera.", icon: "warning" });
+                return;
+            }
+
+            // detalle
+            const items = [];
+            const errores = [];
+            let fila = 0;
+            const seriesKeys = new Set();
+
+            $('#tblDetalleRecepcion tbody tr').each(function () {
+                fila++;
+                const $tr = $(this);
+                const $optSel = $tr.find('.selProducto option:selected');
+
+                const codProd = $optSel.val();
+                const ind = ($optSel.data('serializable') || 'S');
+                const numSerie = ($tr.find('.inpSerie').val() || '').trim();
+                const cant = parseInt($tr.find('.inpCantidad').val() || '0', 10);
+                const codAct = ($tr.find('.inpCodActivo').val() || '').trim();
+
+                if (!codProd) {
+                    errores.push(`Fila ${fila}: producto es obligatorio.`);
+                    return;
+                }
+
+                if (ind === 'S') {
+                    if (!numSerie) errores.push(`Fila ${fila}: N° serie es obligatorio para producto serializable.`);
+                    if (cant !== 1) errores.push(`Fila ${fila}: cantidad debe ser 1 para producto serializable.`);
+                    const key = codProd + '|' + numSerie;
+                    if (seriesKeys.has(key)) errores.push(`Fila ${fila}: la serie '${numSerie}' del producto ${codProd} está repetida.`);
+                    else seriesKeys.add(key);
+                } else {
+                    if (!cant || cant <= 0) errores.push(`Fila ${fila}: cantidad debe ser mayor a 0.`);
+                }
+
+                items.push({
+                    CodProducto: codProd,
+                    SerieProductoId: null,
+                    NumSerie: (ind === 'S') ? numSerie : null,
+                    Cantidad: cant,
+                    CodActivo: codAct
+                });
+            });
+
+            if (items.length === 0) { swal({ text: "Agregue al menos un ítem en el detalle.", icon: "warning" }); return; }
+            if (errores.length) { swal({ text: errores.join('\n'), icon: "warning" }); return; }
+
+            const payload = { Cabecera: header, Detalle: items };
+
             const resp = await $.ajax({
                 url: urlRegistrarRecepcion,
                 type: 'POST',
@@ -378,21 +430,23 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             if (resp.Ok) {
                 swal({ text: resp.Mensaje || 'Guía registrada correctamente.', icon: 'success' });
                 bootstrap.Modal.getInstance(document.getElementById('modalRecepcion')).hide();
-                $('#tableRecepciones').DataTable().ajax.reload(null, false);
+                if (dt) dt.ajax.reload(null, false);
             } else {
                 swal({ text: swalText(resp, 'No se pudo registrar.'), icon: 'warning' });
             }
         } catch (err) {
             swal({ text: swalText(err, 'Error al registrar'), icon: 'error' });
+        } finally {
+            $btn.prop('disabled', false).html(oldHtml);
         }
     }
 
-    // ==== DataTable principal ====
+    // ================== DataTable ==================
     function visualizarDataTable() {
-        $('#tableRecepciones').DataTable({
+        dt = $('#tableRecepciones').DataTable({
             serverSide: true,
             processing: true,
-            searching: false,
+            searching: true,
             ordering: false,
             ajax: function (data, callback) {
                 var pageNumber = (data.start / data.length) + 1;
@@ -401,9 +455,11 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                 var filtros = {
                     FechaDesde: $('#fDesde').val() || null,
                     FechaHasta: $('#fHasta').val() || null,
-                    ProveedorRuc: $('#cboProveedor').val() || null,
+                    ProveedorRuc: $('#fProveedor').val() || null,
+                    CodEmpresaOrigen: $('#fEmpOri').val() || null,
+                    CodLocalOrigen: $('#fLocOri').val() || null,
                     IndTransferencia: 'N',
-                    FiltroVarios: $('#txtFiltro').val() || ''
+                    FiltroVarios: (data.search.value || '').toUpperCase()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -446,22 +502,31 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                 },
                 { data: 'NumGuia' },
                 { data: 'Proveedor', defaultContent: '' },
+                { data: 'NomLocalOrigen', defaultContent: '' },
                 { data: 'NomLocalDestino', defaultContent: '' },
-                //{
-                //    data: null, render: function (r) {
-                //        return (r.CodEmpresaDestino || '') + '-' + (r.CodLocalDestino || '');
-                //    }
-                //},
                 { data: 'Items', defaultContent: '' },
                 { data: 'IndEstado', defaultContent: 'REGISTRADA' },
-                { data: 'UsuCreacion', defaultContent: '' }
+                { data: 'UsuCreacion', defaultContent: '' },
+                {
+                    data: null,
+                    className: 'dt-center nowrap',
+                    render: function (r) {
+                        return '' +
+                            '<button type="button" class="btn btn-sm btn-outline-primary btnVer" data-id="' + r.Id + '">' +
+                            '<i class="fe fe-eye me-1"></i>Ver</button>';
+                    }
+                }
             ],
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
                 zeroRecords: "No se encontraron resultados",
                 info: "Mostrando página _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
-                infoFiltered: "(filtrado de _MAX_ registros totales)"
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "N° Guía:"
+            },
+            initComplete: function () {
+                $('#tableRecepciones_filter input').addClass('form-control-sm').attr('placeholder', 'Buscar...');
             },
             scrollY: '500px',
             scrollX: true,
@@ -471,6 +536,7 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         });
     }
 
+    // ================== Auxiliares ==================
     function limpiarModal() {
         $('#recNumGuia').val('');
         $('#recOrdenCompra').val('');
@@ -478,12 +544,143 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         $('#recProveedor').val(null).trigger('change');
         $('#recAreaGestion,#recClaseStock,#recEstadoStock,#recObs').val('');
         $('#tblDetalleRecepcion tbody').empty();
+
+        // Si existen empresa/local en el modal, resetear y deshabilitar local
+        //if ($('#recEmpDest').length) $('#recEmpDest').val(null).trigger('change');
+        //if ($('#recLocDest').length) {
+        //    $('#recLocDest').empty().append(new Option('', '')).val(null).trigger('change');
+        //    $('#recLocDest').prop('disabled', true);
+        //}
     }
+
+    function initCombosFijos() {
+        // Selects fijos del modal (no dependientes)
+        $('#recAreaGestion').select2({
+            dropdownParent: $('#modalRecepcion'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#recClaseStock').select2({
+            dropdownParent: $('#modalRecepcion'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#recEstadoStock').select2({
+            dropdownParent: $('#modalRecepcion'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        $('#desEstadoStock').select2({
+            dropdownParent: $('#modalRecepcion'),
+            width: '100%',
+            placeholder: 'Seleccionar',
+            allowClear: true,
+            minimumResultsForSearch: 0
+        });
+
+        // Atajos: Enter para buscar
+        $('#txtFiltro, #fDesde, #fHasta').on('keyup', function (e) {
+            if (e.key === 'Enter') $('#btnBuscar').click();
+        });
+    }
+
+    async function abrirModalDetalleRecepcion(id) {
+        // limpia/placeholder
+        $('#detalleRecepcionBody').html('<div class="text-muted">Cargando detalle…</div>');
+        const $modalEl = document.getElementById('modalDetalleRecepcion');
+        const modal = bootstrap.Modal.getInstance($modalEl) || new bootstrap.Modal($modalEl);
+        modal.show();
+
+        try {
+            const resp = await $.getJSON(urlObtenerGuiaRecepcion, { id: id });
+            if (!resp || !resp.Ok || !resp.Data) {
+                $('#detalleRecepcionBody').html('<div class="text-danger">No se pudo cargar el detalle.</div>');
+                return;
+            }
+            const html = detalleDespachoTemplate(resp.Data);
+            $('#detalleRecepcionBody').html(html);
+        } catch (err) {
+            $('#detalleRecepcionBody').html('<div class="text-danger">' + (swalText(err, 'Error al obtener el detalle.') || 'Error') + '</div>');
+        }
+    }
+
+    function safe(v) { return (v == null ? '' : (v + '')); }
+
+    function detalleDespachoTemplate(gr) {
+        // por si viniera envuelto
+        if (gr && gr.Data) gr = gr.Data;
+
+        const fecha = parseDotNetDate(gr.Fecha);
+        const detalles = Array.isArray(gr.Detalles) ? gr.Detalles : [];
+
+        const rows = detalles.map(d => {
+            return `
+      <tr>
+        <td>${safe(d.CodProducto)}</td>
+        <td>${safe(d.DesProducto)}</td>
+        <td>${safe(d.NumSerie)}</td>
+        <td class="text-end">${safe(d.Cantidad)}</td>
+        <td>${safe(d.CodActivo)}</td>
+        <td>${safe(d.Observaciones)}</td>
+      </tr>`;
+        }).join('');
+
+        return `
+<div class="detalle-recepcion">
+    <div class="mb-3">
+        <div class="row g-2">
+            <div class="col-md-3"><b>N° Guía:</b> ${safe(gr.NumGuia)}</div>
+            <div class="col-md-3"><b>Fecha:</b> ${fecha}</div>
+            <div class="col-md-3"><b>Transferencia:</b> ${safe(gr.IndTransferencia)}</div>
+            <div class="col-md-3"><b>Estado:</b> ${safe(gr.IndEstado || 'REGISTRADA')}</div>
+
+            <div class="col-md-3"><b>Origen:</b> ${safe(gr.NomLocalOrigen)}</div>
+            <div class="col-md-3"><b>Destino:</b> ${safe(gr.NomLocalDestino)}</div>
+            <div class="col-md-3"><b>Área Gestión:</b> ${safe(gr.AreaGestion)}</div>
+            <div class="col-md-3"><b>Clase Stock:</b> ${safe(gr.ClaseStock)}</div>
+
+            <div class="col-md-3"><b>Estado Stock:</b> ${safe(gr.EstadoStock)}</div>
+            <div class="col-md-9"><b>Observaciones:</b> ${safe(gr.Observaciones)}</div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Serie</th>
+                    <th class="text-end">Cantidad</th>
+                    <th>Cód. Activo</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows || '<tr><td colspan="6" class="text-muted">Sin detalle.</td></tr>'}
+            </tbody>
+        </table>
+    </div>
+</div>
+`;
+    }
+
 
     return {
         init: function () {
             checkSession(async function () {
                 eventos();
+                initCombosFijos();
+                await cargarComboEmpresas();
                 await cargarFiltroProveedores();
                 visualizarDataTable();
             });

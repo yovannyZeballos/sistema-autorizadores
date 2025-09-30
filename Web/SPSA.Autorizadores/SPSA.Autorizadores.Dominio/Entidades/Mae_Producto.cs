@@ -22,5 +22,6 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public DateTime? FecElimina { get; set; }
 
         public virtual Mae_Marca Marca { get; set; }
+        public virtual Mae_AreaGestion AreaGestion { get; set; }
     }
 }

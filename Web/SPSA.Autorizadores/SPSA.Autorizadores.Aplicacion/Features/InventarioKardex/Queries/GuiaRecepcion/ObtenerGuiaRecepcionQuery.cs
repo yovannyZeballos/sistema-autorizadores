@@ -7,50 +7,50 @@ using AutoMapper;
 using MediatR;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
 
-namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDespacho
+namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRecepcion
 {
-    public class ObtenerGuiaDespachoQuery : IRequest<GenericResponseDTO<GuiaDespachoCabeceraDto>>
+    public class ObtenerGuiaRecepcionQuery : IRequest<GenericResponseDTO<GuiaRecepcionCabeceraDto>>
     {
         public long Id { get; set; }
     }
 
-    public class ObtenerGuiaDespachoHandler : IRequestHandler<ObtenerGuiaDespachoQuery, GenericResponseDTO<GuiaDespachoCabeceraDto>>
+    public class ObtenerGuiaRecepcionHandler : IRequestHandler<ObtenerGuiaRecepcionQuery, GenericResponseDTO<GuiaRecepcionCabeceraDto>>
     {
         private readonly ISGPContexto _contexto;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ObtenerGuiaDespachoHandler(IMapper mapper)
+        public ObtenerGuiaRecepcionHandler(IMapper mapper)
         {
             _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<GuiaDespachoCabeceraDto>> Handle(ObtenerGuiaDespachoQuery request, CancellationToken cancellationToken)
+        public async Task<GenericResponseDTO<GuiaRecepcionCabeceraDto>> Handle(ObtenerGuiaRecepcionQuery request, CancellationToken cancellationToken)
         {
-            var response = new GenericResponseDTO<GuiaDespachoCabeceraDto> { Ok = true };
+            var response = new GenericResponseDTO<GuiaRecepcionCabeceraDto> { Ok = true };
             try
             {
-                var gd = await _contexto.RepositorioGuiaDespachoCabecera
+                var gr = await _contexto.RepositorioGuiaRecepcionCabecera
                     .Obtener(g => g.Id == request.Id)
                     .Include(g => g.Detalles.Select(d => d.SerieProducto))
                     .FirstOrDefaultAsync(cancellationToken);
 
-                if (gd == null)
+                if (gr == null)
                 {
                     response.Ok = false;
-                    response.Mensaje = "La guía de despacho no existe.";
+                    response.Mensaje = "La guía de recepción no existe.";
                     return response;
                 }
 
                 // Distintos códigos de producto del detalle
-                var cods = gd.Detalles
+                var cods = gr.Detalles
                     .Select(d => d.CodProducto)
                     .Where(c => !string.IsNullOrWhiteSpace(c))
                     .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -71,17 +71,16 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                 var dicProd = productos.ToDictionary(x => x.CodProducto, StringComparer.OrdinalIgnoreCase);
 
                 // === Mapear detalle con datos de producto ===
-                var detalleDtos = gd.Detalles.Select(item =>
+                var detalleDtos = gr.Detalles.Select(item =>
                 {
                     dicProd.TryGetValue(item.CodProducto ?? string.Empty, out var prod);
 
-                    return new GuiaDespachoDetalleDto
+                    return new GuiaRecepcionDetalleDto
                     {
                         Id = item.Id,
                         CodProducto = item.CodProducto,
                         DesProducto = prod?.DesProducto + " " + prod?.NomMarca + " " + prod?.NomModelo,
                         Cantidad = item.Cantidad,
-                        CantidadConfirmada = item.CantidadConfirmada,
                         CodActivo = item.CodActivo,
                         Observaciones = item.Observaciones,
                         NumSerie = item.SerieProducto?.NumSerie,
@@ -89,35 +88,37 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                     };
                 }).ToList();
 
+                var razonSocial = await _contexto.RepositorioMaeProveedor.Obtener(p => p.Ruc == gr.ProveedorRuc)
+                                                                            .Select(p => p.RazonSocial)
+                                                                            .FirstOrDefaultAsync() ?? string.Empty;
 
-                var localOrigen = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == gd.CodEmpresaOrigen && p.CodLocal == gd.CodLocalOrigen)
+                var localOrigen = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == gr.CodEmpresaOrigen && p.CodLocal == gr.CodLocalOrigen)
                                                                             .Select(p => p.NomLocal)
                                                                             .FirstOrDefaultAsync() ?? string.Empty;
-                var localDestino = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == gd.CodEmpresaDestino && p.CodLocal == gd.CodLocalDestino)
+                var localDestino = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == gr.CodEmpresaDestino && p.CodLocal == gr.CodLocalDestino)
                                                                         .Select(p => p.NomLocal)
                                                                         .FirstOrDefaultAsync() ?? string.Empty;
 
 
-                var dto = new GuiaDespachoCabeceraDto
+                var dto = new GuiaRecepcionCabeceraDto
                 {
-                    Id = gd.Id,
-                    Fecha = gd.Fecha,
-                    NumGuia = gd.NumGuia,
-                    CodEmpresaOrigen = gd.CodEmpresaOrigen,
-                    CodLocalOrigen = gd.CodLocalOrigen,
+                    Id = gr.Id,
+                    Fecha = gr.Fecha,
+                    NumGuia = gr.NumGuia,
+                    Proveedor = razonSocial ?? string.Empty,
+                    CodEmpresaOrigen = gr.CodEmpresaOrigen,
+                    CodLocalOrigen = gr.CodLocalOrigen,
                     NomLocalOrigen = localOrigen,
-                    CodEmpresaDestino = gd.CodEmpresaDestino,
-                    CodLocalDestino = gd.CodLocalDestino,
+                    CodEmpresaDestino = gr.CodEmpresaDestino,
+                    CodLocalDestino = gr.CodLocalDestino,
                     NomLocalDestino = localDestino,
-                    TipoMovimiento = gd.TipoMovimiento,
-                    IndEstado = gd.IndEstado,
-                    AreaGestion = gd.AreaGestion,
-                    ClaseStock = gd.ClaseStock,
-                    EstadoStock = gd.EstadoStock,
-                    Observaciones = gd.Observaciones,
-                    IndConfirmacion = gd.IndConfirmacion,
-                    FecConfirmacion = gd.FecConfirmacion,
-                    UsuCreacion = gd.UsuCreacion,
+                    IndTransferencia = gr.IndTransferencia,
+                    IndEstado = gr.IndEstado,
+                    AreaGestion = gr.AreaGestion,
+                    ClaseStock = gr.ClaseStock,
+                    EstadoStock = gr.EstadoStock,
+                    Observaciones = gr.Observaciones,
+                    UsuCreacion = gr.UsuCreacion,
                     Detalles = detalleDtos
                 };
 

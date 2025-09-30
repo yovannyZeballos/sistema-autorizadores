@@ -31,16 +31,6 @@
         .nowrap {
             white-space: nowrap;
         }
-
-        table.dataTable td.details-control {
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M8 10l4 4 4-4z"/></svg>') no-repeat center center;
-            cursor: pointer;
-            width: 28px;
-        }
-
-        table.dataTable tr.shown td.details-control {
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23666" viewBox="0 0 24 24"><path d="M8 14l4-4 4 4z"/></svg>') no-repeat center center;
-        }
     </style>
 }
 
@@ -74,13 +64,13 @@
                     <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-group select2-sm">
                     <label class="form-label">Empresa Origen</label>
                     <select id="fEmpOrigen" class="form-control select2-show-search"></select>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-group select2-sm">
                     <label class="form-label">Local Origen</label>
                     <select id="fLocOrigen" class="form-control select2-show-search"></select>
@@ -92,36 +82,21 @@
                     <select id="fTipoMov" class="form-control select2-show-search">
                         <option value="">Todos</option>
                         <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                        <option value="ASIGNACION_ACTIVO">ASIGNACION_ACTIVO</option>
+                        <option value="BAJA">BAJA</option>
                     </select>
-                </div>
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <div class="form-group">
-                    <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
-                        <i class="fe fe-search me-1"></i>Buscar
-                    </button>
                 </div>
             </div>
         </div>
 
         <div class="my-3 d-flex gap-2">
-            <button id="btnConfirmarSeleccion" class="btn btn-sm btn-success">
-                <i class="fe fe-check me-1"></i>Confirmar selección
-            </button>
             <button id="btnExportar" class="btn btn-sm btn-outline-primary">
                 <i class="fe fe-file me-1"></i>Exportar Excel
             </button>
-            <div class="ms-auto text-muted small align-self-center">
-                <span id="lblSel">0 seleccionados</span>
-            </div>
         </div>
 
         <table id="tablePendientes" class="table table-bordered text-nowrap border-bottom w-100">
             <thead class="thead-light">
                 <tr>
-                    <th class="dt-center"><input type="checkbox" id="chkAll" /></th>
-                    <th></th>
                     <th>Fecha</th>
                     <th>N° Guía</th>
                     <th>Origen</th>
@@ -139,21 +114,22 @@
 
 <!-- Modal: Confirmar recepción -->
 <div class="modal fade" id="modalConfirmar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">Confirmar en destino</h6>
+                <h6 class="modal-title">Confirmar detalle en destino</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <input type="hidden" id="hidGuiaId" />
+                <input type="hidden" id="hidTipoMov" />
                 <div class="row g-2">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <label class="form-label">Fecha recepción <span class="text-danger">*</span></label>
                         <input type="date" id="mFecha" class="form-control form-control-sm date-sm-fix" />
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <label class="form-label">N° Guía de Recepción</label>
                         <input type="text" id="mNumGR" class="form-control form-control-sm text-uppercase" placeholder="Si se deja vacío: REC-{N° guía despacho}" oninput="this.value=this.value.toUpperCase();" />
                     </div>
@@ -174,7 +150,7 @@
                     </div>
                     <div class="col-md-12">
                         <ul class="text-muted small ps-3">
-                            <li>ASIGNACION_ACTIVO: quedará <b>EN_USO</b> en destino.</li>
+                            <li>BAJA: el ítem queda <b>DADO DE BAJA</b> (no se genera Guía de Recepción).</li>
                         </ul>
                     </div>
                 </div>
@@ -213,8 +189,8 @@
     <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-
-    <script src="~/Content/ViewJs/AdministrarConfirmacionDespachos.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
+    <script src="~/Content/ViewJs/AdministrarGuiaDespachoConfirmar.js"></script>
     <script>
         $(function () { AdministrarConfirmacionDespachos.init(); });
     </script>

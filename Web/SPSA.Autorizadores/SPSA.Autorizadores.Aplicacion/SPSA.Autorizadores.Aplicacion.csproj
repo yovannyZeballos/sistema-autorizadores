@@ -426,6 +426,7 @@
     <Compile Include="Features\InventarioKardex\Commands\Proveedor\EliminarMaeProveedorCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\ActualizarMaeSerieProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\CrearMaeSerieProductoCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\SerieProducto\DarBajaSerieProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\EliminarMaeSerieProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\ListarMaeAreaGestionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\MaeAreaGestionDto.cs" />
@@ -450,6 +451,7 @@
     <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ListarPaginadoGuiaDespachoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ObtenerGuiaDespachoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ListarPaginadoGuiaRecepcionQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ObtenerGuiaRecepcionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Marca\ListarMaeMarcaQuery.cs" />

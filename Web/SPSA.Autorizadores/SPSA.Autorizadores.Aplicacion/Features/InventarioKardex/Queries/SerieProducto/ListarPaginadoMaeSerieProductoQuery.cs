@@ -49,7 +49,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieP
 
             try
             {
-                // Rechaza scan si no envían producto
                 if (string.IsNullOrWhiteSpace(request.CodProducto))
                 {
                     response.Data = new PagedResult<ListarMaeSerieProductoDto>
@@ -63,7 +62,32 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieP
                     return response;
                 }
 
-                Expression<Func<Mae_SerieProducto, bool>> predicate = x => x.CodProducto == request.CodProducto;
+
+                ParameterExpression param = Expression.Parameter(typeof(Mae_SerieProducto), "x");
+                Expression combined = Expression.Constant(true);
+
+                if (!string.IsNullOrWhiteSpace(request.CodProducto))
+                {
+                    var prop = Expression.Property(param, nameof(Mae_SerieProducto.CodProducto));
+                    var cte = Expression.Constant(request.CodProducto);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.FiltroVarios))
+                {
+                    var filtroConst = Expression.Constant(request.FiltroVarios.ToUpper());
+                    var contains = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                    var numSerieContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_SerieProducto.NumSerie)), contains, filtroConst);
+
+                    var indEstadoContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_SerieProducto.IndEstado)), contains, filtroConst);
+
+                    var orExpr = Expression.OrElse(numSerieContains, indEstadoContains);
+                    combined = Expression.AndAlso(combined, orExpr);
+                }
+
+                Expression<Func<Mae_SerieProducto, bool>> predicate = Expression.Lambda<Func<Mae_SerieProducto, bool>>(combined, param);
 
                 var pagedRegistros = await _contexto.RepositorioMaeSerieProducto.ObtenerPaginado(
                     predicado: predicate,
@@ -79,9 +103,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieP
                     var nomLocalActual = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == k.CodEmpresa && x.CodLocal == k.CodLocal)
                                                                             .Select(x => x.NomLocal)
                                                                             .FirstOrDefaultAsync() ?? string.Empty;
-                    //var nomLocalDes = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == k.CodEmpresaDestino && x.CodLocal == k.CodLocalDestino)
-                    //                                                        .Select(x => x.NomLocal)
-                    //                                                        .FirstOrDefaultAsync() ?? string.Empty;
 
                     dtoItems.Add(new ListarMaeSerieProductoDto
                     {
@@ -96,9 +117,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieP
                         FecCreacion = k.FecCreacion
                     });
                 }
-
-
-
 
                 var pagedResult = new PagedResult<ListarMaeSerieProductoDto>
                 {

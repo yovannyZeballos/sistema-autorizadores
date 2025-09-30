@@ -55,6 +55,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
         public string CodProducto { get; set; }
         public string NumSerie { get; set; }    // requerido si serializable
         public decimal Cantidad { get; set; }   // = 1 si serializable; > 0 si no serializable
+        public decimal CantidadConfirmada { get; set; } = 0m ;
         public string CodActivo { get; set; }
         public string Observaciones { get; set; }
     }
@@ -93,10 +94,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
 
                 var tipoMov = (request.Cabecera.TipoMovimiento ?? "TRANSFERENCIA").Trim().ToUpper();
                 var esTransferencia = tipoMov == "TRANSFERENCIA";
-                var esAsignacion = tipoMov == "ASIGNACION_ACTIVO";
+                //var esAsignacion = tipoMov == "ASIGNACION_ACTIVO";
 
                 // === Ahora destino también es obligatorio para ASIGNACION_ACTIVO ===
-                if ((esTransferencia || esAsignacion) &&
+                if ((esTransferencia) &&
                     (string.IsNullOrWhiteSpace(request.Cabecera.CodEmpresaDestino) ||
                      string.IsNullOrWhiteSpace(request.Cabecera.CodLocalDestino)))
                 {
@@ -196,9 +197,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         serie.StkActual = 0;
                         serie.FecSalida = cab.Fecha;
 
-                        // IMPORTANTE: Tanto TRANSFERENCIA como ASIGNACION_ACTIVO quedan EN_TRANSITO
-                        // (la verificación en destino decide DISPONIBLE o EN_USO)
-                        if (esTransferencia || esAsignacion)
+                        // IMPORTANTE: TRANSFERENCIA quedan EN_TRANSITO
+                        if (esTransferencia)
                         {
                             serie.IndEstado = "EN_TRANSITO";
                         }
@@ -240,6 +240,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         GuiaDespacho = cab,
                         CodProducto = item.CodProducto,
                         Cantidad = item.Cantidad,
+                        CantidadConfirmada = item.CantidadConfirmada,
                         CodActivo = string.IsNullOrWhiteSpace(item.CodActivo) ? null : item.CodActivo.Trim(),
                         Observaciones = string.IsNullOrWhiteSpace(item.Observaciones) ? null : item.Observaciones.Trim()
                     };
@@ -471,72 +472,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                 }
             }
         }
-
-
-        //private async Task ApplyStockDeltasAsync(Dictionary<string, DeltaPair> deltas, string usuario, CancellationToken ct)
-        //{
-        //    if (deltas == null || deltas.Count == 0) return;
-
-        //    var cods = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        //    var emps = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        //    var locs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        //    foreach (var d in deltas.Values)
-        //    {
-        //        cods.Add(d.CodProducto);
-        //        emps.Add(d.CodEmpresa);
-        //        locs.Add(d.CodLocal);
-        //    }
-
-        //    var existentes = await _contexto.RepositorioStockProducto
-        //        .Obtener(x => cods.Contains(x.CodProducto)
-        //                   && emps.Contains(x.CodEmpresa)
-        //                   && locs.Contains(x.CodLocal))
-        //        .ToListAsync(ct);
-
-        //    foreach (var kv in deltas)
-        //    {
-        //        var d = kv.Value;
-
-        //        var sp = existentes.FirstOrDefault(x =>
-        //            x.CodProducto == d.CodProducto &&
-        //            x.CodEmpresa == d.CodEmpresa &&
-        //            x.CodLocal == d.CodLocal);
-
-        //        if (sp == null)
-        //        {
-        //            sp = new StockProducto
-        //            {
-        //                CodProducto = d.CodProducto,
-        //                CodEmpresa = d.CodEmpresa,
-        //                CodLocal = d.CodLocal,
-        //                StkDisponible = d.DeltaDisponible,
-        //                StkReservado = 0,
-        //                StkTransito = d.DeltaTransito,
-        //                UsuModifica = usuario,
-        //                FecModifica = DateTime.Now
-        //            };
-
-        //            if (sp.StkDisponible < 0 || sp.StkTransito < 0)
-        //                throw new InvalidOperationException($"Stock negativo para {kv.Key}.");
-
-        //            _contexto.RepositorioStockProducto.Agregar(sp);
-        //            existentes.Add(sp);
-        //        }
-        //        else
-        //        {
-        //            sp.StkDisponible += d.DeltaDisponible;
-        //            sp.StkTransito += d.DeltaTransito;
-
-        //            if (sp.StkDisponible < 0 || sp.StkTransito < 0)
-        //                throw new InvalidOperationException($"Stock negativo para {kv.Key}.");
-
-        //            sp.UsuModifica = usuario;
-        //            sp.FecModifica = DateTime.Now;
-        //            _contexto.RepositorioStockProducto.Actualizar(sp);
-        //        }
-        //    }
-        //}
 
         // ================= PG helper =================
         static PostgresException FindPostgresException(Exception ex)

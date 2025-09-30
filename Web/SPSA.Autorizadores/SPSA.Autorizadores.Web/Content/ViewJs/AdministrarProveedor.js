@@ -24,6 +24,11 @@ var AdministrarProveedor = function () {
 
             $('#modalInputRuc').val('');
             $('#modalInputRazonSocial').val('');
+            $('#modalInputNomComercial').val('');
+            $('#modalInputDirFiscal').val('');
+            $('#modalInputContacto').val('');
+            $('#modalInputTelefono').val('');
+            $('#modalInputEmail').val('');
             $('#modalChkActivo').prop('checked', true);
 
             $('#modalInputRuc').prop('disabled', false);
@@ -54,6 +59,11 @@ var AdministrarProveedor = function () {
 
             $('#modalInputRuc').val(data.Ruc);
             $('#modalInputRazonSocial').val(data.RazonSocial);
+            $('#modalInputNomComercial').val(data.NomComercial);
+            $('#modalInputDirFiscal').val(data.DirFiscal);
+            $('#modalInputContacto').val(data.Contacto);
+            $('#modalInputTelefono').val(data.Telefono);
+            $('#modalInputEmail').val(data.Email);
             $('#modalChkActivo').prop('checked', data.IndActivo === 'S');
 
             $('#modalInputRuc').prop('disabled', true);
@@ -121,16 +131,43 @@ var AdministrarProveedor = function () {
             });
         });
 
+        $('#cboIndActivoBuscar')
+            .off('change._prov')
+            .on('change._prov', function () {
+                if ($.fn.DataTable.isDataTable('#tableProveedores')) {
+                    $('#tableProveedores').DataTable().ajax.reload();
+                }
+            });
+
     };
 
     async function guardarProveedor({ modo }) {
         var ruc = $('#modalInputRuc').val().trim();
         var razonSocial = $('#modalInputRazonSocial').val().trim();
+        var nomComercial = $('#modalInputNomComercial').val().trim();
+        var dirFiscal = $('#modalInputDirFiscal').val().trim();
+        var contacto = $('#modalInputContacto').val().trim();
+        var telefono = $('#modalInputTelefono').val().trim();
+        var email = $('#modalInputEmail').val().trim();
         var activo = $('#modalChkActivo').is(':checked') ? 'S' : 'N';
 
+        if (ruc === '') {
+            swal({ text: "Ruc es obligatoria.", icon: "warning" });
+            return;
+        }
 
         if (razonSocial === '') {
             swal({ text: "Razón social es obligatoria.", icon: "warning" });
+            return;
+        }
+
+        if (nomComercial === '') {
+            swal({ text: "Nombre Comercial es obligatoria.", icon: "warning" });
+            return;
+        }
+
+        if (dirFiscal === '') {
+            swal({ text: "Dirección Fiscal es obligatoria.", icon: "warning" });
             return;
         }
 
@@ -140,6 +177,11 @@ var AdministrarProveedor = function () {
         var payload = {
             Ruc: ruc,
             RazonSocial: razonSocial,
+            NomComercial: nomComercial,
+            DirFiscal: dirFiscal,
+            Contacto: contacto,
+            Telefono: telefono,
+            Email: email,
             IndActivo: activo
         };
 
@@ -171,7 +213,7 @@ var AdministrarProveedor = function () {
     const visualizarDataTableProveedores = function () {
 
         $('#tableProveedores').DataTable({
-            searching: false,
+            searching: true,
             processing: true,
             serverSide: true,
             ordering: false,
@@ -181,7 +223,7 @@ var AdministrarProveedor = function () {
 
                 var filtros = {
                     IndActivo: $("#cboIndActivoBuscar").val(),
-                    FiltroVarios: $("#txtFiltroVariosBuscar").val()
+                    FiltroVarios: (data.search.value || '').toUpperCase()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -235,7 +277,7 @@ var AdministrarProveedor = function () {
                             + '/>';
                     }
                 },
-                { title: "Código", data: "Ruc" },
+                { title: "Ruc", data: "Ruc" },
                 { title: "Razón Social", data: "RazonSocial" },
                 {
                     title: "Activo",
@@ -293,7 +335,11 @@ var AdministrarProveedor = function () {
                 zeroRecords: "No se encontraron resultados",
                 info: "Mostrando página _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
-                infoFiltered: "(filtrado de _MAX_ registros totales)"
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "Buscar Por:"
+            },
+            initComplete: function () {
+                $('#tableProveedores_filter input').addClass('form-control-sm').attr('placeholder', 'Buscar...');
             },
             scrollY: '500px',
             scrollX: true,
