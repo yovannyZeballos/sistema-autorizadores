@@ -159,7 +159,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                             serie = new Mae_SerieProducto
                             {
                                 CodProducto = item.CodProducto,
-                                NumSerie = numSerie,
+                                NumSerie = numSerie.ToUpper(),
                                 IndEstado = "DISPONIBLE",
                                 CodEmpresa = cab.CodEmpresaDestino,
                                 CodLocal = cab.CodLocalDestino,

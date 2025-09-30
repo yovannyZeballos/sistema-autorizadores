@@ -29,13 +29,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
 
     public class ListarPaginadoMaeProductoHandler : IRequestHandler<ListarPaginadoMaeProductoQuery, GenericResponseDTO<PagedResult<ListarMaeProductoDto>>>
     {
-        private readonly IMapper _mapper;
         private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
 
-        public ListarPaginadoMaeProductoHandler(IMapper mapper)
+        public ListarPaginadoMaeProductoHandler()
         {
-            _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
@@ -91,7 +89,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
 
                 if (!string.IsNullOrEmpty(request.FiltroVarios))
                 {
-                    Expression filtroConst = Expression.Constant(request.FiltroVarios);
+                    Expression filtroConst = Expression.Constant(request.FiltroVarios.ToUpper());
                     var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
 
                     Expression desProductoContains = Expression.Call(

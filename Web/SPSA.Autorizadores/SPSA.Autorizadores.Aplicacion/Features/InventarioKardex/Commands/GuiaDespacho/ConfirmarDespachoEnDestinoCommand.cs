@@ -263,7 +263,25 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                     return conf >= tot;
                 });
 
-                gd.IndEstado = todoConfirmado ? "RECEPCIONADA" : "PENDIENTE_CONFIRMACION";
+                // === Setear indicadores/fechas SOLO en CABECERA ===
+                if (todoConfirmado)
+                {
+                    gd.IndEstado = "RECEPCIONADA";
+                    gd.IndConfirmacion = "TOTAL";
+                    gd.FecConfirmacion = request.Fecha.Date;     // fecha de cierre total
+                }
+                else
+                {
+                    gd.IndEstado = "PENDIENTE_CONFIRMACION";
+                    gd.IndConfirmacion = "PARCIAL";
+                    // conserva la primera fecha de confirmación parcial:
+                    if (gd.FecConfirmacion == null)
+                        gd.FecConfirmacion = request.Fecha.Date;
+
+                    // Guardar SIEMPRE la última fecha parcial, usa:
+                    // gd.FecConfirmacion = request.Fecha.Date;
+                }
+
                 gd.FecModifica = DateTime.Now;
                 gd.UsuModifica = request.UsuCreacion;
                 _contexto.RepositorioGuiaDespachoCabecera.Actualizar(gd);

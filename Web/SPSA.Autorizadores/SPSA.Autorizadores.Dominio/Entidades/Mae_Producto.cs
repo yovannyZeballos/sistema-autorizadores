@@ -8,7 +8,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string DesProducto { get; set; }      
         public int MarcaId { get; set; }
         public string TipProducto { get; set; }
-        public long AreaGestionId { get; set; }
+        public int AreaGestionId { get; set; }
         public string IndSerializable { get; set; }
         public string IndActivo { get; set; }
         public decimal StkMinimo { get; set; }

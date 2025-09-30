@@ -64,13 +64,13 @@
                     <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-group select2-sm">
                     <label class="form-label">Empresa Origen</label>
                     <select id="fEmpOrigen" class="form-control select2-show-search"></select>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-group select2-sm">
                     <label class="form-label">Local Origen</label>
                     <select id="fLocOrigen" class="form-control select2-show-search"></select>
@@ -84,13 +84,6 @@
                         <option value="TRANSFERENCIA">TRANSFERENCIA</option>
                         <option value="BAJA">BAJA</option>
                     </select>
-                </div>
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <div class="form-group">
-                    <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
-                        <i class="fe fe-search me-1"></i>Buscar
-                    </button>
                 </div>
             </div>
         </div>
@@ -124,7 +117,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">Confirmar en destino</h6>
+                <h6 class="modal-title">Confirmar detalle en destino</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -196,8 +189,8 @@
     <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-
-    <script src="~/Content/ViewJs/AdministrarConfirmacionDespachos.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
+    <script src="~/Content/ViewJs/AdministrarGuiaDespachoConfirmar.js"></script>
     <script>
         $(function () { AdministrarConfirmacionDespachos.init(); });
     </script>

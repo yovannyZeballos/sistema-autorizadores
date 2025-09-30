@@ -30,9 +30,6 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         [HttpGet]
         public async Task<JsonResult> Obtener(ObtenerGuiaDespachoQuery command)
         {
-            //command.UsuCreacion = WebSession.Login;
-            //command.Cabecera.CodEmpresaOrigen = WebSession.JerarquiaOrganizacional.CodEmpresa;
-            //command.Cabecera.CodLocalOrigen = WebSession.JerarquiaOrganizacional.CodLocal;
             var respuesta = await _mediator.Send(command);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }

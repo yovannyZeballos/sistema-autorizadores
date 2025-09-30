@@ -1141,7 +1141,7 @@ var AdministrarInvCajas = function () {
                 { data: "VerSo" },
                 { data: "CapDisco" },
                 { data: "DesPuertoBalanza" },
-                { data: "FecGarantia" }
+                { data: "FecGarantia", title: "FEC_GARANTIA", render: parseDotNetDate }
             ],
             language: {
                 searchPlaceholder: 'Buscar...',

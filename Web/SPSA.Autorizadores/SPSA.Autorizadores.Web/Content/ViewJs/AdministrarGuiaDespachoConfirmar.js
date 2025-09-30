@@ -8,31 +8,8 @@ var AdministrarConfirmacionDespachos = (function ($) {
 
     let dt = null; // DataTable reutilizable
 
-    function swalText(err, fallback) {
-        if (!err) return fallback || '';
-        if (typeof err === 'string') return err;
-        if (err.responseText) return err.responseText;
-        if (err.statusText) return err.statusText;
-        if (err.Mensaje) return err.Mensaje;
-        try { return JSON.stringify(err); } catch { return fallback || ''; }
-    }
-
     // ========= Eventos =========
     function eventos() {
-        // Buscar con anti doble clic
-        $('#btnBuscar').on('click', async function (e) {
-            e.preventDefault();
-            const $btn = $(this);
-            const old = $btn.html();
-            $btn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm me-1"></span>Buscando…');
-            try {
-                if (dt) dt.ajax.reload();
-            } finally {
-                $btn.prop('disabled', false).html(old);
-            }
-        });
-
         // Empresa Origen → carga locales y habilita el combo de local
         $('#fEmpOrigen').on('change', function () {
             cargarComboLocales('#fEmpOrigen', '#fLocOrigen'); // habilita al finalizar
@@ -40,6 +17,14 @@ var AdministrarConfirmacionDespachos = (function ($) {
 
         // Guardar confirmación (anti doble clic robusto)
         $('#btnConfirmarModal').off('click').on('click', onConfirmarModalClick);
+
+        $('#fEmpOrigen, #fLocOrigen, #fTipoMov, #fDesde, #fHasta')
+            .off('change._pend')
+            .on('change._pend', function () {
+                if ($.fn.DataTable.isDataTable('#tablePendientes')) {
+                    $('#tablePendientes').DataTable().ajax.reload();
+                }
+            });
 
     }
 
@@ -153,30 +138,28 @@ var AdministrarConfirmacionDespachos = (function ($) {
     };
 
     async function cargarComboLocales(selEmpresa, selLocal) {
-        // mientras carga: deshabilitar y mostrar placeholder
-        await cargarCombo($(selLocal), [], { placeholder: 'Cargando…', disabled: true });
-
-        const codEmpresa = $(selEmpresa).val();
-        if (!codEmpresa) {
-            // si limpian empresa, mantener local vacío y deshabilitado
-            await cargarCombo($(selLocal), [], { placeholder: 'Todos', disabled: true });
-            return;
-        }
+        const $emp = $(selEmpresa), $loc = $(selLocal);
+        if (!$emp.length || !$loc.length) return;
 
         try {
+            const codEmpresa = $emp.val();
+            if (!codEmpresa) {
+                await cargarCombo($loc, [], { placeholder: 'Todos', todos: true });
+                $loc.prop('disabled', true).trigger('change.select2');
+                return;
+            }
             const resp = await listarLocales(codEmpresa);
             if (resp.Ok) {
-                await cargarCombo($(selLocal),
+                await cargarCombo($loc,
                     resp.Data.map(l => ({ text: l.NomLocal, value: l.CodLocal })),
-                    { placeholder: 'Todos', disabled: false }
+                    { placeholder: 'Todos', todos: true }
                 );
+                $loc.prop('disabled', false).trigger('change.select2');
             } else {
                 swal({ text: swalText(resp, 'No fue posible listar locales'), icon: 'error' });
-                await cargarCombo($(selLocal), [], { placeholder: 'Todos', disabled: true });
             }
         } catch (err) {
             swal({ text: swalText(err, 'Error al listar locales'), icon: 'error' });
-            await cargarCombo($(selLocal), [], { placeholder: 'Todos', disabled: true });
         }
     }
 
@@ -184,7 +167,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
         dt = $('#tablePendientes').DataTable({
             serverSide: true,
             processing: true,
-            searching: false,
+            searching: true,
             ordering: false,
             ajax: function (data, callback) {
                 var pageNumber = (data.start / data.length) + 1;
@@ -196,7 +179,8 @@ var AdministrarConfirmacionDespachos = (function ($) {
                     CodEmpresaOrigen: $('#fEmpOrigen').val() || null,
                     CodLocalOrigen: $('#fLocOrigen').val() || null,
                     TipoMovimiento: $('#fTipoMov').val() || null,
-                    IndEstado: 'PENDIENTE_CONFIRMACION' // o EN_TRANSITO / PENDIENTE_CONFIRMACION según tu backend
+                    IndEstado: 'PENDIENTE_CONFIRMACION', // o EN_TRANSITO / PENDIENTE_CONFIRMACION según tu backend
+                    FiltroVarios: (data.search.value || '').toUpperCase()
                 };
 
                 var params = $.extend({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -257,7 +241,11 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 zeroRecords: "No se encontraron resultados",
                 info: "Mostrando página _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
-                infoFiltered: "(filtrado de _MAX_ registros totales)"
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "N° Guía:"
+            },
+            initComplete: function () {
+                $('#tablePendientes_filter input').addClass('form-control-sm').attr('placeholder', 'Buscar...');
             },
             scrollY: '500px',
             scrollX: true,
@@ -318,15 +306,16 @@ var AdministrarConfirmacionDespachos = (function ($) {
         const detalles = (gd && gd.Detalles) || [];
         var html = [];
         html.push(
-            '<div class="table-responsive"><table class="table table-sm table-bordered w-100">',
-            '<thead><tr>',
-            '<th class="text-center">Sel.</th>',
-            '<th>Producto</th>',
-            '<th>Serie</th>',
-            '<th class="text-end">Desp.</th>',
-            '<th class="text-end">Conf.</th>',
-            '<th class="text-end">Pend.</th>',
-            '<th class="text-end">Confirmar ahora</th>',
+            '<div class="table-responsive"><table class="table table-sm table-bordered text-nowrap border-bottom w-100">',
+            '<thead class="thead-light"><tr>',
+            '<th class="text-center">Seleccionar</th>',
+            '<th>Cód. producto</th>',
+            '<th>Descripción</th>',
+            '<th>N° de serie</th>',
+            '<th class="text-end">Enviado</th>',
+            '<th class="text-end">Recibido</th>',
+            '<th class="text-end">Pendiente</th>',
+            '<th class="text-end">A confirmar</th>',
             '</tr></thead><tbody>'
         );
 
@@ -351,6 +340,7 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 '" data-pend="', pend, '">',
                 '<td class="text-center">', sel, '</td>',
                 '<td>', (d.CodProducto || ''), '</td>',
+                '<td>', (d.DesProducto || ''), '</td>',
                 '<td class="cel-serie">', (esSer ? (d.NumSerie || '') : ''), '</td>',
                 '<td class="text-end">', cant, '</td>',
                 '<td class="text-end">', conf, '</td>',
@@ -366,45 +356,6 @@ var AdministrarConfirmacionDespachos = (function ($) {
         $('#modalConfirmar .modal-body').append('<div id="mDetalle" class="mt-3"></div>');
         $('#mDetalle').html(html.join(''));
     }
-
-
-    async function cargarCombo($select, data, { placeholder = 'Seleccionar…', todos = false, disabled = false, dropdownParent = null } = {}) {
-        // Destruye select2 previo si existe
-        if ($.fn.select2 && $select.hasClass('select2-hidden-accessible')) {
-            $select.select2('destroy');
-        }
-
-        $select.empty();
-
-        // Opción inicial
-        if (todos) $select.append(new Option('Todos', ''));
-        else $select.append(new Option('', ''));
-
-        // Poblar opciones
-        if (Array.isArray(data) && data.length) {
-            data.forEach(d => $select.append(new Option(d.text, d.value)));
-        }
-
-        // Padre correcto del dropdown (modal si existe)
-        const parentEl = dropdownParent
-            ? $(dropdownParent)
-            : ($select.closest('.modal').length ? $select.closest('.modal') : $(document.body));
-
-        // Inicializa select2
-        if ($.fn.select2) {
-            $select.select2({
-                width: '100%',
-                placeholder,
-                allowClear: true,
-                minimumResultsForSearch: 0,
-                dropdownParent: parentEl
-            });
-        }
-
-        $select.prop('disabled', !!disabled);
-        $select.val('').trigger('change');
-    }
-
     function initCombosFijos() {
 
         $('#fTipoMov').select2({

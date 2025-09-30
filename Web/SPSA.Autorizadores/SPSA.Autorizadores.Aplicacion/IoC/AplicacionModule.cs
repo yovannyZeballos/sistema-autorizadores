@@ -431,6 +431,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearMaeProveedorHandler>().As<IRequestHandler<CrearMaeProveedorCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeSerieProductoHandler>().As<IRequestHandler<CrearMaeSerieProductoCommand, RespuestaComunDTO>>();
 
+            builder.RegisterType<DarBajaSerieProductoHandler>().As<IRequestHandler<DarBajaSerieProductoCommand, RespuestaComunDTO>>();
+
             builder.RegisterType<RegistrarGuiaRecepcionHandler>().As<IRequestHandler<RegistrarGuiaRecepcionCommand, RespuestaComunDTO>>();
             builder.RegisterType<RegistrarGuiaDespachoHandler>().As<IRequestHandler<RegistrarGuiaDespachoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ConfirmarDespachoEnDestinoHandler>().As<IRequestHandler<ConfirmarDespachoEnDestinoCommand, RespuestaComunDTO>>();
@@ -448,6 +450,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<EliminarMaeProveedorHandler>().As<IRequestHandler<EliminarMaeProveedorCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<ObtenerGuiaDespachoHandler>().As<IRequestHandler<ObtenerGuiaDespachoQuery, GenericResponseDTO<GuiaDespachoCabeceraDto>>>();
+            builder.RegisterType<ObtenerGuiaRecepcionHandler>().As<IRequestHandler<ObtenerGuiaRecepcionQuery, GenericResponseDTO<GuiaRecepcionCabeceraDto>>>();
 
             builder.RegisterType<ListarMaeMarcaHandler>().As<IRequestHandler<ListarMaeMarcaQuery, GenericResponseDTO<List<ListarMaeMarcaDto>>>>();
             builder.RegisterType<ListarMaeAreaGestionHandler>().As<IRequestHandler<ListarMaeAreaGestionQuery, GenericResponseDTO<List<ListarMaeAreaGestionDto>>>>();

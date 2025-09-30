@@ -4,7 +4,7 @@ var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
 var urlListarProductos = baseUrl + 'Inventario/Productos/Listar';
 var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProductoDisponibles';
-var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener'; 
+var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener';
 
 var AdministrarGuiaDespacho = (function ($) {
 
@@ -12,65 +12,8 @@ var AdministrarGuiaDespacho = (function ($) {
     var _productosCache = [];   // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable('S'|'N')}
     var dt = null;              // DataTable cache
 
-    // ======================== Utils ========================
-    function swalText(err, fallback) {
-        if (!err) return fallback || '';
-        if (typeof err === 'string') return err;
-        if (err.responseText) return err.responseText;
-        if (err.statusText) return err.statusText;
-        if (err.Mensaje) return err.Mensaje;
-        try { return JSON.stringify(err); } catch { return fallback || ''; }
-    }
-
-    async function cargarCombo($select, data, { placeholder = 'Seleccionar', todos = false, dropdownParent = null } = {}) {
-        // Destruye select2 previo si existe
-        if ($.fn.select2 && $select.hasClass('select2-hidden-accessible')) {
-            $select.select2('destroy');
-        }
-
-        $select.empty();
-
-        // Opción inicial
-        if (todos) $select.append(new Option('Todos', ''));
-        else $select.append(new Option('', ''));
-
-        // Poblar opciones
-        if (Array.isArray(data) && data.length) {
-            data.forEach(d => {
-                var opt = new Option(d.text, d.value, false, false);
-                if (d.attrs) { Object.entries(d.attrs).forEach(([k, v]) => $(opt).attr(k, v)); }
-                $select.append(opt);
-            });
-        }
-
-        // Padre correcto del dropdown (modal si existe)
-        var parentEl = dropdownParent
-            ? $(dropdownParent)
-            : ($select.closest('.modal').length ? $select.closest('.modal') : $(document.body));
-
-        // Inicializa select2
-        if ($.fn.select2) {
-            $select.select2({
-                width: '100%',
-                placeholder: placeholder,
-                allowClear: true,
-                minimumResultsForSearch: 0,
-                dropdownParent: parentEl
-            });
-        }
-
-        $select.val('').trigger('change');
-    }
-
-
     // ================== Eventos ==================
     const eventos = function () {
-        // Buscar
-        $('#btnBuscar').on('click', function (e) {
-            e.preventDefault();
-            if (dt) dt.ajax.reload();
-        });
-
         // Nueva guía
         $('#btnNuevaGuia').on('click', async function () {
             limpiarModal();
@@ -96,6 +39,14 @@ var AdministrarGuiaDespacho = (function ($) {
             var id = $(this).data('id');
             abrirModalDetalleDespacho(id);
         });
+
+        $('#fEmpDest, #fLocDest, #fTipoMov, #fDesde, #fHasta')
+            .off('change._desp')
+            .on('change._desp', function () {
+                if ($.fn.DataTable.isDataTable('#tableDespachos')) {
+                    $('#tableDespachos').DataTable().ajax.reload();
+                }
+            });
     };
 
     // ================== AJAX helpers ==================
@@ -462,7 +413,7 @@ var AdministrarGuiaDespacho = (function ($) {
         dt = $('#tableDespachos').DataTable({
             serverSide: true,
             processing: true,
-            searching: false,
+            searching: true,
             ordering: false,
             ajax: function (data, callback) {
                 var pageNumber = (data.start / data.length) + 1;
@@ -474,7 +425,7 @@ var AdministrarGuiaDespacho = (function ($) {
                     CodEmpresaDestino: $('#fEmpDest').val() || null,
                     CodLocalDestino: $('#fLocDest').val() || null,
                     TipoMovimiento: $('#fTipoMov').val() || null,
-                    FiltroVarios: $('#txtFiltro').val() || ''
+                    FiltroVarios: (data.search.value || '').toUpperCase()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -537,7 +488,11 @@ var AdministrarGuiaDespacho = (function ($) {
                 zeroRecords: "No se encontraron resultados",
                 info: "Mostrando página _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
-                infoFiltered: "(filtrado de _MAX_ registros totales)"
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "N° Guía:"
+            },
+            initComplete: function () {
+                $('#tableDespachos_filter input').addClass('form-control-sm').attr('placeholder', 'Buscar...');
             },
             scrollY: '500px',
             scrollX: true,
@@ -655,20 +610,13 @@ var AdministrarGuiaDespacho = (function ($) {
         if (gd && gd.Data) gd = gd.Data;
 
         const fecha = parseDotNetDate(gd.Fecha);
-        const origen = (safe(gd.CodEmpresaOrigen) && safe(gd.CodLocalOrigen))
-            ? `${safe(gd.CodEmpresaOrigen)} - ${safe(gd.CodLocalOrigen)}`
-            : `${safe(gd.CodEmpresaOrigen)}${gd.CodLocalOrigen ? ' - ' + gd.CodLocalOrigen : ''}`;
-
-        const destino = (safe(gd.CodEmpresaDestino) && safe(gd.CodLocalDestino))
-            ? `${safe(gd.CodEmpresaDestino)} - ${safe(gd.CodLocalDestino)}`
-            : `${safe(gd.CodEmpresaDestino)}${gd.CodLocalDestino ? ' - ' + gd.CodLocalDestino : ''}`;
-
         const detalles = Array.isArray(gd.Detalles) ? gd.Detalles : [];
 
         const rows = detalles.map(d => {
             return `
       <tr>
         <td>${safe(d.CodProducto)}</td>
+        <td>${safe(d.DesProducto)}</td>
         <td>${safe(d.NumSerie)}</td>
         <td class="text-end">${safe(d.Cantidad)}</td>
         <td>${safe(d.CodActivo)}</td>
@@ -677,41 +625,44 @@ var AdministrarGuiaDespacho = (function ($) {
         }).join('');
 
         return `
+<div class="detalle-despacho">
     <div class="mb-3">
-      <div class="row g-2">
-        <div class="col-md-3"><b>N° Guía:</b> ${safe(gd.NumGuia)}</div>
-        <div class="col-md-3"><b>Fecha:</b> ${fecha}</div>
-        <div class="col-md-3"><b>Tipo:</b> ${safe(gd.TipoMovimiento)}</div>
-        <div class="col-md-3"><b>Estado:</b> ${safe(gd.IndEstado || 'REGISTRADA')}</div>
+        <div class="row g-2">
+            <div class="col-md-3"><b>N° Guía:</b> ${safe(gd.NumGuia)}</div>
+            <div class="col-md-3"><b>Fecha:</b> ${fecha}</div>
+            <div class="col-md-3"><b>Tipo:</b> ${safe(gd.TipoMovimiento)}</div>
+            <div class="col-md-3"><b>Estado:</b> ${safe(gd.IndEstado || 'REGISTRADA')}</div>
 
-        <div class="col-md-6"><b>Origen:</b> ${origen}</div>
-        <div class="col-md-6"><b>Destino:</b> ${destino}</div>
+            <div class="col-md-3"><b>Origen:</b> ${safe(gd.NomLocalOrigen)}</div>
+            <div class="col-md-3"><b>Destino:</b> ${safe(gd.NomLocalDestino)}</div>
+            <div class="col-md-3"><b>Área Gestión:</b> ${safe(gd.AreaGestion)}</div>
+            <div class="col-md-3"><b>Clase Stock:</b> ${safe(gd.ClaseStock)}</div>
 
-        <div class="col-md-4"><b>Área Gestión:</b> ${safe(gd.AreaGestion)}</div>
-        <div class="col-md-4"><b>Clase Stock:</b> ${safe(gd.ClaseStock)}</div>
-        <div class="col-md-4"><b>Estado Stock:</b> ${safe(gd.EstadoStock)}</div>
-
-        <div class="col-12"><b>Observaciones:</b> ${safe(gd.Observaciones)}</div>
-      </div>
+            <div class="col-md-3"><b>Estado Stock:</b> ${safe(gd.EstadoStock)}</div>
+            <div class="col-md-3"><b>Recepción Destino:</b> ${safe(gd.IndConfirmacion)}</div>
+            <div class="col-12"><b>Observaciones:</b> ${safe(gd.Observaciones)}</div>
+        </div>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-sm table-bordered w-100">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Serie</th>
-            <th class="text-end">Cantidad</th>
-            <th>Cód. Activo</th>
-            <th>Observaciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows || '<tr><td colspan="5" class="text-muted">Sin detalle.</td></tr>'}
-        </tbody>
-      </table>
+        <table class="table table-bordered w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Serie</th>
+                    <th class="text-end">Cantidad</th>
+                    <th>Cód. Activo</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows || '<tr><td colspan="6" class="text-muted">Sin detalle.</td></tr>'}
+            </tbody>
+        </table>
     </div>
-  `;
+</div>
+`;
     }
 
 

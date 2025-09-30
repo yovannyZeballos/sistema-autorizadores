@@ -131,6 +131,14 @@ var AdministrarProveedor = function () {
             });
         });
 
+        $('#cboIndActivoBuscar')
+            .off('change._prov')
+            .on('change._prov', function () {
+                if ($.fn.DataTable.isDataTable('#tableProveedores')) {
+                    $('#tableProveedores').DataTable().ajax.reload();
+                }
+            });
+
     };
 
     async function guardarProveedor({ modo }) {
@@ -205,7 +213,7 @@ var AdministrarProveedor = function () {
     const visualizarDataTableProveedores = function () {
 
         $('#tableProveedores').DataTable({
-            searching: false,
+            searching: true,
             processing: true,
             serverSide: true,
             ordering: false,
@@ -215,7 +223,7 @@ var AdministrarProveedor = function () {
 
                 var filtros = {
                     IndActivo: $("#cboIndActivoBuscar").val(),
-                    FiltroVarios: $("#txtFiltroVariosBuscar").val()
+                    FiltroVarios: (data.search.value || '').toUpperCase()
                 };
 
                 var params = Object.assign({ PageNumber: pageNumber, PageSize: pageSize }, filtros);
@@ -269,7 +277,7 @@ var AdministrarProveedor = function () {
                             + '/>';
                     }
                 },
-                { title: "Código", data: "Ruc" },
+                { title: "Ruc", data: "Ruc" },
                 { title: "Razón Social", data: "RazonSocial" },
                 {
                     title: "Activo",
@@ -327,7 +335,11 @@ var AdministrarProveedor = function () {
                 zeroRecords: "No se encontraron resultados",
                 info: "Mostrando página _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
-                infoFiltered: "(filtrado de _MAX_ registros totales)"
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "Buscar Por:"
+            },
+            initComplete: function () {
+                $('#tableProveedores_filter input').addClass('form-control-sm').attr('placeholder', 'Buscar...');
             },
             scrollY: '500px',
             scrollX: true,

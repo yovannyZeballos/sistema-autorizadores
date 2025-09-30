@@ -27,6 +27,31 @@
         #tblDetalleDespacho th, #tblDetalleDespacho td {
             vertical-align: middle;
         }
+
+        /* Ajusta la tipografía de todo el bloque detalle */
+        .detalle-despacho {
+            font-size: .75rem; /* tamaño base (puedes subir a 1.05rem si aún lo ves chico) */
+            line-height: 1.5;
+        }
+
+            /* Mejora la legibilidad de títulos en negrita */
+            .detalle-despacho b {
+                font-weight: 600;
+                color: #333;
+            }
+
+            /* Alineación y espacio uniforme en las filas */
+            .detalle-despacho .row > div {
+                margin-bottom: .25rem;
+            }
+
+            /* Tabla del detalle */
+            .detalle-despacho .table th,
+            .detalle-despacho .table td {
+                font-size: .65rem; /* un poco más grande que .table-sm */
+                padding: .5rem .75rem;
+                vertical-align: middle;
+            }
     </style>
 }
 
@@ -81,20 +106,6 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label">N° Guía / Observ.</label>
-                    <input type="text" id="txtFiltro" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
-                </div>
-            </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-                <div class="form-group">
-                    <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
-                        <i class="fe fe-search me-1"></i>Buscar
-                    </button>
-                </div>
-            </div>
         </div>
         <div class="my-3">
             <button id="btnNuevaGuia" class="btn btn-sm btn-primary me-2">
@@ -116,7 +127,7 @@
                     <th>Ítems</th>
                     <th>Estado</th>
                     <th>Usuario</th>
-                    <th>Acciones</th>
+                    <th class="dt-center">Acciones</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -184,19 +195,6 @@
                             </select>
                         </div>
                     </div>
-                    @*<div class="col-md-3">
-                            <div class="form-group select2-sm">
-                                <label class="form-label">Empresa Origen <span class="text-danger">*</span></label>
-                                <select id="desEmpOrig" class="form-control select2-show-search"></select>
-                            </div>
-                        </div>*@
-                    @*<div class="col-md-3">
-                            <div class="form-group select2-sm">
-                                <label class="form-label">Local Origen <span class="text-danger">*</span></label>
-                                <select id="desLocOrig" class="form-control select2-show-search"></select>
-                            </div>
-                        </div>*@
-
                     <div class="col-md-3">
                         <div class="form-group select2-sm">
                             <label class="form-label">Empresa Destino</label>
@@ -230,7 +228,7 @@
                         <thead>
                             <tr>
                                 <th style="width:34%">Producto <span class="text-danger">*</span></th>
-                                <th style="width:26%">Serie (si aplica)</th>
+                                <th style="width:26%">N° Serie</th>
                                 <th style="width:12%">Cantidad <span class="text-danger">*</span></th>
                                 <th style="width:18%">Cód. Activo</th>
                                 <th style="width:10%"></th>
@@ -290,7 +288,7 @@
     <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-
+    <script src="~/Content/ViewJs/util.js"></script>
     <script src="~/Content/ViewJs/AdministrarGuiaDespacho.js"></script>
     <script>
         $(function () { AdministrarGuiaDespacho.init(); });

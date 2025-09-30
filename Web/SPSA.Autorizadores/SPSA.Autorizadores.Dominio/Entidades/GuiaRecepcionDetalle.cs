@@ -2,7 +2,7 @@
 {
     public class GuiaRecepcionDetalle
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int GuiaRecepcionId { get; set; }
         public string CodProducto { get; set; }
         public long? SerieProductoId { get; set; }

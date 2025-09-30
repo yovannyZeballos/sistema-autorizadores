@@ -2396,7 +2396,7 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
-    <Content Include="Content\ViewJs\AdministrarConfirmacionDespachos.js" />
+    <Content Include="Content\ViewJs\AdministrarGuiaDespachoConfirmar.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaDespacho.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcionProveedor.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcion.js" />
@@ -2423,6 +2423,7 @@
     <Content Include="Content\ViewJs\AdministrarPuesto.js" />
     <Content Include="Content\ViewJs\MaestroCajeros.js" />
     <Content Include="Content\ViewJs\MaestroAutorizadores.js" />
+    <Content Include="Content\ViewJs\util.js" />
     <Content Include="Content\ViewJs\ValesRedimidos.js" />
     <Content Include="Content\ViewJs\AsignarLocal.js" />
     <Content Include="Content\ViewJs\AutorizadoresMass.js" />
@@ -2962,7 +2963,6 @@
     <Content Include="Areas\Inventario\Views\AreasGestion\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Kardex\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaRecepcion\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\GuiaRecepcion\Proveedor.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaDespacho\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaDespacho\ConfirmacionDespacho.cshtml" />
     <Content Include="Areas\Operaciones\Views\Gestion\ClienteCen.cshtml" />
@@ -2970,6 +2970,7 @@
     <Content Include="Areas\Operaciones\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Operaciones\Views\web.config" />
     <Content Include="Areas\Operaciones\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaRecepcion\RecepcionProveedor.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3062,6 +3063,9 @@
       <Project>{CAAE201A-9378-407A-B56C-EBB0CFFB1F86}</Project>
       <Name>SPSA.Autorizadores.Infraestructura</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

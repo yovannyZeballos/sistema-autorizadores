@@ -26,6 +26,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
         public DateTime? FechaHasta { get; set; }
         public string ProveedorRuc { get; set; }   // opcional
         public string IndTransferencia { get; set; }
+        public string CodEmpresaOrigen { get; set; }
+        public string CodLocalOrigen { get; set; }
         public string CodEmpresaDestino { get; set; }
         public string CodLocalDestino { get; set; }
         public string FiltroVarios { get; set; }   // busca en NumGuia / Observaciones
@@ -83,6 +85,20 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                 {
                     var prop = Expression.Property(param, nameof(GuiaRecepcionCabecera.IndTransferencia));
                     var cte = Expression.Constant(request.IndTransferencia);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.CodEmpresaOrigen))
+                {
+                    var prop = Expression.Property(param, nameof(GuiaRecepcionCabecera.CodEmpresaOrigen));
+                    var cte = Expression.Constant(request.CodEmpresaOrigen);
+                    combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.CodLocalOrigen))
+                {
+                    var prop = Expression.Property(param, nameof(GuiaRecepcionCabecera.CodLocalOrigen));
+                    var cte = Expression.Constant(request.CodLocalOrigen);
                     combined = Expression.AndAlso(combined, Expression.Equal(prop, cte));
                 }
 

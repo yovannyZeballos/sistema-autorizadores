@@ -47,7 +47,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieP
             try
             {
                 var listaEntidades = await _contexto.RepositorioMaeSerieProducto
-                    .Obtener(x => x.CodEmpresa == request.CodEmpresaOrigen && x.CodLocal == request.CodLocalOrigen && x.CodProducto == request.CodProducto )
+                    .Obtener(x => x.CodEmpresa == request.CodEmpresaOrigen && x.CodLocal == request.CodLocalOrigen && x.CodProducto == request.CodProducto && x.IndEstado == "DISPONIBLE")
                     .OrderBy(x => x.NumSerie)
                     .ToListAsync();
 
