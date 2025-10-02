@@ -514,14 +514,15 @@ var AdministrarGuiaDespacho = (function ($) {
 
     function limpiarModal() {
         $('#desFecha').val(new Date().toISOString().slice(0, 10));
-        $('#desNumGuia').val('');
+        $('#modalDespacho input').val('');
+        $('#desTipoMov, #desAreaGestion, #desClaseStock, #desEstadoStock').val(null).trigger('change');
+
         $('#desTipoMov').val('TRANSFERENCIA').trigger('change');
 
         $('#desEmpDest').val(null).trigger('change');
         $('#desLocDest').empty().append('<option></option>').val(null).trigger('change');
         $('#desLocDest').prop('disabled', true).trigger('change.select2');
 
-        $('#desObs').val('');
         $('#tblDetalleDespacho tbody').empty();
     }
 

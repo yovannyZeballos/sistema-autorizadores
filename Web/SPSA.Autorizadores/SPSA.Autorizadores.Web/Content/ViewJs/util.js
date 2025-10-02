@@ -116,3 +116,9 @@ function parseDotNetDate(value) {
     }
     return (value + '').substring(0, 10);
 }
+
+function setBtnBusy($btn, busyText) {
+    var old = { html: $btn.html(), disabled: $btn.prop('disabled') };
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>' + (busyText || 'Procesando…'));
+    return function restore() { $btn.prop('disabled', old.disabled).html(old.html); };
+}

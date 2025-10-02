@@ -8,6 +8,7 @@ using SPSA.Autorizadores.Aplicacion.Features.TiposActivo.Queries;
 using SPSA.Autorizadores.Aplicacion.ViewModel;
 using SPSA.Autorizadores.Web.Utiles;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -161,5 +162,14 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 			var respuesta = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventarios_v2" });
 			return Json(respuesta);
 		}
-	}
+
+        [HttpPost]
+        public async Task<JsonResult> DescargarInventarioCaja(DescargarInventarioCajaCommand request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta);
+        }
+
+
+    }
 }

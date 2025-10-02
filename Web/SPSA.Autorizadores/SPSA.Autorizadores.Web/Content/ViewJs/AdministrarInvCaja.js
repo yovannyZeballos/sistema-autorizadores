@@ -19,6 +19,7 @@ var urlEliminarInvCajaPorLocal = baseUrl + 'Inventario/InventarioCaja/EliminarIn
 var urlImportarInventario = baseUrl + 'Inventario/InventarioCaja/Importar';
 var urlDescargarPlantilla = baseUrl + 'Inventario/InventarioCaja/DescargarPlantillas';
 var urlDescargarInvTiposActivo = baseUrl + 'Inventario/InventarioTipoActivo/DescargarInvTiposActivo';
+var urlDescargarInventario = baseUrl + 'Inventario/InventarioCaja/DescargarInventarioCaja';
 
 var dtListaNumCajas = null;
 var dtListaCajas = null;
@@ -27,6 +28,15 @@ var dtListaLocales = null;
 var AdministrarInvCajas = function () {
 
     const eventos = function () {
+
+        $("#btnDescargarInventario").on("click", function () {
+            if (validarBuscarInvCajaPorEmpresa()) {
+                const request = {
+                    CodEmpresa: $("#cboEmpresa").val()
+                };
+                descargarInventario(request);
+            }
+        });
 
         $("#cboEmpresa").on("change", async function () {
             await cargarComboCadenas();
@@ -1318,6 +1328,37 @@ var AdministrarInvCajas = function () {
                 downloadLink.click();
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                swal({ text: jqXHR.responseText, icon: "error" });
+            }
+        });
+    }
+
+    const descargarInventario = function (request) {
+        $.ajax({
+            url: urlDescargarInventario,
+            type: "post",
+            data: { request },
+            dataType: "json",
+            beforeSend: function () {
+                showLoading();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            success: function (response) {
+                if (!response.Ok) {
+                    swal({ text: response.Mensaje, icon: "warning" });
+                    return;
+                }
+
+                const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo;
+                const downloadLink = document.createElement("a");
+                const fileName = response.NombreArchivo || "Inventario.xlsx";
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            },
+            error: function (jqXHR) {
                 swal({ text: jqXHR.responseText, icon: "error" });
             }
         });

@@ -39,6 +39,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Proveedor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.SerieProducto;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servidor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.AreaGestion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
@@ -48,6 +49,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Proveedor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.SerieProducto;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Servidor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.AreaGestion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDespacho;
@@ -57,6 +59,7 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Proveedor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieProducto;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servidor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioServidor.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
@@ -239,7 +242,10 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 			builder.RegisterType<ObtenerMenusUsuarioHandler>().As<IRequestHandler<ObtenerMenusUsuarioQuery, GenericResponseDTO<List<ListarMenuDTO>>>>();
 			builder.RegisterType<ImportarExcelInventarioCajaHandler>().As<IRequestHandler<ImportarExcelInventarioCajaCommand, RespuestaComunExcelDTO>>();
 			builder.RegisterType<ImportarExcelInvCajaHandler>().As<IRequestHandler<ImportarExcelInvCajaCommand, RespuestaComunExcelDTO>>();//POR EL MOMENT
-			builder.RegisterType<DtUsuariosHandler>().As<IRequestHandler<DtUsuariosQuery, DataTable>>();
+
+            builder.RegisterType<DescargarInventarioCajaHandler>().As<IRequestHandler<DescargarInventarioCajaCommand, RespuestaComunExcelDTO>>().InstancePerDependency();
+
+            builder.RegisterType<DtUsuariosHandler>().As<IRequestHandler<DtUsuariosQuery, DataTable>>();
 
 			#region <--TABLA MAESTROS SGP-->
 			builder.RegisterType<DescargarTablaPlantillasHandler>().As<IRequestHandler<DescargarTablaPlantillasCommand, DescargarPlantillasDTO>>();
@@ -430,6 +436,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearMaeProductoHandler>().As<IRequestHandler<CrearMaeProductoCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeProveedorHandler>().As<IRequestHandler<CrearMaeProveedorCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeSerieProductoHandler>().As<IRequestHandler<CrearMaeSerieProductoCommand, RespuestaComunDTO>>();
+            builder.RegisterType<CrearSrvSerieDetHandler>().As<IRequestHandler<CrearSrvSerieDetCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<DarBajaSerieProductoHandler>().As<IRequestHandler<DarBajaSerieProductoCommand, RespuestaComunDTO>>();
 
@@ -443,6 +450,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ActualizarMaeAreaGestionHandler>().As<IRequestHandler<ActualizarMaeAreaGestionCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeProductoHandler>().As<IRequestHandler<ActualizarMaeProductoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeProveedorHandler>().As<IRequestHandler<ActualizarMaeProveedorCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarSrvSerieDetHandler>().As<IRequestHandler<ActualizarSrvSerieDetCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<EliminarMaeMarcaHandler>().As<IRequestHandler<EliminarMaeMarcaCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarMaeAreaGestionHandler>().As<IRequestHandler<EliminarMaeAreaGestionCommand, RespuestaComunDTO>>();
@@ -459,6 +467,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarMaeSeriesPorProductoHandler>().As<IRequestHandler<ListarMaeSeriesPorProductoQuery, GenericResponseDTO<List<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarMaeSeriesPorProductoDisponiblesHandler>().As<IRequestHandler<ListarMaeSeriesPorProductoDisponiblesQuery, GenericResponseDTO<List<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarMaeProveedorHandler>().As<IRequestHandler<ListarMaeProveedorQuery, GenericResponseDTO<List<ListarMaeProveedorDto>>>>();
+            builder.RegisterType<ListarTipoServidorHandler>().As<IRequestHandler<ListarTipoServidorQuery, GenericResponseDTO<List<SrvTipoServidor>>>>();
+            builder.RegisterType<ListarSistemaOperativoHandler>().As<IRequestHandler<ListarSistemaOperativoQuery, GenericResponseDTO<List<SrvSistemaOperativo>>>>();
 
             builder.RegisterType<ListarPaginadoMaeMarcaHandler>().As<IRequestHandler<ListarPaginadoMaeMarcaQuery, GenericResponseDTO<PagedResult<ListarMaeMarcaDto>>>>();
             builder.RegisterType<ListarPaginadoMaeAreaGestionHandler>().As<IRequestHandler<ListarPaginadoMaeAreaGestionQuery, GenericResponseDTO<PagedResult<ListarMaeAreaGestionDto>>>>();
@@ -467,6 +477,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarPaginadoMaeSerieProductoHandler>().As<IRequestHandler<ListarPaginadoMaeSerieProductoQuery, GenericResponseDTO<PagedResult<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaRecepcionHandler>().As<IRequestHandler<ListarPaginadoGuiaRecepcionQuery, GenericResponseDTO<PagedResult<GuiaRecepcionCabeceraDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaDespachoHandler>().As<IRequestHandler<ListarPaginadoGuiaDespachoQuery, GenericResponseDTO<PagedResult<GuiaDespachoCabeceraDto>>>>();
+            builder.RegisterType<ListarPaginadoServidoresInventarioHandler>().As<IRequestHandler<ListarPaginadoServidoresInventarioQuery, GenericResponseDTO<PagedResult<ServidorInventarioDto>>>>();
             
 
 

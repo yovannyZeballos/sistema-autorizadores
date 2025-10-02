@@ -83,6 +83,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioGuiaDespachoCabecera = new RepositorioGuiaDespachoCabecera(this);
             RepositorioGuiaDespachoDetalle = new RepositorioGuiaDespachoDetalle(this);
 
+            RepositorioSrvTipoServidor = new RepositorioSrvTipoServidor(this);
+            RepositorioSrvSistemaOperativo = new RepositorioSrvSistemaOperativo(this);
+            RepositorioSrvSerieDet = new RepositorioSrvSerieDet(this);
+
 
             //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
         }
@@ -151,7 +155,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
         public IRepositorioGuiaDespachoCabecera RepositorioGuiaDespachoCabecera { get; private set; }
         public IRepositorioGuiaDespachoDetalle RepositorioGuiaDespachoDetalle { get; private set; }
 
-
+        public IRepositorioSrvTipoServidor RepositorioSrvTipoServidor { get; private set; }
+        public IRepositorioSrvSistemaOperativo RepositorioSrvSistemaOperativo { get; private set; }
+        public IRepositorioSrvSerieDet RepositorioSrvSerieDet { get; private set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -221,6 +227,10 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new GuiaRecepcionDetalleTypeConfiguration());
             modelBuilder.Configurations.Add(new GuiaDespachoCabeceraTypeConfiguration());
             modelBuilder.Configurations.Add(new GuiaDespachoDetalleTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new SrvTipoServidorTypeConfiguration());
+            modelBuilder.Configurations.Add(new SrvSistemaOperativoTypeConfiguration());
+            modelBuilder.Configurations.Add(new SrvSerieDetTypeConfiguration());
 
         }
 
