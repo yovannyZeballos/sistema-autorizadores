@@ -4,9 +4,9 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-    public class RepositorioSrvServidor : RepositorioGenerico<SGPContexto, SrvServidor>, IRepositorioSrvServidor
+    public class RepositorioSrvSerieDet : RepositorioGenerico<SGPContexto, SrvSerieDet>, IRepositorioSrvSerieDet
     {
-        public RepositorioSrvServidor(SGPContexto context) : base(context) { }
+        public RepositorioSrvSerieDet(SGPContexto context) : base(context) { }
 
         public SGPContexto AppDBMyBDContext
         {

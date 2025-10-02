@@ -13,8 +13,6 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 
             Property(x => x.Id).HasColumnName("id");
             Property(x => x.NomSo).HasColumnName("nom_so");
-            Property(x => x.Version).HasColumnName("version");
-            Property(x => x.Edition).HasColumnName("edition");
         }
     }
 }

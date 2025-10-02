@@ -74,7 +74,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 
         IRepositorioSrvTipoServidor RepositorioSrvTipoServidor { get; }
         IRepositorioSrvSistemaOperativo RepositorioSrvSistemaOperativo { get; }
-        IRepositorioSrvServidor RepositorioSrvServidor { get; }
+        IRepositorioSrvSerieDet RepositorioSrvSerieDet { get; }
 
 
 

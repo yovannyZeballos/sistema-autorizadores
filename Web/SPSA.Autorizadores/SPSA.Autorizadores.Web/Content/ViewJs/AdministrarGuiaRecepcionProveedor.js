@@ -538,12 +538,12 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
 
     // ================== Auxiliares ==================
     function limpiarModal() {
-        $('#recNumGuia').val('');
-        $('#recOrdenCompra').val('');
+
+        $('#modalRecepcion input').val('');
+        $('#recProveedor, #recAreaGestion, #recClaseStock, #recEstadoStock').val(null).trigger('change');
         $('#recFecha').val(new Date().toISOString().slice(0, 10));
-        $('#recProveedor').val(null).trigger('change');
-        $('#recAreaGestion,#recClaseStock,#recEstadoStock,#recObs').val('');
-        $('#tblDetalleRecepcion tbody').empty();
+
+       $('#tblDetalleRecepcion tbody').empty();
 
         // Si existen empresa/local en el modal, resetear y deshabilitar local
         //if ($('#recEmpDest').length) $('#recEmpDest').val(null).trigger('change');

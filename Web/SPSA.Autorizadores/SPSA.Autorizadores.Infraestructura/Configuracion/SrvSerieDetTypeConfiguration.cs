@@ -3,30 +3,26 @@ using SPSA.Autorizadores.Dominio.Entidades;
 
 namespace SPSA.Autorizadores.Infraestructura.Configuracion
 {
-    public class SrvServidorTypeConfiguration : EntityTypeConfiguration<SrvServidor>
+    public class SrvSerieDetTypeConfiguration : EntityTypeConfiguration<SrvSerieDet>
     {
-        public SrvServidorTypeConfiguration()
+        public SrvSerieDetTypeConfiguration()
         {
-            ToTable("srv_servidor", "SGP");
+            ToTable("srv_serie_det", "SGP");
 
-            HasKey(x => new { x.Id });
+            HasKey(x => new { x.SerieProductoId });
 
-            Property(x => x.Id).HasColumnName("id");
-            Property(x => x.CodEmpresa).HasColumnName("cod_empresa");
-            Property(x => x.CodLocal).HasColumnName("cod_local");
+            //Property(x => x.SerieProductoId).HasColumnName("serie_producto_id");
+            Property(x => x.SerieProductoId)
+    .HasColumnName("serie_producto_id")
+    .HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None);
+
             Property(x => x.TipoId).HasColumnName("tipo_id");
-            Property(x => x.IndActivo).HasColumnName("ind_activo");
             Property(x => x.Hostname).HasColumnName("hostname");
             Property(x => x.Ip).HasColumnName("ip");
-            Property(x => x.MarcaId).HasColumnName("marca_id");
-            Property(x => x.Modelo).HasColumnName("modelo");
-            Property(x => x.NumSerie).HasColumnName("num_serie");
             Property(x => x.RamGb).HasColumnName("ram_gb");
-            Property(x => x.CpuModelo).HasColumnName("cpu_modelo");
             Property(x => x.CpuSockets).HasColumnName("cpu_sockets");
             Property(x => x.CpuCores).HasColumnName("cpu_cores");
-            Property(x => x.HddTotalGb).HasColumnName("hdd_total_gb");
-            Property(x => x.StorageDesc).HasColumnName("storage_desc");
+            Property(x => x.HddTotal).HasColumnName("hdd_total");
             Property(x => x.SoId).HasColumnName("so_id");
             Property(x => x.HostnameBranch).HasColumnName("hostname_branch");
             Property(x => x.IpBranch).HasColumnName("ip_branch");

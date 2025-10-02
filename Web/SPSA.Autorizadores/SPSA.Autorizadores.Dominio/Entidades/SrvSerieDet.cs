@@ -2,36 +2,25 @@
 
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
-    public class SrvServidor
+    public class SrvSerieDet
     {
-        public long Id { get; set; }
-
-        // Ubicación
-        public string CodEmpresa { get; set; } = null;
-        public string CodLocal { get; set; } = null;
+        public long SerieProductoId { get; set; }
 
         // Clasificación
         public short TipoId { get; set; }
-        public string IndActivo { get; set; } = "S";
 
         // Identidad
         public string Hostname { get; set; } = null;
         public string Ip { get; set; }
-        public long? MarcaId { get; set; }
-        public string Modelo { get; set; }
-        public string NumSerie { get; set; }
 
         // HW
         public decimal? RamGb { get; set; }
-        public string CpuModelo { get; set; }
         public int? CpuSockets { get; set; }
         public int? CpuCores { get; set; }
-        public decimal? HddTotalGb { get; set; }
-        public string StorageDesc { get; set; }
+        public string HddTotal { get; set; }
 
         // SO
         public long? SoId { get; set; }
-        public string SoTexto { get; set; }
 
         // Endpoints por sede
         public string HostnameBranch { get; set; }
@@ -50,9 +39,8 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public DateTime? FecModifica { get; set; }
 
         // Navs (opcionales, según tu modelo)
+        //public Mae_SerieProducto SerieProducto { get; set; }
         public SrvTipoServidor Tipo { get; set; }
-        public SrvSistemaOperativo SistemaOperativo { get; set; }
-        public Mae_Marca Marca { get; set; }
-        // public MaeLocal Local { get; set; }         // si la tienes en el modelo
+        //public SrvSistemaOperativo SistemaOperativo { get; set; }
     }
 }

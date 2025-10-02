@@ -177,7 +177,7 @@
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
-    <Compile Include="Configuracion\SrvServidorTypeConfiguration.cs" />
+    <Compile Include="Configuracion\SrvSerieDetTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvSistemaOperativoTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvTipoServidorTypeConfiguration.cs" />
     <Compile Include="Configuracion\StockProductoTypeConfiguration.cs" />
@@ -235,7 +235,7 @@
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\RepositorioMovKardex.cs" />
     <Compile Include="Repositorio\RepositorioSolicitudUsuarioASR.cs" />
-    <Compile Include="Repositorio\RepositorioSrvServidor.cs" />
+    <Compile Include="Repositorio\RepositorioSrvSerieDet.cs" />
     <Compile Include="Repositorio\RepositorioSrvSistemaOperativo.cs" />
     <Compile Include="Repositorio\RepositorioSrvTipoServidor.cs" />
     <Compile Include="Repositorio\RepositorioStockProducto.cs" />
