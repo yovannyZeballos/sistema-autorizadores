@@ -10,6 +10,7 @@ using MediatR;
 using Npgsql;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
@@ -18,18 +19,16 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaDespacho
 {
     /// <summary>
-    /// Confirma en el DESTINO cualquier Guía de Despacho (TRANSFERENCIA o ASIGNACION_ACTIVO).
-    /// - TRANSFERENCIA: pasa a DISPONIBLE (mueve ubicación, +disponible, -transito).
-    /// - ASIGNACION_ACTIVO: pasa a EN_USO (mueve ubicación, -transito, no suma disponible).
-    /// Opcionalmente genera una Guía de Recepción en destino para auditoría.
+    /// Confirmación (parcial o total) en destino - SOLO TRANSFERENCIA.
     /// </summary>
     public class ConfirmarDespachoEnDestinoCommand : IRequest<RespuestaComunDTO>
     {
         public long GuiaDespachoId { get; set; }
-        public string NumGuiaRecepcion { get; set; }   // Para trazar el ingreso en destino (opcional pero recomendado)
+        public string NumGuiaRecepcion { get; set; }
         public DateTime Fecha { get; set; }
         public string Observaciones { get; set; }
-        public bool GenerarGuiaRecepcion { get; set; } = true; // crea GR en destino como evidencia
+        public bool GenerarGuiaRecepcion { get; set; } = true;
+        public List<LineaConfirmacionDto> Lineas { get; set; } = new List<LineaConfirmacionDto>();
         public string UsuCreacion { get; set; }
     }
 
@@ -52,8 +51,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
 
             try
             {
-                if (request.GuiaDespachoId <= 0)
+                if (request.GuiaDespachoId <= 0) 
                     throw new InvalidOperationException("Guía de despacho no válida.");
+
+                if (request.Lineas == null || request.Lineas.Count == 0) 
+                    throw new InvalidOperationException("No hay ítems a confirmar.");
+
 
                 // === Cargar GUIA DESPACHO con detalles y series ===
                 var gd = await _contexto.RepositorioGuiaDespachoCabecera
@@ -64,24 +67,106 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                 if (gd == null)
                     throw new InvalidOperationException("No se encontró la guía de despacho.");
 
-                var tipo = (gd.TipoMovimiento ?? "").ToUpper();
-                var esTransf = tipo == "TRANSFERENCIA";
-                var esAsign = tipo == "ASIGNACION_ACTIVO";
-
-                if (!esTransf && !esAsign)
-                    throw new InvalidOperationException("Sólo se permite confirmar TRANSFERENCIA o ASIGNACION_ACTIVO.");
+                var tipo = (gd.TipoMovimiento ?? "").ToUpperInvariant();
+                if (tipo != "TRANSFERENCIA")
+                    throw new InvalidOperationException("Sólo las TRANSFERENCIAS requieren confirmación en destino.");
 
                 if (string.IsNullOrWhiteSpace(gd.CodEmpresaDestino) || string.IsNullOrWhiteSpace(gd.CodLocalDestino))
                     throw new InvalidOperationException("La guía de despacho no tiene destino definido.");
 
-                // (Opcional) Evitar doble confirmación
-                // if (gd.IndEstado == "RECEPCIONADA" || gd.IndEstado == "CONFIRMADA") throw ...
+                // ===== agrupar líneas solicitadas por Id de detalle =====
+                var lineasSolic = request.Lineas
+                    .GroupBy(x => x.DespachoDetalleId)
+                    .ToDictionary(g => g.Key, g => new
+                    {
+                        Cantidad = g.Sum(x => x.Cantidad),
+                        NumSerie = g.Select(x => x.NumSerie).FirstOrDefault(),
+                        CodProd = g.Select(x => x.CodProducto).FirstOrDefault()
+                    });
 
-                // ===== Armar acumulador de stock en DESTINO =====
-                var deltas = new Dictionary<string, DeltaPair>(StringComparer.OrdinalIgnoreCase);
                 var usarTransito = gd.UsarTransitoDestino;
 
-                // ===== (Opcional) Crear CABECERA de Guía de Recepción en destino =====
+                // -------------------------------
+                // FASE 1: VALIDAR Y PLANIFICAR
+                // -------------------------------
+                var errores = new List<string>();
+
+                // Planes a aplicar si todo está OK
+                var planSerializables = new List<(GuiaDespachoDetalle det, Mae_SerieProducto serie)>();
+                var planNoSerializables = new List<(GuiaDespachoDetalle det, decimal qty)>();
+
+                foreach (var det in gd.Detalles)
+                {
+                    if (!lineasSolic.TryGetValue(det.Id, out var linea)) continue; // no solicitada
+
+                    var confirmado = det.CantidadConfirmada ?? 0m;
+                    var total = det.Cantidad <= 0 ? 0m : det.Cantidad;
+                    var pendiente = Math.Max(0m, total - confirmado);
+
+                    if (pendiente <= 0m)
+                    {
+                        errores.Add($"El detalle {det.Id} ya no tiene pendiente por confirmar.");
+                        continue;
+                    }
+
+                    var esSerializable = det.SerieProductoId.HasValue;
+                    if (esSerializable)
+                    {
+                        // cada línea serializable representa 1 unidad
+                        if (linea.Cantidad <= 0m) { errores.Add($"El detalle {det.Id} (serializable) debe confirmar 1."); continue; }
+                        if (linea.Cantidad > 1m) { errores.Add($"El detalle {det.Id} (serializable) no puede confirmar más de 1."); continue; }
+
+                        var serie = det.SerieProducto ?? await _contexto.RepositorioMaeSerieProducto
+                            .Obtener(s => s.Id == det.SerieProductoId.Value)
+                            .FirstOrDefaultAsync(cancellationToken);
+
+                        if (serie == null)
+                        {
+                            errores.Add($"No se encontró la serie del detalle {det.Id}.");
+                            continue;
+                        }
+
+                        // Validar que esté en tránsito
+                        if (serie.StkActual != 0 || !string.Equals((serie.IndEstado ?? "").ToUpperInvariant(), "EN_TRANSITO"))
+                        {
+                            errores.Add($"La serie {serie.NumSerie} del detalle {det.Id} no está en tránsito para confirmar.");
+                            continue;
+                        }
+
+                        planSerializables.Add((det, serie));
+
+                    }
+                    else
+                    {
+                        // No serializable: confirmar la cantidad solicitada (cap a pendiente)
+                        var reqCant = linea.Cantidad;
+                        if (reqCant <= 0m)
+                        {
+                            errores.Add($"El detalle {det.Id}: cantidad a confirmar debe ser mayor a 0.");
+                            continue;
+                        }
+                        if (reqCant > pendiente)
+                        {
+                            errores.Add($"El detalle {det.Id}: la cantidad solicitada ({reqCant}) excede el pendiente ({pendiente}).");
+                            continue;
+                        }
+
+                        planNoSerializables.Add((det, reqCant));
+                    }
+                }
+
+                if (errores.Count > 0)
+                    throw new InvalidOperationException(string.Join(Environment.NewLine, errores));
+
+                if (planSerializables.Count == 0 && planNoSerializables.Count == 0)
+                    throw new InvalidOperationException("No se confirmó ninguna línea. Verifique cantidades pendientes/seleccionadas.");
+
+
+                // -------------------------------
+                // FASE 2: APLICAR CAMBIOS
+                // -------------------------------
+
+                // (Opcional) Crear CABECERA de Guía de Recepción en destino
                 GuiaRecepcionCabecera gr = null;
                 if (request.GenerarGuiaRecepcion)
                 {
@@ -90,14 +175,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         NumGuia = string.IsNullOrWhiteSpace(request.NumGuiaRecepcion) ? $"REC-{gd.NumGuia}" : request.NumGuiaRecepcion.Trim(),
                         Fecha = request.Fecha.Date,
                         ProveedorRuc = null,
+                        CodEmpresaOrigen = gd.CodEmpresaOrigen,
+                        CodLocalOrigen = gd.CodLocalOrigen,
                         CodEmpresaDestino = gd.CodEmpresaDestino,
                         CodLocalDestino = gd.CodLocalDestino,
                         AreaGestion = gd.AreaGestion,
                         ClaseStock = gd.ClaseStock,
                         EstadoStock = gd.EstadoStock,
                         Observaciones = string.IsNullOrWhiteSpace(request.Observaciones) ? null : request.Observaciones.Trim(),
-                        // Marca de procedencia: puedes usar 'S' para transf, 'A' para asignación
-                        IndTransferencia = esTransf ? "S" : "A",
+                        IndTransferencia = "S",
                         IndEstado = "REGISTRADA",
                         UsuCreacion = request.UsuCreacion,
                         FecCreacion = DateTime.Now,
@@ -106,106 +192,96 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                     _contexto.RepositorioGuiaRecepcionCabecera.Agregar(gr);
                 }
 
-                foreach (var det in gd.Detalles)
+                // Acumulador de stock destino
+                var deltas = new Dictionary<string, DeltaPair>(StringComparer.OrdinalIgnoreCase);
+
+                // Serializables: 1 por línea
+                foreach (var (det, serie) in planSerializables)
                 {
-                    var esSerializable = det.SerieProductoId.HasValue;
-                    if (esSerializable)
+                    // mover al DESTINO -> DISPONIBLE (entra)
+                    serie.CodEmpresa = gd.CodEmpresaDestino;
+                    serie.CodLocal = gd.CodLocalDestino;
+                    serie.IndEstado = "DISPONIBLE";
+                    serie.StkActual = 1;
+                    serie.FecIngreso = request.Fecha.Date;
+                    serie.UsuModifica = request.UsuCreacion;
+                    serie.FecModifica = DateTime.Now;
+                    _contexto.RepositorioMaeSerieProducto.Actualizar(serie);
+
+                    // stock destino: +1 disp, -1 trans (si se usó tránsito)
+                    AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +1m, trans: usarTransito ? -1m : 0m);
+
+                    // marcar confirmado
+                    det.CantidadConfirmada = det.CantidadConfirmada + 1m;
+                    _contexto.RepositorioGuiaDespachoDetalle.Actualizar(det);
+
+                    // GR
+                    if (gr != null)
                     {
-                        var serie = det.SerieProducto;
-                        if (serie == null)
+                        gr.Detalles.Add(new GuiaRecepcionDetalle
                         {
-                            serie = await _contexto.RepositorioMaeSerieProducto
-                                .Obtener(s => s.Id == det.SerieProductoId.Value)
-                                .FirstOrDefaultAsync(cancellationToken);
-                        }
-                        if (serie == null)
-                            throw new InvalidOperationException($"No se encontró la serie del detalle (Id={det.Id}).");
-
-                        // Debe venir EN_TRANSITO
-                        if (serie.StkActual != 0 || !string.Equals((serie.IndEstado ?? "").ToUpper(), "EN_TRANSITO"))
-                            throw new InvalidOperationException($"La serie {serie.NumSerie} no está en tránsito para confirmar.");
-
-                        // Mover ubicación al DESTINO
-                        serie.CodEmpresa = gd.CodEmpresaDestino;
-                        serie.CodLocal = gd.CodLocalDestino;
-
-                        if (esTransf)
-                        {
-                            // Pasa a DISPONIBLE
-                            serie.IndEstado = "DISPONIBLE";
-                            serie.StkActual = 1;
-                            serie.FecIngreso = request.Fecha.Date;
-
-                            // Stock: -transito, +disponible (si se usó tránsito)
-                            if (usarTransito)
-                                AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +1m, trans: -1m);
-                            else
-                                AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +1m, trans: 0m);
-                        }
-                        else // ASIGNACION_ACTIVO
-                        {
-                            // Pasa a EN_USO (no disponible)
-                            serie.IndEstado = "EN_USO";
-                            serie.StkActual = 0;
-                            // Stock: sólo -transito (no suma disponible)
-                            if (usarTransito)
-                                AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: 0m, trans: -1m);
-                        }
-
-                        serie.UsuModifica = request.UsuCreacion;
-                        serie.FecModifica = DateTime.Now;
-                        _contexto.RepositorioMaeSerieProducto.Actualizar(serie);
-
-                        if (gr != null)
-                        {
-                            gr.Detalles.Add(new GuiaRecepcionDetalle
-                            {
-                                GuiaRecepcion = gr,
-                                CodProducto = det.CodProducto,
-                                SerieProductoId = serie.Id,
-                                Cantidad = 1,
-                                CodActivo = det.CodActivo,
-                                Observaciones = det.Observaciones
-                            });
-                        }
+                            GuiaRecepcion = gr,
+                            CodProducto = det.CodProducto,
+                            SerieProductoId = serie.Id,
+                            Cantidad = 1,
+                            CodActivo = det.CodActivo,
+                            Observaciones = det.Observaciones
+                        });
                     }
-                    else
+                }
+
+                // No serializables: sumar qty solicitada
+                foreach (var (det, qty) in planNoSerializables)
+                {
+                    AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +qty, trans: usarTransito ? -qty : 0m);
+
+                    det.CantidadConfirmada = det.CantidadConfirmada + qty;
+                    _contexto.RepositorioGuiaDespachoDetalle.Actualizar(det);
+
+                    if (gr != null)
                     {
-                        var qty = det.Cantidad <= 0 ? 0 : det.Cantidad;
-
-                        if (esTransf)
+                        gr.Detalles.Add(new GuiaRecepcionDetalle
                         {
-                            if (usarTransito)
-                                AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +qty, trans: -qty);
-                            else
-                                AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +qty, trans: 0m);
-                        }
-                        else // ASIGNACION_ACTIVO (consumo en destino)
-                        {
-                            if (usarTransito)
-                                AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: 0m, trans: -qty);
-                        }
-
-                        if (gr != null)
-                        {
-                            gr.Detalles.Add(new GuiaRecepcionDetalle
-                            {
-                                GuiaRecepcion = gr,
-                                CodProducto = det.CodProducto,
-                                SerieProductoId = null,
-                                Cantidad = qty,
-                                CodActivo = det.CodActivo,
-                                Observaciones = det.Observaciones
-                            });
-                        }
+                            GuiaRecepcion = gr,
+                            CodProducto = det.CodProducto,
+                            SerieProductoId = null,
+                            Cantidad = qty,
+                            CodActivo = det.CodActivo,
+                            Observaciones = det.Observaciones
+                        });
                     }
                 }
 
                 // Aplicar deltas en stock destino
                 await ApplyStockDeltasAsync(deltas, request.UsuCreacion, cancellationToken);
 
-                // Marcar GD como confirmada/recepcionada
-                gd.IndEstado = esTransf ? "RECEPCIONADA" : "CONFIRMADA";
+                // Estado de la guía (total o parcial)
+                bool todoConfirmado = gd.Detalles.All(d =>
+                {
+                    var conf = d.CantidadConfirmada;     // decimal
+                    var tot = d.Cantidad <= 0 ? 0m : d.Cantidad;
+                    return conf >= tot;
+                });
+
+                // === Setear indicadores/fechas SOLO en CABECERA ===
+                if (todoConfirmado)
+                {
+                    gd.IndEstado = "RECEPCIONADA";
+                    gd.IndConfirmacion = "TOTAL";
+                    gd.FecConfirmacion = request.Fecha.Date;     // fecha de cierre total
+                }
+                else
+                {
+                    gd.IndEstado = "PENDIENTE_CONFIRMACION";
+                    gd.IndConfirmacion = "PARCIAL";
+                    // conserva la primera fecha de confirmación parcial:
+                    if (gd.FecConfirmacion == null)
+                        gd.FecConfirmacion = request.Fecha.Date;
+
+                    // Guardar SIEMPRE la última fecha parcial, usa:
+                    // gd.FecConfirmacion = request.Fecha.Date;
+                }
+
                 gd.FecModifica = DateTime.Now;
                 gd.UsuModifica = request.UsuCreacion;
                 _contexto.RepositorioGuiaDespachoCabecera.Actualizar(gd);
@@ -213,10 +289,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                 // Un solo commit
                 await _contexto.GuardarCambiosAsync();
 
-                r.Mensaje = esTransf
-                    ? "Despacho confirmado: productos recepcionados y disponibles en destino."
-                    : "Asignación confirmada: productos en uso en destino.";
+                r.Mensaje = todoConfirmado
+                    ? "Transferencia confirmada totalmente."
+                    : "Transferencia confirmada parcialmente.";
                 return r;
+
             }
             catch (DbUpdateException dbEx)
             {

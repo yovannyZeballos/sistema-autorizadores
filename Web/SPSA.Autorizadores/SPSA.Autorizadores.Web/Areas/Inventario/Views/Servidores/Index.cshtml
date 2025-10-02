@@ -1,0 +1,278 @@
+﻿@model string
+@{
+    ViewBag.Title = "Inventario de Servidores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .badge-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+        }
+
+            .badge-dot i {
+                width: .5rem;
+                height: .5rem;
+                border-radius: 50%;
+                display: inline-block;
+            }
+
+        .dot-disponible {
+            background: #28a745;
+        }
+
+        .dot-transito {
+            background: #17a2b8;
+        }
+
+        .dot-uso {
+            background: #ffc107;
+        }
+
+        .dot-baja {
+            background: #dc3545;
+        }
+
+        #modalSrvSerie .form-control {
+            margin-bottom: 0.5rem;
+        }
+
+        #modalSrvSerie hr {
+            margin: 0.75rem 0; 
+        }
+
+
+    </style>
+}
+
+<!-- Page header -->
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Inventario de Servidores</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href="@Url.Action("Index","Home")">Inicio</a></li>
+            <li class="breadcrumb-item1">Inventario</li>
+            <li class="breadcrumb-item1 active">Servidores</li>
+        </ol>
+    </div>
+</div>
+
+<!-- Card principal -->
+<div class="card overflow-hidden">
+    @Html.Partial("_CardHeader", "Filtros")
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Empresa:</label>
+                    <select class="form-control select2-show-search" id="fEmp">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Local:</label>
+                    <select class="form-control select2-show-search" id="fLoc">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Tipo:</label>
+                    <select class="form-control select2-show-search" id="fTipo">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Estado de serie:</label>
+                    <select class="form-control select2-show-search" id="fEstadoSerie">
+                        <option value="">Todos</option>
+                        <option value="DISPONIBLE">DISPONIBLE</option>
+                        <option value="EN_TRANSITO">EN_TRANSITO</option>
+                        <option value="DE_BAJA">DE_BAJA</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button id="btnDetalle" class="btn btn-sm btn-primary w-100">
+                    <i class="fe fe-server me-1"></i>Detalle
+                </button>
+            </div>
+            @*<div class="col-md-2 d-flex align-items-end">
+                    <button id="btnExportar" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="fe fe-file me-1"></i>Exportar
+                    </button>
+                </div>*@
+        </div>
+
+        <hr class="my-3" />
+
+        <table id="tableServidores" class="table table-sm table-bordered text-nowrap border-bottom w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th>Serie</th>
+                    <th>Producto</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Tipo</th>
+                    <th>Hostname</th>
+                    <th>IP</th>
+                    <th>Empresa</th>
+                    <th>Local</th>
+                    <th>Estado Serie</th>
+                    <th>RAM (GB)</th>
+                    <th>Procesadores</th>
+                    <th>Cores</th>
+                    <th>HDD (GB)</th>
+                    <th>SO</th>
+                    <th>iDRAC / iLO</th>
+                    <th>Unicola</th>
+                    <th>Branch</th>
+                    <th>FileServer</th>
+                    <th>Enlace</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Crear/Editar Detalle de Servidor -->
+<div class="modal fade" id="modalSrvSerie" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalSrvSerieTitle" class="modal-title">Detalle de Servidor</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Serie (producto servidor) <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="mSerieId">
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Tipo <span class="text-danger">*</span></label>
+                            <select class="form-control select2-show-search" id="mTipoId">
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Hostname <span class="text-danger">*</span></label>
+                        <input id="mHostname" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">IP</label>
+                        <input id="mIp" type="text" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">RAM (GB)</label>
+                        <input id="mRam" type="number" step="0.01" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Procesadores</label>
+                        <input id="mCpuSockets" type="number" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Cores</label>
+                        <input id="mCpuCores" type="number" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">HDD total</label>
+                        <input id="mHddGb" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Sistema Operativo</label>
+                            <select class="form-control select2-show-search" id="mSoId">
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12"><hr /></div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Hostname BRANCH</label>
+                        <input id="mHostBranch" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">IP BRANCH</label>
+                        <input id="mIpBranch" type="text" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Hostname FILESERVER</label>
+                        <input id="mHostFs" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">IP FILESERVER</label>
+                        <input id="mIpFs" type="text" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Hostname UNICOLA</label>
+                        <input id="mHostUnicola" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">IP UNICOLA</label>
+                        <input id="mIpUnicola" type="text" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Enlace (URL)</label>
+                        <input id="mEnlaceUrl" type="text" class="form-control form-control-sm" placeholder="http://..." />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">IP iDRAC/iLO</label>
+                        <input id="mIpIdracIlo" type="text" class="form-control form-control-sm" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGuardar" class="btn btn-sm btn-primary">
+                    <i class="fe fe-save me-1"></i>Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
+    <script src="~/Content/ViewJs/AdministrarServidores.js"></script>
+    <script type="text/javascript">
+        $(function () { AdministrarServidores.init(); });
+    </script>
+}
+

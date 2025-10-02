@@ -30,13 +30,6 @@ namespace SPSA.Autorizadores.Web.Areas.Cajeros.Controllers
 			return View();
 		}
 
-		//[HttpPost]
-		//public async Task<JsonResult> ListarCajerosVolante()
-		//{
-		//	var response = await _mediator.Send(new ListarCajeroVolanteQuery { CodEmpresa = WebSession.CodigoEmpresa, CodCoordinador = WebSession.Login });
-		//	return Json(response);
-		//}
-
         [HttpPost]
         public async Task<JsonResult> ListarCajerosVolante(DataTableRequest request)
         {

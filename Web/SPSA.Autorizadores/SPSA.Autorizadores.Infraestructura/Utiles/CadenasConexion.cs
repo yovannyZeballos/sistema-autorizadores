@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace SPSA.Autorizadores.Infraestructura.Utiles
 {
@@ -92,5 +93,28 @@ namespace SPSA.Autorizadores.Infraestructura.Utiles
             }
         }
 
-    }
+		public static string CadenaConexionCT3_SPSA_SGP
+		{
+			get
+			{
+                return ConfigurationManager.ConnectionStrings["CT3_SP_SGP"].ConnectionString;
+            }
+		}
+
+		private static string CadenaConexionDesdeVariableEntorno(string nombreVariable)
+		{
+			// Obtiene el valor de la variable de entorno
+			var cadena = Environment.GetEnvironmentVariable(nombreVariable, EnvironmentVariableTarget.Process);
+
+			// Si no existe en el proceso, busca en el usuario y luego en la máquina
+			if (string.IsNullOrEmpty(cadena))
+				cadena = Environment.GetEnvironmentVariable(nombreVariable, EnvironmentVariableTarget.User);
+
+			if (string.IsNullOrEmpty(cadena))
+				cadena = Environment.GetEnvironmentVariable(nombreVariable, EnvironmentVariableTarget.Machine);
+
+			return cadena;
+		}
+
+	}
 }

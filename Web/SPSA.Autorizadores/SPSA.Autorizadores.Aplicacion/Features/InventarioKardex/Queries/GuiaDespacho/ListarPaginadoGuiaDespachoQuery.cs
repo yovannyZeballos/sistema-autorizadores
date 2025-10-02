@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -23,7 +24,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
         public int PageSize { get; set; } = 10;
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
-        public string IndTransferencia { get; set; }
+        //public string IndTransferencia { get; set; }
         public string IndEstado { get; set; }
         public string CodEmpresaOrigen { get; set; }
         public string CodLocalOrigen { get; set; }
@@ -146,8 +147,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                 var dtoItems = new List<GuiaDespachoCabeceraDto>(pagedRegistros.Items.Count);
                 foreach (var g in pagedRegistros.Items)
                 {
-                    var detalleDtos = (g.Detalles ?? Enumerable.Empty<GuiaDespachoDetalle>())
-                        .Select(d => new GuiaDespachoDetalle
+                    var detalleDtos = (g.Detalles != null ? g.Detalles : Enumerable.Empty<GuiaDespachoDetalle>())
+                        .Select(d => new GuiaDespachoDetalleDto
                         {
                             Id = d.Id,
                             GuiaDespachoId = d.GuiaDespachoId,
@@ -159,14 +160,26 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                         })
                         .ToList();
 
+                    var localOrigen = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == g.CodEmpresaOrigen && p.CodLocal == g.CodLocalOrigen)
+                                                                            .Select(p => p.NomLocal)
+                                                                            .FirstOrDefaultAsync() ?? string.Empty;
+                    var localDestino = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == g.CodEmpresaDestino && p.CodLocal == g.CodLocalDestino)
+                                                                            .Select(p => p.NomLocal)
+                                                                            .FirstOrDefaultAsync() ?? string.Empty;
+
                     dtoItems.Add(new GuiaDespachoCabeceraDto
                     {
                         Id = g.Id,
                         Fecha = g.Fecha,
                         NumGuia = g.NumGuia,
-                        CodEmpresaDestino = g.CodEmpresaDestino,
+                        CodEmpresaOrigen= g.CodEmpresaOrigen,
+                        CodLocalOrigen = g.CodLocalOrigen,
+                        CodEmpresaDestino = g.CodLocalDestino,
                         CodLocalDestino = g.CodLocalDestino,
-                        //Items = lineas,
+                        NomLocalOrigen = localOrigen,
+                        NomLocalDestino = localDestino,
+                        TipoMovimiento = g.TipoMovimiento,
+                        Items = detalleDtos.Count,
                         Detalles = detalleDtos,
                         IndEstado = g.IndEstado,
                         UsuCreacion = g.UsuCreacion

@@ -285,11 +285,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<RegistrarGuiaDespachoCommand, GuiaDespachoCabecera>().ReverseMap();
             CreateMap<ConfirmarDespachoEnDestinoCommand, GuiaDespachoCabecera>().ReverseMap();
 
-            //CreateMap<GuiaRecepcionCabeceraDto, GuiaRecepcionCabecera>().ReverseMap();
-            //CreateMap<GuiaRecepcionDetalleDto, GuiaRecepcionDetalle>().ReverseMap();
-            //CreateMap<GuiaDespachoCabeceraDto, GuiaDespachoCabecera>().ReverseMap();
-            //CreateMap<GuiaDespachoDetalleDto, GuiaDespachoDetalle>().ReverseMap();
-
             CreateMap<ListarMaeMarcaDto, Mae_Marca>().ReverseMap();
             CreateMap<ListarMaeAreaGestionDto, Mae_AreaGestion>().ReverseMap();
             CreateMap<ListarMaeProductoDto, Mae_Producto>().ReverseMap();

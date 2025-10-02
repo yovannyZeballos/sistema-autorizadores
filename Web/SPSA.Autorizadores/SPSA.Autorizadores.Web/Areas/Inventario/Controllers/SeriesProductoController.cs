@@ -40,6 +40,14 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> DarBaja(DarBajaSerieProductoCommand command)
+        {
+            command.UsuEjecucion = WebSession.Login;
+            var res = await _mediator.Send(command);
+            return Json(res);
+        }
+
+        [HttpPost]
         public async Task<JsonResult> Eliminar(EliminarMaeSerieProductoCommand command)
         {
             command.UsuElimina = WebSession.Login;

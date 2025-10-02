@@ -62,7 +62,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Login.Queries
 					.Select(x => new JerarquiaOrganizacionalDTO
 					{
 						CodEmpresa = x.Empresa.CodEmpresa,
-						NomEmpresa = x.Empresa.NomEmpresa,
+						Ruc = x.Empresa.Ruc,
+                        NomEmpresa = x.Empresa.NomEmpresa,
 						CodCadena = x.Cadena.CodCadena,
 						NomCadena = x.Cadena.NomCadena,
 						CodRegion = x.Region.CodRegion,

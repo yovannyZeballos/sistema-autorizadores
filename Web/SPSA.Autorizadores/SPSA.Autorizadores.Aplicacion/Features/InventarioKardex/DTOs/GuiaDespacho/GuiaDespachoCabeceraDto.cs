@@ -28,12 +28,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespa
         public string TipoMovimiento { get; set; }
         public bool UsarTransitoDestino { get; set; }
 
+        public string IndConfirmacion { get; set; } 
+        public DateTime? FecConfirmacion { get; set; }
+
         public string UsuCreacion { get; set; }
         public DateTime FecCreacion { get; set; }
         public string UsuModifica { get; set; }
         public DateTime? FecModifica { get; set; }
 
-        public List<GuiaDespachoDetalle> Detalles { get; set; }
+        public List<GuiaDespachoDetalleDto> Detalles { get; set; }
         public int Items { get; set; }
     }
 }

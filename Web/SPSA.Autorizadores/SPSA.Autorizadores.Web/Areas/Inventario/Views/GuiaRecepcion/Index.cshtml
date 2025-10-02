@@ -29,6 +29,31 @@
         #tblDetalleRecepcion th, #tblDetalleRecepcion td {
             vertical-align: middle;
         }
+
+        /* Ajusta la tipografía de todo el bloque detalle */
+        .detalle-recepcion {
+            font-size: .75rem; /* tamaño base (puedes subir a 1.05rem si aún lo ves chico) */
+            line-height: 1.5;
+        }
+
+            /* Mejora la legibilidad de títulos en negrita */
+            .detalle-recepcion b {
+                font-weight: 600;
+                color: #333;
+            }
+
+            /* Alineación y espacio uniforme en las filas */
+            .detalle-recepcion .row > div {
+                margin-bottom: .25rem;
+            }
+
+            /* Tabla del detalle */
+            .detalle-recepcion .table th,
+            .detalle-recepcion .table td {
+                font-size: .65rem; /* un poco más grande que .table-sm */
+                padding: .5rem .75rem;
+                vertical-align: middle;
+            }
     </style>
 }
 
@@ -40,7 +65,7 @@
         <ol class="breadcrumb1">
             <li class="breadcrumb-item1"><a href="@Url.Action("Index","Home")">Inicio</a></li>
             <li class="breadcrumb-item1 active">Inventario</li>
-            <li class="breadcrumb-item1 active">Guía de Recepción</li>
+            <li class="breadcrumb-item1 active">Guía de Recepción Proveedor</li>
         </ol>
     </div>
 </div>
@@ -49,37 +74,48 @@
     @Html.Partial("_CardHeader", "Filtros")
     <div class="card-body">
         <div class="row g-2">
-            <div class="col-sm-2">
-                <label class="form-label">Fecha desde</label>
-                <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Fecha desde</label>
+                    <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+                </div>
             </div>
-            <div class="col-sm-2">
-                <label class="form-label">Fecha hasta</label>
-                <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Fecha hasta</label>
+                    <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+                </div>
             </div>
-            <div class="col-sm-3">
-                <label class="form-label">Proveedor</label>
-                <select id="cboProveedor" class="form-control form-control-sm"></select>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Proveedor:</label>
+                    <select id="fProveedor" class="form-control select2-show-search">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <label class="form-label">N° Guía / Observ.</label>
-                <input type="text" id="txtFiltro" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Empresa Origen</label>
+                    <select id="fEmpOri" class="form-control select2-show-search"></select>
+                </div>
             </div>
-            <div class="col-sm-2 d-flex align-items-end">
-                <button id="btnBuscar" class="btn btn-sm btn-primary w-100">
-                    <i class="fe fe-search me-1"></i>Buscar
-                </button>
+            <div class="col-md-2">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Local Origen</label>
+                    <select id="fLocOri" class="form-control select2-show-search"></select>
+                </div>
             </div>
         </div>
 
-        <div class="my-3">
+        @*<div class="my-3">
             <button id="btnNuevaGuia" class="btn btn-sm btn-primary me-2">
                 <i class="fe fe-plus me-1"></i>Nueva guía
             </button>
             <button id="btnExportar" class="btn btn-sm btn-outline-primary">
                 <i class="fe fe-file me-1"></i>Exportar Excel
             </button>
-        </div>
+        </div>*@
 
         <table id="tableRecepciones" class="table table-bordered text-nowrap border-bottom w-100">
             <thead class="thead-light">
@@ -87,10 +123,12 @@
                     <th>Fecha</th>
                     <th>N° Guía</th>
                     <th>Proveedor</th>
+                    <th>Origen</th>
                     <th>Destino</th>
                     <th>Ítems</th>
                     <th>Estado</th>
                     <th>Usuario</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -100,7 +138,6 @@
 
 <!-- Modal: Nueva Guía de Recepción -->
 <div class="modal fade" id="modalRecepcion" tabindex="-1" aria-hidden="true">
-    @*<div class="modal-dialog modal-dialog-centered modal-xl">*@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -145,28 +182,12 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group select2-sm">
-                            <label class="form-label">Proveedor</label>
+                            <label class="form-label">Proveedor <span class="text-danger">*</span></label>
                             <select class="form-control select2-show-search" id="recProveedor" required>
                                 <option value="">Seleccionar...</option>
                             </select>
                         </div>
                     </div>
-                    @*<div class="col-md-4">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Empresa Destino <span class="text-danger">*</span></label>
-                            <select class="form-control select2-show-search" id="recEmpDest" required>
-                                <option value="">Seleccionar...</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Local Destino <span class="text-danger">*</span></label>
-                            <select class="form-control select2-show-search" id="recLocDest" required>
-                                <option value="">Seleccionar...</option>
-                            </select>
-                        </div>
-                    </div>*@
                     <div class="col-md-2">
                         <div class="form-group select2-sm">
                             <label class="form-label">Estado Stock <span class="text-danger">*</span></label>
@@ -177,9 +198,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-6">
                         <label class="form-label">Observaciones</label>
-                        <input type="text" id="recObs" class="form-control form-control-sm" />
+                        <input type="text" id="recObs" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
                     </div>
                 </div>
 
@@ -209,13 +230,33 @@
                     </table>
                 </div>
                 <small class="text-muted d-block">
-                    * Si el producto es <b>serializable</b>, la cantidad será 1 y deberá seleccionar la <b>serie</b>. Para no serializables, deje <b>serie vacía</b> y registre la <b>cantidad</b>.
+                    * Si el producto tiene <b>número de serie</b>, debe seleccionar <b>serie disponible en el origen</b> y la cantidad será 1. Para los que no tienen número de serie, deje el campo <b>serie vacío</b> y registre la <b>cantidad</b>.
                 </small>
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button id="btnGuardarRecepcion" class="btn btn-sm btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Detalle de Guía -->
+<div class="modal fade" id="modalDetalleRecepcion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de Guía</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="detalleRecepcionBody" class="small">
+                    <div class="text-muted">Cargando detalle…</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -237,6 +278,7 @@
     <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
     <script src="~/Content/ViewJs/AdministrarGuiaRecepcion.js"></script>
     <script>
         $(function () { AdministrarGuiaRecepcion.init(); });

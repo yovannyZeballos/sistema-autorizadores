@@ -24,7 +24,7 @@
 
             <div class="card-body pt-2 pb-0">
                 <div class="row">
-                    <div class="col-md-3 d-none">
+                    <div class="col-md-2 d-none">
                         <div class="form-group">
                             <label for="txtUsuario" class="form-label">Usuario</label>
                             <input type="text" class="form-control form-control-sm" id="txtUsuario" value="@SPSA.Autorizadores.Web.Utiles.WebSession.Login" disabled>
@@ -38,7 +38,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-2 col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label">Cadena</label>
                             <select class="form-control select2-show-search custom-select" id="cboCadena" required>
@@ -46,7 +46,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-2 col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label">Region</label>
                             <select class="form-control select2-show-search custom-select" id="cboRegion" required>
@@ -54,7 +54,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
+                    <div class="col-xl-2 col-md-6">
                         <div class="form-group select2-sm">
                             <label class="form-label">Zona</label>
                             <select class="form-control select2-show-search custom-select" id="cboZona" required>
@@ -70,11 +70,36 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-9 col-md-6">
-                        <div class="form-group select2-sm">
-                            <label class="form-label"></label>
-                            <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary me-2"><i class="fa fa-search"></i> Buscar x Empresa</button>
-                            <button type="button" id="btnEliminarPorLocal" class="btn btn-sm btn-outline-danger me-2"><i class="fa fa-remove"></i> Eliminar Por Local</button>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="form-group d-flex justify-content-between align-items-center flex-wrap">
+
+                            <!-- Botones a la derecha -->
+                            <div class="d-flex gap-2">
+                                <button type="button" id="btnBuscarLocalPorEmpresa" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-search"></i> Buscar x Empresa
+                                </button>
+                                <button type="button" id="btnEliminarPorLocal" class="btn btn-sm btn-outline-danger">
+                                    <i class="fa fa-remove"></i> Eliminar Por Local
+                                </button>
+                                <button type="button" id="btnImportar" class="btn btn-sm btn-outline-success">
+                                    <i class="fa fa-upload"></i> Cargar Excel
+                                </button>
+                            </div>
+
+                            <!-- Botones a la izquierda -->
+                            <div class="d-flex gap-2">
+                                <button type="button" id="btnDescargarInventario" class="btn btn-sm btn-default">
+                                    <i class="fa fa-download"></i> Inventario Por Empresa
+                                </button>
+                                <input type="file" id="excelInventario" style="display:none;">
+                                <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default">
+                                    <i class="fa fa-download"></i> Plantilla
+                                </button>
+                                <button type="button" id="btnDescargarTiposActivo" class="btn btn-sm btn-default">
+                                    <i class="fa fa-download"></i> Tipos de Activo
+                                </button>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -114,10 +139,6 @@
                                     <button type="button" id="btnNuevoInvCaja" class="btn btn-sm btn-primary me-2"><i class="fa fa-plus"></i> Nuevo Activo</button>
                                     <button type="button" id="btnEditarInvCaja" class="btn btn-sm btn-outline-warning me-2"><i class="fa fa-pencil"></i> Editar Activo</button>
                                     <button type="button" id="btnEliminarInvCaja" class="btn btn-sm btn-outline-danger me-2"><i class="fa fa-remove"></i> Eliminar Activo</button>
-                                    <button type="button" id="btnImportar" class="btn btn-sm btn-outline-success me-2"><i class="fa fa-upload"></i> Cargar Excel</button>
-                                    <input type="file" id="excelInventario" style="display: none;">
-                                    <button type="button" id="btnDescargarPlantillas" class="btn btn-sm btn-default me-2"><i class="fa fa-download"></i> Plantilla</button>
-                                    <button type="button" id="btnDescargarTiposActivo" class="btn btn-sm btn-default me-2"><i class="fa fa-download"></i> Tipos de Activo</button>
                                 </div>
                             </div>
                         </div>
@@ -200,8 +221,6 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                        @*<fieldset class="default">
-                            <legend class="default">Datos del activo (Caja)</legend>*@
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class=" card-title text-center"><b>Modelo:</b></div>
@@ -413,6 +432,7 @@
     <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
     <script src="~/Content/ViewJs/AdministrarInvCaja.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {

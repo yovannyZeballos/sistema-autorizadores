@@ -388,8 +388,6 @@ var AprobacionASR = function () {
             $('#cboLocalBuscar').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
         });
         $('#cboLocalBuscar').val('0');
-
-
     }
 
     const cargarUsuarios = function (usuarios) {

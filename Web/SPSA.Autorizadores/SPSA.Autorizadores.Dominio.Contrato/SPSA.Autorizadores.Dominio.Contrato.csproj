@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auxiliar\PagedResult.cs" />
+    <Compile Include="Dto\ListarDocumentoElectronicoDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\IContexto.cs" />
     <Compile Include="Repositorio\IRepositorioCComSolicitudCab.cs" />
@@ -74,6 +75,9 @@
     <Compile Include="Repositorio\IRepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\IRepositorioMovKardex.cs" />
     <Compile Include="Repositorio\IRepositorioSolicitudUsuarioASR.cs" />
+    <Compile Include="Repositorio\IRepositorioSrvSerieDet.cs" />
+    <Compile Include="Repositorio\IRepositorioSrvSistemaOperativo.cs" />
+    <Compile Include="Repositorio\IRepositorioSrvTipoServidor.cs" />
     <Compile Include="Repositorio\IRepositorioStockProducto.cs" />
     <Compile Include="Repositorio\IRepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\ISGPContexto.cs" />

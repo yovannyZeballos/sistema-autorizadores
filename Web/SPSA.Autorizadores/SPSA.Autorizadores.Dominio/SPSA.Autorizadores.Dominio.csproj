@@ -60,6 +60,7 @@
     <Compile Include="Entidades\CCom_SolicitudDet.cs" />
     <Compile Include="Entidades\Colaborador.cs" />
     <Compile Include="Entidades\DatosAuditoria.cs" />
+    <Compile Include="Entidades\DocumentoElectronico.cs" />
     <Compile Include="Entidades\GuiaDespachoCabecera.cs" />
     <Compile Include="Entidades\GuiaDespachoDetalle.cs" />
     <Compile Include="Entidades\GuiaRecepcionCabecera.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Entidades\Mdr_TmpBinesIzipay.cs" />
     <Compile Include="Entidades\MonCierreEOD.cs" />
     <Compile Include="Entidades\MonCierreEODHist.cs" />
+    <Compile Include="Entidades\SrvSerieDet.cs" />
+    <Compile Include="Entidades\SrvSistemaOperativo.cs" />
+    <Compile Include="Entidades\SrvTipoServidor.cs" />
     <Compile Include="Entidades\StockProducto.cs" />
     <Compile Include="Entidades\TmpMonCierreLocal.cs" />
     <Compile Include="Entidades\MonCierreLocal.cs" />

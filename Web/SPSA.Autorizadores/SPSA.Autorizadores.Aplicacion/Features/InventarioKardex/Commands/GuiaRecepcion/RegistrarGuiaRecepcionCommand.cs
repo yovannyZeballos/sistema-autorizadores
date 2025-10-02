@@ -29,7 +29,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
         public string NumGuia { get; set; }
         public string OrdenCompra { get; set; }
         public DateTime Fecha { get; set; }
-        public string ProveedorRuc { get; set; } 
+        public string ProveedorRuc { get; set; }
+        public string CodEmpresaOrigen { get; set; }
+        public string CodLocalOrigen { get; set; }
         public string CodEmpresaDestino { get; set; }
         public string CodLocalDestino { get; set; }
         public string AreaGestion { get; set; }
@@ -91,6 +93,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                     OrdenCompra = string.IsNullOrWhiteSpace(request.Cabecera.OrdenCompra) ? null : request.Cabecera.OrdenCompra.Trim(),
                     Fecha = request.Cabecera.Fecha.Date,
                     ProveedorRuc = string.IsNullOrWhiteSpace(request.Cabecera.ProveedorRuc) ? null : request.Cabecera.ProveedorRuc.Trim(),
+                    CodEmpresaOrigen = request.Cabecera.CodEmpresaOrigen.Trim(),
+                    CodLocalOrigen = request.Cabecera.CodLocalOrigen.Trim(),
                     CodEmpresaDestino = request.Cabecera.CodEmpresaDestino.Trim(),
                     CodLocalDestino = request.Cabecera.CodLocalDestino.Trim(),
                     AreaGestion = string.IsNullOrWhiteSpace(request.Cabecera.AreaGestion) ? null : request.Cabecera.AreaGestion.Trim(),
@@ -155,7 +159,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                             serie = new Mae_SerieProducto
                             {
                                 CodProducto = item.CodProducto,
-                                NumSerie = numSerie,
+                                NumSerie = numSerie.ToUpper(),
                                 IndEstado = "DISPONIBLE",
                                 CodEmpresa = cab.CodEmpresaDestino,
                                 CodLocal = cab.CodLocalDestino,

@@ -19,10 +19,12 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string EstadoStock { get; set; }
         public string Observaciones { get; set; }
 
-        // 'BORRADOR','REGISTRADA','ANULADA'
         public string IndEstado { get; set; } = "REGISTRADA";
         public string TipoMovimiento { get; set; } = "TRANSFERENCIA";
         public bool UsarTransitoDestino { get; set; }
+
+        public string IndConfirmacion { get; set; } = "PENDIENTE";
+        public DateTime? FecConfirmacion { get; set; }
 
         public string UsuCreacion { get; set; }
         public DateTime FecCreacion { get; set; }

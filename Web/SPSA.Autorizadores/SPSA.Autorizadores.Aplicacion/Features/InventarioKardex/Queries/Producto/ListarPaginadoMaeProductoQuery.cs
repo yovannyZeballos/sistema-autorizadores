@@ -29,13 +29,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
 
     public class ListarPaginadoMaeProductoHandler : IRequestHandler<ListarPaginadoMaeProductoQuery, GenericResponseDTO<PagedResult<ListarMaeProductoDto>>>
     {
-        private readonly IMapper _mapper;
         private readonly ISGPContexto _contexto;
         private readonly ILogger _logger;
 
-        public ListarPaginadoMaeProductoHandler(IMapper mapper)
+        public ListarPaginadoMaeProductoHandler()
         {
-            _mapper = mapper;
             _contexto = new SGPContexto();
             _logger = SerilogClass._log;
         }
@@ -53,7 +51,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                 ParameterExpression param = Expression.Parameter(typeof(Mae_Producto), "x");
                 Expression combined = Expression.Constant(true);
 
-                if (request.IndActivo != "0")
+                if (!string.IsNullOrEmpty(request.IndActivo))
                 {
                     Expression property = Expression.Property(param, nameof(Mae_Producto.IndActivo));
                     Expression value = Expression.Constant(request.IndActivo);
@@ -71,7 +69,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     combined = Expression.AndAlso(combined, equal);
                 }
 
-                if (request.TipProducto != "0")
+                if (!string.IsNullOrEmpty(request.TipProducto))
                 {
                     Expression property = Expression.Property(param, nameof(Mae_Producto.TipProducto));
                     Expression value = Expression.Constant(request.TipProducto);
@@ -91,7 +89,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
 
                 if (!string.IsNullOrEmpty(request.FiltroVarios))
                 {
-                    Expression filtroConst = Expression.Constant(request.FiltroVarios);
+                    Expression filtroConst = Expression.Constant(request.FiltroVarios.ToUpper());
                     var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
 
                     Expression desProductoContains = Expression.Call(
@@ -122,14 +120,28 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     includes: p => p.Marca
                 );
 
+                // Buscar las áreas de gestión asociadas a la página actual
+                var areaGestionIds = pagedRegistros.Items
+                    .Select(p => p.AreaGestionId)
+                    .Distinct()
+                    .ToList();
+
+                var areas = _contexto.RepositorioMaeAreaGestion
+                    .Obtener(a => areaGestionIds.Contains(a.Id))
+                    .ToDictionary(a => a.Id, a => a.NomAreaGestion);
+
+
                 var dtoItems = pagedRegistros.Items.Select(p => new ListarMaeProductoDto
                 {
                     CodProducto = p.CodProducto,
                     DesProducto = p.DesProducto,
                     MarcaId = p.MarcaId,
-                    NomMarca = p.Marca?.NomMarca,    //  ←  ya llega lleno
+                    NomMarca = p.Marca?.NomMarca,
                     TipProducto = p.TipProducto,
+                    NomTipProducto = p.TipProducto == "A" ? "ACTIVO" : p.TipProducto == "R" ? "REPUESTO" : "",
                     AreaGestionId = p.AreaGestionId,
+                    NomAreaGestion = areas.ContainsKey(p.AreaGestionId)? areas[p.AreaGestionId] : string.Empty,
+                    IndSerializable = p.IndSerializable,
                     IndActivo = p.IndActivo,
                     StkMinimo = p.StkMinimo,
                     StkMaximo = p.StkMaximo,

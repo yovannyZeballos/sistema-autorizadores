@@ -78,8 +78,10 @@ var BCT = function () {
                 $("#btnResultadoCantidadPromartEcu").removeClass("btn-warning");
             }
             else {
-                cargarParametros("11");
-                idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "11");
+                cargarParametros("12");
+                idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "12");
+                //cargarParametros("02");
+                //idIntervalPromartEcu = setInterval(cargarDatos, timeoutInterval, "02");
             }
         });
     }
@@ -97,7 +99,7 @@ var BCT = function () {
                 case "10":
                     $("#lblCantidadPromart").text(registro.Cantidad);
                     break;
-                case "11":
+                case "12":
                     $("#lblCantidadPromartEcu").text(registro.Cantidad);
                     break;
                 default:
@@ -167,6 +169,14 @@ var BCT = function () {
 
                             ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioSpsa");
                             ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionSpsa");
+
+                            //-- Por el momento
+
+                            $("#lblFechaNegocioPromartEcu").text(item.FechaNegocio);
+                            $("#lblHoraNegocioPromartEcu").text(item.HoraNegocio);
+
+                            ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromartEcu");
+                            ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromartEcu");
                             
                             break;
                         case "09":
@@ -185,12 +195,12 @@ var BCT = function () {
                             ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromart");
 
                             break;
-                        case "11":
-                            $("#lblFechaNegocioPromartEcu").text(item.FechaNegocio);
-                            $("#lblHoraNegocioPromartEcu").text(item.HoraNegocio);
+                        case "12":
+                            //$("#lblFechaNegocioPromartEcu").text(item.FechaNegocio);
+                            //$("#lblHoraNegocioPromartEcu").text(item.HoraNegocio);
 
-                            ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromartEcu");
-                            ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromartEcu");
+                            //ColorEtadoFechaNegocio(item.FechaNegocio, "#btnEstadoFechaNegocioPromartEcu");
+                            //ColorEtadoConexion(item.EstadoConexion, "#btnEstadoConexionPromartEcu");
 
                             break;
                         default:
@@ -261,7 +271,7 @@ var BCT = function () {
             case "10":
                 cantidad = $("#lblCantidadPromart").text();
                 break;
-            case "11":
+            case "12":
                 cantidad = $("#lblCantidadPromartEcu").text();
                 break;
             default:
@@ -291,6 +301,7 @@ var BCT = function () {
                     switch (item.CodEmpresa) {
                         case "02":
                             $("#lblToleranciaSpsa").text(item.ToleranciaCantidad);
+                            $("#lblToleranciaPromartEcu").text(item.ToleranciaCantidad);
                             break;
                         case "09":
                             $("#lblToleranciaOechsle").text(item.ToleranciaCantidad);
@@ -298,8 +309,8 @@ var BCT = function () {
                         case "10":
                             $("#lblToleranciaPromart").text(item.ToleranciaCantidad);
                             break;
-                        case "11":
-                            $("#lblToleranciaPromartEcu").text(item.ToleranciaCantidad);
+                        case "12":
+                            //$("#lblToleranciaPromartEcu").text(item.ToleranciaCantidad);
                             break;
                         default:
                     }
@@ -336,7 +347,7 @@ var BCT = function () {
             case "10":
                 fechaAlerta = fechaAlertaPromart;
                 break;
-            case "11":
+            case "12":
                 fechaAlerta = fechaAlertaPromartEcu;
                 break;
             default:
@@ -381,7 +392,7 @@ var BCT = function () {
                     case "10":
                         idBoton = "#btnResultadoCantidadPromart";
                         break;
-                    case "11":
+                    case "12":
                         idBoton = "#btnResultadoCantidadPromartEcu";
                         break;
                     default:
@@ -402,7 +413,7 @@ var BCT = function () {
                         case "10":
                             fechaAlertaPromart = "";
                             break;
-                        case "10":
+                        case "12":
                             fechaAlertaPromartEcu = "";
                             break;
                         default:
@@ -426,7 +437,7 @@ var BCT = function () {
                             if (fechaAlertaPromart == "" || envioNotificacion == 1)
                                 fechaAlertaPromart = convertirfecha(new Date());
                             break;
-                        case "11":
+                        case "12":
                             if (fechaAlertaPromartEcu == "" || envioNotificacion == 1)
                                 fechaAlertaPromartEcu = convertirfecha(new Date());
                             break;
@@ -483,7 +494,7 @@ var BCT = function () {
             case "10":
                 idBoton = "#btnResultadoCantidadPromart";
                 break;
-            case "11":
+            case "12":
                 idBoton = "#btnResultadoCantidadPromartEcu";
                 break;
             default:

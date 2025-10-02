@@ -72,5 +72,11 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioGuiaDespachoCabecera RepositorioGuiaDespachoCabecera { get; }
         IRepositorioGuiaDespachoDetalle RepositorioGuiaDespachoDetalle { get; }
 
+        IRepositorioSrvTipoServidor RepositorioSrvTipoServidor { get; }
+        IRepositorioSrvSistemaOperativo RepositorioSrvSistemaOperativo { get; }
+        IRepositorioSrvSerieDet RepositorioSrvSerieDet { get; }
+
+
+
     }
 }

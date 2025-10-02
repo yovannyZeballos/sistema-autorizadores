@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaRecepcion;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRecepcion;
 using SPSA.Autorizadores.Web.Utiles;
 
@@ -22,9 +23,16 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return View();
         }
 
-        public ActionResult Proveedor()
+        public ActionResult RecepcionProveedor()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> Obtener(ObtenerGuiaRecepcionQuery command)
+        {
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -33,6 +41,13 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             command.UsuCreacion = WebSession.Login;
             command.Cabecera.CodEmpresaDestino = WebSession.JerarquiaOrganizacional.CodEmpresa;
             command.Cabecera.CodLocalDestino = WebSession.JerarquiaOrganizacional.CodLocal;
+
+            if (!string.IsNullOrEmpty(command.Cabecera.ProveedorRuc)) 
+            {
+                command.Cabecera.CodEmpresaOrigen = WebSession.JerarquiaOrganizacional.CodEmpresa;
+                command.Cabecera.CodLocalOrigen = WebSession.JerarquiaOrganizacional.CodLocal;
+            }
+
             var respuesta = await _mediator.Send(command);
             return Json(respuesta);
         }
