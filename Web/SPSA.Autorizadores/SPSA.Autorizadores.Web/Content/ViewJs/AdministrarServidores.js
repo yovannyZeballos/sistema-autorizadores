@@ -271,7 +271,7 @@ var AdministrarServidores = (function ($) {
             .append(new Option(row.NumSerie || ('#' + row.SerieProductoId), row.SerieProductoId))
             .val(row.SerieProductoId).trigger('change');
 
-        $('#modalSrvSerieTitle').text('Crear características de Servidor');
+        $('#modalSrvSerieTitle').text('Caracteristicas de Servidor');
         new bootstrap.Modal(document.getElementById('modalSrvSerie')).show();
     }
 
@@ -307,7 +307,7 @@ var AdministrarServidores = (function ($) {
         $('#mEnlaceUrl').val(row.EnlaceUrl || '');
         $('#mIpIdracIlo').val(row.IpIdracIlo || '');
 
-        $('#modalSrvSerieTitle').text('Detalle de Servidor');
+        $('#modalSrvSerieTitle').text('Caracteristicas de Servidor');
         new bootstrap.Modal(document.getElementById('modalSrvSerie')).show();
     }
 

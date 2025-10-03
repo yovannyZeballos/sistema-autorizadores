@@ -21,7 +21,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string TipProducto { get; set; }
-        public string NomMarca { get; set; }
         public string IndActivo { get; set; }
         public int AreaGestionId { get; set; }
         public string FiltroVarios { get; set; }
@@ -60,15 +59,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     combined = Expression.AndAlso(combined, equal);
                 }
 
-                //if (request.MarcaId != 0)
-                //{
-                //    Expression property = Expression.Property(param, nameof(Mae_Producto.MarcaId));
-                //    Expression value = Expression.Constant(request.MarcaId);
-                //    Expression equal = Expression.Equal(property, value);
-
-                //    combined = Expression.AndAlso(combined, equal);
-                //}
-
                 if (!string.IsNullOrEmpty(request.TipProducto))
                 {
                     Expression property = Expression.Property(param, nameof(Mae_Producto.TipProducto));
@@ -98,13 +88,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                         filtroConst
                     );
 
-                    Expression nomModeloContains = Expression.Call(
-                        Expression.Property(param, nameof(Mae_Producto.NomModelo)),
+                    Expression nomMarcaContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_Producto.NomMarca)),
                         containsMethod,
                         filtroConst
                     );
 
-                    Expression filtroOr = Expression.OrElse(desProductoContains, nomModeloContains);
+                    Expression filtroOr = Expression.OrElse(desProductoContains, nomMarcaContains);
 
                     combined = Expression.AndAlso(combined, filtroOr);
                 }

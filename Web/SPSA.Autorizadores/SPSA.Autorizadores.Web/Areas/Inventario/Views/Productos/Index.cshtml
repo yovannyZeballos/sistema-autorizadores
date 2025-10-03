@@ -45,16 +45,7 @@
             @Html.Partial("_CardHeader", "Productos")
             <div class="card-body">
                 <div class="row mb-0">
-                    <div class="col-md-3">
-                        <div class="form-group select2-sm">
-                            <label for="cboCodMarcaBuscar" class="form-label">Marca:</label>
-                            <select class="form-control select2-show-search" id="cboCodMarcaBuscar">
-                                <option value="">Todos</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group select2-sm">
                             <label for="cboTipProductoBuscar" class="form-label">Tipo:</label>
                             <select class="form-control select2-show-search" id="cboTipProductoBuscar">
@@ -64,7 +55,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group select2-sm">
                             <label for="cboCodAreaGestionBuscar" class="form-label">Área:</label>
                             <select class="form-control select2-show-search" id="cboCodAreaGestionBuscar">
@@ -72,7 +63,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group select2-sm">
                             <label for="cboIndActivoBuscar" class="form-label">Estado:</label>
                             <select class="form-control select2-show-search" id="cboIndActivoBuscar">
@@ -91,9 +82,6 @@
                         <button id="btnEditarProducto" class="btn btn-sm btn-primary me-2 mb-2">
                             <i class="fe fe-edit-2"></i> Editar
                         </button>
-                        @*<button id="btnEliminarProducto" class="btn btn-sm btn-primary me-2 mb-2">
-                                <i class="fe fe-trash"></i> Eliminar
-                            </button>*@
                     </div>
                 </div>
                 <div class="row">
@@ -110,7 +98,7 @@
                                     <th>Modelo</th>
                                     <th>Tipo</th>
                                     <th>Área</th>
-                                    <th>Activo</th>
+                                    <th>Publicado</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -214,7 +202,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="modalChkActivo">¿Activo?</label>
+                        <label class="form-label" for="modalChkActivo">¿Publicado?</label>
                         <input type="checkbox" class="form-check" id="modalChkActivo">
                     </div>
                     <div class="mb-3">
@@ -304,10 +292,6 @@
                         <label class="form-label">Fecha de baja <span class="text-danger">*</span></label>
                         <input type="date" id="bajaFecha" class="form-control" />
                     </div>
-                    @*<div class="col-md-8">
-                            <label class="form-label">Observaciones</label>
-                            <input type="text" id="bajaObs" class="form-control form-control-sm" />
-                        </div>*@
                 </div>
                 <div class="alert alert-warning mt-3 mb-0">
                     <strong class="d-block mb-2">Al dar de baja:</strong>

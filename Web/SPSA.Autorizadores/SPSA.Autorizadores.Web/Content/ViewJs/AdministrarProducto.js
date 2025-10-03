@@ -193,7 +193,7 @@ var AdministrarProducto = function ($) {
             }
         });
 
-        $('#cboCodMarcaBuscar, #cboTipProductoBuscar, #cboCodAreaGestionBuscar, #cboIndActivoBuscar')
+        $('#cboTipProductoBuscar, #cboCodAreaGestionBuscar, #cboIndActivoBuscar')
             .off('change._prod')
             .on('change._prod', function () {
                 if ($.fn.DataTable.isDataTable('#tableProductos')) {
@@ -401,22 +401,6 @@ var AdministrarProducto = function ($) {
         });
     }
 
-    async function cargarComboMarcas() {
-        try {
-            const resp = await listarMarcas();
-
-            if (resp.Ok) {
-                await cargarCombo($('#cboCodMarcaBuscar'), resp.Data.map(m => ({ text: m.NomMarca, value: m.Id })), { placeholder: 'Todos', todos: true });
-                await cargarCombo($('#modalInputCboMarca'), resp.Data.map(m => ({ text: m.NomMarca, value: m.Id })), { placeholder: 'Seleccionar' });
-
-            } else {
-                swal({ text: resp.Mensaje, icon: 'error' });
-            }
-        } catch (err) {
-            swal({ text: err, icon: 'error' });
-        }
-    }
-
     async function cargarComboAreasGestion() {
         try {
             const resp = await listarAreasGestion();
@@ -453,7 +437,6 @@ var AdministrarProducto = function ($) {
             url: urlListarProductos,
             filtrosFn: (data) => ({
                 IndActivo: $("#cboIndActivoBuscar").val(),
-                NomMarca: $("#cboCodMarcaBuscar").val(),
                 TipProducto: $("#cboTipProductoBuscar").val(),
                 AreaGestionId: $("#cboCodAreaGestionBuscar").val(),
                 FiltroVarios: data.search?.value?.trim() || ''
@@ -473,7 +456,7 @@ var AdministrarProducto = function ($) {
                 { data: "NomTipProducto", title: "Tipo" },
                 { data: "NomAreaGestion", title: "Área" },
                 {
-                    data: "IndActivo", title: "¿Activo?", className: "text-center",
+                    data: "IndActivo", title: "¿Publicado?", className: "text-center",
                     render: d => d === 'S'
                         ? '<i class="fe fe-check text-success fs-6"></i>'
                         : '<i class="fe fe-x text-danger fs-6"></i>'
@@ -534,7 +517,6 @@ var AdministrarProducto = function ($) {
         init: function () {
             checkSession(async function () {
                 eventos();
-                //await cargarComboMarcas();
                 await cargarComboAreasGestion();
                 initCombosFijos();   // <- inicializa combos fijos
                 visualizarDataTableProductos();
