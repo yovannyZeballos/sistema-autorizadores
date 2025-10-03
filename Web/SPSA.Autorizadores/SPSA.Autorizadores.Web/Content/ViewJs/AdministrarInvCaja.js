@@ -30,13 +30,22 @@ var AdministrarInvCajas = function () {
     const eventos = function () {
 
         $("#btnDescargarInventario").on("click", function () {
-            if (validarBuscarInvCajaPorEmpresa()) {
-                const request = {
-                    CodEmpresa: $("#cboEmpresa").val()
-                };
-                descargarInventario(request);
+            var codEmpresa = $("#cboEmpresa").val();
+            if (!codEmpresa) {
+                swal("Aviso", "Debe seleccionar una empresa", "warning");
+                return;
             }
+            window.location = urlDescargarInventario + "?codEmpresa=" + codEmpresa;
         });
+
+        //$("#btnDescargarInventario").on("click", function () {
+        //    if (validarBuscarInvCajaPorEmpresa()) {
+        //        const request = {
+        //            CodEmpresa: $("#cboEmpresa").val()
+        //        };
+        //        descargarInventario(request);
+        //    }
+        //});
 
         $("#cboEmpresa").on("change", async function () {
             await cargarComboCadenas();
