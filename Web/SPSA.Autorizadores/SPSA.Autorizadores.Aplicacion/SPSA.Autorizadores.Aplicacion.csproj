@@ -469,9 +469,6 @@
     <Compile Include="Features\InventarioKardex\Commands\GuiaDespacho\RegistrarGuiaDespachoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\GuiaRecepcion\RegistrarGuiaRecepcionCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Kardex\RegistrarMovKardexCommand.cs" />
-    <Compile Include="Features\InventarioKardex\Commands\Marca\ActualizarMaeMarcaCommand.cs" />
-    <Compile Include="Features\InventarioKardex\Commands\Marca\CrearMaeMarcaCommand.cs" />
-    <Compile Include="Features\InventarioKardex\Commands\Marca\EliminarMaeMarcaCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Producto\ActualizarMaeProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Producto\CrearMaeProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Producto\EliminarMaeProductoCommand.cs" />
@@ -494,8 +491,6 @@
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\ListarGuiaRecepcionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Kardex\ListarMovKardexDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Kardex\MovKardexDto.cs" />
-    <Compile Include="Features\InventarioKardex\DTOs\Marca\ListarMaeMarcaDto.cs" />
-    <Compile Include="Features\InventarioKardex\DTOs\Marca\MaeMarcaDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Producto\ListarMaeProductoDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Producto\MaeProductoDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Proveedor\ListarMaeProveedorDto.cs" />
@@ -511,8 +506,6 @@
     <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ObtenerGuiaRecepcionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexQuery.cs" />
-    <Compile Include="Features\InventarioKardex\Queries\Marca\ListarMaeMarcaQuery.cs" />
-    <Compile Include="Features\InventarioKardex\Queries\Marca\ListarPaginadoMaeMarcaQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Producto\ListarMaeProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Producto\ListarPaginadoMaeProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Proveedor\ListarMaeProveedorQuery.cs" />

@@ -58,6 +58,47 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                 // var repLocal  = _ctx.RepositorioMaeLocal;
                 // var repEmp    = _ctx.RepositorioMaeEmpresa;
 
+                //var q =
+                //    from sp in _ctx.RepositorioMaeSerieProducto.Obtener(_ => true)
+                //    join p in _ctx.RepositorioMaeProducto.Obtener(_ => true)
+                //        on sp.CodProducto equals p.CodProducto
+                //    join ag in _ctx.RepositorioMaeAreaGestion.Obtener(_ => true)
+                //        on p.AreaGestionId equals ag.Id into agx
+                //    from ag in agx.DefaultIfEmpty()
+                //    join m in _ctx.RepositorioMaeMarca.Obtener(_ => true)
+                //        on p.MarcaId equals m.Id into mx
+                //    from m in mx.DefaultIfEmpty()
+                //    join s in _ctx.RepositorioSrvSerieDet.Obtener(_ => true)
+                //        on sp.Id equals s.SerieProductoId into sx
+                //    from s in sx.DefaultIfEmpty()
+                //    join ts in _ctx.RepositorioSrvTipoServidor.Obtener(_ => true)
+                //        on s.TipoId equals ts.Id into tsx
+                //    from ts in tsx.DefaultIfEmpty()
+                //        // 👇 JOIN al catálogo de Sistema Operativo
+                //    join so in _ctx.RepositorioSrvSistemaOperativo.Obtener(_ => true)
+                //        on s.SoId equals so.Id into sox
+                //    from so in sox.DefaultIfEmpty()
+                //    join l in _ctx.RepositorioMaeLocal.Obtener(_ => true)
+                //        on new { Emp = sp.CodEmpresa, Loc = sp.CodLocal }
+                //        equals new { Emp = l.CodEmpresa, Loc = l.CodLocal } into lx
+                //    from l in lx.DefaultIfEmpty()
+                //    join e in _ctx.RepositorioMaeEmpresa.Obtener(_ => true)
+                //        on sp.CodEmpresa equals e.CodEmpresa into ex
+                //    from e in ex.DefaultIfEmpty()
+                //    where p.AreaGestionId == 4 // ← servidores
+                //    select new
+                //    {
+                //        sp,
+                //        p,
+                //        ag,
+                //        m,
+                //        s,
+                //        ts,
+                //        so,
+                //        l,
+                //        e
+                //    };
+
                 var q =
                     from sp in _ctx.RepositorioMaeSerieProducto.Obtener(_ => true)
                     join p in _ctx.RepositorioMaeProducto.Obtener(_ => true)
@@ -65,16 +106,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                     join ag in _ctx.RepositorioMaeAreaGestion.Obtener(_ => true)
                         on p.AreaGestionId equals ag.Id into agx
                     from ag in agx.DefaultIfEmpty()
-                    join m in _ctx.RepositorioMaeMarca.Obtener(_ => true)
-                        on p.MarcaId equals m.Id into mx
-                    from m in mx.DefaultIfEmpty()
                     join s in _ctx.RepositorioSrvSerieDet.Obtener(_ => true)
                         on sp.Id equals s.SerieProductoId into sx
                     from s in sx.DefaultIfEmpty()
                     join ts in _ctx.RepositorioSrvTipoServidor.Obtener(_ => true)
                         on s.TipoId equals ts.Id into tsx
                     from ts in tsx.DefaultIfEmpty()
-                        // 👇 JOIN al catálogo de Sistema Operativo
                     join so in _ctx.RepositorioSrvSistemaOperativo.Obtener(_ => true)
                         on s.SoId equals so.Id into sox
                     from so in sox.DefaultIfEmpty()
@@ -91,13 +128,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                         sp,
                         p,
                         ag,
-                        m,
                         s,
                         ts,
                         so,
                         l,
                         e
                     };
+
+                
 
                 // ===== Filtros =====
                 if (!string.IsNullOrWhiteSpace(request.CodEmpresa))
@@ -112,6 +150,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                 if (request.TipoId.HasValue && request.TipoId.Value > 0)
                     q = q.Where(x => x.s != null && x.s.TipoId == request.TipoId.Value);
 
+                // ===== Filtro por texto =====
                 if (!string.IsNullOrWhiteSpace(request.Texto))
                 {
                     var t = request.Texto.Trim().ToUpper();
@@ -119,9 +158,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                         ((x.s.Hostname ?? "").ToUpper().Contains(t)) ||
                         ((x.sp.NumSerie ?? "").ToUpper().Contains(t)) ||
                         ((x.p.DesProducto ?? "").ToUpper().Contains(t)) ||
-                        ((x.m.NomMarca ?? "").ToUpper().Contains(t)) ||
+                        ((x.p.NomMarca ?? "").ToUpper().Contains(t)) ||   // ✅ ahora directo del producto
                         ((x.p.NomModelo ?? "").ToUpper().Contains(t)) ||
-                        //((x.ts.NomTipo ?? "").ToUpper().Contains(t)) ||
                         ((x.so.NomSo ?? "").ToUpper().Contains(t))
                     );
                 }
@@ -142,7 +180,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                         AreaGestionId = x.p.AreaGestionId,
                         NomAreaGestion = x.ag != null ? x.ag.NomAreaGestion : null,
                         DesProducto = x.p.DesProducto,
-                        NomMarca = x.m != null ? x.m.NomMarca : null,
+                        NomMarca = x.p.NomMarca,
                         Modelo = x.p.NomModelo,
 
                         NumSerie = x.sp.NumSerie,

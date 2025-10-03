@@ -7,7 +7,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Producto
     {
         public string CodProducto { get; set; }
         public string DesProducto { get; set; }
-        public int MarcaId { get; set; }
         public string NomMarca { get; set; }
         public string TipProducto { get; set; }
         public string NomTipProducto { get; set; }

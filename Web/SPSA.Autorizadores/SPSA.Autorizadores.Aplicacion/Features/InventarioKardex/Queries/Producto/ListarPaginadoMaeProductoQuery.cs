@@ -21,7 +21,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string TipProducto { get; set; }
-        public int MarcaId { get; set; }
+        public string NomMarca { get; set; }
         public string IndActivo { get; set; }
         public int AreaGestionId { get; set; }
         public string FiltroVarios { get; set; }
@@ -60,14 +60,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     combined = Expression.AndAlso(combined, equal);
                 }
 
-                if (request.MarcaId != 0)
-                {
-                    Expression property = Expression.Property(param, nameof(Mae_Producto.MarcaId));
-                    Expression value = Expression.Constant(request.MarcaId);
-                    Expression equal = Expression.Equal(property, value);
+                //if (request.MarcaId != 0)
+                //{
+                //    Expression property = Expression.Property(param, nameof(Mae_Producto.MarcaId));
+                //    Expression value = Expression.Constant(request.MarcaId);
+                //    Expression equal = Expression.Equal(property, value);
 
-                    combined = Expression.AndAlso(combined, equal);
-                }
+                //    combined = Expression.AndAlso(combined, equal);
+                //}
 
                 if (!string.IsNullOrEmpty(request.TipProducto))
                 {
@@ -116,8 +116,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                     pageNumber: request.PageNumber,
                     pageSize: request.PageSize,
                     orderBy: x => new { x.CodProducto, x.DesProducto },
-                    ascending: true,
-                    includes: p => p.Marca
+                    ascending: true
                 );
 
                 // Buscar las áreas de gestión asociadas a la página actual
@@ -135,8 +134,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                 {
                     CodProducto = p.CodProducto,
                     DesProducto = p.DesProducto,
-                    MarcaId = p.MarcaId,
-                    NomMarca = p.Marca?.NomMarca,
+                    NomMarca = p.NomMarca,
                     TipProducto = p.TipProducto,
                     NomTipProducto = p.TipProducto == "A" ? "ACTIVO" : p.TipProducto == "R" ? "REPUESTO" : "",
                     AreaGestionId = p.AreaGestionId,

@@ -46,6 +46,12 @@ var AdministrarProducto = function ($) {
             $('#btnGuardarCambiosModal').hide();
             $('#modalInputCodProducto').prop('disabled', false);
 
+            $('#modalInputCboTipProducto').val('').trigger('change');
+            $('#modalInputCboAreaGestion').val('').trigger('change');
+
+            $('#modalChkActivo').prop('checked', true);
+            $('#modalChkSerializable').prop('checked', false);
+
             new bootstrap.Modal(document.getElementById('modalNuevoProducto')).show();
         });
 
@@ -67,7 +73,7 @@ var AdministrarProducto = function ($) {
 
             $('#modalInputCodProducto').val(data.CodProducto).prop('disabled', true);
             $('#modalInputDesProducto').val(data.DesProducto);
-            $('#modalInputCboMarca').val(data.MarcaId).trigger('change');
+            $('#modalInputCboMarca').val(data.NomMarca).trigger('change');
             $('#modalInputCboTipProducto').val(data.TipProducto).trigger('change');
             $('#modalInputCboAreaGestion').val(data.AreaGestionId).trigger('change');
             $('#modalInputNomModelo').val(data.NomModelo);
@@ -286,7 +292,7 @@ var AdministrarProducto = function ($) {
         var payload = {
             CodProducto: $('#modalInputCodProducto').val().trim(),
             DesProducto: $('#modalInputDesProducto').val().trim(),
-            MarcaId: $('#modalInputCboMarca').val(),
+            NomMarca: $('#modalInputCboMarca').val(),
             TipProducto: $('#modalInputCboTipProducto').val(),
             AreaGestionId: $('#modalInputCboAreaGestion').val(),
             NomModelo: $('#modalInputNomModelo').val().trim(),
@@ -296,7 +302,7 @@ var AdministrarProducto = function ($) {
             IndSerializable: $('#modalChkSerializable').is(':checked') ? 'S' : 'N',
         };
 
-        if (!payload.DesProducto || !payload.TipProducto || !payload.MarcaId || !payload.AreaGestionId) {
+        if (!payload.DesProducto || !payload.TipProducto || !payload.AreaGestionId) {
             swal({ text: "Complete los campos obligatorios (*)", icon: "warning" });
             return;
         }
@@ -447,7 +453,7 @@ var AdministrarProducto = function ($) {
             url: urlListarProductos,
             filtrosFn: (data) => ({
                 IndActivo: $("#cboIndActivoBuscar").val(),
-                MarcaId: $("#cboCodMarcaBuscar").val(),
+                NomMarca: $("#cboCodMarcaBuscar").val(),
                 TipProducto: $("#cboTipProductoBuscar").val(),
                 AreaGestionId: $("#cboCodAreaGestionBuscar").val(),
                 FiltroVarios: data.search?.value?.trim() || ''
@@ -528,7 +534,7 @@ var AdministrarProducto = function ($) {
         init: function () {
             checkSession(async function () {
                 eventos();
-                await cargarComboMarcas();
+                //await cargarComboMarcas();
                 await cargarComboAreasGestion();
                 initCombosFijos();   // <- inicializa combos fijos
                 visualizarDataTableProductos();

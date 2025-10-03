@@ -295,7 +295,6 @@
     <Compile Include="Areas\Inventario\Controllers\InventarioCajaController.cs" />
     <Compile Include="Areas\Inventario\Controllers\InventarioTipoActivoController.cs" />
     <Compile Include="Areas\Inventario\Controllers\KardexController.cs" />
-    <Compile Include="Areas\Inventario\Controllers\MarcasController.cs" />
     <Compile Include="Areas\Inventario\Controllers\ProductosController.cs" />
     <Compile Include="Areas\Inventario\Controllers\ProveedoresController.cs" />
     <Compile Include="Areas\Inventario\Controllers\SeriesProductoController.cs" />
@@ -2415,7 +2414,6 @@
     <Content Include="Content\ViewJs\AdministrarKardex.js" />
     <Content Include="Content\ViewJs\AdministrarProveedor.js" />
     <Content Include="Content\ViewJs\AdministrarProducto.js" />
-    <Content Include="Content\ViewJs\AdministrarMarca.js" />
     <Content Include="Content\ViewJs\AdministrarPeriodoMdr.js" />
     <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
     <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
@@ -2971,7 +2969,6 @@
     <Content Include="Areas\Dashboards\Views\AdministrarDashboard\Viewer.cshtml" />
     <Content Include="Areas\MdrBinesIzipay\Views\PeriodosMdr\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Proveedores\Index.cshtml" />
-    <Content Include="Areas\Inventario\Views\Marcas\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Productos\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\AreasGestion\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Kardex\Index.cshtml" />

@@ -70,7 +70,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMdrFactorIzipay = new RepositorioMdrFactorIzipay(this);
             RepositorioMdrPeriodo = new RepositorioMdrPeriodo(this);
 
-            RepositorioMaeMarca = new RepositorioMaeMarca(this);
             RepositorioMaeAreaGestion = new RepositorioMaeAreaGestion(this);
             RepositorioMaeProducto = new RepositorioMaeProducto(this);
             RepositorioMaeSerieProducto = new RepositorioMaeSerieProducto(this);
@@ -143,7 +142,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 		public IRepositorioMdrOperador RepositorioMdrOperador { get; private set; }
 		public IRepositorioMdrFactorIzipay RepositorioMdrFactorIzipay { get; private set; }
 		public IRepositorioMdrPeriodo RepositorioMdrPeriodo { get; private set; }
-		public IRepositorioMaeMarca RepositorioMaeMarca { get; private set; }
 		public IRepositorioMaeAreaGestion RepositorioMaeAreaGestion { get; private set; }
 		public IRepositorioMaeProducto RepositorioMaeProducto { get; private set; }
 		public IRepositorioMaeSerieProducto RepositorioMaeSerieProducto { get; private set; }
@@ -217,7 +215,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new MdrOperadorTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrPeriodoTypeConfiguration());
 
-			modelBuilder.Configurations.Add(new MaeMarcaTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeAreaGestionTypeConfiguration());
             modelBuilder.Configurations.Add(new MaeProveedorTypeConfiguration());
             modelBuilder.Configurations.Add(new MaeProductoTypeConfiguration());

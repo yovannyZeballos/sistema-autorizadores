@@ -62,7 +62,6 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
         IRepositorioMaeProveedor RepositorioMaeProveedor { get; }
         IRepositorioMaeProducto RepositorioMaeProducto { get; }
         IRepositorioMaeSerieProducto RepositorioMaeSerieProducto { get; }
-        IRepositorioMaeMarca RepositorioMaeMarca { get; }
         IRepositorioMaeAreaGestion RepositorioMaeAreaGestion { get; }
         IRepositorioMovKardex RepositorioMovKardex { get; } //QUITAR
 

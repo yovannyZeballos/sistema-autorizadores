@@ -61,7 +61,6 @@
     <Compile Include="Repositorio\IRepositorioMaeColaboradorExt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeColaboradorInt.cs" />
     <Compile Include="Repositorio\IRepositorioMaeHorario.cs" />
-    <Compile Include="Repositorio\IRepositorioMaeMarca.cs" />
     <Compile Include="Repositorio\IRepositorioMaeProducto.cs" />
     <Compile Include="Repositorio\IRepositorioMaeProveedor.cs" />
     <Compile Include="Repositorio\IRepositorioMaePuesto.cs" />

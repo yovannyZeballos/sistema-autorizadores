@@ -78,7 +78,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Kardex
                 foreach (var k in pagedRegistros.Items)
                 {
                     var prod = k.SerieProducto?.Producto;
-                    var marca = prod?.Marca?.NomMarca;
+                    var marca = prod?.NomMarca;
                     var desProducto = string.Join(" - ",
                         new[] { prod?.DesProducto, marca, prod?.NomModelo }.Where(s => !string.IsNullOrWhiteSpace(s)));
 

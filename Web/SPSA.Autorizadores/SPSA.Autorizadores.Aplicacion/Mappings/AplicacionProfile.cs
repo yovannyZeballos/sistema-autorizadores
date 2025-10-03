@@ -8,32 +8,24 @@ using SPSA.Autorizadores.Aplicacion.Features.Cajas.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresExt.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.ColaboradoresInt.DTOs;
-using SPSA.Autorizadores.Aplicacion.Features.Correo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Empresas.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.Horarios.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioActivo.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.AreaGestion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Proveedor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.SerieProducto;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.AreaGestion;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecepcion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Kardex;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Proveedor;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.SerieProducto;
 using SPSA.Autorizadores.Aplicacion.Features.Locales.Commands;
-using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.Bines;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.FactoresMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Commands.PeriodosMdr;
 using SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.DTOs.Bines;
@@ -274,7 +266,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--INV_KARDEX->
-            CreateMap<CrearMaeMarcaCommand, Mae_Marca>().ReverseMap();
             CreateMap<CrearMaeAreaGestionCommand, Mae_AreaGestion>().ReverseMap();
             CreateMap<CrearMaeProductoCommand, Mae_Producto>().ReverseMap();
             CreateMap<CrearMaeSerieProductoCommand, Mae_SerieProducto>().ReverseMap();
@@ -285,7 +276,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<RegistrarGuiaDespachoCommand, GuiaDespachoCabecera>().ReverseMap();
             CreateMap<ConfirmarDespachoEnDestinoCommand, GuiaDespachoCabecera>().ReverseMap();
 
-            CreateMap<ListarMaeMarcaDto, Mae_Marca>().ReverseMap();
             CreateMap<ListarMaeAreaGestionDto, Mae_AreaGestion>().ReverseMap();
             CreateMap<ListarMaeProductoDto, Mae_Producto>().ReverseMap();
             CreateMap<ListarMaeSerieProductoDto, Mae_SerieProducto>().ReverseMap();

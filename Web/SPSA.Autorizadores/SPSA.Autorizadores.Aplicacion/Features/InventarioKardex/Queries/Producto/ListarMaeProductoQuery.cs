@@ -43,14 +43,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
             {
                 var productos = await _contexto.RepositorioMaeProducto
                    .Obtener(x => x.IndActivo == "S")
-                   .Include(x => x.Marca)              // para usar p.Marca.NomMarca
                    .OrderBy(x => x.DesProducto)
                    .Select(p => new ListarMaeProductoDto
                    {
                        CodProducto = p.CodProducto,
                        DesProducto = p.DesProducto,
-                       MarcaId = p.MarcaId,
-                       NomMarca = p.Marca.NomMarca,   // ← aquí se llena
+                       NomMarca = p.NomMarca,
                        TipProducto = p.TipProducto,
                        AreaGestionId = p.AreaGestionId,
                        IndSerializable = p.IndSerializable,

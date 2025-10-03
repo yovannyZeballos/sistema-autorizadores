@@ -13,7 +13,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
 
             Property(x => x.CodProducto).HasColumnName("cod_producto");
             Property(x => x.DesProducto).HasColumnName("des_producto");
-            Property(x => x.MarcaId).HasColumnName("marca_id");
+            Property(x => x.NomMarca).HasColumnName("nom_marca");
             Property(x => x.NomModelo).HasColumnName("nom_modelo");
             Property(x => x.TipProducto).HasColumnName("tip_producto");
             Property(x => x.AreaGestionId).HasColumnName("area_gestion_id");

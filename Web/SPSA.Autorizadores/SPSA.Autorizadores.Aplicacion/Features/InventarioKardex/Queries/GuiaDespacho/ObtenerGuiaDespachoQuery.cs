@@ -58,12 +58,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
 
                 var productos = await _contexto.RepositorioMaeProducto
                     .Obtener(p => cods.Contains(p.CodProducto))
-                    .Include(p => p.Marca)
                     .Select(p => new
                     {
                         p.CodProducto,
                         p.DesProducto,
-                        p.Marca.NomMarca,
+                        p.NomMarca,
                         p.NomModelo
                     })
                     .ToListAsync(cancellationToken);

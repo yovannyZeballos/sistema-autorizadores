@@ -6,7 +6,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
     {
         public string CodProducto { get; set; }
         public string DesProducto { get; set; }      
-        public int MarcaId { get; set; }
+        public string NomMarca { get; set; }
         public string TipProducto { get; set; }
         public int AreaGestionId { get; set; }
         public string IndSerializable { get; set; }
@@ -21,7 +21,6 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string UsuElimina { get; set; }
         public DateTime? FecElimina { get; set; }
 
-        public virtual Mae_Marca Marca { get; set; }
         public virtual Mae_AreaGestion AreaGestion { get; set; }
     }
 }
