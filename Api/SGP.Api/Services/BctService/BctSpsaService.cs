@@ -130,7 +130,7 @@ namespace SGP.Api.Services.BctService
         {
             using (var connection = new OracleConnection(_conexionBCT))
             {
-                using (var command = new OracleCommand("ADM_SPSA.SF_MONITOR_BCT_TRXS_XMIGR", connection)
+                using (var command = new OracleCommand("ADM_SPSA.SF_MONITOR_BCT_TRXS_XMIGR_CT3", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 })
@@ -211,12 +211,18 @@ namespace SGP.Api.Services.BctService
         {
             using (var connection = new OracleConnection(_conexionBCT))
             {
+                //    string query = @"
+                //SELECT TRUNC(insertdate) AS DO_FECHA_TRX,
+                //       COUNT(*) AS NO_CANT_TRX
+                //FROM ADM_SPSA.TransactionXmlCT3
+                //WHERE TRUNC(insertdate) = TRUNC(SYSDATE)
+                //GROUP BY TRUNC(insertdate)";
                 string query = @"
-            SELECT TRUNC(insertdate) AS DO_FECHA_TRX,
-                   COUNT(*) AS NO_CANT_TRX
-            FROM ADM_SPSA.TransactionXmlCT3
-            WHERE TRUNC(insertdate) = TRUNC(SYSDATE)
-            GROUP BY TRUNC(insertdate)";
+                    SELECT TRUNC(insertdate) AS DO_FECHA_TRX,
+                           COUNT(1) AS NO_CANT_TRX
+                    FROM ADM_SPSA.TransactionXmlCT3
+                    WHERE TRUNC(insertdate) = TRUNC(SYSDATE)
+                    GROUP BY TRUNC(insertdate)";
 
                 using (var command = new OracleCommand(query, connection))
                 {

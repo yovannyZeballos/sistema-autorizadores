@@ -11,7 +11,7 @@ var idIntervalSpsa = 0;
 var idIntervalPromart = 0;
 var idIntervalPromartEcu = 0;
 var idIntervalOechsle = 0;
-var timeoutInterval = 5000;
+var timeoutInterval = 300000;
 var toleranciaSegundosSpa = 0;
 var fechaAlertaSpsa = "";
 var fechaAlertaPromart = "";
@@ -450,25 +450,35 @@ var BCT = function () {
                     $(idBoton).addClass("btn-danger");
                     $(idBoton).removeClass("btn-success");
                     $(idBoton).removeClass("btn-warning");
-                    switch (codEmpresa) {
-                        case "02":
-                            if (colorSemaforo == 2 || envioNotificacion == 1)
-                                fechaAlertaSpsa = convertirfecha(new Date());
-                            break;
-                        case "09":
-                            if (colorSemaforo == 2 || envioNotificacion == 1)
-                                fechaAlertaOechsle = convertirfecha(new Date());
-                            break;
-                        case "10":
-                            if (colorSemaforo == 2 || envioNotificacion == 1)
-                                fechaAlertaPromart = convertirfecha(new Date());
-                            break;
-                        case "12":
-                            if (colorSemaforo == 2 || envioNotificacion == 1)
-                                fechaAlertaPromartEcu = convertirfecha(new Date());
-                            break;
-                        default:
+                    // Solo registrar la fecha si aplica, pero siempre pinta rojo
+                    if (colorSemaforo == 2 || envioNotificacion == 1) {
+                        switch (codEmpresa) {
+                            case "02": fechaAlertaSpsa = convertirfecha(new Date()); break;
+                            case "12": fechaAlertaPromartEcu = convertirfecha(new Date()); break;
+                            case "09": fechaAlertaOechsle = convertirfecha(new Date()); break;
+                            case "10": fechaAlertaPromart = convertirfecha(new Date()); break;
+                        }
                     }
+
+                    //switch (codEmpresa) {
+                    //    case "02":
+                    //        if (colorSemaforo == 2 || envioNotificacion == 1)
+                    //            fechaAlertaSpsa = convertirfecha(new Date());
+                    //        break;
+                    //    case "09":
+                    //        if (colorSemaforo == 2 || envioNotificacion == 1)
+                    //            fechaAlertaOechsle = convertirfecha(new Date());
+                    //        break;
+                    //    case "10":
+                    //        if (colorSemaforo == 2 || envioNotificacion == 1)
+                    //            fechaAlertaPromart = convertirfecha(new Date());
+                    //        break;
+                    //    case "12":
+                    //        if (colorSemaforo == 2 || envioNotificacion == 1)
+                    //            fechaAlertaPromartEcu = convertirfecha(new Date());
+                    //        break;
+                    //    default:
+                    //}
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
