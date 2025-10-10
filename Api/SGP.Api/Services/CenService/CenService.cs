@@ -56,6 +56,7 @@ namespace SGP.Api.Services.CenService
 			command.Parameters.AddWithValue("@Apellidos", recurso.Apellidos ?? (object)DBNull.Value);
 			command.Parameters.AddWithValue("@Sistema", recurso.Sistema ?? (object)DBNull.Value);
 			command.Parameters.AddWithValue("@Usuario", recurso.UsuarioCreacion ?? (object)DBNull.Value);
+			command.Parameters.AddWithValue("@Ip", recurso.Ip ?? (object)DBNull.Value);
 
 			// Parámetro de salida
 			var codigoRespuestaParam = new SqlParameter("@Codigo_respuesta", System.Data.SqlDbType.Int)

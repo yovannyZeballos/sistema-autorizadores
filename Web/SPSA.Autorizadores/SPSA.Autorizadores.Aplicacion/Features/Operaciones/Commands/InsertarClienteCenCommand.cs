@@ -22,6 +22,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 		public string Apellidos { get; set; }
 		public string RazonSocial { get; set; }
 		public string Usuario { get; set; }
+		public string Ip { get; set; }
 	}
 
 	public class InsertarClienteCenHandler : IRequestHandler<InsertarClienteCenCommand, RespuestaComunDTO>
@@ -37,6 +38,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 		public async Task<RespuestaComunDTO> Handle(InsertarClienteCenCommand request, CancellationToken cancellationToken)
 		{
 			var respuesta = new RespuestaComunDTO { Ok = true, Mensaje = "Cliente registrado correctamente en CEN." };
+
+			
 			try
 			{
 				var recurso = new InsertarClienteRecurso
@@ -47,7 +50,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 					Apellidos = request.Apellidos,
 					RazonSocial = request.RazonSocial,
 					UsuarioCreacion = request.Usuario,
-					Sistema = "SGP"
+					Sistema = "SGP",
+					Ip = request.Ip
 				};
 				await _agenteCen.InsertarCliente(recurso);
 			}

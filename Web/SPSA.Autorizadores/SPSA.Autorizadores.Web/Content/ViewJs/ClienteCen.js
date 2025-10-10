@@ -1,7 +1,6 @@
 ﻿var urlConsultaCliente = baseUrl + 'Operaciones/Gestion/ConsultarClienteCen';
 var urlInsertarCliente = baseUrl + 'Operaciones/Gestion/InsertarClienteCen';
 
-
 var ClienteCen = function () {
 
     const eventos = function () {
@@ -57,6 +56,13 @@ var ClienteCen = function () {
         // Validaciones en tiempo real para el formulario de registro
         $("#txtNombresRegistro, #txtApellidosRegistro, #txtRazonSocialRegistro").on('blur', function () {
             validarFormularioRegistro();
+        });
+
+        $(document).on('click', '.btn-editar', function (e) {
+            e.preventDefault();
+            console.log("editar");
+            const clienteData = $(this).data('cliente');
+            editarCliente(clienteData);
         });
 
     };
@@ -168,6 +174,9 @@ var ClienteCen = function () {
         $('#mensajeBusqueda').addClass('d-none');
         limpiarFormularioRegistro();
         $('#contenedorFormularioRegistro').addClass('d-none');
+        $('#cboTipoDocumentoRegistro, #txtNroDocumentoRegistro, #txtRazonSocialRegistro').prop('disabled', false);
+        $('#contenedorFormularioRegistro .card-title').text('Registrar nuevo cliente');
+
     }
 
     const mostrarCamposSegunTipoDocumento = function () {
@@ -273,20 +282,48 @@ var ClienteCen = function () {
 
     const mostrarClienteEnTabla = function (cliente) {
         const tbody = $('#tablaClienteBody');
+        const thead = $('#tablaCliente thead tr');
 
         // Limpiar tabla antes de agregar nuevo contenido
         tbody.empty();
 
+        // Mostrar/ocultar columnas del encabezado según tipo de documento
+        if (cliente.TipoDocumento === '1') {
+            // DNI: Mostrar Nombres y Apellidos, ocultar Razón Social
+            thead.find('th:nth-child(3)').removeClass('d-none'); // Nombres
+            thead.find('th:nth-child(4)').removeClass('d-none'); // Apellidos
+            thead.find('th:nth-child(5)').addClass('d-none');    // Razón Social
+        } else if (cliente.TipoDocumento === '4') {
+            // RUC: Ocultar Nombres y Apellidos, mostrar Razón Social
+            thead.find('th:nth-child(3)').addClass('d-none');    // Nombres
+            thead.find('th:nth-child(4)').addClass('d-none');    // Apellidos
+            thead.find('th:nth-child(5)').removeClass('d-none'); // Razón Social
+        }
+
         // Crear fila con los datos del cliente
-        const fila = `
-            <tr>
-                <td>${(cliente.TipoDocumento === '1' || '') ? 'DNI' : 'RUC' }</td>
-                <td>${cliente.NumeroDocumento || ''}</td>
-                <td>${cliente.Nombres || ''}</td>
-                <td>${cliente.Apellidos || ''}</td>
-                <td>${cliente.RazonSocial || ''}</td>
-            </tr>
-        `;
+        let fila = '<tr>';
+        fila += `<td>${cliente.TipoDocumento === '1' ? 'DNI' : 'RUC'}</td>`;
+        fila += `<td>${cliente.NumeroDocumento || ''}</td>`;
+
+        if (cliente.TipoDocumento === '1') {
+            // DNI: Mostrar Nombres y Apellidos, ocultar Razón Social
+            fila += `<td>${cliente.Nombres || ''}</td>`;
+            fila += `<td>${cliente.Apellidos || ''}</td>`;
+            fila += `<td class="d-none"></td>`;
+        } else if (cliente.TipoDocumento === '4') {
+            // RUC: Ocultar Nombres y Apellidos, mostrar Razón Social
+            fila += `<td class="d-none"></td>`;
+            fila += `<td class="d-none"></td>`;
+            fila += `<td>${cliente.RazonSocial || ''}</td>`;
+        } else {
+            // Por defecto, mostrar todos los campos
+            fila += `<td>${cliente.Nombres || ''}</td>`;
+            fila += `<td>${cliente.Apellidos || ''}</td>`;
+            fila += `<td>${cliente.RazonSocial || ''}</td>`;
+        }
+
+        fila += `<td><a href="#" class="btn-editar text-primary text-center" data-cliente='${JSON.stringify(cliente)}'><i class="fa fa-edit fa-2x"></i></a></td>`;
+        fila += '</tr>';
 
         tbody.append(fila);
 
@@ -349,6 +386,12 @@ var ClienteCen = function () {
     const limpiarTabla = function () {
         $('#tablaClienteBody').empty();
         $('#contenedorTablaCliente').addClass('d-none');
+
+        // Restablecer visibilidad de todas las columnas del encabezado
+        const thead = $('#tablaCliente thead tr');
+        thead.find('th:nth-child(3)').removeClass('d-none'); // Nombres
+        thead.find('th:nth-child(4)').removeClass('d-none'); // Apellidos
+        thead.find('th:nth-child(5)').removeClass('d-none'); // Razón Social
     }
 
     // Función global para limpiar formulario (llamada desde el botón Limpiar)
@@ -361,6 +404,57 @@ var ClienteCen = function () {
         limpiarTabla();
         ocultarFormularioRegistro();
     }
+
+    const editarCliente = function (cliente) {
+        // Ocultar la tabla
+        $('#contenedorTablaCliente').addClass('d-none');
+
+        // Cargar datos en el formulario según el tipo de documento
+        $('#txtNroDocumentoRegistro').val(cliente.NumeroDocumento);
+
+        if (cliente.TipoDocumento === '1') {
+            // DNI: Cargar nombres y apellidos
+            $('#txtNombresRegistro').val(cliente.Nombres);
+            $('#txtApellidosRegistro').val(cliente.Apellidos);
+            $('#txtRazonSocialRegistro').val('');
+
+            // Mostrar campos de persona natural, ocultar persona jurídica
+            $('#camposPersonaNatural').removeClass('d-none');
+            $('#camposPersonaJuridica').addClass('d-none');
+
+            // Habilitar campos editables para DNI
+            $('#txtNombresRegistro').prop('disabled', false);
+            $('#txtApellidosRegistro').prop('disabled', false);
+            $('#txtRazonSocialRegistro').prop('disabled', true);
+        } else if (cliente.TipoDocumento === '4') {
+            // RUC: Cargar razón social
+            $('#txtRazonSocialRegistro').val(cliente.RazonSocial);
+            $('#txtNombresRegistro').val('');
+            $('#txtApellidosRegistro').val('');
+
+            // Mostrar campos de persona jurídica, ocultar persona natural
+            $('#camposPersonaNatural').addClass('d-none');
+            $('#camposPersonaJuridica').removeClass('d-none');
+
+            // Habilitar campos editables para RUC
+            $('#txtRazonSocialRegistro').prop('disabled', false);
+            $('#txtNombresRegistro').prop('disabled', true);
+            $('#txtApellidosRegistro').prop('disabled', true);
+        }
+
+        $('#cboTipoDocumentoRegistro').val(cliente.TipoDocumento).trigger('change');
+
+        // Deshabilitar campos que nunca se pueden editar
+        $('#cboTipoDocumentoRegistro').prop('disabled', true);
+        $('#txtNroDocumentoRegistro').prop('disabled', true);
+
+        // Cambiar el título del formulario
+        $('#contenedorFormularioRegistro .card-title').text('Editar cliente');
+
+        // Mostrar el formulario
+        $('#contenedorFormularioRegistro').removeClass('d-none');
+    };
+
 
     return {
         init: function () {

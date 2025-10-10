@@ -7,8 +7,8 @@
 		public string? Nombres { get; set; }
 		public string? Apellidos { get; set; }
 		public string? RazonSocial { get; set; }
-
 		public string? UsuarioCreacion { get; set; }
 		public string? Sistema { get; set; }
+		public string? Ip { get; set; }
 	}
 }

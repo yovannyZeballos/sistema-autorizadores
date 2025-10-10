@@ -7,6 +7,11 @@ var DocumentoElectronico = function () {
 
     const eventos = function () {
 
+        $('#btnLimpiar').on('click', function () {
+            limpiarCampos();
+        });
+
+
         $('#btnBuscar').on('click', function () {
             if (validarFechas()) {
                 visualizarDataTableDocumentos();
@@ -290,6 +295,18 @@ var DocumentoElectronico = function () {
         const mes = parseInt(partes[1], 10) - 1; // Los meses en JavaScript van de 0 a 11
         const año = parseInt(partes[2], 10);
         return new Date(año, mes, dia);
+    };
+
+    const limpiarCampos = function () {
+        $('#cboLocal').val('0').trigger('change');
+        $('#txtFechaInicio').val('');
+        $('#txtFechaFin').val('');
+        $('#txtCajero').val('0');
+        $('#txtCaja').val('0');
+        $('#txtNroTransaccion').val('0');
+        $('#cboTipoDocumento').val('0').trigger('change');
+        $('#cboTipoDocCliente').val('0').trigger('change');
+        $('#txtNroDocCliente').val('');
     };
 
     return {
