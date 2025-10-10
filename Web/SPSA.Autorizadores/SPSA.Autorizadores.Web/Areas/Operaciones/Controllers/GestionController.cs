@@ -36,7 +36,14 @@ namespace SPSA.Autorizadores.Web.Areas.Operaciones.Controllers
 		[HttpPost]
 		public async Task<JsonResult> InsertarClienteCen(InsertarClienteCenCommand request)
 		{
+			string ip = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+			if (string.IsNullOrEmpty(ip))
+			{
+				ip = Request.ServerVariables["REMOTE_ADDR"];
+			}
+
 			request.Usuario = WebSession.Login;
+			request.Ip = ip;
 			var response = await _mediator.Send(request);
 			return Json(response);
 		}
