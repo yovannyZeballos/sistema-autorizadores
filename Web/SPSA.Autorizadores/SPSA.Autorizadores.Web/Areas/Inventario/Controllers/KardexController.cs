@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Kardex;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieProducto;
 using SPSA.Autorizadores.Web.Utiles;
 
 namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
@@ -19,6 +20,11 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 
         // GET: Inventario/Kardex
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Movimientos()
         {
             return View();
         }
@@ -43,6 +49,23 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DescargarPorFechas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            var result = await _mediator.Send(new DescargarMovKardexPorFechasCommand { FechaInicio = fechaInicio, FechaFin = fechaFin });
+
+            if (!result.Ok || result.Archivo == null)
+            {
+                return Content("No se pudo generar el archivo: " + result.Mensaje);
+            }
+
+            var bytes = Convert.FromBase64String(result.Archivo);
+
+            return File(bytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                result.NombreArchivo);
         }
     }
 }

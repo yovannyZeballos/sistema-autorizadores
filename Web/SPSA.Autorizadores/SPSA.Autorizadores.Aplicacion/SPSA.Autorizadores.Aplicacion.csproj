@@ -468,6 +468,7 @@
     <Compile Include="Features\InventarioKardex\Commands\GuiaDespacho\ConfirmarDespachoEnDestinoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\GuiaDespacho\RegistrarGuiaDespachoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\GuiaRecepcion\RegistrarGuiaRecepcionCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\Kardex\DescargarMovKardexPorFechasCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Kardex\RegistrarMovKardexCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Marca\ActualizarMaeMarcaCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Marca\CrearMaeMarcaCommand.cs" />
@@ -521,6 +522,7 @@
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoDisponiblesQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarPaginadoMaeSerieProductoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ObtenerMaeSerieProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarPaginadoServidoresInventarioQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarSistemaOperativoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarTipoServidorQuery.cs" />

@@ -10,6 +10,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.SerieProd
         public string CodProducto { get; set; } = null;
         public string NumSerie { get; set; } = null;
         public string IndEstado { get; set; }
+        public string StkEstado { get; set; }
 
         public string CodEmpresa { get; set; }
         public string CodLocal { get; set; }
@@ -25,6 +26,5 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.SerieProd
 
         // Relaciones
         //public virtual Mae_Producto Producto { get; set; } = null;
-        //public virtual Mae_Local LocalActual { get; set; }
     }
 }

@@ -83,6 +83,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                         Cantidad = item.Cantidad,
                         CodActivo = item.CodActivo,
                         Observaciones = item.Observaciones,
+                        //StkEstado = item.SerieProducto?.StkEstado,
+                        StkEstado = item.StkEstado,
                         NumSerie = item.SerieProducto?.NumSerie,
                         EsSerializable = item.SerieProductoId.HasValue
                     };
@@ -99,6 +101,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                                                                         .Select(p => p.NomLocal)
                                                                         .FirstOrDefaultAsync() ?? string.Empty;
 
+                var nomLocalOrigen = (!string.IsNullOrWhiteSpace(gr.ProveedorRuc) && !string.IsNullOrWhiteSpace(razonSocial))
+                        ? razonSocial
+                        : localOrigen;
+
 
                 var dto = new GuiaRecepcionCabeceraDto
                 {
@@ -108,7 +114,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                     Proveedor = razonSocial ?? string.Empty,
                     CodEmpresaOrigen = gr.CodEmpresaOrigen,
                     CodLocalOrigen = gr.CodLocalOrigen,
-                    NomLocalOrigen = localOrigen,
+                    NomLocalOrigen = nomLocalOrigen,
                     CodEmpresaDestino = gr.CodEmpresaDestino,
                     CodLocalDestino = gr.CodLocalDestino,
                     NomLocalDestino = localDestino,
@@ -116,7 +122,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                     IndEstado = gr.IndEstado,
                     AreaGestion = gr.AreaGestion,
                     ClaseStock = gr.ClaseStock,
-                    EstadoStock = gr.EstadoStock,
                     Observaciones = gr.Observaciones,
                     UsuCreacion = gr.UsuCreacion,
                     Detalles = detalleDtos

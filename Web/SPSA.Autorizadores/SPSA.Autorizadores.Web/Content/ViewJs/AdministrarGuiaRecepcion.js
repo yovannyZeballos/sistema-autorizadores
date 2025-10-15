@@ -90,8 +90,8 @@ var AdministrarGuiaRecepcion = (function ($) {
         });
 
         // Ver detalle de una guía
-        $('#tableRecepciones tbody').on('click', '.btnVer', function () {
-            var id = $(this).data('id');
+        $('#tableRecepciones').on('click', '.action-ver', function () {
+            const id = $(this).data('id');
             abrirModalDetalleRecepcion(id);
         });
 
@@ -522,11 +522,13 @@ var AdministrarGuiaRecepcion = (function ($) {
                 { data: 'UsuCreacion', defaultContent: '' },
                 {
                     data: null,
-                    className: 'dt-center nowrap',
+                    className: 'text-center nowrap',
+                    orderable: false,
                     render: function (r) {
-                        return '' +
-                            '<button type="button" class="btn btn-sm btn-outline-primary btnVer" data-id="' + r.Id + '">' +
-                            '<i class="fe fe-eye me-1"></i>Ver</button>';
+                        return '<i class="fe fe-eye fs-6 text-primary action-ver" ' +
+                            'data-id="' + (r.Id || '') + '" ' +
+                            'style="cursor:pointer;" ' +
+                            'title="Ver detalle" aria-label="Ver detalle"></i>';
                     }
                 }
             ],
@@ -653,7 +655,7 @@ var AdministrarGuiaRecepcion = (function ($) {
         <td>${safe(d.NumSerie)}</td>
         <td class="text-end">${safe(d.Cantidad)}</td>
         <td>${safe(d.CodActivo)}</td>
-        <td>${safe(d.Observaciones)}</td>
+        <td>${safe(d.StkEstado)}</td>
       </tr>`;
         }).join('');
 
@@ -671,8 +673,7 @@ var AdministrarGuiaRecepcion = (function ($) {
             <div class="col-md-3"><b>Área Gestión:</b> ${safe(gr.AreaGestion)}</div>
             <div class="col-md-3"><b>Clase Stock:</b> ${safe(gr.ClaseStock)}</div>
 
-            <div class="col-md-3"><b>Estado Stock:</b> ${safe(gr.EstadoStock)}</div>
-            <div class="col-md-9"><b>Observaciones:</b> ${safe(gr.Observaciones)}</div>
+            <div class="col-md-12"><b>Observaciones:</b> ${safe(gr.Observaciones)}</div>
         </div>
     </div>
 
@@ -685,7 +686,7 @@ var AdministrarGuiaRecepcion = (function ($) {
                     <th>Serie</th>
                     <th class="text-end">Cantidad</th>
                     <th>Cód. Activo</th>
-                    <th>Observaciones</th>
+                    <th>Est. Stock</th>
                 </tr>
             </thead>
             <tbody>

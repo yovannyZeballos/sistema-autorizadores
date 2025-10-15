@@ -185,16 +185,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group select2-sm">
-                            <label class="form-label">Estado Stock <span class="text-danger">*</span></label>
-                            <select id="desEstadoStock" class="form-control select2-show-search">
-                                <option value="">Seleccionar...</option>
-                                <option value="NUEVO">NUEVO</option>
-                                <option value="USADO">USADO</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <div class="form-group select2-sm">
                             <label class="form-label">Empresa Destino</label>
@@ -208,7 +198,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label class="form-label">Observaciones</label>
                         <input type="text" id="desObs" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
                     </div>
@@ -227,10 +217,11 @@
                     <table id="tblDetalleDespacho" class="table table-bordered text-nowrap w-100">
                         <thead>
                             <tr>
-                                <th style="width:34%">Producto <span class="text-danger">*</span></th>
-                                <th style="width:26%">N° Serie</th>
-                                <th style="width:12%">Cantidad <span class="text-danger">*</span></th>
-                                <th style="width:18%">Cód. Activo</th>
+                                <th style="width:30%">Producto<span class="text-danger">*</span></th>
+                                <th style="width:20%">N° Serie</th>
+                                <th style="width:10%">Cantidad<span class="text-danger">*</span></th>
+                                <th style="width:15%">Cód. Activo</th>
+                                <th style="width:15%">Estado Stock<span class="text-danger">*</span></th>
                                 <th style="width:10%"></th>
                             </tr>
                         </thead>

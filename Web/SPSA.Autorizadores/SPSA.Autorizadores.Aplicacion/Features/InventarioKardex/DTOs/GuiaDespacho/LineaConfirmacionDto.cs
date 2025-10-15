@@ -12,5 +12,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespa
         public string CodProducto { get; set; }
         public string NumSerie { get; set; }   // requerido si serializable
         public decimal Cantidad { get; set; }  // 1 si serializable; 0 si no serializable
+        public string StkEstado { get; set; }  // "NUEVO" | "USADO"
     }
 }

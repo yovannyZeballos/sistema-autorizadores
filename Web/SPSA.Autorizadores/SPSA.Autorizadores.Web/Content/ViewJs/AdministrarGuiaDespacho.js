@@ -5,6 +5,7 @@ var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpr
 var urlListarProductos = baseUrl + 'Inventario/Productos/Listar';
 var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProductoDisponibles';
 var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener';
+var urlObtenerSerieProducto = baseUrl + 'Inventario/SeriesProducto/Obtener';
 
 var AdministrarGuiaDespacho = (function ($) {
 
@@ -18,6 +19,7 @@ var AdministrarGuiaDespacho = (function ($) {
         $('#btnNuevaGuia').on('click', async function () {
             limpiarModal();
             await Promise.all([cargarComboEmpresasModal(), ensureProductos()]);
+            addDetalleRow();
             new bootstrap.Modal(document.getElementById('modalDespacho')).show();
         });
 
@@ -35,8 +37,8 @@ var AdministrarGuiaDespacho = (function ($) {
         $('#btnAddItem').on('click', function (e) { e.preventDefault(); addDetalleRow(); });
 
         // Ver detalle de una guía
-        $('#tableDespachos tbody').on('click', '.btnVer', function () {
-            var id = $(this).data('id');
+        $('#tableDespachos').on('click', '.action-ver', function () {
+            const id = $(this).data('id');
             abrirModalDetalleDespacho(id);
         });
 
@@ -70,6 +72,10 @@ var AdministrarGuiaDespacho = (function ($) {
         });
     }
 
+    function obtenerSeriePorProducto(codProducto, numSerie) {
+        if (!codProducto || !numSerie) return Promise.resolve({ Ok: false, Mensaje: 'Faltan parámetros' });
+        return $.getJSON(urlObtenerSerieProducto, { CodProducto: codProducto, NumSerie: numSerie });
+    }
 
     // ======================== Cargas de combos (pantalla) ========================
     const cargarComboEmpresas = async function () {
@@ -189,6 +195,7 @@ var AdministrarGuiaDespacho = (function ($) {
             '<td class="select2-sm"><select class="form-select form-select-sm selSerie select2-show-search" style="width:100%" disabled><option value=""></option></select></td>' +
             '<td><input type="number" class="form-control form-control-sm inpCantidad" min="1" step="1" value="1" /></td>' +
             '<td><input type="text" class="form-control form-control-sm inpCodActivo text-uppercase" /></td>' +
+            '<td class="select2-sm"><select class="form-select form-select-sm selEstadoStock select2-show-search" style="width:100%"></select></td>' +
             '<td class="text-center"><button type="button" class="btn btn-sm btn-link text-danger btnDelRow" title="Quitar"><i class="fe fe-trash-2"></i></button></td>' +
             '</tr>'
         );
@@ -197,6 +204,7 @@ var AdministrarGuiaDespacho = (function ($) {
 
         const $selProd = tr.find('select.selProducto');
         const $selSerie = tr.find('select.selSerie');
+        const $selEstado = tr.find('select.selEstadoStock');
 
         // productos con data-serializable como atributo (no .data() por cache)
         const prodOptions = _productosCache.map(p => {
@@ -209,6 +217,15 @@ var AdministrarGuiaDespacho = (function ($) {
         cargarCombo($selProd, prodOptions, { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
         cargarCombo($selSerie, [], { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
         $selSerie.prop('disabled', true);
+
+        const estOptions = [
+            { value: 'NUEVO', text: 'NUEVO' },
+            { value: 'USADO', text: 'USADO' }
+        ];
+
+        cargarCombo($selEstado, estOptions, { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
+        // deshabilitado por defecto y sin valor
+        $selEstado.prop('disabled', true).val('').trigger('change');
 
         // eventos
         $selProd.on('change', function () { onProductoChange(tr); });
@@ -227,25 +244,32 @@ var AdministrarGuiaDespacho = (function ($) {
         const $selProd = tr.find('select.selProducto');
         const $selSerie = tr.find('select.selSerie');
         const $cant = tr.find('.inpCantidad');
+        const $selEstado = tr.find('select.selEstadoStock');
 
         const cod = $selProd.val();
         const ind = ($selProd.find(':selected').attr('data-serializable') || 'N');
 
-        // reset
+        // reset dependientes
         await cargarCombo($selSerie, [], { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
         $selSerie.prop('disabled', true);
         $cant.prop('disabled', false).val('1');
 
+        $selEstado.val('').prop('disabled', !cod).trigger('change');
+
         if (!cod) return;
+
+        $selEstado.prop('disabled', false);
 
         if (ind === 'S') {
             // serializable → listar series y fijar cantidad=1
             try {
                 const resp = await listarSeriesPorProducto(cod);
                 if (resp.Ok) {
+
                     const series = (resp.Data || []).map(s => ({ text: s.NumSerie, value: s.NumSerie }));
                     await cargarCombo($selSerie, series, { placeholder: 'Seleccionar', dropdownParent: '#modalDespacho' });
                     $selSerie.prop('disabled', false);
+
                 } else {
                     swal({ text: swalText(resp, 'No fue posible listar series disponibles.'), icon: 'warning' });
                 }
@@ -258,6 +282,23 @@ var AdministrarGuiaDespacho = (function ($) {
             $selSerie.prop('disabled', true).val(null).trigger('change');
             $cant.prop('disabled', false);
         }
+
+        $selSerie.off('change.estado').on('change.estado', async function () {  // 👈 elimina select2:select
+            const numSerie = $(this).val();
+            if (!numSerie) { $selEstado.val('').trigger('change'); return; }
+            try {
+                const r = await obtenerSeriePorProducto(cod, numSerie);
+                const est = (r && r.Ok && r.Data) ? (r.Data.StkEstado) : '';
+                if (est === 'NUEVO' || est === 'USADO') {
+                    $selEstado.val(est).trigger('change');
+                } else {
+                    $selEstado.val('').trigger('change');
+                }
+            } catch {
+                $selEstado.val('').trigger('change');
+            }
+        });
+      
     }
 
     // ================== Guardar ==================
@@ -269,8 +310,7 @@ var AdministrarGuiaDespacho = (function ($) {
 
         const $btn = $('#btnGuardarDespacho');
         const oldHtml = $btn.html();
-        $btn.prop('disabled', true)
-            .html('<span class="spinner-border spinner-border-sm me-1"></span>Guardando…');
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Guardando…');
 
         // Helper para cortar el flujo mostrando alerta y lanzando excepción controlada
         const fail = (text, icon = 'warning') => {
@@ -297,18 +337,11 @@ var AdministrarGuiaDespacho = (function ($) {
                 UsarTransitoDestino: isTransf,   // true solo en TRANSFERENCIA
                 AreaGestion: ($('#desAreaGestion').val() || '').trim(),
                 ClaseStock: ($('#desClaseStock').val() || '').trim(),
-                EstadoStock: ($('#desEstadoStock').val() || '').trim(),
                 Observaciones: ($('#desObs').val() || '').trim()
             };
 
-            // Validaciones cabecera mínimas
-            if (!header.NumGuia || !header.Fecha) {
-                swal({ text: "Complete Fecha y N° Guía", icon: "warning" });
-                return;
-            }
-
-            if (!header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
-                swal({ text: "Complete Área Gestión, Clase Stock y Estado Stock.", icon: "warning" });
+            if (!header.NumGuia || !header.Fecha || !header.AreaGestion || !header.ClaseStock) {
+                swal({ text: "Complete los campos obligatorios (*) de la cabecera.", icon: "warning" });
                 return;
             }
 
@@ -322,12 +355,16 @@ var AdministrarGuiaDespacho = (function ($) {
             let fila = 0;
             // evitar series duplicadas (mismo producto) en el mismo payload
             const seriesKeys = new Set();
+            const estadosValidos = new Set(['NUEVO', 'USADO']);
 
             $('#tblDetalleDespacho tbody tr').each(function () {
                 fila++;
                 const $tr = $(this);
                 const $optSel = $tr.find('.selProducto option:selected');
+                const $optEstStock = $tr.find('.selEstadoStock option:selected');
+
                 const codProd = $optSel.val();
+                const estStock = $optEstStock.val();
                 const ind = ($optSel.data('serializable') || 'S');
                 const numSerie = ($tr.find('.selSerie').val() || '').trim();
                 const cant = parseInt($tr.find('.inpCantidad').val() || '0', 10);
@@ -335,24 +372,32 @@ var AdministrarGuiaDespacho = (function ($) {
 
                 if (!codProd) {
                     errores.push(`Fila ${fila}: producto es obligatorio.`);
-                } else if (ind === 'S') {
-                    if (!numSerie) errores.push(`Fila ${fila}: debe seleccionar una serie disponible para producto serializable.`);
-                    if (cant !== 1) errores.push(`Fila ${fila}: cantidad debe ser 1 para producto serializable.`);
-                    // duplicidad de serie
-                    var key = codProd + '|' + numSerie;
-                    if (seriesKeys.has(key)) errores.push(`Fila ${fila}: la serie '${numSerie}' del producto ${codProd} está repetida.`);
-                    else seriesKeys.add(key);
-                } else {
-                    if (!cant || cant <= 0) errores.push(`Fila ${fila}: cantidad debe ser mayor a 0.`);
+                    return;
                 }
 
-                if (!codProd) return;
+                if (ind === 'S') {
+                    if (!numSerie) errores.push(`Fila ${fila}: Debe seleccionar una serie disponible para producto.`);
+                    if (cant !== 1) errores.push(`Fila ${fila}: Cantidad debe ser 1 para producto con numeros de serie.`);
+                    // duplicidad de serie
+                    const key = codProd + '|' + numSerie;
+                    if (seriesKeys.has(key)) errores.push(`Fila ${fila}: La serie '${numSerie}' del producto ${codProd} está repetida.`);
+                    else seriesKeys.add(key);
+                } else {
+                    if (!cant || cant <= 0) errores.push(`Fila ${fila}: Cantidad debe ser mayor a 0.`);
+                }
+
+                if (!estStock) {
+                    errores.push(`Fila ${fila}: Seleccione estado de stock.`);
+                } else if (!estadosValidos.has(estStock)) {
+                    errores.push(`Fila ${fila}: Estado de stock inválido (${estStock}).`);
+                }
 
                 items.push({
                     CodProducto: codProd,
                     NumSerie: (ind === 'S') ? numSerie : null,
                     Cantidad: cant,
                     CodActivo: codAct,
+                    StkEstado: estStock,
                     Observaciones: null
                 });
             });
@@ -475,11 +520,13 @@ var AdministrarGuiaDespacho = (function ($) {
                 { data: 'UsuCreacion', defaultContent: '' },
                 {
                     data: null,
-                    className: 'dt-center nowrap',
+                    className: 'text-center nowrap',
+                    orderable: false,
                     render: function (r) {
-                        return '' +
-                            '<button type="button" class="btn btn-sm btn-outline-primary btnVer" data-id="' + r.Id + '">' +
-                            '<i class="fe fe-eye me-1"></i>Ver</button>';
+                        return '<i class="fe fe-eye fs-6 text-primary action-ver" ' +
+                            'data-id="' + (r.Id || '') + '" ' +
+                            'style="cursor:pointer;" ' +
+                            'title="Ver detalle" aria-label="Ver detalle"></i>';
                     }
                 }
             ],
@@ -513,10 +560,9 @@ var AdministrarGuiaDespacho = (function ($) {
     }
 
     function limpiarModal() {
+        $('#modalDespacho  input').val('');
+        $('#desTipoMov, #desAreaGestion, #desClaseStock').val(null).trigger('change');
         $('#desFecha').val(new Date().toISOString().slice(0, 10));
-        $('#modalDespacho input').val('');
-        $('#desTipoMov, #desAreaGestion, #desClaseStock, #desEstadoStock').val(null).trigger('change');
-
         $('#desTipoMov').val('TRANSFERENCIA').trigger('change');
 
         $('#desEmpDest').val(null).trigger('change');
@@ -545,14 +591,6 @@ var AdministrarGuiaDespacho = (function ($) {
         });
 
         $('#desClaseStock').select2({
-            dropdownParent: $('#modalDespacho'),
-            width: '100%',
-            placeholder: 'Seleccionar',
-            allowClear: true,
-            minimumResultsForSearch: 0
-        });
-
-        $('#desEstadoStock').select2({
             dropdownParent: $('#modalDespacho'),
             width: '100%',
             placeholder: 'Seleccionar',
@@ -621,7 +659,7 @@ var AdministrarGuiaDespacho = (function ($) {
         <td>${safe(d.NumSerie)}</td>
         <td class="text-end">${safe(d.Cantidad)}</td>
         <td>${safe(d.CodActivo)}</td>
-        <td>${safe(d.Observaciones)}</td>
+        <td>${safe(d.StkEstado)}</td>
       </tr>`;
         }).join('');
 
@@ -639,9 +677,8 @@ var AdministrarGuiaDespacho = (function ($) {
             <div class="col-md-3"><b>Área Gestión:</b> ${safe(gd.AreaGestion)}</div>
             <div class="col-md-3"><b>Clase Stock:</b> ${safe(gd.ClaseStock)}</div>
 
-            <div class="col-md-3"><b>Estado Stock:</b> ${safe(gd.EstadoStock)}</div>
             <div class="col-md-3"><b>Recepción Destino:</b> ${safe(gd.IndConfirmacion)}</div>
-            <div class="col-12"><b>Observaciones:</b> ${safe(gd.Observaciones)}</div>
+            <div class="col-md-9"><b>Observaciones:</b> ${safe(gd.Observaciones)}</div>
         </div>
     </div>
 
@@ -654,7 +691,7 @@ var AdministrarGuiaDespacho = (function ($) {
                     <th>Serie</th>
                     <th class="text-end">Cantidad</th>
                     <th>Cód. Activo</th>
-                    <th>Observaciones</th>
+                    <th>Est. Stock</th>
                 </tr>
             </thead>
             <tbody>

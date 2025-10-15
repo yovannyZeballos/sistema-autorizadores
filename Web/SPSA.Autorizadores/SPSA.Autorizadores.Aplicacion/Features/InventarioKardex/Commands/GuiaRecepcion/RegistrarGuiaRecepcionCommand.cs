@@ -36,7 +36,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
         public string CodLocalDestino { get; set; }
         public string AreaGestion { get; set; }
         public string ClaseStock { get; set; }
-        public string EstadoStock { get; set; }
         public string Observaciones { get; set; }
         public string IndTransferencia { get; set; }
 
@@ -50,6 +49,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
         public long? SerieProductoId { get; set; }          // si eligen serie existente
         public string NumSerie { get; set; }                // si crean serie nueva
         public decimal Cantidad { get; set; }
+        public string StkEstado { get; set; }
         public string CodActivo { get; set; }
         public string Observaciones { get; set; }
     }
@@ -99,7 +99,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                     CodLocalDestino = request.Cabecera.CodLocalDestino.Trim(),
                     AreaGestion = string.IsNullOrWhiteSpace(request.Cabecera.AreaGestion) ? null : request.Cabecera.AreaGestion.Trim(),
                     ClaseStock = string.IsNullOrWhiteSpace(request.Cabecera.ClaseStock) ? null : request.Cabecera.ClaseStock.Trim(),
-                    EstadoStock = string.IsNullOrWhiteSpace(request.Cabecera.EstadoStock) ? null : request.Cabecera.EstadoStock.Trim(),
                     Observaciones = string.IsNullOrWhiteSpace(request.Cabecera.Observaciones) ? null : request.Cabecera.Observaciones.Trim(),
                     IndTransferencia = request.Cabecera.IndTransferencia,
                     IndEstado = "REGISTRADA",
@@ -130,7 +129,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                         throw new InvalidOperationException($"El producto {item.CodProducto} no existe.");
 
                     var esSerializable = (prodInfo.IndSerializable ?? "S").ToUpper() == "S";
-
                     Mae_SerieProducto serieParaDetalle = null;
 
                     if (esSerializable)
@@ -161,10 +159,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                                 CodProducto = item.CodProducto,
                                 NumSerie = numSerie.ToUpper(),
                                 IndEstado = "DISPONIBLE",
+                                StkEstado = item.StkEstado,
                                 CodEmpresa = cab.CodEmpresaDestino,
                                 CodLocal = cab.CodLocalDestino,
                                 FecIngreso = cab.Fecha,
-                                StkActual = 1,
+                                StkActual = 1,                               
                                 UsuCreacion = request.UsuCreacion,
                                 FecCreacion = DateTime.Now
                             };
@@ -189,6 +188,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                             serie.CodEmpresa = cab.CodEmpresaDestino;
                             serie.CodLocal = cab.CodLocalDestino;
                             serie.IndEstado = "DISPONIBLE";
+                            serie.StkEstado = item.StkEstado;
                             if (serie.FecIngreso == null) serie.FecIngreso = cab.Fecha;
                             serie.StkActual = 1;
                             serie.UsuModifica = request.UsuCreacion;
@@ -220,6 +220,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaR
                         GuiaRecepcion = cab,
                         CodProducto = item.CodProducto,
                         Cantidad = item.Cantidad,
+                        StkEstado = item.StkEstado,
                         CodActivo = string.IsNullOrWhiteSpace(item.CodActivo) ? null : item.CodActivo.Trim(),
                         Observaciones = string.IsNullOrWhiteSpace(item.Observaciones) ? null : item.Observaciones.Trim()
                     };

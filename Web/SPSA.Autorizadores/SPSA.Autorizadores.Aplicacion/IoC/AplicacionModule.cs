@@ -459,6 +459,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
 
             builder.RegisterType<ObtenerGuiaDespachoHandler>().As<IRequestHandler<ObtenerGuiaDespachoQuery, GenericResponseDTO<GuiaDespachoCabeceraDto>>>();
             builder.RegisterType<ObtenerGuiaRecepcionHandler>().As<IRequestHandler<ObtenerGuiaRecepcionQuery, GenericResponseDTO<GuiaRecepcionCabeceraDto>>>();
+            builder.RegisterType<ObtenerMaeSerieProductoHandler>().As<IRequestHandler<ObtenerMaeSerieProductoQuery, GenericResponseDTO<MaeSerieProductoDto>>>();
 
             builder.RegisterType<ListarMaeMarcaHandler>().As<IRequestHandler<ListarMaeMarcaQuery, GenericResponseDTO<List<ListarMaeMarcaDto>>>>();
             builder.RegisterType<ListarMaeAreaGestionHandler>().As<IRequestHandler<ListarMaeAreaGestionQuery, GenericResponseDTO<List<ListarMaeAreaGestionDto>>>>();
@@ -478,11 +479,14 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarPaginadoGuiaRecepcionHandler>().As<IRequestHandler<ListarPaginadoGuiaRecepcionQuery, GenericResponseDTO<PagedResult<GuiaRecepcionCabeceraDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaDespachoHandler>().As<IRequestHandler<ListarPaginadoGuiaDespachoQuery, GenericResponseDTO<PagedResult<GuiaDespachoCabeceraDto>>>>();
             builder.RegisterType<ListarPaginadoServidoresInventarioHandler>().As<IRequestHandler<ListarPaginadoServidoresInventarioQuery, GenericResponseDTO<PagedResult<ServidorInventarioDto>>>>();
-            
+
+            builder.RegisterType<DescargarMovKardexPorFechasHandler>().As<IRequestHandler<DescargarMovKardexPorFechasCommand, RespuestaComunExcelDTO>>().InstancePerDependency();
 
 
             builder.RegisterType<ListarPaginadoMovKardexHandler>().As<IRequestHandler<ListarPaginadoMovKardexQuery, GenericResponseDTO<PagedResult<ListarMovKardexDto>>>>();
             builder.RegisterType<ListarPaginadoMovKardexPorProductoHandler>().As<IRequestHandler<ListarPaginadoMovKardexPorProductoQuery, GenericResponseDTO<PagedResult<ListarMovKardexDto>>>>();
+
+			
 
 
 			#endregion

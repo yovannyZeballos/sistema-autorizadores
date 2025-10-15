@@ -2413,6 +2413,7 @@
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcionProveedor.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcion.js" />
     <Content Include="Content\ViewJs\AdministrarKardex.js" />
+    <Content Include="Content\ViewJs\MovimientoKardex.js" />
     <Content Include="Content\ViewJs\AdministrarProveedor.js" />
     <Content Include="Content\ViewJs\AdministrarProducto.js" />
     <Content Include="Content\ViewJs\AdministrarMarca.js" />
@@ -2985,6 +2986,7 @@
     <Content Include="Areas\Operaciones\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaRecepcion\RecepcionProveedor.cshtml" />
     <Content Include="Areas\Inventario\Views\Servidores\Index.cshtml" />
+    <Content Include="Areas\Inventario\Views\Kardex\Movimientos.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

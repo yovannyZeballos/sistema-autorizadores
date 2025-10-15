@@ -98,13 +98,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Produc
                         filtroConst
                     );
 
-                    Expression nomModeloContains = Expression.Call(
-                        Expression.Property(param, nameof(Mae_Producto.NomModelo)),
+                    Expression codProductoContains = Expression.Call(
+                        Expression.Property(param, nameof(Mae_Producto.CodProducto)),
                         containsMethod,
                         filtroConst
                     );
 
-                    Expression filtroOr = Expression.OrElse(desProductoContains, nomModeloContains);
+                    Expression filtroOr = Expression.OrElse(desProductoContains, codProductoContains);
 
                     combined = Expression.AndAlso(combined, filtroOr);
                 }
