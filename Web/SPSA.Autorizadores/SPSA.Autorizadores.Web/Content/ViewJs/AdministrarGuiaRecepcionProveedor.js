@@ -68,7 +68,7 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
 
         // Al abrir modal, inicializar selects fijos del modal (si existen)
         $('#modalRecepcion').on('shown.bs.modal', function () {
-            const fixed = ['#recAreaGestion', '#recClaseStock', '#recEstadoStock', '#recProveedor', '#recEmpDest', '#recLocDest'];
+            const fixed = ['#recAreaGestion', '#recClaseStock', '#recProveedor', '#recEmpDest', '#recLocDest'];
             fixed.forEach(sel => {
                 if ($(sel).length && $.fn.select2 && !$(sel).hasClass('select2-hidden-accessible')) {
                     $(sel).select2({
@@ -83,8 +83,8 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         });
 
         // Ver detalle de una guía
-        $('#tableRecepciones tbody').on('click', '.btnVer', function () {
-            var id = $(this).data('id');
+        $('#tableRecepciones').on('click', '.action-ver', function () {
+            const id = $(this).data('id');
             abrirModalDetalleRecepcion(id);
         });
 
@@ -293,12 +293,14 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             '  <td><input type="text" class="form-control form-control-sm inpSerie text-uppercase" placeholder="N° serie (si aplica)" /></td>' +
             '  <td><input type="number" class="form-control form-control-sm inpCantidad" min="1" step="1" value="1" /></td>' +
             '  <td><input type="text" class="form-control form-control-sm inpCodActivo text-uppercase" /></td>' +
+            '  <td class="select2-sm"><select class="form-select form-select-sm selEstadoStock select2-show-search" style="width:100%"></select></td>' +
             '  <td class="text-center"><button type="button" class="btn btn-sm btn-link text-danger btnDelRow" title="Quitar"><i class="fe fe-trash-2"></i></button></td>' +
             '</tr>'
         );
         $tb.append(tr);
 
         const $selProd = tr.find('select.selProducto');
+        const $selEstado = tr.find('select.selEstadoStock');
 
         // Opciones de producto con data-* para mejor búsqueda
         const prodOptions = _productosCache.map(p => ({
@@ -316,6 +318,17 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             placeholder: 'Buscar producto…',
             dropdownParent: '#modalRecepcion',
             select2Options: s2ProductoOptions()
+        });
+
+        // ====== Estado Stock por fila ======
+        const estOptions = [
+            { value: 'NUEVO', text: 'NUEVO' },
+            { value: 'USADO', text: 'USADO' }
+        ];
+
+        cargarCombo($selEstado, estOptions, {
+            placeholder: 'Seleccionar',
+            dropdownParent: '#modalRecepcion'
         });
 
         // eventos de fila
@@ -350,12 +363,13 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
 
     // ================== Guardar (anti doble clic) ==================
     async function guardarRecepcion() {
+
         const $btn = $('#btnGuardarRecepcion');
         const oldHtml = $btn.html();
         $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Guardando…');
 
         try {
-            // cabecera
+            // ===== Cabecera =====
             const header = {
                 NumGuia: ($('#recNumGuia').val() || '').trim(),
                 OrdenCompra: ($('#recOrdenCompra').val() || '').trim(),
@@ -363,28 +377,31 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                 ProveedorRuc: $('#recProveedor').val() || null,
                 AreaGestion: ($('#recAreaGestion').val() || '').trim(),
                 ClaseStock: ($('#recClaseStock').val() || '').trim(),
-                EstadoStock: ($('#recEstadoStock').val() || '').trim(),
                 IndTransferencia: 'N',
                 Observaciones: ($('#recObs').val() || '').trim()
             };
 
-            if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha || !header.AreaGestion || !header.ClaseStock || !header.EstadoStock) {
+            if (!header.NumGuia || !header.ProveedorRuc || !header.Fecha || !header.AreaGestion || !header.ClaseStock) {
                 swal({ text: "Complete los campos obligatorios (*) de la cabecera.", icon: "warning" });
                 return;
             }
 
-            // detalle
+            // ===== Detalle =====
             const items = [];
             const errores = [];
             let fila = 0;
             const seriesKeys = new Set();
+            const estadosValidos = new Set(['NUEVO', 'USADO']); // validación explícita
+
 
             $('#tblDetalleRecepcion tbody tr').each(function () {
                 fila++;
                 const $tr = $(this);
                 const $optSel = $tr.find('.selProducto option:selected');
+                const $optEstStock = $tr.find('.selEstadoStock option:selected');
 
                 const codProd = $optSel.val();
+                const estStock = $optEstStock.val();
                 const ind = ($optSel.data('serializable') || 'S');
                 const numSerie = ($tr.find('.inpSerie').val() || '').trim();
                 const cant = parseInt($tr.find('.inpCantidad').val() || '0', 10);
@@ -393,6 +410,12 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                 if (!codProd) {
                     errores.push(`Fila ${fila}: producto es obligatorio.`);
                     return;
+                }
+
+                if (!estStock) {
+                    errores.push(`Fila ${fila}: seleccione Estado Stock.`);
+                } else if (!estadosValidos.has(estStock)) {
+                    errores.push(`Fila ${fila}: Estado Stock inválido (${estStock}).`);
                 }
 
                 if (ind === 'S') {
@@ -410,7 +433,8 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                     SerieProductoId: null,
                     NumSerie: (ind === 'S') ? numSerie : null,
                     Cantidad: cant,
-                    CodActivo: codAct
+                    CodActivo: codAct,
+                    StkEstado: estStock
                 });
             });
 
@@ -509,11 +533,13 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                 { data: 'UsuCreacion', defaultContent: '' },
                 {
                     data: null,
-                    className: 'dt-center nowrap',
+                    className: 'text-center nowrap',
+                    orderable: false,
                     render: function (r) {
-                        return '' +
-                            '<button type="button" class="btn btn-sm btn-outline-primary btnVer" data-id="' + r.Id + '">' +
-                            '<i class="fe fe-eye me-1"></i>Ver</button>';
+                        return '<i class="fe fe-eye fs-6 text-primary action-ver" ' +
+                            'data-id="' + (r.Id || '') + '" ' +
+                            'style="cursor:pointer;" ' +
+                            'title="Ver detalle" aria-label="Ver detalle"></i>';
                     }
                 }
             ],
@@ -540,7 +566,7 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
     function limpiarModal() {
 
         $('#modalRecepcion input').val('');
-        $('#recProveedor, #recAreaGestion, #recClaseStock, #recEstadoStock').val(null).trigger('change');
+        $('#recProveedor, #recAreaGestion, #recClaseStock').val(null).trigger('change');
         $('#recFecha').val(new Date().toISOString().slice(0, 10));
 
        $('#tblDetalleRecepcion tbody').empty();
@@ -564,14 +590,6 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         });
 
         $('#recClaseStock').select2({
-            dropdownParent: $('#modalRecepcion'),
-            width: '100%',
-            placeholder: 'Seleccionar',
-            allowClear: true,
-            minimumResultsForSearch: 0
-        });
-
-        $('#recEstadoStock').select2({
             dropdownParent: $('#modalRecepcion'),
             width: '100%',
             placeholder: 'Seleccionar',
@@ -630,7 +648,7 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
         <td>${safe(d.NumSerie)}</td>
         <td class="text-end">${safe(d.Cantidad)}</td>
         <td>${safe(d.CodActivo)}</td>
-        <td>${safe(d.Observaciones)}</td>
+        <td>${safe(d.StkEstado)}</td>
       </tr>`;
         }).join('');
 
@@ -648,8 +666,7 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
             <div class="col-md-3"><b>Área Gestión:</b> ${safe(gr.AreaGestion)}</div>
             <div class="col-md-3"><b>Clase Stock:</b> ${safe(gr.ClaseStock)}</div>
 
-            <div class="col-md-3"><b>Estado Stock:</b> ${safe(gr.EstadoStock)}</div>
-            <div class="col-md-9"><b>Observaciones:</b> ${safe(gr.Observaciones)}</div>
+            <div class="col-md-12"><b>Observaciones:</b> ${safe(gr.Observaciones)}</div>
         </div>
     </div>
 
@@ -662,7 +679,7 @@ var AdministrarGuiaRecepcionProveedor = (function ($) {
                     <th>Serie</th>
                     <th class="text-end">Cantidad</th>
                     <th>Cód. Activo</th>
-                    <th>Observaciones</th>
+                    <th>Est. Stock</th>
                 </tr>
             </thead>
             <tbody>

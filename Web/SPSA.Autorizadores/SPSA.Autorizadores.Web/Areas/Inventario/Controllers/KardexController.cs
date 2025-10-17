@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Kardex;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieProducto;
-using SPSA.Autorizadores.Web.Utiles;
 
 namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 {
@@ -23,26 +21,26 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<JsonResult> Registrar(RegistrarMovKardexCommand command)
+        public ActionResult Movimientos()
         {
-            command.Usuario = WebSession.Login;
-            var respuesta = await _mediator.Send(command);
-            return Json(respuesta);
+            return View();
         }
 
         [HttpGet]
-        public async Task<JsonResult> ListarPaginado(ListarPaginadoMovKardexQuery request)
+        public async Task<ActionResult> DescargarPorFechas(DateTime fechaInicio, DateTime fechaFin)
         {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta, JsonRequestBehavior.AllowGet);
-        }
+            var result = await _mediator.Send(new DescargarMovKardexPorFechasCommand { FechaInicio = fechaInicio, FechaFin = fechaFin });
 
-        [HttpGet]
-        public async Task<JsonResult> ListarPaginadoPorProducto(ListarPaginadoMovKardexPorProductoQuery request)
-        {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta, JsonRequestBehavior.AllowGet);
+            if (!result.Ok || result.Archivo == null)
+            {
+                return Content("No se pudo generar el archivo: " + result.Mensaje);
+            }
+
+            var bytes = Convert.FromBase64String(result.Archivo);
+
+            return File(bytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                result.NombreArchivo);
         }
     }
 }

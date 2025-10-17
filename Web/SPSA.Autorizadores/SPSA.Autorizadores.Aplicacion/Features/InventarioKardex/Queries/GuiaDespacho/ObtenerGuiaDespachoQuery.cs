@@ -84,6 +84,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                         CantidadConfirmada = item.CantidadConfirmada,
                         CodActivo = item.CodActivo,
                         Observaciones = item.Observaciones,
+                        StkEstado = item.StkEstado,
                         NumSerie = item.SerieProducto?.NumSerie,
                         EsSerializable = item.SerieProductoId.HasValue
                     };
@@ -113,7 +114,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
                     IndEstado = gd.IndEstado,
                     AreaGestion = gd.AreaGestion,
                     ClaseStock = gd.ClaseStock,
-                    EstadoStock = gd.EstadoStock,
                     Observaciones = gd.Observaciones,
                     IndConfirmacion = gd.IndConfirmacion,
                     FecConfirmacion = gd.FecConfirmacion,

@@ -11,6 +11,7 @@
         public decimal Cantidad { get; set; }
         public string CodActivo { get; set; }
         public string Observaciones { get; set; }
+        public string StkEstado { get; set; }
         public string NumSerie { get; set; }
         public bool EsSerializable { get; set; }
 

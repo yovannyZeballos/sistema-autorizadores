@@ -51,10 +51,10 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
 
             try
             {
-                if (request.GuiaDespachoId <= 0) 
+                if (request.GuiaDespachoId <= 0)
                     throw new InvalidOperationException("Guía de despacho no válida.");
 
-                if (request.Lineas == null || request.Lineas.Count == 0) 
+                if (request.Lineas == null || request.Lineas.Count == 0)
                     throw new InvalidOperationException("No hay ítems a confirmar.");
 
 
@@ -81,7 +81,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                     {
                         Cantidad = g.Sum(x => x.Cantidad),
                         NumSerie = g.Select(x => x.NumSerie).FirstOrDefault(),
-                        CodProd = g.Select(x => x.CodProducto).FirstOrDefault()
+                        CodProd = g.Select(x => x.CodProducto).FirstOrDefault(),
+                        StkEstado = g.Select(x => (x.StkEstado ?? "").Trim().ToUpperInvariant()).FirstOrDefault(s => s == "NUEVO" || s == "USADO")
                     });
 
                 var usarTransito = gd.UsarTransitoDestino;
@@ -92,8 +93,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                 var errores = new List<string>();
 
                 // Planes a aplicar si todo está OK
-                var planSerializables = new List<(GuiaDespachoDetalle det, Mae_SerieProducto serie)>();
-                var planNoSerializables = new List<(GuiaDespachoDetalle det, decimal qty)>();
+                //var planSerializables = new List<(GuiaDespachoDetalle det, Mae_SerieProducto serie)>();
+                //var planNoSerializables = new List<(GuiaDespachoDetalle det, decimal qty)>();
+
+                var planSerializables = new List<(GuiaDespachoDetalle det, Mae_SerieProducto serie, string est)>();
+                var planNoSerializables = new List<(GuiaDespachoDetalle det, decimal qty, string est)>();
 
                 foreach (var det in gd.Detalles)
                 {
@@ -133,7 +137,15 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                             continue;
                         }
 
-                        planSerializables.Add((det, serie));
+                        // SOLO del payload
+                        var est = (linea.StkEstado ?? "").Trim().ToUpperInvariant();
+                        if (est != "NUEVO" && est != "USADO")
+                        { 
+                            errores.Add($"El detalle {det.Id}: Estado de stock inválido o vacío (serializable)."); 
+                            continue; 
+                        }
+
+                        planSerializables.Add((det, serie, est));
 
                     }
                     else
@@ -151,7 +163,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                             continue;
                         }
 
-                        planNoSerializables.Add((det, reqCant));
+                        var est = (linea.StkEstado ?? "").Trim().ToUpperInvariant();
+                        if (est != "NUEVO" && est != "USADO")
+                        {
+                            errores.Add($"El detalle {det.Id}: Estado de stock inválido o vacío (no serializable).");
+                            continue;
+                        }
+
+                        planNoSerializables.Add((det, reqCant, est));
                     }
                 }
 
@@ -181,7 +200,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         CodLocalDestino = gd.CodLocalDestino,
                         AreaGestion = gd.AreaGestion,
                         ClaseStock = gd.ClaseStock,
-                        EstadoStock = gd.EstadoStock,
                         Observaciones = string.IsNullOrWhiteSpace(request.Observaciones) ? null : request.Observaciones.Trim(),
                         IndTransferencia = "S",
                         IndEstado = "REGISTRADA",
@@ -196,16 +214,18 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                 var deltas = new Dictionary<string, DeltaPair>(StringComparer.OrdinalIgnoreCase);
 
                 // Serializables: 1 por línea
-                foreach (var (det, serie) in planSerializables)
+                foreach (var (det, serie, est) in planSerializables)
                 {
                     // mover al DESTINO -> DISPONIBLE (entra)
                     serie.CodEmpresa = gd.CodEmpresaDestino;
                     serie.CodLocal = gd.CodLocalDestino;
                     serie.IndEstado = "DISPONIBLE";
                     serie.StkActual = 1;
+                    serie.StkEstado = est;
                     serie.FecIngreso = request.Fecha.Date;
                     serie.UsuModifica = request.UsuCreacion;
                     serie.FecModifica = DateTime.Now;
+
                     _contexto.RepositorioMaeSerieProducto.Actualizar(serie);
 
                     // stock destino: +1 disp, -1 trans (si se usó tránsito)
@@ -225,13 +245,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                             SerieProductoId = serie.Id,
                             Cantidad = 1,
                             CodActivo = det.CodActivo,
-                            Observaciones = det.Observaciones
+                            Observaciones = det.Observaciones,
+                            StkEstado = est
                         });
                     }
                 }
 
                 // No serializables: sumar qty solicitada
-                foreach (var (det, qty) in planNoSerializables)
+                foreach (var (det, qty, est) in planNoSerializables)
                 {
                     AddDelta(deltas, det.CodProducto, gd.CodEmpresaDestino, gd.CodLocalDestino, disp: +qty, trans: usarTransito ? -qty : 0m);
 
@@ -247,7 +268,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                             SerieProductoId = null,
                             Cantidad = qty,
                             CodActivo = det.CodActivo,
-                            Observaciones = det.Observaciones
+                            Observaciones = det.Observaciones,
+                            StkEstado = est
                         });
                     }
                 }
@@ -397,6 +419,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
         {
             while (ex != null) { if (ex is PostgresException pg) return pg; ex = ex.InnerException; }
             return null;
+        }
+
+        private static bool EsEstadoValido(string v)
+        {
+            v = (v ?? "").Trim().ToUpperInvariant();
+            return v == "NUEVO" || v == "USADO";
         }
     }
 }

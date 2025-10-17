@@ -16,7 +16,6 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string CodLocalDestino { get; set; }
         public string AreaGestion { get; set; }
         public string ClaseStock { get; set; }
-        public string EstadoStock { get; set; }
         public string Observaciones { get; set; }
         public string IndTransferencia { get; set; }
         public string IndEstado { get; set; }
