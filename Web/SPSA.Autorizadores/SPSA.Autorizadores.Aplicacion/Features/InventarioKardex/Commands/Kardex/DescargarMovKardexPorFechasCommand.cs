@@ -10,6 +10,7 @@ using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Infraestructura.Contexto;
+using SPSA.Autorizadores.Infraestructura.Repositorio;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex
 {
@@ -21,12 +22,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Karde
 
     public class DescargarMovKardexPorFechasHandler : IRequestHandler<DescargarMovKardexPorFechasCommand, RespuestaComunExcelDTO>
     {
-        private readonly ISGPContexto _contexto;
+        private readonly IRepositorioMovKardex _repositorioMovKardex;
         private readonly ILogger _logger;
 
-        public DescargarMovKardexPorFechasHandler()
+        public DescargarMovKardexPorFechasHandler(IRepositorioMovKardex repositorioMovKardex)
         {
-            _contexto = new SGPContexto();
+            _repositorioMovKardex = repositorioMovKardex;
             _logger = SerilogClass._log;
         }
 
@@ -36,7 +37,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Karde
 
             try
             {
-                var table = await _contexto.RepositorioMovKardex.DescargarMovKardexPorFechas(r.FechaInicio, r.FechaFin);
+                var table = await _repositorioMovKardex.DescargarMovKardexPorFechas(r.FechaInicio, r.FechaFin);
                 if (table.Rows.Count == 0)
                 {
                     resp.Ok = false;

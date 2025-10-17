@@ -5,7 +5,7 @@ using SPSA.Autorizadores.Dominio.Entidades;
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-    public interface IRepositorioMovKardex : IRepositorioGenerico<Mov_Kardex>
+    public interface IRepositorioMovKardex
     {
         Task<DataTable> DescargarMovKardexPorFechas(DateTime fechaInicio, DateTime fechaFin);
     }

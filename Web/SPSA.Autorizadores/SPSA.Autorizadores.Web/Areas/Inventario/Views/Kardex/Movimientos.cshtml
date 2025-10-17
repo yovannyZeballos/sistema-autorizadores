@@ -5,15 +5,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section css{
+    <style>
+        .form-control-sm.date-sm-fix {
+            height: auto;
+            min-height: calc(1.5em + .5rem + 2px);
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            line-height: 1.5;
+        }
+
+            .form-control-sm.date-sm-fix::-webkit-datetime-edit {
+                line-height: 1.5;
+                color: inherit;
+                opacity: 1;
+            }
+
+            .form-control-sm.date-sm-fix::-webkit-calendar-picker-indicator {
+                opacity: 1;
+            }
+    </style>
+}
+
+
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">Administrar Proveedores</div>
+        <div class="page-title">Reporte de kardex</div>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
             <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
-            <li class="breadcrumb-item1 active">Movimiento</li>
+            <li class="breadcrumb-item1 active">Reporte</li>
             <li class="breadcrumb-item1 active">Kardex</li>
         </ol>
     </div>
@@ -21,65 +44,70 @@
 
 <div class="col-xl-12">
     <div class="card overflow-hidden">
-        @Html.Partial("_CardHeader", "Movimiento Kardex")
+        @Html.Partial("_CardHeader", "Filtros")
         <div class="card-body">
-            <div class="row mb-3">
+            <div class="row g-2">
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="fDesde" class="form-label">Desde</label>
-                        <input type="date" id="fDesde" class="form-control form-control-sm" />
+                        <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="fHasta" class="form-label">Hasta</label>
-                        <input type="date" id="fHasta" class="form-control form-control-sm" />
+                        <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
                     </div>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+                @*<div class="col-md-2 d-flex align-items-end">
                     <button id="btnDescargarKardex" class="btn btn-sm btn-success w-100">
                         <i class="fe fe-download me-1"></i> Descargar Kardex
                     </button>
-                </div>
+                </div>*@
+            </div>
+            <div class="my-3">
+                <button id="btnDescargarKardex" class="btn btn-sm btn-primary me-2">
+                    <i class="fe fe-download me-1"></i> Movimientos kardex
+                </button>
             </div>
 
             @*<div class="row">
-                <div>
-                    <button id="btnNuevoProveedor" class="btn btn-sm btn-primary me-2 mb-2">
-                        <i class="fe fe-plus"></i> Nuevo
-                    </button>
-                    <button id="btnEditarProveedor" class="btn btn-sm btn-primary me-2 mb-2">
-                        <i class="fe fe-edit-2"></i> Modificar
-                    </button>
-                    <button id="btnEliminarProveedor" class="btn btn-sm btn-primary me-2 mb-2">
-                        <i class="fe fe-trash"></i> Eliminar
-                    </button>
-                </div>
-            </div>*@
+            <div>
+                <button id="btnNuevoProveedor" class="btn btn-sm btn-primary me-2 mb-2">
+                    <i class="fe fe-plus"></i> Nuevo
+                </button>
+                <button id="btnEditarProveedor" class="btn btn-sm btn-primary me-2 mb-2">
+                    <i class="fe fe-edit-2"></i> Modificar
+                </button>
+                <button id="btnEliminarProveedor" class="btn btn-sm btn-primary me-2 mb-2">
+                    <i class="fe fe-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>*@
             @*<div class="row">
-                <div class="col-12">
-                    <table id="tableProveedores" class="table table-bordered text-nowrap border-bottom">
-                        <thead class="thead-light">
-                            <tr>
-                                <th style="width: 30px; text-align: center;">
-                                    <input type="checkbox" id="checkAllRows" />
-                                </th>
-                                <th>Ruc</th>
-                                <th>RazonSocial</th>
-                                <th>Activo</th>
-                                <th>U. Creacion</th>
-                                <th>F. Creacion</th>
-                                <th>U. Modifica</th>
-                                <th>F. Modifica</th>
-                                <th>U. Elimina</th>
-                                <th>F. Elimina</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>*@
+            <div class="col-12">
+                <table id="tableProveedores" class="table table-bordered text-nowrap border-bottom">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width: 30px; text-align: center;">
+                                <input type="checkbox" id="checkAllRows" />
+                            </th>
+                            <th>Ruc</th>
+                            <th>RazonSocial</th>
+                            <th>Activo</th>
+                            <th>U. Creacion</th>
+                            <th>F. Creacion</th>
+                            <th>U. Modifica</th>
+                            <th>F. Modifica</th>
+                            <th>U. Elimina</th>
+                            <th>F. Elimina</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>*@
 
         </div>
     </div>
