@@ -690,9 +690,9 @@
     <Compile Include="Features\SolicitudCodComercio\Commands\ImportarMaeLocalComercioCommand.cs" />
     <Compile Include="Features\SolicitudCodComercio\Commands\ImportarSolicitudCodComercioCommand.cs" />
     <Compile Include="Features\SolicitudCodComercio\DTOs\ListarSolicitudCComercioCabDTO.cs" />
-    <Compile Include="Features\SolicitudCodComercio\DTOs\MaeCodComercioDTO.cs" />
-    <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioCabDTO.cs" />
-    <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioDetDTO.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\MaeCodComercioDto.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\CCom_SolicitudCabDto.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\CCom_SolicitudDetDto.cs" />
     <Compile Include="Features\SolicitudCodComercio\Queries\ListarSolicitudCComercioCabQuery.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\ActualizarMotivoRechazoCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudEliminarCommand.cs" />

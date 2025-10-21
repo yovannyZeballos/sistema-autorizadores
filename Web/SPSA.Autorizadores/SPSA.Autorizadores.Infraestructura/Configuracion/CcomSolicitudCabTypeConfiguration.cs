@@ -8,23 +8,24 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
     {
         public CcomSolicitudCabTypeConfiguration()
         {
-            ToTable("CCOM_SOLICITUD_CAB", "SGP");
+            ToTable("ccom_solicitud_cabecera", "SGP");
 
             HasKey(cab => cab.NroSolicitud);
 
             Property(cab => cab.NroSolicitud)
-                .HasColumnName("NRO_SOLICITUD")
+                .HasColumnName("nro_solicitud")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(cab => cab.TipEstado).HasColumnName("TIP_ESTADO");
-            Property(cab => cab.RznSocial).HasColumnName("RZN_SOCIAL");
-            Property(cab => cab.FecSolicitud).HasColumnName("FEC_SOLICITUD");
-            Property(cab => cab.UsuSolicitud).HasColumnName("USU_SOLICITUD");
-            Property(cab => cab.FecRecepcion).HasColumnName("FEC_RECEPCION");
-            Property(cab => cab.UsuRecepcion).HasColumnName("USU_RECEPCION");
-            Property(cab => cab.FecRegistro).HasColumnName("FEC_REGISTRO");
-            Property(cab => cab.UsuRegistro).HasColumnName("USU_REGISTRO");
-            Property(cab => cab.FecCreacion).HasColumnName("FEC_CREACION");
+            Property(cab => cab.RznSocial).HasColumnName("rzn_social");
+            Property(cab => cab.TipEstado).HasColumnName("tip_estado");
+            
+            Property(cab => cab.FecSolicitud).HasColumnName("fec_solicitud");
+            Property(cab => cab.UsuSolicitud).HasColumnName("usu_solicitud");
+            Property(cab => cab.FecRecepcion).HasColumnName("fec_recepcion");
+            Property(cab => cab.UsuRecepcion).HasColumnName("usu_recepcion");
+            Property(cab => cab.FecRegistro).HasColumnName("fec_registro");
+            Property(cab => cab.UsuRegistro).HasColumnName("usu_registro");
+            Property(cab => cab.FecCreacion).HasColumnName("fec_creacion");
         }
     }
 }

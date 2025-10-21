@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs
 {
-    public class SolicitudCComercioCabDTO
+    public class CCom_SolicitudCabDto
     {
-        public decimal NroSolicitud { get; set; }
+        public int NroSolicitud { get; set; }
         public string RznSocial { get; set; }
         public string TipEstado { get; set; }
         public DateTime? FecSolicitud { get; set; }
@@ -14,7 +14,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs
         public string UsuRecepcion { get; set; }
         public DateTime? FecRegistro { get; set; }
         public string UsuRegistro { get; set; }
+        public DateTime? FecCreacion { get; set; }
 
-        public List<SolicitudCComercioDetDTO> Detalles { get; set; }
+        public List<CCom_SolicitudDetDto> Detalles { get; set; }
     }
 }

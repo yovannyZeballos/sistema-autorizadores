@@ -7,17 +7,18 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
     {
         public CcomSolicitudDetTypeConfiguration()
         {
-            ToTable("CCOM_SOLICITUD_DET", "SGP");
+            ToTable("ccom_solicitud_detalle", "SGP");
 
-            HasKey(det => new { det.NroSolicitud, det.CodLocalAlterno });
+            HasKey(det => new { det.NroSolicitud, det.CodEmpresa, det.CodLocal });
 
-            Property(det => det.NroSolicitud).HasColumnName("NRO_SOLICITUD");
-            Property(det => det.CodLocalAlterno).HasColumnName("COD_LOCAL_ALTERNO");
-            Property(det => det.TipEstado).HasColumnName("TIP_ESTADO");
-            Property(det => det.FecCreacion).HasColumnName("FEC_CREACION");
-            Property(det => det.UsuCreacion).HasColumnName("USU_CREACION");
-            Property(det => det.FecModifica).HasColumnName("FEC_MODIFICA");
-            Property(det => det.UsuModifica).HasColumnName("USU_MODIFICA");
+            Property(det => det.NroSolicitud).HasColumnName("nro_solicitud");
+            Property(det => det.CodEmpresa).HasColumnName("cod_empresa");
+            Property(det => det.CodLocal).HasColumnName("cod_local");
+            Property(det => det.TipEstado).HasColumnName("tip_estado");
+            Property(det => det.FecCreacion).HasColumnName("fec_creacion");
+            Property(det => det.UsuCreacion).HasColumnName("usu_creacion");
+            Property(det => det.FecModifica).HasColumnName("fec_modifica");
+            Property(det => det.UsuModifica).HasColumnName("usu_modifica");
         }
     }
 }

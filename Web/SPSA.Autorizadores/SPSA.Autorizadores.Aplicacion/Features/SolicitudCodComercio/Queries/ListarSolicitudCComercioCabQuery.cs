@@ -15,10 +15,11 @@ using Serilog;
 using SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs;
 using System.Linq;
 using System.Data.Entity;
+using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecepcion;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
 {
-    public class ListarSolicitudCComercioCabQuery : IRequest<GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>>
+    public class ListarSolicitudCComercioCabQuery : IRequest<GenericResponseDTO<PagedResult<CCom_SolicitudCabDto>>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -26,7 +27,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
         public string TipEstado { get; set; }
     }
 
-    public class ListarSolicitudCComercioCabHandler : IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>>
+    public class ListarSolicitudCComercioCabHandler : IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<CCom_SolicitudCabDto>>>
     {
         private readonly IMapper _mapper;
         private readonly ISGPContexto _contexto;
@@ -39,12 +40,12 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
             _logger = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>> Handle(ListarSolicitudCComercioCabQuery request, CancellationToken cancellationToken)
+        public async Task<GenericResponseDTO<PagedResult<CCom_SolicitudCabDto>>> Handle(ListarSolicitudCComercioCabQuery request, CancellationToken cancellationToken)
         {
-            var response = new GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>
+            var response = new GenericResponseDTO<PagedResult<CCom_SolicitudCabDto>>
             {
                 Ok = true,
-                Data = new PagedResult<SolicitudCComercioCabDTO>()
+                Data = new PagedResult<CCom_SolicitudCabDto>()
             };
 
             try
@@ -74,7 +75,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
                 Expression<Func<CCom_SolicitudCab, bool>> predicate = Expression.Lambda<Func<CCom_SolicitudCab, bool>>(combined, param);
 
 
-                var pagedSolicitudes = await _contexto.RepositorioCComSolicitudCab.ObtenerPaginado(
+                var pagedRegistros = await _contexto.RepositorioCComSolicitudCab.ObtenerPaginado(
                     predicado: predicate,
                     pageNumber: request.PageNumber,
                     pageSize: request.PageSize,
@@ -83,45 +84,29 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Queries
                     includes: cab => cab.Detalles.Select(det => det.Comercios)
                 );
 
-                var codLocales = pagedSolicitudes.Items
-                    .SelectMany(cab => cab.Detalles)
-                    .Select(det => det.CodLocalAlterno.ToString())
-                    .Distinct()
-                    .ToList();
-
-                var locales = await _contexto.RepositorioMaeLocal.Obtener(x => codLocales.Contains(x.CodLocalAlterno))
-                            .Join(_contexto.RepositorioMaeEmpresa.Obtener(),
-                                  loc => loc.CodEmpresa,
-                                  emp => emp.CodEmpresa,
-                                  (loc, emp) => new
-                                  {
-                                      loc.CodLocalAlterno,
-                                      loc.NomLocal,
-                                      emp.NomEmpresa
-                                  })
-                            .ToListAsync();
-
-                foreach (var cab in pagedSolicitudes.Items)
+                foreach (var cab in pagedRegistros.Items)
                 {
                     foreach (var det in cab.Detalles)
                     {
-                        var localData = locales.FirstOrDefault(l => l.CodLocalAlterno == det.CodLocalAlterno.ToString());
-                        if (localData != null)
-                        {
-                            det.NomLocal = localData.NomLocal;
-                            det.NomEmpresa = localData.NomEmpresa;
-                        }
+                        //var nomLocal = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == det.CodEmpresa && p.CodLocal == det.CodLocal)
+                        //                                                    .Select(p => p.NomLocal)
+                        //                                                    .FirstOrDefaultAsync() ?? string.Empty;
+
+                        var nomLocal = await _contexto.RepositorioMaeLocal.Obtener(p => p.CodEmpresa == det.CodEmpresa && p.CodLocal == det.CodLocal)
+                                                                            .Select(p => p.NomLocal)
+                                                                            .FirstOrDefaultAsync() ?? string.Empty;
+                        det.NomLocal = nomLocal;
+                        det.NomEmpresa = nomLocal;
                     }
                 }
 
-                var mappedItems = _mapper.Map<List<SolicitudCComercioCabDTO>>(pagedSolicitudes.Items);
+                var mappedItems = _mapper.Map<List<CCom_SolicitudCabDto>>(pagedRegistros.Items);
 
-                var pagedResult = new PagedResult<SolicitudCComercioCabDTO>
+                var pagedResult = new PagedResult<CCom_SolicitudCabDto>
                 {
-                    PageNumber = pagedSolicitudes.PageNumber,
-                    PageSize = pagedSolicitudes.PageSize,
-                    TotalRecords = pagedSolicitudes.TotalRecords,
-                    TotalPages = pagedSolicitudes.TotalPages,
+                    PageNumber = pagedRegistros.PageNumber,
+                    PageSize = pagedRegistros.PageSize,
+                    TotalRecords = pagedRegistros.TotalPages,
                     Items = mappedItems
                 };
 
