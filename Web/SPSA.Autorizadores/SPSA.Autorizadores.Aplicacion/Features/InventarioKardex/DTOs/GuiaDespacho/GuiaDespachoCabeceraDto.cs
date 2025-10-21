@@ -20,7 +20,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespa
 
         public string AreaGestion { get; set; }
         public string ClaseStock { get; set; }
-        public string EstadoStock { get; set; }
         public string Observaciones { get; set; }
 
 

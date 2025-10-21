@@ -22,7 +22,6 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.CodLocalDestino).HasColumnName("cod_local_destino");
             Property(x => x.AreaGestion).HasColumnName("area_gestion");
             Property(x => x.ClaseStock).HasColumnName("clase_stock");
-            Property(x => x.EstadoStock).HasColumnName("estado_stock");
             Property(x => x.Observaciones).HasColumnName("observaciones");
             Property(x => x.IndTransferencia).HasColumnName("ind_transferencia");
             Property(x => x.IndEstado).HasColumnName("ind_estado");

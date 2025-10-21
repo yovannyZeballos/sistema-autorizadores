@@ -15,6 +15,7 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.CodProducto).HasColumnName("cod_producto");
             Property(x => x.NumSerie).HasColumnName("num_serie");
             Property(x => x.IndEstado).HasColumnName("ind_estado");
+            Property(x => x.StkEstado).HasColumnName("stk_estado");
             Property(x => x.CodEmpresa).HasColumnName("cod_empresa");
             Property(x => x.CodLocal).HasColumnName("cod_local");
             Property(x => x.FecIngreso).HasColumnName("fec_ingreso");

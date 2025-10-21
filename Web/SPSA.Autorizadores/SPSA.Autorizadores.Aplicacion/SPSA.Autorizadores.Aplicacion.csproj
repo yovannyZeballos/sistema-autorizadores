@@ -468,7 +468,7 @@
     <Compile Include="Features\InventarioKardex\Commands\GuiaDespacho\ConfirmarDespachoEnDestinoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\GuiaDespacho\RegistrarGuiaDespachoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\GuiaRecepcion\RegistrarGuiaRecepcionCommand.cs" />
-    <Compile Include="Features\InventarioKardex\Commands\Kardex\RegistrarMovKardexCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\Kardex\DescargarMovKardexPorFechasCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Marca\ActualizarMaeMarcaCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Marca\CrearMaeMarcaCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Marca\EliminarMaeMarcaCommand.cs" />
@@ -492,8 +492,6 @@
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionCabeceraDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\GuiaRecepcionDetalleDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\GuiaRecepcion\ListarGuiaRecepcionDto.cs" />
-    <Compile Include="Features\InventarioKardex\DTOs\Kardex\ListarMovKardexDto.cs" />
-    <Compile Include="Features\InventarioKardex\DTOs\Kardex\MovKardexDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Marca\ListarMaeMarcaDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Marca\MaeMarcaDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Producto\ListarMaeProductoDto.cs" />
@@ -509,8 +507,6 @@
     <Compile Include="Features\InventarioKardex\Queries\GuiaDespacho\ObtenerGuiaDespachoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ListarPaginadoGuiaRecepcionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\GuiaRecepcion\ObtenerGuiaRecepcionQuery.cs" />
-    <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexPorProductoQuery.cs" />
-    <Compile Include="Features\InventarioKardex\Queries\Kardex\ListarPaginadoMovKardexQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Marca\ListarMaeMarcaQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Marca\ListarPaginadoMaeMarcaQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Producto\ListarMaeProductoQuery.cs" />
@@ -521,6 +517,7 @@
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoDisponiblesQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarPaginadoMaeSerieProductoQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ObtenerMaeSerieProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarPaginadoServidoresInventarioQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarSistemaOperativoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarTipoServidorQuery.cs" />
@@ -693,9 +690,9 @@
     <Compile Include="Features\SolicitudCodComercio\Commands\ImportarMaeLocalComercioCommand.cs" />
     <Compile Include="Features\SolicitudCodComercio\Commands\ImportarSolicitudCodComercioCommand.cs" />
     <Compile Include="Features\SolicitudCodComercio\DTOs\ListarSolicitudCComercioCabDTO.cs" />
-    <Compile Include="Features\SolicitudCodComercio\DTOs\MaeCodComercioDTO.cs" />
-    <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioCabDTO.cs" />
-    <Compile Include="Features\SolicitudCodComercio\DTOs\SolicitudCComercioDetDTO.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\MaeCodComercioDto.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\CCom_SolicitudCabDto.cs" />
+    <Compile Include="Features\SolicitudCodComercio\DTOs\CCom_SolicitudDetDto.cs" />
     <Compile Include="Features\SolicitudCodComercio\Queries\ListarSolicitudCComercioCabQuery.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\ActualizarMotivoRechazoCommand.cs" />
     <Compile Include="Features\SolicitudUsuarioASR\Commands\AprobarSolicitudEliminarCommand.cs" />
@@ -756,6 +753,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\ColaboradoresInt\Commands\" />
+    <Folder Include="Features\InventarioKardex\DTOs\Kardex\" />
+    <Folder Include="Features\InventarioKardex\Queries\Kardex\" />
     <Folder Include="Features\Operaciones\DTOs\" />
     <Folder Include="Features\Reportes\DTOs\" />
     <Folder Include="Features\TablasMae\Queries\" />

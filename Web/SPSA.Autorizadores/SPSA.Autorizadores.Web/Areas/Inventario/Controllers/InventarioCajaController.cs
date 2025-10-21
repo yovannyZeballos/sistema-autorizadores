@@ -163,11 +163,28 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 			return Json(respuesta);
 		}
 
-        [HttpPost]
-        public async Task<JsonResult> DescargarInventarioCaja(DescargarInventarioCajaCommand request)
+        //[HttpPost]
+        //public async Task<JsonResult> DescargarInventarioCaja(DescargarInventarioCajaCommand request)
+        //{
+        //    var respuesta = await _mediator.Send(request);
+        //    return Json(respuesta);
+        //}
+
+        [HttpGet]
+        public async Task<ActionResult> DescargarInventarioCaja(string codEmpresa)
         {
-            var respuesta = await _mediator.Send(request);
-            return Json(respuesta);
+            var result = await _mediator.Send(new DescargarInventarioCajaCommand { CodEmpresa = codEmpresa });
+
+            if (!result.Ok || result.Archivo == null)
+            {
+                return Content("No se pudo generar el archivo: " + result.Mensaje);
+            }
+
+            var bytes = Convert.FromBase64String(result.Archivo);
+
+            return File(bytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                result.NombreArchivo);
         }
 
 

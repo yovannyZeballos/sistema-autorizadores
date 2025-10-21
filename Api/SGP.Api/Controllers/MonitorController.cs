@@ -87,6 +87,7 @@ namespace SGP.Api.Controllers
                     return StatusCode(500, "El parámetro obtenido es nulo.");
                 }
 
+                //var monitorSpsa = await _bctSpsaService.ObtenerMonitorBctCt3();
                 var monitorSpsa = await _bctSpsaService.ObtenerMonitorBct();
                 monitorSpsa.CodEmpresa = "02";
                 monitorSpsa.Limite = Convert.ToInt32(parametroSpsa.ValParametro);

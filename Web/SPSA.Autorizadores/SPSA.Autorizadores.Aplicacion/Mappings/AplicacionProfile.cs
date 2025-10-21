@@ -27,7 +27,6 @@ using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.AreaGestion;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaDespacho;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecepcion;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Kardex;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Marca;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Proveedor;
@@ -245,11 +244,11 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--SOLICITUD_COD_COMERCIO-->
-            CreateMap<SolicitudCComercioCabDTO, CCom_SolicitudCab>().ReverseMap();
-            CreateMap<SolicitudCComercioDetDTO, CCom_SolicitudDet>().ReverseMap();
-            CreateMap<MaeCodComercioDTO, Mae_CodComercio>().ReverseMap();
+            CreateMap<CCom_SolicitudCabDto, CCom_SolicitudCab>().ReverseMap();
+            CreateMap<CCom_SolicitudDetDto, CCom_SolicitudDet>().ReverseMap();
+            CreateMap<MaeCodComercioDto, Mae_CodComercio>().ReverseMap();
 
-            CreateMap<CCom_SolicitudDet, SolicitudCComercioDetDTO>()
+            CreateMap<CCom_SolicitudDet, CCom_SolicitudDetDto>()
                 .ForMember(dest => dest.NomEmpresa, opt => opt.MapFrom(src => src.NomEmpresa))
                 .ForMember(dest => dest.NomLocal, opt => opt.MapFrom(src => src.NomLocal));
 
@@ -279,7 +278,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<CrearMaeProductoCommand, Mae_Producto>().ReverseMap();
             CreateMap<CrearMaeSerieProductoCommand, Mae_SerieProducto>().ReverseMap();
             CreateMap<CrearMaeProveedorCommand, Mae_Proveedor>().ReverseMap();
-            CreateMap<RegistrarMovKardexCommand, Mov_Kardex>().ReverseMap();
 
             CreateMap<RegistrarGuiaRecepcionCommand, GuiaRecepcionCabecera>().ReverseMap();
             CreateMap<RegistrarGuiaDespachoCommand, GuiaDespachoCabecera>().ReverseMap();
@@ -290,7 +288,6 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ListarMaeProductoDto, Mae_Producto>().ReverseMap();
             CreateMap<ListarMaeSerieProductoDto, Mae_SerieProducto>().ReverseMap();
             CreateMap<ListarMaeProveedorDto, Mae_Proveedor>().ReverseMap();
-            CreateMap<ListarMovKardexDto, Mov_Kardex>().ReverseMap();
 
             #endregion
 

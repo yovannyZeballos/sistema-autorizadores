@@ -10,6 +10,7 @@
         public decimal? CantidadConfirmada { get; set; }
         public string CodActivo { get; set; }
         public string Observaciones { get; set; }
+        public string StkEstado { get; set; }
 
         public virtual GuiaDespachoCabecera GuiaDespacho { get; set; }
         public virtual Mae_SerieProducto SerieProducto { get; set; }

@@ -43,7 +43,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
 
         public string AreaGestion { get; set; }
         public string ClaseStock { get; set; }
-        public string EstadoStock { get; set; }
         public string Observaciones { get; set; }
 
         // Auditoría
@@ -57,6 +56,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
         public decimal Cantidad { get; set; }   // = 1 si serializable; > 0 si no serializable
         public decimal CantidadConfirmada { get; set; } = 0m ;
         public string CodActivo { get; set; }
+        public string StkEstado { get; set; }
+        
         public string Observaciones { get; set; }
     }
 
@@ -94,7 +95,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
 
                 var tipoMov = (request.Cabecera.TipoMovimiento ?? "TRANSFERENCIA").Trim().ToUpper();
                 var esTransferencia = tipoMov == "TRANSFERENCIA";
-                //var esAsignacion = tipoMov == "ASIGNACION_ACTIVO";
 
                 // === Ahora destino también es obligatorio para ASIGNACION_ACTIVO ===
                 if ((esTransferencia) &&
@@ -124,7 +124,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                     CodLocalDestino = string.IsNullOrWhiteSpace(request.Cabecera.CodLocalDestino) ? null : request.Cabecera.CodLocalDestino.Trim(),
                     AreaGestion = string.IsNullOrWhiteSpace(request.Cabecera.AreaGestion) ? null : request.Cabecera.AreaGestion.Trim(),
                     ClaseStock = string.IsNullOrWhiteSpace(request.Cabecera.ClaseStock) ? null : request.Cabecera.ClaseStock.Trim(),
-                    EstadoStock = string.IsNullOrWhiteSpace(request.Cabecera.EstadoStock) ? null : request.Cabecera.EstadoStock.Trim(),
                     Observaciones = string.IsNullOrWhiteSpace(request.Cabecera.Observaciones) ? null : request.Cabecera.Observaciones.Trim(),
                     TipoMovimiento = tipoMov,
                     UsarTransitoDestino = request.Cabecera.UsarTransitoDestino,
@@ -196,6 +195,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         // Marcar salida de la serie
                         serie.StkActual = 0;
                         serie.FecSalida = cab.Fecha;
+                        serie.StkEstado = item.StkEstado;
 
                         // IMPORTANTE: TRANSFERENCIA quedan EN_TRANSITO
                         if (esTransferencia)
@@ -241,6 +241,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.GuiaD
                         CodProducto = item.CodProducto,
                         Cantidad = item.Cantidad,
                         CantidadConfirmada = item.CantidadConfirmada,
+                        StkEstado = item.StkEstado,
                         CodActivo = string.IsNullOrWhiteSpace(item.CodActivo) ? null : item.CodActivo.Trim(),
                         Observaciones = string.IsNullOrWhiteSpace(item.Observaciones) ? null : item.Observaciones.Trim()
                     };

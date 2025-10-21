@@ -164,6 +164,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                                                                             .Select(p => p.NomLocal)
                                                                             .FirstOrDefaultAsync() ?? string.Empty;
 
+
+                    var nomLocalOrigen = (!string.IsNullOrWhiteSpace(g.ProveedorRuc) && !string.IsNullOrWhiteSpace(razonSocial))
+                        ? razonSocial
+                        : localOrigen;
+
                     dtoItems.Add(new GuiaRecepcionCabeceraDto
                     {
                         Id = g.Id,
@@ -172,8 +177,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaRe
                         Proveedor = razonSocial ?? string.Empty,
                         CodEmpresaDestino = g.CodEmpresaDestino,
                         CodLocalDestino = g.CodLocalDestino,
-                        NomLocalOrigen = localOrigen,
-                        NomLocalDestino = localDestino,
+                        NomLocalOrigen = nomLocalOrigen,
+                        NomLocalDestino = localOrigen,
                         Items = g.Detalles.Count,
                         IndEstado = g.IndEstado,
                         UsuCreacion = g.UsuCreacion

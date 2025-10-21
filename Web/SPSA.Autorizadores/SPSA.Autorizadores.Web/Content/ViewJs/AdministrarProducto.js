@@ -46,6 +46,11 @@ var AdministrarProducto = function ($) {
             $('#btnGuardarCambiosModal').hide();
             $('#modalInputCodProducto').prop('disabled', false);
 
+            $('#modalInputCboMarca').val('').trigger('change');
+            $('#modalInputCboTipProducto').val('').trigger('change');
+            $('#modalInputCboAreaGestion').val('').trigger('change');
+
+
             new bootstrap.Modal(document.getElementById('modalNuevoProducto')).show();
         });
 
@@ -467,7 +472,7 @@ var AdministrarProducto = function ($) {
                 { data: "NomTipProducto", title: "Tipo" },
                 { data: "NomAreaGestion", title: "Área" },
                 {
-                    data: "IndActivo", title: "¿Activo?", className: "text-center",
+                    data: "IndActivo", title: "¿Publicado?", className: "text-center",
                     render: d => d === 'S'
                         ? '<i class="fe fe-check text-success fs-6"></i>'
                         : '<i class="fe fe-x text-danger fs-6"></i>'

@@ -23,8 +23,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
     {
         public HttpPostedFileBase Archivo { get; set; }
         public string Usuario { get; set; }
-        public decimal NroSolicitud { get; set; }
-        public List<SolicitudCComercioDetDTO> Locales { get; set; }
+        public int NroSolicitud { get; set; }
+        public List<CCom_SolicitudDetDto> Locales { get; set; }
     }
 
     public class ImportarMaeLocalComercioHandler : IRequestHandler<ImportarMaeLocalComercioCommand, RespuestaComunExcelDTO>
@@ -76,14 +76,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 
                             var maeLocal = await _contexto.RepositorioMaeLocal.Obtener(x => x.CodEmpresa == codEmpresa && x.CodLocal == codLocal).FirstOrDefaultAsync();
 
-                            string codLocalAlternoStr = maeLocal?.CodLocalAlterno;
 
-                            if (!int.TryParse(codLocalAlternoStr, out int codLocalAlterno))
+                            if (maeLocal == null)
                             {
-                                throw new InvalidOperationException($"Código alterno inválido o no encontrado para {codLocal}");
+                                throw new InvalidOperationException($"Local {codLocal} no encontrado.");
                             }
 
-                            var existe = request.Locales.Any(l => l.CodLocalAlterno == codLocalAlterno);
+                            var existe = request.Locales.Any(l => l.CodEmpresa == maeLocal.CodEmpresa && l.CodLocal == maeLocal.CodLocal);
                             if (!existe)
                             {
                                 throw new InvalidOperationException($"Local {maeLocal.NomLocal} no está en la solicitud seleccionada.");
@@ -104,13 +103,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                             listaComercios.Add(new Mae_CodComercio
                             {
                                 NroSolicitud = nroSolicitud,
-                                CodLocalAlterno = codLocalAlterno,
+                                CodEmpresa = codEmpresa,
+                                CodLocal = codLocal,
                                 CodComercio = codComercio,
                                 NomCanalVta = "LINEAL",
                                 DesOperador = desOperador,
                                 NroCaso = nroCaso,
                                 FecComercio = fecComercio,
-                                IndActiva = "S",
+                                IndEstado = "S",
                                 FecCreacion = DateTime.Now,
                                 UsuCreacion = request.Usuario
                             });
@@ -142,7 +142,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                         }
 
                         var solicitudDet = await _contexto.RepositorioCComSolicitudDet
-                            .Obtener(x => x.NroSolicitud == entidad.NroSolicitud && x.CodLocalAlterno == entidad.CodLocalAlterno)
+                            .Obtener(x => x.NroSolicitud == entidad.NroSolicitud && x.CodEmpresa == entidad.CodEmpresa && x.CodLocal == entidad.CodLocal)
                             .FirstOrDefaultAsync();
 
                         if (solicitudDet != null)

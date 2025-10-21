@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using MediatR;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.SerieProducto;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Producto;
 using SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.SerieProducto;
 using SPSA.Autorizadores.Web.Utiles;
 
@@ -81,6 +80,13 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
 
         [HttpGet]
         public async Task<JsonResult> ListarPaginado(ListarPaginadoMaeSerieProductoQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> Obtener(ObtenerMaeSerieProductoQuery request)
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);

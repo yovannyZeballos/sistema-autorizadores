@@ -4,14 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!--Page header-->
+<!-- Page header -->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
         <div class="page-title">Administrar Solicitudes Cod. Comercio</div>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
-            <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
+            <li class="breadcrumb-item1">
+                <a href="@Url.Action("Index", "Home", new { area = "" })">Inicio</a>
+            </li>
             <li class="breadcrumb-item1 active">Solicitudes Cod. Comercio</li>
             <li class="breadcrumb-item1 active">Administrar</li>
         </ol>
@@ -22,50 +24,58 @@
     <div class="card overflow-hidden">
         @Html.Partial("_CardHeader", "Listado de solicitudes")
         <div class="card-body">
-            <div class="col-xl-12">
-                @*<button id="btnModalNuevoColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-user-plus me-1"></i>Nuevo Colaborador</button>
-                    <button id="btnModalModificarColabExt" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-edit me-1"></i>Modificar Colaborador</button>
-                    <button id="btnDescargarPlantilla" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-download me-1"></i>Descargar Plantilla</button>*@
-                <button id="btnImportarSolicitudCab" class="btn btn-sm btn-primary mb-4 ms-1"><i class="fe fe-upload me-1"></i>Importar Solicitud</button>
-                <input type="file" id="excelImportar" style="display: none;">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <button id="btnImportarSolicitudCab" class="btn btn-sm btn-primary">
+                    <i class="fe fe-upload me-1"></i> Importar Solicitud
+                </button>
+                <input type="file" id="excelImportar" style="display:none;" accept=".xlsx,.xls" />
             </div>
-            <div class="col-xl-12">
-                <div class="row">
-                    <table id="tableSolicitudesCab" class="table table-bordered text-nowrap border-bottom">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Nro. Solicitud</th>
-                                <th>Razón Social</th>
-                                <th>Estado</th>
-                                <th>F. Solicitud</th>
-                                <th>F. Recepción</th>
-                                <th>F. Registro</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
+
+            <table id="tableSolicitudesCab" class="table table-bordered text-nowrap border-bottom w-100">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nro. Solicitud</th>
+                        <th>Razón Social</th>
+                        <th>Estado</th>
+                        <th>F. Solicitud</th>
+                        <th>F. Recepción</th>
+                        <th>F. Registro</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>
 
-
-<!-- Modal Detalle y Comercios -->
-<div class="modal fade" id="modalDetalleComercio" tabindex="-1" role="dialog" aria-labelledby="modalDetalleComercioLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Modal: Detalle de solicitud / Comercios -->
+<div class="modal fade" id="modalDetalleComercio" tabindex="-1" aria-hidden="true" aria-labelledby="lblSolicitudHeader">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
+
             <div class="modal-header">
-                <h5 class="modal-title" id="modalDetalleLabel">Detalle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title">
+                    <span id="lblSolicitudHeader">Detalle</span>
+                </h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
+
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-10">
-                        <table id="tableSolicitudDet" class="table table-bordered text-nowrap border-bottom">
-                            <thead class="thead-light">
+                <!-- Row 1: Detalle de locales -->
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="fw-semibold">Locales de la solicitud</div>
+                        <div>
+                            <button id="btnImportarMaeLocalComercio" class="btn btn-sm btn-primary">
+                                <i class="fe fe-upload me-1"></i> Importar Comercios
+                            </button>
+                            <input type="file" id="excelImportarComercios" style="display:none;" accept=".xlsx,.xls" />
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <table id="tableSolicitudDet" class="table table-bordered text-nowrap border-bottom w-100">
+                            <thead class="table-light">
                                 <tr>
-                                    <th>Empresa</th>
                                     <th>Local</th>
                                     <th>Estado</th>
                                 </tr>
@@ -73,117 +83,47 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    <div class="col-md-2 d-flex flex-column align-items-start">
-                        @*<button id="btnNuevoDetalle" class="btn btn-sm btn-primary mb-2">
-                            <i class="fe fe-plus"></i> Nuevo
-                        </button>
-                        <button id="btnEliminarDetalle" class="btn btn-sm btn-danger mb-2">
-                            <i class="fe fe-trash"></i> Eliminar
-                        </button>*@
-                        <button id="btnImportarMaeLocalComercio" class="btn btn-sm btn-primary mb-2">
-                            <i class="fe fe-upload me-1"></i>Importar Comercios
-                        </button>
-                        <input type="file" id="excelImportarComercios" style="display: none;">
-                    </div>
                 </div>
-            </div>
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalComerciosLabel">Comercios</h5>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-10">
-                        <table id="tableLocalComercio" class="table table-bordered text-nowrap border-bottom">
-                            <thead class="thead-light">
+
+                <!-- Row 2: Comercios del local (misma modal body con toolbar dentro) -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="fw-semibold">
+                            Comercios del local: <span id="lblLocalHeader" class="text-secondary"></span>
+                        </div>
+                        <div class="btn-group">
+                            <button id="btnNuevoComercio" class="btn btn-sm btn-primary">
+                                <i class="fe fe-plus"></i> Nuevo
+                            </button>
+                            <button id="btnEditarComercio" class="btn btn-sm btn-outline-primary">
+                                <i class="fe fe-edit"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <table id="tableLocalComercio" class="table table-bordered text-nowrap border-bottom w-100">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Cod. Comercio</th>
                                     <th>Canal Venta</th>
                                     <th>Operador</th>
                                     <th>Activo</th>
+                                    <th>Acciones</th> <!-- Guardar/Cancelar en fila -->
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
-                    </div>
-
-                    <div class="col-md-2 d-flex flex-column align-items-start">
-                        <button id="btnNuevoComercio" class="btn btn-sm btn-primary mb-2">
-                            <i class="fe fe-plus"></i> Nuevo
-                        </button>
-                        <button id="btnGuardarNuevoComercio" class="btn btn-sm btn-primary mb-2" disabled>
-                            <i class="fe fe-save"></i> Guardar
-                        </button>
-                        <button id="btnEditarComercio" class="btn btn-sm btn-primary mb-2">
-                            <i class="fe fe-edit"></i> Editar
-                        </button>
+                        <div class="small text-muted mt-2">
+                            * Para editar, selecciona un registro y pulsa <strong>Editar</strong>.
+                            * Para crear, pulsa <strong>Nuevo</strong>. Usa los botones <em>Guardar/Cancelar</em> dentro de la fila.
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div> <!-- /modal-body -->
+
         </div>
     </div>
 </div>
-
-<!-- Modal Nuevo Cod Comercio -->
-<div class="modal fade" id="modalNuevoCodComercio" tabindex="-1" aria-labelledby="modalNuevoCodComercioLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nuevo Código Comercio</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formNuevoCodComercio">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="form-group">
-                                <label for="txtCodLocalAlterno" class="form-label">Código Local Alterno</label>
-                                <input type="text" id="txtCodLocalAlterno" class="form-control form-control-sm" required>
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="form-group">
-                                <label for="txtCodComercio" class="form-label">Código Comercio</label>
-                                <input type="text" id="txtCodComercio" class="form-control form-control-sm" required>
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="form-group">
-                                <label for="txtNomCanalVta" class="form-label">Canal Venta</label>
-                                <input type="text" id="txtNomCanalVta" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="form-group">
-                                <label for="txtDesOperador" class="form-label">Operador</label>
-                                <select id="txtDesOperador" class="form-select form-select-sm">
-                                    <option value="IZIPAY">IZIPAY</option>
-                                    <option value="NIUBIZ">NIUBIZ</option>
-                                    <option value="DINNERS">DINNERS</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="form-group">
-                                <label for="chkIndActiva" class="form-label">Activo</label>
-                                <select id="chkIndActiva" class="form-select form-select-sm">
-                                    <option value="S">Sí</option>
-                                    <option value="N">No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnGuardarCodComercio">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 
 @section scripts{
     <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
@@ -198,9 +138,9 @@
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
     <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
-    <script src="~/Content/ViewJs/AdministrarSolicitudComercio.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
+    <script src="~/Content/ViewJs/AdministrarSolicitudComercio.js?v=3"></script>
+    <script>
+        $(function () {
             AdministrarSolicitudComercio.init();
         });
     </script>

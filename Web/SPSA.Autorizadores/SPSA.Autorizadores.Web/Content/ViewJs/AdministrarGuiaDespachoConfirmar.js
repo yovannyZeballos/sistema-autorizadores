@@ -67,7 +67,16 @@ var AdministrarConfirmacionDespachos = (function ($) {
             }
 
             if (!codProd) errores.push(`Línea ${detId}: producto vacío.`);
-            lines.push({ DespachoDetalleId: detId, CodProducto: codProd, NumSerie: numSerie, Cantidad: cant });
+
+            const estStock = ($tr.find('.selEstado').val() || '').toUpperCase();
+            if (!estStock) {
+                errores.push(`Línea ${detId}: seleccione estado de stock.`);
+            } else if (estStock !== 'NUEVO' && estStock !== 'USADO') {
+                errores.push(`Línea ${detId}: estado inválido (${estStock}).`);
+            }
+
+
+            lines.push({ DespachoDetalleId: detId, CodProducto: codProd, NumSerie: numSerie, Cantidad: cant, StkEstado: estStock });
         });
 
         if (!lines.length) { swal({ text: "Selecciona al menos una línea a confirmar.", icon: "warning" }); return; }
@@ -305,13 +314,15 @@ var AdministrarConfirmacionDespachos = (function ($) {
 
         const detalles = (gd && gd.Detalles) || [];
         var html = [];
+
         html.push(
             '<div class="table-responsive"><table class="table table-sm table-bordered text-nowrap border-bottom w-100">',
             '<thead class="thead-light"><tr>',
             '<th class="text-center">Seleccionar</th>',
             '<th>Cód. producto</th>',
             '<th>Descripción</th>',
-            '<th>N° de serie</th>',
+            '<th>N° serie</th>',
+            '<th>Est. Stock</th>', 
             '<th class="text-end">Enviado</th>',
             '<th class="text-end">Recibido</th>',
             '<th class="text-end">Pendiente</th>',
@@ -334,6 +345,15 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 input = '<input type="number" min="1" max="' + pend + '" value="' + Math.min(1, pend) + '" class="form-control form-control-sm inpCant" data-id="' + d.Id + '" ' + (pend > 0 ? '' : 'disabled') + ' />';
             }
 
+            var stkEstado = (d.StkEstado || '').toString().toUpperCase();
+
+            const selEstadoHtml = `
+                <select class="form-select form-select-sm selEstado select2-show-search" style="width:100%">
+                  <option value="">Seleccionar</option>
+                  <option value="NUEVO" ${stkEstado === 'NUEVO' ? 'selected' : ''}>NUEVO</option>
+                  <option value="USADO" ${stkEstado === 'USADO' ? 'selected' : ''}>USADO</option>
+                </select>`;
+
             html.push(
                 '<tr data-producto="', (d.CodProducto || ''),
                 '" data-serializable="', (esSer ? 'true' : 'false'),
@@ -342,12 +362,15 @@ var AdministrarConfirmacionDespachos = (function ($) {
                 '<td>', (d.CodProducto || ''), '</td>',
                 '<td>', (d.DesProducto || ''), '</td>',
                 '<td class="cel-serie">', (esSer ? (d.NumSerie || '') : ''), '</td>',
+                `<td class="select2-sm">${selEstadoHtml}</td>`,
                 '<td class="text-end">', cant, '</td>',
                 '<td class="text-end">', conf, '</td>',
                 '<td class="text-end">', pend, '</td>',
                 '<td class="text-end">', input, '</td>',
                 '</tr>'
             );
+
+            
         });
 
         html.push('</tbody></table></div>');
@@ -355,6 +378,14 @@ var AdministrarConfirmacionDespachos = (function ($) {
         $('#mDetalle').remove(); // limpia anterior
         $('#modalConfirmar .modal-body').append('<div id="mDetalle" class="mt-3"></div>');
         $('#mDetalle').html(html.join(''));
+
+        $('#mDetalle .selEstado').select2({
+            dropdownParent: $('#modalConfirmar'),
+            width: '100%',
+            minimumResultsForSearch: 0,
+            placeholder: 'Seleccionar'
+        });
+
     }
     function initCombosFijos() {
 

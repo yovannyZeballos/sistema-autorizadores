@@ -171,7 +171,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
                         FecCreacion = DateTime.Now,
                         Detalles = listaLocales.Select(local => new CCom_SolicitudDet
                         {
-                            CodLocalAlterno = int.Parse(local.CodLocalAlterno),
+                            CodEmpresa = local.CodEmpresa,
+                            CodLocal = local.CodLocal,
                             FecCreacion = DateTime.Now,
                             UsuCreacion = request.Usuario,
                             TipEstado = "P",

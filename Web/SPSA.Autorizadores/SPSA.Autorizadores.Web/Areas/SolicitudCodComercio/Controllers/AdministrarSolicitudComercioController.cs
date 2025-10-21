@@ -89,17 +89,17 @@ namespace SPSA.Autorizadores.Web.Areas.SolicitudCodComercio.Controllers
 
                 var nroSolicitud = Request.Form["nroSolicitud"];
                 var localesJson = Request.Form["localesJson"];
-                var locales = new List<SolicitudCComercioDetDTO>();
+                var locales = new List<CCom_SolicitudDetDto>();
                 if (!string.IsNullOrWhiteSpace(localesJson))
                 {
-                    locales = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SolicitudCComercioDetDTO>>(localesJson);
+                    locales = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CCom_SolicitudDetDto>>(localesJson);
                 }
 
                 respuesta = await _mediator.Send(new ImportarMaeLocalComercioCommand
                 {
                     Archivo = archivo,
                     Usuario = WebSession.Login,
-                    NroSolicitud = Convert.ToDecimal(nroSolicitud),
+                    NroSolicitud = Convert.ToInt32(nroSolicitud),
                     Locales = locales
                 });
             }

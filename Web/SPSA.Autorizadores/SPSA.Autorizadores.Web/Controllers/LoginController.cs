@@ -133,12 +133,32 @@ namespace SPSA.Autorizadores.Web.Controllers
 
 				WebSession.JerarquiaOrganizacional = jerarquia;
 
-				var local = await _mediator.Send(new ObtenerLocalQuery { Codigo = query.CodLocal });
-				WebSession.Local = query.CodLocal;
-				WebSession.TipoSO = local.TipoSO;
-				WebSession.LocalOfiplan = local.CodigoOfiplan;
-				WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
-				WebSession.CodigoEmpresa = local.CodigoEmpresa;
+                var local = await _mediator.Send(new ObtenerLocalQuery { Codigo = query.CodLocal });
+
+                if (local != null)
+                {
+                    WebSession.Local = query.CodLocal;
+                    WebSession.TipoSO = local.TipoSO;
+                    WebSession.LocalOfiplan = local.CodigoOfiplan;
+                    WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
+                    WebSession.CodigoEmpresa = local.CodigoEmpresa;
+                }
+                else
+                {
+                    var maeLocal = await _mediator.Send(new ObtenerMaeLocalQuery
+                    {
+                        CodEmpresa = query.CodEmpresa,
+                        CodCadena = query.CodCadena,
+                        CodRegion = query.CodRegion,
+                        CodZona = query.CodZona,
+                        CodLocal = query.CodLocal
+                    });
+
+                    WebSession.Local = query.CodLocal;
+                    WebSession.NombreLocal = maeLocal.Data?.NomLocal ?? "LOCAL DESCONOCIDO";
+                    WebSession.CodigoEmpresa = query.CodEmpresa;
+                }
+
 
                 response.Ok = true;
 			}

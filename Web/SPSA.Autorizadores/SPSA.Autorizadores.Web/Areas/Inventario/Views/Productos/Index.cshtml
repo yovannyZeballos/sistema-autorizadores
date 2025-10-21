@@ -218,12 +218,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="modalChkActivo">¿Activo?</label>
+                        <label class="form-label" for="modalChkActivo">¿Habilitado?</label>
                         <input type="checkbox" class="form-check" id="modalChkActivo">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="modalChkActivo">¿Serializable?</label>
+                        <label class="form-label" for="modalChkSerializable">¿Requiere serie?</label>
                         <input type="checkbox" class="form-check" id="modalChkSerializable">
+                        <small class="form-text text-muted">Seleccione si este registro debe estar ligado a un número de serie.</small>
                     </div>
                 </form>
             </div>
@@ -308,10 +309,6 @@
                         <label class="form-label">Fecha de baja <span class="text-danger">*</span></label>
                         <input type="date" id="bajaFecha" class="form-control" />
                     </div>
-                    @*<div class="col-md-8">
-                            <label class="form-label">Observaciones</label>
-                            <input type="text" id="bajaObs" class="form-control form-control-sm" />
-                        </div>*@
                 </div>
                 <div class="alert alert-warning mt-3 mb-0">
                     <strong class="d-block mb-2">Al dar de baja:</strong>

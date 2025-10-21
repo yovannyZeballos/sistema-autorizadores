@@ -24,7 +24,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.GuiaDe
         public int PageSize { get; set; } = 10;
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
-        //public string IndTransferencia { get; set; }
         public string IndEstado { get; set; }
         public string CodEmpresaOrigen { get; set; }
         public string CodLocalOrigen { get; set; }

@@ -130,7 +130,7 @@ namespace SGP.Api.Services.BctService
         {
             using (var connection = new OracleConnection(_conexionBCT))
             {
-                using (var command = new OracleCommand("ADM_SPSA.SF_MONITOR_BCT_TRXS_XMIGR", connection)
+                using (var command = new OracleCommand("ADM_SPSA.SF_MONITOR_BCT_TRXS_XMIGR_CT3", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 })
@@ -203,6 +203,65 @@ namespace SGP.Api.Services.BctService
 
 
                     return monitorBct;
+                }
+            }
+        }
+
+        public async Task<MonitorBctDTO> ObtenerMonitorBctCt3()
+        {
+            using (var connection = new OracleConnection(_conexionBCT))
+            {
+                //    string query = @"
+                //SELECT TRUNC(insertdate) AS DO_FECHA_TRX,
+                //       COUNT(*) AS NO_CANT_TRX
+                //FROM ADM_SPSA.TransactionXmlCT3
+                //WHERE TRUNC(insertdate) = TRUNC(SYSDATE)
+                //GROUP BY TRUNC(insertdate)";
+                string query = @"
+                    SELECT TRUNC(insertdate) AS DO_FECHA_TRX,
+                           COUNT(1) AS NO_CANT_TRX
+                    FROM ADM_SPSA.TransactionXmlCT3
+                    WHERE TRUNC(insertdate) = TRUNC(SYSDATE)
+                    GROUP BY TRUNC(insertdate)";
+
+                using (var command = new OracleCommand(query, connection))
+                {
+                    command.CommandType = CommandType.Text;
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            DateTime fechaTrx = reader.IsDBNull(0)
+                                ? DateTime.Today
+                                : reader.GetDateTime(0);
+
+                            int noCantTrx = reader.IsDBNull(1)
+                                ? 0
+                                : reader.GetInt32(1);
+
+                            return new MonitorBctDTO
+                            {
+                                Fecha = fechaTrx,
+                                //FechaFormato = fechaTrx.ToString("dd MMM yyyy"),
+                                //FechaStr = fechaTrx.ToString(),
+                                Cantidad = noCantTrx
+                            };
+                        }
+                        else
+                        {
+                            // No hay registros hoy
+                            return new MonitorBctDTO
+                            {
+                                FechaHora = DateTime.Today,
+                                //FechaFormato = DateTime.Today.ToString("dd MMM yyyy"),
+                                //FechaStr = DateTime.Today.ToString(),
+                                Cantidad = 0
+                            };
+                        }
+                    }
                 }
             }
         }

@@ -75,7 +75,6 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
             RepositorioMaeProducto = new RepositorioMaeProducto(this);
             RepositorioMaeSerieProducto = new RepositorioMaeSerieProducto(this);
             RepositorioMaeProveedor = new RepositorioMaeProveedor(this);
-            RepositorioMovKardex = new RepositorioMovKardex(this); //QUITAR
 
             RepositorioStockProducto = new RepositorioStockProducto(this);
             RepositorioGuiaRecepcionCabecera = new RepositorioGuiaRecepcionCabecera(this);

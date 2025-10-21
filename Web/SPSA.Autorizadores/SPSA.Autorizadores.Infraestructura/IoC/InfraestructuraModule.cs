@@ -42,7 +42,10 @@ namespace SPSA.Autorizadores.Infraestructura.IoC
 			builder.RegisterType<AgenteCen>().As<IAgenteCen>().InstancePerRequest();
 			builder.RegisterType<AgenteAxteroid>().As<IAgenteAxteroid>().InstancePerRequest();
 
-			base.Load(builder);
+            builder.RegisterType<RepositorioMovKardex>().As<IRepositorioMovKardex>().InstancePerRequest();
+
+
+            base.Load(builder);
 		}
 	}
 }

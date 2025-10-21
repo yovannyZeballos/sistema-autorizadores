@@ -12,7 +12,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.GuiaRecep
         public string Proveedor { get; set; }
         public string CodEmpresaDestino { get; set; }
         public string CodLocalDestino { get; set; }
-        public int Items { get; set; }                  // Cantidad de líneas del detalle
+        public int Items { get; set; }
         public string IndEstado { get; set; }
         public string UsuCreacion { get; set; }
 
