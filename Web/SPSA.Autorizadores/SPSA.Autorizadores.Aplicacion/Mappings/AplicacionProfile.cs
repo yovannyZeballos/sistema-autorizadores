@@ -244,11 +244,11 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             #endregion
 
             #region <--SOLICITUD_COD_COMERCIO-->
-            CreateMap<SolicitudCComercioCabDTO, CCom_SolicitudCab>().ReverseMap();
-            CreateMap<SolicitudCComercioDetDTO, CCom_SolicitudDet>().ReverseMap();
-            CreateMap<MaeCodComercioDTO, Mae_CodComercio>().ReverseMap();
+            CreateMap<CCom_SolicitudCabDto, CCom_SolicitudCab>().ReverseMap();
+            CreateMap<CCom_SolicitudDetDto, CCom_SolicitudDet>().ReverseMap();
+            CreateMap<MaeCodComercioDto, Mae_CodComercio>().ReverseMap();
 
-            CreateMap<CCom_SolicitudDet, SolicitudCComercioDetDTO>()
+            CreateMap<CCom_SolicitudDet, CCom_SolicitudDetDto>()
                 .ForMember(dest => dest.NomEmpresa, opt => opt.MapFrom(src => src.NomEmpresa))
                 .ForMember(dest => dest.NomLocal, opt => opt.MapFrom(src => src.NomLocal));
 

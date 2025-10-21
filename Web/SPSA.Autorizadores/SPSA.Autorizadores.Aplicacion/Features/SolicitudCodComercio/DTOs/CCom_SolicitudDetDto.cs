@@ -2,14 +2,15 @@
 
 namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.DTOs
 {
-    public class SolicitudCComercioDetDTO
+    public class CCom_SolicitudDetDto
     {
-        public decimal NroSolicitud { get; set; }
-        public int CodLocalAlterno { get; set; }
+        public int NroSolicitud { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
         public string NomLocal { get; set; }
         public string NomEmpresa { get; set; }
         public string TipEstado { get; set; }
 
-        public List<MaeCodComercioDTO> Comercios { get; set; }
+        public List<MaeCodComercioDto> Comercios { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 {
     public class CCom_SolicitudCab
     {
-        public decimal NroSolicitud { get; set; }
+        public int NroSolicitud { get; set; }
         public string TipEstado { get; set; }
         public string RznSocial { get; set; }
         public DateTime? FecSolicitud { get; set; }

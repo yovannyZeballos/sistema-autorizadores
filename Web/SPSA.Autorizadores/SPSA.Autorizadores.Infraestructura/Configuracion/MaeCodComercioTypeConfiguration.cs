@@ -7,23 +7,23 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
     {
         public MaeCodComercioTypeConfiguration()
         {
-            ToTable("MAE_LOCAL_COMERCIO", "SGP");
+            ToTable("mae_codcomercio", "SGP");
 
-            HasKey(loc => new { loc.NroSolicitud, loc.CodLocalAlterno, loc.CodComercio });
+            HasKey(loc => new { loc.CodEmpresa, loc.CodLocal, loc.CodComercio });
 
-            Property(loc => loc.NroSolicitud).HasColumnName("NRO_SOLICITUD");
-            Property(loc => loc.CodLocalAlterno).HasColumnName("COD_LOCAL_ALTERNO");
-            Property(loc => loc.CodComercio).HasColumnName("COD_COMERCIO");
-            Property(loc => loc.NomCanalVta).HasColumnName("NOM_CANAL_VTA");
-            Property(loc => loc.DesOperador).HasColumnName("DES_OPERADOR");
-            Property(loc => loc.NroCaso).HasColumnName("NRO_CASO");
-            Property(loc => loc.FecComercio).HasColumnName("FEC_COMERCIO");
-            Property(loc => loc.IndActiva).HasColumnName("IND_ACTIVA");
-            Property(loc => loc.FecCreacion).HasColumnName("FEC_CREACION");
-            Property(loc => loc.UsuCreacion).HasColumnName("USU_CREACION");
-            Property(loc => loc.FecModifica).HasColumnName("FEC_MODIFICA");
-            Property(loc => loc.UsuModifica).HasColumnName("USU_MODIFICA");
-            Property(loc => loc.NomProcesador).HasColumnName("NOM_PROCESADOR");
+            Property(loc => loc.NroSolicitud).HasColumnName("nro_solicitud");
+            Property(loc => loc.CodEmpresa).HasColumnName("cod_empresa");
+            Property(loc => loc.CodLocal).HasColumnName("cod_local");
+            Property(loc => loc.CodComercio).HasColumnName("cod_comercio");
+            Property(loc => loc.NomCanalVta).HasColumnName("nom_canal_vta");
+            Property(loc => loc.DesOperador).HasColumnName("des_operador");
+            Property(loc => loc.NroCaso).HasColumnName("nro_caso");
+            Property(loc => loc.FecComercio).HasColumnName("fec_comercio");
+            Property(loc => loc.IndEstado).HasColumnName("ind_estado");
+            Property(loc => loc.FecCreacion).HasColumnName("fec_creacion");
+            Property(loc => loc.UsuCreacion).HasColumnName("usu_creacion");
+            Property(loc => loc.FecModifica).HasColumnName("fec_modifica");
+            Property(loc => loc.UsuModifica).HasColumnName("usu_modifica");
         }
     }
 }

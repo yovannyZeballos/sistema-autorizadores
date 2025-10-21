@@ -401,7 +401,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             #endregion
 
             #region SOLICITUD_COD_COMERCIO
-            builder.RegisterType<ListarSolicitudCComercioCabHandler>().As<IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<SolicitudCComercioCabDTO>>>>();
+            builder.RegisterType<ListarSolicitudCComercioCabHandler>().As<IRequestHandler<ListarSolicitudCComercioCabQuery, GenericResponseDTO<PagedResult<CCom_SolicitudCabDto>>>>();
             builder.RegisterType<ImportarSolicitudCodComercioHandler>().As<IRequestHandler<ImportarSolicitudCodComercioCommand, RespuestaComunExcelDTO>>();
             builder.RegisterType<ImportarMaeLocalComercioHandler>().As<IRequestHandler<ImportarMaeLocalComercioCommand, RespuestaComunExcelDTO>>();
             builder.RegisterType<CrearEditarMaeCodComercioHandler>().As<IRequestHandler<CrearEditarMaeCodComercioCommand, RespuestaComunDTO>>();

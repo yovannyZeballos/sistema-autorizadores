@@ -15,12 +15,13 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 {
     public class CrearEditarMaeCodComercioCommand : IRequest<RespuestaComunDTO>
     {
-        public decimal NroSolicitud { get; set; }
-        public int CodLocalAlterno { get; set; }
+        public int NroSolicitud { get; set; }
+        public string CodEmpresa { get; set; }
+        public string CodLocal { get; set; }
         public string CodComercio { get; set; }
         public string NomCanalVta { get; set; }
         public string DesOperador { get; set; }
-        public string IndActiva { get; set; }
+        public string IndEstado { get; set; }
         public string UsuCreacion { get; set; }
         public long? NomProcesador { get; set; }
         public bool EsEdicion { get; set; }
@@ -80,12 +81,14 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 
         private async Task<bool> ExisteComercioActivoEnOtroLocal(CrearEditarMaeCodComercioCommand request)
         {
-            if (request.IndActiva == "S")
+            if (request.IndEstado == "S")
             {
                 return await _contexto.RepositorioMaeCodComercio.Existe(x =>
                     x.CodComercio == request.CodComercio &&
-                    x.IndActiva == "S" &&
-                    !(x.NroSolicitud == request.NroSolicitud && x.CodLocalAlterno == request.CodLocalAlterno)
+                    x.IndEstado == "S" &&
+                    !(x.NroSolicitud == request.NroSolicitud && 
+                        x.CodEmpresa== request.CodEmpresa && 
+                        x.CodLocal == request.CodLocal)
                 );
             }
             return false;
@@ -95,7 +98,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
         {
             var comercio = await _contexto.RepositorioMaeCodComercio.Obtener(x =>
                 x.NroSolicitud == request.NroSolicitud &&
-                x.CodLocalAlterno == request.CodLocalAlterno &&
+                x.CodEmpresa == request.CodEmpresa &&
+                x.CodLocal == request.CodLocal &&
                 x.CodComercio == request.CodComercio
             ).FirstOrDefaultAsync();
 
@@ -108,7 +112,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.SolicitudCodComercio.Commands
 
             comercio.NomCanalVta = request.NomCanalVta;
             comercio.DesOperador = request.DesOperador;
-            comercio.IndActiva = request.IndActiva;
+            comercio.IndEstado = request.IndEstado;
             comercio.FecModifica = DateTime.UtcNow;
             comercio.UsuModifica = request.UsuCreacion;
 
