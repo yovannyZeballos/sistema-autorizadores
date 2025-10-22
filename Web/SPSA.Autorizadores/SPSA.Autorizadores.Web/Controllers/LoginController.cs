@@ -48,36 +48,34 @@ namespace SPSA.Autorizadores.Web.Controllers
 				var usuario = await _mediator.Send(command);
 				respuesta.Ok = usuario.Ok;
 
-				if (usuario.Ok)
+				if (!usuario.Ok)
 				{
-					_log.Information($"Usuario: {command.Usuario}, Inicio de sesion exitoso");
-					WebSession.Login = command.Usuario;
-					WebSession.UserName = usuario.NombreUsuario;
-					WebSession.Permisos = usuario.Aplicacion.Permisos;
-					WebSession.Locales = usuario.Locales;
-					WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
-					WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
-					WebSession.MenusAsociados = usuario.MenusAsociados.OrderBy(x => x.CodMenu).ToList();
-
-
-
-
+                    respuesta.Ok = false;
+                    respuesta.Mensaje = usuario.Mensaje;
+                    return Json(respuesta);
 				}
-				else
-				{
-					respuesta.Mensaje = usuario.Mensaje;
-					respuesta.Ok = usuario.Ok;
-				}
-			}
-			catch (System.Exception ex)
+
+                // Sesión base
+                _log.Information("Usuario: {Usuario}, Inicio de sesion exitoso", command.Usuario);
+                WebSession.Login = command.Usuario;
+                WebSession.UserName = usuario.NombreUsuario;
+                WebSession.Permisos = usuario.Aplicacion.Permisos;
+                WebSession.Locales = usuario.Locales;
+                WebSession.SistemaVersion = ConfigurationManager.AppSettings["SistemaVersion"].ToString();
+                WebSession.SistemaAmbiente = ConfigurationManager.AppSettings["SistemaAmbiente"].ToString();
+                WebSession.MenusAsociados = usuario.MenusAsociados.OrderBy(x => x.CodMenu).ToList();
+
+                // Redirigimos SIEMPRE a la vista de selección de ubicación (paso 2)
+                return Json(new { Ok = true, Mensaje = "", NextUrl = Url.Action("Ubicacion", "Seleccion") });
+
+            }
+			catch (Exception ex)
 			{
 				_log.Error(ex, ex.Message);
 				respuesta.Ok = false;
 				respuesta.Mensaje = ex.Message;
-			}
-
-			return Json(respuesta);
-
+                return Json(respuesta);
+            }
 		}
 
 		[HttpGet]
@@ -140,7 +138,7 @@ namespace SPSA.Autorizadores.Web.Controllers
                     WebSession.Local = query.CodLocal;
                     WebSession.TipoSO = local.TipoSO;
                     WebSession.LocalOfiplan = local.CodigoOfiplan;
-                    WebSession.NombreLocal = $"{local.Nombre} ({(local.Manual == "S" ? "MANUAL" : "CON TARJETA")})";
+                    WebSession.NombreLocal = string.Format("{0} ({1})", local.Nombre, (local.Manual == "S" ? "MANUAL" : "CON TARJETA"));
                     WebSession.CodigoEmpresa = local.CodigoEmpresa;
                 }
                 else

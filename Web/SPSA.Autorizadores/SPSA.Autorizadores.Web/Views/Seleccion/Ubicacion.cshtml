@@ -1,0 +1,112 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'>
+    <title>Seleccionar ubicación | Sistema de gestión de cajas</title>
+
+    <link rel="icon" href="~/Content/images/brand/favicon.ico" type="image/x-icon" />
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <link href="~/Content/css/plugins.css" rel="stylesheet" />
+    <link href="~/Content/css/animated.css" rel="stylesheet" />
+    <link href="~/Content/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/plugins/select2/select2.min.css" rel="stylesheet" />
+</head>
+<body class="login-img">
+    <div class="container-fluid">
+        <div class="row g-0 min-vh-100">
+            <div class="col-xl-6 d-none d-xl-block" style="background:#2E9A90;">
+                <img src="~/Content/images/logo_sgp.jpg" alt="SGP" class="img-fluid w-100 h-100" style="object-fit:cover" />
+            </div>
+
+            <div class="col-12 col-xl-6 d-flex align-items-center justify-content-center bg-white">
+                <div class="w-100" style="max-width: 600px;">
+                    <div class="mb-4 text-center">
+                        <img src="~/Content/images/brand/logo-super-food.png" style="width:180px" />
+                        <h3 class="mt-3 mb-0">Seleccionar ubicación (Paso 2 de 2)</h3>
+                        <div class="text-muted">
+                            Usuario: @SPSA.Autorizadores.Web.Utiles.WebSession.UserName (@SPSA.Autorizadores.Web.Utiles.WebSession.Login)
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Empresa</label>
+                                    <select id="cboEmpresa" class="form-control form-control-sm"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Cadena</label>
+                                    <select id="cboCadena" class="form-control form-control-sm"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Región</label>
+                                    <select id="cboRegion" class="form-control form-control-sm"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Zona</label>
+                                    <select id="cboZona" class="form-control form-control-sm"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Local</label>
+                                    <select id="cboLocal" class="form-control form-control-sm"></select>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 d-flex gap-2">
+                                <a class="btn btn-outline-secondary btn-sm" href="@Url.Action("Logout","Login")">Cambiar usuario</a>
+
+                                <!-- Botón con spinner -->
+                                <button id="btnIngresar" class="btn btn-primary btn-sm" type="button">
+                                    <span class="btn-text">Ingresar</span>
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2 d-none"
+                                          id="btnSpinnerUbic" role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+
+                            <div class="mt-3 text-end text-primary">
+                                Ambiente <b>@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaAmbiente</b> - Versión @SPSA.Autorizadores.Web.Utiles.WebSession.SistemaVersion
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var baseUrl = "@Url.Content("~")";
+            var urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';
+            var urlListarCadenasAsociadas  = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
+            var urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesAsociadas';
+            var urlListarZonasAsociadas    = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
+            var urlListarLocalesAsociados  = baseUrl + 'Local/ListarLocalesAsociadas';
+            var urlGuardarLocalSession     = baseUrl + 'Login/GuardarLocalSession';
+            var usuarioLogueado            = '@SPSA.Autorizadores.Web.Utiles.WebSession.Login';
+        </script>
+
+        <!-- JS base -->
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <script src="~/Content/plugins/bootstrap/js/popper.min.js"></script>
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Select2 -->
+        <script src="~/Content/plugins/select2/select2.full.min.js"></script>
+        <script src="~/Content/js/select2.js"></script>
+
+        <!-- Notificaciones / utilidades -->
+        <script src="~/Content/plugins/notify/js/jquery.growl.js"></script>
+        <script src="~/Content/plugins/notify/js/notifIt.js"></script>
+        <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+        <script src="~/Content/js/utiles.js"></script>
+
+        <!-- Lógica -->
+        <script src="~/Content/ViewJs/SeleccionUbicacion.js"></script>
+        <script>$(function () { SeleccionUbicacion.init(); });</script>
+    </div>
+</body>
+</html>

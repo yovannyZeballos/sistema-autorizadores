@@ -364,6 +364,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Areas\Monitor\Controllers\CierreEODController.cs" />
     <Compile Include="Areas\Autorizadores\Controllers\PuestoController.cs" />
+    <Compile Include="Controllers\SeleccionController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Extensiones\DataTableExtension.cs" />
     <Compile Include="Global.asax.cs">
@@ -2424,6 +2425,7 @@
     <Content Include="Content\ViewJs\ClienteCen.js" />
     <Content Include="Content\ViewJs\DocumentoElectronico.js" />
     <Content Include="Content\ViewJs\AsignarLocal_Ct3.js" />
+    <Content Include="Content\ViewJs\SeleccionUbicacion.js" />
     <Content Include="Content\ViewJs\SolicitudAprobacionASR.js" />
     <Content Include="Content\ViewJs\SolicitudUsuarioASR.js" />
     <Content Include="Content\ViewJs\AdministrarColaboradorExt.js" />
@@ -3019,6 +3021,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_CardHeader.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Seleccion\Ubicacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

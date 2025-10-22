@@ -1,178 +1,162 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
-
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="es">
 <head>
-
-    <!-- Meta data -->
-    <meta charset="UTF-8">
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
-
-    <!-- Title -->
+    <meta charset="utf-8" />
+    <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'>
     <title>Login | Sistema de gestión de cajas</title>
 
-    <!--Favicon -->
     <link rel="icon" href="~/Content/images/brand/favicon.ico" type="image/x-icon" />
-
-    <!-- Bootstrap css -->
-    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" id="style" />
-
-    <!-- Style css -->
+    <!-- Bootstrap -->
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!-- Estilos del sistema -->
     <link href="~/Content/css/style.css" rel="stylesheet" />
     <link href="~/Content/css/plugins.css" rel="stylesheet" />
-
-    <!-- Animate css -->
     <link href="~/Content/css/animated.css" rel="stylesheet" />
-
-    <!---Icons css-->
     <link href="~/Content/css/icons.css" rel="stylesheet" />
 
+    <style>
+        /* --- Ajustes visuales y responsive --- */
+        :root {
+            --accent: #2E9A90;
+        }
+
+        .auth-wrapper {
+            min-height: 100vh;
+        }
+        /* Columna de imagen: solo en >= lg */
+        .auth-illustration {
+            background: var(--accent) url('/Content/images/logo_sgp.jpg') center/cover no-repeat;
+            position: relative;
+        }
+
+            .auth-illustration::after {
+                /* leve overlay para mejor contraste si agregas texto encima, opcional */
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,.05);
+            }
+        /* Contenedor del formulario centrado */
+        .auth-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            min-height: 100vh;
+            background: #fff;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 460px; /* límite para desktop */
+            border: 0;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+            border-radius: 16px;
+        }
+
+        .brand img {
+            max-width: 220px;
+            height: auto;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: .9rem;
+        }
+        /* Inputs cómodos para dedo en móvil */
+        .form-control {
+            height: calc(2.25rem + 10px);
+            padding-top: .6rem;
+            padding-bottom: .6rem;
+            font-size: .95rem;
+        }
+
+        .input-group-text {
+            border-right: 0;
+        }
+
+        .input-group .form-control {
+            border-left: 0;
+        }
+
+        .btn-primary.btn-block {
+            padding: .8rem 1rem;
+            font-weight: 600;
+        }
+
+        .env-text {
+            font-size: .85rem;
+        }
+
+        /* --- Mobile first ajustes --- */
+        @@media (max-width: 575.98px) {
+            .brand img {
+                max-width: 180px;
+            }
+
+            .auth-panel {
+                padding: 20px;
+            }
+
+            .auth-card {
+                box-shadow: none;
+                border-radius: 12px;
+            }
+        }
+    </style>
 </head>
+<body>
+    <div class="container-fluid auth-wrapper">
+        <div class="row g-0">
+            <!-- Ilustración (solo >= lg) -->
+            <div class="col-lg-6 d-none d-lg-block auth-illustration"></div>
 
-<body class="login-img">
-
-    <div class="page responsive-log relative error-page3">
-        <div class="row no-gutters">
-
-            <!-- COLUMNA IZQUIERDA: IMAGEN RESPONSIVA -->
-            <div class="col-xl-6  d-xl-block d-none log-image1">
-                <div class="cover-image h-100vh d-flex align-items-center"
-                     style="background-color: #2E9A90;">
-                    <img src="~/Content/images/logo_sgp.jpg"
-                         alt="SGP"
-                         class="img-fluid w-100" />
-                </div>
-            </div>
-
-            <!-- COLUMNA DERECHA: FORMULARIO -->
-            <div class="col-xl-6 bg-white log-image1">
-                <div class="container">
-                    <div class="customlogin-content pt-1 pt-xl-8">
-                        <div class="pt-0 pb-2 ps-2">
-                            <a class="header-brand" href="index.html">
-                                <img src="~/Content/images/brand/logo-super-food.png"
-                                     class="header-brand-img custom-logo"
-                                     style="width: 180px"
-                                     alt="Dayonelogo" />
-                                <img src="~/Content/images/brand/logo-super-food.png"
-                                     style="width: 180px"
-                                     class="header-brand-img custom-logo-dark"
-                                     alt="Dayonelogo" />
-                            </a>
+            <!-- Panel de login (centrado siempre) -->
+            <div class="col-12 col-lg-6 auth-panel">
+                <div class="card auth-card">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="brand mb-4 text-center">
+                            <img src="~/Content/images/brand/logo-super-food.png" alt="Super Food Holding" />
                         </div>
-                        <div class="p-4 pt-1">
-                            <h3 class="mb-2">Iniciar sesión</h3>
 
-                        </div>
-                        <form class="card-body pt-0" id="formLogin" role="form" name="login">
-                            <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="form-group">
-                                        <label class="form-label">Usuario</label>
-                                        <div class="input-group mb-4">
-                                            <div class="input-group">
-                                                <a class="input-group-text">
-                                                    <i class="fe fe-mail" aria-hidden="true"></i>
-                                                </a>
-                                                <input class="form-control form-control-sm" id="txtUsuario" placeholder="Usuario" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="form-group">
-                                        <label class="form-label">Contraseña</label>
-                                        <div class="input-group mb-4">
-                                            <div class="input-group" id="Password-toggle">
-                                                <a href="" class="input-group-text">
-                                                    <i class="fe fe-eye-off" aria-hidden="true"></i>
-                                                </a>
-                                                <input class="form-control form-control-sm" id="txtClave" type="password" placeholder="Password" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="form-group select2-sm">
-                                        <label class="form-label">Tipo de usuario</label>
-                                        <select class="form-control  custom-select" id="cboTipoUsuario" disabled required>
-                                            <option label="Seleccione un tipo"></option>
-                                            <option value="AD">Administrador</option>
-                                            <option value="SG">Seguridad</option>
-                                            <option value="US">Usuario</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="form-group select2-sm">
-                                        <label class="form-label">Empresa</label>
-                                        <select class="form-control custom-select" id="cboEmpresa" disabled required>
-                                            <option label="Seleccione una empresa"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="form-group select2-sm">
-                                        <label class="form-label">Cadena</label>
-                                        <select class="form-control custom-select" id="cboCadena" disabled required>
-                                            <option label="Seleccione una cadena"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="form-group select2-sm">
-                                        <label class="form-label">Región</label>
-                                        <select class="form-control custom-select" id="cboRegion" disabled required>
-                                            <option label="Seleccione una región"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="form-group select2-sm">
-                                        <label class="form-label">Zona</label>
-                                        <select class="form-control custom-select" id="cboZona" disabled required>
-                                            <option label="Seleccione una región"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="form-group select2-sm">
-                                        <label class="form-label">Local</label>
-                                        <select class="form-control custom-select" id="cboLocal" disabled required>
-                                            <option label="Seleccione un local"></option>
-                                        </select>
-                                    </div>
+                        <h3 class="mb-1 text-center">Iniciar sesión</h3>
+                        <p class="text-muted text-center mb-4">Ingresa tus credenciales para continuar</p>
+
+                        <form id="formLogin" autocomplete="off">
+                            <div class="mb-3">
+                                <label for="txtUsuario" class="form-label">Usuario</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fe fe-user"></i></span>
+                                    <input class="form-control" id="txtUsuario" placeholder="Usuario" autofocus />
                                 </div>
                             </div>
 
-
-
-                            <div class="form-group">
-                                <button class="btn btn-link btn-sm" id="btnCancelar" type="button">Cancelar</button>
+                            <div class="mb-2">
+                                <label for="txtClave" class="form-label">Contraseña</label>
+                                <div class="input-group" id="Password-toggle">
+                                    <span class="input-group-text"><i class="fe fe-lock"></i></span>
+                                    <input class="form-control" id="txtClave" type="password" placeholder="Password" />
+                                    <button class="btn btn-outline-primary" type="button" id="btnTogglePass" aria-label="Mostrar/ocultar contraseña">
+                                        <i class="fe fe-eye-off" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="submit">
-                                <button class="btn btn-primary btn-block btn-sm" id="btnAutenticarse" type="button">Autenticarse</button>
+
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-primary btn-block" id="btnAutenticarse" type="button">
+                                    <span class="btn-text">Autenticarse</span>
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2 d-none"
+                                          id="btnSpinner" role="status" aria-hidden="true"></span>
+                                </button>
                             </div>
                         </form>
-                        <div class="pt-1 pb-2 ps-2">
-                            <a class="header-brand" routerLink="/hr-dashboard/dashboard">
-                                <img src="~/Content/images/brand/logo-marcas.png"
-                                     class="header-brand-img custom-logo"
-                                     alt="Dayonelogo" />
-                                <img src="~/Content/images/brand/logo-marcas.png"
-                                     class="header-brand-img custom-logo-dark"
-                                     alt="Dayonelogo" />
-                            </a>
-                        </div>
-                        <div>
-                            <p class="text-end text-primary mt-4"> Ambiente <span id="Ambiente">@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaAmbiente</span> - Versión <span>@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaVersion</span></p>
+
+                        <div class="mt-4 text-end text-primary env-text">
+                            Ambiente <b>@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaAmbiente</b> —
+                            Versión <span>@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaVersion</span>
                         </div>
                     </div>
                 </div>
@@ -180,75 +164,41 @@
         </div>
     </div>
 
-    <div class="modal" id="modalLoading" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h4 class="text-center">Procesando...</h4>
-                    <div class="dimmer active" id="loader">
-                        <div class="sk-circle">
-                            <div class="sk-circle1 sk-child"></div>
-                            <div class="sk-circle2 sk-child"></div>
-                            <div class="sk-circle3 sk-child"></div>
-                            <div class="sk-circle4 sk-child"></div>
-                            <div class="sk-circle5 sk-child"></div>
-                            <div class="sk-circle6 sk-child"></div>
-                            <div class="sk-circle7 sk-child"></div>
-                            <div class="sk-circle8 sk-child"></div>
-                            <div class="sk-circle9 sk-child"></div>
-                            <div class="sk-circle10 sk-child"></div>
-                            <div class="sk-circle11 sk-child"></div>
-                            <div class="sk-circle12 sk-child"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
+    <script>
         var baseUrl = "@Url.Content("~")";
-        var home = '@Url.Action("Index", "Home")';
-        </script>
+    </script>
 
+    <!-- JS base -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
 
-        <!-- Jquery js-->
-        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
-        <!-- Bootstrap js-->
-        <script src="~/Content/plugins/bootstrap/js/popper.min.js"></script>
-        <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Notificaciones -->
+    <script src="~/Content/plugins/notify/js/jquery.growl.js"></script>
+    <script src="~/Content/plugins/notify/js/notifIt.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/utiles.js"></script>
 
-        <!-- Select2 js -->
-        <script src="~/Content/plugins/select2/select2.full.min.js"></script>
+    <!-- Lógica de login -->
+    <script src="~/Content/ViewJs/Login.js"></script>
 
-        <!-- P-scroll js-->
-        <script src="~/Content/plugins/p-scrollbar/p-scrollbar.js"></script>
+    <script>
+        // Toggle mostrar/ocultar contraseña
+        (function () {
+            var btn = document.getElementById('btnTogglePass');
+            var input = document.getElementById('txtClave');
+            if (btn && input) {
+                btn.addEventListener('click', function () {
+                    var isPwd = input.type === 'password';
+                    input.type = isPwd ? 'text' : 'password';
+                    this.innerHTML = isPwd ? '<i class="fe fe-eye"></i>' : '<i class="fe fe-eye-off"></i>';
+                    input.focus();
+                });
+            }
+        })();
 
-        <!-- INTERNAL Form Advanced Element -->
-        <script src="~/Content/js/select2.js"></script>
-
-        <!-- INTERNAL Notifications js -->
-        <script src="~/Content/plugins/notify/js/rainbow.js"></script>
-        <script src="~/Content/plugins/notify/js/jquery.growl.js"></script>
-        <script src="~/Content/plugins/notify/js/notifIt.js"></script>
-
-        <!--Sticky js -->
-        <script src="~/Content/js/sticky.js"></script>
-
-
-        <!-- Color Theme js -->
-        <script src="~/Content/js/themeColors.js"></script>
-
-        <!-- custom js -->
-        <script src="~/Content/js/custom.js"></script>
-        <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
-        <script src="~/Content/js/sweet-alert.js"></script>
-        <script src="~/Content/js/utiles.js"></script>
-        <script src="~/Content/ViewJs/Login.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                Login.init();
-            });
-        </script>
-
+        // Inicializar JS de login
+        $(function () { if (window.Login && Login.init) Login.init(); });
+    </script>
 </body>
 </html>

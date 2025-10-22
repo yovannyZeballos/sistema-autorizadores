@@ -1,0 +1,156 @@
+﻿@{
+    Layout = null;  // <-- independiente, SIN layout
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seleccionar contexto</title>
+
+    <link href="~/Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #f6f7fb;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            max-width: 1100px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container auth-container">
+        <div class="card shadow auth-card">
+            <div class="card-header"><h5 class="mb-0">Selecciona tu contexto</h5></div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3"><label class="form-label">Empresa</label><select id="cboEmpresa" class="form-control"></select></div>
+                    <div class="col-md-3"><label class="form-label">Cadena</label> <select id="cboCadena" class="form-control"></select></div>
+                    <div class="col-md-3"><label class="form-label">Región</label>  <select id="cboRegion" class="form-control"></select></div>
+                    <div class="col-md-3"><label class="form-label">Zona</label>    <select id="cboZona" class="form-control"></select></div>
+                    <div class="col-md-4"><label class="form-label">Local</label>   <select id="cboLocal" class="form-control"></select></div>
+                </div>
+                <div class="mt-4 d-flex gap-2">
+                    <button id="btnIngresar" class="btn btn-primary btn-sm">Ingresar</button>
+                    <a href="@Url.Action("Logout","Login")" class="btn btn-outline-secondary btn-sm">Cancelar</a>
+                </div>
+            </div>
+            <div class="card-footer text-end text-primary">
+                Ambiente <b>@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaAmbiente</b> –
+                Versión <b>@SPSA.Autorizadores.Web.Utiles.WebSession.SistemaVersion</b>
+            </div>
+        </div>
+    </div>
+
+    <script> const baseUrl = "@Url.Content("~")"; </script>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/select2/select2.full.min.js"></script>
+    <script src="~/Content/plugins/notify/js/notifIt.js"></script>
+    <script>
+(function(){
+  // Usa TUS endpoints existentes
+  const urlListarEmpresasAsociadas = baseUrl + 'Empresa/ListarEmpresasAsociadas';                // como tú lo tienes
+  const urlListarCadenasAsociadas  = baseUrl + 'Maestros/MaeCadena/ListarCadenasAsociadas';
+  const urlListarRegionesAsociadas = baseUrl + 'Maestros/MaeRegion/ListarRegionesAsociadas';
+  const urlListarZonasAsociadas    = baseUrl + 'Maestros/MaeZona/ListarZonasAsociadas';
+  const urlListarLocalesAsociados  = baseUrl + 'Local/ListarLocalesAsociadas';
+  const urlGuardarLocalSession     = baseUrl + 'Login/GuardarLocalSession';                      // ya lo tienes
+
+  const CodUsuario = '@SPSA.Autorizadores.Web.Utiles.WebSession.Login';
+
+  function toSelect2($el, items, placeholder){
+    $el.empty().append(new Option('', ''));
+    (items||[]).forEach(x => $el.append(new Option(x.text, x.id)));
+    $el.select2({ width:'100%', placeholder:placeholder||'Seleccionar…', allowClear:true, minimumResultsForSearch:0 });
+    $el.val('').trigger('change');
+  }
+  function postJSON(url, data){ return $.ajax({ url, type:'POST', data: JSON.stringify(data), contentType:'application/json' }); }
+
+  // Cargar empresas del usuario
+  function cargarEmpresas(){
+    postJSON(urlListarEmpresasAsociadas, { CodUsuario, Busqueda:'' }).done(r=>{
+      if(!r.Ok) return notif({type:'error', msg:r.Mensaje});
+      toSelect2($('#cboEmpresa'), (r.Data||[]).map(i=>({id:i.CodEmpresa, text:i.NomEmpresa})), 'Empresa…');
+    });
+  }
+
+  $('#cboEmpresa').on('change', function(){
+    const CodEmpresa = $(this).val();
+    toSelect2($('#cboCadena'),[], 'Cadena…'); toSelect2($('#cboRegion'),[], 'Región…'); toSelect2($('#cboZona'),[], 'Zona…'); toSelect2($('#cboLocal'),[], 'Local…');
+    if(!CodEmpresa) return;
+    postJSON(urlListarCadenasAsociadas, { CodUsuario, CodEmpresa, Busqueda:'' }).done(r=>{
+      if(!r.Ok) return notif({type:'error', msg:r.Mensaje});
+      toSelect2($('#cboCadena'), (r.Data||[]).map(i=>({id:i.CodCadena, text:i.NomCadena})), 'Cadena…');
+    });
+  });
+
+  $('#cboCadena').on('change', function(){
+    const CodEmpresa=$('#cboEmpresa').val(), CodCadena=$(this).val();
+    toSelect2($('#cboRegion'),[], 'Región…'); toSelect2($('#cboZona'),[], 'Zona…'); toSelect2($('#cboLocal'),[], 'Local…');
+    if(!CodEmpresa || !CodCadena) return;
+    postJSON(urlListarRegionesAsociadas, { CodUsuario, CodEmpresa, CodCadena }).done(r=>{
+      if(!r.Ok) return notif({type:'error', msg:r.Mensaje});
+      toSelect2($('#cboRegion'), (r.Data||[]).map(i=>({id:i.CodRegion, text:i.NomRegion})), 'Región…');
+    });
+  });
+
+  $('#cboRegion').on('change', function(){
+    const CodEmpresa=$('#cboEmpresa').val(), CodCadena=$('#cboCadena').val(), CodRegion=$(this).val();
+    toSelect2($('#cboZona'),[], 'Zona…'); toSelect2($('#cboLocal'),[], 'Local…');
+    if(!CodEmpresa || !CodCadena || !CodRegion) return;
+    postJSON(urlListarZonasAsociadas, { CodUsuario, CodEmpresa, CodCadena, CodRegion }).done(r=>{
+      if(!r.Ok) return notif({type:'error', msg:r.Mensaje});
+      toSelect2($('#cboZona'), (r.Data||[]).map(i=>({id:i.CodZona, text:i.NomZona})), 'Zona…');
+    });
+  });
+
+  $('#cboZona').on('change', function(){
+    const CodEmpresa=$('#cboEmpresa').val(), CodCadena=$('#cboCadena').val(), CodRegion=$('#cboRegion').val(), CodZona=$(this).val();
+    toSelect2($('#cboLocal'),[], 'Local…');
+    if(!CodEmpresa || !CodCadena || !CodRegion || !CodZona) return;
+    postJSON(urlListarLocalesAsociados, { CodUsuario, CodEmpresa, CodCadena, CodRegion, CodZona }).done(r=>{
+      if(!r.Ok) return notif({type:'error', msg:r.Mensaje});
+      toSelect2($('#cboLocal'), (r.Data||[]).map(i=>({id:i.CodLocal, text:i.NomLocal})), 'Local…');
+    });
+  });
+
+  $('#btnIngresar').on('click', function(){
+    const data = {
+      CodEmpresa: $('#cboEmpresa').val(),
+      CodCadena : $('#cboCadena').val(),
+      CodRegion : $('#cboRegion').val(),
+      CodZona   : $('#cboZona').val(),
+      CodLocal  : $('#cboLocal').val()
+    };
+    if(!data.CodEmpresa || !data.CodLocal)
+      return notif({type:'error', msg:'Selecciona al menos Empresa y Local'});
+
+    const $b=$(this).prop('disabled',true).text('Ingresando…');
+    $.post(urlGuardarLocalSession, data).done(r=>{
+      if(r.Ok) window.location = '@Url.Action("Index","Home")';
+      else notif({type:'error', msg:r.Mensaje});
+    }).fail(x=> notif({type:'error', msg:x.responseText||'Error'}))
+      .always(()=> $b.prop('disabled',false).text('Ingresar'));
+  });
+
+  // init
+  $('#cboEmpresa,#cboCadena,#cboRegion,#cboZona,#cboLocal').each(function(){
+    $(this).select2({width:'100%',allowClear:true,minimumResultsForSearch:0});
+  });
+  cargarEmpresas();
+})();
+    </script>
+</body>
+</html>
