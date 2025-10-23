@@ -2,6 +2,7 @@
 var urlInsertarCliente = baseUrl + 'Operaciones/Gestion/InsertarClienteCen';
 
 var ClienteCen = function () {
+    let clienteActual = null; 
 
     const eventos = function () {
         $("#cboTipoDocumento").on('change', function () {
@@ -60,9 +61,7 @@ var ClienteCen = function () {
 
         $(document).on('click', '.btn-editar', function (e) {
             e.preventDefault();
-            console.log("editar");
-            const clienteData = $(this).data('cliente');
-            editarCliente(clienteData);
+            editarCliente(clienteActual);
         });
 
     };
@@ -281,6 +280,8 @@ var ClienteCen = function () {
 
 
     const mostrarClienteEnTabla = function (cliente) {
+        clienteActual = cliente;
+
         const tbody = $('#tablaClienteBody');
         const thead = $('#tablaCliente thead tr');
 
@@ -406,6 +407,9 @@ var ClienteCen = function () {
     }
 
     const editarCliente = function (cliente) {
+
+        console.log({ cliente });
+
         // Ocultar la tabla
         $('#contenedorTablaCliente').addClass('d-none');
 
