@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SPSA.Autorizadores.Aplicacion.DTO;
-using SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Commands;
 using SPSA.Autorizadores.Aplicacion.Features.MantenimientoLocales.Queries;
 using SPSA.Autorizadores.Web.Models.Intercambio;
