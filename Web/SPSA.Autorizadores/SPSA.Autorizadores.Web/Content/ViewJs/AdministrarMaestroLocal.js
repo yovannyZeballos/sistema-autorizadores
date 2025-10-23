@@ -30,16 +30,19 @@ var urlDescargarCajasPorEmpresa = baseUrl + 'Maestros/MaeCaja/DescargarCajaPorEm
 
 var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
 
-var dataTableLocales = null;
-var codLocalCaja = null;
-
 var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
 
 var codRegionAnterior = "";
 var codZonaAnterior = "";
 var permitirCambioZonaRegion = false;
 
+// DataTables handlers
+var dataTableLocales = null;   // #tableLocales
+var dtListaCajas = null;       // #tableCajas
+var dtListaHorarios = null;    // #tableHorarios
+
 var AdministrarMaestroLocal = function () {
+
     const eventos = function () {
 
         $("#cboEmpresa").on("change", async function () {
@@ -85,6 +88,13 @@ var AdministrarMaestroLocal = function () {
             limpiar();
         });
 
+        // Si existe el botón Limpiar, vincular
+        if ($("#btnLimpiarTodo").length) {
+            $("#btnLimpiarTodo").on("click", function () {
+                limpiar();
+            });
+        }
+
         $("#btnGuardarLocal, #btnGuardarCambiosLocal").on("click", async function () {
             if (!validarFormulario(["#cboEmpresa", "#cboCadena", "#cboRegion", "#cboZona", "#txtCodLocal"], "Debe seleccionar la empresa, cadena, región, zona y local")) return;
 
@@ -127,8 +137,7 @@ var AdministrarMaestroLocal = function () {
                     if (isGuardarCambios) {
                         permitirCambioZonaRegion = false;
                         actualizarLocal(local);
-                    }
-                    else {
+                    } else {
                         guardarLocal(local);
                     }
                 }
@@ -179,7 +188,6 @@ var AdministrarMaestroLocal = function () {
         $('#tableLocales tbody').on('click', 'tr', function () {
             $('#tableLocales tbody tr').removeClass('selected');
             $(this).toggleClass('selected');
-
         });
 
         $('#tableCajas tbody').on('click', 'tr', function () {
@@ -204,7 +212,7 @@ var AdministrarMaestroLocal = function () {
 
             const fila = filasSeleccionada[0];
             const model = {
-                CodLocal: codLocalCaja,
+                CodLocal: $("#txtCodLocal").val(), // evita usar variable global obsoleta
                 NumCaja: fila.querySelector('td:first-child').textContent.trim(),
                 IpAddress: fila.querySelector('td:nth-child(2)').textContent.trim(),
                 TipOs: fila.querySelector('td:nth-child(3)').textContent.trim(),
@@ -322,8 +330,8 @@ var AdministrarMaestroLocal = function () {
                     CodZona: $("#cboZona").val(),
                     CodLocal: $("#cboLocal").val(),
                     NumCaja: filas.querySelector('td:first-child').textContent,
-                    ipAddress: filas.querySelector('td:nth-child(2)').textContent.trim(),
-                    tipOs: filas.querySelector('td:nth-child(3)').textContent,
+                    IpAddress: filas.querySelector('td:nth-child(2)').textContent.trim(),
+                    TipOs: filas.querySelector('td:nth-child(3)').textContent,
                     TipCaja: filas.querySelector('td:nth-child(4)').textContent.trim(),
                     TipUbicacion: filas.querySelector('td:nth-child(5)').textContent.trim(),
                     tipEstado: 'E'
@@ -410,7 +418,7 @@ var AdministrarMaestroLocal = function () {
             $("#excelImportarCajas").trigger("click");
         });
 
-        $('#excelImportarCajas').change(function (e) {
+        $('#excelImportarCajas').change(function () {
             importarCajasDesdeExcel();
         });
 
@@ -418,110 +426,69 @@ var AdministrarMaestroLocal = function () {
             $("#excelImportarLocales").trigger("click");
         });
 
-        $('#excelImportarLocales').change(function (e) {
+        $('#excelImportarLocales').change(function () {
             importarLocalesDesdeExcel();
         });
     };
 
+    // --------- Listados para combos ---------
+
     const listarEmpresas = function () {
         return new Promise((resolve, reject) => {
-
-            const request = {
-            };
-
             $.ajax({
                 url: urlListarEmpresas,
                 type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
+                data: { request: {} },
+                success: function (response) { resolve(response); },
+                error: function (jqXHR) { reject(jqXHR.responseText); }
             });
         });
-
-    }
+    };
 
     const listarCadenas = function () {
         return new Promise((resolve, reject) => {
             const codEmpresa = $("#cboEmpresa").val();
             if (!codEmpresa) return resolve();
-
-            const request = {
-                CodEmpresa: codEmpresa
-            };
-
             $.ajax({
                 url: urlListarCadenas,
                 type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
+                data: { request: { CodEmpresa: codEmpresa } },
+                success: function (response) { resolve(response); },
+                error: function (jqXHR) { reject(jqXHR.responseText); }
             });
         });
-    }
+    };
 
     const listarRegiones = function () {
         return new Promise((resolve, reject) => {
             const codEmpresa = $("#cboEmpresa").val();
             const codCadena = $("#cboCadena").val();
             if (!codEmpresa) return resolve();
-
-            const request = {
-                CodEmpresa: codEmpresa,
-                CodCadena: codCadena,
-            };
-
             $.ajax({
                 url: urlListarRegiones,
                 type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
+                data: { request: { CodEmpresa: codEmpresa, CodCadena: codCadena } },
+                success: function (response) { resolve(response); },
+                error: function (jqXHR) { reject(jqXHR.responseText); }
             });
         });
-    }
+    };
 
     const listarZonas = function () {
         return new Promise((resolve, reject) => {
             const codEmpresa = $("#cboEmpresa").val();
             const codCadena = $("#cboCadena").val();
             const codRegion = $("#cboRegion").val();
-
-            if (!codEmpresa) return resolve();
-            if (!codCadena) return resolve();
-            if (!codRegion) return resolve();
-
-            const request = {
-                CodEmpresa: codEmpresa,
-                CodCadena: codCadena,
-                CodRegion: codRegion
-            };
-
+            if (!codEmpresa || !codCadena || !codRegion) return resolve();
             $.ajax({
                 url: urlListarZonas,
                 type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
+                data: { request: { CodEmpresa: codEmpresa, CodCadena: codCadena, CodRegion: codRegion } },
+                success: function (response) { resolve(response); },
+                error: function (jqXHR) { reject(jqXHR.responseText); }
             });
         });
-
-    }
+    };
 
     const listarLocales = function () {
         return new Promise((resolve, reject) => {
@@ -529,59 +496,20 @@ var AdministrarMaestroLocal = function () {
             const codCadena = $("#cboCadena").val();
             const codRegion = $("#cboRegion").val();
             const codZona = $("#cboZona").val();
-
-            if (!codEmpresa) return resolve();
-            if (!codCadena) return resolve();
-            if (!codRegion) return resolve();
-            if (!codZona) return resolve();
-
-            const request = {
-                CodEmpresa: codEmpresa,
-                CodCadena: codCadena,
-                CodRegion: codRegion,
-                CodZona: codZona
-            };
-
+            if (!codEmpresa || !codCadena || !codRegion || !codZona) return resolve();
             $.ajax({
                 url: urlListarLocales,
                 type: "post",
-                data: { request },
-                success: function (response) {
-                    resolve(response)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(jqXHR.responseText)
-                }
+                data: { request: { CodEmpresa: codEmpresa, CodCadena: codCadena, CodRegion: codRegion, CodZona: codZona } },
+                success: function (response) { resolve(response); },
+                error: function (jqXHR) { reject(jqXHR.responseText); }
             });
         });
-
-    }
-
-    const listarCajas = async function () {
-
-        const request = {
-            CodEmpresa: $("#cboEmpresa").val(),
-            CodCadena: $("#cboCadena").val(),
-            CodRegion: $("#cboRegion").val(),
-            CodZOna: $("#cboZona").val(),
-            /*CodFormato: $("#cboFormato").val(),*/
-            CodLocal: $("#txtCodLocal").val()
-        };
-
-        const response = await $.ajax({
-            url: urlListarCajas,
-            type: "post",
-            data: { request }
-        });
-
-        return response;
-    }
+    };
 
     const cargarComboEmpresa = async function () {
-
         try {
             const response = await listarEmpresas();
-
             if (response.Ok) {
                 $('#cboEmpresa').empty().append('<option label="Seleccionar"></option>');
                 $('#cboCadena').empty().append('<option label="Seleccionar"></option>');
@@ -591,29 +519,18 @@ var AdministrarMaestroLocal = function () {
                 response.Data.map(empresa => {
                     $('#cboEmpresa').append($('<option>', { value: empresa.CodEmpresa, text: empresa.NomEmpresa }));
                 });
-                //$('#cboEmpresa').val("001");
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: response.Mensaje, icon: "error" });
             }
         } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+            swal({ text: error, icon: "error" });
         }
-    }
+    };
 
     const cargarComboCadenas = async function () {
-
         try {
             const response = await listarCadenas();
-
             if (response === undefined) return;
-
             if (response.Ok) {
                 $('#cboCadena').empty().append('<option label="Seleccionar"></option>');
                 $('#cboRegion').empty().append('<option label="Seleccionar"></option>');
@@ -623,159 +540,111 @@ var AdministrarMaestroLocal = function () {
                     $('#cboCadena').append($('<option>', { value: cadena.CodCadena, text: cadena.NomCadena }));
                 });
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: response.Mensaje, icon: "error" });
             }
         } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+            swal({ text: error, icon: "error" });
         }
-    }
+    };
 
     const cargarComboRegiones = async function () {
-
         try {
             const response = await listarRegiones();
             if (response === undefined) return;
             if (response.Ok) {
                 $('#cboRegion').empty().append('<option label="Seleccionar"></option>');
                 $('#cboZona').empty().append('<option label="Seleccionar"></option>');
-                //$('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(region => {
                     $('#cboRegion').append($('<option>', { value: region.CodRegion, text: region.NomRegion }));
                 });
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: response.Mensaje, icon: "error" });
             }
         } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+            swal({ text: error, icon: "error" });
         }
-    }
+    };
 
     const cargarComboZonas = async function () {
-
         try {
             const response = await listarZonas();
-
             if (response === undefined) return;
-
             if (response.Ok) {
                 $('#cboZona').empty().append('<option label="Seleccionar"></option>');
-                //$('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(region => {
                     $('#cboZona').append($('<option>', { value: region.CodZona, text: region.NomZona }));
                 });
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: response.Mensaje, icon: "error" });
             }
         } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+            swal({ text: error, icon: "error" });
         }
-    }
+    };
 
     const cargarComboLocales = async function () {
-
         try {
             const response = await listarLocales();
-
             if (response === undefined) return;
-
             if (response.Ok) {
                 $('#cboLocal').empty().append('<option label="Seleccionar"></option>');
                 response.Data.map(local => {
                     $('#cboLocal').append($('<option>', { value: local.CodLocal, text: local.NomLocal }));
                 });
             } else {
-                swal({
-                    text: response.Mensaje,
-                    icon: "error"
-                });
-                return;
+                swal({ text: response.Mensaje, icon: "error" });
             }
         } catch (error) {
-            swal({
-                text: error,
-                icon: "error"
-            });
+            swal({ text: error, icon: "error" });
         }
-    }
+    };
+
+    // --------- DataTables (Locales/Cajas/Horarios) ---------
 
     const visualizarDataTableLocales = function () {
-
         $.ajax({
             url: urlListarLocales,
             type: "post",
             data: { request: {} },
             dataType: "json",
             success: function (response) {
-
+                if ($.fn.DataTable.isDataTable('#tableLocales')) {
+                    $('#tableLocales').DataTable().destroy();
+                }
                 dataTableLocales = $('#tableLocales').DataTable({
-                    language: {
-                        searchPlaceholder: 'Buscar...',
-                        sSearch: '',
-                    },
+                    language: { searchPlaceholder: 'Buscar...', sSearch: '' },
                     scrollY: '180px',
                     scrollX: true,
                     scrollCollapse: true,
                     paging: false,
                     data: response.Locales,
-                    bAutoWidth: false,
+                    bAutoWidth: false
                 });
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({
-                    text: jqXHR.responseText,
-                    icon: "error",
-                });
+            error: function (jqXHR) {
+                swal({ text: jqXHR.responseText, icon: "error" });
             }
         });
-    }
+    };
 
     const recargarDataTableLocalesPorEmpresa = function () {
-        const request = {
-            CodEmpresa: $("#cboEmpresa").val()
-        };
+        const request = { CodEmpresa: $("#cboEmpresa").val() };
 
         if ($.fn.DataTable.isDataTable('#tableLocales')) {
             $('#tableLocales').DataTable().destroy();
         }
-        dtListaLocales = $('#tableLocales').DataTable({
+
+        dataTableLocales = $('#tableLocales').DataTable({
             ajax: {
                 url: urlListarLocalesPorEmpresa,
                 type: "post",
                 dataType: "JSON",
                 dataSrc: "Data",
                 data: { request },
-                beforeSend: function () {
-                    showLoading();
-                },
-                complete: function () {
-                    closeLoading();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal({
-                        text: 'Error al listar los locales: ' + jqXHR,
-                        icon: "error"
-                    });
+                beforeSend: function () { showLoading(); },
+                complete: function () { closeLoading(); },
+                error: function (jqXHR) {
+                    swal({ text: 'Error al listar los locales: ' + jqXHR, icon: "error" });
                 }
             },
             columns: [
@@ -787,31 +656,31 @@ var AdministrarMaestroLocal = function () {
                 { data: "CodEmpresa" },
                 { data: "CodCadena" },
                 { data: "CodRegion" },
-                { data: "CodZona" },
+                { data: "CodZona" }
             ],
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-            },
+            language: { searchPlaceholder: 'Buscar...', sSearch: '' },
             scrollY: '400px',
             scrollX: true,
             scrollCollapse: true,
             paging: true,
-            rowCallback: function (row, data, index) {
-
-            },
             bAutoWidth: false
         });
-    }
+    };
 
     const limpiar = function () {
         permitirCambioZonaRegion = false;
+        codRegionAnterior = "";
+        codZonaAnterior = "";
+
+        // Combos
         $("#cboEmpresa").val('').trigger('change');
         $("#cboCadena").val('').trigger('change');
         $("#cboRegion").val('').trigger('change');
         $("#cboZona").val('').trigger('change');
         $("#cboLocal").val('').trigger('change');
         $("#cboTipEstado").val('A').trigger('change');
+
+        // Textos / números
         $("#txtCodLocal").val('');
         $("#txtNomLocal").val('');
         $("#txtCodLocalPMM").val('0');
@@ -824,14 +693,52 @@ var AdministrarMaestroLocal = function () {
         $("#txtFecApertura").val('');
         $("#txtFecCierre").val('');
         $("#txtFecEntrega").val('');
+
+        // Quitar selecciones visuales en tablas
+        $('#tableLocales tbody tr, #tableCajas tbody tr, #tableHorarios tbody tr').removeClass('selected');
+
+        // Limpiar DataTable Locales
+        if ($.fn.DataTable.isDataTable('#tableLocales')) {
+            $('#tableLocales').DataTable().clear().draw();
+            $('#tableLocales').DataTable().destroy();
+            dataTableLocales = null;
+        }
+        $('#tableLocales tbody').empty();
+
+        // Limpiar DataTable Cajas
+        if ($.fn.DataTable.isDataTable('#tableCajas')) {
+            $('#tableCajas').DataTable().clear().draw();
+            $('#tableCajas').DataTable().destroy();
+            dtListaCajas = null;
+        }
+        $('#tableCajas tbody').empty();
+
+        // Limpiar DataTable Horarios
+        if ($.fn.DataTable.isDataTable('#tableHorarios')) {
+            $('#tableHorarios').DataTable().clear().draw();
+            $('#tableHorarios').DataTable().destroy();
+            dtListaHorarios = null;
+        }
+        $('#tableHorarios tbody').empty();
+
+        // Botones / estados
         $("#btnGuardarLocal").prop("disabled", false);
+        $("#btnGuardarCambiosLocal").prop("disabled", true);
+        $("#btnHabilitarlCambioRegionZona").prop("disabled", true);
+
         deshabilitarGrupoBotones("#btn-cajas", true);
         deshabilitarGrupoBotones("#btn-horarios", true);
         desabilitarControles(false);
+
+        // Quitar validaciones previas
+        $("#formLocal").removeClass("was-validated");
+
+        // Volver a dejar la página como al inicio
         obtenerFechaSistema();
-        $("#btnGuardarCambiosLocal").prop("disabled", true);
-        $("#btnHabilitarlCambioRegionZona").prop("disabled", true);
-    }
+        visualizarDataTableLocales();
+    };
+
+    // --------- Guardar/Actualizar/Eliminar ---------
 
     const validarLocal = function (local) {
         let validate = true;
@@ -840,11 +747,11 @@ var AdministrarMaestroLocal = function () {
             local.NomLocal === '' || local.TipEstado === '' || local.CodLocalPMM === '' || local.Ip === '' || local.CodLocalSunat === '') {
             validate = false;
             $("#formLocal").addClass("was-validated");
-            swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning", });
+            swal({ text: 'Faltan ingresar algunos campos obligatorios', icon: "warning" });
         }
 
         return validate;
-    }
+    };
 
     const guardarLocal = function (local) {
         $.ajax({
@@ -852,31 +759,18 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { command: local },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
-
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
+                swal({ text: response.Mensaje, icon: "success" });
                 deshabilitarGrupoBotones("#btn-cajas", true);
                 deshabilitarGrupoBotones("#btn-horarios", true);
                 $("#btnGuardarLocal").prop("disabled", true);
-                //await recargarDataTableCajas();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const actualizarLocal = function (local) {
         $.ajax({
@@ -884,41 +778,25 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { command: local },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
-
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
+                swal({ text: response.Mensaje, icon: "success" });
                 deshabilitarGrupoBotones("#btn-cajas", false);
                 deshabilitarGrupoBotones("#btn-horarios", false);
                 $("#btnGuardarLocal").prop("disabled", true);
                 $("#cboRegion").prop("disabled", true);
                 $("#cboZona").prop("disabled", true);
-
-                //await recargarDataTableCajas();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const validarFormulario = function (campos, mensaje) {
         for (const campo of campos) {
             if ($(campo).val() === '') {
-                if (mensaje) {
-                    swal({ text: mensaje, icon: "warning" });
-                }
+                if (mensaje) swal({ text: mensaje, icon: "warning" });
                 return false;
             }
         }
@@ -927,23 +805,15 @@ var AdministrarMaestroLocal = function () {
 
     const validarSelecion = function (count, unSoloRegistro = false) {
         if (count === 0) {
-            swal({
-                text: "Debe seleccionar como mínimo un registro",
-                icon: "warning",
-            });
+            swal({ text: "Debe seleccionar como mínimo un registro", icon: "warning" });
             return false;
         }
-
         if (unSoloRegistro && count > 1) {
-            swal({
-                text: "Solo debe seleccionar un registro",
-                icon: "warning",
-            });
+            swal({ text: "Solo debe seleccionar un registro", icon: "warning" });
             return false;
         }
-
         return true;
-    }
+    };
 
     const obtenerLocal = function (request) {
         $.ajax({
@@ -951,17 +821,10 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { request },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
 
                 $("#modalLocales").modal('hide');
 
@@ -976,33 +839,22 @@ var AdministrarMaestroLocal = function () {
                 await recargarDataTableCajas();
                 await recargarDataTableHorarios();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const setearLocal = function (local) {
-
-        if (local.FecApertura != "" && local.FecApertura != null) {
+        if (local.FecApertura) {
             let timestamp = parseInt(local.FecApertura.match(/\d+/)[0], 10);
-            let date = new Date(timestamp);
-            let formattedDate = date.toISOString().split('T')[0];
-            local.FecApertura = formattedDate;
+            local.FecApertura = new Date(timestamp).toISOString().split('T')[0];
         }
-
-        if (local.FecCierre != "" && local.FecCierre != null) {
+        if (local.FecCierre) {
             let timestamp = parseInt(local.FecCierre.match(/\d+/)[0], 10);
-            let date = new Date(timestamp);
-            let formattedDate = date.toISOString().split('T')[0];
-            local.FecCierre = formattedDate;
+            local.FecCierre = new Date(timestamp).toISOString().split('T')[0];
         }
-
-        if (local.FecEntrega != "" && local.FecEntrega != null) {
+        if (local.FecEntrega) {
             let timestamp = parseInt(local.FecEntrega.match(/\d+/)[0], 10);
-            let date = new Date(timestamp);
-            let formattedDate = date.toISOString().split('T')[0];
-            local.FecEntrega = formattedDate;
+            local.FecEntrega = new Date(timestamp).toISOString().split('T')[0];
         }
 
         $("#cboTipEstado").val(local.TipEstado).trigger('change');
@@ -1018,10 +870,9 @@ var AdministrarMaestroLocal = function () {
         $("#txtFecApertura").val(local.FecApertura);
         $("#txtFecCierre").val(local.FecCierre);
         $("#txtFecEntrega").val(local.FecEntrega);
-    }
+    };
 
     const recargarDataTableCajas = async function () {
-
         const request = {
             CodEmpresa: $("#cboEmpresa").val(),
             CodCadena: $("#cboCadena").val(),
@@ -1033,6 +884,7 @@ var AdministrarMaestroLocal = function () {
         if ($.fn.DataTable.isDataTable('#tableCajas')) {
             $('#tableCajas').DataTable().destroy();
         }
+
         dtListaCajas = $('#tableCajas').DataTable({
             ajax: {
                 url: urlListarCajas,
@@ -1040,17 +892,10 @@ var AdministrarMaestroLocal = function () {
                 dataType: "JSON",
                 dataSrc: "Data",
                 data: { request },
-                beforeSend: function () {
-                    showLoading();
-                },
-                complete: function () {
-                    closeLoading();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal({
-                        text: 'Error al listar cajas: ' + jqXHR,
-                        icon: "error"
-                    });
+                beforeSend: function () { showLoading(); },
+                complete: function () { closeLoading(); },
+                error: function (jqXHR) {
+                    swal({ text: 'Error al listar cajas: ' + jqXHR, icon: "error" });
                 }
             },
             columns: [
@@ -1059,25 +904,18 @@ var AdministrarMaestroLocal = function () {
                 { data: "TipOs" },
                 { data: "TipCaja" },
                 { data: "TipUbicacion" },
-                { data: "TipEstado" },
+                { data: "TipEstado" }
             ],
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-            },
+            language: { searchPlaceholder: 'Buscar...', sSearch: '' },
             scrollY: '400px',
             scrollX: true,
             scrollCollapse: true,
             paging: true,
-            rowCallback: function (row, data, index) {
-
-            },
             bAutoWidth: false
         });
-    }
+    };
 
     const recargarDataTableHorarios = async function () {
-
         const request = {
             CodEmpresa: $("#cboEmpresa").val(),
             CodCadena: $("#cboCadena").val(),
@@ -1089,6 +927,7 @@ var AdministrarMaestroLocal = function () {
         if ($.fn.DataTable.isDataTable('#tableHorarios')) {
             $('#tableHorarios').DataTable().destroy();
         }
+
         dtListaHorarios = $('#tableHorarios').DataTable({
             ajax: {
                 url: urlListarHorarios,
@@ -1096,17 +935,10 @@ var AdministrarMaestroLocal = function () {
                 dataType: "JSON",
                 dataSrc: "Data",
                 data: { request },
-                beforeSend: function () {
-                    showLoading();
-                },
-                complete: function () {
-                    closeLoading();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal({
-                        text: 'Error al listar horarios: ' + jqXHR,
-                        icon: "error"
-                    });
+                beforeSend: function () { showLoading(); },
+                complete: function () { closeLoading(); },
+                error: function (jqXHR) {
+                    swal({ text: 'Error al listar horarios: ' + jqXHR, icon: "error" });
                 }
             },
             columns: [
@@ -1114,23 +946,17 @@ var AdministrarMaestroLocal = function () {
                 { data: "CodDia" },
                 { data: "HorOpen" },
                 { data: "HorClose" },
-                { data: "MinLmt" },
+                { data: "MinLmt" }
             ],
-            language: {
-                searchPlaceholder: 'Buscar...',
-                sSearch: '',
-            },
+            language: { searchPlaceholder: 'Buscar...', sSearch: '' },
             scrollY: '400px',
             scrollX: true,
             scrollCollapse: true,
             paging: false,
             searching: false,
-            rowCallback: function (row, data, index) {
-
-            },
             bAutoWidth: false
         });
-    }
+    };
 
     const deshabilitarGrupoBotones = function (selector, disable) {
         $(`${selector} :input`).attr("disabled", disable);
@@ -1144,7 +970,7 @@ var AdministrarMaestroLocal = function () {
         $("#cboLocal").prop("disabled", disable);
         $("#txtCodLocal").prop("disabled", disable);
         $("#txtNomLocal").prop("disabled", disable);
-    }
+    };
 
     const abrirModalCaja = function (esEdicion, model = {}) {
         $("#tituloModalCaja").html(esEdicion ? "Actualizar Caja" : "Nueva Caja");
@@ -1167,13 +993,12 @@ var AdministrarMaestroLocal = function () {
                 url: urlModalCrearEditarCaja,
                 type: "post",
                 data: { model },
-                dataType: "html",
+                dataType: "html"
             });
 
             $("#modalCaja").find(".modal-body").html(response);
             $("#modalCaja").modal('show');
 
-            // Configurar plugins y máscaras
             configurarPlugins(deshabilitar);
         } catch (error) {
             swal({ text: error.responseText, icon: "error" });
@@ -1189,7 +1014,7 @@ var AdministrarMaestroLocal = function () {
                 url: esEdicion ? urlFormEditarHorario : urlFormCrearHorario,
                 type: "post",
                 data: { model },
-                dataType: "html",
+                dataType: "html"
             });
 
             $("#modalHorario").find(".modal-body").html(response);
@@ -1203,24 +1028,10 @@ var AdministrarMaestroLocal = function () {
             });
 
             $('#txtHorOpen, #txtHorClose').mask('00:00', {
-                translation: {
-                    '0': { pattern: /[0-9]/, optional: false }
-                },
-                onKeyPress: function (val, e, field, options) {
-                    const [hours, minutes] = val.split(':');
-                    if (hours && parseInt(hours, 10) > 23) {
-                        field.val('23:' + (minutes || ''));
-                    }
-
-                    if (minutes && parseInt(minutes, 10) > 59) {
-                        field.val((hours || '00') + ':59');
-                    }
-                }
+                translation: { '0': { pattern: /[0-9]/, optional: false } },
             });
 
-            $('#txtMinLmt').mask('ZZZ', {
-                translation: { 'Z': { pattern: /[0-9]/, optional: true } }
-            });
+            $('#txtMinLmt').mask('ZZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: true } } });
 
             $("#cboNumDia").prop("disabled", esEdicion);
 
@@ -1240,8 +1051,10 @@ var AdministrarMaestroLocal = function () {
         });
 
         $('#txtIpAddress').mask('099.099.099.099');
-        $('#txtNumCaja').mask('ZZZ', {
-            translation: { 'Z': { pattern: /[1-9]/, optional: true } }
+
+        // Permite ceros (evita que 30 se convierta en 3)
+        $('#txtNumCaja').mask('999', {
+            translation: { '9': { pattern: /[0-9]/, optional: true } }
         });
 
         $("#txtNumCaja").prop("disabled", deshabilitar);
@@ -1249,14 +1062,13 @@ var AdministrarMaestroLocal = function () {
 
     const validarCaja = function (caja) {
         let validate = true;
-
         if (caja.CodEmpresa === '' || caja.CodCadena === '' || caja.CodRegion === '' || caja.CodZona === '' || caja.CodLocal === '' || caja.NumCaja === '' ||
             caja.IpAddress === '' || caja.TipOS === '' || caja.TipEstado === '' || caja.TipCaja === '' || caja.TipUbicacion === '') {
             validate = false;
             $("#formCaja").addClass("was-validated");
         }
         return validate;
-    }
+    };
 
     const validarHorario = function (horario) {
         let validate = true;
@@ -1267,7 +1079,7 @@ var AdministrarMaestroLocal = function () {
             $("#formHorario").addClass("was-validated");
         }
         return validate;
-    }
+    };
 
     const guardarCaja = function (caja, url) {
         $.ajax({
@@ -1275,28 +1087,17 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { command: caja },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
+                swal({ text: response.Mensaje, icon: "success" });
                 await recargarDataTableCajas();
                 $("#modalCaja").modal('hide');
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const guardarHorario = function (horario, url) {
         $.ajax({
@@ -1304,94 +1105,53 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { command: horario },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
+                swal({ text: response.Mensaje, icon: "success" });
                 await recargarDataTableHorarios();
                 $("#modalHorario").modal('hide');
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const eliminarCajas = function (cajas) {
-
-        const command = {
-            Cajas: cajas
-        };
-
         $.ajax({
             url: urlEliminarCajas,
             type: "post",
-            data: { command },
+            data: { command: { Cajas: cajas } },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
+                swal({ text: response.Mensaje, icon: "success" });
                 await recargarDataTableCajas();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const eliminarHorarios = function (horarios) {
-
-        const command = {
-            Horarios: horarios
-        };
-
         $.ajax({
             url: urlEliminarHorario,
             type: "post",
-            data: { command },
+            data: { command: { Horarios: horarios } },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
-                swal({ text: response.Mensaje, icon: "success", });
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
+                swal({ text: response.Mensaje, icon: "success" });
                 await recargarDataTableHorarios();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
+
+    // --------- Importaciones / Descargas ---------
 
     const importarCajasDesdeExcel = function () {
         var formData = new FormData();
@@ -1405,37 +1165,25 @@ var AdministrarMaestroLocal = function () {
             dataType: "json",
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-                $("#excelImportarCajas").val(null);
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); $("#excelImportarCajas").val(null); },
             success: function (response) {
-
                 if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
-
-                        if (response.Errores.length > 0) {
+                    swal({ text: response.Mensaje, icon: "warning" }).then(() => {
+                        if (response.Errores && response.Errores.length > 0) {
                             let html = "";
-                            response.Errores.map((error) => {
-                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
-                            });
+                            response.Errores.map((error) => { html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`; });
                             $('#tbodyErrores').html(html);
                             $('#modalErrores').modal("show");
                         }
                     });
                     return;
                 }
-                swal({ text: response.Mensaje, icon: "success", });
-                //await recargarDataTableCajas();
+                swal({ text: response.Mensaje, icon: "success" });
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const importarLocalesDesdeExcel = function () {
         var formData = new FormData();
@@ -1449,37 +1197,26 @@ var AdministrarMaestroLocal = function () {
             dataType: "json",
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-                $("#excelImportarLocales").val(null);
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); $("#excelImportarLocales").val(null); },
             success: function (response) {
-
                 if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", }).then(() => {
-
-                        if (response.Errores.length > 0) {
+                    swal({ text: response.Mensaje, icon: "warning" }).then(() => {
+                        if (response.Errores && response.Errores.length > 0) {
                             let html = "";
-                            response.Errores.map((error) => {
-                                html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`
-                            });
+                            response.Errores.map((error) => { html += `<tr><td>${error.Fila}</td><td>${error.Mensaje}</td></tr>`; });
                             $('#tbodyErrores').html(html);
                             $('#modalErrores').modal("show");
                         }
                     });
                     return;
                 }
-                swal({ text: response.Mensaje, icon: "success", });
+                swal({ text: response.Mensaje, icon: "success" });
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
-  
+    };
+
     const descargarPlantillas = function (nombreCarpeta) {
         $.ajax({
             url: urlDescargarPlantilla,
@@ -1487,28 +1224,18 @@ var AdministrarMaestroLocal = function () {
             data: { nombreCarpeta: nombreCarpeta },
             dataType: "json",
             success: function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
                 const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
                 const downloadLink = document.createElement("a");
-                const fileName = response.NombreArchivo;
                 downloadLink.href = linkSource;
-                downloadLink.download = fileName;
+                downloadLink.download = response.NombreArchivo;
                 downloadLink.click();
-
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const descargarLocalesPorEmpresa = function () {
-
         const request = {
             CodEmpresa: $("#cboEmpresa").val(),
             CodCadena: $("#cboCadena").val(),
@@ -1521,40 +1248,27 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { request },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
                 const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
                 const downloadLink = document.createElement("a");
-                const fileName = response.NombreArchivo;
                 downloadLink.href = linkSource;
-                downloadLink.download = fileName;
+                downloadLink.download = response.NombreArchivo;
                 downloadLink.click();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     const descargarCajas = function (url) {
-
         const request = {
             CodEmpresa: $("#cboEmpresa").val(),
             CodCadena: $("#cboCadena").val(),
             CodRegion: $("#cboRegion").val(),
             CodZona: $("#cboZona").val(),
-            CodLocal: $("#cboLocal").val(),
+            CodLocal: $("#cboLocal").val()
         };
 
         $.ajax({
@@ -1562,44 +1276,26 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             data: { request },
             dataType: "json",
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: function () { showLoading(); },
+            complete: function () { closeLoading(); },
             success: async function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
                 const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,` + response.Archivo + '\n';
                 const downloadLink = document.createElement("a");
-                const fileName = response.NombreArchivo;
                 downloadLink.href = linkSource;
-                downloadLink.download = fileName;
+                downloadLink.download = response.NombreArchivo;
                 downloadLink.click();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
+
+    // --------- Utilitarios ---------
 
     const inputMask = function () {
-        //$('#txtIpServidor').mask('099.099.099.099');
-        $('#txtCodLocal').mask('ZZZZZZZZZZ', {
-            translation: {
-                'Z': {
-                    pattern: /[0-9]/, optional: true
-                }
-            }
-
-        });
-        $('#txtCodLocalSunat').mask('0999');
-    }
+        $('#txtCodLocal').mask('ZZZZZZZZZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: true } } });
+        $('#txtCodLocalSunat').mask('0999'); // mantiene ceros a la izquierda
+    };
 
     async function asignarValorSelectorConDelay(selector, value, delay) {
         $(selector).val(value).trigger('change');
@@ -1612,33 +1308,22 @@ var AdministrarMaestroLocal = function () {
             type: "post",
             dataType: "json",
             success: function (response) {
-
-                if (!response.Ok) {
-                    swal({ text: response.Mensaje, icon: "warning", });
-                    return;
-                }
-
+                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
                 $("#txtEl").val(response.Mensaje);
-
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal({ text: jqXHR.responseText, icon: "error" });
-            }
+            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });
-    }
+    };
 
     return {
         init: function () {
             checkSession(async function () {
                 eventos();
                 inputMask();
-                //showLoading();
                 await cargarComboEmpresa();
-                //closeLoading();
                 visualizarDataTableLocales();
-
             });
         }
-    }
+    };
 
 }(jQuery);
