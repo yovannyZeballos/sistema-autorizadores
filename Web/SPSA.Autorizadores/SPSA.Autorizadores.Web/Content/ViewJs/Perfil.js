@@ -63,24 +63,35 @@ const Perfil = function () {
         });
 
         $('#btnGuardarMenus').click(function () {
-            let registros = $treeview.jstree("get_selected", true);
-            console.log(registros);
-            let menusAsociados = registros.map(item => {
-                return {
-                    CodMenu: item.id,
-                    CodMenuPadre: item.parent
-                }
+            const inst = $treeview.jstree(true);
+            const checkedNodes = inst.get_checked(true);
+
+            const ids = new Set();
+            checkedNodes.forEach(n => {
+                ids.add(n.id);
+                n.parents.forEach(p => { if (p && p !== '#' && p !== '0') ids.add(p); });
             });
 
-            let menus = {
+            const menusAsociados = [...ids].map(id => {
+                const node = inst.get_node(id);
+                const parent = node.parent;
+                return {
+                    CodMenu: id,
+                    CodMenuPadre: (parent === '#' || parent === '0') ? '' : parent
+                };
+            });
+
+            const payload = {
                 CodSistema: $("#cboSistema").val(),
                 CodPerfil: dataTableListado.row('.selected').data().CodPerfil,
                 Menus: menusAsociados
             };
 
-            asociarMenus(menus);
-
+            asociarMenus(payload);
         });
+
+
+
 
         $treeview.on('refresh.jstree', function () {
             $treeview.jstree('open_all');
@@ -317,64 +328,62 @@ const Perfil = function () {
     }
 
     const listarMenus = function () {
+        const perfil = dataTableListado.row('.selected').data();
+        if (!perfil) return;
 
-        $treeview.jstree(true).deselect_all(true);
-
-        let data = {
+        const payload = {
             CodSistema: $("#cboSistema").val(),
-            CodPerfil: dataTableListado.row('.selected').data().CodPerfil
-        }
+            CodPerfil: perfil.CodPerfil
+        };
 
         $.ajax({
             url: urlListarMenusAsociados,
             type: 'POST',
-            data: JSON.stringify(data),
+            data: JSON.stringify(payload),
             contentType: 'application/json',
-            beforeSend: function () {
-                showLoading();
-            },
-            complete: function () {
-                closeLoading();
-            },
+            beforeSend: showLoading,
+            complete: closeLoading,
             success: function (data) {
-                if (!data.Ok) {
-                    mensajeError('Error al listar los menus: ' + data.Mensaje);
-                    return;
-                }
+                if (!data.Ok) { mensajeError('Error al listar los menus: ' + data.Mensaje); return; }
 
-                menus = [{ "id": "0", "parent": "#", "text": "" }];
+                // Arma el árbol
+                menus = [{ id: '0', parent: '#', text: '', state: { opened: true } }];
+                const all = data.Data.map(x => ({
+                    id: String(x.CodMenu),
+                    parent: (x.CodMenuPadre ? String(x.CodMenuPadre) : '0'),
+                    text: x.NomMenu,
+                    asociado: !!x.IndAsociado
+                }));
+                menus.push.apply(menus, all.map(x => ({ id: x.id, parent: x.parent, text: x.text })));
 
-                data.Data.forEach(item => {
-                    if (item.IndAsociado) {
-                        menus.push({
-                            id: item.CodMenu,
-                            text: item.NomMenu,
-                            parent: item.CodMenuPadre == "" || item.CodMenuPadre == null ? "0" : item.CodMenuPadre,
-                            state: { selected: true },
-                        });
-                    } else {
-                        menus.push({
-                            id: item.CodMenu,
-                            text: item.NomMenu,
-                            parent: item.CodMenuPadre == "" || item.CodMenuPadre == null ? "0" : item.CodMenuPadre,
-                            state: { selected: false },
-                        });
-                    }
-                  
+                // Calcula HOJAS asociadas (nodo sin hijos en el dataset)
+                const setParents = new Set(all.map(x => x.parent).filter(p => p && p !== '0' && p !== '#'));
+                const idsMarcadosSoloHojas = all
+                    .filter(x => x.asociado)
+                    .filter(x => !setParents.has(x.id))  // hoja = nadie lo usa como parent
+                    .map(x => x.id);
+
+                // Refresca y marca
+                $treeview.off('refresh.jstree.asociar');
+                $treeview.on('refresh.jstree.asociar', function () {
+                    const inst = $treeview.jstree(true);
+                    inst.uncheck_all(true);
+                    inst.deselect_all(true);
+                    if (idsMarcadosSoloHojas.length) inst.check_node(idsMarcadosSoloHojas);
+                    inst.open_all();
+                    $treeview.off('refresh.jstree.asociar');
                 });
 
-                console.log(data);
-
-                //$treeview.jstree(true).refresh();
-                $treeview.jstree(true).load_node('#', (node,state) => {
-                    $treeview.jstree('open_all');
-                });
+                $treeview.jstree(true).refresh();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR) {
                 mensajeError('Error al listar los sistemas: ' + jqXHR);
             }
         });
-    }
+    };
+
+
+
 
 
     const listarSistemas = function () {
@@ -430,19 +439,25 @@ const Perfil = function () {
 
     const inicializarMenus = function () {
         $treeview.jstree({
+            plugins: ['checkbox', 'wholerow'],
             checkbox: {
                 keep_selected_style: false,
-
+                three_state: true,   // muestra estado indeterminado en padres
+                cascade: 'up',       // <- sólo sube, NO marca hijos
+                tie_selection: false
             },
-            plugins: ["noclose", 'checkbox', 'json_data'],
             core: {
-                'check_callback': true,
-                'data': function (node, cb) {
-                    cb.call(this, menus);
-                }
+                multiple: true,
+                check_callback: true,
+                data: function (node, cb) { cb(menus); }
             }
         });
-    }
+
+        $treeview.on('refresh.jstree', function () {
+            $treeview.jstree('open_all');
+        });
+    };
+
 
     const asociarMenus = function (menus) {
         $.ajax({
