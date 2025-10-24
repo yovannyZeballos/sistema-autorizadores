@@ -7,7 +7,7 @@ var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorP
 var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener';
 var urlObtenerSerieProducto = baseUrl + 'Inventario/SeriesProducto/Obtener';
 
-var AdministrarGuiaDespachoPorSociedad = (function ($) {
+var AdmGuiaDespachoPorEmpresa = (function ($) {
 
     // ======================== Estado ========================
     var _productosCache = [];   // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable('S'|'N')}

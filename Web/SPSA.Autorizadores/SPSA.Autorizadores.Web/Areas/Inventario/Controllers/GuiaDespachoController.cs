@@ -27,7 +27,12 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return View();
         }
 
-        public ActionResult PorSociedad()
+        public ActionResult PorEmpresa()
+        {
+            return View();
+        }
+
+        public ActionResult EntreEmpresas()
         {
             return View();
         }

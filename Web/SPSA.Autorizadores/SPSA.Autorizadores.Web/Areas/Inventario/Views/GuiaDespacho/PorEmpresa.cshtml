@@ -141,7 +141,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Registrar guía de despacho</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
 
             <div class="modal-body">
@@ -280,11 +280,11 @@
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Content/ViewJs/util.js"></script>
-    <script src="~/Content/ViewJs/AdministrarGuiaDespachoPorSociedad.js"></script>
+    <script src="~/Content/ViewJs/AdmGuiaDespachoPorEmpresa.js"></script>
 
     <script>
         var codigoEmpresa = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa';
-        $(function () { AdministrarGuiaDespachoPorSociedad.init(); });
+        $(function () { AdmGuiaDespachoPorEmpresa.init(); });
     </script>
 
 }

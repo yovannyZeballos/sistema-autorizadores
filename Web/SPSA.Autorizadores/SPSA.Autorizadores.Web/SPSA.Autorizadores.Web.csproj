@@ -2408,7 +2408,8 @@
     <Content Include="Content\switcher\js\switcher-rtl.js" />
     <Content Include="Content\switcher\js\switcher.js" />
     <Content Include="Content\ViewJs\AdministrarApertura.js" />
-    <Content Include="Content\ViewJs\AdministrarGuiaDespachoPorSociedad.js" />
+    <Content Include="Content\ViewJs\AdmGuiaDespachoEntreEmpresas.js" />
+    <Content Include="Content\ViewJs\AdmGuiaDespachoPorEmpresa.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaDespachoConfirmar.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaDespacho.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcionProveedor.js" />
@@ -2983,7 +2984,8 @@
     <Content Include="Areas\Inventario\Views\GuiaRecepcion\RecepcionProveedor.cshtml" />
     <Content Include="Areas\Inventario\Views\Servidores\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\Kardex\Movimientos.cshtml" />
-    <Content Include="Areas\Inventario\Views\GuiaDespacho\PorSociedad.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaDespacho\EntreEmpresas.cshtml" />
+    <Content Include="Areas\Inventario\Views\GuiaDespacho\PorEmpresa.cshtml" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
