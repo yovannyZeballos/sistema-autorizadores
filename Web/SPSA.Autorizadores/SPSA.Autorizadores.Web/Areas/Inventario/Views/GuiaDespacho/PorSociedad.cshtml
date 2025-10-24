@@ -1,0 +1,291 @@
+﻿
+@{
+    ViewBag.Title = "Guía de Despacho";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <style>
+        .form-control-sm.date-sm-fix {
+            height: auto;
+            min-height: calc(1.5em + .5rem + 2px);
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            line-height: 1.5;
+        }
+
+            .form-control-sm.date-sm-fix::-webkit-datetime-edit {
+                line-height: 1.5;
+                color: inherit;
+                opacity: 1;
+            }
+
+            .form-control-sm.date-sm-fix::-webkit-calendar-picker-indicator {
+                opacity: 1;
+            }
+
+        #tblDetalleDespacho th, #tblDetalleDespacho td {
+            vertical-align: middle;
+        }
+
+        /* Ajusta la tipografía de todo el bloque detalle */
+        .detalle-despacho {
+            font-size: .75rem; /* tamaño base (puedes subir a 1.05rem si aún lo ves chico) */
+            line-height: 1.5;
+        }
+
+            /* Mejora la legibilidad de títulos en negrita */
+            .detalle-despacho b {
+                font-weight: 600;
+                color: #333;
+            }
+
+            /* Alineación y espacio uniforme en las filas */
+            .detalle-despacho .row > div {
+                margin-bottom: .25rem;
+            }
+
+            /* Tabla del detalle */
+            .detalle-despacho .table th,
+            .detalle-despacho .table td {
+                font-size: .65rem; /* un poco más grande que .table-sm */
+                padding: .5rem .75rem;
+                vertical-align: middle;
+            }
+    </style>
+}
+
+<div class="page-header d-lg-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Guía de Despacho</div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <ol class="breadcrumb1">
+            <li class="breadcrumb-item1"><a href="@Url.Action("Index","Home")">Inicio</a></li>
+            <li class="breadcrumb-item1 active">Inventario</li>
+            <li class="breadcrumb-item1 active">Guía de Despacho</li>
+        </ol>
+    </div>
+</div>
+
+<div class="card overflow-hidden">
+    @Html.Partial("_CardHeader", "Filtros")
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Fecha desde</label>
+                    <input type="date" id="fDesde" class="form-control form-control-sm date-sm-fix" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Fecha hasta</label>
+                    <input type="date" id="fHasta" class="form-control form-control-sm date-sm-fix" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Empresa Destino</label>
+                    <select id="fEmpDest" class="form-control select2-show-search"></select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Local Destino</label>
+                    <select id="fLocDest" class="form-control select2-show-search"></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group select2-sm">
+                    <label class="form-label">Tipo</label>
+                    <select id="fTipoMov" class="form-control select2-show-search">
+                        <option value="">Todos</option>
+                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                        <option value="BAJA">BAJA</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="my-3">
+            <button id="btnNuevaGuia" class="btn btn-sm btn-primary me-2">
+                <i class="fe fe-plus me-1"></i>Nueva guía
+            </button>
+            <button id="btnExportar" class="btn btn-sm btn-outline-primary">
+                <i class="fe fe-file me-1"></i>Exportar Excel
+            </button>
+        </div>
+
+        <table id="tableDespachos" class="table table-bordered text-nowrap border-bottom w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>N° Guía</th>
+                    <th>Origen</th>
+                    <th>Destino</th>
+                    <th>Tipo Mov.</th>
+                    <th>Ítems</th>
+                    <th>Estado</th>
+                    <th>Usuario</th>
+                    <th class="dt-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Nueva Guía de Despacho -->
+<div class="modal fade" id="modalDespacho" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar guía de despacho</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-2">
+                        <label class="form-label">Fecha <span class="text-danger">*</span></label>
+                        <input type="date" id="desFecha" class="form-control form-control-sm date-sm-fix" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">N° Guía <span class="text-danger">*</span></label>
+                        <input type="text" id="desNumGuia" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Tipo <span class="text-danger">*</span></label>
+                            <select id="desTipoMov" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                                <option value="BAJA">BAJA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Área Gestión <span class="text-danger">*</span></label>
+                            <select id="desAreaGestion" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="GESTION ACTIVOS">GESTION ACTIVOS</option>
+                                <option value="GESTION PROYECTOS">GESTION PROYECTOS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Clase Stock <span class="text-danger">*</span></label>
+                            <select id="desClaseStock" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                                <option value="PROYECTO">PROYECTO</option>
+                                <option value="RENOVACIÓN X INCIDENTES">RENOVACIÓN X INCIDENTES</option>
+                                <option value="STOCK">STOCK</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Empresa Destino</label>
+                            <select id="desEmpDest" class="form-control select2-show-search"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Local Destino</label>
+                            <select id="desLocDest" class="form-control select2-show-search"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Observaciones</label>
+                        <input type="text" id="desObs" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                </div>
+
+                <hr class="my-2" />
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Detalle de ítems</h6>
+                    <button id="btnAddItem" class="btn btn-sm btn-outline-primary">
+                        <i class="fe fe-plus"></i> Agregar ítem
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="tblDetalleDespacho" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th style="width:30%">Producto<span class="text-danger">*</span></th>
+                                <th style="width:20%">N° Serie</th>
+                                <th style="width:10%">Cantidad<span class="text-danger">*</span></th>
+                                <th style="width:15%">Cód. Activo</th>
+                                <th style="width:15%">Estado Stock<span class="text-danger">*</span></th>
+                                <th style="width:10%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+                <small class="text-muted d-block">
+                    * Si el producto tiene <b>número de serie</b>, debe seleccionar <b>serie disponible en el origen</b> y la cantidad será 1. Para los que no tienen número de serie, deje el campo <b>serie vacío</b> y registre la <b>cantidad</b>.
+                </small>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGuardarDespacho" class="btn btn-sm btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Detalle de Guía -->
+<div class="modal fade" id="modalDetalleDespacho" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de Guía</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="detalleDespachoBody" class="small">
+                    <div class="text-muted">Cargando detalle…</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Content/plugins/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/jszip.min.js"></script>
+    <script src="~/Content/plugins/datatable/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatable/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
+    <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="~/Content/js/sweet-alert.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/ViewJs/util.js"></script>
+    <script src="~/Content/ViewJs/AdministrarGuiaDespachoPorSociedad.js"></script>
+
+    <script>
+        var codigoEmpresa = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa';
+        $(function () { AdministrarGuiaDespachoPorSociedad.init(); });
+    </script>
+
+}
+
