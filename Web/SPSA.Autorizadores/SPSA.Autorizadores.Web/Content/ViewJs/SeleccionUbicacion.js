@@ -1,7 +1,7 @@
 var SeleccionUbicacion = (function ($) {
 
     function s2($el, placeholder) {
-        if ($.fn.select2) {
+        if ($.fn.select2 && !$el.data('select2')) {
             $el.select2({
                 width: '100%',
                 placeholder: placeholder || 'Seleccionar…',
@@ -11,6 +11,7 @@ var SeleccionUbicacion = (function ($) {
             });
         }
     }
+
 
     function setOptions($el, items) {
         $el.empty();
@@ -25,6 +26,8 @@ var SeleccionUbicacion = (function ($) {
             $el.val(items[0].id).trigger('change');
         }
     }
+
+
 
     function ajaxPost(url, data, onOk) {
         $.ajax({
@@ -60,14 +63,19 @@ var SeleccionUbicacion = (function ($) {
         }
     }
 
+    //function bloquearCombos(bloquear) {
+    //    $('#cboEmpresa,#cboLocal').prop('disabled', bloquear);
+    //    if ($.fn.select2) {
+    //        $('#cboEmpresa,#cboLocal').each(function () {
+    //            $(this).select2(); // refresco de estado visual
+    //        });
+    //    }
+    //}
     function bloquearCombos(bloquear) {
-        $('#cboEmpresa,#cboCadena,#cboRegion,#cboZona,#cboLocal').prop('disabled', bloquear);
-        if ($.fn.select2) {
-            $('#cboEmpresa,#cboCadena,#cboRegion,#cboZona,#cboLocal').each(function () {
-                $(this).select2(); // refresco de estado visual
-            });
-        }
+        $('#cboEmpresa,#cboLocal').prop('disabled', bloquear)
+            .trigger('change.select2'); // solo notifica disabled, no reinit
     }
+
     // -------------------------------------------
 
     function cargarEmpresas() {
@@ -82,71 +90,13 @@ var SeleccionUbicacion = (function ($) {
         });
     }
 
-    function cargarCadenas() {
-        var emp = $('#cboEmpresa').val() || '';
-        if (!emp) {
-            setOptions($('#cboCadena'), []); setOptions($('#cboRegion'), []);
-            setOptions($('#cboZona'), []); setOptions($('#cboLocal'), []);
-            return;
-        }
-        ajaxPost(urlListarCadenasAsociadas, { CodUsuario: usuarioLogueado, CodEmpresa: emp, Busqueda: '' }, function (r) {
-            var items = [];
-            if (r.Data && r.Data.length) {
-                for (var i = 0; i < r.Data.length; i++) {
-                    items.push({ id: r.Data[i].CodCadena, text: r.Data[i].NomCadena });
-                }
-            }
-            setOptions($('#cboCadena'), items);
-        });
-    }
-
-    function cargarRegiones() {
-        var emp = $('#cboEmpresa').val() || '';
-        var cad = $('#cboCadena').val() || '';
-        if (!emp || !cad) {
-            setOptions($('#cboRegion'), []); setOptions($('#cboZona'), []); setOptions($('#cboLocal'), []);
-            return;
-        }
-        ajaxPost(urlListarRegionesAsociadas, { CodUsuario: usuarioLogueado, CodEmpresa: emp, CodCadena: cad }, function (r) {
-            var items = [];
-            if (r.Data && r.Data.length) {
-                for (var i = 0; i < r.Data.length; i++) {
-                    items.push({ id: r.Data[i].CodRegion, text: r.Data[i].NomRegion });
-                }
-            }
-            setOptions($('#cboRegion'), items);
-        });
-    }
-
-    function cargarZonas() {
-        var emp = $('#cboEmpresa').val() || '';
-        var cad = $('#cboCadena').val() || '';
-        var reg = $('#cboRegion').val() || '';
-        if (!emp || !cad || !reg) {
-            setOptions($('#cboZona'), []); setOptions($('#cboLocal'), []);
-            return;
-        }
-        ajaxPost(urlListarZonasAsociadas, { CodUsuario: usuarioLogueado, CodEmpresa: emp, CodCadena: cad, CodRegion: reg }, function (r) {
-            var items = [];
-            if (r.Data && r.Data.length) {
-                for (var i = 0; i < r.Data.length; i++) {
-                    items.push({ id: r.Data[i].CodZona, text: r.Data[i].NomZona });
-                }
-            }
-            setOptions($('#cboZona'), items);
-        });
-    }
-
     function cargarLocales() {
         var emp = $('#cboEmpresa').val() || '';
-        var cad = $('#cboCadena').val() || '';
-        var reg = $('#cboRegion').val() || '';
-        var zon = $('#cboZona').val() || '';
-        if (!emp || !cad || !reg || !zon) {
+        if (!emp) {
             setOptions($('#cboLocal'), []);
             return;
         }
-        ajaxPost(urlListarLocalesAsociados, { CodUsuario: usuarioLogueado, CodEmpresa: emp, CodCadena: cad, CodRegion: reg, CodZona: zon }, function (r) {
+        ajaxPost(urlListarLocalesAsociados, { CodUsuario: usuarioLogueado, CodEmpresa: emp }, function (r) {
             var items = [];
             if (r.Data && r.Data.length) {
                 for (var i = 0; i < r.Data.length; i++) {
@@ -159,9 +109,6 @@ var SeleccionUbicacion = (function ($) {
 
     function guardarSesion() {
         var emp = $('#cboEmpresa').val();
-        var cad = $('#cboCadena').val();
-        var reg = $('#cboRegion').val();
-        var zon = $('#cboZona').val();
         var loc = $('#cboLocal').val();
 
         if (!emp || !loc) {
@@ -172,7 +119,7 @@ var SeleccionUbicacion = (function ($) {
         $.ajax({
             url: urlGuardarLocalSession,
             type: 'POST',
-            data: { CodEmpresa: emp, CodCadena: cad, CodRegion: reg, CodZona: zon, CodLocal: loc },
+            data: { CodEmpresa: emp, CodLocal: loc },
             beforeSend: function () {
                 if (typeof showLoading === 'function') showLoading();
                 setBtnLoadingUbic(true);
@@ -199,18 +146,13 @@ var SeleccionUbicacion = (function ($) {
 
     function init() {
         s2($('#cboEmpresa'), 'Empresa');
-        s2($('#cboCadena'), 'Cadena');
-        s2($('#cboRegion'), 'Región');
-        s2($('#cboZona'), 'Zona');
-        s2($('#cboLocal'), 'Local');
+        s2($('#cboLocal'), 'Local');    
 
-        $('#cboEmpresa').on('change', cargarCadenas);
-        $('#cboCadena').on('change', cargarRegiones);
-        $('#cboRegion').on('change', cargarZonas);
-        $('#cboZona').on('change', cargarLocales);
+        $('#cboEmpresa').on('change', cargarLocales);
         $('#btnIngresar').on('click', guardarSesion);
 
         cargarEmpresas();
+      
     }
 
     return { init: init };

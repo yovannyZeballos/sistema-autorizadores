@@ -12,7 +12,6 @@ namespace SPSA.Autorizadores.Web.Controllers
         [HttpGet]
         public ActionResult Ubicacion()
         {
-            // Si no hay login, vuelve al Login
             if (WebSession.Login == null)
                 return RedirectToAction("Index", "Login");
 
