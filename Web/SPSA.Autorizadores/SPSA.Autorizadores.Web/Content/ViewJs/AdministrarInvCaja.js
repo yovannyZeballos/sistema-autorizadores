@@ -460,9 +460,14 @@ var AdministrarInvCajas = function () {
             importarExcelInventario();
         });
 
+        //$("#btnDescargarPlantillas").on("click", function () {
+        //    descargarPlantillas();
+        //});
+
         $("#btnDescargarPlantillas").on("click", function () {
-            descargarPlantillas();
+            window.open((window.routes && window.routes.descargarPlantilla) || '/Inventario/InventarioCaja/DescargarPlantillas', "_blank", "noopener");
         });
+
         $("#btnDescargarTiposActivo").on("click", function () {
             descargarTiposActivo();
         });

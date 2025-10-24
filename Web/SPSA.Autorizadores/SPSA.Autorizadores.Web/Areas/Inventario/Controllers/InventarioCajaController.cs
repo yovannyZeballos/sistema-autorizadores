@@ -156,19 +156,19 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return Json(respuesta);
 		}
 
-		[HttpPost]
-		public async Task<JsonResult> DescargarPlantillas()
+		[HttpGet]
+		public async Task<ActionResult> DescargarPlantillas()
 		{
-			var respuesta = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventarios_v2" });
-			return Json(respuesta);
-		}
+			//var respuesta = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventarios_v2" });
+			//return Json(respuesta);
 
-        //[HttpPost]
-        //public async Task<JsonResult> DescargarInventarioCaja(DescargarInventarioCajaCommand request)
-        //{
-        //    var respuesta = await _mediator.Send(request);
-        //    return Json(respuesta);
-        //}
+            var r = await _mediator.Send(new DescargarPlantillasCommand { Carpeta = "Plantilla_Inventarios_v2" });
+            if (!r.Ok || r.Archivo == null)
+                return Content("No se pudo generar el archivo: " + r.Mensaje);
+
+            var bytes = Convert.FromBase64String(r.Archivo);
+            return File(bytes, "application/zip", r.NombreArchivo);
+        }
 
         [HttpGet]
         public async Task<ActionResult> DescargarInventarioCaja(string codEmpresa)

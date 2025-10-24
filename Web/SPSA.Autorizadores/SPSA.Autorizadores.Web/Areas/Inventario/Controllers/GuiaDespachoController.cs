@@ -27,6 +27,16 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
             return View();
         }
 
+        public ActionResult PorEmpresa()
+        {
+            return View();
+        }
+
+        public ActionResult EntreEmpresas()
+        {
+            return View();
+        }
+
         [HttpGet]
         public async Task<JsonResult> Obtener(ObtenerGuiaDespachoQuery command)
         {
