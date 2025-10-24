@@ -280,9 +280,12 @@
     <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Content/ViewJs/util.js"></script>
-    <script src="~/Content/ViewJs/AdministrarGuiaDespacho.js"></script>
+    <script src="~/Content/ViewJs/AdmGuiaDespachoPorEmpresa.js"></script>
+
     <script>
-        $(function () { AdministrarGuiaDespacho.init(); });
+        var codigoEmpresa = '@SPSA.Autorizadores.Web.Utiles.WebSession.JerarquiaOrganizacional.CodEmpresa';
+        $(function () { AdmGuiaDespachoPorEmpresa.init(); });
     </script>
+
 }
 
