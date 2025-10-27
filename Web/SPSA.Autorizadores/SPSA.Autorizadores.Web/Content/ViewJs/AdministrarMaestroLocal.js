@@ -28,8 +28,6 @@ var urlDescargarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/DescargarLocalP
 var urlDescargarCajasPorLocal = baseUrl + 'Maestros/MaeCaja/DescargarCajaPorLocal';
 var urlDescargarCajasPorEmpresa = baseUrl + 'Maestros/MaeCaja/DescargarCajaPorEmpresa';
 
-var urlDescargarPlantilla = baseUrl + 'Maestros/MaeTablas/DescargarPlantillas';
-
 var urlFechaSistema = baseUrl + 'Locales/AdministrarLocal/ObtenerFechaSistema';
 
 var codRegionAnterior = "";
@@ -388,15 +386,30 @@ var AdministrarMaestroLocal = function () {
         });
 
         $("#btnPlantillaLocal").on("click", function () {
-            descargarPlantillas("Plantilla_Local");
+            window.open(
+                '/Maestros/MaeTablas/DescargarPlantillas?nomPlantilla=' +
+                encodeURIComponent('Plantilla_MaeLocal.xlsx'),
+                '_blank',
+                'noopener'
+            );
         });
 
         $("#btnPlantillaCaja").on("click", function () {
-            descargarPlantillas("Plantilla_Caja");
+            window.open(
+                '/Maestros/MaeTablas/DescargarPlantillas?nomPlantilla=' +
+                encodeURIComponent('Plantilla_MaeCaja.xlsx'),
+                '_blank',
+                'noopener'
+            );
         });
 
         $("#btnPlantillaHorario").on("click", function () {
-            descargarPlantillas("Plantilla_Horario");
+            window.open(
+                '/Maestros/MaeTablas/DescargarPlantillas?nomPlantilla=' +
+                encodeURIComponent('Plantilla_MaeHorario.xlsx'),
+                '_blank',
+                'noopener'
+            );
         });
 
         $("#btnDescargarLocalesPorEmpresa").on("click", function () {
@@ -1212,24 +1225,6 @@ var AdministrarMaestroLocal = function () {
                     return;
                 }
                 swal({ text: response.Mensaje, icon: "success" });
-            },
-            error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
-        });
-    };
-
-    const descargarPlantillas = function (nombreCarpeta) {
-        $.ajax({
-            url: urlDescargarPlantilla,
-            type: "post",
-            data: { nombreCarpeta: nombreCarpeta },
-            dataType: "json",
-            success: function (response) {
-                if (!response.Ok) { swal({ text: response.Mensaje, icon: "warning" }); return; }
-                const linkSource = `data:application/zip;base64,` + response.Archivo + '\n';
-                const downloadLink = document.createElement("a");
-                downloadLink.href = linkSource;
-                downloadLink.download = response.NombreArchivo;
-                downloadLink.click();
             },
             error: function (jqXHR) { swal({ text: jqXHR.responseText, icon: "error" }); }
         });

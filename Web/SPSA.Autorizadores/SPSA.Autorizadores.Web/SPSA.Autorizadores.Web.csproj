@@ -2896,7 +2896,6 @@
     <Content Include="Areas\Maestros\Views\MaeTablas\_CrearEditarZona.cshtml" />
     <Content Include="Areas\Maestros\Views\_ViewStart.cshtml" />
     <Content Include="Plantillas_Tablas\Plantilla_Cadena\TablaCadena.xlsx" />
-    <Content Include="Plantillas_Tablas\Plantilla_Caja\TablaCaja.xlsx" />
     <Content Include="Areas\Monitor\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Monitor\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Monitor\Views\ReporteTesoreria\Index.cshtml" />
@@ -2912,9 +2911,6 @@
     <Content Include="Plantilla_Inventario_Caja\Plantilla_Carga_Inventario.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Plantilla_Inventarios\Plantilla_Carga_Inventario_Caja.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Plantillas_Tablas\Plantilla_InvActivo\Plantilla_InventarioActivo.xlsx" />
     <Content Include="Plantillas_Tablas\Plantilla_Aperturas\Platilla_DIRECTORIO-TIENDA-MASS.xlsx" />
     <Content Include="Areas\DataTables\Views\web.config" />
@@ -2925,7 +2921,6 @@
     <Content Include="Areas\Reportes\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Reportes\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Reportes\Views\AdministrarReportes\Index.cshtml" />
-    <Content Include="Plantilla_Inventarios_v2\Plantilla_Carga_Inventario_Caja_v2.xlsx" />
     <Content Include="Areas\Monitor\Views\DiferenciaTransacciones\Index.cshtml" />
     <Content Include="Areas\Monitor\Views\Proceso\Index.cshtml" />
     <Content Include="Areas\Inventario\Views\InventarioActivo\_CrearInvActivo.cshtml" />
@@ -2936,8 +2931,6 @@
     <Content Include="Areas\Maestros\Views\MaeHorario\_CrearMaeHorario.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeHorario\_EditarMaeHorario.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeCaja\_CrearEditarCaja.cshtml" />
-    <Content Include="Plantillas_Tablas\Plantilla_Horario\TablaHorario.xlsx" />
-    <Content Include="Plantillas_Tablas\Plantilla_Local\TablaLocal.xlsx" />
     <Content Include="Areas\Reportes\Views\MaestroAutorizadores\Index.cshtml" />
     <Content Include="Areas\Reportes\Views\MaestroCajeros\Index.cshtml" />
     <Content Include="Areas\Maestros\Views\MaeColaboradorExt\Index.cshtml" />
@@ -2986,6 +2979,10 @@
     <Content Include="Areas\Inventario\Views\Kardex\Movimientos.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaDespacho\EntreEmpresas.cshtml" />
     <Content Include="Areas\Inventario\Views\GuiaDespacho\PorEmpresa.cshtml" />
+    <Content Include="App_Data\Plantillas\Plantilla_Carga_Inventario_Caja_v2.xlsx" />
+    <Content Include="App_Data\Plantillas\Plantilla_MaeCaja.xlsx" />
+    <Content Include="App_Data\Plantillas\Plantilla_MaeLocal.xlsx" />
+    <Content Include="App_Data\Plantillas\Plantilla_MaeHorario.xlsx" />
     <None Include="Properties\PublishProfiles\Autorizadores.pubxml" />
     <Content Include="Reportes\rptBarraAutorizador.rdl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3025,7 +3022,6 @@
     <Content Include="Views\Shared\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\Aperturas\Data\" />
     <Folder Include="Areas\Dashboards\Data\" />
     <Folder Include="Areas\DataTables\Data\" />
@@ -3046,9 +3042,6 @@
     <Folder Include="Areas\Ubigeos\Data\" />
     <Folder Include="Areas\Ubigeos\Views\Shared\" />
     <Folder Include="Areas\Ubigeos\Views\Ubigeo\" />
-    <Folder Include="Plantillas_Tablas\Plantilla_Empresa\" />
-    <Folder Include="Plantillas_Tablas\Plantilla_Region\" />
-    <Folder Include="Plantillas_Tablas\Plantilla_Zona\" />
     <Folder Include="Views\Reportes\" />
     <Folder Include="Views\Status\" />
   </ItemGroup>

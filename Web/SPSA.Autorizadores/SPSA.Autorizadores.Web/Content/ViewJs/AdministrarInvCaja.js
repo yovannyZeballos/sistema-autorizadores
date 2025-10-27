@@ -17,7 +17,6 @@ var urlEliminarInvCajaPorNumCaja = baseUrl + 'Inventario/InventarioCaja/Eliminar
 var urlEliminarInvCajaPorLocal = baseUrl + 'Inventario/InventarioCaja/EliminarInvCajaPorLocal';
 
 var urlImportarInventario = baseUrl + 'Inventario/InventarioCaja/Importar';
-var urlDescargarPlantilla = baseUrl + 'Inventario/InventarioCaja/DescargarPlantillas';
 var urlDescargarInvTiposActivo = baseUrl + 'Inventario/InventarioTipoActivo/DescargarInvTiposActivo';
 var urlDescargarInventario = baseUrl + 'Inventario/InventarioCaja/DescargarInventarioCaja';
 
@@ -460,12 +459,13 @@ var AdministrarInvCajas = function () {
             importarExcelInventario();
         });
 
-        //$("#btnDescargarPlantillas").on("click", function () {
-        //    descargarPlantillas();
-        //});
-
         $("#btnDescargarPlantillas").on("click", function () {
-            window.open((window.routes && window.routes.descargarPlantilla) || '/Inventario/InventarioCaja/DescargarPlantillas', "_blank", "noopener");
+            window.open(
+                '/Maestros/MaeTablas/DescargarPlantillas?nomPlantilla=' +
+                encodeURIComponent('Plantilla_Carga_Inventario_Caja_v2.xlsx'),
+                '_blank',
+                'noopener'
+            );
         });
 
         $("#btnDescargarTiposActivo").on("click", function () {
