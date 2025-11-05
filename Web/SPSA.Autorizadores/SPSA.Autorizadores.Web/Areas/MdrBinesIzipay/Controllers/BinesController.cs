@@ -57,7 +57,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                 await Response.OutputStream.WriteAsync(bom, 0, bom.Length);
 
                 // Encabezado (todas las columnas de mdr_bines_izipay)
-                var headerLine = "cod_periodo,nom_empresa,bin6,bin8_9,marca,tipo_tarjeta,subproducto,banco_emisor,factor_mdr\r\n";
+                var headerLine = "periodo,empresa,bin6,bin8_9,marca,tipo_tarjeta,subproducto,banco_emisor,factor_mdr\r\n";
                 var headerBytes = Encoding.UTF8.GetBytes(headerLine);
                 await Response.OutputStream.WriteAsync(headerBytes, 0, headerBytes.Length);
 
@@ -90,7 +90,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                             var sb = new StringBuilder(256);
                             while (await reader.ReadAsync())
                             {
-                                var codPeriodoStr = reader["cod_periodo"] != DBNull.Value ? reader["cod_periodo"].ToString() : "";
+                                var desPeriodoStr = reader["des_periodo"] != DBNull.Value ? reader["des_periodo"].ToString() : "";
                                 var nomEmpStr = reader["nom_empresa"] != DBNull.Value ? reader["nom_empresa"].ToString() : "";
                                 var bin6Str = reader["bin_6"] != DBNull.Value ? reader["bin_6"].ToString() : "";
                                 var bin89Str = reader["bin_8_9"] != DBNull.Value ? reader["bin_8_9"].ToString() : "";
@@ -101,7 +101,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                                 var factor = reader["factor_mdr"] != DBNull.Value ? Convert.ToDecimal(reader["factor_mdr"]) : 0m;
 
                                 sb.Clear();
-                                sb.Append(Esc(codPeriodoStr)).Append(",");
+                                sb.Append(Esc(desPeriodoStr)).Append(",");
                                 sb.Append(Esc(nomEmpStr)).Append(",");
                                 sb.Append(Esc(bin6Str)).Append(",");
                                 sb.Append(Esc(bin89Str)).Append(",");
