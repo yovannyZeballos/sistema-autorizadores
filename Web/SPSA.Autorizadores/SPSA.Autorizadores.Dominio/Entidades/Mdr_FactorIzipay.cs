@@ -17,6 +17,6 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 
         public virtual Mae_Empresa Empresa { get; set; }
         public virtual Mdr_Operador Operador { get; set; }
-        public virtual Mdr_ClasificacionPorOperador Clasificacion { get; set; }
+        public virtual Mdr_Clasificacion Clasificacion { get; set; }
     }
 }

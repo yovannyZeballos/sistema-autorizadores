@@ -35,97 +35,96 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DescargarCsvStreaming(string nomEmpresa, string codEmpresa, string nomPeriodo, long codPeriodo)
+        public async Task<ActionResult> DescargarCsvStreaming(string codEmpresa, string nomPeriodo, int codPeriodo)
         {
             if (string.IsNullOrWhiteSpace(codEmpresa))
             {
-                return Json(new { ok = false, mensaje = "Seleccionar empresa es obligatorios." }, JsonRequestBehavior.AllowGet);
+                return Json(new { ok = false, mensaje = "Seleccionar empresa es obligatorio." }, JsonRequestBehavior.AllowGet);
             }
 
-            string connectionString = ConfigurationManager.ConnectionStrings["SGP"].ConnectionString;
+            var connectionString = ConfigurationManager.ConnectionStrings["SGP"].ConnectionString;
 
             try
             {
                 Response.Clear();
+                Response.BufferOutput = false;
                 Response.ContentType = "text/csv; charset=utf-8";
-                string fileName = $"ConsolidadoBines_{nomPeriodo}.csv";
+                var fileName = $"ConsolidadoBines_{(string.IsNullOrWhiteSpace(nomPeriodo) ? DateTime.Now.ToString("yyyyMMdd_HHmmss") : nomPeriodo)}.csv";
                 Response.AddHeader("Content-Disposition", $"attachment; filename=\"{fileName}\"");
 
-                byte[] bom = Encoding.UTF8.GetPreamble();
+                // BOM UTF-8
+                var bom = Encoding.UTF8.GetPreamble();
                 await Response.OutputStream.WriteAsync(bom, 0, bom.Length);
 
-                string headerLine = "un,nombre_tarjeta,marca,bin6,bin8,emisor,tipo_tarjeta,Clasificacion,mdr\r\n";
-                byte[] headerBytes = Encoding.UTF8.GetBytes(headerLine);
+                // Encabezado (todas las columnas de mdr_bines_izipay)
+                var headerLine = "cod_periodo,nom_empresa,bin6,bin8_9,marca,tipo_tarjeta,subproducto,banco_emisor,factor_mdr\r\n";
+                var headerBytes = Encoding.UTF8.GetBytes(headerLine);
                 await Response.OutputStream.WriteAsync(headerBytes, 0, headerBytes.Length);
 
                 using (var conn = new NpgsqlConnection(connectionString))
                 {
                     await conn.OpenAsync();
 
-                    const string sql = @"SELECT * FROM ""SGP"".sf_mdr_consolidado_bines(@p_cod_empresa, @p_cod_periodo);";
+                    // Llama a la función que retorna todas las columnas en minúsculas
+                    const string sql = @"SELECT * FROM ""SGP"".mdr_bines_sf_consolidado(@p_cod_empresa, @p_cod_periodo);";
 
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.Add(new NpgsqlParameter("@p_cod_empresa", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = codEmpresa });
-                        cmd.Parameters.Add(new NpgsqlParameter("@p_cod_periodo", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = codPeriodo });
+                        cmd.Parameters.Add(new NpgsqlParameter("@p_cod_periodo", NpgsqlTypes.NpgsqlDbType.Integer) { Value = codPeriodo });
                         cmd.CommandTimeout = 0;
 
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            var sb = new StringBuilder();
+                            string Esc(string s)
+                            {
+                                if (string.IsNullOrEmpty(s)) return "";
+                                if (s.Contains(",") || s.Contains("\"") || s.Contains("\r") || s.Contains("\n"))
+                                {
+                                    var temp = s.Replace("\"", "\"\"");
+                                    return $"\"{temp}\"";
+                                }
+                                return s;
+                            }
 
+                            var sb = new StringBuilder(256);
                             while (await reader.ReadAsync())
                             {
-                                // Función para escapar si hay comas o comillas
-                                string Esc(string s)
-                                {
-                                    if (s.Contains(",") || s.Contains("\"") || s.Contains("\r") || s.Contains("\n"))
-                                    {
-                                        var temp = s.Replace("\"", "\"\"");
-                                        return $"\"{temp}\"";
-                                    }
-                                    return s;
-                                }
-
-                                string nomEmpr = reader["NOM_EMPRESA"] != DBNull.Value ? reader["NOM_EMPRESA"].ToString() : "";
-                                //string numAnoR = reader["DES_PERIODO"] != DBNull.Value ? reader["DES_PERIODO"].ToString() : "";
-                                string nomTarj = reader["NOM_TARJETA"] != DBNull.Value ? reader["NOM_TARJETA"].ToString() : "";
-                                string nomOper = reader["NOM_OPERADOR"] != DBNull.Value ? reader["NOM_OPERADOR"].ToString() : "";
-                                string numBin6 = reader["NUM_BIN_6"] != DBNull.Value ? reader["NUM_BIN_6"].ToString() : "";
-                                string numBin8 = reader["NUM_BIN_8"] != DBNull.Value ? reader["NUM_BIN_8"].ToString() : "";
-                                string bancoEm = reader["BANCO_EMISOR"] != DBNull.Value ? reader["BANCO_EMISOR"].ToString() : "";
-                                string tipo = reader["TIPO"] != DBNull.Value ? reader["TIPO"].ToString() : "";
-                                string nomClas = reader["NOM_CLASIFICACION"] != DBNull.Value ? reader["NOM_CLASIFICACION"].ToString() : "";
-                                decimal factor = reader["FACTOR_MDR"] != DBNull.Value ? Convert.ToDecimal(reader["FACTOR_MDR"]) : 0m;
+                                var codPeriodoStr = reader["cod_periodo"] != DBNull.Value ? reader["cod_periodo"].ToString() : "";
+                                var nomEmpStr = reader["nom_empresa"] != DBNull.Value ? reader["nom_empresa"].ToString() : "";
+                                var bin6Str = reader["bin_6"] != DBNull.Value ? reader["bin_6"].ToString() : "";
+                                var bin89Str = reader["bin_8_9"] != DBNull.Value ? reader["bin_8_9"].ToString() : "";
+                                var marcaStr = reader["marca"] != DBNull.Value ? reader["marca"].ToString() : "";
+                                var tipoStr = reader["tipo_tarjeta"] != DBNull.Value ? reader["tipo_tarjeta"].ToString() : "";
+                                var subprodStr = reader["subproducto"] != DBNull.Value ? reader["subproducto"].ToString() : "";
+                                var bancoStr = reader["banco_emisor"] != DBNull.Value ? reader["banco_emisor"].ToString() : "";
+                                var factor = reader["factor_mdr"] != DBNull.Value ? Convert.ToDecimal(reader["factor_mdr"]) : 0m;
 
                                 sb.Clear();
-                                sb.Append(Esc(nomEmpr)).Append(",");
-                                //sb.Append(Esc(numAnoR)).Append(",");
-                                sb.Append(Esc(nomTarj)).Append(",");
-                                sb.Append(Esc(nomOper)).Append(",");
-                                sb.Append(Esc(numBin6)).Append(",");
-                                sb.Append(Esc(numBin8)).Append(",");
-                                sb.Append(Esc(bancoEm)).Append(",");
-                                sb.Append(Esc(tipo)).Append(",");
-                                sb.Append(Esc(nomClas)).Append(",");
-                                sb.Append(factor.ToString("F2")).Append("%\r\n");
+                                sb.Append(Esc(codPeriodoStr)).Append(",");
+                                sb.Append(Esc(nomEmpStr)).Append(",");
+                                sb.Append(Esc(bin6Str)).Append(",");
+                                sb.Append(Esc(bin89Str)).Append(",");
+                                sb.Append(Esc(marcaStr)).Append(",");
+                                sb.Append(Esc(tipoStr)).Append(",");
+                                sb.Append(Esc(subprodStr)).Append(",");
+                                sb.Append(Esc(bancoStr)).Append(",");
+                                sb.Append(factor.ToString("F4")).Append("\r\n");
 
-                                byte[] lineBytes = Encoding.UTF8.GetBytes(sb.ToString());
+                                var lineBytes = Encoding.UTF8.GetBytes(sb.ToString());
                                 await Response.OutputStream.WriteAsync(lineBytes, 0, lineBytes.Length);
                             }
                         }
                     }
                 }
 
-                Response.End();
+                await Response.OutputStream.FlushAsync();
                 return new EmptyResult();
             }
             catch (Exception ex)
             {
                 return Json(new { ok = false, mensaje = "Error al generar CSV: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
-
-
         }
 
         [HttpPost]
@@ -136,7 +135,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                 return Json(new { ok = false, mensaje = "Debes seleccionar un archivo .xlsx." });
             }
 
-            var command = new ImportarMdrTmpBinesIzipayCommand
+            var command = new ImportarMdrBinesInretailCommand
             {
                 Archivo = archivoExcel,
                 CodPeriodo = codPeriodo,
