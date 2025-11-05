@@ -67,6 +67,8 @@
     <Compile Include="Entidades\GuiaRecepcionDetalle.cs" />
     <Compile Include="Entidades\Mae_AreaGestion.cs" />
     <Compile Include="Entidades\Mae_SerieProducto.cs" />
+    <Compile Include="Entidades\Mdr_BinesIzipay.cs" />
+    <Compile Include="Entidades\Mdr_Clasificacion.cs" />
     <Compile Include="Entidades\Mov_Kardex.cs" />
     <Compile Include="Entidades\ProductoSerieDetalle.cs" />
     <Compile Include="Entidades\ElectronicJournal.cs" />
@@ -96,13 +98,10 @@
     <Compile Include="Entidades\Mae_Puesto.cs" />
     <Compile Include="Entidades\Mae_Region.cs" />
     <Compile Include="Entidades\Mae_Zona.cs" />
-    <Compile Include="Entidades\Mdr_BinesIzipay.cs" />
-    <Compile Include="Entidades\Mdr_ClasificacionPorNombre.cs" />
-    <Compile Include="Entidades\Mdr_ClasificacionPorOperador.cs" />
     <Compile Include="Entidades\Mdr_FactorIzipay.cs" />
     <Compile Include="Entidades\Mdr_Operador.cs" />
     <Compile Include="Entidades\Mdr_Periodo.cs" />
-    <Compile Include="Entidades\Mdr_TmpBinesIzipay.cs" />
+    <Compile Include="Entidades\Mdr_BinesInretail.cs" />
     <Compile Include="Entidades\MonCierreEOD.cs" />
     <Compile Include="Entidades\MonCierreEODHist.cs" />
     <Compile Include="Entidades\SrvSerieDet.cs" />

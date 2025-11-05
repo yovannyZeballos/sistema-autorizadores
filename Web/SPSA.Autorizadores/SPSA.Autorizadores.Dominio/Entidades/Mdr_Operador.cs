@@ -6,6 +6,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
     {
         public string CodOperador { get; set; }
         public string NomOperador { get; set; }
+        public string IndActivo { get; set; }
 
         public virtual ICollection<Mdr_FactorIzipay> Factores { get; set; }
     }

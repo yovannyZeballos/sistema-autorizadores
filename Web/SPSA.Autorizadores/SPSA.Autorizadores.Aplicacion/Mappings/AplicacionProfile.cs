@@ -262,7 +262,7 @@ namespace SPSA.Autorizadores.Aplicacion.Mappings
             CreateMap<ListarMdrBinesDto, Mdr_BinesIzipay>().ReverseMap();
             CreateMap<ListarMdrFactorDto, Mdr_FactorIzipay>().ReverseMap();
             CreateMap<ListarMdrOperadorDto, Mdr_Operador>().ReverseMap();
-            CreateMap<ListarMdrClasificacionDto, Mdr_ClasificacionPorOperador>().ReverseMap();
+            CreateMap<ListarMdrClasificacionDto, Mdr_Clasificacion>().ReverseMap();
             CreateMap<ListarMdrPeriodoDto, Mdr_Periodo>().ReverseMap();
 
             CreateMap<Mdr_FactorIzipay, ListarMdrFactorDto>()

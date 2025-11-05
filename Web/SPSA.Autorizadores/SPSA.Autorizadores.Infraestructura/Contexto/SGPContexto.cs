@@ -209,9 +209,8 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 			modelBuilder.Configurations.Add(new CcomSolicitudDetTypeConfiguration());
 			modelBuilder.Configurations.Add(new MaeCodComercioTypeConfiguration());
 
-			modelBuilder.Configurations.Add(new MdrBinesIzipayTypeConfiguration());
-			modelBuilder.Configurations.Add(new MdrClasificacionPorNombreTypeConfiguration());
-			modelBuilder.Configurations.Add(new MdrClasificacionPorOperadorTypeConfiguration());
+			//modelBuilder.Configurations.Add(new MdrBinesInretailTypeConfiguration());
+			modelBuilder.Configurations.Add(new MdrClasificacionTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrFactorIzipayTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrOperadorTypeConfiguration());
 			modelBuilder.Configurations.Add(new MdrPeriodoTypeConfiguration());
