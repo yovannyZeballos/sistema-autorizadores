@@ -63,6 +63,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioCaja.Queries
                     .OrderBy(s => s)
                     .ToListAsync();
 
+                listaSo.Add("SUSE Linux Enterprise Server 15 SP6");
+
                 var listaVerSo = await _contexto.RepositorioInvCajas.Obtener(x => !string.IsNullOrEmpty(x.VerSo))
                     .Select(x => x.VerSo)
                     .Distinct()

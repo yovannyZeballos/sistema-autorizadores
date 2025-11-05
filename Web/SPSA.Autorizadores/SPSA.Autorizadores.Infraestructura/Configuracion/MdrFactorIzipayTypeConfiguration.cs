@@ -9,22 +9,22 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
         {
 
             // Configura la tabla a la que se mapea la entidad.
-            ToTable("MDR_FACTOR_IZIPAY", "SGP");
+            ToTable("mdr_factor_izipay", "SGP");
 
             // Configura la clave primaria de la entidad.
             HasKey(x => new { x.CodEmpresa, x.CodPeriodo, x.CodOperador, x.CodClasificacion });
 
             // Configura las propiedades de la entidad.
-            Property(x => x.CodEmpresa).HasColumnName("COD_EMPRESA");
-            Property(x => x.CodPeriodo).HasColumnName("COD_PERIODO");
-            Property(x => x.CodOperador).HasColumnName("COD_OPERADOR");
-            Property(x => x.CodClasificacion).HasColumnName("COD_CLASIFICACION");
-            Property(x => x.Factor).HasColumnName("FACTOR");
-            Property(x => x.IndActivo).HasColumnName("IND_ACTIVO");
-            Property(x => x.UsuCreacion).HasColumnName("USU_CREACION");
-            Property(x => x.FecCreacion).HasColumnName("FEC_CREACION");
-            Property(x => x.UsuModifica).HasColumnName("USU_MODIFICA");
-            Property(x => x.FecModifica).HasColumnName("FEC_MODIFICA");
+            Property(x => x.CodEmpresa).HasColumnName("cod_empresa");
+            Property(x => x.CodPeriodo).HasColumnName("cod_periodo");
+            Property(x => x.CodOperador).HasColumnName("cod_operador");
+            Property(x => x.CodClasificacion).HasColumnName("cod_clasificacion");
+            Property(x => x.Factor).HasColumnName("factor");
+            Property(x => x.IndActivo).HasColumnName("ind_activo");
+            Property(x => x.UsuCreacion).HasColumnName("usu_creacion");
+            Property(x => x.FecCreacion).HasColumnName("fec_creacion");
+            Property(x => x.UsuModifica).HasColumnName("usu_modifica");
+            Property(x => x.FecModifica).HasColumnName("fec_modifica");
 
         }
     }

@@ -43,7 +43,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.MdrBinesIzipay.Queries.Periodos
             {
                 var listaEntidades = await _contexto.RepositorioMdrPeriodo
                     .Obtener(x=> x.IndActivo == "S")
-                    .OrderByDescending(x => x.CodPeriodo)
+                    .OrderByDescending(x => x.DesPeriodo)
                     .ToListAsync();
 
                 response.Data = _mapper.Map<List<ListarMdrPeriodoDto>>(listaEntidades);

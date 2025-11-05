@@ -4,7 +4,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-    public class RepositorioMdrClasificacion : RepositorioGenerico<SGPContexto, Mdr_ClasificacionPorOperador>, IRepositorioMdrClasificacion
+    public class RepositorioMdrClasificacion : RepositorioGenerico<SGPContexto, Mdr_Clasificacion>, IRepositorioMdrClasificacion
     {
         public RepositorioMdrClasificacion(SGPContexto context) : base(context) { }
 
