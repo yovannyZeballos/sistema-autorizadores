@@ -17,6 +17,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Producto
         public string IndActivo { get; set; }
         public decimal StkMinimo { get; set; }
         public decimal StkMaximo { get; set; }
+        public decimal StkDisponible { get; set; }
         public string NomModelo { get; set; }
         public string UsuCreacion { get; set; }
         public DateTime FecCreacion { get; set; }

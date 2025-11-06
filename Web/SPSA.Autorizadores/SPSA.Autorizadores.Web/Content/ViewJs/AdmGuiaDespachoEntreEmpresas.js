@@ -2,7 +2,7 @@
 var urlRegistrarDespacho = baseUrl + 'Inventario/GuiaDespacho/Registrar';
 var urlListarEmpresas = baseUrl + 'Maestros/MaeEmpresa/ListarEmpresasAsociadas';
 var urlListarLocalesPorEmpresa = baseUrl + 'Maestros/MaeLocal/ListarLocalPorEmpresa';
-var urlListarProductos = baseUrl + 'Inventario/Productos/Listar';
+var urlListarProductos = baseUrl + 'Inventario/Productos/ListarPorLocal';
 var urlListarSeriesDisponibles = baseUrl + 'Inventario/SeriesProducto/ListarPorProductoDisponibles';
 var urlObtenerDespacho = baseUrl + 'Inventario/GuiaDespacho/Obtener';
 var urlObtenerSerieProducto = baseUrl + 'Inventario/SeriesProducto/Obtener';
@@ -174,6 +174,7 @@ var AdmGuiaDespachoEntreEmpresas = (function ($) {
                     DesProducto: p.DesProducto,
                     NomMarca: p.NomMarca,
                     NomModelo: p.NomModelo,
+                    StkDisponible: p.StkDisponible, //-----------------------------------------
                     IndSerializable: (p.IndSerializable || 'N') // ← default seguro: no serializable
                 }));
             } else {
@@ -211,6 +212,7 @@ var AdmGuiaDespachoEntreEmpresas = (function ($) {
             var texto = (p.DesProducto || '');
             if (p.NomMarca) texto += ' - ' + p.NomMarca;
             if (p.NomModelo) texto += ' - ' + p.NomModelo;
+            texto += ' (Disp: ' + (p.StkDisponible != null ? p.StkDisponible : '0') + ')'; //-----------------------------------------
             return { text: texto.trim(), value: p.CodProducto, attrs: { 'data-serializable': p.IndSerializable } };
         });
 

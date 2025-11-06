@@ -457,6 +457,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarMaeMarcaHandler>().As<IRequestHandler<ListarMaeMarcaQuery, GenericResponseDTO<List<ListarMaeMarcaDto>>>>();
             builder.RegisterType<ListarMaeAreaGestionHandler>().As<IRequestHandler<ListarMaeAreaGestionQuery, GenericResponseDTO<List<ListarMaeAreaGestionDto>>>>();
             builder.RegisterType<ListarMaeProductoHandler>().As<IRequestHandler<ListarMaeProductoQuery, GenericResponseDTO<List<ListarMaeProductoDto>>>>();
+            builder.RegisterType<ListarMaeProductoPorLocalHandler>().As<IRequestHandler<ListarMaeProductoPorLocalQuery, GenericResponseDTO<List<ListarMaeProductoDto>>>>();
             builder.RegisterType<ListarMaeSerieProductoHandler>().As<IRequestHandler<ListarMaeSerieProductoQuery, GenericResponseDTO<List<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarMaeSeriesPorProductoHandler>().As<IRequestHandler<ListarMaeSeriesPorProductoQuery, GenericResponseDTO<List<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarMaeSeriesPorProductoDisponiblesHandler>().As<IRequestHandler<ListarMaeSeriesPorProductoDisponiblesQuery, GenericResponseDTO<List<ListarMaeSerieProductoDto>>>>();
