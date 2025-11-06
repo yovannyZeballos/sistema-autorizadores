@@ -57,7 +57,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                 await Response.OutputStream.WriteAsync(bom, 0, bom.Length);
 
                 // Encabezado (todas las columnas de mdr_bines_izipay)
-                var headerLine = "periodo,empresa,bin6,bin8_9,marca,tipo_tarjeta,subproducto,banco_emisor,factor_mdr\r\n";
+                var headerLine = "periodo,empresa,bin6,bin8_9,marca,tipo_tarjeta,subproducto,banco_emisor,factor_mdr,traduccion_tarifario\r\n";
                 var headerBytes = Encoding.UTF8.GetBytes(headerLine);
                 await Response.OutputStream.WriteAsync(headerBytes, 0, headerBytes.Length);
 
@@ -99,6 +99,7 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                                 var subprodStr = reader["subproducto"] != DBNull.Value ? reader["subproducto"].ToString() : "";
                                 var bancoStr = reader["banco_emisor"] != DBNull.Value ? reader["banco_emisor"].ToString() : "";
                                 var factor = reader["factor_mdr"] != DBNull.Value ? Convert.ToDecimal(reader["factor_mdr"]) : 0m;
+                                var tarifarioStr = reader["traduccion_tarifario"] != DBNull.Value ? reader["traduccion_tarifario"].ToString() : "";
 
                                 sb.Clear();
                                 sb.Append(Esc(desPeriodoStr)).Append(",");
@@ -109,7 +110,8 @@ namespace SPSA.Autorizadores.Web.Areas.MdrBinesIzipay.Controllers
                                 sb.Append(Esc(tipoStr)).Append(",");
                                 sb.Append(Esc(subprodStr)).Append(",");
                                 sb.Append(Esc(bancoStr)).Append(",");
-                                sb.Append(factor.ToString("F4")).Append("\r\n");
+                                sb.Append(factor.ToString("F4")).Append(",");
+                                sb.Append(Esc(tarifarioStr)).Append("\r\n");
 
                                 var lineBytes = Encoding.UTF8.GetBytes(sb.ToString());
                                 await Response.OutputStream.WriteAsync(lineBytes, 0, lineBytes.Length);
