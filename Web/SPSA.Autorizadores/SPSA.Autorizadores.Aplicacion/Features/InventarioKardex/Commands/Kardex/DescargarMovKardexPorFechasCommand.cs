@@ -4,13 +4,13 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using NPOI.SS.Util;
-using NPOI.XSSF.Streaming;
-using NPOI.XSSF.UserModel;
 using Serilog;
 using SPSA.Autorizadores.Aplicacion.DTO;
 using SPSA.Autorizadores.Aplicacion.Logger;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Kardex
 {
@@ -33,174 +33,93 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Karde
 
         public async Task<RespuestaComunExcelDTO> Handle(DescargarMovKardexPorFechasCommand r, CancellationToken ct)
         {
-            var resp = new RespuestaComunExcelDTO { Ok = false, Mensaje = "No procesado" };
+            var resp = new RespuestaComunExcelDTO();
             string tempPath = null;
 
             try
             {
-                // 1) Datos
-                DataTable table = await _repositorioMovKardex.DescargarMovKardexPorFechas(r.FechaInicio, r.FechaFin);
+                var table = await _repositorioMovKardex.DescargarMovKardexPorFechas(r.FechaInicio, r.FechaFin);
                 if (table == null || table.Rows.Count == 0)
                 {
+                    resp.Ok = false;
                     resp.Mensaje = "No se encontraron movimientos en el rango indicado.";
                     return resp;
                 }
 
-                // 2) Generar XLSX en archivo temporal (streaming con SXSSF)
                 tempPath = Path.Combine(Path.GetTempPath(), $"kardex_{Guid.NewGuid():N}.xlsx");
 
-                using (var xssf = new XSSFWorkbook())
-                using (var wb = new SXSSFWorkbook(xssf, 500)) // ventana de 500 filas en memoria
+                using (var doc = SpreadsheetDocument.Create(tempPath, SpreadsheetDocumentType.Workbook))
                 {
-                    var sh = wb.CreateSheet("Kardex");
-                    var helper = wb.GetCreationHelper();
+                    var wbPart = doc.AddWorkbookPart();
+                    wbPart.Workbook = new Workbook();
 
-                    // Estilos
-                    var fontBold = wb.CreateFont(); fontBold.IsBold = true;
-                    var headerStyle = wb.CreateCellStyle(); headerStyle.SetFont(fontBold);
-
-                    var df = helper.CreateDataFormat();
-                    var dateStyle = wb.CreateCellStyle();
-                    dateStyle.DataFormat = df.GetFormat("yyyy-mm-dd hh:mm:ss");
-
-                    int colCount = table.Columns.Count;
-                    int rowCount = table.Rows.Count;
-                    var maxLen = new int[colCount]; // longitudes para ancho de columna
-
-                    // Cabeceras
-                    var head = sh.CreateRow(0);
-                    for (int c = 0; c < colCount; c++)
+                    var wsPart = wbPart.AddNewPart<WorksheetPart>();
+                    using (var w = OpenXmlWriter.Create(wsPart))
                     {
-                        var name = table.Columns[c].ColumnName ?? string.Empty;
-                        var cell = head.CreateCell(c);
-                        cell.SetCellValue(name);
-                        cell.CellStyle = headerStyle;
-                        maxLen[c] = Math.Max(maxLen[c], name.Length);
-                    }
+                        w.WriteStartElement(new Worksheet());
+                        w.WriteStartElement(new SheetData());
 
-                    // Filas (compatible C# 7.3, sin 'or patterns')
-                    for (int i = 0; i < rowCount; i++)
-                    {
-                        var row = sh.CreateRow(i + 1);
-                        var dr = table.Rows[i];
+                        // Header
+                        w.WriteStartElement(new Row());
+                        for (int c = 0; c < table.Columns.Count; c++)
+                            WriteStringCell(w, table.Columns[c].ColumnName ?? string.Empty);
+                        w.WriteEndElement(); // </Row>
 
-                        for (int j = 0; j < colCount; j++)
+                        // Data (todo como texto)
+                        for (int i = 0; i < table.Rows.Count; i++)
                         {
-                            var cell = row.CreateCell(j);
-                            var val = dr[j];
-
-                            if (val == null || val == DBNull.Value)
+                            var dr = table.Rows[i];
+                            w.WriteStartElement(new Row());
+                            for (int j = 0; j < table.Columns.Count; j++)
                             {
-                                cell.SetCellValue(string.Empty);
-                                continue;
+                                var s = dr[j] == null || dr[j] is DBNull ? string.Empty : dr[j].ToString();
+                                WriteStringCell(w, s);
                             }
-
-                            // DateTime / DateTimeOffset
-                            if (val is DateTime)
-                            {
-                                var dt = (DateTime)val;
-                                cell.SetCellValue(dt);
-                                cell.CellStyle = dateStyle;
-                                maxLen[j] = Math.Max(maxLen[j], 19); // "yyyy-mm-dd hh:mm:ss"
-                            }
-                            else if (val is DateTimeOffset)
-                            {
-                                var dto = (DateTimeOffset)val;
-                                cell.SetCellValue(dto.UtcDateTime);
-                                cell.CellStyle = dateStyle;
-                                maxLen[j] = Math.Max(maxLen[j], 19);
-                            }
-                            else
-                            {
-                                // Numérico / Boolean / Texto por TypeCode
-                                var tc = Type.GetTypeCode(val.GetType());
-                                switch (tc)
-                                {
-                                    case TypeCode.Byte:
-                                    case TypeCode.SByte:
-                                    case TypeCode.Int16:
-                                    case TypeCode.UInt16:
-                                    case TypeCode.Int32:
-                                    case TypeCode.UInt32:
-                                    case TypeCode.Int64:
-                                    case TypeCode.UInt64:
-                                    case TypeCode.Single:
-                                    case TypeCode.Double:
-                                    case TypeCode.Decimal:
-                                        {
-                                            double d = Convert.ToDouble(val);
-                                            cell.SetCellValue(d);
-                                            maxLen[j] = Math.Max(maxLen[j], val.ToString().Length);
-                                            break;
-                                        }
-                                    case TypeCode.Boolean:
-                                        {
-                                            bool b = Convert.ToBoolean(val);
-                                            cell.SetCellValue(b);
-                                            maxLen[j] = Math.Max(maxLen[j], b.ToString().Length);
-                                            break;
-                                        }
-                                    default:
-                                        {
-                                            string s = val.ToString();
-                                            cell.SetCellValue(s);
-                                            maxLen[j] = Math.Max(maxLen[j], s == null ? 0 : s.Length);
-                                            break;
-                                        }
-                                }
-                            }
+                            w.WriteEndElement(); // </Row>
                         }
 
-                        // Liberar por bloques si manejas millones de filas
-                        // if ((i % 5000) == 0) ((SXSSFSheet)sh).FlushRows(5000);
+                        w.WriteEndElement(); // </SheetData>
+                        w.WriteEndElement(); // </Worksheet>
                     }
 
-                    // Anchos de columna "a ojo" (sin AutoSizeColumn → evita SixLabors)
-                    for (int c = 0; c < colCount; c++)
+                    var sheets = wbPart.Workbook.AppendChild(new Sheets());
+                    sheets.Append(new Sheet
                     {
-                        int widthChars = Math.Min(60, Math.Max(10, maxLen[c] + 2)); // 10..60
-                        sh.SetColumnWidth(c, widthChars * 256);
-                    }
+                        Id = wbPart.GetIdOfPart(wsPart),
+                        SheetId = 1U,
+                        Name = "Kardex"
+                    });
 
-                    // UX
-                    sh.CreateFreezePane(0, 1);
-                    sh.SetAutoFilter(new CellRangeAddress(0, rowCount, 0, colCount - 1));
-
-                    // Guardar a disco (no en memoria)
-                    using (var fs = File.Create(tempPath))
-                    {
-                        wb.Write(fs);
-                    }
-
-                    try { wb.Dispose(); } catch { try { wb.Close(); } catch { } }
+                    wbPart.Workbook.Save();
                 }
 
-                // 3) Leer archivo y convertir a Base64 (tu DTO lo requiere)
-                byte[] fileBytes = File.ReadAllBytes(tempPath);
-                resp.Archivo = Convert.ToBase64String(fileBytes);
-                resp.NombreArchivo = $"Kardex_{r.FechaInicio:yyyyMMdd}_{r.FechaFin:yyyyMMdd}.xlsx";
+                var bytes = File.ReadAllBytes(tempPath);
                 resp.Ok = true;
                 resp.Mensaje = "Archivo generado correctamente.";
+                resp.NombreArchivo = $"Kardex_{r.FechaInicio:yyyyMMdd}_{r.FechaFin:yyyyMMdd}.xlsx";
+                resp.Archivo = Convert.ToBase64String(bytes);
             }
             catch (Exception ex)
             {
-                _logger.Error("DescargarMovKardexPorFechasHandler error: {Message}", ex.Message);
+                _logger.Error(ex, "DescargarMovKardexPorFechasHandler error");
                 resp.Ok = false;
                 resp.Mensaje = $"Error al generar archivo: {ex.Message}";
             }
             finally
             {
-                if (!string.IsNullOrEmpty(tempPath))
-                {
-                    try
-                    {
-                        if (File.Exists(tempPath)) File.Delete(tempPath);
-                    }
-                    catch { /* ignore */ }
-                }
+                try { if (!string.IsNullOrEmpty(tempPath) && File.Exists(tempPath)) File.Delete(tempPath); } catch { }
             }
 
             return resp;
+        }
+
+        private static void WriteStringCell(OpenXmlWriter w, string value)
+        {
+            w.WriteElement(new Cell
+            {
+                DataType = CellValues.String,
+                CellValue = new CellValue(value ?? string.Empty)
+            });
         }
     }
 }
