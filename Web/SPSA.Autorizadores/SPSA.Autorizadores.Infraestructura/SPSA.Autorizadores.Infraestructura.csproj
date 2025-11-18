@@ -168,9 +168,9 @@
     <Compile Include="Configuracion\MaeProveedorTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaePuestoTypeConfiguration.cs" />
     <Compile Include="Configuracion\MaeSerieProductoTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrBinesInretailTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrBinesIzipayTypeConfiguration.cs" />
-    <Compile Include="Configuracion\MdrClasificacionPorNombreTypeConfiguration.cs" />
-    <Compile Include="Configuracion\MdrClasificacionPorOperadorTypeConfiguration.cs" />
+    <Compile Include="Configuracion\MdrClasificacionTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrFactorIzipayTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrOperadorTypeConfiguration.cs" />
     <Compile Include="Configuracion\MdrPeriodoTypeConfiguration.cs" />

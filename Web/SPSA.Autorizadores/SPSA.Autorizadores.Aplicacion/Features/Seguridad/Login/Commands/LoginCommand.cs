@@ -126,11 +126,20 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Seguridad.Commands
 
         private async Task RegistrarFechaHoraIngreso(string codUsuario)
         {
-            var usuario = await _sgpContexto.RepositorioSegUsuario.Obtener(x => x.CodUsuario == codUsuario).AsNoTracking().FirstOrDefaultAsync();
-            usuario.FecIngreso = DateTime.Now;
-            usuario.HoraIngreso = DateTime.Now.TimeOfDay;
-            _sgpContexto.RepositorioSegUsuario.Actualizar(usuario);
-            await _sgpContexto.GuardarCambiosAsync();
+            try
+            {
+                var usuario = await _sgpContexto.RepositorioSegUsuario.Obtener(x => x.CodUsuario == codUsuario).AsNoTracking().FirstOrDefaultAsync();
+                usuario.FecIngreso = DateTime.Now;
+                usuario.HoraIngreso = DateTime.Now.TimeOfDay;
+                _sgpContexto.RepositorioSegUsuario.Actualizar(usuario);
+                await _sgpContexto.GuardarCambiosAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                throw new Exception($"Error al obtener usuario [{codUsuario}] en SGP", ex);
+            }
+            
         }
     }
 }

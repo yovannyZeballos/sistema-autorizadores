@@ -140,7 +140,12 @@
                             <ul class="side-menu">
                                 @if (SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados != null)
                                 {
-                                    foreach (var menuPadre in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => string.IsNullOrEmpty(x.CodMenuPadre) || x.CodMenuPadre == "#"))
+                                    var padres = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados
+                                            .Where(x => string.IsNullOrEmpty(x.CodMenuPadre) || x.CodMenuPadre == "#")
+                                            .OrderBy(x => x.NomMenu, StringComparer.CurrentCultureIgnoreCase)
+                                            .ToList();
+
+                                    foreach (var menuPadre in padres)
                                     {
                                         <li class="slide">
                                             <a class="side-menu__item" href="javascript:void(0);">
@@ -149,7 +154,9 @@
                                                 <i class="angle fa fa-angle-right"></i>
                                             </a>
                                             <ul class="slide-menu">
-                                                @foreach (var menuHijo in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuPadre.CodMenu))
+
+
+                                                @foreach (var menuHijo in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuPadre.CodMenu).OrderBy(x => x.NomMenu, StringComparer.CurrentCultureIgnoreCase))
                                                 {
                                                     var tieneNietos = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Any(x => x.CodMenuPadre == menuHijo.CodMenu);
                                                     <li class="sub-slide">
@@ -163,7 +170,7 @@
                                                         @if (tieneNietos)
                                                         {
                                                             <ul class="sub-sub-slide-menu">
-                                                                @foreach (var menuNieto in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuHijo.CodMenu))
+                                                                @foreach (var menuNieto in SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados.Where(x => x.CodMenuPadre == menuHijo.CodMenu).OrderBy(x => x.NomMenu, StringComparer.CurrentCultureIgnoreCase))
                                                                 {
                                                                     <li>
                                                                         <a href="@menuNieto.UrlMenu" class="sub-sub-slide-item">@menuNieto.NomMenu</a>
@@ -324,7 +331,7 @@
 {
     var subMenus = SPSA.Autorizadores.Web.Utiles.WebSession.MenusAsociados
         .Where(x => x.CodMenuPadre == menuPadre.CodMenu)
-        .OrderBy(x => x.NomMenu)
+        .OrderBy(x => x.NomMenu, StringComparer.CurrentCultureIgnoreCase)
         .ToList();
 
     foreach (var menu in subMenus)

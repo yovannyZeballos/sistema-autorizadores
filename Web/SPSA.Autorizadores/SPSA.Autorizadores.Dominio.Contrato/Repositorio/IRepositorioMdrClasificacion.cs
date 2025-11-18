@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-    public interface IRepositorioMdrClasificacion : IRepositorioGenerico<Mdr_ClasificacionPorOperador>
+    public interface IRepositorioMdrClasificacion : IRepositorioGenerico<Mdr_Clasificacion>
     {
     }
 }
