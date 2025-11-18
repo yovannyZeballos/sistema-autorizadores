@@ -42,8 +42,19 @@ namespace SPSA.Autorizadores.Web.Areas.Operaciones.Controllers
 				ip = Request.ServerVariables["REMOTE_ADDR"];
 			}
 
+			string hostname = "";
+			try
+			{
+				var hostEntry = System.Net.Dns.GetHostEntry(ip);
+				hostname = hostEntry.HostName;
+			}
+			catch
+			{
+				hostname = "";
+			}
+
 			request.Usuario = WebSession.Login;
-			request.Ip = ip;
+			request.Ip = $"{ip} - {hostname}";
 			var response = await _mediator.Send(request);
 			return Json(response);
 		}

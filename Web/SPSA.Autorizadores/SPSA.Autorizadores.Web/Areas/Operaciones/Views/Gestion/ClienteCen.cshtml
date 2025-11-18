@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Operaciones | Gestión | Cliente CEN";
+    ViewBag.Title = "Operaciones | Gestión | Cliente CEM";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -24,21 +24,21 @@
 <!--Page header-->
 <div class="page-header d-lg-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">MANTENIMIENTO CLIENTE - CEN</div>
+        <div class="page-title">MANTENIMIENTO CLIENTE - CEM</div>
     </div>
     <div class="page-rightheader ms-md-auto">
         <ol class="breadcrumb1">
             <li class="breadcrumb-item1"><a href=@Url.Action("Index", "Home", new {area=""})>Inicio</a></li>
             <li class="breadcrumb-item1 active">Operaciones</li>
             <li class="breadcrumb-item1 active">Gestión</li>
-            <li class="breadcrumb-item1 active">Cliente CEN</li>
+            <li class="breadcrumb-item1 active">Cliente CEM</li>
         </ol>
     </div>
 </div>
 
 <div class="col-xl-12">
     <div class="card overflow-hidden">
-        @Html.Partial("_CardHeader", "Buscar cliente en CEN")
+        @Html.Partial("_CardHeader", "Buscar cliente en CEM")
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
