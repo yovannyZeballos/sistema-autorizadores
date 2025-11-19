@@ -11,6 +11,7 @@ var AdmGuiaDespachoEntreEmpresas = (function ($) {
 
     // ======================== Estado ========================
     var _productosCache = [];   // {CodProducto, DesProducto, NomMarca, NomModelo, IndSerializable('S'|'N')}
+    var _productosCacheStale = true; // ← arranca como "necesita refrescarse"
     var dt = null;              // DataTable cache
 
     // ================== Eventos ==================
@@ -18,7 +19,7 @@ var AdmGuiaDespachoEntreEmpresas = (function ($) {
         // Nueva guía
         $('#btnNuevaGuia').on('click', async function () {
             limpiarModal();
-            await Promise.all([cargarComboEmpresasModal(), ensureProductos()]);
+            await Promise.all([cargarComboEmpresasModal(), ensureProductos(true)]);
             addDetalleRow();
             new bootstrap.Modal(document.getElementById('modalDespacho')).show();
         });
@@ -164,19 +165,20 @@ var AdmGuiaDespachoEntreEmpresas = (function ($) {
     }
 
     // ======================== Cache de productos ========================
-    async function ensureProductos() {
-        if (_productosCache.length) return;
+    async function ensureProductos(force = false) {
+        if (!force && _productosCache.length && !_productosCacheStale) return;
         try {
-            const resp = await listarProductos();
+            const resp = await listarProductos(); // si tu endpoint acepta local/origen, pásalo aquí
             if (resp.Ok) {
-                _productosCache = resp.Data.map(p => ({
+                _productosCache = (resp.Data || []).map(p => ({
                     CodProducto: p.CodProducto,
                     DesProducto: p.DesProducto,
                     NomMarca: p.NomMarca,
                     NomModelo: p.NomModelo,
-                    StkDisponible: p.StkDisponible, //-----------------------------------------
-                    IndSerializable: (p.IndSerializable || 'N') // ← default seguro: no serializable
+                    StkDisponible: p.StkDisponible,
+                    IndSerializable: (p.IndSerializable || 'N')
                 }));
+                _productosCacheStale = false; // ya está fresco
             } else {
                 swal({ text: swalText(resp, 'No fue posible listar productos'), icon: 'error' });
             }
@@ -428,6 +430,9 @@ var AdmGuiaDespachoEntreEmpresas = (function ($) {
 
             if (resp.Ok) {
                 swal({ text: resp.Mensaje || 'Guía de despacho registrada correctamente.', icon: 'success' });
+                _productosCacheStale = true;   // ← invalida cache
+                // opcional: _productosCache = [];
+
                 // cerrar modal
                 const modalEl = document.getElementById('modalDespacho');
                 if (modalEl) {

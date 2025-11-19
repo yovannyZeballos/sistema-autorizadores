@@ -122,3 +122,33 @@ function setBtnBusy($btn, busyText) {
     $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>' + (busyText || 'Procesando…'));
     return function restore() { $btn.prop('disabled', old.disabled).html(old.html); };
 }
+
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+function _isMinDotNet(val) { return typeof val === 'string' && val.indexOf('0001-01-01') === 0; }
+
+function toInputDate(val) {
+    if (!val) return '';
+    if (_isMinDotNet(val)) return '';
+
+    // /Date(…)/ de .NET
+    var m = /^\/Date\((\d+)\)\/$/.exec(val);
+    if (m) {
+        var d = new Date(parseInt(m[1], 10));
+        return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+    }
+
+    // ISO con hora -> quedarse con la parte de fecha
+    if (typeof val === 'string') {
+        // ya viene "YYYY-MM-DD"
+        if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+        var t = val.indexOf('T');
+        if (t > 0) return val.substring(0, t);
+    }
+
+    // Fallback: intentar como Date
+    var d2 = new Date(val);
+    if (isNaN(d2.getTime()) || d2.getFullYear() < 1900) return '';
+    return d2.getFullYear() + '-' + pad2(d2.getMonth() + 1) + '-' + pad2(d2.getDate());
+}

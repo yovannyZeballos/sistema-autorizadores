@@ -177,9 +177,11 @@
     <Compile Include="Configuracion\MonCierreEODHistTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
-    <Compile Include="Configuracion\SrvSerieDetTypeConfiguration.cs" />
+    <Compile Include="Configuracion\SrvPlataformaVmTypeConfiguration.cs" />
+    <Compile Include="Configuracion\SrvSerieCaracteristicaTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvSistemaOperativoTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvTipoServidorTypeConfiguration.cs" />
+    <Compile Include="Configuracion\SrvVirtualTypeConfiguration.cs" />
     <Compile Include="Configuracion\StockProductoTypeConfiguration.cs" />
     <Compile Include="Configuracion\TmpMonCierreLocalTypeConfiguration.cs" />
     <Compile Include="Configuracion\MonCierreLocalTypeConfiguration.cs" />
@@ -235,9 +237,10 @@
     <Compile Include="Repositorio\RepositorioMonCierreEODHist.cs" />
     <Compile Include="Repositorio\RepositorioMovKardex.cs" />
     <Compile Include="Repositorio\RepositorioSolicitudUsuarioASR.cs" />
-    <Compile Include="Repositorio\RepositorioSrvSerieDet.cs" />
+    <Compile Include="Repositorio\RepositorioSrvSerieCaracteristica.cs" />
     <Compile Include="Repositorio\RepositorioSrvSistemaOperativo.cs" />
     <Compile Include="Repositorio\RepositorioSrvTipoServidor.cs" />
+    <Compile Include="Repositorio\RepositorioSrvVirtual.cs" />
     <Compile Include="Repositorio\RepositorioStockProducto.cs" />
     <Compile Include="Repositorio\RepositorioTrxHeader.cs" />
     <Compile Include="Repositorio\RepositorioApertura.cs" />
@@ -297,6 +300,7 @@
     <Compile Include="Repositorio\RepositorioUbiDepartamento.cs" />
     <Compile Include="Repositorio\RepositorioUbiDistrito.cs" />
     <Compile Include="Repositorio\RepositorioUbiProvincia.cs" />
+    <Compile Include="Repositorio\RepositorioSrvPlataformaVm.cs" />
     <Compile Include="Utiles\CadenasConexion.cs" />
     <Compile Include="Utiles\DBHelper.cs" />
   </ItemGroup>

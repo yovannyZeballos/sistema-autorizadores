@@ -84,7 +84,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
             RepositorioSrvTipoServidor = new RepositorioSrvTipoServidor(this);
             RepositorioSrvSistemaOperativo = new RepositorioSrvSistemaOperativo(this);
-            RepositorioSrvSerieDet = new RepositorioSrvSerieDet(this);
+            RepositorioSrvSerieCaracteristica = new RepositorioSrvSerieCaracteristica(this);
+            RepositorioSrvPlataformaVm = new RepositorioSrvPlataformaVm(this);
+            RepositorioSrvVirtual = new RepositorioSrvVirtual(this);
 
 
             //this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s); //TODO: Borrar en producción
@@ -156,7 +158,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
         public IRepositorioSrvTipoServidor RepositorioSrvTipoServidor { get; private set; }
         public IRepositorioSrvSistemaOperativo RepositorioSrvSistemaOperativo { get; private set; }
-        public IRepositorioSrvSerieDet RepositorioSrvSerieDet { get; private set; }
+        public IRepositorioSrvSerieCaracteristica RepositorioSrvSerieCaracteristica { get; private set; }
+        public IRepositorioSrvPlataformaVm RepositorioSrvPlataformaVm { get; private set; }
+        public IRepositorioSrvVirtual RepositorioSrvVirtual { get; private set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -228,7 +232,9 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
             modelBuilder.Configurations.Add(new SrvTipoServidorTypeConfiguration());
             modelBuilder.Configurations.Add(new SrvSistemaOperativoTypeConfiguration());
-            modelBuilder.Configurations.Add(new SrvSerieDetTypeConfiguration());
+            modelBuilder.Configurations.Add(new SrvSerieCaracteristicaTypeConfiguration());
+            modelBuilder.Configurations.Add(new SrvPlataformaVmTypeConfiguration());
+            modelBuilder.Configurations.Add(new SrvVirtualTypeConfiguration());
 
         }
 

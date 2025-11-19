@@ -431,7 +431,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearMaeProductoHandler>().As<IRequestHandler<CrearMaeProductoCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeProveedorHandler>().As<IRequestHandler<CrearMaeProveedorCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeSerieProductoHandler>().As<IRequestHandler<CrearMaeSerieProductoCommand, RespuestaComunDTO>>();
-            builder.RegisterType<CrearSrvSerieDetHandler>().As<IRequestHandler<CrearSrvSerieDetCommand, RespuestaComunDTO>>();
+            builder.RegisterType<CrearSrvSerieCaracteristicaHandler>().As<IRequestHandler<CrearSrvSerieCaracteristicaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<CrearSrvVirtualHandler>().As<IRequestHandler<CrearSrvVirtualCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<DarBajaSerieProductoHandler>().As<IRequestHandler<DarBajaSerieProductoCommand, RespuestaComunDTO>>();
 
@@ -443,7 +444,8 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ActualizarMaeAreaGestionHandler>().As<IRequestHandler<ActualizarMaeAreaGestionCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeProductoHandler>().As<IRequestHandler<ActualizarMaeProductoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeProveedorHandler>().As<IRequestHandler<ActualizarMaeProveedorCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ActualizarSrvSerieDetHandler>().As<IRequestHandler<ActualizarSrvSerieDetCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarSrvSerieCaracteristicaHandler>().As<IRequestHandler<ActualizarSrvSerieCaracteristicaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarSrvVirtualHandler>().As<IRequestHandler<ActualizarSrvVirtualCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<EliminarMaeMarcaHandler>().As<IRequestHandler<EliminarMaeMarcaCommand, RespuestaComunDTO>>();
             builder.RegisterType<EliminarMaeAreaGestionHandler>().As<IRequestHandler<EliminarMaeAreaGestionCommand, RespuestaComunDTO>>();
@@ -464,6 +466,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarMaeProveedorHandler>().As<IRequestHandler<ListarMaeProveedorQuery, GenericResponseDTO<List<ListarMaeProveedorDto>>>>();
             builder.RegisterType<ListarTipoServidorHandler>().As<IRequestHandler<ListarTipoServidorQuery, GenericResponseDTO<List<SrvTipoServidor>>>>();
             builder.RegisterType<ListarSistemaOperativoHandler>().As<IRequestHandler<ListarSistemaOperativoQuery, GenericResponseDTO<List<SrvSistemaOperativo>>>>();
+            builder.RegisterType<ListarPlataformasVmHandler>().As<IRequestHandler<ListarPlataformasVmQuery, GenericResponseDTO<List<SrvPlataformaVm>>>>();
 
             builder.RegisterType<ListarPaginadoMaeMarcaHandler>().As<IRequestHandler<ListarPaginadoMaeMarcaQuery, GenericResponseDTO<PagedResult<ListarMaeMarcaDto>>>>();
             builder.RegisterType<ListarPaginadoMaeAreaGestionHandler>().As<IRequestHandler<ListarPaginadoMaeAreaGestionQuery, GenericResponseDTO<PagedResult<ListarMaeAreaGestionDto>>>>();
@@ -473,6 +476,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarPaginadoGuiaRecepcionHandler>().As<IRequestHandler<ListarPaginadoGuiaRecepcionQuery, GenericResponseDTO<PagedResult<GuiaRecepcionCabeceraDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaDespachoHandler>().As<IRequestHandler<ListarPaginadoGuiaDespachoQuery, GenericResponseDTO<PagedResult<GuiaDespachoCabeceraDto>>>>();
             builder.RegisterType<ListarPaginadoServidoresInventarioHandler>().As<IRequestHandler<ListarPaginadoServidoresInventarioQuery, GenericResponseDTO<PagedResult<ServidorInventarioDto>>>>();
+            builder.RegisterType<ListarVmPorHostHandler>().As<IRequestHandler<ListarVmPorHostQuery, GenericResponseDTO<PagedResult<ServidorVirtualDto>>>>();
 
             builder.RegisterType<DescargarMovKardexPorFechasHandler>().As<IRequestHandler<DescargarMovKardexPorFechasCommand, RespuestaComunExcelDTO>>();
 

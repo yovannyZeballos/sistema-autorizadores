@@ -53,7 +53,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                 // var repProd   = _ctx.RepositorioMaeProducto;
                 // var repAG     = _ctx.RepositorioMaeAreaGestion;
                 // var repMarca  = _ctx.RepositorioMaeMarca;
-                // var repSrvDet = _ctx.RepositorioSrvSerieDet; // o RepositorioSrvServidor si así se llama tu entidad
+                // var repSrvDet = _ctx.RepositorioSrvSerieCaracteristica; // o RepositorioSrvServidor si así se llama tu entidad
                 // var repTipo   = _ctx.RepositorioSrvTipoServidor;
                 // var repLocal  = _ctx.RepositorioMaeLocal;
                 // var repEmp    = _ctx.RepositorioMaeEmpresa;
@@ -68,7 +68,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                     join m in _ctx.RepositorioMaeMarca.Obtener(_ => true)
                         on p.MarcaId equals m.Id into mx
                     from m in mx.DefaultIfEmpty()
-                    join s in _ctx.RepositorioSrvSerieDet.Obtener(_ => true)
+                    join s in _ctx.RepositorioSrvSerieCaracteristica.Obtener(_ => true)
                         on sp.Id equals s.SerieProductoId into sx
                     from s in sx.DefaultIfEmpty()
                     join ts in _ctx.RepositorioSrvTipoServidor.Obtener(_ => true)
@@ -121,7 +121,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                         ((x.p.DesProducto ?? "").ToUpper().Contains(t)) ||
                         ((x.m.NomMarca ?? "").ToUpper().Contains(t)) ||
                         ((x.p.NomModelo ?? "").ToUpper().Contains(t)) ||
-                        //((x.ts.NomTipo ?? "").ToUpper().Contains(t)) ||
+                        ((x.ts.NomTipo ?? "").ToUpper().Contains(t)) ||
                         ((x.so.NomSo ?? "").ToUpper().Contains(t))
                     );
                 }
@@ -131,7 +131,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
 
                 // Paginación + proyección final
                 var items = await q
-                    .OrderBy(x => x.s.Hostname)  // primero hostname…
+                    .OrderBy(x => x.s.Hostname ?? x.sp.NumSerie)  // primero hostname…
                     .ThenBy(x => x.sp.NumSerie)  // …luego serie
                     .Skip((request.PageNumber - 1) * request.PageSize)
                     .Take(request.PageSize)
@@ -158,20 +158,17 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                         NomSo = x.so != null ? x.so.NomSo : null,
 
                         Hostname = x.s != null ? x.s.Hostname : null,
-                        Ip = x.s != null ? x.s.Ip : null,
+                        IpSo = x.s != null ? x.s.IpSo : null,
                         RamGb = x.s != null ? x.s.RamGb : null,
                         CpuSockets = x.s != null ? x.s.CpuSockets : null,
                         CpuCores = x.s != null ? x.s.CpuCores : null,
                         HddTotal = x.s != null ? x.s.HddTotal : null,
 
-                        HostnameBranch = x.s != null ? x.s.HostnameBranch : null,
-                        IpBranch = x.s != null ? x.s.IpBranch : null,
-                        HostnameFileServer = x.s != null ? x.s.HostnameFileserver : null,
-                        IpFileServer = x.s != null ? x.s.IpFileserver : null,
-                        HostnameUnicola = x.s != null ? x.s.HostnameUnicola : null,
-                        IpUnicola = x.s != null ? x.s.IpUnicola : null,
-                        EnlaceUrl = x.s != null ? x.s.EnlaceUrl : null,
-                        IpIdracIlo = x.s != null ? x.s.IpIdracIlo : null,
+                        MacAddress = x.s != null ? x.s.MacAddress : null,
+                        FecIngreso = x.s != null ? x.s.FecIngreso : (DateTime?)null,
+                        Antiguedad = x.s != null ? (int?)x.s.Antiguedad : (int?)null,
+                        ConexionRemota = x.s != null ? x.s.ConexionRemota : null,
+                        IpRemota = x.s != null ? x.s.IpRemota : null,
 
                         NomLocal = x.l != null ? x.l.NomLocal : null,
                         NomEmpresa = x.e != null ? x.e.NomEmpresa : null

@@ -2413,7 +2413,7 @@
     <Content Include="Content\ViewJs\AdministrarGuiaDespachoConfirmar.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaDespacho.js" />
     <Content Include="Content\ViewJs\AdministrarGuiaRecepcionProveedor.js" />
-    <Content Include="Content\ViewJs\AdministrarGuiaRecepcion.js" />
+    <Content Include="Content\ViewJs\adm-guia-recepcion.js" />
     <Content Include="Content\ViewJs\AdministrarKardex.js" />
     <Content Include="Content\ViewJs\MovimientoKardex.js" />
     <Content Include="Content\ViewJs\AdministrarProveedor.js" />
@@ -2422,7 +2422,7 @@
     <Content Include="Content\ViewJs\AdministrarPeriodoMdr.js" />
     <Content Include="Content\ViewJs\AdministrarSolicitudComercio.js" />
     <Content Include="Content\ViewJs\AdministrarFactorMdr.js" />
-    <Content Include="Content\ViewJs\AdministrarServidores.js" />
+    <Content Include="Content\ViewJs\adm-servidores.js" />
     <Content Include="Content\ViewJs\ClienteCen.js" />
     <Content Include="Content\ViewJs\DocumentoElectronico.js" />
     <Content Include="Content\ViewJs\AsignarLocal_Ct3.js" />

@@ -1,4 +1,6 @@
-﻿namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Servidor
+﻿using System;
+
+namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Servidor
 {
     public class ServidorInventarioDto
     {
@@ -23,20 +25,17 @@
         public string IndActivo { get; set; } // S/N
 
         public string Hostname { get; set; }
-        public string Ip { get; set; }
+        public string IpSo { get; set; }
         public decimal? RamGb { get; set; }
         public int? CpuSockets { get; set; }
         public int? CpuCores { get; set; }
         public string HddTotal { get; set; }
 
-        public string HostnameBranch { get; set; }
-        public string IpBranch { get; set; }
-        public string HostnameFileServer { get; set; }
-        public string IpFileServer { get; set; }
-        public string HostnameUnicola { get; set; }
-        public string IpUnicola { get; set; }
-        public string EnlaceUrl { get; set; }
-        public string IpIdracIlo { get; set; }
+        public string MacAddress { get; set; }
+        public DateTime? FecIngreso { get; set; }
+        public int? Antiguedad { get; set; }
+        public string ConexionRemota { get; set; }
+        public string IpRemota { get; set; }
 
         public string NomLocal { get; set; }
         public string NomEmpresa { get; set; }

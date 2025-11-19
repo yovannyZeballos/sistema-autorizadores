@@ -1,4 +1,4 @@
-﻿@model string
+﻿
 @{
     ViewBag.Title = "Inventario de Servidores";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,6 +6,25 @@
 
 @section css{
     <style>
+        /* Fix de inputs date con .form-control-sm */
+        .form-control-sm.date-sm-fix {
+            height: auto;
+            min-height: calc(1.5em + .5rem + 2px);
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            line-height: 1.5;
+        }
+
+            .form-control-sm.date-sm-fix::-webkit-datetime-edit {
+                line-height: 1.5;
+                color: inherit;
+                opacity: 1;
+            }
+
+            .form-control-sm.date-sm-fix::-webkit-calendar-picker-indicator {
+                opacity: 1;
+            }
+
         .table th, .table td {
             vertical-align: middle;
         }
@@ -44,10 +63,8 @@
         }
 
         #modalSrvSerie hr {
-            margin: 0.75rem 0; 
+            margin: 0.75rem 0;
         }
-
-
     </style>
 }
 
@@ -105,11 +122,11 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button id="btnDetalle" class="btn btn-sm btn-primary w-100">
-                    <i class="fe fe-server me-1"></i>Detalle
-                </button>
-            </div>
+            @*<div class="col-md-2 d-flex align-items-end">
+                    <button id="btnDetalle" class="btn btn-sm btn-primary w-100">
+                        <i class="fe fe-edit me-1"></i>Características
+                    </button>
+                </div>*@
             @*<div class="col-md-2 d-flex align-items-end">
                     <button id="btnExportar" class="btn btn-sm btn-outline-primary w-100">
                         <i class="fe fe-file me-1"></i>Exportar
@@ -119,16 +136,19 @@
 
         <hr class="my-3" />
 
-        <table id="tableServidores" class="table table-sm table-bordered text-nowrap border-bottom w-100">
+        <table id="tableServidores" class="table table-bordered text-nowrap border-bottom w-100">
             <thead class="thead-light">
                 <tr>
+                    <th style="width:115px;">Acciones</th>
                     <th>Serie</th>
                     <th>Producto</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Tipo</th>
                     <th>Hostname</th>
-                    <th>IP</th>
+                    <th>IP SO</th>
+                    <th>IP Remota</th>
+                    <th>MAC</th>
                     <th>Empresa</th>
                     <th>Local</th>
                     <th>Estado Serie</th>
@@ -137,11 +157,9 @@
                     <th>Cores</th>
                     <th>HDD (GB)</th>
                     <th>SO</th>
-                    <th>iDRAC / iLO</th>
-                    <th>Unicola</th>
-                    <th>Branch</th>
-                    <th>FileServer</th>
-                    <th>Enlace</th>
+                    <th>Fec. Ingreso</th>
+                    <th>Antigüedad</th>
+                    <th>Conexión</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -154,7 +172,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="modalSrvSerieTitle" class="modal-title">Detalle de Servidor</h5>
+                <h5 id="modalSrvSerieTitle" class="modal-title">Características de Servidor</h5>
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
 
@@ -212,36 +230,24 @@
                     <div class="col-12"><hr /></div>
 
                     <div class="col-md-3">
-                        <label class="form-label">Hostname BRANCH</label>
-                        <input id="mHostBranch" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
+                        <label class="form-label">MAC Address</label>
+                        <input id="mMac" type="text" class="form-control form-control-sm" placeholder="00:11:22:33:44:55" maxlength="17" oninput="this.value=this.value.toUpperCase();" />
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">IP BRANCH</label>
-                        <input id="mIpBranch" type="text" class="form-control form-control-sm" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Hostname FILESERVER</label>
-                        <input id="mHostFs" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">IP FILESERVER</label>
-                        <input id="mIpFs" type="text" class="form-control form-control-sm" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Hostname UNICOLA</label>
-                        <input id="mHostUnicola" type="text" class="form-control form-control-sm text-uppercase" oninput="this.value=this.value.toUpperCase();" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">IP UNICOLA</label>
-                        <input id="mIpUnicola" type="text" class="form-control form-control-sm" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Enlace (URL)</label>
-                        <input id="mEnlaceUrl" type="text" class="form-control form-control-sm" placeholder="http://..." />
+                        <label class="form-label">Fec. Ingreso</label>
+                        <input id="mFecIngreso" type="date" class="form-control form-control-sm date-sm-fix" />
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label">IP iDRAC/iLO</label>
-                        <input id="mIpIdracIlo" type="text" class="form-control form-control-sm" />
+                        <label class="form-label">Antigüedad (años)</label>
+                        <input id="mAntiguedad" type="number" min="0" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Conexión</label>
+                        <input id="mConexionRemota" type="text" maxlength="20" class="form-control form-control-sm" placeholder="RDP/VNC/SSH/OTRO" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">IP Remota</label>
+                        <input id="mIpRemota" type="text" class="form-control form-control-sm" />
                     </div>
                 </div>
             </div>
@@ -256,6 +262,126 @@
     </div>
 </div>
 
+<!-- Modal Crear/Editar VM -->
+<div class="modal fade" id="modalVm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalVmTitle" class="modal-title">Agregar VM</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="vmHostSerieId" />
+                <div class="row g-2">
+                    <div class="col-md-8">
+                        <label class="form-label">Hostname <span class="text-danger">*</span></label>
+                        <input id="vmHostname" type="text" class="form-control form-control-sm text-uppercase"
+                               oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">IP</label>
+                        <input id="vmIp" type="text" class="form-control form-control-sm" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">RAM (GB)</label>
+                        <input id="vmRam" type="number" step="0.01" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">vCores</label>
+                        <input id="vmVcores" type="number" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">HDD total</label>
+                        <input id="vmHddGb" type="text" class="form-control form-control-sm text-uppercase"
+                               oninput="this.value=this.value.toUpperCase();" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">Plataforma</label>
+                            <select id="vmPlataformaId" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group select2-sm">
+                            <label class="form-label">SO</label>
+                            <select id="vmSoId" class="form-control select2-show-search">
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 d-flex align-items-center mt-1">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="vmActivo" checked>
+                            <label class="form-check-label" for="vmActivo">Activo</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Notas</label>
+                        <input id="vmNotas" type="text" maxlength="200" class="form-control form-control-sm" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btnGuardarVm" class="btn btn-sm btn-primary">
+                    <i class="fe fe-save me-1"></i>Guardar VM
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Lista VMs -->
+<div class="modal fade" id="modalVmList" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalVmListTitle" class="modal-title">VMs del host</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="vmListHostSerieId" />
+
+                <!-- Barra de acciones del modal (botón a la derecha) -->
+                <div class="d-flex justify-content-end mb-2">
+                    <button id="btnVmNuevo" class="btn btn-sm btn-primary">
+                        <i class="fe fe-plus me-1"></i> Agregar nuevo
+                    </button>
+                </div>
+
+                <!-- Tabla -->
+                <table id="tableVms" class="table table-sm table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th style="width:80px;">Acciones</th>
+                            <th>Hostname</th>
+                            <th>IP</th>
+                            <th>RAM(GB)</th>
+                            <th>vCores</th>
+                            <th>HDD</th>
+                            <th>Plataforma</th>
+                            <th>SO</th>
+                            <th>Activo</th>
+                            <th>Url</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
 @section scripts{
     <script src="~/Content/plugins/datatable/js/jquery.dataTables.min.js"></script>
     <script src="~/Content/plugins/datatable/js/dataTables.bootstrap5.js"></script>
@@ -268,11 +394,14 @@
     <script src="~/Content/plugins/sweet-alert/jquery.sweet-modal.min.js"></script>
     <script src="~/Content/plugins/sweet-alert/sweetalert.min.js"></script>
     <script src="~/Content/js/sweet-alert.js"></script>
-    <script src="~/Content/plugins/input-mask/jquery.mask.min.js"></script>
+    <script src="~/Content/plugins/date-picker/date-picker.js"></script>
+    <script src="~/Content/plugins/date-picker/jquery-ui.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.maskedinput.js"></script>
+    <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Content/ViewJs/util.js"></script>
-    <script src="~/Content/ViewJs/AdministrarServidores.js"></script>
+    <script src="~/Content/ViewJs/adm-servidores.js"></script>
     <script type="text/javascript">
-        $(function () { AdministrarServidores.init(); });
+        $(function () { AdmServidores.init(); });
     </script>
 }
 

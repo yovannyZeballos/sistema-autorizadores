@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
-    public class SrvSerieDet
+    public class SrvSerieCaracteristica
     {
         public long SerieProductoId { get; set; }
 
@@ -11,7 +11,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 
         // Identidad
         public string Hostname { get; set; } = null;
-        public string Ip { get; set; }
+        public string IpSo { get; set; }
 
         // HW
         public decimal? RamGb { get; set; }
@@ -23,14 +23,11 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public long? SoId { get; set; }
 
         // Endpoints por sede
-        public string HostnameBranch { get; set; }
-        public string IpBranch { get; set; }
-        public string HostnameFileserver { get; set; }
-        public string IpFileserver { get; set; }
-        public string HostnameUnicola { get; set; }
-        public string IpUnicola { get; set; }
-        public string EnlaceUrl { get; set; }
-        public string IpIdracIlo { get; set; }
+        public string MacAddress { get; set; }
+        public DateTime FecIngreso { get; set; }
+        public int Antiguedad { get; set; }
+        public string ConexionRemota { get; set; }
+        public string IpRemota { get; set; }
 
         // Auditoría
         public string UsuCreacion { get; set; }

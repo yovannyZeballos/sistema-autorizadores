@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-    public interface IRepositorioSrvSerieDet : IRepositorioGenerico<SrvSerieDet>
+    public interface IRepositorioSrvPlataformaVm : IRepositorioGenerico<SrvPlataformaVm>
     {
     }
 }

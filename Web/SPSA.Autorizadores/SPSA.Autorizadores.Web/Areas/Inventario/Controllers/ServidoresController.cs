@@ -23,7 +23,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Crear(CrearSrvSerieDetCommand command)
+        public async Task<JsonResult> Crear(CrearSrvSerieCaracteristicaCommand command)
         {
             command.UsuCreacion = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -31,7 +31,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Editar(ActualizarSrvSerieDetCommand command)
+        public async Task<JsonResult> Editar(ActualizarSrvSerieCaracteristicaCommand command)
         {
             command.UsuModifica = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -58,6 +58,38 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         {
             var respuesta = await _mediator.Send(request);
             return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+        // ================== VMs ==================
+        [HttpGet]
+        public async Task<JsonResult> ListarPlataformasVm(ListarPlataformasVmQuery request)
+        {
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> ListarVmPorHost(ListarVmPorHostQuery request)
+        {
+            if (request.PageSize <= 0) request.PageSize = 10;
+            var respuesta = await _mediator.Send(request);
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CrearVm(CrearSrvVirtualCommand command)
+        {
+            command.UsuCreacion = WebSession.Login;
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> EditarVm(ActualizarSrvVirtualCommand command)
+        {
+            command.UsuModifica = WebSession.Login;
+            var respuesta = await _mediator.Send(command);
+            return Json(respuesta);
         }
 
     }
