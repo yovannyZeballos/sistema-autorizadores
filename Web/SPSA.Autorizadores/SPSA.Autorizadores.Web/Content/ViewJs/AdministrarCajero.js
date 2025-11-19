@@ -403,15 +403,28 @@ const AdministrarCajero = function () {
 
     const eliminarCajero = function () {
 
-        const registrosSeleccionados = dataTableCajeros.rows('.selected').data().toArray();
+        const seleccionadosTodos = dataTableCajeros.rows('.selected').data().toArray();
 
-        if (!validarSelecion(registrosSeleccionados.length)) {
+        if (!validarSelecion(seleccionadosTodos.length)) {
+            return;
+        }
+
+        // Filtrar solo los que estén activos (o diferentes de "2" = inactivo)
+        // Ajusta la condición si tienes más estados activos (1, 3, etc.)
+        const seleccionadosActivos = seleccionadosTodos.filter(x => x.CAJ_ESTADO !== "2");
+        //const seleccionadosActivos = seleccionadosTodos.filter(x => x.CAJ_ESTADO === "1" || x.CAJ_ESTADO === "3");
+
+        if (seleccionadosActivos.length === 0) {
+            swal({
+                text: "Los cajeros seleccionados ya se encuentran inactivos. No hay nada que eliminar.",
+                icon: "warning",
+            });
             return;
         }
 
         let cajeros = [];
 
-        registrosSeleccionados.map((item) => {
+        seleccionadosActivos.forEach((item) => {
             cajeros.push(item.DocIdentidad);
         });
 

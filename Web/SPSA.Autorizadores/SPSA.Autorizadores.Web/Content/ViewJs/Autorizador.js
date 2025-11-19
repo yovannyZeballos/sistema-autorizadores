@@ -506,16 +506,23 @@ var Autorizador = function () {
             return;
         }
 
+        const registrosActivos = registrosSeleccionados.filter(x => x.Estado !== "ELI");
 
-        let autorizadores = registrosSeleccionados.map(x => {
+        if (registrosActivos.length === 0) {
+            swal({
+                text: "Los autorizadores seleccionados ya se encuentran eliminados. No hay nada que eliminar.",
+                icon: "warning",
+            });
+            return;
+        }
+
+        let autorizadores = registrosActivos.map(x => {
             return {
                 Codigo: x.Codigo,
                 CodigoAutorizador: x.Autorizador,
                 UsuarioCreacion: x.UCreación
-            }
+            };
         });
-
-
 
         btnLoading($("#btnEliminar"), true);
 
