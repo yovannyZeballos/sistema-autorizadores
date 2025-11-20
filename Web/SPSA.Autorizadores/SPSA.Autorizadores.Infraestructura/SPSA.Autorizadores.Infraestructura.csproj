@@ -178,7 +178,7 @@
     <Compile Include="Configuracion\MonCierreEODTypeConfiguration.cs" />
     <Compile Include="Configuracion\NpgsqlConfiguration.cs" />
     <Compile Include="Configuracion\SrvPlataformaVmTypeConfiguration.cs" />
-    <Compile Include="Configuracion\SrvSerieCaracteristicaTypeConfiguration.cs" />
+    <Compile Include="Configuracion\SrvFisicoTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvSistemaOperativoTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvTipoServidorTypeConfiguration.cs" />
     <Compile Include="Configuracion\SrvVirtualTypeConfiguration.cs" />

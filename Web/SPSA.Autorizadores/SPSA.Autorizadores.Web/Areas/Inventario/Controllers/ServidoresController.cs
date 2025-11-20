@@ -23,7 +23,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Crear(CrearSrvSerieCaracteristicaCommand command)
+        public async Task<JsonResult> Crear(CrearSrvFisicoCommand command)
         {
             command.UsuCreacion = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -31,7 +31,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Editar(ActualizarSrvSerieCaracteristicaCommand command)
+        public async Task<JsonResult> Editar(ActualizarSrvFisicoCommand command)
         {
             command.UsuModifica = WebSession.Login;
             var respuesta = await _mediator.Send(command);
@@ -39,7 +39,7 @@ namespace SPSA.Autorizadores.Web.Areas.Inventario.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> ListarPaginado(ListarPaginadoServidoresInventarioQuery request)
+        public async Task<JsonResult> ListarPaginado(ListarPaginadoServidorFisicoQuery request)
         {
             if (request.PageSize <= 0) request.PageSize = 10;
             var respuesta = await _mediator.Send(request);

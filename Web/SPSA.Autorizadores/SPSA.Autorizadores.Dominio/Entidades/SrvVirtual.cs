@@ -20,7 +20,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
         public string UsuModifica { get; set; }
         public DateTime? FecModifica { get; set; }
 
-        public virtual SrvSerieCaracteristica Host { get; set; }     // 👈 navegación
+        public virtual SrvFisico Host { get; set; }     // 👈 navegación
         public virtual SrvPlataformaVm Plataforma { get; set; }
         public virtual SrvSistemaOperativo SistemaOperativo { get; set; }
     }

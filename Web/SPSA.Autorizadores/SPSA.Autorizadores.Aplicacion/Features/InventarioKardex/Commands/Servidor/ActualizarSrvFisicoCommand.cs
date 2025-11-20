@@ -13,7 +13,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servidor
 {
-    public class ActualizarSrvSerieCaracteristicaCommand : IRequest<RespuestaComunDTO>
+    public class ActualizarSrvFisicoCommand : IRequest<RespuestaComunDTO>
     {
         public long SerieProductoId { get; set; }               // Id de srv_servidor a editar
         public short TipoId { get; set; }
@@ -28,25 +28,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
         public long? SoId { get; set; }
 
         public string MacAddress { get; set; }
-        public DateTime FecIngreso { get; set; }
-        public int? Antiguedad { get; set; }
         public string ConexionRemota { get; set; }
         public string IpRemota { get; set; }
         public string UsuModifica { get; set; }
     }
 
-    public class ActualizarSrvSerieCaracteristicaHandler : IRequestHandler<ActualizarSrvSerieCaracteristicaCommand, RespuestaComunDTO>
+    public class ActualizarSrvFisicoHandler : IRequestHandler<ActualizarSrvFisicoCommand, RespuestaComunDTO>
     {
         private readonly ISGPContexto _ctx;
         private readonly ILogger _log;
 
-        public ActualizarSrvSerieCaracteristicaHandler()
+        public ActualizarSrvFisicoHandler()
         {
             _ctx = new SGPContexto();
             _log = SerilogClass._log;
         }
 
-        public async Task<RespuestaComunDTO> Handle(ActualizarSrvSerieCaracteristicaCommand request, CancellationToken ct)
+        public async Task<RespuestaComunDTO> Handle(ActualizarSrvFisicoCommand request, CancellationToken ct)
         {
             try
             {
@@ -54,8 +52,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
                 if (request.SerieProductoId <= 0) throw new InvalidOperationException("Id inválido.");
                 if (string.IsNullOrWhiteSpace(request.Hostname)) throw new InvalidOperationException("Hostname es obligatorio.");
                 if (request.TipoId <= 0) throw new InvalidOperationException("Tipo de servidor es obligatorio.");
-                if (request.Antiguedad.HasValue && request.Antiguedad.Value < 0)
-                    throw new InvalidOperationException("Antigüedad no puede ser negativa.");
                 if (!string.IsNullOrEmpty(request.ConexionRemota) && request.ConexionRemota.Trim().Length > 20)
                     throw new InvalidOperationException("Conexión remota excede el máximo de 20 caracteres.");
 
@@ -81,8 +77,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
                 srv.SoId = request.SoId;
 
                 srv.MacAddress = string.IsNullOrWhiteSpace(request.MacAddress) ? null : request.MacAddress.Trim();
-                srv.FecIngreso = request.FecIngreso;            // DDL permite NULL
-                srv.Antiguedad = request.Antiguedad ?? 0;
                 srv.ConexionRemota = string.IsNullOrWhiteSpace(request.ConexionRemota) ? null : request.ConexionRemota.Trim();
 
                 srv.UsuModifica = string.IsNullOrWhiteSpace(request.UsuModifica) ? "system" : request.UsuModifica.Trim();

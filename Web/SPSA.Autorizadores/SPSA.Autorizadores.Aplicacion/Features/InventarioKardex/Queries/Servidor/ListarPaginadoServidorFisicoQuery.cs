@@ -14,7 +14,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servidor
 {
-    public class ListarPaginadoServidoresInventarioQuery : IRequest<GenericResponseDTO<PagedResult<ServidorInventarioDto>>>
+    public class ListarPaginadoServidorFisicoQuery : IRequest<GenericResponseDTO<PagedResult<ServidorFisicoDto>>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -27,23 +27,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
         public string Texto { get; set; }          // búsqueda libre (hostname, serie, ip, producto, marca, modelo, tipo)
     }
 
-    public class ListarPaginadoServidoresInventarioHandler : IRequestHandler<ListarPaginadoServidoresInventarioQuery, GenericResponseDTO<PagedResult<ServidorInventarioDto>>>
+    public class ListarPaginadoServidorFisicoHandler : IRequestHandler<ListarPaginadoServidorFisicoQuery, GenericResponseDTO<PagedResult<ServidorFisicoDto>>>
     {
         private readonly ISGPContexto _ctx;
         private readonly ILogger _log;
 
-        public ListarPaginadoServidoresInventarioHandler()
+        public ListarPaginadoServidorFisicoHandler()
         {
             _ctx = new SGPContexto();
             _log = SerilogClass._log;
         }
 
-        public async Task<GenericResponseDTO<PagedResult<ServidorInventarioDto>>> Handle(ListarPaginadoServidoresInventarioQuery request, CancellationToken ct)
+        public async Task<GenericResponseDTO<PagedResult<ServidorFisicoDto>>> Handle(ListarPaginadoServidorFisicoQuery request, CancellationToken ct)
         {
-            var resp = new GenericResponseDTO<PagedResult<ServidorInventarioDto>>
+            var resp = new GenericResponseDTO<PagedResult<ServidorFisicoDto>>
             {
                 Ok = true,
-                Data = new PagedResult<ServidorInventarioDto>()
+                Data = new PagedResult<ServidorFisicoDto>()
             };
 
             try
@@ -135,7 +135,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
                     .ThenBy(x => x.sp.NumSerie)  // …luego serie
                     .Skip((request.PageNumber - 1) * request.PageSize)
                     .Take(request.PageSize)
-                    .Select(x => new ServidorInventarioDto
+                    .Select(x => new ServidorFisicoDto
                     {
                         SerieProductoId = x.sp.Id,
                         CodProducto = x.sp.CodProducto,
@@ -166,7 +166,9 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
 
                         MacAddress = x.s != null ? x.s.MacAddress : null,
                         FecIngreso = x.s != null ? x.s.FecIngreso : (DateTime?)null,
-                        Antiguedad = x.s != null ? (int?)x.s.Antiguedad : (int?)null,
+                        Antiguedad = x.s != null && x.s.FecIngreso != null
+                            ? DbFunctions.DiffYears(x.s.FecIngreso, DateTime.Today)
+                            : (int?)null,
                         ConexionRemota = x.s != null ? x.s.ConexionRemota : null,
                         IpRemota = x.s != null ? x.s.IpRemota : null,
 
@@ -183,7 +185,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Queries.Servid
             catch (Exception ex)
             {
                 _log.Error(ex, "Error en ListarPaginadoServidoresInventario");
-                return new GenericResponseDTO<PagedResult<ServidorInventarioDto>>
+                return new GenericResponseDTO<PagedResult<ServidorFisicoDto>>
                 {
                     Ok = false,
                     Mensaje = ex.Message

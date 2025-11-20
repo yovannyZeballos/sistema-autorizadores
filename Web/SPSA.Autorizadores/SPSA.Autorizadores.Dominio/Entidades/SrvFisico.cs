@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Dominio.Entidades
 {
-    public class SrvSerieCaracteristica
+    public class SrvFisico
     {
         public long SerieProductoId { get; set; }
 
@@ -24,8 +24,7 @@ namespace SPSA.Autorizadores.Dominio.Entidades
 
         // Endpoints por sede
         public string MacAddress { get; set; }
-        public DateTime FecIngreso { get; set; }
-        public int Antiguedad { get; set; }
+        public DateTime? FecIngreso { get; set; }
         public string ConexionRemota { get; set; }
         public string IpRemota { get; set; }
 

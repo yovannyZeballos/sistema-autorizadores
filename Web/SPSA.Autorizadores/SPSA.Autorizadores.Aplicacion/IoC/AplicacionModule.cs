@@ -431,7 +431,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<CrearMaeProductoHandler>().As<IRequestHandler<CrearMaeProductoCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeProveedorHandler>().As<IRequestHandler<CrearMaeProveedorCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearMaeSerieProductoHandler>().As<IRequestHandler<CrearMaeSerieProductoCommand, RespuestaComunDTO>>();
-            builder.RegisterType<CrearSrvSerieCaracteristicaHandler>().As<IRequestHandler<CrearSrvSerieCaracteristicaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<CrearSrvFisicoHandler>().As<IRequestHandler<CrearSrvFisicoCommand, RespuestaComunDTO>>();
             builder.RegisterType<CrearSrvVirtualHandler>().As<IRequestHandler<CrearSrvVirtualCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<DarBajaSerieProductoHandler>().As<IRequestHandler<DarBajaSerieProductoCommand, RespuestaComunDTO>>();
@@ -444,7 +444,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ActualizarMaeAreaGestionHandler>().As<IRequestHandler<ActualizarMaeAreaGestionCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeProductoHandler>().As<IRequestHandler<ActualizarMaeProductoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarMaeProveedorHandler>().As<IRequestHandler<ActualizarMaeProveedorCommand, RespuestaComunDTO>>();
-            builder.RegisterType<ActualizarSrvSerieCaracteristicaHandler>().As<IRequestHandler<ActualizarSrvSerieCaracteristicaCommand, RespuestaComunDTO>>();
+            builder.RegisterType<ActualizarSrvFisicoHandler>().As<IRequestHandler<ActualizarSrvFisicoCommand, RespuestaComunDTO>>();
             builder.RegisterType<ActualizarSrvVirtualHandler>().As<IRequestHandler<ActualizarSrvVirtualCommand, RespuestaComunDTO>>();
 
             builder.RegisterType<EliminarMaeMarcaHandler>().As<IRequestHandler<EliminarMaeMarcaCommand, RespuestaComunDTO>>();
@@ -475,7 +475,7 @@ namespace SPSA.Autorizadores.Aplicacion.IoC
             builder.RegisterType<ListarPaginadoMaeSerieProductoHandler>().As<IRequestHandler<ListarPaginadoMaeSerieProductoQuery, GenericResponseDTO<PagedResult<ListarMaeSerieProductoDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaRecepcionHandler>().As<IRequestHandler<ListarPaginadoGuiaRecepcionQuery, GenericResponseDTO<PagedResult<GuiaRecepcionCabeceraDto>>>>();
             builder.RegisterType<ListarPaginadoGuiaDespachoHandler>().As<IRequestHandler<ListarPaginadoGuiaDespachoQuery, GenericResponseDTO<PagedResult<GuiaDespachoCabeceraDto>>>>();
-            builder.RegisterType<ListarPaginadoServidoresInventarioHandler>().As<IRequestHandler<ListarPaginadoServidoresInventarioQuery, GenericResponseDTO<PagedResult<ServidorInventarioDto>>>>();
+            builder.RegisterType<ListarPaginadoServidorFisicoHandler>().As<IRequestHandler<ListarPaginadoServidorFisicoQuery, GenericResponseDTO<PagedResult<ServidorFisicoDto>>>>();
             builder.RegisterType<ListarVmPorHostHandler>().As<IRequestHandler<ListarVmPorHostQuery, GenericResponseDTO<PagedResult<ServidorVirtualDto>>>>();
 
             builder.RegisterType<DescargarMovKardexPorFechasHandler>().As<IRequestHandler<DescargarMovKardexPorFechasCommand, RespuestaComunExcelDTO>>();

@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.DTOs.Servidor
 {
-    public class ServidorInventarioDto
+    public class ServidorFisicoDto
     {
         public long SerieProductoId { get; set; }   // FK a mae_serie_producto
 

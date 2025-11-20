@@ -232,7 +232,7 @@ namespace SPSA.Autorizadores.Infraestructura.Contexto
 
             modelBuilder.Configurations.Add(new SrvTipoServidorTypeConfiguration());
             modelBuilder.Configurations.Add(new SrvSistemaOperativoTypeConfiguration());
-            modelBuilder.Configurations.Add(new SrvSerieCaracteristicaTypeConfiguration());
+            modelBuilder.Configurations.Add(new SrvFisicoTypeConfiguration());
             modelBuilder.Configurations.Add(new SrvPlataformaVmTypeConfiguration());
             modelBuilder.Configurations.Add(new SrvVirtualTypeConfiguration());
 

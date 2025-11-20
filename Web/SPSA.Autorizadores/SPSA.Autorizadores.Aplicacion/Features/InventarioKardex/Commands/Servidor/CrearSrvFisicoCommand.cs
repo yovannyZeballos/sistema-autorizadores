@@ -13,7 +13,7 @@ using System.Data.Entity;
 
 namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servidor
 {
-    public class CrearSrvSerieCaracteristicaCommand : IRequest<RespuestaComunDTO>
+    public class CrearSrvFisicoCommand : IRequest<RespuestaComunDTO>
     {
         public long SerieProductoId { get; set; }   // requerido
         public short TipoId { get; set; }           // requerido
@@ -25,25 +25,23 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
         public string HddTotal { get; set; }
         public long? SoId { get; set; }
         public string MacAddress { get; set; }
-        public DateTime FecIngreso { get; set; }
-        public int? Antiguedad { get; set; }
         public string ConexionRemota { get; set; }
         public string IpRemota { get; set; }
         public string UsuCreacion { get; set; }
     }
 
-    public class CrearSrvSerieCaracteristicaHandler : IRequestHandler<CrearSrvSerieCaracteristicaCommand, RespuestaComunDTO>
+    public class CrearSrvFisicoHandler : IRequestHandler<CrearSrvFisicoCommand, RespuestaComunDTO>
     {
         private readonly ISGPContexto _ctx;
         private readonly ILogger _log;
 
-        public CrearSrvSerieCaracteristicaHandler()
+        public CrearSrvFisicoHandler()
         {
             _ctx = new SGPContexto();
             _log = SerilogClass._log;
         }
 
-        public async Task<RespuestaComunDTO> Handle(CrearSrvSerieCaracteristicaCommand command, CancellationToken ct)
+        public async Task<RespuestaComunDTO> Handle(CrearSrvFisicoCommand command, CancellationToken ct)
         {
             try
             {
@@ -51,8 +49,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
                 if (command.SerieProductoId <= 0) throw new InvalidOperationException("Serie de producto no válida.");
                 if (string.IsNullOrWhiteSpace(command.Hostname)) throw new InvalidOperationException("Hostname es obligatorio.");
                 if (command.TipoId <= 0) throw new InvalidOperationException("Tipo de servidor es obligatorio.");
-                if (command.Antiguedad.HasValue && command.Antiguedad.Value < 0)
-                    throw new InvalidOperationException("Antigüedad no puede ser negativa.");
 
                 // Normalizaciones
                 var hostnameNorm = command.Hostname.Trim();
@@ -82,7 +78,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
 
                 var now = DateTime.Now;
 
-                var srv = new Dominio.Entidades.SrvSerieCaracteristica
+                var srv = new Dominio.Entidades.SrvFisico
                 {
                     SerieProductoId = command.SerieProductoId,
                     TipoId = command.TipoId,
@@ -94,11 +90,8 @@ namespace SPSA.Autorizadores.Aplicacion.Features.InventarioKardex.Commands.Servi
                     HddTotal = command.HddTotal,
                     SoId = command.SoId,
                     MacAddress = mac,
-                    FecIngreso = command.FecIngreso,
-                    Antiguedad = command.Antiguedad ?? 0,
                     ConexionRemota = command.ConexionRemota?.Trim(),
                     IpRemota = ipRemota,
-
                     UsuCreacion = string.IsNullOrWhiteSpace(command.UsuCreacion) ? "system" : command.UsuCreacion.Trim(),
                     FecCreacion = now
                 };

@@ -4,7 +4,7 @@ using SPSA.Autorizadores.Infraestructura.Contexto;
 
 namespace SPSA.Autorizadores.Infraestructura.Repositorio
 {
-    public class RepositorioSrvSerieCaracteristica : RepositorioGenerico<SGPContexto, SrvSerieCaracteristica>, IRepositorioSrvSerieCaracteristica
+    public class RepositorioSrvSerieCaracteristica : RepositorioGenerico<SGPContexto, SrvFisico>, IRepositorioSrvSerieCaracteristica
     {
         public RepositorioSrvSerieCaracteristica(SGPContexto context) : base(context) { }
 

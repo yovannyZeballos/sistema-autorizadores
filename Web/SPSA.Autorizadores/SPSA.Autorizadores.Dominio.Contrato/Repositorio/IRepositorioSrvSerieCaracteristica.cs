@@ -2,7 +2,7 @@
 
 namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 {
-    public interface IRepositorioSrvSerieCaracteristica : IRepositorioGenerico<SrvSerieCaracteristica>
+    public interface IRepositorioSrvSerieCaracteristica : IRepositorioGenerico<SrvFisico>
     {
     }
 }

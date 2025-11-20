@@ -3,11 +3,11 @@ using SPSA.Autorizadores.Dominio.Entidades;
 
 namespace SPSA.Autorizadores.Infraestructura.Configuracion
 {
-    public class SrvSerieCaracteristicaTypeConfiguration : EntityTypeConfiguration<SrvSerieCaracteristica>
+    public class SrvFisicoTypeConfiguration : EntityTypeConfiguration<SrvFisico>
     {
-        public SrvSerieCaracteristicaTypeConfiguration()
+        public SrvFisicoTypeConfiguration()
         {
-            ToTable("srv_serie_caracteristica", "SGP");
+            ToTable("srv_fisico", "SGP");
 
             HasKey(x => x.SerieProductoId );
 
@@ -25,7 +25,6 @@ namespace SPSA.Autorizadores.Infraestructura.Configuracion
             Property(x => x.SoId).HasColumnName("so_id");
             Property(x => x.MacAddress).HasColumnName("mac_address");
             Property(x => x.FecIngreso).HasColumnName("fec_ingreso");
-            Property(x => x.Antiguedad).HasColumnName("antiguedad");
             Property(x => x.ConexionRemota).HasColumnName("conexion_remota");
             Property(x => x.IpRemota).HasColumnName("ip_remota");
             Property(x => x.UsuCreacion).HasColumnName("usu_creacion");

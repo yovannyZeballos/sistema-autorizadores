@@ -369,7 +369,7 @@ var AdmServidores = (function ($) {
         if (vm.PlataformaId) $('#vmPlataformaId').val(vm.PlataformaId).trigger('change'); else $('#vmPlataformaId').val('').trigger('change');
         if (vm.SoId) $('#vmSoId').val(vm.SoId).trigger('change'); else $('#vmSoId').val('').trigger('change');
         $('#vmActivo').prop('checked', (vm.IndActivo || 'S') === 'S');
-        $('#vmNotas').val(vm.Notas || '');
+        $('#vmNotas').val(vm.Url || '');
         $('#modalVmTitle').text('Editar VM');
 
         const modalLista = bootstrap.Modal.getInstance(document.getElementById('modalVmList')); if (modalLista) modalLista.hide();
@@ -398,7 +398,7 @@ var AdmServidores = (function ($) {
             SoId: $('#vmSoId').val() ? parseInt($('#vmSoId').val(), 10) : null,
             PlataformaId: $('#vmPlataformaId').val() ? parseInt($('#vmPlataformaId').val(), 10) : null,
             IndActivo: $('#vmActivo').is(':checked') ? 'S' : 'N',
-            Notas: ($('#vmNotas').val() || '').trim()
+            Url: ($('#vmNotas').val() || '').trim()
         };
         if (esEdicion) obj.Id = _ctxVm.vmId;
         return obj;

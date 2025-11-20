@@ -497,9 +497,9 @@
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\CrearMaeSerieProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\DarBajaSerieProductoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\SerieProducto\EliminarMaeSerieProductoCommand.cs" />
-    <Compile Include="Features\InventarioKardex\Commands\Servidor\ActualizarSrvSerieCaracteristicaCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\Servidor\ActualizarSrvFisicoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Servidor\ActualizarSrvVirtualCommand.cs" />
-    <Compile Include="Features\InventarioKardex\Commands\Servidor\CrearSrvSerieCaracteristicaCommand.cs" />
+    <Compile Include="Features\InventarioKardex\Commands\Servidor\CrearSrvFisicoCommand.cs" />
     <Compile Include="Features\InventarioKardex\Commands\Servidor\CrearSrvVirtualCommand.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\ListarMaeAreaGestionDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\AreaGestion\MaeAreaGestionDto.cs" />
@@ -517,7 +517,7 @@
     <Compile Include="Features\InventarioKardex\DTOs\Proveedor\MaeProveedorDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\SerieProducto\ListarMaeSerieProductoDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\SerieProducto\MaeSerieProductoDto.cs" />
-    <Compile Include="Features\InventarioKardex\DTOs\Servidor\ServidorInventarioDto.cs" />
+    <Compile Include="Features\InventarioKardex\DTOs\Servidor\ServidorFisicoDto.cs" />
     <Compile Include="Features\InventarioKardex\DTOs\Servidor\ServidorVirtualDto.cs" />
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarMaeAreaGestionQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\AreaGestion\ListarPaginadoMaeAreaGestionQuery.cs" />
@@ -537,7 +537,7 @@
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarMaeSeriesPorProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ListarPaginadoMaeSerieProductoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\SerieProducto\ObtenerMaeSerieProductoQuery.cs" />
-    <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarPaginadoServidoresInventarioQuery.cs" />
+    <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarPaginadoServidorFisicoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarPlataformasVmQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarSistemaOperativoQuery.cs" />
     <Compile Include="Features\InventarioKardex\Queries\Servidor\ListarTipoServidorQuery.cs" />
