@@ -1,9 +1,15 @@
-﻿namespace SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid.Dto
+﻿using Newtonsoft.Json;
+
+namespace SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid.Dto
 {
     public class ConsultaDocumentoElectronicoRespuesta
     {
-		public string Codigo { get; set; }
+		[JsonProperty("pdf_link")]
+		public string Pdf { get; set; }
+
+		[JsonProperty("message")]
 		public string Mensaje { get; set; }
-		public string DocId { get; set; }
+
+		public bool Exito { get; set; }
 	}
 }

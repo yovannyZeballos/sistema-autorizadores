@@ -48,7 +48,8 @@
 
 		public const string CodigoParametroUsuarioServicio_DocumentoElectronico = "01";
 		public const string CodigoParametroClaveServicio_DocumentoElectronico = "02";
+		public const string CodigoParametroToken_DocumentoElectronico = "03";
 
-
+		public const string CodigoParametroWorkSpaceEmpresa_DocumentoElectronico = "01";
 	}
 }

@@ -6,8 +6,10 @@ using SPSA.Autorizadores.Dominio.Contrato.Auxiliar;
 using SPSA.Autorizadores.Dominio.Contrato.Dto;
 using SPSA.Autorizadores.Dominio.Contrato.Repositorio;
 using SPSA.Autorizadores.Dominio.Entidades;
+using Stimulsoft.Base.Gauge.GaugeGeoms;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Queries
     public class ListarDocumentosElectronicosQuery : ListarDocumentoElectronicoDto, IRequest<GenericResponseDTO<PagedResult<DocumentoElectronico>>>
 	{
 		public string Busqueda { get; set; }
+		public string CodEmpresaSesion { get; set; }
 	}
 
 	public class ListarDocumentosElectronicosHandler : IRequestHandler<ListarDocumentosElectronicosQuery, GenericResponseDTO<PagedResult<DocumentoElectronico>>>
@@ -36,7 +39,20 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Queries
 			var respuesta = new GenericResponseDTO<PagedResult<DocumentoElectronico>> { Ok = true };
 			try
 			{
-				var documentos = await _repositorioTrxHeader.ListarDocumentosElectronicos(request);
+				string empresasOracle = Convert.ToString(ConfigurationManager.AppSettings["EmpresasDocumentosElectronicosOracle"] ?? "");
+				List<string> listaEmpresasOracle = empresasOracle.Split(',').ToList();
+
+				List<DocumentoElectronico> documentos;
+
+				if (listaEmpresasOracle.Contains(request.CodEmpresaSesion))
+				{
+					documentos = await _repositorioTrxHeader.ListarDocumentosElectronicosCT3(request);
+				}
+				else
+				{
+					documentos = await _repositorioTrxHeader.ListarDocumentosElectronicosSGP(request);
+				}
+
 			    int totalRegistros = documentos.Any() ? documentos[0].TotalRegistros : 0;
 			
 
@@ -57,31 +73,6 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Queries
 
 			}
 			return respuesta;
-		}
-
-		private static async Task<List<DocumentoElectronico>> ObtenerDatosPrueba()
-		{
-			await Task.Delay(1);
-			return new List<DocumentoElectronico>
-			{
-				new DocumentoElectronico { Fecha = "01/01/2025", Caja = "CAJA01", Importe = 125.50m, DocElectronico = "BB13-7083232", MedioPago = "EFECTIVO", Cajero = "JPEREZ", TipoDocumento = "DNI", NroDocumento = "7083232", Local = "001", TipoDocElectronico = "BLT" },
-				new DocumentoElectronico { Fecha = "01/01/2025", Caja = "CAJA02", Importe = 250.75m, DocElectronico = "F001-000001", MedioPago = "TARJETA_CREDITO", Cajero = "MGARCIA", TipoDocumento = "DNI", NroDocumento = "44567651", Local = "002", TipoDocElectronico = "TFC" },
-			};
-		}
-
-		private static async Task<List<DocumentoElectronico>> ObtenerDatosPruebaPaginado(int numeroPagina, int tamañoPagina)
-		{
-			var todosLosDocumentos = await ObtenerDatosPrueba();
-
-			// Calcular la paginación
-			var skip = (numeroPagina - 1) * tamañoPagina;
-			return todosLosDocumentos.Skip(skip).Take(tamañoPagina).ToList();
-		}
-
-		private static async Task<int> ObtenerTotalRegistrosPrueba()
-		{
-			var todosLosDocumentos = await ObtenerDatosPrueba();
-			return todosLosDocumentos.Count;
 		}
 	}
 }
