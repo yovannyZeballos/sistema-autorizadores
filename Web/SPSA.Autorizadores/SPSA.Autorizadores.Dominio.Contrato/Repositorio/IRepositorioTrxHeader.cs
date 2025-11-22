@@ -9,6 +9,7 @@ namespace SPSA.Autorizadores.Dominio.Contrato.Repositorio
 	{
 		Task<(int cantidadTransacciones, decimal montoFinal)> ObtenerCantidadTransacciones(int local, string date);
 
-		Task<List<DocumentoElectronico>> ListarDocumentosElectronicos(ListarDocumentoElectronicoDto documentoElectronico);
+		Task<List<DocumentoElectronico>> ListarDocumentosElectronicosSGP(ListarDocumentoElectronicoDto documentoElectronico);
+		Task<List<DocumentoElectronico>> ListarDocumentosElectronicosCT3(ListarDocumentoElectronicoDto documentoElectronico);
 	}
 }

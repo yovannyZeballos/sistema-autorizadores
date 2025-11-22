@@ -7,6 +7,7 @@ using SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid;
 using SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid.Dto;
 using SPSA.Autorizadores.Infraestructura.Agente.AgenteCen;
 using SPSA.Autorizadores.Infraestructura.Contexto;
+using Stimulsoft.Blockly.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -22,6 +23,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 		public string RucEmpresa { get; set; }
 		public string NumeroDocumento { get; set; }
 		public string TipoDocumento { get; set; }
+		public string CodEmpresa { get; set; }
 	}
 
 	public class DescargarDocumentoElectronicoHandler : IRequestHandler<DescargarDocumentoElectronicoCommand, GenericResponseDTO<byte[]>>
@@ -45,21 +47,27 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 						.Obtener(x => x.CodProceso == Constantes.CodigoProcesoConsultaDocumentoElectronico)
 						.AsNoTracking()
 						.ToListAsync();
-					
-					string usuarioServicio = parametros.FirstOrDefault(p => p.CodParametro == Constantes.CodigoParametroUsuarioServicio_DocumentoElectronico)?.ValParametro;
-					string claveServicio = parametros.FirstOrDefault(p => p.CodParametro == Constantes.CodigoParametroClaveServicio_DocumentoElectronico)?.ValParametro;
+
+					List<ProcesoParametroEmpresa> parametrosEmpresa = await contexto.RepositorioProcesoParametroEmpresa
+						.Obtener(x => x.CodProceso == Constantes.CodigoProcesoConsultaDocumentoElectronico
+							&& x.CodEmpresa == request.CodEmpresa)
+						.AsNoTracking()
+						.ToListAsync();
+
+					string token = parametros.FirstOrDefault(p => p.CodParametro == Constantes.CodigoParametroToken_DocumentoElectronico)?.ValParametro;
+					string workspace = parametrosEmpresa.FirstOrDefault(p => p.CodParametro == Constantes.CodigoParametroWorkSpaceEmpresa_DocumentoElectronico)?.ValParametro;
 
 					ConsultaDocumentoElectronicoRespuesta respuesta = await _agenteAxteroid.ConsultarDocumento(new ConsultaDocumentoElectronicoRecurso
 					{
-						Clave = claveServicio,
-						Login = usuarioServicio,
+						Token = token,
+						Workspace = workspace,
 						Folio = request.NumeroDocumento,
 						Ruc = request.RucEmpresa,
 						TipoDoc = ObtenerTipoDocumento(request.TipoDocumento),
 						TipoRetorno = "2"
 					});
 
-					if (respuesta.Codigo != "0")
+					if (!respuesta.Exito)
 					{
 						return new GenericResponseDTO<byte[]>
 						{
@@ -69,7 +77,7 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 						};
 					}
 
-					byte[] archivo = await _agenteAxteroid.DescargarDocumento(respuesta.Mensaje);
+					byte[] archivo = await _agenteAxteroid.DescargarDocumento(respuesta.Pdf);
 
 					return new GenericResponseDTO<byte[]>
 					{
@@ -98,11 +106,11 @@ namespace SPSA.Autorizadores.Aplicacion.Features.Operaciones.Commands
 			switch (valor)
 			{
 				case "TFC":
-					return "01";
+					return "PE01";
 				case "BLT":
-					return "03";
+					return "PE03";
 				case "NCR":
-					return "07";
+					return "PE07";
 				default:
 					return string.Empty;
 			}

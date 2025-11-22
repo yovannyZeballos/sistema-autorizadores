@@ -26,6 +26,7 @@ namespace SPSA.Autorizadores.Web.Areas.Operaciones.Controllers
 		[HttpPost]
 		public async Task<JsonResult> ListarDocumentos(ListarDocumentosElectronicosQuery request)
 		{
+			request.CodEmpresaSesion = WebSession.JerarquiaOrganizacional?.CodEmpresa;
 			var response = await _mediator.Send(request);
 			return Json(response);
 		}
@@ -46,7 +47,8 @@ namespace SPSA.Autorizadores.Web.Areas.Operaciones.Controllers
 			{
 				NumeroDocumento = numero,
 				TipoDocumento = tipo,
-				RucEmpresa = WebSession.JerarquiaOrganizacional.Ruc
+				RucEmpresa = WebSession.JerarquiaOrganizacional.Ruc,
+				CodEmpresa = WebSession.JerarquiaOrganizacional.CodEmpresa
 			};
 
 			var resultado = await _mediator.Send(request);

@@ -22,7 +22,7 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
 			_commandTimeout = Convert.ToInt32(ConfigurationManager.AppSettings["CommandTimeout"]);
 		}
 
-		public async Task<List<DocumentoElectronico>> ListarDocumentosElectronicos(ListarDocumentoElectronicoDto documentoElectronico)
+		public async Task<List<DocumentoElectronico>> ListarDocumentosElectronicosSGP(ListarDocumentoElectronicoDto documentoElectronico)
 		{
 			List<DocumentoElectronico> documentos = new List<DocumentoElectronico>();
 
@@ -127,5 +127,73 @@ namespace SPSA.Autorizadores.Infraestructura.Repositorio
             }
 
         }
+
+		public async Task<List<DocumentoElectronico>> ListarDocumentosElectronicosCT3(ListarDocumentoElectronicoDto documentoElectronico)
+		{
+			var documentos = new List<DocumentoElectronico>();
+			int totalRegistros = 0;
+
+			using (var connection = new OracleConnection(CadenaConexionCT2))
+			using (var command = new OracleCommand("sp_consulta_head_trx", connection))
+			{
+				command.CommandType = CommandType.StoredProcedure;
+
+				// Parámetros de entrada
+				command.Parameters.Add(new OracleParameter("p_local", OracleDbType.Int32) { Value = string.IsNullOrWhiteSpace(documentoElectronico.Codlocal) ? 0 : Convert.ToDecimal(documentoElectronico.Codlocal) });
+				command.Parameters.Add(new OracleParameter("p_fecha_inicio", OracleDbType.Date) { Value = documentoElectronico.FechaInicio });
+				command.Parameters.Add(new OracleParameter("p_fecha_fin", OracleDbType.Date) { Value = documentoElectronico.FechaFin });
+				command.Parameters.Add(new OracleParameter("p_tipoDoc", OracleDbType.Varchar2) { Value = documentoElectronico.TipoDocumento });
+				command.Parameters.Add(new OracleParameter("p_rutdoc", OracleDbType.Varchar2) { Value = documentoElectronico.NroDocCliente });
+				command.Parameters.Add(new OracleParameter("p_tipodoc_cli", OracleDbType.Varchar2) { Value = documentoElectronico.TipoDocCliente });
+				command.Parameters.Add(new OracleParameter("p_cajero", OracleDbType.Varchar2) { Value = string.IsNullOrWhiteSpace(documentoElectronico.Cajero) ? "0" : documentoElectronico.Cajero });
+				command.Parameters.Add(new OracleParameter("p_caja", OracleDbType.Int32) { Value = string.IsNullOrWhiteSpace(documentoElectronico.Caja) ? 0 : Convert.ToInt16(documentoElectronico.Caja) });
+				command.Parameters.Add(new OracleParameter("p_numtrx", OracleDbType.Int64) { Value = string.IsNullOrWhiteSpace(documentoElectronico.NroTransaccion) ? 0 : Convert.ToInt64(documentoElectronico.NroTransaccion) });
+				command.Parameters.Add(new OracleParameter("p_numero_pag", OracleDbType.Int32) { Value = documentoElectronico.NumeroPagina });
+				command.Parameters.Add(new OracleParameter("p_tamano_pag", OracleDbType.Int32) { Value = documentoElectronico.TamañoPagina });
+
+				// Parámetro OUT: cursor
+				var cursorParam = new OracleParameter("p_cursor", OracleDbType.RefCursor)
+				{
+					Direction = ParameterDirection.Output
+				};
+				command.Parameters.Add(cursorParam);
+
+				// Parámetro OUT: total registros
+				var totalParam = new OracleParameter("p_total_registros", OracleDbType.Int32)
+				{
+					Direction = ParameterDirection.Output
+				};
+				command.Parameters.Add(totalParam);
+
+				await connection.OpenAsync();
+
+				using (var dr = await command.ExecuteReaderAsync())
+				{
+					while (await dr.ReadAsync())
+					{
+						documentos.Add(new DocumentoElectronico
+						{
+							Local = dr["local"] != DBNull.Value ? dr["local"].ToString() : "",
+							Caja = dr["caja"] != DBNull.Value ? dr["caja"].ToString() : "",
+							NroTransaccion = dr["numero_transaccion"] != DBNull.Value ? dr["numero_transaccion"].ToString() : null,
+							Fecha = dr["fecha"] != DBNull.Value ? dr["fecha"].ToString() : "",
+							Importe = dr["importe"] != DBNull.Value ? Convert.ToDecimal(dr["importe"]) : 0,
+							TipoDocElectronico = dr["tipo_documento_Electronico"] != DBNull.Value ? dr["tipo_documento_Electronico"].ToString() : "",
+							DocElectronico = dr["nro_documento_Electronico"] != DBNull.Value ? dr["nro_documento_Electronico"].ToString() : "",
+							MedioPago = dr["medio_pago"] != DBNull.Value ? dr["medio_pago"].ToString() : "",
+							Cajero = dr["cajero"] != DBNull.Value ? dr["cajero"].ToString() : "",
+							TipoDocumento = dr["tipo_doc_cliente"] != DBNull.Value ? dr["tipo_doc_cliente"].ToString() : "",
+							NroDocumento = dr["nro_doc_cliente"] != DBNull.Value ? dr["nro_doc_cliente"].ToString() : ""
+						});
+					}
+				}
+
+				// Obtener el total de registros
+				totalRegistros = totalParam.Value != null ? ((OracleDecimal)totalParam.Value).ToInt32() : 0;
+				documentos.ForEach(d => d.TotalRegistros = totalRegistros);
+			}
+
+			return documentos;
+		}
 	}
 }

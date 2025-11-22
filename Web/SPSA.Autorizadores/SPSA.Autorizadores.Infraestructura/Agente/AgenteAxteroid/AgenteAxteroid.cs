@@ -1,4 +1,5 @@
-﻿using SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid.Dto;
+﻿using Newtonsoft.Json;
+using SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid.Dto;
 using System;
 using System.Configuration;
 using System.Linq;
@@ -16,51 +17,32 @@ namespace SPSA.Autorizadores.Infraestructura.Agente.AgenteAxteroid
 
 		public async Task<ConsultaDocumentoElectronicoRespuesta> ConsultarDocumento(ConsultaDocumentoElectronicoRecurso consultaDocumentoElectronicoRecurso)
 		{
-			var soapEnvelope = $@"
-				<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:ws=""http://ws.online.asp.core.paperless.cl"">
-				   <soapenv:Header/>
-				   <soapenv:Body>
-					  <ws:OnlineRecovery>
-						 <ws:ruc>{consultaDocumentoElectronicoRecurso.Ruc}</ws:ruc>
-						 <ws:login>{consultaDocumentoElectronicoRecurso.Login}</ws:login>
-						 <ws:clave>{consultaDocumentoElectronicoRecurso.Clave}</ws:clave>
-						 <ws:tipoDoc>{consultaDocumentoElectronicoRecurso.TipoDoc}</ws:tipoDoc>
-						 <ws:folio>{consultaDocumentoElectronicoRecurso.Folio}</ws:folio>
-						 <ws:tipoRetorno>{consultaDocumentoElectronicoRecurso.TipoRetorno}</ws:tipoRetorno>
-					  </ws:OnlineRecovery>
-				   </soapenv:Body>
-				</soapenv:Envelope>";
+			var serie = consultaDocumentoElectronicoRecurso.Folio?.Split('-')[0] ?? "";
+			var folio = consultaDocumentoElectronicoRecurso.Folio?.Split('-')[1] ?? "";
 
-			var content = new StringContent(soapEnvelope, Encoding.UTF8, "text/xml");
-			content.Headers.Add("SOAPAction", ""); // Si el servicio requiere un SOAPAction, colócalo aquí
+			var queryParams = new StringBuilder();
+			queryParams.Append($"?type={Uri.EscapeDataString(consultaDocumentoElectronicoRecurso.TipoDoc ?? "")}");
+			queryParams.Append($"&series={Uri.EscapeDataString(serie)}");
+			queryParams.Append($"&serial={Uri.EscapeDataString(folio)}");
+			queryParams.Append("&test=false");
+			queryParams.Append("&best=true");
 
+			var url = urlBase + queryParams.ToString();
 
-			using (var response = await _httpClient.PostAsync(urlBase, content).ConfigureAwait(false))
+			using (var request = new HttpRequestMessage(HttpMethod.Get, url))
 			{
-				var responseXml = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+				request.Headers.Add("x-ax-workspace", consultaDocumentoElectronicoRecurso.Workspace);
+				request.Headers.Add("x-ax-tax-id", consultaDocumentoElectronicoRecurso.Ruc);
+				request.Headers.Add("Authorization", $"Token {consultaDocumentoElectronicoRecurso.Token}");
 
-				// Parsear el CDATA con el XML de respuesta
-				var xdoc = XDocument.Parse(responseXml);
-				var cdata = xdoc
-					.Descendants()
-					.FirstOrDefault(e => e.Name.LocalName == "return")?.Value;
-
-				if (string.IsNullOrEmpty(cdata))
-					throw new Exception("No se encontró el bloque CDATA en la respuesta SOAP.");
-
-				var respuestaDoc = XDocument.Parse(cdata);
-				var codigo = respuestaDoc.Root.Element("Codigo")?.Value;
-				var mensaje = respuestaDoc.Root.Element("Mensaje")?.Value;
-				var docId = respuestaDoc.Root.Element("DocId")?.Value;
-
-				return new ConsultaDocumentoElectronicoRespuesta
+				using (var response = await _httpClient.SendAsync(request).ConfigureAwait(false))
 				{
-					Codigo = codigo,
-					Mensaje = mensaje,
-					DocId = docId
-				};
+					var jsonResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+					var consultaDocumentoElectronicoRespuesta = JsonConvert.DeserializeObject<ConsultaDocumentoElectronicoRespuesta>(jsonResponse);
+					consultaDocumentoElectronicoRespuesta.Exito = response.IsSuccessStatusCode;
+					return consultaDocumentoElectronicoRespuesta;
+				}
 			}
-
 		}
 
 		public async Task<byte[]> DescargarDocumento(string url)
